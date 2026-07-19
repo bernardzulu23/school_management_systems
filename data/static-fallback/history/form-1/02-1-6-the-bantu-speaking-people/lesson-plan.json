@@ -1,0 +1,37 @@
+{
+  "subject": "History",
+  "subjectSlug": "history",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "HISTORY-TERM-2-MODULE.pdf",
+  "md5": "aecd14100df28c99f62dbd56d3f8efa2",
+  "detectedShift": 0,
+  "pageCount": 32,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-6-the-bantu-speaking-people",
+  "lesson": {
+    "lesson": 2,
+    "title": "1.6 THE BANTU SPEAKING PEOPLE",
+    "topics": [
+      "Sub-topic:1.6.1: Early Bantu settlement in Africa.....................................................................6",
+      "Sub-Topic1.6.2: Bantu Migrations into Zambia......................................................................10",
+      "Sub-Topic 1.6.3: Decentralised societies in Pre-colonial Zambia...........................................15",
+      "History"
+    ],
+    "activities": [
+      "centered approaches. Thus, the learners will develop knowledge, desirable lifelong skills, values",
+      "and positive attitudes needed for their personal and national development.",
+      "It is hoped that the module will make learning History at Ordinary Level Secondary more",
+      "Kelvin Mambwe (PhD)",
+      "Permanent Secretary- Educational Services",
+      "MINISTRY OF EDUCATION",
+      "Form 1 Term",
+      "TEACHING MODULE"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

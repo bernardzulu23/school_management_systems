@@ -1,0 +1,42 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Chemistry-Teaching-Module-Form-1-final-version-3-1.pdf",
+  "md5": "13d33bbf46b6b8dda99c11fe145b07fa",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "matter",
+  "lesson": {
+    "lesson": 4,
+    "title": "Matter",
+    "topics": [
+      "Introduction",
+      "of matter, and each state is made up of fundamental units that define its characteristics."
+    ],
+    "activities": [
+      "(solid, liquid, gas, plasma) and their characteristics.",
+      "Suggested Teaching and Learning Materials",
+      "Natural Materials: rock, Ice, metal, water, oil, and gases (air), wood",
+      "Artificial Materials: Graduated measuring cups/measuring cylinders/beakers, Balloons Thermometer, Bunsen burner or hot plate,",
+      "model or diagram (structure of atoms and molecules), plastic",
+      "Learning Environment Set-up set up:",
+      "Natural Environment: School surroundings",
+      "Artificial Environment: Chemistry laboratory/Classroom"
+    ],
+    "resources": [],
+    "assessment": [
+      "Short Answer Questions:",
+      "A substance has a fixed shape and volume. What state of matter is it in?",
+      "Describe the differences in particle arrangement and motion between a solid, liquid, and gas.",
+      "A liquid is heated and turns into a gas. What is the process called, and what energy change occurs?",
+      "Explain why a solid maintains its shape, while a liquid takes the shape of its container.",
+      "Describe a real-world scenario where a substance changes from one state of matter to another."
+    ],
+    "notes": ""
+  }
+}

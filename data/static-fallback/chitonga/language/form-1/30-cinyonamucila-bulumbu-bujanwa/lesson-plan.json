@@ -1,0 +1,28 @@
+{
+  "subject": "Chitonga",
+  "subjectSlug": "chitonga",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "CHITONGA-FORM-1-TERM-2-TEACHING-MODULE-2025-VERSION.pdf",
+  "md5": "589b740b71891c39f84d5a840d1730f1",
+  "detectedShift": 0,
+  "pageCount": 87,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "cinyonamucila-bulumbu-bujanwa",
+  "lesson": {
+    "week": 6,
+    "lesson": 30,
+    "title": "CINYONAMUCILA - Bulumbu bujanwa",
+    "topics": [
+      "wamana kucita cintu",
+      "KUVWATUKA - Kunyamuka cakufwaambana",
+      "nkaambo kakuti kuli cakucitikila"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

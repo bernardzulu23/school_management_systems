@@ -1,0 +1,1810 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 French Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — FRENCH-LANGUAGE.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "French",
+    "slug": "french",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.928) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 29,
+    "shiftConfidence": 0.928
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "PHONETICS",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "French Alphabet",
+      "specificCompetences": [
+        "=Recite the French Alphabet= Listening to the recitation of the alphabet and repeating it Pronouncing the individual vowels and consonants in French Identifying French vowels and consonants from the alphabet The French alphabet"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "recited correctly",
+      "keywords": ["phonetics", "french", "alphabet"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "PHONETICS",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Sounds",
+      "specificCompetences": [
+        "Produce consonants and vowel sounds in French Listening to the vowels and the consonant sounds Combining consonants and vowels (m + a = ma) Combining vowels (a + i = ai) Making nasal sounds (u + n = un, e + n"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["phonetics", "sounds"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "PHONETICS",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Liaison",
+      "specificCompetences": [
+        "Apply liason in diඒerent situations Establishing the sound bridge between words. Reading simple sentences with liaison sound between words=."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["phonetics", "liaison"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "PHONETICS",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Spelling Marks",
+      "specificCompetences": ["=Apply the four French"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["phonetics", "spelling", "marks"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "GREETINGS",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Formal and Informal Greetings",
+      "specificCompetences": [
+        "=Use basic greetings in French at diඒerent times of the day Listening to a conversation /dialogue where people are greeting each other and identifying words used Greeting friends in the morning/afternoon/evening bonjour"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["greetings", "formal", "informal", "greetings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "GREETINGS",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Formal and Informal Greetings",
+      "specificCompetences": [
+        "Use deÜnite and indeÜnite articles in diඒerent situations Listening to a conversation/ dialogue in which deÜnite and indeÜnite articles are used and identifying them un/une/le/laÈ) Discussing the deÜnite and indeÜnite articles ( un chien/ une tableÈ)la mre/ le preÈ) Reading a simple passage in which deÜnite and indeÜnite articles are used and answering the questions Completing sentences with correct indeÜnite and deÜnite articles"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["greetings", "formal", "informal", "greetings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "GREETINGS",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "The Well- being of a Person",
+      "specificCompetences": [
+        "Enquire about someoneÓs health in French Identifying the expressions used in a conversation /dialogue on enquiring and giving information about someoneÓs health (Comment va ton Papa? Il va È) Reading a text on enquiring and giving information about someoneÓs health and answering questions based on the passage. Role playing enquiring and giving information about someoneÓs health Writing dictated words or phrases on enquiring and giving information about someoneÓs health"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "enquired correctly",
+      "keywords": ["greetings", "well", "being", "person"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "GREETINGS",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "Taking Leave",
+      "specificCompetences": ["Use French expressions for taking leave"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["greetings", "taking", "leave"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "IDENTIFICATION",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Countries and Nationalities",
+      "specificCompetences": [
+        "Tell oneÓs nationality and country =in French Identifying nationalities mentioned in a given dialogue (Zambien(ne), Americain(H Introducing oneself (ge /adresse /date de naissance)= country and oneÓs nationality Reading a passage on peopleÓs countries"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["identification", "countries", "nationalities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "IDENTIFICATION",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Countries and Nationalities",
+      "specificCompetences": [
+        "Classify countries according to their gender Discussing the gender of countries using deÜnite articles. (La Zambie, LÓAngola, Le Canada, La FranceÈ) Gender of countries classiÜed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately.",
+      "keywords": ["identification", "countries", "nationalities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-3",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "IDENTIFICATION",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Countries and Nationalities",
+      "specificCompetences": [
+        "Apply gender on nationality Indicating the ending of masculine and feminine adjectives of nationality Franais/e, Chinois/e) Completing sentences with correct gender of nationality. (Maurice est anglais/ Julie est anglaiseÈ) Gender applied on nationality"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["identification", "countries", "nationalities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S3",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "IDENTIFICATION",
+      "subtopicNumber": "1.3.3",
+      "subtopic": "Professions",
+      "specificCompetences": [
+        "Describe diඒerent professions in French. Identifying diඒerent professions (un avocat, un(H professeur, un soldat, une inÜrmiere). Discussing professions for family members Reading a passage on professions= and identifying various professions in it Diඒerent professions described in French"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["identification", "professions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S3-2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "IDENTIFICATION",
+      "subtopicNumber": "1.3.3",
+      "subtopic": "Professions",
+      "specificCompetences": [
+        "Apply gender on professions in French Writing the masculine and feminine form of professions (mecanicien/e, electricien/e, inÜrmier/e, boulanger/eÈ) Completing sentences with correct profession according to gender. (Paul est inÜrmier/ Marie est inÜrmiereÈ) Gender on professions applied"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["identification", "professions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "OWNERSHIP",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Possession",
+      "specificCompetences": [
+        "State that something belongs to oneself or someone Classifying items and animals according to gender. ( un chat/une chatte, un stylo/une gomme È) Identifying possessive adjectives from a given passage= =(mon/ma, ton/ta, son/sa Demonstrating possession of something in a role play. (Masculine forms: mon/ ton/ son/ notre /votre/ leur chat. Feminine forms:ma/ta/sa/notre/ votre/ leur chatteÈ) OneÓs or someoneÓs possessions"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "stated correctly",
+      "keywords": ["ownership", "possession"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "OWNERSHIP",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Possession",
+      "specificCompetences": [
+        "Use the plural forms of possessive adjectives in French Matching a possessive adjective =either with a masculine or feminine noun ma voiture, mon stylo) Applying the plural forms of possessive adjectives (mes,tes,ses,nos,vos,leurs) Completing sentences using =the plural forms of possessive adjectives"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["ownership", "possession"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "FAMILY=",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Family",
+      "specificCompetences": [
+        "=Discuss =simple family UHODWLRQVKLSV LQ )UHQFK Identifying the types of families (la famille proche et la famille elargie). Discussing their family relationships pre, mre,enfants, oncle, tanteÈ) Writing about your family in French Writing dictated words in French"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["family", "family"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1-2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "FAMILY=",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Family",
+      "specificCompetences": [
+        "Explain the= =roles of each family member= Identifying roles played by family members in a conversation or dialogue balayer, nettoyer, eduquerÈ)= Listing homes chores of family members in French Dramatising the home chores in French Roles of each family member explained"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["family", "family"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "ATTRIBUTES OF A PERSON OR A THING",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Colours",
+      "specificCompetences": [
+        "=Express preferences for colours in French Identifying colours of objects (Rouge, jaune, verteÈ) Discussing oneÓs preference of colours jÓaime la couleur verte/je nÓaime pasÈ) Drawing and colouring the Ýag of Zambia Preferences for colours expressed in French"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["attributes", "person", "thing", "colours"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1-2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "ATTRIBUTES OF A PERSON OR A THING",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Colours",
+      "specificCompetences": ["=Distinguish gender in colour"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["attributes", "person", "thing", "colours"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S1",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "NUMERACY",
+      "subtopicNumber": "1.7.1",
+      "subtopic": "Cardinal Numbers (0",
+      "specificCompetences": [],
+      "learningActivities": ["1000)"],
+      "expectedStandard": "",
+      "keywords": ["numeracy", "cardinal", "numbers"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S1-2",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "NUMERACY",
+      "subtopicNumber": "1.7.1",
+      "subtopic": "Cardinal Numbers (0",
+      "specificCompetences": ["Count from 0 - 1000 in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["numeracy", "cardinal", "numbers"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S2",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "NUMERACY",
+      "subtopicNumber": "1.7.2",
+      "subtopic": "Ordinal Numbers First to twentieth)",
+      "specificCompetences": ["Demonstrate knowledge of ordinal numbers from 1 - 20 in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["numeracy", "ordinal", "numbers", "first", "twentieth"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "NUMERACY",
+      "subtopicNumber": "1.6.2",
+      "subtopic": "Physical",
+      "specificCompetences": [
+        "= Describe someoneÓ s physical characteristics and personality in French= Identifying physical characteristics and personality (cheveux longs, les yeux bruns)calme, gentil/le) Describing a person or an object using information provided. (cheveux longs, les yeux bruns, petit(H, grand(H Formulating adverbs from adjectives timideÈtimidement, gentilÈgentilment, prudentÈprudemment) Completing sentences with correct adjectives and adverbs"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["numeracy", "physical"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S3",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "NUMERACY",
+      "subtopicNumber": "1.7.3",
+      "subtopic": "Counting Money",
+      "specificCompetences": [
+        "Apply the four mathematical RSHUDWLRQV RQ numbers =below 100 in French"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["numeracy", "counting", "money"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S1",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "PREFERENCES",
+      "subtopicNumber": "1.8.1",
+      "subtopic": "Likes and Dislikes",
+      "specificCompetences": ["Express likes and dislikes in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["preferences", "likes", "dislikes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S1",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "LOCALISATION AND MOVEMENT",
+      "subtopicNumber": "1.9.1",
+      "subtopic": "Position",
+      "specificCompetences": ["Describe the position of an object in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["localisation", "movement", "position"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S1-2",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "LOCALISATION AND MOVEMENT",
+      "subtopicNumber": "1.9.1",
+      "subtopic": "Position",
+      "specificCompetences": ["State the location of a person, place or thing in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["localisation", "movement", "position"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T10-S1",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "ACCOMMODATION AND HYGIENE",
+      "subtopicNumber": "1.10.1",
+      "subtopic": "Types of",
+      "specificCompetences": [
+        "Compare modern and traditional houses in French Identifying the diඒerence between a modern and traditional house (en bois, en brique, en bousÈ ) Reading a passage on modern and traditional houses and summarise the features of each type in French Describing modern and traditional houses in writing"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["accommodation", "hygiene", "types"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T10-S1-2",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "ACCOMMODATION AND HYGIENE",
+      "subtopicNumber": "1.10.1",
+      "subtopic": "Types of",
+      "specificCompetences": [
+        "Name diඒerent rooms and their use in a house Naming diferent rooms in a house and their use (chambre, salle  coucher) Describing oneÓs own house in French coleurs, taille, chambres È ) {written and orally} Writing a short guided composition on a house of your choice"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["accommodation", "hygiene", "types"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S2",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "ACCOMMODATION AND HYGIENE",
+      "subtopicNumber": "1.9.2",
+      "subtopic": "Direction",
+      "specificCompetences": [
+        "Give directions to someone in French Listening to a dialogue on giving directions and identify=ing =expressions used =(allez tout droit, tournez  gaucheÈ) Reading a simple map and locating a place/ village/town/ any other /features Directing someone to a given place Giving =directions to someone to ones own place of choice in written"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["accommodation", "hygiene", "direction"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S3",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "ACCOMMODATION AND HYGIENE",
+      "subtopicNumber": "1.9.3",
+      "subtopic": "Distance",
+      "specificCompetences": [
+        "Indicate how far or near a point is from another in French Identifying expressions indicating how far or near a point is from another (prs de, loin de, dix kilometre de È) Discussing distance between two points prs de, loin de, dix kilomtre de È)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["accommodation", "hygiene", "distance"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T10-S2",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "ACCOMMODATION AND HYGIENE",
+      "subtopicNumber": "1.10.2",
+      "subtopic": "Distance",
+      "specificCompetences": [
+        "Discuss personal hygiene Mentioning ways of keeping oneself clean. (se laver, couper des cheveux, È) Drawing materials used for personal hygiene (le savon, la brosse  dent, de lÓeau È) Writing dictated words in French"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["accommodation", "hygiene", "distance"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S1",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "MY SCHOOL",
+      "subtopicNumber": "1.11.1",
+      "subtopic": "Classroom Orders and",
+      "specificCompetences": [
+        "Use classroom orders and instruction=s in French Listening to a list of French classroom expressions and Ünd their meaning in English (Sortez. Î Entrez. Î Taissez- vousÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["school", "classroom", "orders"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T10-S2-2",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "MY SCHOOL",
+      "subtopicNumber": "1.10.2",
+      "subtopic": "Care for the Surrounding",
+      "specificCompetences": [
+        "Describe a clean and dirty place Describing a clean and dirty place in French Discussing ways of keeping the surrounding clean (balayer, nettoyer, essuyerÈ) Identifying materials used for keep the surrounding clean (balai, torchon È) Stating negative eඒects of dirty surrounding"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["school", "care", "surrounding"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S2",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "MY SCHOOL",
+      "subtopicNumber": "1.11.2",
+      "subtopic": "My School Subjects",
+      "specificCompetences": [
+        "Identify diඒerent school subject=s in French. Listing the diඒerent subjects oඒered in the school (le Franais, les MathmatiquesÈ). Discussing school subjects (les matires prferes) Writing a simple composition on oneÓs favourite subjects and explaining why"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["school", "school", "subjects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S3",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "MY SCHOOL",
+      "subtopicNumber": "1.11.3",
+      "subtopic": "School Time- Table",
+      "specificCompetences": ["Draw up a school/personal timetable"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["school", "school", "time", "table"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S3-2",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "MY SCHOOL",
+      "subtopicNumber": "1.11.3",
+      "subtopic": "School Time- Table",
+      "specificCompetences": ["Describe diඒerent classroom objects"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["school", "school", "time", "table"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S1",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "DAILY ACTIVITIES",
+      "subtopicNumber": "1.12.1",
+      "subtopic": "Telling",
+      "specificCompetences": ["Tell time in French"],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["daily", "activities", "telling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S1-2",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "DAILY ACTIVITIES",
+      "subtopicNumber": "1.12.1",
+      "subtopic": "Telling",
+      "specificCompetences": [
+        "Narrate daily activities in French Narrating daily activities in chronological order in reference to diඒerent times of the day =(a six heures, Je me lave, a 7 heures, Je prends le petit djeurner È) Making a diary in French Writing on oneÓs daily activities"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["daily", "activities", "telling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S1-3",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "DAILY ACTIVITIES",
+      "subtopicNumber": "1.12.1",
+      "subtopic": "Telling",
+      "specificCompetences": [
+        "Identify days of the week and months of the year in French Naming the days of the week Lundi, Mardi È) and months (Janvier, Fevrier"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["daily", "activities", "telling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T13-S1",
+      "form": 1,
+      "topicNumber": "1.13",
+      "topic": "THE PAST",
+      "subtopicNumber": "1.13.1",
+      "subtopic": "Past Actions =1.13.1.1 Describe past actions in French Listening to a passage on past happenings =(Je suis all hier, JÓai mangÈ) Role playing past actions using",
+      "specificCompetences": [],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": [
+        "past",
+        "past",
+        "actions",
+        "describe",
+        "past",
+        "actions",
+        "french",
+        "listening",
+        "passage",
+        "past",
+        "happenings",
+        "suis"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T14-S1",
+      "form": 1,
+      "topicNumber": "1.14",
+      "topic": "WEATHER",
+      "subtopicNumber": "1.14.1",
+      "subtopic": "Weather Conditions",
+      "specificCompetences": ["Describe what the weather is like in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["weather", "weather", "conditions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T14-S1-2",
+      "form": 1,
+      "topicNumber": "1.14",
+      "topic": "WEATHER",
+      "subtopicNumber": "1.14.1",
+      "subtopic": "Weather Conditions",
+      "specificCompetences": ["Identify various seasons in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["weather", "weather", "conditions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T14-S2",
+      "form": 1,
+      "topicNumber": "1.14",
+      "topic": "WEATHER",
+      "subtopicNumber": "1.14.2",
+      "subtopic": "Clothes and Activities",
+      "specificCompetences": ["Describe activities and clothes associated with seasons in French"],
+      "learningActivities": ["cultiver)"],
+      "expectedStandard": "",
+      "keywords": ["weather", "clothes", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T14-S3",
+      "form": 1,
+      "topicNumber": "1.14",
+      "topic": "WEATHER",
+      "subtopicNumber": "1.14.3",
+      "subtopic": "Factors Aඒecting Weather",
+      "specificCompetences": [
+        "Discuss factors aඒecting weather =in Zambia Identifying factors aඒecting weather from a given passage (temprature, vent) Discussing factors aඒecting weather in Zambia Writing on factors = aඒecting weather in Zambia"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["weather", "factors", "ecting", "weather"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "PERMISSION AND PROHIBITION",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Permission",
+      "specificCompetences": [
+        "Ask and give permission in French Identifying expressions on asking for, giving and refusing permission from a given dialogue or conversation. (Est-ce que je peuxÈ/ Puis-je)Oui tu peux /Non tu ne peux pasÈ) Dramatising asking, giving or refusing permission Reading a passage on giving and refusing permission and classifying the expressions used. Writing on asking, giving and refusing SHUPLVVLRQ"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["permission", "prohibition", "permission"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "PERMISSION AND PROHIBITION",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Prohibition",
+      "specificCompetences": ["Interpret prohibitive and non-prohibitive signs in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["permission", "prohibition", "prohibition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "POSSIBILITY AND IMPOSSIBILITY",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Possibilities",
+      "specificCompetences": ["Express possibility to do something in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["possibility", "impossibility", "possibilities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "POSSIBILITY AND IMPOSSIBILITY",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Possibilities",
+      "specificCompetences": ["Express impossibility to do things"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["possibility", "impossibility", "possibilities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "LEISURE ACTIVITIES",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Hobbies",
+      "specificCompetences": ["Discuss hobbies and interests =in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["leisure", "activities", "hobbies"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "LEISURE ACTIVITIES",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Hobbies",
+      "specificCompetences": [
+        "Examine income generating hobbies Identifying Hobbies that can be translated into income generating activities (faire la cuisine, faire la couture, jouer au football,È) Discussing income generating activities. Writing on income generating activities"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["leisure", "activities", "hobbies"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "LEISURE ACTIVITIES",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "Informal Letter",
+      "specificCompetences": ["Discuss parts of an informal letter in French"],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["leisure", "activities", "informal", "letter"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "LEISURE ACTIVITIES",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "Informal Letter",
+      "specificCompetences": ["Write an informal letter in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["leisure", "activities", "informal", "letter"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "=COMMUNICATIO AND TECHNOLOGY",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Means of Communication",
+      "specificCompetences": ["Explain the diඒerent means of communication in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["communicatio", "technology", "means", "communication"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "=COMMUNICATIO AND TECHNOLOGY",
+      "subtopicNumber": "2.4.2",
+      "subtopic": "Semi - Formal Letter",
+      "specificCompetences": ["Write a letter to parents/relatives in French="],
+      "learningActivities": ["formal and informal letters (similarities"],
+      "expectedStandard": "",
+      "keywords": ["communicatio", "technology", "semi", "formal", "letter"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S3",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "=COMMUNICATIO AND TECHNOLOGY",
+      "subtopicNumber": "2.4.3",
+      "subtopic": "Telephone Call",
+      "specificCompetences": ["Make a telephone call in French"],
+      "learningActivities": [],
+      "expectedStandard": "in French correctly",
+      "keywords": ["communicatio", "technology", "telephone", "call"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "POST OFFICE",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Postal Operations",
+      "specificCompetences": ["Discuss postal operations in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["post", "office", "postal", "operations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "HOTELS AND RESTAURANTS",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Room and Table Reservation",
+      "specificCompetences": ["Use appropriate expressions to make a room reservation in French"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately.",
+      "keywords": ["hotels", "restaurants", "room", "table", "reservation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1-2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "HOTELS AND RESTAURANTS",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Room and Table Reservation",
+      "specificCompetences": ["Use appropriate expressions to make a table reservation in French"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["hotels", "restaurants", "room", "table", "reservation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "HOTELS AND RESTAURANTS",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "Food",
+      "specificCompetences": ["Discuss diඒerent types of food in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["hotels", "restaurants", "food"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2-2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "HOTELS AND RESTAURANTS",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "Food",
+      "specificCompetences": ["Use appropriate expressions to order a meal in a hotel/ restaurant"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["hotels", "restaurants", "food"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S1",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "HOSPITAL",
+      "subtopicNumber": "2.7.1",
+      "subtopic": "Medical Personnel",
+      "specificCompetences": ["Demonstrate knowledge of various medical personnel =in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["hospital", "medical", "personnel"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S2",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "HOSPITAL",
+      "subtopicNumber": "2.7.2",
+      "subtopic": "Parts of the Human Body",
+      "specificCompetences": ["Identify various parts of the human body in French"],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed correctly",
+      "keywords": ["hospital", "parts", "human", "body"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S1",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "TRANSPORT",
+      "subtopicNumber": "2.8.1",
+      "subtopic": "Types of Transport",
+      "specificCompetences": ["Discuss diඒerent types of transport in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["transport", "types", "transport"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S1-2",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "TRANSPORT",
+      "subtopicNumber": "2.8.1",
+      "subtopic": "Types of Transport",
+      "specificCompetences": ["Give information on ticket sales and fares"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["transport", "types", "transport"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S3",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "TRANSPORT",
+      "subtopicNumber": "2.7.3",
+      "subtopic": "Diseases",
+      "specificCompetences": ["Discuss diඒerent diseases in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["transport", "diseases"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S3-2",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "TRANSPORT",
+      "subtopicNumber": "2.7.3",
+      "subtopic": "Diseases",
+      "specificCompetences": ["Explain causes and eඒects of diඒerent diseases"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["transport", "diseases"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S1",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "POLICE",
+      "subtopicNumber": "2.9.1",
+      "subtopic": "Reporting Incidents",
+      "specificCompetences": ["Give an account of an incident in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["police", "reporting", "incidents"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S1",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "OWNERSHIP",
+      "subtopicNumber": "2.10.1",
+      "subtopic": "Possession",
+      "specificCompetences": ["=Use possessive adjectives in diඒerent situations"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["ownership", "possession"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S1-2",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "OWNERSHIP",
+      "subtopicNumber": "2.10.1",
+      "subtopic": "Possession",
+      "specificCompetences": ["Use possessive pronouns in diඒerent situa=tions"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["ownership", "possession"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S1",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "PREFERENCES =2.11.1 Likes and Dislikes",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Possession",
+      "specificCompetences": ["Express likes and dislikes in French"],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["preferences", "likes", "dislikes", "possession"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S1-2",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "PREFERENCES =2.11.1 Likes and Dislikes",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Possession",
+      "specificCompetences": ["Use coordination conjunctions in diඒerent situations"],
+      "learningActivities": [],
+      "expectedStandard": "situations correctly",
+      "keywords": ["preferences", "likes", "dislikes", "possession"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "SHOPPING",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Prices",
+      "specificCompetences": ["Enquire about prices of goods in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["shopping", "prices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "SHOPPING",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Prices",
+      "specificCompetences": ["Negotiate for prices of goods in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["shopping", "prices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "SHOPPING",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "Quality and Quantity of Goods",
+      "specificCompetences": ["Express mixed feelings on the quality of goods in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["shopping", "quality", "quantity", "goods"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "SHOPPING",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "Quality and Quantity of Goods",
+      "specificCompetences": ["Compare quantity =of goods"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["shopping", "quality", "quantity", "goods"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "SHOPPING",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "Buying and Selling",
+      "specificCompetences": ["Demonstrate knowledge of buying and selling"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["shopping", "buying", "selling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S3-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "SHOPPING",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "Buying and Selling",
+      "specificCompetences": ["Use partitive articles and demonstrative pronouns"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["shopping", "buying", "selling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "SPORTS",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Types of Sporting activities",
+      "specificCompetences": ["Discuss diඒerent types of sporting activities in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sports", "types", "sporting", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1-2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "SPORTS",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Types of Sporting activities",
+      "specificCompetences": ["Explain the beneÜts of sports in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sports", "types", "sporting", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "COMMUNICATION AND TECHNOLOGY",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Formal Letter",
+      "specificCompetences": ["Write a formal letter in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["communication", "technology", "formal", "letter"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "COMMUNICATION AND TECHNOLOGY",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "Media",
+      "specificCompetences": ["Discuss print media (written press) in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["communication", "technology", "media"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "COMMUNICATION AND TECHNOLOGY",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "Media",
+      "specificCompetences": ["Discuss electronic media broadcast media)"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["communication", "technology", "media"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "OPINIONS",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Opinions and Feelings",
+      "specificCompetences": ["Express oneÓs opinion in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["opinions", "opinions", "feelings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1-2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "OPINIONS",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Opinions and Feelings",
+      "specificCompetences": ["Expressing oneÓs feelings in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["opinions", "opinions", "feelings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1-3",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "OPINIONS",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Opinions and Feelings",
+      "specificCompetences": [
+        "Examine other peopleÓs views. Identifying expressions used to consider other peopleÓs views. (jtu as raison, mais/ tout a fait, par contreÈ) Debating on a given topic in French. agreeing /disagreeing È Je crois /pense"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["opinions", "opinions", "feelings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "INFORMATION",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Ask and Give Information",
+      "specificCompetences": ["Give information to someone in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["information", "give", "information"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1-2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "INFORMATION",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Ask and Give Information",
+      "specificCompetences": [
+        "Use interrogative questions in French Reading a text with interrogative questions. Identifying interogative questions from the given text (qui, quoi, quand , comment, pourquoi, o, combienÈ) Role playing using interogative questions in diඒerent situations Reading and answering questions from a text (comprehension)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["information", "give", "information"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1-3",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "INFORMATION",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Ask and Give Information",
+      "specificCompetences": ["Acknowledge receipt or non- receipt of information"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["information", "give", "information"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "INFORMATION",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Giving Advice",
+      "specificCompetences": ["Use expressions to give advice to someone in French."],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["information", "giving", "advice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S3",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "INFORMATION",
+      "subtopicNumber": "3.6.3",
+      "subtopic": "Curriculum Vitae",
+      "specificCompetences": ["Write a curriculum vitae"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["information", "curriculum", "vitae"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S1",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "ACCOMMODATION",
+      "subtopicNumber": "3.7.1",
+      "subtopic": "Types of Buildings",
+      "specificCompetences": ["Identify diඒerent types of buildings in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["accommodation", "types", "buildings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T8-S1",
+      "form": 3,
+      "topicNumber": "3.8",
+      "topic": "EVENTS",
+      "subtopicNumber": "3.8.1",
+      "subtopic": "Invitation",
+      "specificCompetences": ["Use appropriate expressions to invite someone =in French"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately.",
+      "keywords": ["events", "invitation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T9-S1",
+      "form": 3,
+      "topicNumber": "3.9",
+      "topic": "OBLIGATION",
+      "subtopicNumber": "3.9.1",
+      "subtopic": "Carrying out Tasks",
+      "specificCompetences": ["Express necessity to do things =in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["obligation", "carrying", "tasks"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T10-S1",
+      "form": 3,
+      "topicNumber": "3.10",
+      "topic": "IMMIGRATION AND CUSTOMS",
+      "subtopicNumber": "3.10.1",
+      "subtopic": "Immigration and Customs Formalities",
+      "specificCompetences": ["Carry out immigration and customs formalities =in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["immigration", "customs", "immigration", "customs", "formalities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T10-S2",
+      "form": 3,
+      "topicNumber": "3.10",
+      "topic": "IMMIGRATION AND CUSTOMS",
+      "subtopicNumber": "3.10.2",
+      "subtopic": "Corrupt Practices",
+      "specificCompetences": ["Discuss corrupt practices and their eඒects on society in French"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["immigration", "customs", "corrupt", "practices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T11-S1",
+      "form": 3,
+      "topicNumber": "3.11",
+      "topic": "NUMERACY",
+      "subtopicNumber": "3.11.1",
+      "subtopic": "Counting Numbers",
+      "specificCompetences": ["Count from"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["numeracy", "counting", "numbers"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "TOURISM",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Tourist Attractions",
+      "specificCompetences": [
+        "Give information on tourist attractions and wonders in Zambia =in French Listening to an advert or article on tourist attractions in Zambia Discussing tourist attractions and wonders in Zambia (Les Chutes Victoria, Chishimba, South Luangwa National Park, Les ceremonies Traditionelles - KuombokaÈ) Role playing giving information on tourist attractions and wonders in Zambia Reading a passage on diඒerent tourist attractions and where they are found in Zambia and answering the questions Writing on tourist attractions in Zambia"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["tourism", "tourist", "attractions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1-2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "TOURISM",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Tourist Attractions",
+      "specificCompetences": ["Explain the economic beneÜts of tourism in Zambia in"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["tourism", "tourist", "attractions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "TOURISM",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "Wild Life",
+      "specificCompetences": [
+        "Explain the importance of wild life in Zambia Listening to a passage on wild life in Zambia Discussing wild life in Zambia (the big"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "explained correctly",
+      "keywords": ["tourism", "wild", "life"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S3",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "TOURISM",
+      "subtopicNumber": "4.2.3",
+      "subtopic": "Travels",
+      "specificCompetences": [
+        "Identify Francophone countries Identifying Francophone countries from a given map of Africa (le Marroc, la Cte dÓIvoire È) Locating Francophone countries on a given map Reading a passage on Francophone countries and answering the questions"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["tourism", "travels"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S3-2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "TOURISM",
+      "subtopicNumber": "4.2.3",
+      "subtopic": "Travels",
+      "specificCompetences": [
+        "Use direct and indirect object pronouns in diඒerent situations Identifying direct and indirect object pronouns from a given passage (D.O.P me/te/le/la/ nous /vous/les) I.O.P me/te/lui/nous/vous/ leur) Rewriting sentences using direct and indirect object pronouns Elle mange la pommeÈElle la mange, je parle a MarieÈje lui parle , Il donne un cadeau a ses amisÈ Il le leur donne) Rewriting sentences using en/y Nous allons en France È Nous y allons, Je viens du Zimbabwe È JÓen viens È)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["tourism", "travels"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "MUSIC",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Musical Instruments",
+      "specificCompetences": [
+        "Describe diඒerent of musical instruments in French Identifying diඒerent types of musical instrument (le guitare, le piano, le tam tam, la Ýte"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "French correctly",
+      "keywords": ["music", "musical", "instruments"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "MUSIC",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Musical Instruments",
+      "specificCompetences": [
+        "Compare Zambian and French music Listening to pieces of French and Zambian music Discussing Zambian and French music Singing French songs (LÓhymne National de la Zambie, La MarseillaiseÈ) Writing a composition on Zambian and French music"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["music", "musical", "instruments"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "MUSIC",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Poems",
+      "specificCompetences": [
+        "Analyze Poems in French Listening to diඒerent poems in French. Identifying theme, subject, topic and"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "analyzed correctly",
+      "keywords": ["music", "poems"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "NARRATION",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Stories",
+      "specificCompetences": ["Narrate present, past, future events in"],
+      "learningActivities": [],
+      "expectedStandard": "narrated correctly",
+      "keywords": ["narration", "stories"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "NARRATION",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Stories",
+      "specificCompetences": [
+        "Use direct and indirect speech in French Reading a passage on present and past actions. (target: passeÓ composeÓ) Identifying the direct and indirect speech in the passage. Role playing using the direct and indirect speech Rewriting sentences from direct speech to indirect speech (Pauline ditÓ Je suis intelligenteÓ. QuÓest-ce que Pauline dit"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["narration", "stories"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "THE FUTURE",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Future Plans =4.5.1.1 Discuss oneÓs future plans =in French Listening to a conversation /dialogue on future plans Discussing oneÓs future plans; things they want to do in future (Aprs mes",
+      "specificCompetences": [],
+      "learningActivities": [],
+      "expectedStandard": "French accordingly",
+      "keywords": [
+        "future",
+        "future",
+        "plans",
+        "discuss",
+        "future",
+        "plans",
+        "french",
+        "listening",
+        "conversation",
+        "dialogue",
+        "future",
+        "plans"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1-2",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "THE FUTURE",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Future Plans =4.5.1.1 Discuss oneÓs future plans =in French Listening to a conversation /dialogue on future plans Discussing oneÓs future plans; things they want to do in future (Aprs mes",
+      "specificCompetences": [
+        "Express wishes in French Identifying expressions used for wishes in French (JÓaimairais tre, Je souhate queÈ) Role playing expressing wishes in French Writing"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": [
+        "future",
+        "future",
+        "plans",
+        "discuss",
+        "future",
+        "plans",
+        "french",
+        "listening",
+        "conversation",
+        "dialogue",
+        "future",
+        "plans"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "EMPLOYMENT",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "Future Careers",
+      "specificCompetences": [
+        "Demonstrate knowledge of diඒerent carriers in French Listening to diඒerent dialogues involving people of diඒerent professions and identifying them Discussing diඒerent careers (professeur, avoca, lectricien, menuisier, htesse de lÓair/stewardÈ) Writing on oneÓs future career in French."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["employment", "future", "careers"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S2",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "EMPLOYMENT",
+      "subtopicNumber": "4.6.2",
+      "subtopic": "Job Advertisements",
+      "specificCompetences": [
+        "Apply for employment in French Reading diඒerent adverts and identifying a job advert. (qualiÜcation"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "written correctly",
+      "keywords": ["employment", "advertisements"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S3",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "EMPLOYMENT",
+      "subtopicNumber": "4.6.3",
+      "subtopic": "Interviews",
+      "specificCompetences": [
+        "Use appropriate expressions in a job interview Listening to a job interview from a given dialogue /conversation Discussing interrogative phrases used in a job interview (parlez-nous de vous? Pourquoi choisissez-vous ce travailÈ) Outlining hints to consider when going for an interview (conÜance, bien habill, parlez clairementÈ) Role playing a job interview (Bonjour Monsieur/MadameÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["employment", "interviews"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S1",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "DEMOCRACY",
+      "subtopicNumber": "4.7.1",
+      "subtopic": "Government Organs",
+      "specificCompetences": [
+        "Discuss organs of the Zambian Government Reading a passage on 3 organs of the Zambian Government. Discussing the functions of the three ( organs of the zambian Government. ( LÓExecutif: executer les Lois, Legislatif: formuler les Lois, Le Judiciaire: appliquers Lois)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed correctly",
+      "keywords": ["democracy", "government", "organs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S1-2",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "DEMOCRACY",
+      "subtopicNumber": "4.7.1",
+      "subtopic": "Government Organs",
+      "specificCompetences": [
+        "Discuss human rights in French Describing human rights in French Making a list of Human Rights in French (liberte dÓ expression"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["democracy", "government", "organs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S1-3",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "DEMOCRACY",
+      "subtopicNumber": "4.7.1",
+      "subtopic": "Government Organs",
+      "specificCompetences": [
+        "Explain characteristics of democracy Discussing characteristics of democracy"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["democracy", "government", "organs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S1",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "EDUCATION AND TECHNOLOGY",
+      "subtopicNumber": "4.8.1",
+      "subtopic": "Education System",
+      "specificCompetences": [
+        "Compare and contrast the education system of Zambia =with any Francop=hone country Discussing the education structure in Zambia (Ecole maternelle, Primaire, Secondaire/ technique et universitaire) Comparing the Zambian education system to those in the region (Zambie - Ecole maternelle, Primaire, Secondaire, cole normale/ universitaire. Any country in the region"
+      ],
+      "learningActivities": ["(cole maternelle, primaire, Lyce,"],
+      "expectedStandard": "",
+      "keywords": ["education", "technology", "education", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S1-2",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "EDUCATION AND TECHNOLOGY",
+      "subtopicNumber": "4.8.1",
+      "subtopic": "Education System",
+      "specificCompetences": [
+        "Discuss the importance of education = Identifying modes of teaching and learning (conventional, e- learning) Discussing the importance of education in French (debate) Writing a composition on the importance of education in French Importance of education discussed thoroughly"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["education", "technology", "education", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T9-S1",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "HEALTH",
+      "subtopicNumber": "4.9.1",
+      "subtopic": "Terminal Diseases",
+      "specificCompetences": [
+        "Demonstrate knowledge of terminal diseases Identifying terminal diseases from a given passage (Malaria, le SIDA, Fievre jaune) Discussing causes and eඒects of terminal diseases such as la Malaria, HIV/AIDS and Yellow fever.(Malaria - Moustique, le SIDA - le virus dans le sang, Cholra - les bacteries dans lÓenvironment sale) Reading a passage on how these diseases are transmitted and answering the questions Writing about terminal diseases"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["health", "terminal", "diseases"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T9-S1-2",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "HEALTH",
+      "subtopicNumber": "4.9.1",
+      "subtopic": "Terminal Diseases",
+      "specificCompetences": [
+        "=Explain ways of =preventing various =diseases in French Discussing ways of preventing diඒerent diseases such as HIV (AIDS/STIs - Abstenance, Covid 19 - Masque, Malaria - moustiquaire, cholra- environement propreÈ) Dramatising ways of preventing diඒerent deseases in French Writing on ways of preventing HIV AIDS/STIs - malaria,cholra, Covid 19"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["health", "terminal", "diseases"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T10-S1",
+      "form": 4,
+      "topicNumber": "4.10",
+      "topic": "ENVIRONMENT",
+      "subtopicNumber": "4.10.1",
+      "subtopic": "Climate Change",
+      "specificCompetences": [
+        "Discuss the causes and eඒects of climate change in French Reading a passage on the causes and eඒects of climate change and identifying them Discussing environmental issues and their solutions. Les deÜs: environmental degradation) such as production de Charbon, dforestation coupage dÓarbres) /rosion du sol/ la pollution de lÓair/ le feu de la brousse, dchets solides).=Les Solutions - Aforestation, lÓernergie renouvelableÈ) Causes and HIIHFWV RI climate change discussed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["environment", "climate", "change"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T10-S1-2",
+      "form": 4,
+      "topicNumber": "4.10",
+      "topic": "ENVIRONMENT",
+      "subtopicNumber": "4.10.1",
+      "subtopic": "Climate Change",
+      "specificCompetences": [
+        "Explain the importance of environmental protection in French Reading a passage on the importance of environmental protection and answering the questions Discussing ways of enviromental protection (la plantation des arbres, eviter a bruler la brousse nÓimporte quel tempsÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["environment", "climate", "change"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T10-S2",
+      "form": 4,
+      "topicNumber": "4.10",
+      "topic": "ENVIRONMENT",
+      "subtopicNumber": "4.10.2",
+      "subtopic": "Energy Conservation",
+      "specificCompetences": [
+        "Discuss ways of conserving energy in French Listening to a conversation on diඒerent sources of energy (lÓnergie renouvelable, lÓnergie propre, lÓnergie solaire, lÓnergie dÓlectricit , lÓnergie de gazÈ) Writing a list of dos and donts on energy conservation(Eteindre toutes les lumireres aprs lÓutilisation, Remplacer les ampoules traditionnelles par les ampoules  conomie dÓnergie) Dramatising and sensitising the community on ways of conserving energy in French"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "French accordingly",
+      "keywords": ["environment", "energy", "conservation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T11-S1",
+      "form": 4,
+      "topicNumber": "4.11",
+      "topic": "ENTREPRENE- URSHIP",
+      "subtopicNumber": "4.11.1",
+      "subtopic": "Small Businesses",
+      "specificCompetences": [
+        "Discuss the beneÜts of HQWUHSUHQHXUV hip in French Listing the diඒerent types of entrepreneurship from a given passage petit commerce, cooperatives, petites entreprises etc) Discussing the beneÜts of entrepreneurship (emploi personnel, creation dÓemploi, contribution au dveloppement conomique national) Writing about solutions of unemployment in a community in French"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["entreprene", "urship", "small", "businesses"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T11-S1-2",
+      "form": 4,
+      "topicNumber": "4.11",
+      "topic": "ENTREPRENE- URSHIP",
+      "subtopicNumber": "4.11.1",
+      "subtopic": "Small Businesses",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Saluer: Bonjour / Bonsoir /bon apres- midi/Salut ! / Coucou !",
+        "Comment a va ? / Comment vas-tu ? / Comment allez-vous ?",
+        "Comment tu te portes ? / Comment vous vous portez ? / a va ? / a va bien ? / Tu vas bien ? /",
+        "Je vais bien. / Nous allons bien. / Je me porte bien. / Nous nous portons bien. / Oui, a va.",
+        "Comme ci comme a. / a va mal. / a ne va pas. / Je ne me sens pas bien. / Je ne vais pas",
+        "Je suis Zambian(ne). /Je suis de nationalit Zambianne. /Je viens de la Zambie",
+        "Il /elle est Zambien (ne). /Il /elle est de nationalit Zambienne. /Il / elle vient de Zambie",
+        "Les pays: Le Ghana, le Senegal, le Mali, le Cameroun,le Portugal, le Bresil Èla Zambie, la",
+        "etre, avoir,habiter, s",
+        "combien de frres/sÍurs/cousin(V/cousine(V quel ge ? plus/moins/aussi +adjectif +queÈ",
+        "Il /elle est È (petit/petite,/grand/grande/, gros/ grosse, mince / Il(elle) est trs È beau/belle,",
+        "il /elle est un peu, assez È. Il/elle a les cheveux longs et noirs",
+        "derrire, devant, sur, sous, dans, entre, parmi, etc.",
+        "prs de,  droite/gauche de,  ct de / en face de /au milieu de /autour de / en dessous de / au-",
+        "il y a kilomtres de ÈÈ/cÓest  kilomtres de È"
+      ],
+      "expectedStandard": "",
+      "keywords": ["entreprene", "urship", "small", "businesses"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T11-S1-3",
+      "form": 4,
+      "topicNumber": "4.11",
+      "topic": "ENTREPRENE- URSHIP",
+      "subtopicNumber": "4.11.1",
+      "subtopic": "Small Businesses",
+      "specificCompetences": [],
+      "learningActivities": ["par train, par bus,  pied,  vlo, par avion, par bateau."],
+      "expectedStandard": "",
+      "keywords": ["entreprene", "urship", "small", "businesses"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

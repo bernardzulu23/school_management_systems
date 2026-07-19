@@ -1,0 +1,37 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "summary",
+  "lesson": {
+    "lesson": 13,
+    "title": "SUMMARY",
+    "topics": ["PREFACE"],
+    "activities": [],
+    "resources": [
+      "new Competence-Based Curriculum, enhancing their ability to inspire and equip learners with",
+      "essential English Language knowledge, skills and positive attitudes desired to create a vibrant",
+      "and responsive education system.",
+      "CHAPTER 1: LIFE SKILLS AND HEALTH EDUCATION",
+      "LISTENING AND SPEAKING",
+      "TOPIC TITLE: PUBLIC SPEAKING"
+    ],
+    "assessment": [
+      "supplement this module with their own research and innovations in order to address any gaps",
+      "that may arise during implementation.",
+      "Kelvin Mambwe (PhD.)",
+      "Permanent Secretary- Educational Services",
+      "MINISTRY OF EDUCATION",
+      "ACKOWLEDGEMENT"
+    ],
+    "notes": ""
+  }
+}

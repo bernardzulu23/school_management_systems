@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "ba-anyi-bo-walanguluka-bengijisha-bingi-bizhima-kutama-mu-ki",
+  "lesson": {
+    "week": 3,
+    "lesson": 17,
+    "title": "Bañanyi bo walanguluka bengijisha bingi bizhima kutama mu kino kyalo kya Zambia?",
+    "topics": [
+      "Mepuzho:",
+      "Mufunjishi abuule bafunda kwambapo bintu bimo byo bafunda mu kwipipisha. Apa bino, ne aye",
+      "asunsepo pabyo baamba.",
+      "KIBESE C: KUNEMBA",
+      "Mutwe: Nsombelo"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

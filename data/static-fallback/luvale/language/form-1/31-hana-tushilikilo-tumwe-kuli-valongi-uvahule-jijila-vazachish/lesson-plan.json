@@ -1,0 +1,44 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+  "md5": "29ad092b9734bb89d25044f40ea2b62a",
+  "detectedShift": 0,
+  "pageCount": 104,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "hana-tushilikilo-tumwe-kuli-valongi-uvahule-jijila-vazachish",
+  "lesson": {
+    "week": 4,
+    "lesson": 31,
+    "title": "Hana tushilikilo tumwe kuli valongi uvahule jijila vazachishilamo tushilikilo",
+    "topics": [
+      "khana vaze.",
+      "Kukhukulula",
+      "Mutwe wachihande ou uneulula valongi halumbunwiso namilimo yatushilikilo.",
+      "KWALUMUNA MUJIMBU",
+      "Chihande: Kwalumuna Mujimbu"
+    ],
+    "activities": [],
+    "resources": [
+      " Chinjikizo chakulumbununa muthu",
+      " Lipapilo lyavathu vakulisezaseza.",
+      "EXPECTED STANDARD: Kulumbununa muthu vanachisoneka mujila yakwoloka.",
+      "(This must come from the syllabus as it is)",
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTIO",
+      " Mumazavu",
+      "amandende,",
+      "valumbunune",
+      "chakulumbunun"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "subject": "Computer Studies",
+  "subjectSlug": "computer-studies",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "FORM-1-ICT-MODULE-Sample1.pdf",
+  "md5": "33d06366ada5cf9dee9617585d61b549",
+  "detectedShift": 0,
+  "pageCount": 15,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "basic-internet-and-online-tools",
+  "lesson": {
+    "lesson": 12,
+    "title": "Basic Internet and Online Tools",
+    "topics": [],
+    "activities": [
+      "ensuring a balance between theoretical and practical learning.",
+      "To encourage teachers to critically evaluate the module and identify gaps that may arise,"
+    ],
+    "resources": [
+      "approved textbooks tailored to the new curriculum. It aims to support teachers in aligning their",
+      "teaching practices with the curriculum’s objectives, while also fostering innovation and creativity",
+      "in the classroom.",
+      "Objectives of the Module:",
+      "To empower teachers with structured guidance on the delivery of ICT lessons based on the"
+    ],
+    "assessment": [
+      "ensuring a balance between theoretical and practical learning.",
+      "To encourage teachers to critically evaluate the module and identify gaps that may arise,"
+    ],
+    "notes": ""
+  }
+}

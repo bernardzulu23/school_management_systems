@@ -1,0 +1,30 @@
+{
+  "subject": "Lunda",
+  "subjectSlug": "lunda",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LIT-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "1e0328322e67dd5db47a7a0e677db070",
+  "detectedShift": 0,
+  "pageCount": 62,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-5-litilicha-yakusoneka-boys",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.5 Litilicha yakusoneka BOYS:",
+    "topics": ["GIRLS: 26", "SUB-TOPIC: 1.5.3 Chambu nikudifwana kwa Litilicha yakusoneka."],
+    "activities": ["What should the", "teacher do?", "LEARNERS", "learners"],
+    "resources": [],
+    "assessment": [
+      "CRITERIA",
+      "Activity 1:",
+      "Introduction/Revisi",
+      "learners to",
+      "b) State",
+      "literature"
+    ],
+    "notes": ""
+  }
+}

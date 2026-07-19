@@ -1,0 +1,1267 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Religious Education Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — RELIGIOUS-EDUCATION-SYLLABUS.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Religious Education",
+    "slug": "religious-education",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.976) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 29,
+    "shiftConfidence": 0.976
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "=The Idea of Religion",
+      "specificCompetences": ["Recognise other peopleÓs Religions"],
+      "learningActivities": [],
+      "expectedStandard": "recognised accordingly",
+      "keywords": ["idea", "religion"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "=The Idea of Religion",
+      "specificCompetences": ["Appreciate Religious Education in day to day living"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["idea", "religion"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "= Four Religions in Zambia",
+      "specificCompetences": ["Evaluating the four Religions in Zambia"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["four", "religions", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Types of growth = =1.2.1.1 Analyse types of JURZWK",
+      "specificCompetences": [],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["types", "growth", "analyse", "types", "jurzwk"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Types of growth = =1.2.1.1 Analyse types of JURZWK",
+      "specificCompetences": ["Demonstrate responsible citizenship in growing up"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["types", "growth", "analyse", "types", "jurzwk"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "=Diඒerent ways people develop",
+      "specificCompetences": ["Demonstrate diඒerent ways people develop"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["erent", "ways", "people", "develop"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "=Diඒerent ways people develop",
+      "specificCompetences": ["Care for the environment"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["erent", "ways", "people", "develop"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "= Growing up in diඒerent religions Hinduism, Islam, Christianity and ZTR)",
+      "specificCompetences": ["= Communicate teachings of diඒerent religions on growing up"],
+      "learningActivities": [],
+      "expectedStandard": "communicated accordingly",
+      "keywords": ["growing", "erent", "religions", "hinduism", "islam", "christianity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Morality",
+      "specificCompetences": ["Apply moral principles in daily living"],
+      "learningActivities": [],
+      "expectedStandard": "daily living accordingly",
+      "keywords": ["morality"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Morality",
+      "specificCompetences": ["Analyse moral dilemmas"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["morality"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Sources of moral codes",
+      "specificCompetences": ["Diඒerentiate sources of religious and secular moral codes"],
+      "learningActivities": [],
+      "expectedStandard": "diඒerentiated accordingly",
+      "keywords": ["sources", "moral", "codes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "=Making Choices=",
+      "specificCompetences": ["=Accept responsibility for oneÓs choices"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["making", "choices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "=Making Choices=",
+      "specificCompetences": ["=Evaluate decision making steps"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["making", "choices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "Central teachings on making choices =in the four =religions =in Zambia.",
+      "specificCompetences": ["=Analyse central teachings on making choices in the four religions"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["central", "teachings", "making", "choices", "four", "religions", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "Talents",
+      "specificCompetences": [
+        "=Use talent as a source of earning a living Responsibility for oneÓs"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "analysed =accordingly",
+      "keywords": ["talents"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "Talents",
+      "specificCompetences": [
+        "'HYHORS talent to promote HQWUHSUHQHXUVKLS Identifying talents that can develop into entrepreneurial ventures Tailoring, hair dressing, sportsÈ) 'HPRQVWUDWH how oneÓs"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "developed accordingly",
+      "keywords": ["talents"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "=Competition and Cooperation",
+      "specificCompetences": [
+        "Demonstrate understanding the importance of competition and cooperation in society"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["competition", "cooperation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1-2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "=Competition and Cooperation",
+      "specificCompetences": ["Promote collaboration in competition and co- operation"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["competition", "cooperation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "=Trust",
+      "specificCompetences": ["Justify importance of trust in real life"],
+      "learningActivities": [],
+      "expectedStandard": "life justiÜed accordingly",
+      "keywords": ["trust"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S3",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.3",
+      "subtopic": "Religious teachings on competition, cooperation and trust",
+      "specificCompetences": [
+        "Apply religious teachings on competition, cooperation and trust in society"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "competition", "cooperation", "trust"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Religious teachings on competition, cooperation and trust",
+      "specificCompetences": [
+        "=Analyse diඒerent types of learning Discussing learning Identifying types of learning guided and unguided) Identifying guided and unguided learning experiences at home and at school Discussing advantages and disadvantages of guided and unguided learning"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["religious", "teachings", "competition", "cooperation", "trust"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.2",
+      "subtopic": "Religious teachings on competition, cooperation and trust",
+      "specificCompetences": [
+        "=Explore use of social media to justify truth Discussing meaning of truth Describing social media"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "competition", "cooperation", "trust"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S3",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.3",
+      "subtopic": "=Religious teachings on learning and truth",
+      "specificCompetences": ["=Analyse religious teachings on learning and truth"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "learning", "truth"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S3-2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.3",
+      "subtopic": "=Religious teachings on learning and truth",
+      "specificCompetences": [
+        "Apply teachings of the four religions in Zambia on freedom in community"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "learning", "truth"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "=Division and hatred",
+      "specificCompetences": ["Practise unity and love in daily living"],
+      "learningActivities": [],
+      "expectedStandard": "practised accordingly",
+      "keywords": ["division", "hatred"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "=Division and hatred in the four religions",
+      "specificCompetences": ["Recognise other peopleÓs beliefs and practices"],
+      "learningActivities": [],
+      "expectedStandard": "practices recognised accordingly",
+      "keywords": ["division", "hatred", "four", "religions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "=Overcoming division and hatred",
+      "specificCompetences": [
+        "Apply religious teachings on overcoming division and hatred Analysing religious teachings on overcoming division and hatred in Christianity (Jesus Overcoming divisions, Matt 8:5-13,Luke 5:27-"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["overcoming", "division", "hatred"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "Sin, Forgiveness and Reconciliation",
+      "specificCompetences": [
+        "Relate religious teachings on sin, forgiveness and reconciliation to real life situation"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "related accordingly",
+      "keywords": ["forgiveness", "reconciliation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "=Freedom and Community",
+      "specificCompetences": ["Demonstrate understanding the importance of freedom in community"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["freedom", "community"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "=Freedom and Community",
+      "specificCompetences": [
+        "= Practice Teamwork in the community= Describing collaboration in relation to freedom Interpreting the importance of collaboration in community Discussing the linkage between collaboration and freedom in FRPPXQLW\\ Showing how teamwork can practised in community Teamwork in the community"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "practised accordingly",
+      "keywords": ["freedom", "community"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "= The teachings of the four religions in Zambia on freedom in community=",
+      "specificCompetences": [
+        "= Apply teachings of the four religions in Zambia on freedom in community Evaluating religious teachings of the four religions on freedom in community. Christianity Deuteronomy 24:10-18,Mark 3:1-"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "applied accordingly",
+      "keywords": ["teachings", "four", "religions", "zambia", "freedom", "community"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "= Self-Esteem",
+      "specificCompetences": [
+        "= Analyse personal strength and weakness Exploring the meaning of self HVWHHP Describing types of self-esteem Identifying factors inÝuencing self-esteem Conscious living, self- acceptance, self-responsibility, self-assertiveness, purposive living, personal integrity) Personal strength and weakness"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["self", "esteem"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "= Social and Emotional learning (SEL)",
+      "specificCompetences": [
+        "Practise Social and Emotion Learning FRPSHWHQFHV Identifying Social and Emotional Learning competences Exploring self-awareness, self- management, social awareness, relationship skills and responsible decision making Discussing personal challenges with others Applying Social and Emotional Learning competences in daily life Social and Emotional Learning"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "competences practised accordingly",
+      "keywords": ["social", "emotional", "learning"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S3",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.3",
+      "subtopic": "= Religious teachings on self-esteem =",
+      "specificCompetences": [
+        "= Apply teachings of the four religions in Zambia on self-esteem Examining the teaching of self- esteem in diඒerent religions; Christianity (Genesis 1: 26-27, Joshua 1:1-9, 1 Samuel 16:7, 2 Tim Hinduism, Islam, Zambia Traditional Religion (text from scholars, proverbs, songs, riddlesÈ) Applying teachings of the four religions in Zambia on self-esteem to real life situation Teachings of the four religions in Zambia"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "on self-esteem applied accordingly",
+      "keywords": ["religious", "teachings", "self", "esteem"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "= =Ambitions=",
+      "specificCompetences": [
+        "Promote oneÓs DPELWLRQV Explaining meaning of ambition Illustrating positive and negative effects of ambitions Describing factors that determine DPELWLRQV Promoting oneÓs ambitions Determination, set goalsÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "OneÓs ambitions promoted appropriately",
+      "keywords": ["ambitions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "= =Ambitions=",
+      "specificCompetences": [
+        "Demonstrate creativity and innovation in ambitions and hope Describing creativity and innovation Discussing the importance of creativity and innovation in ambition Explaining steps in designing a SURMHFW Identifying an ambition, describing it, planning the project and acting/conducting project) Designing a project based on their ambitions and hope Creativity and innovation in ambitions"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "and hope demonstrated accordingly",
+      "keywords": ["ambitions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.2",
+      "subtopic": "= =Ambitions=",
+      "specificCompetences": [
+        "Apply hope in daily life Describing hope Exploring attributes of hope Explaining the types of hope Analysing factors that inÝuence KRSH"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Hope applied in daily life accordingly",
+      "keywords": ["ambitions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S3",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.3",
+      "subtopic": "Religious teachings on Ambitions and",
+      "specificCompetences": [
+        "Analyse religious teachings on ambitions and hope ([SORULQJ religious teachings on ambitions and hope in the four religions. Christianity Luke 12:16- Teachings of religions on ambitions and"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "hope analysed on accordingly",
+      "keywords": ["religious", "teachings", "ambitions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "= =Justice and injustice",
+      "specificCompetences": [
+        "Demonstrate understanding of justice in society Discussing justice and injustice in VRFLHW\\ Explaining forms of justice within a social system Distributive, Procedural, Retributive, Restorative) Analysing forms of injustice within a social system Bribery, Tribalism, Corruption, NepotismÈ) Describing steps needed to arrive at an informed decision Showing importance of justice in society ( equality, human dignity, equityÈ) Understanding of justice in society"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "demonstrated appropriately",
+      "keywords": ["justice", "injustice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1-2",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "= =Justice and injustice",
+      "specificCompetences": [
+        "'HPRQVWUDWH how good governance promotes social justice Discussing good governance Explaining importance of good governance in promoting social MXVWLFH Evaluating social justice and good"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["justice", "injustice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S2",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.2",
+      "subtopic": "Religious teachings on Justice in VRFLHW\\",
+      "specificCompetences": [
+        "Apply religious teachings on Justice in VRFLHW\\ (YDOXDWLQJ religious teachings on MXVWLFH in the four religions,"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "applied accordingly",
+      "keywords": ["religious", "teachings", "justice", "vrflhw"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Work",
+      "specificCompetences": [
+        "=Recognise signiÜcance of work in society Describing types of work =(formal and informal) Analysing why people work Discussing vocation as work Examining interdependence of work in modern Zambia. Identifying solutions to dependence on formal employment SigniÜcance of work in society UHFRJQLVHG DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1-2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Work",
+      "specificCompetences": [
+        "=Use work as a source of investment Assessing diඒerent ways of earning money Evaluating diඒerent work opportunities available Exploring ways of using work as a source of investment Analysing reasons for saving Work as a source of investment"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "used accordingly",
+      "keywords": ["work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1-3",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Work",
+      "specificCompetences": [
+        "=Show that entrepreneurial activities constitute work Describing entrepreneurial activities Identifying entrepreneurial activities in the community Justifying entrepreneurial activities as a form of employment Entrepreneurial activities constitute"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "work shown accordingly",
+      "keywords": ["work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "=Ethics",
+      "specificCompetences": [
+        "=Show positive attitudes towards work Describing ethics Demonstrating the relationship between ethics and work Evaluating attitudes to work in Zambia today Exploring importance of positive attitudes towards work Examining relevance of the Code Positive attitudes towards work"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "shown accordingly",
+      "keywords": ["ethics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S3",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.3",
+      "subtopic": "=Religious teachings on work",
+      "specificCompetences": [
+        "=Analyse teachings of the four religions on work Examining religious =teachings on work =in the four religions, Christianity =Gen 2: 15, Ex 20: 8-"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "work analysed accordingly",
+      "keywords": ["religious", "teachings", "work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S3-2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.3",
+      "subtopic": "=Religious teachings on work",
+      "specificCompetences": ["Evaluate religious teachings on suඒering in the four=religions"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Admission practices",
+      "specificCompetences": ["Evaluate role of admission practices in Zambian society"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["admission", "practices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Admission practices",
+      "specificCompetences": ["Exhibit Loyalty and devotion in society"],
+      "learningActivities": [],
+      "expectedStandard": "exhibited accordingly",
+      "keywords": ["admission", "practices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "Religious teachings on admission practices",
+      "specificCompetences": ["Analyse teachings =of =the four religions on admission practices"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["religious", "teachings", "admission", "practices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "=Leisure",
+      "specificCompetences": ["Promote positive leisure time activities in modern society"],
+      "learningActivities": [],
+      "expectedStandard": "promoted accordingly",
+      "keywords": ["leisure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1-2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "=Leisure",
+      "specificCompetences": ["Recognise personal role in environmental management"],
+      "learningActivities": [],
+      "expectedStandard": "recognized accordingly",
+      "keywords": ["leisure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1-3",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "=Leisure",
+      "specificCompetences": ["Explore impact of digital literacy on leisure"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["leisure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.2",
+      "subtopic": "Religious teachings =on Leisure",
+      "specificCompetences": ["Evaluate religious teachings on leisure in the four religions"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "leisure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "=Friendship",
+      "specificCompetences": ["Demonstrate"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["friendship"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "Love",
+      "specificCompetences": ["Distinguish types of love"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["love"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "Love",
+      "specificCompetences": ["Justify importance of collaboration in friendship and love"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["love"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "Love",
+      "specificCompetences": ["Use appropriate language to express oneself in friendship and love"],
+      "learningActivities": [],
+      "expectedStandard": "used correctly",
+      "keywords": ["love"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Religious teaching on friendship and love",
+      "specificCompetences": ["Examine religious teachings on friendship and love"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teaching", "friendship", "love"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Faith",
+      "specificCompetences": ["Justify the role of faith in life"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["faith"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "Prayer",
+      "specificCompetences": ["Interpret the signiÜcance of prayer in oneÓs life"],
+      "learningActivities": [],
+      "expectedStandard": "life interpreted accordingly",
+      "keywords": ["prayer"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "Religious teachings on faith and prayer",
+      "specificCompetences": [
+        "Analyse religious teachings on faith and prayer in the four religions"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "analysed appropriately",
+      "keywords": ["religious", "teachings", "faith", "prayer"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "Wealth",
+      "specificCompetences": ["Apply Ünancial management skills in wealthy creation"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["wealth"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Wealth",
+      "specificCompetences": ["Use entrepreneurship skills in wealth creation"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["wealth"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.2",
+      "subtopic": "Happiness",
+      "specificCompetences": ["Apply emotional intelligence in maintaining happiness"],
+      "learningActivities": [],
+      "expectedStandard": "applied accordingly",
+      "keywords": ["happiness"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S3",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.3",
+      "subtopic": "Religious teachings on wealth and happiness",
+      "specificCompetences": ["Evaluate religious teachings on wealth and happiness"],
+      "learningActivities": [],
+      "expectedStandard": "¤ =Communicating and relating effectively",
+      "keywords": ["religious", "teachings", "wealth", "happiness"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S3-2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.3",
+      "subtopic": "Religious teachings on wealth and happiness",
+      "specificCompetences": [
+        "Apply religious teachings on wealthy and happiness in real life situation"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "wealth", "happiness"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "=Types of Suඒering",
+      "specificCompetences": ["Distinguish diඒerent types of suඒering in society"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["types", "ering"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1-2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "=Types of Suඒering",
+      "specificCompetences": ["Apply problem solving skills in suඒering"],
+      "learningActivities": [],
+      "expectedStandard": "suඒering applied accordingly",
+      "keywords": ["types", "ering"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Religious teachings =on suඒering",
+      "specificCompetences": ["Evaluate religious teachings on suඒering in the four religions"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "ering"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2-2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Religious teachings =on suඒering",
+      "specificCompetences": ["Analyse =religious teachings on courtship and marriage="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "ering"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Death.",
+      "specificCompetences": ["Demonstrate"],
+      "learningActivities": ["QGHUVWDQGLQJ"],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["death"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1-2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Death.",
+      "specificCompetences": [
+        "6KRZ empathy for other people Exploring how people react to bereavement Showing ways of expressing empathy to other people who have lost the beloved one Analysing the essence of expressing"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["death"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.2",
+      "subtopic": "Religious teachings about death",
+      "specificCompetences": [
+        "Analyse religious teachings on ([DPLQLQJ teachings on death and life after death Isa 38:-20, Dan 12:1-3, John 11:11=-44, 1 Cor 15:1-28, Luke Understanding of religious teachings on death and life after death analysed DFFRUGLQJO\\ Religious Education Syllabus 2024"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "about", "death"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "=Leadership",
+      "specificCompetences": ["Demonstrate"],
+      "learningActivities": ["QGHUVWDQGLQ"],
+      "expectedStandard": "",
+      "keywords": ["leadership"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1-2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "=Leadership",
+      "specificCompetences": ["Promote integrity in leadership"],
+      "learningActivities": [],
+      "expectedStandard": "promoted accordingly",
+      "keywords": ["leadership"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1-3",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "=Leadership",
+      "specificCompetences": ["Advocate good governance in leadership"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["leadership"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "Religious teachings on leadership and integrity",
+      "specificCompetences": ["Demonstrate"],
+      "learningActivities": ["QGHUVWDQGLQJ"],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["religious", "teachings", "leadership", "integrity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "=Courtship",
+      "specificCompetences": ["Explore importance of courtship"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["courtship"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Marriage",
+      "specificCompetences": ["Demonstrate"],
+      "learningActivities": ["QGHUVWDQGLQJ"],
+      "expectedStandard": "",
+      "keywords": ["marriage"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2-2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Marriage",
+      "specificCompetences": ["Examine the importance of FRPPXQLFDWLRQ in marriage"],
+      "learningActivities": [],
+      "expectedStandard": "marriage examined accordingly",
+      "keywords": ["marriage"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2-3",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Marriage",
+      "specificCompetences": ["Analyse factors that promote strong marriage relationships"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["marriage"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2-4",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Marriage",
+      "specificCompetences": ["Apply emotional intelligence in marital relationships"],
+      "learningActivities": [],
+      "expectedStandard": "relationships applied accordingly",
+      "keywords": ["marriage"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S3",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.3",
+      "subtopic": "Religious teachings on courtship and marriage",
+      "specificCompetences": ["Analyse religious teachings on courtship and marriage"],
+      "learningActivities": [],
+      "expectedStandard": "marriage analysed accordingly",
+      "keywords": ["religious", "teachings", "courtship", "marriage"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "=Parent- children UHODWLRQVKLS",
+      "specificCompetences": ["Appreciate parent- children relationships"],
+      "learningActivities": [],
+      "expectedStandard": "appreciated accordingly",
+      "keywords": ["parent", "children", "uhodwlrqvkls"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "=Parent- children UHODWLRQVKLS",
+      "specificCompetences": ["Apply human rights in Parent- children relationships"],
+      "learningActivities": [],
+      "expectedStandard": "relationships applied accordingly",
+      "keywords": ["parent", "children", "uhodwlrqvkls"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "Religious teachings on children- parent relationships=",
+      "specificCompetences": ["Utilise religious teachings on children- parent relationships"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "children", "parent", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "National Values and Principles",
+      "specificCompetences": [
+        "=Apply National Values and Principles in daily living Describing National Values and Principles Examining National Values and Principles Identifying Sources of National Values and Principles Discussing objectives of National Values and Principles =(Promotion of hard work and accountabilityÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "daily living applied accordingly",
+      "keywords": ["national", "values", "principles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "(FXPHQLV",
+      "specificCompetences": ["=Explore merging technologies in promoting unity and cooperation"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["fxphqlv"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1-2",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "(FXPHQLV",
+      "specificCompetences": [
+        "=Demonstrate collaboration in Ecumenical work Describing collaboration in ecumenical work Identifying possible areas in which collaboration can enhance ecumenical work Justifying collaboration in ecumenical work Collaboration in Ecumenical work"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["fxphqlv"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S2",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.2",
+      "subtopic": "Religious teachings on Ecumenism",
+      "specificCompetences": [
+        "=Promote interfaith dialogue Explaining the concept of ecumenism and its signiÜcance in the four religions Discuss the importance of dialogue and c Examining Christian teachings on Ecumenism (Acts 15; Psalm 133, Eph"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["religious", "teachings", "ecumenism"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

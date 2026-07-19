@@ -1,22 +1,536 @@
 {
   "subject": "Design and Technology",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["Personal Safety", "Workplace Safety", "First Aid", "Fire Fighting"],
+      "learningOutcomes": [
+        "Apply personal safety precautions in a workplace Discussing safety precautions to be applied in a work place ( wearing correct safety attire, eat in designated areas, operate machinery that you are familiar with, lift objects carefully, use proper HTXLSPHQW« Researching on uses of various Personal Protective Equipment (PPEs) Demonstrating safe ways of handling tools and equipment Developing safety plans",
+        "Apply workplace safety SUDFWLFHV Exploring workplace safety practices ( storing tools and equipment in the right places, keeping gangways clear, cleaning of the benches and the Àoors«)",
+        "Apply ¿rst aid techniques in the workplace Identifying common accident VFHQDULRV suৼocation, burns, FXWV« Role-playing the provision of ¿rst aid to injured persons",
+        "Demonstrate ¿re-¿ghting techniques Classifying ¿res Utilising ¿re-¿ghting equipment ("
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Personal safety precautions in a workplace applied correctly",
+        "Workplace safety practices applied accordingly",
+        "First aid techniques in the workplace applied correctly",
+        "Fire-¿ghting techniques demonstrated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": ["Fire Fighting", "Manufacturing"],
+      "learningOutcomes": [
+        "Use timber in di൵erent VLWXDWLRQV Classifying types of wood ( softwood and hardwood Analysing properties of wood ( physical and PHFKDQLFDO Researching on timber production processes ( felling, conversion, seasoning Identifying timber defects Applying preservatives on timber ( brushing, dipping, spraying ) Timber used in di൵erent VLWXDWLRQV DFFRUGLQJO\\",
+        "Utilise manufactured boards in di൵erent situations Identifying types of manufactured boards ( plywood, block board,",
+        "8VH PHWDOV in di൵erent VLWXDWLRQV Discussing properties of metals Classifying types of metals ( ferrous, non-ferrous and DOOR\\V Exploring the production of ferrous metals",
+        "Use plastics in di൵erent situations Exploring the structure and chemistry of plastics Identifying types of plastics Researching on properties of plastics ( physical and PHFKDQLFDO Classifying plastics ( thermal and thermosetting) Exploring plastic forming processes",
+        "Utilise other materials in di൵erent situations Exploring other materials ( reeds, grass, leather, glass ceramic, canvas, rubber, ¿berglass«) Researching on properties of the other materials ( reeds, glass, grass, leather, clay, canvas, rubber, ¿berglass«) Analysing the e൵ects of using other materials on the environment",
+        "Join materials using di൵erent methods Joining metal using temporary and permanent methods (t emporary: bolt and nut, screwing«; permanent: seaming,",
+        "Use holding tools in product making Identifying holding tools ( bench vice, hand vice,"
+      ],
+      "suggestedActivities": ["VLQJ"],
+      "assessmentMethods": [
+        "di൵erent situations utilised appropriately",
+        "Plastics in di൵erent situations used accordingly",
+        "Other materials utilised in di൵erent situations accordingly",
+        "Materials using di൵erent methods joined appropriately",
+        "Holding tools in product making used accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": [
+        "Manufacturing",
+        "Plane Geometry",
+        "Symbols",
+        "Introduction to Computer Aided Design (CAD)"
+      ],
+      "learningOutcomes": [
+        "Use drafting aids to create drawings Using drafting aids ( pencils, drawing board, T ~ square, set squares, stencils, ¿llet, Àex curves«) to create drawings Applying varied e൵ects to lettering work Drafting Aids to create drawings used correctly=",
+        "Construct lines from given data Drawing boarder lines and title block Bisecting lines Dividing lines into equal parts = Dividing lines into given ratios Lines from given data constructed correctly=",
+        "Construct angles from given data Constructing angles from given data Incorporating angles in designs Applying angles in di൵erent situations Angles=from given dataconstructed=accurately =",
+        "Construct triangles from given data Constructing triangles from given information ( sides, angles and ratio Inscribing and circumscribing triangles Incorporating triangles in designs Applying knowledge of triangles to solve problems Triangles from given data constructed correctly=",
+        "Construct quadrilaterals from given data Exploring types of quadrilaterals Quadrilaterals from given data constructed correctly =",
+        "'HVLJQ V\\PEROV Identifying symbols (used in building construction, welding, electrical, mechanical, pneumatics, hydraulics«) Designing symbols using appropriate tools and equipment (",
+        "Produce Computer Aided Drawings in"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Symbols designed appropriately",
+        "Computer aided drawings in in 2-Dimension produced correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": ["Forms of Energy", "Sources of Energy"],
+      "learningOutcomes": [
+        "8WLOLVH forms of energy Researching forms of energy ( heat, light, sound, chemical, electrical, mechanical«) Discussing uses of different forms of energy 8WLOLVLQJ",
+        "8WLOLVH sources of energy Identifying sources of energy Classifying sources of energy ( renewable and non- UHQHZDEOH 'LVFXVVLQJ advantages and disadvantages of di൵erent sources of energy ("
+      ],
       "suggestedActivities": [],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Sources of Energy"],
+      "learningOutcomes": [
+        "Apply knowledge on structures in di൵erent situations Identifying structures Classifying structures Researching on the properties of structures Applying structures in product design Applying knowledge of structures in di൵erent situations"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Knowledge on structures in di൵erent situations applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["Sources of Energy", "Levers", "Linkages"],
+      "learningOutcomes": [
+        "Apply motions in various situations Identifying di൵erent types of motions Analyzing types of motions",
+        "Apply levers in di൵erent situations Researching on levers Classifying levers into ¿rst, second and third class ( screw driver, bottle opener, door handle, pair of snips, wheelbarrow« Applying the principle of moments in designing and making levers Applying levers in di൵erent situations",
+        "Apply linkages in di൵erent situations Identifying di൵erent types of linkages Analysing operations of various linkages Designing linkages Utilising linkages in di൵erent situations"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Motions in various situations applied accordingly",
+        "Levers in di൵erent situations applied appropriately",
+        "Linkages in di൵erent situations applied appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["Linkages"],
+      "learningOutcomes": [
+        "Utilise electronic components Identifying electronic components ( VZLWFK diode, capacitor, transistor, Integrated Circuit (IC), resistor«) Interpreting symbols of electronic components Drawing conventional symbols of electronic components"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Electronic components utilised accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["Design Process"],
+      "learningOutcomes": [
+        "Apply Design process stages in problem solving Identifying the theme from societal needs Analysing the theme Describing the situation Identifying the problem Deriving a design brief Carrying out a research Formulating design speci¿cations"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Design process stages in problem solving applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Topic 1.9",
+      "topics": ["The Entrepreneur", "Business Plan"],
+      "learningOutcomes": [
+        "Identify entrepreneurial opportunities in Design and Technology Discussing attributes of an entrepreneur Exploring ways of strengthening entrepreneurial abilities Identifying entrepreneurial opportunities in Design and Technology",
+        "Generate a Business Idea Brainstorming on business ideas Assessing a business idea using the SWOT analysis and PMI methods Selecting a viable business opportunity",
+        "Develop a business plan Discussing components of a business plan Formulating parts of a business plan: (i) Summary (ii)Business description (iii) Marketing plan (product description, product costing and pricing, selecting a",
+        "Design and Technology Syllabus 2024"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Entrepreneurial opportunities in Design and Technology identi¿ed accordingly",
+        "Business idea generated successfully",
+        "Business plan developed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.1",
+      "topics": ["Manufacturing Processes", "(QYLURQPHQWDO"],
+      "learningOutcomes": [
+        "Cut screw threads Classifying types of screw threads ( internal and H[WHUQDO",
+        "Apply heat treatment processes on metals",
+        "Manage waste Classifying waste Sorting waste Disposing waste in designated places Researching on e൵ects of waste on the environment ( diseases, Àooding, land/air/water pollution«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Screw threads cut correctly",
+        "applied accordingly",
+        "Waste managed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.2",
+      "topics": [
+        "Form",
+        "Plane Geometry",
+        "Solid Geometry",
+        "Surface Development",
+        "Orthographic Projection"
+      ],
+      "learningOutcomes": [
+        "$SSO\\ form in drawings Drawing shapes Interpreting form in drawings Applying form in drawings ( rendering, adding depth to shapes«) Form in drawings applied FRUUHFWO\\",
+        "Construct circles from given data Classifying circles ( eccentric and concentric Constructing circles from given data Drawing circles in contact external and internal Using circles in pro¿le design Applying circles to solve real-world problems",
+        "Construct tangents and arcs form given data Constructing common tangents to satisfy given data external and internal Constructing a tangent from a circle to a point Constructing tangential arcs to satisfy given data Applying tangents and arcs to real life situations",
+        "&RQVWUXFW polygons from given data Constructing polygons Applying polygons in pro¿le design ( signs, logos, symbols«)",
+        "Transform plane ¿gures to address given situations Producing ¿gures of equal area ( triangles, quadrilaterals, regular and irregular polygons Interpreting linear and area ratios Reducing and enlarging plane ¿gures using linear and area ratios",
+        "Produce pictorial drawings",
+        "Produce surface development of solids Drawing surface developments of prisms and cylinders Applying surface development in product making ( chicken feeders, dustpans, packages«) Calculating surface area of a developed solid Surface development of solids",
+        "Convert pictorial YLHZV to orthographic drawings Preparing the layout for the elevations ( spacing of elevations)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Circles from given data constructed accordingly",
+        "Tangents and arcs from given data constructed accordingly",
+        "Polygons from given data constructed accordingly",
+        "Plane ¿gures to address given situations transformed correctly",
+        "Pictorial drawings produced correctly",
+        "produced correctly",
+        "orthographic drawings converted accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["(OHFWULFLW\\", "Energy Transformation"],
+      "learningOutcomes": [
+        "Construct electrical Circuits Researching on electrical components ( Bulb, circuit board, circuit breakers, cells, resistor, switch, wire«) Interpreting electrical symbols Designing domestic electrical circuits ( ring and radial) Constructing domestic electrical circuits Applying safety precautions when constructing electrical circuits Researching on charge, voltage, electromotive force ( e.m.f), current, resistance, power and energy Installing electrical FRPSRQHQWV using DSSURSULDWH tools, equipment and materials Calculating electrical quantities Measuring electrical quantities using appropriate equipment",
+        "Transform energy from one form to another Researching on the concept of energy conversion and e൵iciency Discussing ways of converting energy from one form to another Developing a system that transforms energy from one form to another Determining the e൶ciency of WKH energy transforming systems"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Electrical circuits constructed correctly",
+        "Energy transformed from one form to another accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Structural Forces"],
+      "learningOutcomes": [
+        "$QDO\\VH the e൵ects of forces on structures Identifying types of forces Classifying forces in structures ( static and G\\QDPLF Analysing structural forces ( Tension, shear,"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Effects of forces on structures analysed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Pulleys and Belts", "Chains and Sprockets", "Cranks"],
+      "learningOutcomes": [
+        "Apply pulleys and belts in problem solving",
+        "Apply chains and sprockets in problem solving Exploring chains and sprocket operations Analysing advantages and disadvantages of using chains and sprocket Applying chains and sprockets in real life situations Maintaining chains and sprockets",
+        "$SSO\\ cranks in solving SUREOHPV Identifying uses of cranks in everyday life Making designs of cranks using suitable material Producing cranks from suitable material"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "applied appropriately",
+        "Chains and sprockets in problem solving utilised correctly",
+        "Cranks in solving problems applied appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Electronic Circuits"],
+      "learningOutcomes": [
+        "Develop Electronic Circuits Researching on electronic components ( Circuit"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Electronic circuits developed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Topic 2.7",
+      "topics": ["Design Process", "Product Realisation"],
+      "learningOutcomes": [
+        "Apply the design process stages to problem solving Producing sketches of design VROXWLRQV Generating possible solutions while applying creativity and innovation Developing a chosen idea Producing a working drawing Producing a presentation drawing Preparing a cutting list Preparing a materials OLVW Outlining the production plan Design process VWDJHV in problem solving applied",
+        "Apply design process skills to make products Selecting materials Using various skills to make product Finishing the product Testing the product Evaluating the product Compiling the report/portfolio Design process skills to make products DSSOLHG DFFRUGLQJO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 2: Topic 2.8",
+      "topics": ["Financial Planning"],
+      "learningOutcomes": [
+        "Make a Financial plan Brainstorming the importance of financial planning Setting up ¿nancial goals Managing ¿nances ( cash Àow, reducing expenses, achieving sales target, banking « Preparing a Financial Plan",
+        "Prepare a budget for a business Researching on components of a budget for a business (income and expenditure) Preparing a budget",
+        "Organise start-up capital Discussing sources of start-up capital ( loan, savings, leasing an asset«) Organising start-up capital"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Financial plan made accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: Topic 2.9",
+      "topics": ["Record Keeping"],
+      "learningOutcomes": [
+        "Manage business records Identifying business documents ( quotations, receipts, invoices«) Preparing records of business activities ( purchases, sales, records of creditors and debtors",
+        "Design and Technology Syllabus 2024"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "A budget for a business prepared successfully Start-up capital organised successfully Business records managed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Fastening/ Fixing", "Fittings"],
+      "learningOutcomes": [
+        "Join materials using fasteners Identifying various types of fasteners Exploring the uses of various fasteners Preparing materials before fastening Boring clearance and pilot holes«) Joining using fasteners ( nails, screws, rivets, Bolts and nuts, studs«) Applying safety precautions when using fasteners",
+        "Mount ¿ttings Identifying types of"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Materials using fasteners joined appropriately",
+        "Fittings mounted correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Casting", "ForgingSheet Material====", "Lathe Work"],
+      "learningOutcomes": [
+        "Produce components by casting Researching on casting Identifying casting tools and equipment Designing a pattern for casting Making a pattern for casting Preparing materials for casting ( sand, pattern, mould, material to be cast«) Components by casting SURGXFHG FRUUHFWO\\ Design and Technology Syllabus 2024 Casting using appropriate techniques and tools Applying safety precautions during casting",
+        "Make products using forging techniques= Researching on forging techniques ( swaging, fullering, drawing down, bending, upsetting, twisting, Àaring« Identifying tools and equipment used in forge work Making products using forging techniques ( swaging, fullering, drawing down, bending, upsetting, twisting, Àaring«) Practising safety precautions during forging",
+        "Make products using= sheet materials= Identifying types of sheet materials ( sheet metal, plastic sheet, glass sheet«) Identifying tools and equipment for making products from sheet materials ( snips, guillotine, glass cutter, marker« Joining sheet materials ( metal, glass, plastic, wood ) Making products from sheet materials using appropriate tools and equipment Practising safety when handling sheet materials ( wearing gloves, avoiding scratching the surface«",
+        "Make products using beaten metalwork SURFHVVHV Researching on beaten metalwork processes ( bossing mallet, sandbag, planishing hammer, tinman¶s anvil, stakes«) Identifying tools and equipment used in beaten metalwork Preparing materials to undergo beaten metalwork SURFHVVHV Making products using appropriate beaten metalwork techniques Practising safety when carrying out beaten metalwork processes Products using beaten metalwork SURFHVVHV made DFFRUGLQJO\\",
+        "Turn materials on the lathe Researching on lathe operations turning between centres, face plate turning, knurling, drilling, boring«) Identifying lathe turning tools Operating lathe machines ( setting the speed, changing direction of rotation«) Turning materials on the lathe wood, metal, plastic« Caring and maintaining lathe tools and machines Applying safety precautions when using the lathe machine"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Products using forging techniques made correctly",
+        "Products using sheet materials made accordingly",
+        "Materials on the lathe turned correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 3: Topic 3.3",
+      "topics": [
+        "=Logos",
+        "1Produce models Researching on the functions of models Exploring tools and materials used in model making Designing the model Producing models using appropriate tools and equipment ( crafting knife, safety rule, compass cutter, cutting mat, paper guillotine, scissors«)",
+        "=Computer Aided Designs (CAD)",
+        "Plane Geometry",
+        "Solid Geometry",
+        "Surface Development",
+        "Orthographic Projection"
+      ],
+      "learningOutcomes": [
+        "Produce logos Analysing characteristics of logos Exploring stages in logo production Designing logos Producing logos using appropriate tools and equipment ( crafting knife, safety rule, compass cutter, cutting mat, paper guillotine, scissors«)",
+        "Produce Computer Aided Designs in 3-Dimesion Performing auxiliary tasks using CAD software ( extending lines, trimming, erasing, scaling, oৼsetting, dimensioning«) Setting the size of a ¿gure",
+        "Construct special curves Exploring types of special curves ( ellipse, parabola, and hyperbola, cycloid, involute archmedian spiral and single start helices Constructing special curves Applying special curves in designing pro¿les",
+        "Plot the locus of a point on link mechanisms Exploring everyday applications of link mechanisms ( power saw, shaping machine, sewing machine, potter¶s wheel, conrod on crankshaft«) Analysing movements of link mechanisms ( oscillations, linear«) Plotting a locus of a point on link mechanisms ( at least two OLQNV Applying link mechanisms=in product development",
+        "Produce pictorial drawings incorporating circles and arcs Producing drawings in isometric, incorporating circles and arcs.",
+        "Draw exploded views Drawing exploded views of objects in pictorial ( isometric and oblique projection",
+        "Draw surface developments of solids Drawing surface developments of pyramids and cones Making templates of developed cones and pyramids ( template lofting",
+        "Produce Assembly drawings Exploring applications of engineering fasteners ( bolts, nut washers, pins, keys, studs, locknuts, handles«) Constructing a bolt and nut Sketching graphical representation of materials ( wood, metal, glass, plastic, concrete«) Producing assembly drawings from exploded pictorial views ( isometric and oblique) Producing assembly drawings in orthographic projection ( with at least 5 components"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Logos produced accordingly",
+        "Models produced appropriately",
+        "Computer Aided Designs in 3-Dimension produced appropriately",
+        "Special curves constructed correctly",
+        "Locus of a point on Link mechanisms plotted correctly",
+        "Pictorial drawings incorporating circles and arcs produced correctly",
+        "Exploded views drawn correctly",
+        "Surface developments of solids drawn correctly",
+        "Assembly drawings produced correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Conservation of Energy", "Cells and Batteries"],
+      "learningOutcomes": [
+        "Apply ways of conserving energy Discussing the importance of conserving energy Exploring ways of conserving energy ( using",
+        "Utilise cells and batteries in problem solving Exploring characteristics of primary and secondary cells Making simple cells Applying cells and batteries in problem solving Maintaining cells and Batteries Practising safety precautions when using batteries Disposing battery waste"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Ways of conserving energy applied accordingly",
+        "Cells and batteries in problem solving utilised accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Cells and Batteries"],
+      "learningOutcomes": [
+        "Construct Structures Researching on structures Exploring structural failure Strengthening structures Stabilising structures ( triangulation, gussets«) Exploring structural sections of various materials ( U- channel, I-beam, H-beam, T-beam«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Structures constructed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 3: Topic 3.6",
+      "topics": ["Cells and Batteries", "Cams and Followers"],
+      "learningOutcomes": [
+        "Apply Gears in problem VROYLQJ",
+        "Apply Cams and Followers in problem solving Identifying characteristics of cam and followers Analysing operations of cams and followers Designing various shapes of cams and followers Applying Cams and Followers in problem solving Maintaining cams and followers Cams and Followers in problem solving DSSOLHG DFFRUGLQJO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["applied appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 3: Topic 3.7",
+      "topics": ["(OHFWURQLF"],
+      "learningOutcomes": [
+        "Repair Electronic Devices Identifying tools and equipment used for repairing electronic devices"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Electronic devices repaired successfully"],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 3: Topic 3.8",
+      "topics": ["Winding-up aBusiness"],
+      "learningOutcomes": [
+        "Winding-up a business YHQWXUH Exploring methods of winding up a business formal methods bankruptcy, voluntary liquidation; informal PHWKRGV",
+        "Design and Technology Syllabus 2024"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["A business enterprise liquidated successfully"],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Adhesives"],
+      "learningOutcomes": [
+        "Apply adhesives in product making Researching on characteristics and uses of adhesives ( epoxy resins, contact adhesive, PVA, Tensol cement, synthetic, casein adhesives«) Preparing surfaces of materials in readiness for applying adhesives"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Adhesives in product making applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Finishes"],
+      "learningOutcomes": ["Apply Finishes to SURGXFWV Discussing types of ¿nishes ( varnish,"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Finishes to products applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 4: Topic 4.3",
+      "topics": [
+        "Computer Aided Designs in 3D",
+        "Pictographs",
+        "Solid Geometry",
+        "Intersection of Objects",
+        "Projection"
+      ],
+      "learningOutcomes": [
+        "Produce Computer Aided Designs in 3D Utilising command tools ( drawing tools Drawing lines, circles, arcs, shapes and extruding Setting sizes of drawings Creating drawings in 3D using graphic software ( AutoCAD, ArchiCAD, Revit, Solidworks, Sketchup",
+        "Produce pictographs Researching on pictographs Outlining stages of creating pictographs: (i) De¿ning the pictograph¶s purpose (ii) Collecting and organising data (iii) Selecting symbols (iv) Determining the scale of the pictograph (v)",
+        "Draw surface development of truncated solids Drawing surface development of truncated solids ( prisms, cylinders, pyramids and cones)",
+        "Draw a True shape of a cut surface Drawing elevations of truncated solids ( prisms, cylinders, pyramids and cones orthographic Drawing the true shape of a cut surface Applying true shape of cut surface in problem solving",
+        "Draw intersection lines between geometrical objects Drawing views of intersecting objects: centred and o൵-centered ( cylinders and SULVPV Applying knowledge of intersecting objects in product making",
+        "Draw building plans Interpreting abbreviations and building symbols of ¿ttings and materials ( electric symbols, walls, windows, doors, toilet pans, bath tabs, electric symbols«) Drawing building plans using geometrical instruments Drawing building plans using graphic software ( AutoCAD, ArchiCAD«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Computer Aided Designs in 3D produced correctly",
+        "Pictographs produced correctly",
+        "Surface development of truncated objects drawn correctly",
+        "True shape of a cut surface drawn correctly",
+        "Intersection lines between geometrical objects drawn correctly",
+        "Building plans drawn accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["Energy Systems"],
+      "learningOutcomes": [
+        "Develop energy generating systems Researching on systems for generating renewable energy ( solar, hydro, wind, geothermal, biomass« Designing a system for generating renewable energy Developing a system for generating energy Evaluating the e൵iciency of a system for generating energy"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Energy generating systems developed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["Energy Systems"],
+      "learningOutcomes": [
+        "Apply Systems and Controls in product development Exploring systems and controls ( perforator, stapler, lock, ladder, elevator, escalator«) Designing systems and controls Applying systems and controls in product making"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Systems and Controls in product development applied appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["Energy Systems"],
+      "learningOutcomes": [
+        "Develop Pneumatic Systems Exploring operation principles of pneumatic systems Analysing the advantages and disadvantages of pneumatic systems Exploring components for pneumatic circuits ( reservoir, pump, valves, actuators, prime movers«) Drawing pneumatic circuits using appropriate symbols",
+        "Develop Hydraulic Systems Exploring operation principles of hydraulic systems Analysing the advantages and disadvantages of Hydraulic systems Discussing components for hydraulic circuits ( reservoir, pump, valves, actuators, prime movers«) Drawing hydraulic circuits using appropriate symbols Designing hydraulic systems for products ( using block diagrams and symbols Applying hydraulic systems in products Practising safety when working with hydraulic systems"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Pneumatic systems developed accordingly",
+        "Hydraulic systems developed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 4: Topic 4.7",
+      "topics": ["Logic Control"],
+      "learningOutcomes": [
+        "Make Logic control Systems Exploring logic control systems Applying logic systems in product development"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Logic control systems made successfully"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "DESIGN-AND-TECHNOLOGY-STUDIES.pdf",
-    "extractedAt": "2026-07-11T06:20:38.822Z",
-    "fileSize": 883567
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/DESIGN-AND-TECHNOLOGY-STUDIES.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 883567,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true,
+    "recordCount": 92
   }
 }

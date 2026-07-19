@@ -1,0 +1,27 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "school-community-mapping",
+  "lesson": {
+    "week": 2,
+    "lesson": 30,
+    "title": "School community mapping",
+    "topics": [
+      "Learners to draw a map of their school and label different groups (e.g., teachers, students,",
+      "clubs, teams)"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

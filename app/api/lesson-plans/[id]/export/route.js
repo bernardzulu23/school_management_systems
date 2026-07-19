@@ -10,6 +10,7 @@ import {
   generateLessonPlanFilename,
   generateLessonPlanWordDoc,
 } from '@/lib/ai/lesson-plan-word-generator'
+import { buildPdfDocument, pdfToBuffer, plainTextToPdfBlocks } from '@/lib/ai/pdf-generator'
 
 export const dynamic = 'force-dynamic'
 
@@ -96,5 +97,51 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
     }
   }
 
-  throw new ApiError('Invalid format. Use ?format=word or ?format=clean-text', 400)
+  if (format === 'pdf') {
+    try {
+      const ctx = await getLessonPlanTeacherContext(plan.createdByUserId, schoolId, plan.subject)
+      const teacherName = ctx.teacherName || plan.createdBy?.name || 'Teacher'
+      const infoRows = [
+        { label: 'School:', value: ctx.schoolName || plan.school?.name || '' },
+        {
+          label: 'Teacher:',
+          value: `${teacherName}${ctx.teacherGender ? ` (${ctx.teacherGender})` : ''}`,
+        },
+        { label: 'Date:', value: plan.createdAt.toLocaleDateString('en-GB') },
+        { label: 'Subject:', value: plan.subject },
+        { label: 'Form/Class:', value: plan.grade },
+        { label: 'Topic:', value: plan.topic },
+        { label: 'Sub-Topic:', value: plan.subTopic || plan.topic },
+        { label: 'Duration:', value: `${plan.duration || 40} minutes` },
+      ]
+
+      const doc = buildPdfDocument({
+        title: 'MINISTRY OF GENERAL EDUCATION',
+        subtitle: ctx.department
+          ? `DEPARTMENT OF ${String(ctx.department).toUpperCase()} LESSON PLAN`
+          : "TEACHER'S LESSON PLAN",
+        infoRows,
+        blocks: plainTextToPdfBlocks(sanitizeText(plan.content)),
+      })
+
+      const filename = generateLessonPlanFilename(plan.subject, plan.grade, plan.topic).replace(
+        /\.docx$/,
+        '.pdf'
+      )
+      const body = new Uint8Array(pdfToBuffer(doc))
+
+      return new Response(body, {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="${filename}"`,
+          'Content-Length': String(body.byteLength || 0),
+        },
+      })
+    } catch (exportError) {
+      console.error('Lesson plan PDF export failed:', exportError)
+      throw new ApiError(exportError?.message || 'Failed to generate PDF document', 500)
+    }
+  }
+
+  throw new ApiError('Invalid format. Use ?format=word, ?format=pdf, or ?format=clean-text', 400)
 })

@@ -1,0 +1,24 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "demonstrate-before-practice-to-help-learners-understand-tech",
+  "lesson": {
+    "week": 1,
+    "lesson": 26,
+    "title": "Demonstrate before practice to help learners understand techniques.",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

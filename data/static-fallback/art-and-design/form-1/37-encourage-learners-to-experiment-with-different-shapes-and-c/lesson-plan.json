@@ -1,0 +1,43 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "encourage-learners-to-experiment-with-different-shapes-and-c",
+  "lesson": {
+    "week": 2,
+    "lesson": 37,
+    "title": "Encourage learners to experiment with different shapes and combinations to develop their",
+    "topics": [
+      "critical thinking and creativity.",
+      "Expected standard: Basic shapes applied in drawings correctly"
+    ],
+    "activities": [
+      "Review of learners' drawings for accuracy and creativity",
+      "Quizzes or tests to assess learners' understanding of basic shapes",
+      "This subtopic introduced learners to basic shapes and their application in drawing. Through",
+      "understanding of basic shapes and their ability to apply them in artistic expressions.",
+      "Introduction",
+      "Shading techniques help artists create realistic drawings by showing the effect of light and",
+      "shadow. Different techniques allow for different textures and moods in artwork. This",
+      "subtopic will explore various shading techniques and their application in drawings."
+    ],
+    "resources": [],
+    "assessment": [
+      "Observation of learners during drawing activities",
+      "Review of learners' drawings for accuracy and creativity",
+      "Quizzes or tests to assess learners' understanding of basic shapes",
+      "This subtopic introduced learners to basic shapes and their application in drawing. Through",
+      "interactive activities and creative drawing exercises, learners would have developed their",
+      "understanding of basic shapes and their ability to apply them in artistic expressions."
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "provide-clues-or-hints-about-artists-unique-styles-to-help-l",
+  "lesson": {
+    "week": 2,
+    "lesson": 11,
+    "title": "Provide clues or hints about artists’ unique styles to help learners make connections.",
+    "topics": ["Expected Standard: Careers in Art classified appropriately"],
+    "activities": [
+      "Learning",
+      "Environment",
+      "Out-Door",
+      "(Natural,",
+      "Artificial",
+      "Technological)",
+      "Suggested Learning & Teaching Materials",
+      "Printed images of various forms of Visual Arts"
+    ],
+    "resources": [],
+    "assessment": [
+      "Learners should be tasked to mention / write what is involved in a number of listed art related",
+      "careers. For example, an art curator: is a professional responsible for overseeing and",
+      "managing artefacts or other items of historical or cultural significance.",
+      "Summary:",
+      "Defined art (Performing, Literary and Fine Arts)",
+      "Categorized branches of Art (Visual Arts, Performing Arts, Digital Arts…)"
+    ],
+    "notes": ""
+  }
+}

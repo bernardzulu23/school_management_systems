@@ -1,0 +1,49 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Chemistry-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "a273913a2d9d647a810d4cb59ef50198",
+  "detectedShift": 0,
+  "pageCount": 130,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "4-redox-reactions",
+  "lesson": {
+    "lesson": 4,
+    "title": "4.: REDOX REACTIONS",
+    "topics": [
+      "Preface",
+      "The Chemistry Teaching Module for Form 2 is designed to support teachers in preparing and"
+    ],
+    "activities": [
+      "encourage learners to explore, experiment, think critically, and apply scientific reasoning in",
+      "understanding chemical and physical phenomena while developing practical competencies.",
+      "Furthermore, it guides teachers in creating a stimulating and supportive learning environment",
+      "that enables learners to develop a profounder understanding of Chemistry.",
+      "Through carefully designed learning experiences, the module supports learners’ intellectual and",
+      "personal growth by cultivating curiosity, critical thinking, and practical skills, while preparing",
+      "them for further education and potential careers in science, technology, and related fields. It is",
+      "anticipated that this module will inspire learners to explore the fascinating world of Chemistry,"
+    ],
+    "resources": [
+      "simulations to enhance student engagement and understanding.",
+      "students meet the learning objectives",
+      "By following these steps, you can effectively use this Chemistry Teaching Module for Form 1 to",
+      "support your teaching and promote learning.",
+      "Introduction",
+      "Chemistry is a fundamental science that helps learners understand the composition, properties,"
+    ],
+    "assessment": [
+      " Plan your lessons in advance, using the module's suggested teaching and learning",
+      "activities.",
+      " Use a variety of teaching methods, including demonstrations, discussions, group work,",
+      "and hands-on experiments.",
+      "and fostering problem-solving skills.",
+      " Provide feedback and support to learners, helping them to identify areas for improvement"
+    ],
+    "notes": ""
+  }
+}

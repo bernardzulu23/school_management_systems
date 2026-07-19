@@ -1,0 +1,29 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "poster-or-art-creation",
+  "lesson": {
+    "week": 4,
+    "lesson": 37,
+    "title": "Poster or Art Creation",
+    "topics": [
+      "Let students design posters or artwork promoting social justice issues like anti-bullying,",
+      "human rights, or environmental justice.",
+      "Display their work around the school.",
+      "“Walk in Someone Else’s Shoes”"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

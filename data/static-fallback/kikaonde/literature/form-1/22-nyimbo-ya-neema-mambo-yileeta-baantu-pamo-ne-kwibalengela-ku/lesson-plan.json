@@ -1,0 +1,27 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "nyimbo-ya-neema-mambo-yileeta-baantu-pamo-ne-kwibalengela-ku",
+  "lesson": {
+    "week": 1,
+    "lesson": 22,
+    "title": "Nyimbo ya neema mambo yileeta baantu pamo ne kwibalengela kukwantankana.",
+    "topics": [
+      "b. Nyimbo ya nema mambo mu nyimbo muji mafunjisho.",
+      "c. Kabiji nyimbo ya neema mambo ileta lusangajiko ku bantu."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

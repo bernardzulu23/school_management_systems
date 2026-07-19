@@ -1,0 +1,24 @@
+{
+  "subject": "Lunda",
+  "subjectSlug": "lunda",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LUNDA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "078a6b2cbe7cce47dae553c1fa9f8cc5",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "joylin-shindanyi-teacher",
+  "lesson": {
+    "week": 6,
+    "lesson": 6,
+    "title": "Joylin Shindanyi: Teacher,",
+    "topics": ["Zambezi Day Secondary School, Zambezi"],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "subject": "Commerce",
+  "subjectSlug": "commerce",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "COMMERCE-TERM-2-MODULE.pdf",
+  "md5": "4b2ed1e09b031a31d223ebf5e8c5fed6",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "topic",
+  "lesson": {
+    "lesson": 3,
+    "title": "Topic",
+    "topics": [],
+    "activities": [],
+    "resources": [
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE",
+      "LEARNERS’ ROLE",
+      "A S S E S S M E N T",
+      "CRITERIA",
+      "INTRODUCTION"
+    ],
+    "assessment": [],
+    "notes": ""
+  }
+}

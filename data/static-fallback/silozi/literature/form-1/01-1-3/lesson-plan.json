@@ -1,0 +1,44 @@
+{
+  "subject": "Silozi",
+  "subjectSlug": "silozi",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "LIT-IN-SILOZI-TEACHING-MODULE-TERM-3.pdf",
+  "md5": "b4a07f3335247df00ccf7141c5c49cd8",
+  "detectedShift": 0,
+  "pageCount": 62,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-3",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.3.",
+    "topics": [
+      "Functions of literature (This must come from the syllabus with its serial number)",
+      "SUB-TOPIC: 1.3.1.",
+      "Oral literature (This must come from the syllabus with its serial number)"
+    ],
+    "activities": [
+      "RATIONALE: This lesson is on Functions of Literature – specifically Oral literature. It is particularly",
+      "focused on the use of oral literature (FOLKTALES) in managing cross cutting issues. Through",
+      "library/ internet research, brainstorming, analysis and collaboration, learners will acquire a skill of"
+    ],
+    "resources": [
+      "Collection of folktales, proverbs, poems, songs etc.",
+      "Pictures of different people.",
+      "LESSON PROGRESSION:",
+      "TEACHERS ROLE",
+      "LEARNERS ROLE"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION",
+      "Revision",
+      "previous material",
+      "literature",
+      "[5 minutes]"
+    ],
+    "notes": ""
+  }
+}

@@ -12,6 +12,7 @@ import { safeRouteParam } from '@/lib/security/safeQueryValue'
 export const PATCH = withErrorHandler(async function PATCH(request, { params }) {
   const access = await authorizeAiRoute(request, {
     roles: ['hod', 'HOD', 'headteacher', 'ADMIN'],
+    featureId: 'ai-term-reports',
     rateLimitPrefix: 'ai_term_reports_patch_',
   })
   if (!access.ok) return access.response

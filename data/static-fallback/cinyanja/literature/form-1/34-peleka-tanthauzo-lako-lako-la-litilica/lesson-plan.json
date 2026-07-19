@@ -1,0 +1,30 @@
+{
+  "subject": "Cinyanja",
+  "subjectSlug": "cinyanja",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-CINYANJA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "15b1addadb25328fe3c0ec18a5b9cbb9",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "peleka-tanthauzo-lako-lako-la-litilica",
+  "lesson": {
+    "week": 3,
+    "lesson": 34,
+    "title": "Peleka tanthauzo lako-lako la Litilica.",
+    "topics": [
+      "MUTU 2: MITUNDU YA LITILICA",
+      "Zamkati :",
+      "Pali mitundu ya Litilica iwili, Litilica ya Zapakamwa ndi Litilica ya Zolembedwa.",
+      "Litilica ya Zapakamwa ifalitsidwa kupyolela m’kulankhula monga zilapi,",
+      "masewelo, ndakatulo ndi zina. Litilica ya Zolembedwa ipezeka m’mabuku, zozile"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

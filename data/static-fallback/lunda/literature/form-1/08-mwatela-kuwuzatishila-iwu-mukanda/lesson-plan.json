@@ -1,0 +1,37 @@
+{
+  "subject": "Lunda",
+  "subjectSlug": "lunda",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "c5e7d95268bf36986cd716cdc740994e",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "mwatela-kuwuzatishila-iwu-mukanda",
+  "lesson": {
+    "week": 4,
+    "lesson": 8,
+    "title": "MWATELA KUWUZATISHILA IWU MUKANDA",
+    "topics": [
+      "Muniwu mukanda mudi yuma yezhima yatela kutañishewa mu Temu 1 yamu Fomu",
+      "Litilicha. Hampinji yakuloñesha nakusoneka yuma yakutañisha mundizilu, watela",
+      "kusakula yuma yalema yiwatela kushinshikahu niyuma hela nyidimu nawa",
+      "yiwukukeña atudizi kwila hela kuzata hachuma hichuma chinakukuhwelelewawu",
+      "kwilukisha. Dichi, ndizilu yikwikala hela yinatweshi kwikala nayuma yakubadika hadi"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [
+      "Written Literature…………………. Litilicha Yakusoneka Nakanwa",
+      "MUTU WANSAŇU: KUWAHA KWA LITILICHA",
+      "Kulumbulula",
+      "Zhidi muniwu mutu wansañu;",
+      "Iwu mutu wansañu wunakushinshika ha hakuwaha kwa Litilicha. Mumutu wansañu",
+      "weniwu mudi nawa cheñi nyitu yansañu yanyanya yidi neyi kulumbulula izu da"
+    ],
+    "notes": ""
+  }
+}

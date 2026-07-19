@@ -1,0 +1,46 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.pdf",
+  "md5": "c365a013711120f2eb6252f41a63bfdc",
+  "detectedShift": 0,
+  "pageCount": 49,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-5-physical-fitness",
+  "lesson": {
+    "lesson": 9,
+    "title": "1.5 Physical Fitness",
+    "topics": ["SUB-TOPIC: 1.5.1 Health related components."],
+    "activities": [
+      "RATIONALE:",
+      "This lesson will help learners to develop physical fitness, coordination and focus which are",
+      "essential for both athletic performance and personal growth. It is number one (1) of the three (3)",
+      "PRIOR KNOWLEDGE:",
+      "muscular strength, cardiovascular endurance, flexibility, muscular endurance and body",
+      "composition (cycling, skipping, lifting objects …)",
+      "REFERENCES:",
+      "PES Teaching module Term 2, Page"
+    ],
+    "resources": [
+      "Video clips, pictures, charts, whiteboard…",
+      "EXPECTED STANDARD: To be indicated upon successful execution of all the components",
+      "outlined under health-related activities.",
+      "LESSON PROGRESSION:",
+      "TEACHER’S",
+      "ACTIVITY"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "I N T R O D U C ­",
+      "Introduces",
+      "lesson by ask­",
+      "ing learners on",
+      "health-related"
+    ],
+    "notes": ""
+  }
+}

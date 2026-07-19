@@ -1,0 +1,49 @@
+{
+  "subject": "Geography",
+  "subjectSlug": "geography",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Geography-Module-Form1.Term-11.pdf",
+  "md5": "830c5919283d537a897943595cfaf095",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "weather-and-climate",
+  "lesson": {
+    "lesson": 6,
+    "title": "Weather and Climate",
+    "topics": [
+      "Introduction",
+      "Weather and climate play an important role in nearly all areas of life. It influences the clothes"
+    ],
+    "activities": [
+      "Learning about weather and climate helps learners connect what they learn in classroom with",
+      "the real -world experiences. This topic will focus on weather and climate, climate change and",
+      "mitigation and adaptation to climate change. The following Sub-topics would be covered under",
+      "this topic:",
+      "o Weather and Climate",
+      "o Climate Change",
+      "o Mitigation and Adaptation to Climate Change",
+      "Hook: Your community is facing frequent floods. What weather related data would you collect"
+    ],
+    "resources": [
+      "weather reports",
+      "o Cluster learners for interactive activities such as role plays",
+      "o Learners roleplay where they pretend to be weather forecasters or climate",
+      "scientists. Weather forecasters give daily or weekly weather reports but climate",
+      "scientists explain long term climate trends for a region",
+      "o Learners create a T-Chart where they list daily weather observations vs long term"
+    ],
+    "assessment": [
+      "Use a quick checklist while observing as learners roleplay",
+      "o Clear communication, accuracy of facts, team participation and creativity in presentation",
+      "o Conduct a quiz on weather and climate",
+      "Activity 2: Identifying the various elements of weather and climate (temperature, humidity,",
+      "rainfall, cloud cover…)",
+      "a. Learning Environment"
+    ],
+    "notes": ""
+  }
+}

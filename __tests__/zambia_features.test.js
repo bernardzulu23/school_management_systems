@@ -22,6 +22,22 @@ describe('Zambia feature gating', () => {
     expect(planIncludes('standard', 'ai-story-weaver')).toBe(true)
   })
 
+  test('basic plan has no AI route access', () => {
+    expect(PLAN_FEATURES.basic).not.toContain('ai-tools')
+    expect(planIncludes('basic', 'ai-tools')).toBe(false)
+  })
+
+  test('study-assistant and term-reports are gated away from basic', () => {
+    for (const featureId of ['ai-study-assistant', 'ai-term-reports']) {
+      expect(planIncludes('basic', featureId)).toBe(false)
+      expect(planIncludes('standard', featureId)).toBe(true)
+      expect(planIncludes('premium', featureId)).toBe(true)
+      expect(PLAN_FEATURES.standard).toContain(featureId)
+      expect(PLAN_FEATURES.premium).toContain(featureId)
+      expect(PLAN_FEATURES.basic).not.toContain(featureId)
+    }
+  })
+
   test('secondary schools cannot use primary-only features', () => {
     const primaryOnlyId = Object.keys(PRIMARY_ONLY_FEATURES)[0]
     expect(canUseFeature('secondary', primaryOnlyId)).toBe(false)

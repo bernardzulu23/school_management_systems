@@ -1,0 +1,45 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 2,
+  "sourceFile": "Mathematics-2-Teaching-Module-Form-2-Term-2.pdf",
+  "md5": "89aeadaa38c2debec589b6374a4458d5",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "matrices",
+  "lesson": {
+    "lesson": 5,
+    "title": "MATRICES",
+    "topics": [
+      "Introduction",
+      "Overview: Matrices are an important part of Algebra because they provide an organised way of",
+      "arranging numbers, symbols, or expressions in rows and columns so that information can be",
+      "represented, analysed, and manipulated efficiently. They are widely used in Mathematics and in",
+      "everyday life to organise data such as school records, prices of goods, transport schedules, sports"
+    ],
+    "activities": [
+      "formation, manipulation, and interpretation.",
+      " Communication: Explain matrix concepts, notation, operations, and solutions clearly",
+      "using appropriate mathematical language and symbols.",
+      " Creativity and Innovation: Apply matrices in representing real-life situations such as",
+      "timetables, stock records, transport fares, and test scores.",
+      " Critical Thinking: Compare different matrix operations and determine the most suitable",
+      "method for solving a given problem.",
+      " Digital Literacy: Use calculators, spreadsheets, and other digital tools to represent and"
+    ],
+    "resources": [],
+    "assessment": [
+      "matrices and identify entries by their positions.",
+      "Learning Activity 2: Identifying different types of matrices (row, column, square,",
+      "zero, rectangular, equal, diagonal, identity)",
+      "Introduction",
+      "Identifying different types of matrices helps learners classify matrices according to their structure.",
+      "This enables them to recognise similarities and differences between matrices and to prepare for"
+    ],
+    "notes": ""
+  }
+}

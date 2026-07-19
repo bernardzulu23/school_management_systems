@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3-2025.pdf",
+  "md5": "3db35d21d2fc8da2d625ac8d32d567c6",
+  "detectedShift": 0,
+  "pageCount": 119,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "bafunjishi-betu-kechi-baji-na-misalululo-ine",
+  "lesson": {
+    "week": 2,
+    "lesson": 37,
+    "title": "Bafunjishi betu kechi baji na misalululo ine.",
+    "topics": [
+      "Kipimo kya ñingijilo kyaketekelwa kubiwa: Byambo byaingijishiwa mu bipelu",
+      "byalengewa bulongo.",
+      "Mutwe-2: Ntangilo Yazhika",
+      "Mutwe-Kache: Kutanga ne Kumvwisha",
+      "Buyuke: Bafunda batange ne kumvwisha bulongo bibaaba bya mu mabuku"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

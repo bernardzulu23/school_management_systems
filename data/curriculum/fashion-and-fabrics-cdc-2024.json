@@ -1,0 +1,1580 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Fashion and Fabrics Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Fashion and Fabrics",
+    "slug": "fashion-and-fabrics",
+    "extractionNote": "Shift-corrected extract (detected_shift=0, confidence=0.974) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 0,
+    "shiftConfidence": 0.974
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Concepts in Fashion and Fabrics",
+      "specificCompetences": ["Explore concepts in Fashion and Fabrics"],
+      "learningActivities": [
+        "Explaining the basic concepts in",
+        "Exploring why people wear",
+        "Demonstrating ability to choose",
+        "Creating a collage or mood"
+      ],
+      "expectedStandard": "Fabrics explored accordingly",
+      "keywords": ["concepts", "fashion", "fabrics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Career Opportunities",
+      "specificCompetences": ["Explore potential career paths in textile and clothing"],
+      "learningActivities": [
+        "Discussing history of textile and",
+        "Exploring career opportunities",
+        "Discussing the economic im-",
+        "Visiting a local textile shop :("
+      ],
+      "expectedStandard": "",
+      "keywords": ["career", "opportunities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Work Ethics",
+      "specificCompetences": ["Practice work ethics in the fashion industry"],
+      "learningActivities": [
+        "Discussing work ethics: (im-",
+        "Describing key work ethics and",
+        "Discussing the impact of a posi-",
+        "Setting up role-play scenarios"
+      ],
+      "expectedStandard": "",
+      "keywords": ["work", "ethics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Safety",
+      "specificCompetences": ["Practice safety rules in the workroom"],
+      "learningActivities": [
+        "Discussing safety in the fashion",
+        "Practising personal safety and",
+        "Using tools and equipment",
+        "Practising safety rules and regu-"
+      ],
+      "expectedStandard": "Practiced accordingly",
+      "keywords": ["safety"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "First Aid",
+      "specificCompetences": ["Apply First Aid"],
+      "learningActivities": [
+        "Discussing First Aid: (im-",
+        "Dealing with accidents and",
+        "Role-playing using the first aid",
+        "Applying First aid"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["first"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Good Grooming",
+      "specificCompetences": ["Practice good personal hygiene in fashion Industry"],
+      "learningActivities": [
+        "Discussing the importance of",
+        "Exploring the key aspects of",
+        "Discussing effective hygiene",
+        "Practicing good personal hy-"
+      ],
+      "expectedStandard": "Practiced appropriately",
+      "keywords": ["good", "grooming"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Health Habits",
+      "specificCompetences": ["Practice Good Health Habits in the Fashion Industry"],
+      "learningActivities": [
+        "Discussing the importance of",
+        "Analysing the key health habits",
+        "Practicing good posture: (walk-"
+      ],
+      "expectedStandard": "",
+      "keywords": ["health", "habits"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Functional Clothing",
+      "specificCompetences": ["Plan Dressing according to function"],
+      "learningActivities": [
+        "Discussing the concept of cloth-",
+        "Describing different types of",
+        "Exploring how clothing relates",
+        "Explaining the basic attach-",
+        "Sorting various items of cloth-"
+      ],
+      "expectedStandard": "",
+      "keywords": ["functional", "clothing"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "Wardrobe Planning",
+      "specificCompetences": ["Plan the wardrobe in relation to fashion trend"],
+      "learningActivities": [
+        "Discussing wardrobe planning:",
+        "Analysing factors to consider in",
+        "Explaining benefits of planning",
+        "Selecting clothes in relation to"
+      ],
+      "expectedStandard": "to fashion trends accordingly",
+      "keywords": ["wardrobe", "planning"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "Dress Code And Culture",
+      "specificCompetences": ["Dress according to specific culture"],
+      "learningActivities": [
+        "Analysing dress code according",
+        "Discussing how clothing affects",
+        "Performing a fashion parade de-"
+      ],
+      "expectedStandard": "culture accordingly",
+      "keywords": ["dress", "code", "culture"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S4",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.4",
+      "subtopic": "Accessories",
+      "specificCompetences": ["Use suitable accessories with outfit"],
+      "learningActivities": [
+        "Discussing accessories: (scarfs,",
+        "Explaining factors that influ-",
+        "Caring for accessories accord-",
+        "Making accessories: (Practical)"
+      ],
+      "expectedStandard": "with outfits accordingly",
+      "keywords": ["accessories"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S5",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.5",
+      "subtopic": "Inner and Outer Garments",
+      "specificCompetences": ["Make appropriate use of inner and outer garments"],
+      "learningActivities": [
+        "Classifying garments into inner",
+        "Evaluating factors that influence",
+        "Using inner and outer garments"
+      ],
+      "expectedStandard": "used appropriately",
+      "keywords": ["inner", "outer", "garments"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Needlework Tools",
+      "specificCompetences": ["Use needlework tools"],
+      "learningActivities": [
+        "Describing the function of nee-",
+        "Making use of needlework",
+        "Creating a tool kit with labelled",
+        "Making :(measuring card, tape"
+      ],
+      "expectedStandard": "",
+      "keywords": ["needlework", "tools"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "Needlework Equipment",
+      "specificCompetences": ["Use Needlework Equipment"],
+      "learningActivities": ["Exploring different needlework", "Caring of needlework equip-"],
+      "expectedStandard": "",
+      "keywords": ["needlework", "equipment"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S3",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.3",
+      "subtopic": "The Sewing Machines",
+      "specificCompetences": ["Use a sewing machine"],
+      "learningActivities": [
+        "Discussing different sewing ma-",
+        "Describing parts of the sewing",
+        "Operating the sewing machine:",
+        "Applying safety guidelines",
+        "Practicing using the sewing ma-"
+      ],
+      "expectedStandard": "",
+      "keywords": ["sewing", "machines"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Fibres",
+      "specificCompetences": ["Apply techniques in fibre identification"],
+      "learningActivities": [
+        "Analysing different fibres:",
+        "Identifying fibres using various",
+        "Preparing a fibre classification"
+      ],
+      "expectedStandard": "",
+      "keywords": ["fibres"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.2",
+      "subtopic": "Yarns",
+      "specificCompetences": ["Practice the process of transforming fibres to yarns"],
+      "learningActivities": [
+        "Discussing yarns",
+        "Creating yarn by spinning fibres",
+        "Describing types of yarns (sin-",
+        "knitting yarn to create small"
+      ],
+      "expectedStandard": "",
+      "keywords": ["yarns"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S3",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.3",
+      "subtopic": "Fabrics",
+      "specificCompetences": ["Practice the process of transforming yarns to fabrics"],
+      "learningActivities": [
+        "Discussing fibres and fabrics",
+        "Describing properties and uses",
+        "Making fabrics by using types",
+        "Using types of knits to form",
+        "Experimenting with basic weav-"
+      ],
+      "expectedStandard": "",
+      "keywords": ["fabrics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S4",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.4",
+      "subtopic": "Colour Application",
+      "specificCompetences": ["Create desired Artworks on Fabrics"],
+      "learningActivities": [
+        "Discussing the importance of",
+        "Describing various methods of",
+        "Discussing different types of",
+        "Applying colour to a fabric"
+      ],
+      "expectedStandard": "created appropriately",
+      "keywords": ["colour", "application"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S5",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.5",
+      "subtopic": "Methods Of Colour Application",
+      "specificCompetences": ["Apply colour on fabrics"],
+      "learningActivities": [
+        "Discussing the relationships be-",
+        "Using colours that complement",
+        "Dyeing of different fabrics:",
+        "Testing colour fastness (practi-"
+      ],
+      "expectedStandard": "",
+      "keywords": ["methods", "colour", "application"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S1",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.1",
+      "subtopic": "Elements of Design",
+      "specificCompetences": [
+        "Create suitable textile designs x Explaining the key elements of design in fashion and fabric de- sign (line, shape/form, colour"
+      ],
+      "learningActivities": ["Using line, shape, colour, tex-", "Designing a simple garment,"],
+      "expectedStandard": "",
+      "keywords": ["elements", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S2",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.2",
+      "subtopic": "Principles of Design",
+      "specificCompetences": ["Apply different principles of design"],
+      "learningActivities": [
+        "Discussing the key principles of",
+        "Describing how the principles",
+        "Applying the principles of de-",
+        "Creating garment sketches or"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S3",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.3",
+      "subtopic": "Figure Type",
+      "specificCompetences": ["Select personal outfits according to figure types"],
+      "learningActivities": [
+        "Discussing the term \"figure",
+        "Describing types of body",
+        "Selecting clothing styles that",
+        "Identifying common fashion",
+        "Designing outfits according to"
+      ],
+      "expectedStandard": "",
+      "keywords": ["figure", "type"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S1",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "Topic 1.8",
+      "subtopicNumber": "1.8.1",
+      "subtopic": "Stitches",
+      "specificCompetences": ["1 Work out different hand stitches"],
+      "learningActivities": [
+        "Discussing the importance of",
+        "Demonstrating the purposes of",
+        "Working out hand stitches to"
+      ],
+      "expectedStandard": "worked out correctly.",
+      "keywords": ["stitches"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S2",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "Topic 1.8",
+      "subtopicNumber": "1.8.2",
+      "subtopic": "Pressing and Ironing",
+      "specificCompetences": ["Press and Iron articles during construction"],
+      "learningActivities": [
+        "Discussing the importance of",
+        "Explaining the difference be-",
+        "Practicing the proper techniques",
+        "Pressing different types of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["pressing", "ironing"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S1",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.1",
+      "subtopic": "Notions",
+      "specificCompetences": ["Use notions and Trimmings"],
+      "learningActivities": [
+        "Discussing Notions. And trim-",
+        "Describing different types of",
+        "Explaining functions of various",
+        "Using suitable notions for spe-"
+      ],
+      "expectedStandard": "",
+      "keywords": ["notions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S2",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.2",
+      "subtopic": "Pattern Markings",
+      "specificCompetences": ["Interpret different pattern markings"],
+      "learningActivities": [
+        "Discussing the importance of",
+        "Demonstrating ability to use",
+        "Recognizing methods used for",
+        "Interpreting symbols used in",
+        "Applying pattern markings on"
+      ],
+      "expectedStandard": "interpreted accordingly",
+      "keywords": ["pattern", "markings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S3",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.3",
+      "subtopic": "Pattern Drafting",
+      "specificCompetences": ["Draft different patterns"],
+      "learningActivities": [
+        "Discussing types of paper pat-",
+        "Discussing the the importance",
+        "Taking accurate body measure-",
+        "Drawing a standard measure-",
+        "Drafting a basic pattern for a",
+        "Modifying basic patterns for"
+      ],
+      "expectedStandard": "",
+      "keywords": ["pattern", "drafting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S4",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.4",
+      "subtopic": "Seams",
+      "specificCompetences": ["Work out different Seams"],
+      "learningActivities": [
+        "Discussing Seams. (definition,",
+        "Classifying Seams (conspicu-",
+        "Working out different Seams"
+      ],
+      "expectedStandard": "",
+      "keywords": ["seams"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S5",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.5",
+      "subtopic": "Disposal of Fullness",
+      "specificCompetences": ["Apply different methods of reducing fullness of garments"],
+      "learningActivities": [
+        "Discussing disposing of fullness",
+        "Explaining different methods of",
+        "Classifying methods of dispos-",
+        "Using suitable method on ap-",
+        "Identifying positions where dif-",
+        "Apply different methods of dis-"
+      ],
+      "expectedStandard": "",
+      "keywords": ["disposal", "fullness"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S6",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.6",
+      "subtopic": "Pockets",
+      "specificCompetences": ["Work out different pockets"],
+      "learningActivities": [
+        "Discussing pockets. (definition,",
+        "Classifying pockets (Patch, In-",
+        "Discussing uses of pockets",
+        "Working out pockets."
+      ],
+      "expectedStandard": "",
+      "keywords": ["pockets"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S7",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.7",
+      "subtopic": "Waistline Finishes",
+      "specificCompetences": ["Finish waistline"],
+      "learningActivities": [
+        "Discussing different types of",
+        "Choosing appropriate fabrics",
+        "Work out different waistline"
+      ],
+      "expectedStandard": "Waistline finished correctly",
+      "keywords": ["waistline", "finishes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T10-S1",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "Topic 1.10",
+      "subtopicNumber": "1.10.1",
+      "subtopic": "Crocheting",
+      "specificCompetences": ["Work out crochet stitches"],
+      "learningActivities": [
+        "Identifying tools to be used",
+        "Interpreting crocheting abbrevi-",
+        "Working out crotchet stitches: ("
+      ],
+      "expectedStandard": "out correctly",
+      "keywords": ["crocheting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S1",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "Topic 1.11",
+      "subtopicNumber": "1.11.1",
+      "subtopic": "Crocheting",
+      "specificCompetences": [
+        "Apply Entrepreneurial skills x Discussing the concept of entre- preneurship and its importance in the fashion and fabrics indus- try."
+      ],
+      "learningActivities": [
+        "Identifying various business op-",
+        "Developing a simple business",
+        "Demonstrating basic principles",
+        "Writing a brief business plan,",
+        "Integrate culture into the design processes",
+        "Apply consumer rights and responsibilities.",
+        "Perform various beauty treatment and services",
+        "Create different desired artwork on fabric",
+        "Make forms of interior Design",
+        "Produce yarns and fabrics",
+        "Draft pattern",
+        "Use crossway strips",
+        "Identify the role digital technology plays in promoting sustainable fashion practices",
+        "Manage and influence emotions in oneself and others",
+        "Undertake projects",
+        "Employ sustainable practical methods in textile production",
+        "Plan purchases to avoid overspending on unnecessary fabrics or tools",
+        "Repair clothes"
+      ],
+      "expectedStandard": "",
+      "keywords": ["crocheting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Environmental Impact of Textile Production",
+      "specificCompetences": [
+        "Employ sustainable practices that can help mitigate environmental impacts of textile production."
+      ],
+      "learningActivities": [
+        "Discussing the",
+        "Explaining the stages of",
+        "Discussing the impact of",
+        "Exploring sustainable",
+        "Engaging in a hands-on"
+      ],
+      "expectedStandard": "employed accordingly",
+      "keywords": ["environmental", "impact", "textile", "production"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Cosmetology in the Fashion Industry",
+      "specificCompetences": ["Apply techniques of hair and facial makeup"],
+      "learningActivities": [
+        "Discussing the relationship",
+        "Identifying the different",
+        "Discussing the role of a",
+        "Exploring how makeup,",
+        "Practising basic hairstyling"
+      ],
+      "expectedStandard": "",
+      "keywords": ["cosmetology", "fashion", "industry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Millinery",
+      "specificCompetences": ["Make various Headwear"],
+      "learningActivities": [
+        "Discussing millinery and its",
+        "Describing the basic",
+        "Analysing materials",
+        "Making basic millinery"
+      ],
+      "expectedStandard": "",
+      "keywords": ["millinery"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "The Sewing Machines",
+      "specificCompetences": ["Use a sewing machine"],
+      "learningActivities": [
+        "Sewing different machine",
+        "Identifying common faults",
+        "Correcting common sewing",
+        "using a sewing machine by"
+      ],
+      "expectedStandard": "",
+      "keywords": ["sewing", "machines"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Production of Yarns and Fabrics",
+      "specificCompetences": ["Apply techniques in yarns production"],
+      "learningActivities": ["Describing yarns according", "Outlining various stages of"],
+      "expectedStandard": "",
+      "keywords": ["production", "yarns", "fabrics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Colour Combination",
+      "specificCompetences": ["Create different desired artwork on fabric"],
+      "learningActivities": [
+        "Discussing colour",
+        "Experimenting with different",
+        "Dyeing and printing artwork"
+      ],
+      "expectedStandard": "",
+      "keywords": ["colour", "combination"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S1",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "Topic 2.7",
+      "subtopicNumber": "2.7.1",
+      "subtopic": "Forms of Design",
+      "specificCompetences": ["Make forms of interior design"],
+      "learningActivities": ["Discussing forms of design", "Making forms of interior"],
+      "expectedStandard": "",
+      "keywords": ["forms", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S2",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "Topic 2.7",
+      "subtopicNumber": "2.7.2",
+      "subtopic": "Principles of Design Apply different principles of design",
+      "specificCompetences": ["practice asymmetrical and"],
+      "learningActivities": ["Creating a collage using"],
+      "expectedStandard": "applied correctly",
+      "keywords": ["principles", "design", "apply", "different", "principles", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S3",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "Topic 2.7",
+      "subtopicNumber": "2.7.3",
+      "subtopic": "Culture and Design",
+      "specificCompetences": ["Show culture into the design processes"],
+      "learningActivities": [
+        "Discussing cultural costumes",
+        "Comparing different cultural",
+        "Analysing cultural norms",
+        "Making collage displaying"
+      ],
+      "expectedStandard": "processes accordingly",
+      "keywords": ["culture", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S1",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.1",
+      "subtopic": "Crossway Strips",
+      "specificCompetences": ["Use crossway strips"],
+      "learningActivities": [
+        "Discussing crossway strips:",
+        "Demonstrating cutting and",
+        "Using crossway strip to"
+      ],
+      "expectedStandard": "",
+      "keywords": ["crossway", "strips"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S2",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.2",
+      "subtopic": "Openings",
+      "specificCompetences": ["Work out openings"],
+      "learningActivities": ["Discussing openings:", "Working out different"],
+      "expectedStandard": "",
+      "keywords": ["openings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S3",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.3",
+      "subtopic": "Fastenings",
+      "specificCompetences": ["Work out Fastenings"],
+      "learningActivities": ["Discussing fastenings:", "working out fastenings:"],
+      "expectedStandard": "",
+      "keywords": ["fastenings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S4",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.4",
+      "subtopic": "Neckline Finishes 2.8.4.1 Work out neckline finishes",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Identifying different types of",
+        "Discussing neckline finishes:",
+        "Working out neckline"
+      ],
+      "expectedStandard": "",
+      "keywords": ["neckline", "finishes", "work", "neckline", "finishes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S5",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.5",
+      "subtopic": "Armhole Finishes",
+      "specificCompetences": ["Work out armhole finishes."],
+      "learningActivities": [
+        "Discussing methods used to",
+        "Describing reasons for",
+        "Working out armhole"
+      ],
+      "expectedStandard": "",
+      "keywords": ["armhole", "finishes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S1",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.1",
+      "subtopic": "Basketry",
+      "specificCompetences": ["Make items using basketry"],
+      "learningActivities": [
+        "Identifying materials for",
+        "Describing techniques used",
+        "Making various items using"
+      ],
+      "expectedStandard": "",
+      "keywords": ["basketry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S1",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "Topic 2.10",
+      "subtopicNumber": "2.10.1",
+      "subtopic": "Care And Maintenance of Clothes",
+      "specificCompetences": ["Launder different types of clothes"],
+      "learningActivities": [
+        "Discussing the importance of",
+        "Discussing characteristics",
+        "Interpreting the symbols and",
+        "Practicing using"
+      ],
+      "expectedStandard": "",
+      "keywords": ["care", "maintenance", "clothes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S1",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "Topic 2.11",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Consumer Rights and Responsibilities",
+      "specificCompetences": ["Apply consumer rights and responsibilities."],
+      "learningActivities": [
+        "Discussing consumer rights",
+        "Identifying sources of",
+        "Discussing methods of",
+        "Role playing on the rights of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["consumer", "rights", "responsibilities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T12-S1",
+      "form": 2,
+      "topicNumber": "2.12",
+      "topic": "Topic 2.12",
+      "subtopicNumber": "2.12.1",
+      "subtopic": "Entrepreneurial Projects In Fashion And Fabrics",
+      "specificCompetences": ["Develop various project in fashion and fabric"],
+      "learningActivities": [
+        "Identifying projects to be to",
+        "Discussing steps to follow in",
+        "Setting up a business.",
+        "Choose clothes in relation to figure types",
+        "Interpret care labels",
+        "Collaborate with others in order to create a unique collection of designs.",
+        "Create good relations with clients",
+        "Apply different principles of design",
+        "Work out knitting stitches",
+        "Make use of Soft Furnishings",
+        "Operate sewing and knitting machines",
+        "Demonstrate understanding of laws and regulations",
+        "Explore fashion trends online.",
+        "Demonstrate understanding of how emotions influence decisions related to clothing.",
+        "Prepare a business plan",
+        "Adopt eco-friendly practices across the supply chain.",
+        "Develop basic concepts of money management, budgeting and smart consumer habits.",
+        "Make use of Interfacing, interlining and linings on garment",
+        "Finish hem edges",
+        "Launder different articles"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["entrepreneurial", "projects", "fashion", "fabrics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Cosmetology",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Explaining the importance",
+        "Describing the tools used,",
+        "Showing manicure and"
+      ],
+      "expectedStandard": "demonstrated appropriately",
+      "keywords": ["cosmetology"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "Millinery",
+      "specificCompetences": ["Design Principles used in millinery"],
+      "learningActivities": [
+        "Discussing the design",
+        "Creating mood boards and",
+        "Understanding proportions",
+        "Caring and Maintenance"
+      ],
+      "expectedStandard": "designed correctly",
+      "keywords": ["millinery"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Knitting Machine",
+      "specificCompetences": ["Operate knitting machines"],
+      "learningActivities": [
+        "Discussing the knitting",
+        "Describing types of",
+        "Outlining the components",
+        "Discussing common",
+        "Using graph paper, create"
+      ],
+      "expectedStandard": "machines operated correctly",
+      "keywords": ["knitting", "machine"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Production of Yarns and Fabrics",
+      "specificCompetences": ["Produce fabrics"],
+      "learningActivities": [
+        "Discussing the production",
+        "Outlining various stages",
+        "Constructing fabric:"
+      ],
+      "expectedStandard": "",
+      "keywords": ["production", "yarns", "fabrics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Forms of Design",
+      "specificCompetences": ["Make logos"],
+      "learningActivities": [
+        "Explaining forms of",
+        "Making forms of design:",
+        "Creating logos that"
+      ],
+      "expectedStandard": "",
+      "keywords": ["forms", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "Principles of Design",
+      "specificCompetences": ["Make an advert on principles of design"],
+      "learningActivities": [
+        "Discussing the principles",
+        "Applying the principles of",
+        "Design a magazine cover"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "Culture and Design",
+      "specificCompetences": ["Show culture into the design processes"],
+      "learningActivities": ["Analysing cultural norms", "Making collage displaying"],
+      "expectedStandard": "shown accordingly",
+      "keywords": ["culture", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Pattern Making",
+      "specificCompetences": ["Draft different patterns"],
+      "learningActivities": [
+        "Identifying patternmaking",
+        "Explaining the",
+        "Discussing the fabric",
+        "Draft personal"
+      ],
+      "expectedStandard": "drafted accurately",
+      "keywords": ["pattern", "making"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Interfacing, Interlining And Linings",
+      "specificCompetences": ["Make use of Interfacing, interlining and linings on garment"],
+      "learningActivities": [
+        "Discussing Interfacing,",
+        "Interfacing parts of the",
+        "Interlining garments:",
+        "Lining garments: (dress,"
+      ],
+      "expectedStandard": "",
+      "keywords": ["interfacing", "interlining", "linings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Sleeves",
+      "specificCompetences": ["Work out Sleeves"],
+      "learningActivities": [
+        "Discussing sleeves: (drop",
+        "Drafting different types of",
+        "Working out different"
+      ],
+      "expectedStandard": "Sleeves worked out correctly",
+      "keywords": ["sleeves"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S3",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.3",
+      "subtopic": "Cuffs",
+      "specificCompetences": ["Work out cuffs"],
+      "learningActivities": ["Discussing cuffs:", "Working out cuffs: (cuffs"],
+      "expectedStandard": "Cuffs worked out correctly",
+      "keywords": ["cuffs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S4",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.4",
+      "subtopic": "Collars",
+      "specificCompetences": ["Work out collars"],
+      "learningActivities": [
+        "Discussing collars:",
+        "Drafting different types of",
+        "Working out collar: (flat,"
+      ],
+      "expectedStandard": "Collars worked out correctly",
+      "keywords": ["collars"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S5",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.5",
+      "subtopic": "Hem and Hem Edge Finishes",
+      "specificCompetences": ["Finish hem edges"],
+      "learningActivities": [
+        "Discussing hem and hem",
+        "Identifying common",
+        "Finishing hems and hem"
+      ],
+      "expectedStandard": "Hem edges finished correctly",
+      "keywords": ["edge", "finishes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T8-S1",
+      "form": 3,
+      "topicNumber": "3.8",
+      "topic": "Topic 3.8",
+      "subtopicNumber": "3.8.1",
+      "subtopic": "Knitting",
+      "specificCompetences": ["Operate the knitting"],
+      "learningActivities": [
+        "Interpreting knitting",
+        "Identifying tools to be",
+        "Practicing knitting",
+        "Making articles: (scuffs,"
+      ],
+      "expectedStandard": "Knitting operated correctly",
+      "keywords": ["knitting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T9-S1",
+      "form": 3,
+      "topicNumber": "3.9",
+      "topic": "Topic 3.9",
+      "subtopicNumber": "3.9.1",
+      "subtopic": "Soft Furnishings",
+      "specificCompetences": ["Make use of Soft Furnishings"],
+      "learningActivities": [
+        "Discussing soft furnishing:",
+        "Describing factors to",
+        "Making soft furnishing"
+      ],
+      "expectedStandard": "",
+      "keywords": ["soft", "furnishings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T10-S1",
+      "form": 3,
+      "topicNumber": "3.10",
+      "topic": "Topic 3.10",
+      "subtopicNumber": "3.10.1",
+      "subtopic": "Care Labels",
+      "specificCompetences": ["Interpret care labels"],
+      "learningActivities": [
+        "Discussing care label:",
+        "Interpreting care label:",
+        "Drawing care label.",
+        "Attaching a care label on a"
+      ],
+      "expectedStandard": "",
+      "keywords": ["care", "labels"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T10-S2",
+      "form": 3,
+      "topicNumber": "3.10",
+      "topic": "Topic 3.10",
+      "subtopicNumber": "3.10.2",
+      "subtopic": "Laundry Processes",
+      "specificCompetences": ["Launder different articles"],
+      "learningActivities": [
+        "Discussing laundry",
+        "Demonstrating dry",
+        "Classifying stains:",
+        "Removing different kinds",
+        "Laundering different"
+      ],
+      "expectedStandard": "",
+      "keywords": ["laundry", "processes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Laws and Regulations",
+      "specificCompetences": ["Apply laws and regulations"],
+      "learningActivities": [
+        "Discussing laws and",
+        "Comparing laws and",
+        "Study tour Visiting local"
+      ],
+      "expectedStandard": "",
+      "keywords": ["laws", "regulations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T12-S1",
+      "form": 3,
+      "topicNumber": "3.12",
+      "topic": "Topic 3.12",
+      "subtopicNumber": "3.12.1",
+      "subtopic": "Business Plan- Project Implementation",
+      "specificCompetences": ["Prepare a business plan"],
+      "learningActivities": [
+        "Discussing a business",
+        "Discussing the",
+        "Creating a business",
+        "Engage with communities to promote knowledge about fabrics, design and responsible production",
+        "Collaborate with other fashion brands and fabric manufacturers to develop eco-friendly and sustainable",
+        "Explore how clothes convey mood, personality or social status.",
+        "Make use of blended and mixed fabrics",
+        "Draft different paper patterns",
+        "Make textile articles using different embroidery techniques",
+        "Make items using beads",
+        "Demonstrate understanding of dress code for different cultures.",
+        "Camouflage Figure Faults and irregularities",
+        "Use design technology, digital marketing and the use of innovative tools in the fashion industry",
+        "Design clothes that enhance self-esteem and confidence.",
+        "Donate old garments or clothes to those in need.",
+        "Conduct market research",
+        "Upcycle old clothes into new designs",
+        "Recycle different articles"
+      ],
+      "expectedStandard": "",
+      "keywords": ["business", "plan", "project", "implementation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Figure Faults and Irregularities",
+      "specificCompetences": ["Modify garments to suit irregularities"],
+      "learningActivities": ["Discussing Figure Faults", "Making collage by"],
+      "expectedStandard": "Camouflaged accordingly",
+      "keywords": ["figure", "faults", "irregularities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Fabric Finishes",
+      "specificCompetences": ["Launder articles according to the fabric finish applied"],
+      "learningActivities": [
+        "Discussing fabric",
+        "Making a chart or swatch",
+        "Laundering of articles"
+      ],
+      "expectedStandard": "to fabric finish correctly",
+      "keywords": ["fabric", "finishes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Blending and Mixing",
+      "specificCompetences": ["Make use of blended and mixed fabrics"],
+      "learningActivities": [
+        "Discussing blended and",
+        "Comparing blended and",
+        "making a collage to show"
+      ],
+      "expectedStandard": "used correctly",
+      "keywords": ["blending", "mixing"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Uses of Paper Patterns",
+      "specificCompetences": ["Draft different basic paper patterns."],
+      "learningActivities": [
+        "Making a selection of",
+        "Manipulating basic",
+        "Drafting different patterns"
+      ],
+      "expectedStandard": "drafted accurately",
+      "keywords": ["uses", "paper", "patterns"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Beadwork",
+      "specificCompetences": [
+        "Make items using beads x Identifying materials used in beadwork: (definition, material used: beads, twine, snipers…)"
+      ],
+      "learningActivities": ["Making items using", "Showcasing beadwork"],
+      "expectedStandard": "",
+      "keywords": ["beadwork"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "Embroidery Techniques",
+      "specificCompetences": ["Make textile articles using different embroidery techniques"],
+      "learningActivities": [
+        "Discussing embroidery:",
+        "Applying embroidery on",
+        "Making textile articles"
+      ],
+      "expectedStandard": "worked out accordingly",
+      "keywords": ["embroidery", "techniques"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S1",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.1",
+      "subtopic": "Recycling",
+      "specificCompetences": ["Recycle different articles"],
+      "learningActivities": [
+        "Discussing recycling of",
+        "Explaining the",
+        "Recycling different textile",
+        "Demonstrating repairing"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["recycling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S2",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.2",
+      "subtopic": "Textile Exhibition",
+      "specificCompetences": ["Organise Clothing and Textiles Exhibition"],
+      "learningActivities": [
+        "Meaning of terms:",
+        "Types",
+        "Purpose",
+        "Factors to consider",
+        "Organising Clothing and",
+        "Modelling and Fashion"
+      ],
+      "expectedStandard": "",
+      "keywords": ["textile", "exhibition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S1",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.1",
+      "subtopic": "Principles of shopping",
+      "specificCompetences": ["Demonstrate wise shopping"],
+      "learningActivities": [
+        "Discussing budgeting:",
+        "Outlining factors to",
+        "Discussing factors that",
+        "points to bear in mind",
+        "Making a simple budget"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "shopping"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T9-S1",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "Topic 4.9",
+      "subtopicNumber": "4.9.1",
+      "subtopic": "Market research",
+      "specificCompetences": ["Conduct market research"],
+      "learningActivities": [
+        "Discussing economic",
+        "Discussing the",
+        "Conducting market",
+        "Reporting stage:",
+        "Reviewing the market"
+      ],
+      "expectedStandard": "",
+      "keywords": ["market", "research"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T9-S2",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "Topic 4.9",
+      "subtopicNumber": "4.9.2",
+      "subtopic": "Textiles Enterprise",
+      "specificCompetences": ["Set up a Clothing and Textiles enterprise"],
+      "learningActivities": [
+        "Discussing business idea:",
+        "Describing market",
+        "Developing a business",
+        "Managing a Clothing and",
+        "Setting up a business:",
+        "Pricing strategies and sell-",
+        "Documenting the design"
+      ],
+      "expectedStandard": "enterprises set up accordingly",
+      "keywords": ["textiles", "enterprise"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T9-S2-2",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "Topic 4.9",
+      "subtopicNumber": "4.9.2",
+      "subtopic": "Textiles Enterprise",
+      "specificCompetences": ["Design"],
+      "learningActivities": [
+        "Concepts in",
+        "Environmental",
+        "Cosmetology",
+        "Figure Faults",
+        "Career",
+        "Cosmetology in",
+        "Millinery",
+        "Fabric",
+        "Blending and",
+        "Work ethics in",
+        "Millinery",
+        "Knitting",
+        "Uses of Paper",
+        "Safety Rules",
+        "First Aid",
+        "The Sewing",
+        "The Knitting",
+        "Bead Work",
+        "Good",
+        "Health Habits",
+        "Production of",
+        "Production of",
+        "Embroidery",
+        "Functional",
+        "Wardrobe",
+        "Dress Code",
+        "Accessories",
+        "Inner and",
+        "Colour",
+        "Principles of",
+        "Culture and",
+        "Recycling",
+        "Textile",
+        "Needlework",
+        "Forms of Design",
+        "Uses of Paper",
+        "Principles of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["textiles", "enterprise"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T9-S2-3",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "Topic 4.9",
+      "subtopicNumber": "4.9.2",
+      "subtopic": "Textiles Enterprise",
+      "specificCompetences": ["Design"],
+      "learningActivities": [
+        "Needlework",
+        "The Sewing",
+        "Principles of",
+        "Culture and",
+        "Fibres, Yarns",
+        "Methods",
+        "Crossway Strips",
+        "Openings",
+        "Fastenings",
+        "Neckline",
+        "Interfacing,",
+        "Sleeves",
+        "Cuffs",
+        "Collars",
+        "Hem and Hem",
+        "Market",
+        "Enterprise",
+        "Elements of",
+        "Principles of",
+        "Basketry",
+        "Stitches",
+        "Pressing and",
+        "Care and",
+        "Notions",
+        "Pattern",
+        "Pattern",
+        "Disposal of",
+        "Pockets",
+        "Waistline",
+        "Consumer Rights"
+      ],
+      "expectedStandard": "",
+      "keywords": ["textiles", "enterprise"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

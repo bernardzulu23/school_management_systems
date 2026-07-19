@@ -1,0 +1,30 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-LUVALE-TEACHING-MODULE-FROM-1-TERM-1.pdf",
+  "md5": "a04d312ff3971b9abaa654b3384cb8d3",
+  "detectedShift": 0,
+  "pageCount": 63,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "hana-vitalilo-vyamiyachi-ya-litilicha-yakuhanjika-unatombola",
+  "lesson": {
+    "week": 2,
+    "lesson": 40,
+    "title": "Hana vitalilo vyamiyachi ya Litilicha yakuhanjika unatombola muchihula chatete.",
+    "topics": [
+      "KUKHUKULULA:",
+      "Muchilongeselo chino, valongi vanatombola miyachi ya Litilicha yakuhanjika. Cheka",
+      "nawa, vanalumbununa miyachi ya Litilicha yakuhanjika. Chamakumishilo, valongi",
+      "vanahana vinjikizo vyamiyachi ya Litilicha yakuhanjika.",
+      "| P a g e"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

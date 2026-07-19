@@ -1,0 +1,623 @@
+﻿{
+  "generatedAt": "2026-07-19T22:40:58.647Z",
+  "uniqueModules": 68,
+  "topicFilesWritten": 918,
+  "formCoverage": [1, 2],
+  "knownGaps": [3, 4],
+  "note": "Static fallback directories exist only for forms with ingested teaching-module PDFs. Do not claim all forms covered.",
+  "stemPriorityNote": "Form 2 STEM present for: chemistry, physics, mathematics, biology, computer-science, agricultural-science. Form 3-4 STEM teaching modules still not in bank (CDC Digital Library / MoE as of audit).",
+  "modules": [
+    {
+      "file": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+      "subject": "Art and Design",
+      "form": 1,
+      "out": "data\\static-fallback\\art-and-design\\form-1",
+      "lessons": 40,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+      "subject": "Art and Design",
+      "form": 1,
+      "out": "data\\static-fallback\\art-and-design\\form-1",
+      "lessons": 8,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+      "subject": "Agricultural Science",
+      "form": 2,
+      "out": "data\\static-fallback\\agricultural-science\\form-2",
+      "lessons": 13,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Biology-Teaching-Module-Form-2-Term-1-and-2.pdf",
+      "subject": "Biology",
+      "form": 2,
+      "out": "data\\static-fallback\\biology\\form-2",
+      "lessons": 2,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "CHITONGA-FORM-1-TEACHING-MODULE-TERM-3.pdf",
+      "subject": "Chitonga",
+      "form": 1,
+      "out": "data\\static-fallback\\chitonga\\language\\form-1",
+      "lessons": 1,
+      "language": "chitonga",
+      "literature": false
+    },
+    {
+      "file": "CHITONGA-FORM-1-TERM-2-TEACHING-MODULE-2025-VERSION.pdf",
+      "subject": "Chitonga",
+      "form": 1,
+      "out": "data\\static-fallback\\chitonga\\language\\form-1",
+      "lessons": 40,
+      "language": "chitonga",
+      "literature": false
+    },
+    {
+      "file": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2 (1).pdf",
+      "subject": "Cinyanja",
+      "form": 1,
+      "out": "data\\static-fallback\\cinyanja\\language\\form-1",
+      "lessons": 1,
+      "language": "cinyanja",
+      "literature": false
+    },
+    {
+      "file": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+      "subject": "Cinyanja",
+      "form": 1,
+      "out": "data\\static-fallback\\cinyanja\\language\\form-1",
+      "lessons": 1,
+      "language": "cinyanja",
+      "literature": false
+    },
+    {
+      "file": "CIVIC-EDUCATION-TERM-2-MODULE.pdf",
+      "subject": "Civic Education",
+      "form": 1,
+      "out": "data\\static-fallback\\civic-education\\form-1",
+      "lessons": 1,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+      "subject": "Civic Education",
+      "form": 1,
+      "out": "data\\static-fallback\\civic-education\\form-1",
+      "lessons": 40,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "COMMERCE-TERM-2-MODULE.pdf",
+      "subject": "Commerce",
+      "form": 1,
+      "out": "data\\static-fallback\\commerce\\form-1",
+      "lessons": 3,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Chemistry-Teaching-Module-Form-1-final-version-3-1.pdf",
+      "subject": "Chemistry",
+      "form": 1,
+      "out": "data\\static-fallback\\chemistry\\form-1",
+      "lessons": 4,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Chemistry-Teaching-Module-Form-2-Term-1-and-2.pdf",
+      "subject": "Chemistry",
+      "form": 2,
+      "out": "data\\static-fallback\\chemistry\\form-2",
+      "lessons": 8,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+      "subject": "Computer Science",
+      "form": 2,
+      "out": "data\\static-fallback\\computer-science\\form-2",
+      "lessons": 18,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Design-and-Technology-Module-Final-1.pdf",
+      "subject": "Design and Technology",
+      "form": 1,
+      "out": "data\\static-fallback\\design-and-technology\\form-1",
+      "lessons": 11,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+      "subject": "English",
+      "form": 1,
+      "out": "data\\static-fallback\\english\\form-1",
+      "lessons": 37,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+      "subject": "English",
+      "form": 1,
+      "out": "data\\static-fallback\\english\\form-1",
+      "lessons": 27,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "FF-FORM-1-TERM-1-FINAL-MODULE-2025.pdf",
+      "subject": "Fashion and Fabrics",
+      "form": 1,
+      "out": "data\\static-fallback\\fashion-and-fabrics\\form-1",
+      "lessons": 40,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "FOOD-AND-NUTRITION-FORM-1-TERM-1-MODULE-Final-edited-Finaledition.pdf",
+      "subject": "Food and Nutrition",
+      "form": 1,
+      "out": "data\\static-fallback\\food-and-nutrition\\form-1",
+      "lessons": 2,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "FORM-1-ICT-MODULE-Sample1.pdf",
+      "subject": "Computer Studies",
+      "form": 1,
+      "out": "data\\static-fallback\\computer-studies\\form-1",
+      "lessons": 13,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MODULE-FOR-TERM-2-1-1.pdf",
+      "subject": "Literature in English",
+      "form": 1,
+      "out": "data\\static-fallback\\literature-in-english\\form-1",
+      "lessons": 3,
+      "language": null,
+      "literature": true
+    },
+    {
+      "file": "FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MOULE-FOR-TERM-3-1-1.pdf",
+      "subject": "Literature in English",
+      "form": 1,
+      "out": "data\\static-fallback\\literature-in-english\\form-1",
+      "lessons": 3,
+      "language": null,
+      "literature": true
+    },
+    {
+      "file": "FRENCH-TEACHING-MODULE-TERM-2-1.pdf",
+      "subject": "French",
+      "form": 1,
+      "out": "data\\static-fallback\\french\\language\\form-1",
+      "lessons": 5,
+      "language": "french",
+      "literature": false
+    },
+    {
+      "file": "FRENCH-TEACHING-MODULE-TERM-3-1.pdf",
+      "subject": "French",
+      "form": 1,
+      "out": "data\\static-fallback\\french\\language\\form-1",
+      "lessons": 4,
+      "language": "french",
+      "literature": false
+    },
+    {
+      "file": "GEOGRAPHY-TERM-2-MODULE.pdf",
+      "subject": "Geography",
+      "form": 1,
+      "out": "data\\static-fallback\\geography\\form-1",
+      "lessons": 1,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Geography-Module-Form1.Term-11.pdf",
+      "subject": "Geography",
+      "form": 1,
+      "out": "data\\static-fallback\\geography\\form-1",
+      "lessons": 6,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "HISTORY-TERM-2-MODULE.pdf",
+      "subject": "History",
+      "form": 1,
+      "out": "data\\static-fallback\\history\\form-1",
+      "lessons": 5,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-2-1.pdf",
+      "subject": "Icibemba",
+      "form": 1,
+      "out": "data\\static-fallback\\icibemba\\language\\form-1",
+      "lessons": 2,
+      "language": "icibemba",
+      "literature": false
+    },
+    {
+      "file": "ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+      "subject": "Icibemba",
+      "form": 1,
+      "out": "data\\static-fallback\\icibemba\\language\\form-1",
+      "lessons": 2,
+      "language": "icibemba",
+      "literature": false
+    },
+    {
+      "file": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Kikaonde",
+      "form": 1,
+      "out": "data\\static-fallback\\kikaonde\\language\\form-1",
+      "lessons": 40,
+      "language": "kikaonde",
+      "literature": false
+    },
+    {
+      "file": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "subject": "Kikaonde",
+      "form": 1,
+      "out": "data\\static-fallback\\kikaonde\\language\\form-1",
+      "lessons": 40,
+      "language": "kikaonde",
+      "literature": false
+    },
+    {
+      "file": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3-2025.pdf",
+      "subject": "Kikaonde",
+      "form": 1,
+      "out": "data\\static-fallback\\kikaonde\\language\\form-1",
+      "lessons": 40,
+      "language": "kikaonde",
+      "literature": false
+    },
+    {
+      "file": "LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-2.pdf",
+      "subject": "Icibemba",
+      "form": 1,
+      "out": "data\\static-fallback\\icibemba\\literature\\form-1",
+      "lessons": 1,
+      "language": "icibemba",
+      "literature": true
+    },
+    {
+      "file": "LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-3.pdf",
+      "subject": "Icibemba",
+      "form": 1,
+      "out": "data\\static-fallback\\icibemba\\literature\\form-1",
+      "lessons": 1,
+      "language": "icibemba",
+      "literature": true
+    },
+    {
+      "file": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "subject": "Kikaonde",
+      "form": 1,
+      "out": "data\\static-fallback\\kikaonde\\literature\\form-1",
+      "lessons": 40,
+      "language": "kikaonde",
+      "literature": true
+    },
+    {
+      "file": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+      "subject": "Kikaonde",
+      "form": 1,
+      "out": "data\\static-fallback\\kikaonde\\literature\\form-1",
+      "lessons": 40,
+      "language": "kikaonde",
+      "literature": true
+    },
+    {
+      "file": "LIT-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "subject": "Lunda",
+      "form": 1,
+      "out": "data\\static-fallback\\lunda\\literature\\form-1",
+      "lessons": 1,
+      "language": "lunda",
+      "literature": true
+    },
+    {
+      "file": "LIT-IN-LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "subject": "Luvale",
+      "form": 1,
+      "out": "data\\static-fallback\\luvale\\literature\\form-1",
+      "lessons": 1,
+      "language": "luvale",
+      "literature": true
+    },
+    {
+      "file": "LIT-IN-SILOZI-TEACHING-MODULE-TERM-2.pdf",
+      "subject": "Silozi",
+      "form": 1,
+      "out": "data\\static-fallback\\silozi\\literature\\form-1",
+      "lessons": 2,
+      "language": "silozi",
+      "literature": true
+    },
+    {
+      "file": "LIT-IN-SILOZI-TEACHING-MODULE-TERM-3.pdf",
+      "subject": "Silozi",
+      "form": 1,
+      "out": "data\\static-fallback\\silozi\\literature\\form-1",
+      "lessons": 1,
+      "language": "silozi",
+      "literature": true
+    },
+    {
+      "file": "LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Icibemba",
+      "form": 1,
+      "out": "data\\static-fallback\\icibemba\\literature\\form-1",
+      "lessons": 40,
+      "language": "icibemba",
+      "literature": true
+    },
+    {
+      "file": "LITERATURE-IN-CHITONGA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Chitonga",
+      "form": 1,
+      "out": "data\\static-fallback\\chitonga\\literature\\form-1",
+      "lessons": 31,
+      "language": "chitonga",
+      "literature": true
+    },
+    {
+      "file": "LITERATURE-IN-CINYANJA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Cinyanja",
+      "form": 1,
+      "out": "data\\static-fallback\\cinyanja\\literature\\form-1",
+      "lessons": 40,
+      "language": "cinyanja",
+      "literature": true
+    },
+    {
+      "file": "LITERATURE-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Kikaonde",
+      "form": 1,
+      "out": "data\\static-fallback\\kikaonde\\literature\\form-1",
+      "lessons": 40,
+      "language": "kikaonde",
+      "literature": true
+    },
+    {
+      "file": "LITERATURE-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Lunda",
+      "form": 1,
+      "out": "data\\static-fallback\\lunda\\literature\\form-1",
+      "lessons": 8,
+      "language": "lunda",
+      "literature": true
+    },
+    {
+      "file": "LITERATURE-IN-LUVALE-TEACHING-MODULE-FROM-1-TERM-1.pdf",
+      "subject": "Luvale",
+      "form": 1,
+      "out": "data\\static-fallback\\luvale\\literature\\form-1",
+      "lessons": 40,
+      "language": "luvale",
+      "literature": true
+    },
+    {
+      "file": "LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3-1.pdf",
+      "subject": "Lunda",
+      "form": 1,
+      "out": "data\\static-fallback\\lunda\\language\\form-1",
+      "lessons": 1,
+      "language": "lunda",
+      "literature": false
+    },
+    {
+      "file": "LUNDA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Lunda",
+      "form": 1,
+      "out": "data\\static-fallback\\lunda\\language\\form-1",
+      "lessons": 14,
+      "language": "lunda",
+      "literature": false
+    },
+    {
+      "file": "LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "subject": "Lunda",
+      "form": 1,
+      "out": "data\\static-fallback\\lunda\\language\\form-1",
+      "lessons": 1,
+      "language": "lunda",
+      "literature": false
+    },
+    {
+      "file": "LUVALE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "subject": "Luvale",
+      "form": 1,
+      "out": "data\\static-fallback\\luvale\\language\\form-1",
+      "lessons": 1,
+      "language": "luvale",
+      "literature": false
+    },
+    {
+      "file": "LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "subject": "Luvale",
+      "form": 1,
+      "out": "data\\static-fallback\\luvale\\language\\form-1",
+      "lessons": 38,
+      "language": "luvale",
+      "literature": false
+    },
+    {
+      "file": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+      "subject": "Luvale",
+      "form": 1,
+      "out": "data\\static-fallback\\luvale\\language\\form-1",
+      "lessons": 31,
+      "language": "luvale",
+      "literature": false
+    },
+    {
+      "file": "MATHEMATICS-1-MODULE-FINAL.pdf",
+      "subject": "Mathematics",
+      "form": 1,
+      "out": "data\\static-fallback\\mathematics\\form-1",
+      "lessons": 7,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+      "subject": "Music",
+      "form": 1,
+      "out": "data\\static-fallback\\music\\form-1",
+      "lessons": 8,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Mathematics-1-Teaching-Module-Form-2-Term-1-and-2.pdf",
+      "subject": "Mathematics",
+      "form": 2,
+      "out": "data\\static-fallback\\mathematics\\form-2",
+      "lessons": 8,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Mathematics-2-Teaching-Module-Form-2-Term-2.pdf",
+      "subject": "Mathematics",
+      "form": 2,
+      "out": "data\\static-fallback\\mathematics\\form-2",
+      "lessons": 6,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Maths2_Teaching_Module.pdf",
+      "subject": "Mathematics",
+      "form": 1,
+      "out": "data\\static-fallback\\mathematics\\form-1",
+      "lessons": 8,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.pdf",
+      "subject": "Physical Education",
+      "form": 1,
+      "out": "data\\static-fallback\\physical-education\\form-1",
+      "lessons": 10,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.pdf",
+      "subject": "Physical Education",
+      "form": 1,
+      "out": "data\\static-fallback\\physical-education\\form-1",
+      "lessons": 8,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "PRINCIPLES-OF-ACCOUNTS-TERM-2-MODULE.pdf",
+      "subject": "Accounts",
+      "form": 1,
+      "out": "data\\static-fallback\\accounts\\form-1",
+      "lessons": 1,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.pdf",
+      "subject": "Physics",
+      "form": 1,
+      "out": "data\\static-fallback\\physics\\form-1",
+      "lessons": 6,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "Physics-Teaching-Module-Form-2-Term-1-and-2.pdf",
+      "subject": "Physics",
+      "form": 2,
+      "out": "data\\static-fallback\\physics\\form-2",
+      "lessons": 4,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "RELIGIOUS-EDUCATION-TERM-2-MODULE.pdf",
+      "subject": "Religious Education",
+      "form": 1,
+      "out": "data\\static-fallback\\religious-education\\form-1",
+      "lessons": 5,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "subject": "Silozi",
+      "form": 1,
+      "out": "data\\static-fallback\\silozi\\language\\form-1",
+      "lessons": 1,
+      "language": "silozi",
+      "literature": false
+    },
+    {
+      "file": "SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+      "subject": "Silozi",
+      "form": 1,
+      "out": "data\\static-fallback\\silozi\\language\\form-1",
+      "lessons": 1,
+      "language": "silozi",
+      "literature": false
+    },
+    {
+      "file": "TEACHING-MODULE-FOR-LITERATURE-FORM-1-TERM-1.pdf",
+      "subject": "English",
+      "form": 1,
+      "out": "data\\static-fallback\\english\\form-1",
+      "lessons": 4,
+      "language": null,
+      "literature": true
+    },
+    {
+      "file": "TRAVEL_AND_TOURISM_MODULE_Final-2025.pdf",
+      "subject": "Travel and Tourism",
+      "form": 1,
+      "out": "data\\static-fallback\\travel-and-tourism\\form-1",
+      "lessons": 4,
+      "language": null,
+      "literature": false
+    },
+    {
+      "file": "commerce-Teaching-Module-PDF.pdf",
+      "subject": "Commerce",
+      "form": 1,
+      "out": "data\\static-fallback\\commerce\\form-1",
+      "lessons": 4,
+      "language": null,
+      "literature": false
+    }
+  ]
+}

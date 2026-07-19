@@ -1,0 +1,35 @@
+{
+  "subject": "Commerce",
+  "subjectSlug": "commerce",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "commerce-Teaching-Module-PDF.pdf",
+  "md5": "4d5742a009f6b468f486a1271704e6a1",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "production",
+  "lesson": {
+    "lesson": 2,
+    "title": "PRODUCTION",
+    "topics": [],
+    "activities": ["vii | P a g e", "viii | P a g e"],
+    "resources": [
+      "Learning Activity 1: Identifying Technological factors of production (information technology,",
+      "ix | P a g e",
+      "Learning Activity 3: Practising possible solutions to the effects of production on the",
+      "Expected Standard- Environmental management strategies in production processes practiced",
+      "x | P a g e",
+      "The Commerce Teaching Module has been developed in response to the introduction of the"
+    ],
+    "assessment": [
+      "needs and levels",
+      "As the Ministry of Education, we acknowledge the challenges associated with transitioning to a",
+      "new curriculum. Consequently, this module reflects our commitment to providing teachers with",
+      "the CBC's objectives."
+    ],
+    "notes": ""
+  }
+}

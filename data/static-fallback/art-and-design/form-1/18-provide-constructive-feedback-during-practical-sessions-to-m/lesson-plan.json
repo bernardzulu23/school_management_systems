@@ -1,0 +1,47 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "provide-constructive-feedback-during-practical-sessions-to-m",
+  "lesson": {
+    "week": 5,
+    "lesson": 18,
+    "title": "Provide constructive feedback during practical sessions to motivate learners.",
+    "topics": [
+      "Page 11 of 45",
+      "This structure ensures an engaging, hands-on, and discussion-based approach to learning",
+      "Visual Arts.",
+      "Expected standard: Forms of visual Arts identified correctly"
+    ],
+    "activities": [
+      "Learning Environment set up: (in-door, out-door, natural artificial or technological)",
+      "Suggested Learning & Teaching Materials",
+      "Images and prints of artworks by Zambian Visual Arts Pioneers."
+    ],
+    "resources": [
+      "Documentaries and interviews featuring Zambian Visual Arts Pioneers.",
+      "Museum or gallery visits (physical or virtual).",
+      "Biographical notes on Henry Tayali, Gabriel Ellison, and other Visual Arts Pioneers.",
+      "Readily-made art works",
+      "Various paintings",
+      "Activity 1: Identifying Pioneers of Zambian Visual Arts"
+    ],
+    "assessment": [
+      "different categories of Visual Arts.",
+      "the lesson, based on different forms of Visual Arts.",
+      "This subtopic looked at the 3 categories of Visual Arts which are Fine Arts, Crafts and",
+      "SUBTOPIC: PIONEERS OF ZAMBIAN VISUAL ARTS",
+      "Introduction",
+      "This subtopic will discuss pioneers of the Zambian Visual Arts. Over the past 30 years there"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "subject": "Music",
+  "subjectSlug": "music",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "bf730864b2f0142afce9eb9e8ffe0420",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "this-must-come-from-the-syllabus-with-its-serial-number",
+  "lesson": {
+    "lesson": 7,
+    "title": "__________________ (This must come from the syllabus with its serial number)",
+    "topics": ["SUB-TOPIC: ___________ (This must come from the syllabus with its serial number)"],
+    "activities": ["LEARNERS’"],
+    "resources": [
+      "EXPECTED STANDARD:_____________________________________________________",
+      "(This must come from the syllabus as it is)",
+      "Form 1 Term",
+      "Teaching Module",
+      "LESSON PROGRESSION:",
+      "TEACHER’S"
+    ],
+    "assessment": ["CRITERIA", "INTRODUCTION", "DEVELOP­", "EXERCISE", "/APPLICA­", "CONCLUSION"],
+    "notes": ""
+  }
+}

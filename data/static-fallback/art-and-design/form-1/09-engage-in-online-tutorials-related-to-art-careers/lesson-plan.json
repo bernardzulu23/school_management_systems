@@ -1,0 +1,30 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "engage-in-online-tutorials-related-to-art-careers",
+  "lesson": {
+    "week": 2,
+    "lesson": 9,
+    "title": "Engage in online tutorials related to art careers",
+    "topics": [
+      "Gallery Walk and Discussion",
+      "Task 1: Discuss images of famous artworks and have learners match them to their creators.",
+      "Introduce famous artists from different time periods and styles (Henry Tayali, Cynthia Zukas,",
+      "Caleb Chisha…)",
+      "Research"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

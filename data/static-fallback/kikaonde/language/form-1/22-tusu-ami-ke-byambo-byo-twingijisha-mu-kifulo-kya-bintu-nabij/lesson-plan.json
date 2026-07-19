@@ -1,0 +1,27 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "tusu-ami-ke-byambo-byo-twingijisha-mu-kifulo-kya-bintu-nabij",
+  "lesson": {
+    "week": 2,
+    "lesson": 22,
+    "title": "Tusuñami-ke byambo byo twingijisha mu kifulo kya bintu. Nabiji mu kifulo kya kwamba",
+    "topics": [
+      "amba Mukwemba waiya, twakonsha kunembatu amba waiya nangwa amba aye waiya.",
+      "Kyambo kya waiya “wa” ke kasuñami kaimenako Mukwemba (kintu)."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

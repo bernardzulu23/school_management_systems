@@ -1,0 +1,34 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "essay-assignment",
+  "lesson": {
+    "week": 2,
+    "lesson": 16,
+    "title": "Essay assignment",
+    "topics": [
+      "Imagine you have been elected as a representative in the learners’ council at your school, write",
+      "an essay describing how you would promote democratic leadership.",
+      "Characteristics of Good and Bad Governance",
+      "Introduction",
+      "Governance is a process of decision making in society. This can either be done with or without the"
+    ],
+    "activities": [
+      "Distinguishing good governance from bad governance",
+      "Teaching and Learning Materials: a graphical presentation of the characteristics of good",
+      "and bad governance"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

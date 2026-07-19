@@ -1,0 +1,30 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "36401086690d77a9b98b5d2394c50a76",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "kwijilila",
+  "lesson": {
+    "week": 4,
+    "lesson": 1,
+    "title": "Kwijilila",
+    "topics": [
+      "Kuhonesa",
+      "KWIVWILILA NA NAKUHANJIKA",
+      "| P a g e",
+      "CHIHANDE: KUSHIMUTWILA",
+      "Mutwe Wachihande: Vyuma Vinakusefuka Mujingalila."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

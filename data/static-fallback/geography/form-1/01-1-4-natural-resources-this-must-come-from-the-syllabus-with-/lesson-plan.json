@@ -1,0 +1,37 @@
+{
+  "subject": "Geography",
+  "subjectSlug": "geography",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "GEOGRAPHY-TERM-2-MODULE.pdf",
+  "md5": "ef626a40eb4e21d95d9ebb2064b5d6da",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-4-natural-resources-this-must-come-from-the-syllabus-with-",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.4. Natural Resources (This must come from the syllabus with its serial number)",
+    "topics": [],
+    "activities": [],
+    "resources": [
+      "GENERAL COMPETENCES: Analytical thinking, Citizenship, Collaboration, and",
+      "Environmental Sustainability.",
+      "responsibly. (This must come from the syllabus with its serial number)",
+      "the ability to use them responsibly and ensuring sustainable development.",
+      "identification. Through group discussions and collaboration, learners will acquire a value of",
+      "environment."
+    ],
+    "assessment": [
+      "CRITERIA",
+      "Introduction",
+      "Ask learners; ‘Have",
+      "you ever wondered",
+      "clothes and the food",
+      "you eat (sandwich,"
+    ],
+    "notes": ""
+  }
+}

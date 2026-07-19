@@ -1,0 +1,45 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+  "md5": "0b1838dd3d97a165f716846a59545c87",
+  "detectedShift": 0,
+  "pageCount": 33,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "8-drawing-and-painting-from-observation",
+  "lesson": {
+    "lesson": 4,
+    "title": "8 DRAWING AND PAINTING FROM OBSERVATION",
+    "topics": [
+      "Introduction:",
+      "Drawing and painting from observation is a fundamental skill for artists, allowing them to",
+      "accurately capture the world around them.",
+      "This topic explores the techniques and principles of drawing and painting from observation,",
+      "helping artists refine their skills and create more realistic and engaging works. By observing and"
+    ],
+    "activities": [
+      "Learning Environment Setup:",
+      " Indoor (Art room with good lighting, easels…)",
+      "Art and Design",
+      "Teaching Module",
+      " Outdoor (Access to gardens, parks, or urban settings for live observation…)",
+      " Technological (Use of tablets for digital drawing/painting applications…)",
+      "Suggested Learning & Teaching Materials:",
+      "Drawing/ Painting (bond paper, sugar paper, black paper…) and sketchbooks"
+    ],
+    "resources": [],
+    "assessment": [
+      " Evaluate leaners’ artworks based on accuracy, creativity, and the application of",
+      "techniques taught and skills acquired.",
+      " Provide constructive feedback during peer reviews.",
+      "This topic exposed learners to acquire skills in drawing from observation and represent",
+      "their surroundings through drawings and paintings, fostering artistic skills and",
+      "appreciation of the visual world of Natural and Man-made objects."
+    ],
+    "notes": ""
+  }
+}

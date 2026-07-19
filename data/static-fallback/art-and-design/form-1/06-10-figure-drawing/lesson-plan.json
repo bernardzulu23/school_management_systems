@@ -1,0 +1,52 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+  "md5": "0b1838dd3d97a165f716846a59545c87",
+  "detectedShift": 0,
+  "pageCount": 33,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "10-figure-drawing",
+  "lesson": {
+    "lesson": 6,
+    "title": "10 FIGURE DRAWING",
+    "topics": [
+      "Introduction",
+      "The topic will discuss the fundamental skills like proportion, pose, gesture and line art. Stick-",
+      "Figure introduces the learners to basics on the use of line and shape in order to create simple",
+      "imagery.",
+      "Stick Figure (human) Drawing is the art of creating simple animate features using lines in"
+    ],
+    "activities": [
+      "Learning Environment set-up:",
+      " In-door: (classroom, studio, computer lab…)",
+      " Technological (mechanical approach, digital platforms…)",
+      "Suggested Learning & Teaching Materials:",
+      "(i) Pencil",
+      "(ii) Paper/ wall surfaces",
+      "(iii) Eraser",
+      "Art and Design"
+    ],
+    "resources": [
+      "Wood, D. (2013). Laboratory safety overview [Class handout]. Columbia College,",
+      "Chileshe.C.(2022)Understanding Artworks In Expressive & Fine Arts, Lusaka, Haggmart. (page 104)",
+      "https://moodle.columbiacollege.bc.ca/login/index.php",
+      "https://www.youtube.com/watch?v=L_elHeo1PgQ&pp=ygVPIFN0aWxsIGxpZmUgZHJhd2luZyBm­",
+      "b3IgYmVnaW5uZXJzI Monday 21.04.25- 11:00 hrs",
+      "Kasonde.P.C (2017)Art & Design Learners’ Book Grade 9, Lusaka, MK. (pages 19)"
+    ],
+    "assessment": [
+      "value of Stick Figure Drawing.",
+      "Figure Drawings.",
+      "This topic, looked at composing Stick Figure Drawings in action, simplicity and clarity",
+      "over detailed realism.",
+      "The ultimate expectation in this topic was to help learners develop fundamental drawing",
+      "skills, practice gesture drawing and create simple, yet expressive and proportionate"
+    ],
+    "notes": ""
+  }
+}

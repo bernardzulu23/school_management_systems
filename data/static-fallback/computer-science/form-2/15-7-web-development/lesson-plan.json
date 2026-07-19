@@ -1,0 +1,51 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "7-web-development",
+  "lesson": {
+    "lesson": 15,
+    "title": "7: WEB DEVELOPMENT",
+    "topics": [
+      "Overview",
+      "Web development involves the creation and styling of digital content to ensure it is functional, accessible,",
+      "and visually engaging. This topic focuses on Cascading Style Sheets (CSS), the essential design tool that",
+      "allows developers to control the presentation of HTML structures."
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Artificial (Physical – Classroom):",
+      "Computer lab with individual workstations for learners",
+      "Space for learners to implement CSS on HTML templates and share screens",
+      "Technology Environment:",
+      "Computers with text editor (VS Code, Notepad++) and web browser",
+      "Projector and screen to demonstrate CSS transformations",
+      "Natural Environment:"
+    ],
+    "resources": [
+      "Colour blindness simulation tool (Spectrum or similar extension)",
+      "Starter HTML/CSS page designed by learners for accessibility testing",
+      "Worksheet to record observations, contrast ratio results, and responsive design issues",
+      "Suggested Teaching Methods",
+      "Demonstration: Teacher shows how to use DevTools and extensions to test accessibility",
+      "Hands-on Practice: Learners test their own pages for colour contrast, readability, and mobile"
+    ],
+    "assessment": [
+      "Examples of Formative",
+      "Scenario: You are helping a family member build a simple website for their restaurant in Kitwe called",
+      "“Mama B’s Kitchen.” You want all page titles (<h1> elements) to be dark green, and the main text",
+      "(<p>) to be dark grey on a light background.",
+      "(Applying Style Methods) What is the most professional and efficient way to apply these",
+      "styles? Why is this method better than the others, especially if more pages are added later?"
+    ],
+    "notes": ""
+  }
+}

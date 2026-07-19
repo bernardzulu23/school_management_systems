@@ -1,0 +1,14 @@
+{
+  "subject": "Food and Nutrition",
+  "subjectSlug": "food-and-nutrition",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FOOD-AND-NUTRITION-FORM-1-TERM-1-MODULE-Final-edited-Finaledition.pdf",
+  "md5": "74467cd6c3ba4c6da36173963589ca54",
+  "detectedShift": 0,
+  "pageCount": 71,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "lessonCount": 2
+}

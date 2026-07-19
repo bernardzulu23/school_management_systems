@@ -1,0 +1,30 @@
+{
+  "subject": "Icibemba",
+  "subjectSlug": "icibemba",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "ef382ed6b56f920d214fcd97ed1431ff",
+  "detectedShift": 0,
+  "pageCount": 69,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "langa-ifyo-ubulondoloshi-bobe-ubwa-litilica-bwinga-suminishi",
+  "lesson": {
+    "week": 2,
+    "lesson": 22,
+    "title": "Langa ifyo ubulondoloshi bobe ubwa Litilica bwinga suminishiwa",
+    "topics": [
+      "ukukonka ififwaikwa mubulondoloshi",
+      "UMUTWE 2: IMISANGO YA LITILICA",
+      "Ubulondoloshi",
+      "Muli uyu mutwe, abasambi balasambilila pamisango ibili iya Litilica",
+      "apali, Litilica yakulandafye na Litilica iyalembwa. Muli Litilica"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 2,
+  "sourceFile": "Mathematics-2-Teaching-Module-Form-2-Term-2.pdf",
+  "md5": "89aeadaa38c2debec589b6374a4458d5",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "algebra",
+  "lesson": {
+    "lesson": 4,
+    "title": "ALGEBRA",
+    "topics": [
+      "Introduction",
+      "Overview: Algebra is a branch of Mathematics that uses letters and symbols to represent numbers",
+      "and relationships between numbers. It helps us to represent unknown values using letters, write",
+      "mathematical statements called expressions and equations, find unknown values by solving",
+      "equations, and describe patterns and real-life situations mathematically. At Form 2 level, algebra"
+    ],
+    "activities": [
+      "expressions and applying algebraic methods accurately.",
+      "This topic has two sub-topics namely basic processes, and remainder and factor theorems.",
+      "General Competences",
+      " Analytical Thinking: Break down word problems into algebraic statements, interpret",
+      "algebraic expressions, identify relationship between variables, and compare different solution",
+      "methods and check accuracy of results.",
+      " Collaboration: Work in groups to solve problems on algebra and compare solutions.",
+      " Communication: Explain algebraic processes clearly using Mathematical language."
+    ],
+    "resources": [],
+    "assessment": [
+      "patterns and relationships in relation to Algebra and apply them in real-life situations.",
+      "Learning Activity 2: Factorising by grouping terms, quadratic expressions, and",
+      "difference of two squares",
+      "Introduction",
+      "Factorising by grouping terms, quadratic expressions, and the difference of two squares are",
+      "important skills in Algebra because they help simplify expressions, solve equations, and develop"
+    ],
+    "notes": ""
+  }
+}

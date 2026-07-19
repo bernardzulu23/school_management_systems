@@ -1,0 +1,42 @@
+{
+  "subject": "Commerce",
+  "subjectSlug": "commerce",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "commerce-Teaching-Module-PDF.pdf",
+  "md5": "4d5742a009f6b468f486a1271704e6a1",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "commerce",
+  "lesson": {
+    "lesson": 3,
+    "title": "COMMERCE",
+    "topics": [
+      "Introduction",
+      "Commerce is trade and aids to trade. It gives knowledge about the world of business and"
+    ],
+    "activities": [
+      "the economy, as it enables businesses and individuals to acquire the goods and services they need",
+      "to survive and thrive. In addition, it creates employment, generates revenue and creates wealth.",
+      "Learners therefore, learn about trade processes and how aids to trade facilitate these processes",
+      "and at the same time recognizing these aids as industries that are part of trade and their linkages.",
+      "expected to facilitate a learning process that allows learners to explore and discover concepts",
+      "under this topic on their own.",
+      "General Competence:",
+      "Analytical thinking"
+    ],
+    "resources": [],
+    "assessment": [
+      "Class exercise",
+      "Describe the main categories of Commerce.",
+      "Describe how a farmer benefits from commercial services.",
+      "Home work",
+      "Discuss how Zambia benefits from Commerce.",
+      "Discuss how the world benefits from commerce."
+    ],
+    "notes": ""
+  }
+}

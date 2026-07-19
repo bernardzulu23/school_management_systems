@@ -1,0 +1,29 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "group-sorting-card-matching",
+  "lesson": {
+    "week": 1,
+    "lesson": 32,
+    "title": "Group Sorting (Card Matching)",
+    "topics": [
+      "Prepare cards with different special groups (e.g., elderly, disabled, orphans, street children,",
+      "refugees) and another set of cards with their possible needs (e.g., healthcare, education,",
+      "shelter)",
+      "Learners work in groups to match special groups with their corresponding needs."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

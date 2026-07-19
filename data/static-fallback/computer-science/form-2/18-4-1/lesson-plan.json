@@ -1,0 +1,36 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "4-1",
+  "lesson": {
+    "lesson": 18,
+    "title": "4.1",
+    "topics": [
+      "PRIOR KNOWLEDGE:",
+      "Learners have been introduced to basic computer hardware components and understand that computers"
+    ],
+    "activities": [
+      "Computer Science Teaching Module – Form 2 | Ministry of Education, Zambia | 2026",
+      "Form 2 – Secondary Education"
+    ],
+    "resources": ["everyday experience (e.g, mobile data, school Wi-Fi)."],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION",
+      "Discuss a \"hook” with",
+      "learners.",
+      "Poses question: \"How",
+      "can one printer be"
+    ],
+    "notes": ""
+  }
+}

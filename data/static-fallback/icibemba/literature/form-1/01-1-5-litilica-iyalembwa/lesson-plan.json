@@ -1,0 +1,34 @@
+{
+  "subject": "Icibemba",
+  "subjectSlug": "icibemba",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-3.pdf",
+  "md5": "47ad27a181331e1e9da44c6ba77c38ed",
+  "detectedShift": 0,
+  "pageCount": 65,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-5-litilica-iyalembwa",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.5 Litilica Iyalembwa",
+    "topics": [
+      "BOYS: 28",
+      "GIRLS: 26",
+      "SUB-TOPIC: 1.5.3 Ukupalana na ukupusana kwa misango ya Litilica Iyalembwa."
+    ],
+    "activities": ["What should the", "teacher do?", "LEARNERS", "What should the"],
+    "resources": [],
+    "assessment": [
+      "CRITERIA",
+      "learners do?",
+      "(10 minutes)",
+      "Activity 1:",
+      "Introduction/Revision",
+      "The previous lesson"
+    ],
+    "notes": ""
+  }
+}

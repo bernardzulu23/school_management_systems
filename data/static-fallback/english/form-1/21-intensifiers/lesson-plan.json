@@ -1,0 +1,43 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "intensifiers",
+  "lesson": {
+    "lesson": 21,
+    "title": "INTENSIFIERS",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: An intensifier is a word that strengthens or weakens or give emphasis to",
+      "another word. The purpose of an intensifier is to tell us the intensity of another word."
+    ],
+    "activities": [
+      " Give learners three sentences which have intensifiers",
+      "Example:",
+      "Joyce is incredibly smart",
+      "Chilombu is extremely happy.",
+      "This meal is absolutely delicious",
+      "I am utterly exhausted.",
+      " Underline the intensifiers in the sentences",
+      " Ask the learners what role the words are doing in the sentences."
+    ],
+    "resources": [],
+    "assessment": [
+      " Observe learners using intensifiers in sentences.",
+      " Learners identify and highlight intensifiers in a piece of writing such as a magazine,",
+      "newspaper, or text.",
+      " Use intensifiers sparingly to avoid over emphasising or sounding insincere.",
+      " Choose the right intensifier to convey the intended degree of emphasis.",
+      " By using intensifiers, you can add appropriate depth and emphasis to your language"
+    ],
+    "notes": ""
+  }
+}

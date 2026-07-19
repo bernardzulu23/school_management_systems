@@ -1,0 +1,24 @@
+{
+  "subject": "Chitonga",
+  "subjectSlug": "chitonga",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "CHITONGA-FORM-1-TERM-2-TEACHING-MODULE-2025-VERSION.pdf",
+  "md5": "589b740b71891c39f84d5a840d1730f1",
+  "detectedShift": 0,
+  "pageCount": 87,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "makwebo-74",
+  "lesson": {
+    "week": 13,
+    "lesson": 13,
+    "title": "Makwebo …………………………………………………...…… 74",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "subject": "Geography",
+  "subjectSlug": "geography",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Geography-Module-Form1.Term-11.pdf",
+  "md5": "830c5919283d537a897943595cfaf095",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "the-solar-system",
+  "lesson": {
+    "lesson": 5,
+    "title": "The Solar System",
+    "topics": [
+      "Introduction",
+      "The solar system is made up of the sun and its eight planets and everything that orbits around",
+      "it, such as moons, asteroids, comets and various other celestial bodies. In this topic you should",
+      "guide learners to the position of the Earth in the solar system, its shape, size and the movements",
+      "it makes. You should also let learners explore the Earths graticule and atmosphere"
+    ],
+    "activities": [
+      "c. Learning Environment",
+      "Indoor set up:",
+      "o Classroom set up in small groups for the learners to discuss and collaborate as they identify",
+      "elements of the solar system.",
+      "o Learners will work in small groups to observe a poster, chart or diagram of the solar system",
+      "and discuss the position of the Earth and share their thoughts with the whole class",
+      "o Learners will work in small groups to examine the 2 dimension or 3-dimension diagrams",
+      "of the solar system to identify the planets in their order from the sun and determine Earths"
+    ],
+    "resources": [
+      "c. Teaching and Learning Materials",
+      "o Educational videos or clips from reputable sources like NASA and National Geographic.",
+      "o Satellite images, pictures of the Earth from space or photographs of ship disappearing over",
+      "the horizon",
+      "o Physical and digital globes and maps to illustrate the Earth’s shape and geographical",
+      "features."
+    ],
+    "assessment": [
+      "i. Observe learners’ discussions by noting their explanations, participation teamwork and",
+      "understanding",
+      "ii. Ask questions to check understanding of:",
+      "o The position of the Earth if it was further away from the sun.",
+      "o The position of the Earth in the Solar system and its significance for human",
+      "habitation."
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,942 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 History Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — HISTORY-SYLLABUS-FORMS-1-4.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "History",
+    "slug": "history",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.987) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 29,
+    "shiftConfidence": 0.987
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Reasons for Learning History",
+      "specificCompetences": [
+        "Communicate relevance of past events Explaining the meaning of History (Past events) Describing past events in the family (funerals, weddings, outings È) Describing the importance of past events (past experience can provide present or future solutions, become better citizens, develop critical thinking È) Showing the importance of history in diඒerent Üelds and topics (Medicine: understanding the origins of diseases and treatment, understanding patterns and trends in diseases progressionÈ, Music: identifying inÝuential composers and musicians, appreciating cultural and social contexts, learning from past music masters and innovators, Law: making reference to similar past cases to make judgment in present casesÈ) Relevance of past events"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "communicated correctly",
+      "keywords": ["reasons", "learning", "history"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Local History",
+      "specificCompetences": ["Interpret local history"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["local", "history"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Types or Branches of History",
+      "specificCompetences": [],
+      "learningActivities": [],
+      "expectedStandard": "classiÜed correctly",
+      "keywords": ["types", "branches", "history"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Sources of History",
+      "specificCompetences": ["Assess credibility of sources of historical information"],
+      "learningActivities": [],
+      "expectedStandard": "assessed appropriately",
+      "keywords": ["sources", "history"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S5",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.5",
+      "subtopic": "=Learning about the past using digital resources",
+      "specificCompetences": ["=Apply digital resources in learning about the past ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["learning", "about", "past", "using", "digital", "resources"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "=Periods of Time",
+      "specificCompetences": ["=Explore patterns of historical durations"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["periods", "time"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Importance of Chronology in History",
+      "specificCompetences": ["=Arrange series of related events in chronological order="],
+      "learningActivities": [],
+      "expectedStandard": "order correctly",
+      "keywords": ["importance", "chronology", "history"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "=Constructing a timeline",
+      "specificCompetences": ["=Apply chronology in writing time line="],
+      "learningActivities": [],
+      "expectedStandard": "timeline applied correctly.",
+      "keywords": ["constructing", "timeline"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "The use of Abbreviations to denote Historical Periods",
+      "specificCompetences": [
+        "=Use abbreviations (BC/BCE and AD/CE) to denote historical periods="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["abbreviations", "denote", "historical", "periods"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Views on the Origins of Man",
+      "specificCompetences": ["=Analyse religious and scientiÜc views on the origins of man="],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["views", "origins"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "The Way of Life in Stone Age",
+      "specificCompetences": [
+        "Draw lessons from Stone Age way of life Classifying Stone Age Paleolithic also known as old age or Early stone Age, Mesolithic also known as Middle Stone Age and Neolithic also known as New Stone Age or Late Stone Age) Identifying creatures that existed in three Stone Ages Early: Homo-Habilis. Middle: Broken Hillman. Late: Bushmen/San) Describing social, political, economic aspects of the Stone Age. Analysing the use of various Stone Age tools (Hunting, cutting, digging ) Contrasting Stone Age way of life with modern way of OLIH Lessons from Stone Age ZD\\ of life drawn DSSURSULDWHO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["life", "stone"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "Stone Age Sites in",
+      "specificCompetences": [
+        "Assess importance of Stone Age sites in Zambia Locating Stone Age sites on the map of Zambia (Mwela rocks, Nachikufu caves, Gwisho Hot SpringÈ) Analysing the importance of Stone Age sites (Tourism, Cultural Heritage ) Importance of Stone Age sites in Zambia assessed DSSURSULDWHO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["stone", "sites"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Development of Iron-Technology and Farming",
+      "specificCompetences": [
+        "Analyse impact of Iron technology in farming Locating on the map early areas of farming and Iron- working (In the Middle East and Africa) Identifying settlement areas of Iron Age farmers in Zambia (Kalundu, Isamu Pati in Kalomo and InÓgombe Ilede) Impact of Iron technology in farming analysed DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["development", "iron", "technology", "farming"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1-2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Development of Iron-Technology and Farming",
+      "specificCompetences": [
+        "Analyse impact of Iron technology in farming working Identifying settlement areas of Iron Age farmers in Zambia (Kalundu, Isamu Pati in Kalomo and InÓgombe Ilede) Relating InÓgombe Ilede in to the global trade environment. Analysing the importance of Iron technology (agriculture, trade, and hunting,"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["development", "iron", "technology", "farming"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Early Bantu Settlement in",
+      "specificCompetences": [
+        "Locate origins of Bantu Speakin=g People in Africa Discussing the term, Bantu. Identifying the Bantu speaking people. Outlining reasons for early Bantu migrations from West Africa. Analysing the course of early Bantu migrations from West Africa. Locating on the map of Africa early Bantu settlement in West Africa. Origins of Bantu Speaking People in Africa located"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["early", "bantu", "settlement"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.2",
+      "subtopic": "Bantu Migrations into Zambia",
+      "specificCompetences": [
+        "Use knowledge of common origins of Zambian people to promote National unity Discussing causes for movement of various Bantu Speaking groups into Zambia (From Katanga: political, economic, socialÈ; From South Africa: eਙects of Mfecane Discussing the course of Bantu Migrations into Zambia (East Africa, Katanga, South Africa) Knowledge of common origins of Zambian people, used to promote National"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "unity accordingly",
+      "keywords": ["bantu", "migrations", "into", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S3",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.3",
+      "subtopic": "=Decentralised Societies in Pre Colonial Zambia",
+      "specificCompetences": ["Analyse features of decentralised societies"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["decentralised", "societies", "colonial", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S4",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.4",
+      "subtopic": "Centralised Societies in Pre- Colonial Zambia",
+      "specificCompetences": [
+        "Integrate features of Centralised Societies in modern Zambian society"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "utilised accordingly",
+      "keywords": ["centralised", "societies", "colonial", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S1",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.1",
+      "subtopic": "Centralised Societies in Pre- Colonial Zambia",
+      "specificCompetences": ["=Promote heritage sites"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["centralised", "societies", "colonial", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S2",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.2",
+      "subtopic": "Importance of Heritage Sites",
+      "specificCompetences": ["Utilise business opportunities found in national heritage sites"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["importance", "heritage", "sites"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S3",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.3",
+      "subtopic": "Importance of Heritage Sites",
+      "specificCompetences": ["Conserve historical VLWHV"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["importance", "heritage", "sites"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S1",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "Topic 1.8",
+      "subtopicNumber": "1.8.1",
+      "subtopic": "=Traditional Ceremonies= in Zambia",
+      "specificCompetences": ["Analyse importance= of traditional ceremonies ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["traditional", "ceremonies", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S1-2",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "Topic 1.8",
+      "subtopicNumber": "1.8.1",
+      "subtopic": "=Traditional Ceremonies= in Zambia",
+      "specificCompetences": ["Evaluate various human societies"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["traditional", "ceremonies", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Development of Slavery and Slave Trade",
+      "specificCompetences": ["=Show respect for human dignity"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately.",
+      "keywords": ["development", "slavery", "slave", "trade"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "Europe and the beneÜts from Slave WUDGH",
+      "specificCompetences": ["=Analyse EuropeansÓs= beneÜts from slave trade="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["europe", "bene", "from", "slave", "wudgh"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "Slave Trade and Black",
+      "specificCompetences": ["=Relate Black Friday to modern day commerce"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["slave", "trade", "black"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "Human Traඓcking as a morden form of slave trade",
+      "specificCompetences": ["=Show respect for Human rights"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["human", "cking", "morden", "form", "slave", "trade"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Missionary Work in Zambia",
+      "specificCompetences": ["=Analyse impact of missionary activities in= Zambia"],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["missionary", "work", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "=British Occupation of Northern",
+      "specificCompetences": [
+        "=Analyse process of colonial occupation of Northern Rhodesia Discussing colonisation ="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["british", "occupation", "northern"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Types of governance in Northern",
+      "specificCompetences": ["Critique colonial types of governance"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["types", "governance", "northern"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.2",
+      "subtopic": "The Central African Federation",
+      "specificCompetences": ["Demonstrate understanding of Central African"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["central", "african", "federation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Primary and Secondary Resistance to Colonial Rule",
+      "specificCompetences": ["Interpret resistance methods to colonial rule"],
+      "learningActivities": [],
+      "expectedStandard": "interpreted correctly",
+      "keywords": ["primary", "secondary", "resistance", "colonial", "rule"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Nationalists in ZambiaÓs Independence Struggle",
+      "specificCompetences": [
+        "Appreciate the role of nationalists and Freedom Üghters during Independence struggle"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["nationalists", "zambia", "independence", "struggle"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1-2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Nationalists in ZambiaÓs Independence Struggle",
+      "specificCompetences": ["construct an argument on the source of conÝict"],
+      "learningActivities": [],
+      "expectedStandard": "Dispose garbage, trash, electric refuse appropriately.",
+      "keywords": ["nationalists", "zambia", "independence", "struggle"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Nationalists in ZambiaÓs Independence Struggle",
+      "specificCompetences": ["=Explore Copper mining in Zambia ="],
+      "learningActivities": [],
+      "expectedStandard": "explored accordingly",
+      "keywords": ["nationalists", "zambia", "independence", "struggle"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "=Labour Migration in Colonial and Post=- Colonial Zambia.",
+      "specificCompetences": [
+        "Assess impact of labour migration in colonial and post-colonial Zambia="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "assessed appropriately",
+      "keywords": ["labour", "migration", "colonial", "post", "colonial", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "=ZambiaÓs role in the liberation struggle of Southern Africa=",
+      "specificCompetences": [
+        "= Evaluate ZambiaÓs role in liberation struggle of Southern Africa= Identifying countries in Southern Africa which Zambia helped to Liberate Zimbabwe, Angola, Namibia, South Africa, Mozambique) Analysing ZambiaÓs role in the liberation struggle of Southern Africa =(Contribution at inte=rnational forums such as OAU and UN, hosting of key Liberation leaders, diplomacy, Financial, moral, and military support) Discussing the impact ZambiaÓs involvement in the liberation of Southern Africa (Loss of human life, wasted resources, destroyed infr=astructure, presence of land minesÈ) ZambiaÓs role in the liberation struggle of Southern Africa evaluated DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["zambia", "role", "liberation", "struggle", "southern", "africa"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "=The Pan=- Africanism =",
+      "specificCompetences": ["= Promote unity in Africa through Pan=-Africanism ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["africanism"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "United National",
+      "specificCompetences": ["=Examine UNIPÓs domestic policies Political and socio- economic)"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["united", "national"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.2",
+      "subtopic": "=UNIP and the Search for National Unity.",
+      "specificCompetences": ["= =Promote culture of national unity"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["unip", "search", "national", "unity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "=UNIP and the Lumpa Church",
+      "specificCompetences": ["=Utilise diඒerent strategies in responding to challenges="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["unip", "lumpa", "church"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "=UNIP and the Insurgency of Adamson Mus=hala",
+      "specificCompetences": ["=Engage in ways of conÝict resolution in society="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["unip", "insurgency", "adamson", "hala"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S3",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.3",
+      "subtopic": "=UNIPÓs reign and attempted military coups.",
+      "specificCompetences": ["=Promote the culture of ascending to power GHPRFUDWLFDOO\\"],
+      "learningActivities": [],
+      "expectedStandard": "promoted accordingly",
+      "keywords": ["unip", "reign", "attempted", "military", "coups"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S4",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.4",
+      "subtopic": "UNIPÓs Foreign policy-1964",
+      "specificCompetences": ["=Examine UNIPÓs foreign policies Political and socio- economic)"],
+      "learningActivities": [],
+      "expectedStandard": "examined correctly",
+      "keywords": ["unip", "foreign", "policy", "1964"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S5",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.5",
+      "subtopic": "=Zambia under the Movement for Multi- Party Democracy MMD) =191",
+      "specificCompetences": ["Analyse policies of the MMD government"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["zambia", "under", "movement", "multi", "party", "democracy"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S6",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.6",
+      "subtopic": "Zambia under the Patriotic Front (PF)",
+      "specificCompetences": [
+        "Examine PF government policies Identifying the Presidents of Zambia under the PF=(Michael C. Sata, Edgar C. Lungu) Discussing the domestic policy of the PF government Political, socio- economic ) Discussing the Foreign policy of the PF government. Analysing the challenges faced by the PF government arising from its domestic and foreign policies Policies of the PF government examined FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["zambia", "under", "patriotic", "front"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S7",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.7",
+      "subtopic": "Zambia under the United Party for National Development UPND) since 2021 =",
+      "specificCompetences": ["= =Analyse UPNDÓs policies since 2021"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": [
+        "zambia",
+        "under",
+        "united",
+        "party",
+        "national",
+        "development",
+        "upnd",
+        "since",
+        "2021"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S7-2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.7",
+      "subtopic": "Zambia under the United Party for National Development UPND) since 2021 =",
+      "specificCompetences": ["Construct an argument on the source of conÝict"],
+      "learningActivities": [],
+      "expectedStandard": "Analyse ideas and adjust them accordingly",
+      "keywords": [
+        "zambia",
+        "under",
+        "united",
+        "party",
+        "national",
+        "development",
+        "upnd",
+        "since",
+        "2021"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Causes of the First World War",
+      "specificCompetences": ["=Analyse events leading to the First World War"],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["causes", "first", "world"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "The Paris Peace Conference",
+      "specificCompetences": ["=Promote peaceful methods of conÝict resolution="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["paris", "peace", "conference"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "The League of Nations.",
+      "specificCompetences": ["=Assess the work of the League of Nations"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["league", "nations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Causes of the Second World War",
+      "specificCompetences": [
+        "Analyse events leading to the Second World War Analysing events in Europe that led to the collapse of peace by HitlerÓs and MussoliniÓs activities in Foreign Policy, British and French Policy of Appeasement,"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["causes", "second", "world"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Zambia and World Wars",
+      "specificCompetences": ["=Evaluate ZambiaÓs role in World Wars"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["zambia", "world", "wars"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S3",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.3",
+      "subtopic": "=Capitalist versus Communist World =(Cold War)",
+      "specificCompetences": ["= =Examine ideologies of Capitalism and Communism since"],
+      "learningActivities": [],
+      "expectedStandard": "examined correctly.",
+      "keywords": ["capitalist", "versus", "communist", "world", "cold"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "The United Nations (UN) since 1945",
+      "specificCompetences": [
+        "Assess the work of the UN since 1945 Discussing the establishment of the UN Winston Churchill and Franklin Delano RooseveltÓs idea, Atlantic Charter, Moscow Conference, Dumbarton Oaks conference, Yalta conferenceÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["united", "nations", "since", "1945"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "The African Union (AU)",
+      "specificCompetences": ["=Demonstrate understanding the role of African unity"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["african", "union"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Zambia and its international partners",
+      "specificCompetences": [
+        "=Appreciate bilateral relations= between Zambia and its international partners"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["zambia", "international", "partners"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "Pandemics and Epidemics",
+      "specificCompetences": [
+        "Participate in awareness campaign on the prevention of pandemics and HSLGHPLFV Discussing pandemic and HSLGHPLF Identifying pandemics HIV=\\AIDS, COVID=-19« and epidemics (Cholera, Typhoid, dysenteryÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["pandemics", "epidemics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S2",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.2",
+      "subtopic": "Communicable communicable diseases",
+      "specificCompetences": [
+        "=Engage in awareness campaigns on the prevention of communicable and non=-communicable diseases="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["communicable", "communicable", "diseases"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S3",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.3",
+      "subtopic": "National Values and",
+      "specificCompetences": [
+        "Promote culture of respect Discussing National Values and Principles."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["national", "values"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S6",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.6",
+      "subtopic": "=Street vending in Zambia",
+      "specificCompetences": [
+        "Assess impact of street vending. Discussing street vending. Examining causes of street vending Analysing the impact of street vending (positive Impact of street vending assessed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["street", "vending", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S7",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.7",
+      "subtopic": "=Emerging social vices in Zambia",
+      "specificCompetences": [
+        "Promote good morals Role playing awareness on trending social vices juvenile delinquency such as junkies, child marriageÈ) Analysing causes and eඒects of trending social vices in society."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["emerging", "social", "vices", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S8",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.8",
+      "subtopic": "Terrorism",
+      "specificCompetences": ["Recognise ways of promoting a culture of peace in society"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["terrorism"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S10",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.10",
+      "subtopic": "The Middle East Crises",
+      "specificCompetences": ["Analyse conÝicts in the Middle East since"],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["middle", "east", "crises"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S11",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.11",
+      "subtopic": "DR Congo regional FRQÀLFW",
+      "specificCompetences": ["Demonstrate understanding of Congo DR conÝicts"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["congo", "regional"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S9",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.9",
+      "subtopic": "The 194 Rwandan",
+      "specificCompetences": [
+        "Assess the impact of Rwandan Genocide Impact of the Rwandan Genocide"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "assessed accordingly",
+      "keywords": ["rwandan"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

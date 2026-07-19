@@ -1,0 +1,28 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "storytelling-and-sharing-experiences",
+  "lesson": {
+    "week": 2,
+    "lesson": 22,
+    "title": "Storytelling and sharing Experiences",
+    "topics": [
+      "Learners share real-life experiences where they showed loyalty at home or school.",
+      "They can also discuss famous historical or fictional characters who demonstrated",
+      "loyalty."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

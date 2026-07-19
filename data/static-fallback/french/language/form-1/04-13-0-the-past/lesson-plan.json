@@ -1,0 +1,45 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-3-1.pdf",
+  "md5": "aec298243b16b6a59e9d4a1cecd21f60",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "13-0-the-past",
+  "lesson": {
+    "lesson": 4,
+    "title": "13.0 THE PAST",
+    "topics": [
+      "Overview",
+      "The past refers to a time that has already happened, before the present moment. It",
+      "could be recent (yesterday, last week) or distant (years ago). The past usually means",
+      "past tense and it is used to talk about actions or events that have already happened. In",
+      "French, learners start by learning passé compose which is the most commonly used"
+    ],
+    "activities": [
+      " Play an audio or read a passage in which le passé composé has been used for",
+      "the learners to understand the structure and its usage.",
+      " Guide learners in identifying the structure (le passé composé) from the",
+      "passage e.g. Hier, je suis allé au marché. J’ai acheté une pomme.",
+      " In groups, learners identify the structure (le passé composé) used from the",
+      "passage given.",
+      " Explain the formation of le passé compose.",
+      "Content tips:"
+    ],
+    "resources": [],
+    "assessment": [
+      "specific competence.",
+      "learning activities from all the sub-topics taught and the summative",
+      "questions…)",
+      "Key Points / Recap",
+      "Le passé composé,.",
+      "ii. L’auxiliaire (helping verb) – Either avoir or être, used to form the past tense."
+    ],
+    "notes": ""
+  }
+}

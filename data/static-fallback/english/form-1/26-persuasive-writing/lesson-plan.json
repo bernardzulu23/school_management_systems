@@ -1,0 +1,50 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "persuasive-writing",
+  "lesson": {
+    "lesson": 26,
+    "title": "PERSUASIVE WRITING",
+    "topics": [
+      "INTRODUCTION",
+      "Overview: Persuasive writing is a form of writing where the writer attempts to convince or",
+      "persuade the audience to adopt a particular point of view or take a specific action by",
+      "presenting logical reasoning, supporting evidence, and compelling arguments. It has the",
+      "goal of influencing the reader to adopt a certain opinion, ideas or complete an action."
+    ],
+    "activities": [
+      " Distribute a passage to learners and ask them to read it.",
+      "Example:",
+      "The Inclusion Revolution: Why Special Education Belongs in the",
+      "Mainstream Classroom",
+      "For decades, learners with disabilities have been segregated from their",
+      "non-disabled peers, relegated to special education classrooms that"
+    ],
+    "resources": [
+      "However, this approach is not only ineffective but also unjust. It is time",
+      "to revolutionise the way we approach special education, embracing",
+      "inclusive education as the norm.",
+      "One of the primary arguments against inclusive education is that it",
+      "would be too difficult for learners with disabilities to keep up with their",
+      "non-disabled peers. However, this assumption is rooted in a flawed"
+    ],
+    "assessment": [
+      " Ask each group to write a composition using points gathered.",
+      " Give homework for individual practice.",
+      " Argumentative composition is a type of writing that aims to persuade or convince the",
+      "reader to adopt a particular point of view or accept a certain claim.",
+      " It presents a claim or position.",
+      " The writer supports the argument with evidence and reasoning."
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "summary",
+  "lesson": {
+    "lesson": 26,
+    "title": "SUMMARY",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: A summary is a brief and concise piece of writing that presents only",
+      "main points from a given text (oral or written) without altering the meaning of the",
+      "text. The ability to summarise a text is an important skill in academic and social",
+      "contexts in which there is endless need to make information easier to"
+    ],
+    "activities": [
+      " Display a chart with a list of words and ask learners to provide abbreviations for",
+      "Examples:",
+      "Doctor – Dr.",
+      "Mister – Mr.",
+      "Avenue – Av.",
+      "February – Feb.",
+      "Kilogram - Kg",
+      "Fill in the blanks using the correct abbreviation from the list."
+    ],
+    "resources": [],
+    "assessment": [
+      " Observe learners as they discuss and practice writing activities.",
+      " Assess individual understanding and correct usage of abbreviations.",
+      " Ask learners to write a short paragraph with at least five different abbreviations",
+      " Abbreviations are shortened forms of words or phrases used to save time and space.",
+      " There are different types of abbreviations (Initialisms, Acronyms, shortened words,",
+      "Date and Time)."
+    ],
+    "notes": ""
+  }
+}

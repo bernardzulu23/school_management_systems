@@ -1,0 +1,23 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "safety",
+  "lesson": {
+    "lesson": 1,
+    "title": "SAFETY",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

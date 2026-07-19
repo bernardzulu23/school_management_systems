@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "2b0f07c9287cad82904a403707ee78d4",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "jishimikila-bikota-bya-jishimikila-63",
+  "lesson": {
+    "week": 6,
+    "lesson": 1,
+    "title": "JISHIMIKILA (BIKOTA BYA JISHIMIKILA )………………………………………………………… 63",
+    "topics": [
+      "(i). NDUMBULWILO YA BANKAZHI………………………………………………………………….64",
+      "(II). LUKOLA…………………………………………………………………………………………………..69",
+      "(III). TANDA BIMYE……………………………………………………………………………………….75",
+      "| P a g e",
+      "NTENDEKELO"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

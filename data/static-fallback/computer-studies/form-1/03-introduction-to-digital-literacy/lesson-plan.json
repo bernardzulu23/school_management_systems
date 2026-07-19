@@ -1,0 +1,23 @@
+{
+  "subject": "Computer Studies",
+  "subjectSlug": "computer-studies",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "FORM-1-ICT-MODULE-Sample1.pdf",
+  "md5": "33d06366ada5cf9dee9617585d61b549",
+  "detectedShift": 0,
+  "pageCount": 15,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "introduction-to-digital-literacy",
+  "lesson": {
+    "lesson": 3,
+    "title": "Introduction to Digital Literacy",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

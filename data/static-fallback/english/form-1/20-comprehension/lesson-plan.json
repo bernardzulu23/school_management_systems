@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "comprehension",
+  "lesson": {
+    "lesson": 20,
+    "title": "COMPREHENSION",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Comprehension is an active process of understanding spoken or",
+      "written information. It is important for real-life tasks, like following",
+      "instructions, having conversations, and interpreting information. This topic",
+      "focuses on building basic comprehension skills, especially listening. Learners"
+    ],
+    "activities": [
+      " Explain to learners that listening requires concentration and the ability to filter main",
+      "ideas from supporting details.",
+      " Read a story or informational passage.",
+      " Tell learners to listen without writing.",
+      " Tell learners to focus on the speaker, maintain silence, and mentally note key ideas.",
+      "Model Passage",
+      "“Kalulu and Suntwe: The Wisdom of the Calabash Bank”",
+      "Long ago, in a quiet village nestled near the great Zambezi River, lived"
+    ],
+    "resources": [],
+    "assessment": [
+      "Observe maximum participation in the activities.",
+      "Learners should demonstrate understanding of each learning activity",
+      "through the activities conducted.",
+      "Learners to fill in a table while the passage is being read.",
+      "Learners to answer comprehension questions based on the given",
+      "passage."
+    ],
+    "notes": ""
+  }
+}

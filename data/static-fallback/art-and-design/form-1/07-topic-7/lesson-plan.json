@@ -1,0 +1,36 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+  "md5": "0b1838dd3d97a165f716846a59545c87",
+  "detectedShift": 0,
+  "pageCount": 33,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "topic-7",
+  "lesson": {
+    "lesson": 7,
+    "title": "_____",
+    "topics": ["Sub-Topic: _____"],
+    "activities": [],
+    "resources": [
+      "Expected Standard: _____",
+      "LESSON PROGRESSION:",
+      "TEACHER’S",
+      "ACTIVITY AND",
+      "LEARNERS’ ACTIVITY"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION",
+      "DEVELOPMENT",
+      "EXERCISE /",
+      "APPLICATION",
+      "CONCLUSION"
+    ],
+    "notes": ""
+  }
+}

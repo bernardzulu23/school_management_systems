@@ -1,0 +1,284 @@
+{
+  "mappingNote": {
+    "zambianLanguages": "Kept as single aggregate CDC corpus (zambian-languages). Per-language / literature detail → data/static-fallback/<lang>/{language|literature}/form-1/.",
+    "mathematicsIi": "MATHEMATICS-II-SYLLABUS folded into Mathematics (same slug). Content is Additional Mathematics-style topics in the MoE pack; aliases map mathematics ii → Mathematics. Not a separate grounding subject.",
+    "chemistry": "chemistry-cdc-2024.json and chemistry-form1-4.json preserved unless --force-chemistry.",
+    "commerceMusicNote": "Under pymupdf, Commerce and Music extract largely natively (selective-line decode). Prior +36/+34 observations may reflect a different extractor; auto-detect still runs per file."
+  },
+  "subjects": [
+    {
+      "file": "AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.json",
+      "subject": "Agricultural Science",
+      "slug": "agricultural-science",
+      "records": 53,
+      "forms": [1, 2, 3, 4],
+      "shift": 0,
+      "confidence": 0.98,
+      "chunks": 5
+    },
+    {
+      "file": "ART-AND-DESIGN-SYLLABUS-FINAL.json",
+      "subject": "Art and Design",
+      "slug": "art-and-design",
+      "records": 126,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.964,
+      "chunks": 5
+    },
+    {
+      "file": "BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.json",
+      "subject": "Biology",
+      "slug": "biology",
+      "records": 84,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.781,
+      "chunks": 6
+    },
+    {
+      "file": "CHEMISTRY-SYLLABUS.json",
+      "subject": "Chemistry",
+      "slug": "chemistry",
+      "records": 122,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.96,
+      "chunks": 7
+    },
+    {
+      "file": "CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.json",
+      "subject": "Civic Education",
+      "slug": "civic-education",
+      "records": 90,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.967,
+      "chunks": 6
+    },
+    {
+      "file": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.json",
+      "subject": "Commerce",
+      "slug": "commerce",
+      "records": 115,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 1,
+      "chunks": 6
+    },
+    {
+      "file": "COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.json",
+      "subject": "Computer Science",
+      "slug": "computer-science",
+      "records": 53,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.996,
+      "chunks": 6
+    },
+    {
+      "file": "DESIGN-AND-TECHNOLOGY-STUDIES.json",
+      "subject": "Design and Technology",
+      "slug": "design-and-technology",
+      "records": 92,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.95,
+      "chunks": 5
+    },
+    {
+      "file": "ENGLISH-SYLABUS-FORM-1-4-O-LEVELCAMERA-READY.json",
+      "subject": "English",
+      "slug": "english",
+      "records": 429,
+      "forms": [1, 2, 3, 4],
+      "shift": 0,
+      "confidence": 0.959,
+      "chunks": 12
+    },
+    {
+      "file": "FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.json",
+      "subject": "Fashion and Fabrics",
+      "slug": "fashion-and-fabrics",
+      "records": 84,
+      "forms": [1, 2, 3, 4],
+      "shift": 0,
+      "confidence": 0.974,
+      "chunks": 5
+    },
+    {
+      "file": "FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.json",
+      "subject": "Food and Nutrition",
+      "slug": "food-and-nutrition",
+      "records": 74,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.979,
+      "chunks": 4
+    },
+    {
+      "file": "FRENCH-LANGUAGE.json",
+      "subject": "French",
+      "slug": "french",
+      "records": 125,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.928,
+      "chunks": 9
+    },
+    {
+      "file": "GEOGRAPHY-SYLLABUS.json",
+      "subject": "Geography",
+      "slug": "geography",
+      "records": 107,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.953,
+      "chunks": 6
+    },
+    {
+      "file": "HISTORY-SYLLABUS-FORMS-1-4.json",
+      "subject": "History",
+      "slug": "history",
+      "records": 66,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.987,
+      "chunks": 6
+    },
+    {
+      "file": "HOSPITALITY-MANAGEMENT.json",
+      "subject": "Hospitality Management",
+      "slug": "hospitality-management",
+      "records": 75,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.976,
+      "chunks": 6
+    },
+    {
+      "file": "ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.json",
+      "subject": "Computer Studies",
+      "slug": "computer-studies",
+      "records": 34,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.997,
+      "chunks": 3
+    },
+    {
+      "file": "LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.json",
+      "subject": "Literature in English",
+      "slug": "literature-in-english",
+      "records": 89,
+      "forms": [1, 2],
+      "shift": 0,
+      "confidence": 0.962,
+      "chunks": 4
+    },
+    {
+      "file": "MATHEMATICS-II-SYLLABUS.json",
+      "subject": "Mathematics",
+      "slug": "mathematics",
+      "records": 39,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.974,
+      "chunks": 5
+    },
+    {
+      "file": "MATHEMATICS-O-LEVEL-FORMS-1-4.json",
+      "subject": "Mathematics",
+      "slug": "mathematics",
+      "status": "merged",
+      "records": 52,
+      "shift": 29
+    },
+    {
+      "file": "MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.json",
+      "subject": "Music",
+      "slug": "music",
+      "records": 85,
+      "forms": [1, 2, 3, 4],
+      "shift": 0,
+      "confidence": 0.958,
+      "chunks": 4
+    },
+    {
+      "file": "PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.json",
+      "subject": "Physical Education",
+      "slug": "physical-education",
+      "records": 90,
+      "forms": [1, 2, 3, 4],
+      "shift": 0,
+      "confidence": 0.951,
+      "chunks": 4
+    },
+    {
+      "file": "PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.json",
+      "subject": "Physics",
+      "slug": "physics",
+      "records": 59,
+      "forms": [1, 2, 3, 4],
+      "shift": 0,
+      "confidence": 0.974,
+      "chunks": 5
+    },
+    {
+      "file": "RELIGIOUS-EDUCATION-SYLLABUS.json",
+      "subject": "Religious Education",
+      "slug": "religious-education",
+      "records": 91,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.976,
+      "chunks": 5
+    },
+    {
+      "file": "TRAVEL-AND-TOURISM-SYLLABUS.json",
+      "subject": "Travel and Tourism",
+      "slug": "travel-and-tourism",
+      "records": 44,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.961,
+      "chunks": 6
+    },
+    {
+      "file": "ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.json",
+      "subject": "Zambian Languages",
+      "slug": "zambian-languages",
+      "records": 315,
+      "forms": [1, 2, 3, 4],
+      "shift": 29,
+      "confidence": 0.955,
+      "chunks": 6
+    }
+  ],
+  "writtenSlugs": [
+    "agricultural-science",
+    "art-and-design",
+    "biology",
+    "chemistry",
+    "civic-education",
+    "commerce",
+    "computer-science",
+    "design-and-technology",
+    "english",
+    "fashion-and-fabrics",
+    "food-and-nutrition",
+    "french",
+    "geography",
+    "history",
+    "hospitality-management",
+    "computer-studies",
+    "literature-in-english",
+    "mathematics",
+    "music",
+    "physical-education",
+    "physics",
+    "religious-education",
+    "travel-and-tourism",
+    "zambian-languages"
+  ]
+}

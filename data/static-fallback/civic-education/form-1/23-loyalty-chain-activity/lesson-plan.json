@@ -1,0 +1,32 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "loyalty-chain-activity",
+  "lesson": {
+    "week": 3,
+    "lesson": 23,
+    "title": "Loyalty Chain Activity",
+    "topics": [
+      "Each learner writes one way they can show loyalty on strip of paper.",
+      "Link all the strips together to form a “Loyalty Chain” as a class symbol of",
+      "commitment."
+    ],
+    "activities": [
+      "Each learner writes one way they can show loyalty on strip of paper.",
+      "Link all the strips together to form a “Loyalty Chain” as a class symbol of",
+      "commitment."
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

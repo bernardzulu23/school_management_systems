@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "TEACHING-MODULE-FOR-LITERATURE-FORM-1-TERM-1.pdf",
+  "md5": "25275e09394e62d1193ace54f450c52a",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-2-1-oral-literature",
+  "lesson": {
+    "lesson": 2,
+    "title": "1.2.1 ORAL LITERATURE",
+    "topics": [],
+    "activities": [
+      "and needs.",
+      "The Ministry understands the challenges that come with transitioning to a new curriculum",
+      "that is Competence-Based. The choice of the Competence-Based Curriculum (CBC) marks a",
+      "transformative step in improving education quality and relevance. This module reflects the",
+      "Ministry’s unwavering commitment to making this journey as smooth as possible for",
+      "that align with the CBC’s objectives. However, teachers are encouraged to supplement this",
+      "module with their own research and innovations in order to address any gaps that may arise",
+      "during implementation."
+    ],
+    "resources": [
+      "the new Competence-Based Curriculum, enhancing their ability to inspire and equip learners",
+      "with essential literary knowledge, skills and positive attitudes desired to create a vibrant and",
+      "responsive education system.",
+      "Page 11 of",
+      "INTRODUCTION TO LITERATURE"
+    ],
+    "assessment": [
+      "and needs.",
+      "The Ministry understands the challenges that come with transitioning to a new curriculum",
+      "that is Competence-Based. The choice of the Competence-Based Curriculum (CBC) marks a",
+      "transformative step in improving education quality and relevance. This module reflects the",
+      "Ministry’s unwavering commitment to making this journey as smooth as possible for",
+      "that align with the CBC’s objectives. However, teachers are encouraged to supplement this"
+    ],
+    "notes": ""
+  }
+}

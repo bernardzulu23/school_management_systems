@@ -1,0 +1,23 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-3-1.pdf",
+  "md5": "aec298243b16b6a59e9d4a1cecd21f60",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "topic-1",
+  "lesson": {
+    "lesson": 1,
+    "title": "………………………………………………………………………",
+    "topics": ["Weather………………………………………………………………..", "Weather Conditions"],
+    "activities": ["Factors Affecting Weather", "REFERENCES……………………………………………………………………36"],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "the-teacher-to-assign-symbols-of-national-identity-to-be-dis",
+  "lesson": {
+    "week": 1,
+    "lesson": 11,
+    "title": "The teacher to assign symbols of national identity to be discussed by each group. Learners to",
+    "topics": [
+      "work in groups discussing the value of the assigned symbol. Each group to make a presentation",
+      "on a given symbol of national identity."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

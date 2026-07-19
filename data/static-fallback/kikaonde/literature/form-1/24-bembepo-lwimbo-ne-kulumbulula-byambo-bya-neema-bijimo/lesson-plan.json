@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "bembepo-lwimbo-ne-kulumbulula-byambo-bya-neema-bijimo",
+  "lesson": {
+    "week": 1,
+    "lesson": 24,
+    "title": "Bembepo lwimbo ne kulumbulula byambo bya neema bijimo.",
+    "topics": [
+      "Mikumbu yaketekelwa.",
+      "Bafunda bembe lwimbo ne kulumbulula byambo bya nema bijimo.",
+      "Bipimo bya ñyingijilo bya ketekelwa kubiwa mo kyafwainwa",
+      "Kulumbulula byaambo biji mu lwimbo kwesakanya na jishimikila.",
+      "C. Mwingilo"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "subject": "Commerce",
+  "subjectSlug": "commerce",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "COMMERCE-TERM-2-MODULE.pdf",
+  "md5": "4b2ed1e09b031a31d223ebf5e8c5fed6",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "home-trade",
+  "lesson": {
+    "lesson": 2,
+    "title": "Home Trade",
+    "topics": ["SUB-TOPIC: Retail Trade"],
+    "activities": [
+      "RATIONALE: to understand the role and importance of retail trade in the local community",
+      "PRIOR KNOWLEDGE: Learners have been involved in buying and selling of different items both at",
+      "home and school.",
+      "REFERENCES:",
+      "Commerce and Principles of Accounts Secondary Education Ordinary Level Sylla­",
+      "bus-Form 1-4 page….",
+      "Commerce Form 1 Teaching Module Term 2 page….",
+      "Commerce a complete course Wokorach"
+    ],
+    "resources": [
+      "EXPECTED STANDARD: Running a retail business practiced successfully (syllabus)",
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE",
+      "LEARNERS’ ROLE",
+      "A S S E S S M E N T",
+      "CRITERIA"
+    ],
+    "assessment": [],
+    "notes": ""
+  }
+}

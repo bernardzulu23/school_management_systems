@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "question-tags",
+  "lesson": {
+    "lesson": 25,
+    "title": "QUESTION TAGS",
+    "topics": [
+      "INTRODUCTION",
+      "Good communication is essential in both spoken and written language. One way we make",
+      "conversations more engaging and interactive is by using question tags. These are short",
+      "questions added to the end of statements to confirm information, seek agreement, or",
+      "encourage a response."
+    ],
+    "activities": [
+      " Write sentences on the board and ask learners what they notice.",
+      "Example:",
+      "You love social media, don’t you?",
+      "He hasn’t posted on Instagram today, has he?",
+      " Explain what question tags are and the rules.",
+      "Questions tags are short questions added at the end of a statement to confirm or check",
+      "information. They help keep information or seek agreement from the listener.",
+      "If the main sentence is positive, the tag is negative. E.g. She is online, isn’t she?"
+    ],
+    "resources": [],
+    "assessment": [
+      " Observe learners’ participation and their oral responses (ability to explain).",
+      " Carry out peer discussions for learners to correct each other’s mistakes.",
+      " Let each learner write one correct question tag sentence.",
+      " Question tags are short questions added at the end of statements to confirm information",
+      "or seek agreement.",
+      "Positive statements take negative tags (“You use Google, don’t you?”)."
+    ],
+    "notes": ""
+  }
+}

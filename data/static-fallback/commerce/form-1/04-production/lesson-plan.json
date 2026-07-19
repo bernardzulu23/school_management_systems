@@ -1,0 +1,52 @@
+{
+  "subject": "Commerce",
+  "subjectSlug": "commerce",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "commerce-Teaching-Module-PDF.pdf",
+  "md5": "4d5742a009f6b468f486a1271704e6a1",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "production",
+  "lesson": {
+    "lesson": 4,
+    "title": "PRODUCTION",
+    "topics": [
+      "Introduction",
+      "Production is the process by which goods and services are created to satisfy human wants and",
+      "needs. It has been a basis of economic development in many countries. While production has led",
+      "to unprecedented economic growth, improved living standards, and technological advancements,",
+      "it has also brought about severe environmental consequences that continue to affect our country"
+    ],
+    "activities": [
+      "environment during the extraction, processing and transportation of raw materials as well as the",
+      "manufacturing and disposal of products.",
+      "The topic will look at the Stages of Production, Specialisation, Factors of Production and",
+      "teacher is expected to facilitate a learning process that allows learners to explore and discover",
+      "concepts under this topic on their own.",
+      "General Competences:",
+      "Analytical thinking",
+      "collaboration"
+    ],
+    "resources": [
+      "These are either above or underground.",
+      "the forest, animals in the wild and fertile soil and good climate.",
+      "Primary Production includes:",
+      "underground.",
+      "Fisheries: In line with aquaculture.",
+      "Forestry: Harvesting of timber and other forestry products in the forest."
+    ],
+    "assessment": [
+      "a) Class exercise",
+      "Explain production in relation to the activities practiced in your community",
+      "b) Home work",
+      "| P a g e",
+      "Learners to find out about the things in life that they can do without (luxuries) and those",
+      "they cannot do without (necessities) in order to survive"
+    ],
+    "notes": ""
+  }
+}

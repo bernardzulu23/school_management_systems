@@ -1,0 +1,39 @@
+{
+  "subject": "History",
+  "subjectSlug": "history",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "HISTORY-TERM-2-MODULE.pdf",
+  "md5": "aecd14100df28c99f62dbd56d3f8efa2",
+  "detectedShift": 0,
+  "pageCount": 32,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-6-the-bantu-speaking-people",
+  "lesson": {
+    "lesson": 5,
+    "title": "1.6. THE BANTU SPEAKING PEOPLE",
+    "topics": ["SUB-TOPIC: 1.6.2 Bantu migrations into Zambia"],
+    "activities": [
+      " Discussing causes for movement of various Bantu Speaking groups into Zambia",
+      "RATIONALE: This lesson is on Bantu migrations into Zambia. The lesson will help learners",
+      "apply knowledge of the common origins of Zambian people to foster national unity and this",
+      "will done through group work, teacher exposition and question and answer. This is the third",
+      "lesson in the series of four.",
+      "PRIOR KNOWLEDGE: Learners already have knowledge about the origins of the Bantu",
+      "speaking people",
+      "REFERENCES: Haantobolo, G. Junior Secondary History, pp. 22-25"
+    ],
+    "resources": [
+      "Document containing information explaining reasons for the Bantu migrations from",
+      "West Africa",
+      "EXPECTED STANDARD: knowledge of common origins of Zambian people used to promote",
+      "national unity accordingly",
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE"
+    ],
+    "assessment": [],
+    "notes": ""
+  }
+}

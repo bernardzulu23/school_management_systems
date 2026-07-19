@@ -1,0 +1,29 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "co-ordinate-with-local-art-institutions-or-arrange-guest-spe",
+  "lesson": {
+    "week": 2,
+    "lesson": 2,
+    "title": "Co-ordinate with local art institutions or arrange guest speakers/ artists, if the field trip",
+    "topics": ["is not possible."],
+    "activities": [
+      "Critique",
+      "Task 1: Critique identified/ readily made artefacts they were exposed to during art gallery",
+      "reviews.",
+      "Task 2: Write a critique or create a video presentation sharing analysis of one artwork."
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

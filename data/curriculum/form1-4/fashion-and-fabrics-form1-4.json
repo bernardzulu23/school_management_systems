@@ -1,104 +1,942 @@
 {
   "subject": "Fashion and Fabrics",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["Concepts in Fashion and Fabrics", "Career Opportunities", "Work Ethics"],
       "learningOutcomes": [
-        "LEARNING ACTIVITIES",
-        "INTRODUCTION TO TEXTILE AND CLOTHING",
-        "Concepts in Fashion and Fabrics",
         "Explore concepts in Fashion and Fabrics",
-        "Explaining the basic concepts in fashion and fabrics (",
-        "definition",
-        "of fashion, fabrics, fashion ter-minologies, types of fashion styles",
-        "Exploring why people wear clothes",
-        "Demonstrating ability to choose healthy clothes (friendly to the skin, breathability, good con-ductor of heat, waterproof...)",
-        "Creating a collage or mood board presenting different rea-sons why people wear clothes",
-        "Concepts in Fashion and Fabrics explored accordingly",
-        "Career Opportunities",
         "Explore potential career paths in textile and clothing",
-        "Discussing history of textile and clothing:(",
-        "Prehistoric Era, An-",
-        "cient Civilizations, Industrial Revolution",
-        "Exploring career opportunities in the textile and clothing indus-try:",
-        "Textile and Fashion De-",
-        "sign",
-        "textile designer: role and",
-        "skills; fashion designer: role and skills; the design process in textiles and fashion",
-        "Textile",
-        "and Clothing Product Devel-opment",
-        "product development",
-        "manager, costume designer, ap-parel patternmaker, trend fore-caster ...",
-        "Discussing the economic im-portance of the textile and cloth-",
-        "Potential career path in textile and clothing created proficiently",
-        "FASHION AND FABRICS SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
-        "TOPIC",
-        "SUB-TOPIC",
-        "LEARNING ACTIVITIES",
-        "ing sector: (Job",
-        "creation, For-",
-        "eign exchange earnings, Pov-erty reduction, Government rev-enue, Economic diversification)",
-        "Visiting a local textile shop :( garment workshop, design stu-dio",
-        "Work Ethics",
-        "Practice work ethics in the fashion industry",
-        "Discussing work ethics: (",
-        "portance, relevance ...",
-        "Describing key work ethics and professional valu"
+        "Practice work ethics in the fashion industry"
       ],
       "suggestedActivities": [
-        "DUH\u0003GHVLJQHG\u0003WR\u0003R൵HU\u0003OHDUQHUV¶\u0003KDQGV\u0010RQ\u0003H[SHULHQFHV\u0003WKURXJK\u0003PDQ",
-        "LSXODWLRQ\u0003RI\u0003UHDO\u0003REMHFWV\u000f\u0003LQWHUDFWLRQ\u0003ZLWK\u0003QDWXUH\u0003DQG\u0003OHDUQLQJ",
-        "\u0003WKURXJK\u0003SUDFWLFH\u0011\u00037KXV\u000f\u0003WKH\u0003",
-        "learners will develop knowledge, desirable lifelong skills, val",
-        "ues and positive attitudes needed for their personal and nation",
-        "al development.",
-        "Cross cutting themes and emerging issues such as Life Skills, E",
-        "ntrepreneurship, Climate Change and Financial Education have be",
-        "en incorporated in the",
-        "V\\OODEXV\u0003WR\u0003HQVXUH\u0003WKDW\u0003WKH\u0003OHDUQHUV\u0003FXOWLYDWH\u0003D\u0003PLQG\u0010VHW\u000f\u0003VNLO",
-        "OV\u000f\u0003YDOXHV\u0003DQG\u0003SRVLWLYH\u0003DWWLWXGHV\u0003WKDW\u0003SUHSDUH\u0003WKHP\u0003IRU\u0003VXVWDLQ",
-        "DELOLW\\\u0003DQG\u0003VXLWDELOLW\\\u0003LQ\u0003WKH\u0003ODERXU\u0003",
-        "market. ,W\u0003LV\u0003HQYLVDJHG\u0003WKDW\u0003WKH\u0003V\\OODEXV\u0003ZLOO\u0003PDNH\u0003OHDUQLQJ\u0003DW\u0003WKLV\u0003OH",
-        "YHO\u0003PRUH\u0003PHDQLQJIXO\u0003DQG\u0003HQMR\\DEOH\u0003DV\u0003LW\u0003LV\u0003KLJKO\\\u0003DFWLYLW\\\u0003RULH",
-        "QWHG\u0003DQG\u0003DOORZV\u0003IRU\u0003D\u0003VPRRWK\u0003",
-        "transition to Advanced Secondary School Level. Joel Kamoko (Mr.)3HUPDQHQW\u00036HFUHWDU\\\u0010\u0003(GXFDWLRQDO\u00036HUYLFHV\u0003MINISTRY OF EDUCATION",
-        "FASHION AND FABRICS SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
-        "ACKNOWLEDGEMENT",
-        "KH\u0003V\\OODEXV\u0003SUHVHQWHG\u0003KHUH\u0003LV\u0003D\u0003UHVXOW\u0003RI\u0003EURDG\u0010EDVHG\u0003FRQVXOWD",
-        "WLRQ\u0003LQYROYLQJ\u0003VHYHUDO\u0003VWDNHKROGHUV\u0003ZLWKLQ\u0003DQG\u0003RXWVLGH\u0003WKH\u0003HGXF",
-        "DWLRQ\u0003V\\VWHP\u0011\u00030DQ\\\u0003LQGLYLGXDOV\u000f\u0003",
-        "institutions and organisations were consulted to gather their v",
-        "iews on the existing syllabus and to accord them an opportunity",
-        "to make suggestions for the",
-        "reformed syllabus. The Ministry of Education wishes to express",
-        "heartfelt gratitude to all those who participated for their val",
-        "uable contributions, which",
-        "resulted in the development of this syllabus.The Curriculum Development Centre worked closely with other sis",
-        "ter departments and institutions to develop this document. We s",
-        "incerely thank the",
-        "'LUHFWRUDWH\u0003RI\u00036HFRQGDU\\\u000f\u0003WKH\u0003'LUHFWRUDWH\u0003RI\u00031DWLRQDO\u00036FLHQFH\u0003&",
-        "HQWUH\u000f\u0003WKH\u0003([DPLQDWLRQV\u0003&RXQFLO\u0003RI\u0003=DPELD\u000f\u0003WKH\u0003&RSSHUEHOW\u00038QLYH",
-        "UVL\u0010W\\\u000f\u00033ULYDWH\u00038QLYHUVLWLHV\u000f\u0003",
-        "=DPELD\u0003,QVWLWXWH\u0003RI\u0003+RVSLWDOLW\\\u00036WXGLHV\u0003\u000b=,7+6\f\u000f\u0003VFKRROV\u0003DQG\u0003RW",
-        "KHU\u0003LQVWLWXWLRQV\u0003WRR\u0003QXPHURXV\u0003WR\u0003PHQWLRQ\u000f\u0003IRU\u0003WKHLU\u0003VWHDG\u0010IDVW\u0003",
-        "VXSSRUW\u0011",
-        "Charles Ndakala (Dr.)Director – Curriculum DevelopmentMINISTRY OF EDUCATION",
-        "FASHION AND FABRICS SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
-        "INTRODUCTION",
-        "Fashion and Fabrics (FF)"
+        "Explaining the basic concepts in",
+        "Exploring why people wear",
+        "Demonstrating ability to choose",
+        "Creating a collage or mood",
+        "Discussing history of textile and",
+        "Exploring career opportunities",
+        "Discussing the economic im-",
+        "Visiting a local textile shop :(",
+        "Discussing work ethics: (im-",
+        "Describing key work ethics and",
+        "Discussing the impact of a posi-",
+        "Setting up role-play scenarios"
+      ],
+      "assessmentMethods": ["Fabrics explored accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": ["Safety", "First Aid"],
+      "learningOutcomes": ["Practice safety rules in the workroom", "Apply First Aid"],
+      "suggestedActivities": [
+        "Discussing safety in the fashion",
+        "Practising personal safety and",
+        "Using tools and equipment",
+        "Practising safety rules and regu-",
+        "Discussing First Aid: (im-",
+        "Dealing with accidents and",
+        "Role-playing using the first aid",
+        "Applying First aid"
+      ],
+      "assessmentMethods": ["Practiced accordingly", "appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["Good Grooming", "Health Habits"],
+      "learningOutcomes": [
+        "Practice good personal hygiene in fashion Industry",
+        "Practice Good Health Habits in the Fashion Industry"
+      ],
+      "suggestedActivities": [
+        "Discussing the importance of",
+        "Exploring the key aspects of",
+        "Discussing effective hygiene",
+        "Practicing good personal hy-",
+        "Analysing the key health habits",
+        "Practicing good posture: (walk-"
+      ],
+      "assessmentMethods": ["Practiced appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": [
+        "Functional Clothing",
+        "Wardrobe Planning",
+        "Dress Code And Culture",
+        "Accessories",
+        "Inner and Outer Garments"
+      ],
+      "learningOutcomes": [
+        "Plan Dressing according to function",
+        "Plan the wardrobe in relation to fashion trend",
+        "Dress according to specific culture",
+        "Use suitable accessories with outfit",
+        "Make appropriate use of inner and outer garments"
+      ],
+      "suggestedActivities": [
+        "Discussing the concept of cloth-",
+        "Describing different types of",
+        "Exploring how clothing relates",
+        "Explaining the basic attach-",
+        "Sorting various items of cloth-",
+        "Discussing wardrobe planning:",
+        "Analysing factors to consider in",
+        "Explaining benefits of planning",
+        "Selecting clothes in relation to",
+        "Analysing dress code according",
+        "Discussing how clothing affects",
+        "Performing a fashion parade de-",
+        "Discussing accessories: (scarfs,",
+        "Explaining factors that influ-",
+        "Caring for accessories accord-",
+        "Making accessories: (Practical)",
+        "Classifying garments into inner",
+        "Evaluating factors that influence",
+        "Using inner and outer garments"
+      ],
+      "assessmentMethods": [
+        "to fashion trends accordingly",
+        "culture accordingly",
+        "with outfits accordingly",
+        "used appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Needlework Tools", "Needlework Equipment", "The Sewing Machines"],
+      "learningOutcomes": [
+        "Use needlework tools",
+        "Use Needlework Equipment",
+        "Use a sewing machine"
+      ],
+      "suggestedActivities": [
+        "Describing the function of nee-",
+        "Making use of needlework",
+        "Creating a tool kit with labelled",
+        "Making :(measuring card, tape",
+        "Exploring different needlework",
+        "Caring of needlework equip-",
+        "Discussing different sewing ma-",
+        "Describing parts of the sewing",
+        "Operating the sewing machine:",
+        "Applying safety guidelines",
+        "Practicing using the sewing ma-"
       ],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": [
+        "Fibres",
+        "Yarns",
+        "Fabrics",
+        "Colour Application",
+        "Methods Of Colour Application"
+      ],
+      "learningOutcomes": [
+        "Apply techniques in fibre identification",
+        "Practice the process of transforming fibres to yarns",
+        "Practice the process of transforming yarns to fabrics",
+        "Create desired Artworks on Fabrics",
+        "Apply colour on fabrics"
+      ],
+      "suggestedActivities": [
+        "Analysing different fibres:",
+        "Identifying fibres using various",
+        "Preparing a fibre classification",
+        "Discussing yarns",
+        "Creating yarn by spinning fibres",
+        "Describing types of yarns (sin-",
+        "knitting yarn to create small",
+        "Discussing fibres and fabrics",
+        "Describing properties and uses",
+        "Making fabrics by using types",
+        "Using types of knits to form",
+        "Experimenting with basic weav-",
+        "Discussing the importance of",
+        "Describing various methods of",
+        "Discussing different types of",
+        "Applying colour to a fabric",
+        "Discussing the relationships be-",
+        "Using colours that complement",
+        "Dyeing of different fabrics:",
+        "Testing colour fastness (practi-"
+      ],
+      "assessmentMethods": ["created appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["Elements of Design", "Principles of Design", "Figure Type"],
+      "learningOutcomes": [
+        "Create suitable textile designs x Explaining the key elements of design in fashion and fabric de- sign (line, shape/form, colour",
+        "Apply different principles of design",
+        "Select personal outfits according to figure types"
+      ],
+      "suggestedActivities": [
+        "Using line, shape, colour, tex-",
+        "Designing a simple garment,",
+        "Discussing the key principles of",
+        "Describing how the principles",
+        "Applying the principles of de-",
+        "Creating garment sketches or",
+        "Discussing the term \"figure",
+        "Describing types of body",
+        "Selecting clothing styles that",
+        "Identifying common fashion",
+        "Designing outfits according to"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["Stitches", "Pressing and Ironing"],
+      "learningOutcomes": [
+        "1 Work out different hand stitches",
+        "Press and Iron articles during construction"
+      ],
+      "suggestedActivities": [
+        "Discussing the importance of",
+        "Demonstrating the purposes of",
+        "Working out hand stitches to",
+        "Explaining the difference be-",
+        "Practicing the proper techniques",
+        "Pressing different types of"
+      ],
+      "assessmentMethods": ["worked out correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Topic 1.9",
+      "topics": [
+        "Notions",
+        "Pattern Markings",
+        "Pattern Drafting",
+        "Seams",
+        "Disposal of Fullness",
+        "Pockets",
+        "Waistline Finishes"
+      ],
+      "learningOutcomes": [
+        "Use notions and Trimmings",
+        "Interpret different pattern markings",
+        "Draft different patterns",
+        "Work out different Seams",
+        "Apply different methods of reducing fullness of garments",
+        "Work out different pockets",
+        "Finish waistline"
+      ],
+      "suggestedActivities": [
+        "Discussing Notions. And trim-",
+        "Describing different types of",
+        "Explaining functions of various",
+        "Using suitable notions for spe-",
+        "Discussing the importance of",
+        "Demonstrating ability to use",
+        "Recognizing methods used for",
+        "Interpreting symbols used in",
+        "Applying pattern markings on",
+        "Discussing types of paper pat-",
+        "Discussing the the importance",
+        "Taking accurate body measure-",
+        "Drawing a standard measure-",
+        "Drafting a basic pattern for a",
+        "Modifying basic patterns for",
+        "Discussing Seams. (definition,",
+        "Classifying Seams (conspicu-",
+        "Working out different Seams",
+        "Discussing disposing of fullness",
+        "Explaining different methods of",
+        "Classifying methods of dispos-",
+        "Using suitable method on ap-",
+        "Identifying positions where dif-",
+        "Apply different methods of dis-",
+        "Discussing pockets. (definition,",
+        "Classifying pockets (Patch, In-",
+        "Discussing uses of pockets",
+        "Working out pockets.",
+        "Discussing different types of",
+        "Choosing appropriate fabrics",
+        "Work out different waistline"
+      ],
+      "assessmentMethods": ["interpreted accordingly", "Waistline finished correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 1: Topic 1.10",
+      "topics": ["Crocheting"],
+      "learningOutcomes": ["Work out crochet stitches"],
+      "suggestedActivities": [
+        "Identifying tools to be used",
+        "Interpreting crocheting abbrevi-",
+        "Working out crotchet stitches: ("
+      ],
+      "assessmentMethods": ["out correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 1: Topic 1.11",
+      "topics": ["Crocheting"],
+      "learningOutcomes": [
+        "Apply Entrepreneurial skills x Discussing the concept of entre- preneurship and its importance in the fashion and fabrics indus- try."
+      ],
+      "suggestedActivities": [
+        "Identifying various business op-",
+        "Developing a simple business",
+        "Demonstrating basic principles",
+        "Writing a brief business plan,",
+        "Integrate culture into the design processes",
+        "Apply consumer rights and responsibilities.",
+        "Perform various beauty treatment and services",
+        "Create different desired artwork on fabric",
+        "Make forms of interior Design",
+        "Produce yarns and fabrics",
+        "Draft pattern",
+        "Use crossway strips",
+        "Identify the role digital technology plays in promoting sustainable fashion practices",
+        "Manage and influence emotions in oneself and others",
+        "Undertake projects",
+        "Employ sustainable practical methods in textile production",
+        "Plan purchases to avoid overspending on unnecessary fabrics or tools",
+        "Repair clothes"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Topic 2.1",
+      "topics": ["Environmental Impact of Textile Production"],
+      "learningOutcomes": [
+        "Employ sustainable practices that can help mitigate environmental impacts of textile production."
+      ],
+      "suggestedActivities": [
+        "Discussing the",
+        "Explaining the stages of",
+        "Discussing the impact of",
+        "Exploring sustainable",
+        "Engaging in a hands-on"
+      ],
+      "assessmentMethods": ["employed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["Cosmetology in the Fashion Industry"],
+      "learningOutcomes": ["Apply techniques of hair and facial makeup"],
+      "suggestedActivities": [
+        "Discussing the relationship",
+        "Identifying the different",
+        "Discussing the role of a",
+        "Exploring how makeup,",
+        "Practising basic hairstyling"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Millinery"],
+      "learningOutcomes": ["Make various Headwear"],
+      "suggestedActivities": [
+        "Discussing millinery and its",
+        "Describing the basic",
+        "Analysing materials",
+        "Making basic millinery"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["The Sewing Machines"],
+      "learningOutcomes": ["Use a sewing machine"],
+      "suggestedActivities": [
+        "Sewing different machine",
+        "Identifying common faults",
+        "Correcting common sewing",
+        "using a sewing machine by"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Production of Yarns and Fabrics"],
+      "learningOutcomes": ["Apply techniques in yarns production"],
+      "suggestedActivities": ["Describing yarns according", "Outlining various stages of"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Colour Combination"],
+      "learningOutcomes": ["Create different desired artwork on fabric"],
+      "suggestedActivities": [
+        "Discussing colour",
+        "Experimenting with different",
+        "Dyeing and printing artwork"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: Topic 2.7",
+      "topics": [
+        "Forms of Design",
+        "Principles of Design Apply different principles of design",
+        "Culture and Design"
+      ],
+      "learningOutcomes": [
+        "Make forms of interior design",
+        "practice asymmetrical and",
+        "Show culture into the design processes"
+      ],
+      "suggestedActivities": [
+        "Discussing forms of design",
+        "Making forms of interior",
+        "Creating a collage using",
+        "Discussing cultural costumes",
+        "Comparing different cultural",
+        "Analysing cultural norms",
+        "Making collage displaying"
+      ],
+      "assessmentMethods": ["applied correctly", "processes accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 2: Topic 2.8",
+      "topics": [
+        "Crossway Strips",
+        "Openings",
+        "Fastenings",
+        "Neckline Finishes 2.8.4.1 Work out neckline finishes",
+        "Armhole Finishes"
+      ],
+      "learningOutcomes": [
+        "Use crossway strips",
+        "Work out openings",
+        "Work out Fastenings",
+        "Work out armhole finishes."
+      ],
+      "suggestedActivities": [
+        "Discussing crossway strips:",
+        "Demonstrating cutting and",
+        "Using crossway strip to",
+        "Discussing openings:",
+        "Working out different",
+        "Discussing fastenings:",
+        "working out fastenings:",
+        "Identifying different types of",
+        "Discussing neckline finishes:",
+        "Working out neckline",
+        "Discussing methods used to",
+        "Describing reasons for",
+        "Working out armhole"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 2: Topic 2.9",
+      "topics": ["Basketry"],
+      "learningOutcomes": ["Make items using basketry"],
+      "suggestedActivities": [
+        "Identifying materials for",
+        "Describing techniques used",
+        "Making various items using"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 2: Topic 2.10",
+      "topics": ["Care And Maintenance of Clothes"],
+      "learningOutcomes": ["Launder different types of clothes"],
+      "suggestedActivities": [
+        "Discussing the importance of",
+        "Discussing characteristics",
+        "Interpreting the symbols and",
+        "Practicing using"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 2: Topic 2.11",
+      "topics": ["Consumer Rights and Responsibilities"],
+      "learningOutcomes": ["Apply consumer rights and responsibilities."],
+      "suggestedActivities": [
+        "Discussing consumer rights",
+        "Identifying sources of",
+        "Discussing methods of",
+        "Role playing on the rights of"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 2: Topic 2.12",
+      "topics": ["Entrepreneurial Projects In Fashion And Fabrics"],
+      "learningOutcomes": ["Develop various project in fashion and fabric"],
+      "suggestedActivities": [
+        "Identifying projects to be to",
+        "Discussing steps to follow in",
+        "Setting up a business.",
+        "Choose clothes in relation to figure types",
+        "Interpret care labels",
+        "Collaborate with others in order to create a unique collection of designs.",
+        "Create good relations with clients",
+        "Apply different principles of design",
+        "Work out knitting stitches",
+        "Make use of Soft Furnishings",
+        "Operate sewing and knitting machines",
+        "Demonstrate understanding of laws and regulations",
+        "Explore fashion trends online.",
+        "Demonstrate understanding of how emotions influence decisions related to clothing.",
+        "Prepare a business plan",
+        "Adopt eco-friendly practices across the supply chain.",
+        "Develop basic concepts of money management, budgeting and smart consumer habits.",
+        "Make use of Interfacing, interlining and linings on garment",
+        "Finish hem edges",
+        "Launder different articles"
+      ],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Cosmetology", "Millinery", "Knitting Machine", "Laws and Regulations"],
+      "learningOutcomes": [
+        "Design Principles used in millinery",
+        "Operate knitting machines",
+        "Apply laws and regulations"
+      ],
+      "suggestedActivities": [
+        "Explaining the importance",
+        "Describing the tools used,",
+        "Showing manicure and",
+        "Discussing the design",
+        "Creating mood boards and",
+        "Understanding proportions",
+        "Caring and Maintenance",
+        "Discussing the knitting",
+        "Describing types of",
+        "Outlining the components",
+        "Discussing common",
+        "Using graph paper, create",
+        "Discussing laws and",
+        "Comparing laws and",
+        "Study tour Visiting local"
+      ],
+      "assessmentMethods": [
+        "demonstrated appropriately",
+        "designed correctly",
+        "machines operated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["Production of Yarns and Fabrics"],
+      "learningOutcomes": ["Produce fabrics"],
+      "suggestedActivities": [
+        "Discussing the production",
+        "Outlining various stages",
+        "Constructing fabric:"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Forms of Design", "Principles of Design", "Culture and Design"],
+      "learningOutcomes": [
+        "Make logos",
+        "Make an advert on principles of design",
+        "Show culture into the design processes"
+      ],
+      "suggestedActivities": [
+        "Explaining forms of",
+        "Making forms of design:",
+        "Creating logos that",
+        "Discussing the principles",
+        "Applying the principles of",
+        "Design a magazine cover",
+        "Analysing cultural norms",
+        "Making collage displaying"
+      ],
+      "assessmentMethods": ["shown accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Pattern Making"],
+      "learningOutcomes": ["Draft different patterns"],
+      "suggestedActivities": [
+        "Identifying patternmaking",
+        "Explaining the",
+        "Discussing the fabric",
+        "Draft personal"
+      ],
+      "assessmentMethods": ["drafted accurately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 3: Topic 3.6",
+      "topics": ["Interfacing, Interlining And Linings", "Sleeves", "Cuffs", "Collars"],
+      "learningOutcomes": [
+        "Make use of Interfacing, interlining and linings on garment",
+        "Work out Sleeves",
+        "Work out cuffs",
+        "Work out collars"
+      ],
+      "suggestedActivities": [
+        "Discussing Interfacing,",
+        "Interfacing parts of the",
+        "Interlining garments:",
+        "Lining garments: (dress,",
+        "Discussing sleeves: (drop",
+        "Drafting different types of",
+        "Working out different",
+        "Discussing cuffs:",
+        "Working out cuffs: (cuffs",
+        "Discussing collars:",
+        "Working out collar: (flat,"
+      ],
+      "assessmentMethods": [
+        "Sleeves worked out correctly",
+        "Cuffs worked out correctly",
+        "Collars worked out correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 3: Topic 3.7",
+      "topics": ["Hem and Hem Edge Finishes"],
+      "learningOutcomes": ["Finish hem edges"],
+      "suggestedActivities": [
+        "Discussing hem and hem",
+        "Identifying common",
+        "Finishing hems and hem"
+      ],
+      "assessmentMethods": ["Hem edges finished correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 3: Topic 3.8",
+      "topics": ["Knitting"],
+      "learningOutcomes": ["Operate the knitting"],
+      "suggestedActivities": [
+        "Interpreting knitting",
+        "Identifying tools to be",
+        "Practicing knitting",
+        "Making articles: (scuffs,"
+      ],
+      "assessmentMethods": ["Knitting operated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 3: Topic 3.9",
+      "topics": ["Soft Furnishings"],
+      "learningOutcomes": ["Make use of Soft Furnishings"],
+      "suggestedActivities": [
+        "Discussing soft furnishing:",
+        "Describing factors to",
+        "Making soft furnishing"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 3: Topic 3.10",
+      "topics": ["Care Labels", "Laundry Processes"],
+      "learningOutcomes": ["Interpret care labels", "Launder different articles"],
+      "suggestedActivities": [
+        "Discussing care label:",
+        "Interpreting care label:",
+        "Drawing care label.",
+        "Attaching a care label on a",
+        "Discussing laundry",
+        "Demonstrating dry",
+        "Classifying stains:",
+        "Removing different kinds",
+        "Laundering different"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 3: Topic 3.12",
+      "topics": ["Business Plan- Project Implementation"],
+      "learningOutcomes": ["Prepare a business plan"],
+      "suggestedActivities": [
+        "Discussing a business",
+        "Discussing the",
+        "Creating a business",
+        "Engage with communities to promote knowledge about fabrics, design and responsible production",
+        "Collaborate with other fashion brands and fabric manufacturers to develop eco-friendly and sustainable",
+        "Explore how clothes convey mood, personality or social status.",
+        "Make use of blended and mixed fabrics",
+        "Draft different paper patterns",
+        "Make textile articles using different embroidery techniques",
+        "Make items using beads",
+        "Demonstrate understanding of dress code for different cultures.",
+        "Camouflage Figure Faults and irregularities",
+        "Use design technology, digital marketing and the use of innovative tools in the fashion industry",
+        "Design clothes that enhance self-esteem and confidence.",
+        "Donate old garments or clothes to those in need.",
+        "Conduct market research",
+        "Upcycle old clothes into new designs",
+        "Recycle different articles"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Figure Faults and Irregularities"],
+      "learningOutcomes": ["Modify garments to suit irregularities"],
+      "suggestedActivities": ["Discussing Figure Faults", "Making collage by"],
+      "assessmentMethods": ["Camouflaged accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Fabric Finishes"],
+      "learningOutcomes": ["Launder articles according to the fabric finish applied"],
+      "suggestedActivities": [
+        "Discussing fabric",
+        "Making a chart or swatch",
+        "Laundering of articles"
+      ],
+      "assessmentMethods": ["to fabric finish correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["Blending and Mixing"],
+      "learningOutcomes": ["Make use of blended and mixed fabrics"],
+      "suggestedActivities": [
+        "Discussing blended and",
+        "Comparing blended and",
+        "making a collage to show"
+      ],
+      "assessmentMethods": ["used correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["Uses of Paper Patterns"],
+      "learningOutcomes": ["Draft different basic paper patterns."],
+      "suggestedActivities": [
+        "Making a selection of",
+        "Manipulating basic",
+        "Drafting different patterns"
+      ],
+      "assessmentMethods": ["drafted accurately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["Beadwork"],
+      "learningOutcomes": [
+        "Make items using beads x Identifying materials used in beadwork: (definition, material used: beads, twine, snipers…)"
+      ],
+      "suggestedActivities": ["Making items using", "Showcasing beadwork"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["Embroidery Techniques"],
+      "learningOutcomes": ["Make textile articles using different embroidery techniques"],
+      "suggestedActivities": [
+        "Discussing embroidery:",
+        "Applying embroidery on",
+        "Making textile articles"
+      ],
+      "assessmentMethods": ["worked out accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Form 4: Topic 4.7",
+      "topics": ["Recycling", "Textile Exhibition"],
+      "learningOutcomes": [
+        "Recycle different articles",
+        "Organise Clothing and Textiles Exhibition"
+      ],
+      "suggestedActivities": [
+        "Discussing recycling of",
+        "Explaining the",
+        "Recycling different textile",
+        "Demonstrating repairing",
+        "Meaning of terms:",
+        "Types",
+        "Purpose",
+        "Factors to consider",
+        "Organising Clothing and",
+        "Modelling and Fashion"
+      ],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Form 4: Topic 4.8",
+      "topics": ["Principles of shopping"],
+      "learningOutcomes": ["Demonstrate wise shopping"],
+      "suggestedActivities": [
+        "Discussing budgeting:",
+        "Outlining factors to",
+        "Discussing factors that",
+        "points to bear in mind",
+        "Making a simple budget"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Form 4: Topic 4.9",
+      "topics": ["Market research", "Textiles Enterprise"],
+      "learningOutcomes": [
+        "Conduct market research",
+        "Set up a Clothing and Textiles enterprise",
+        "Design"
+      ],
+      "suggestedActivities": [
+        "Discussing economic",
+        "Discussing the",
+        "Conducting market",
+        "Reporting stage:",
+        "Reviewing the market",
+        "Discussing business idea:",
+        "Describing market",
+        "Developing a business",
+        "Managing a Clothing and",
+        "Setting up a business:",
+        "Pricing strategies and sell-",
+        "Documenting the design",
+        "Concepts in",
+        "Environmental",
+        "Cosmetology",
+        "Figure Faults",
+        "Career",
+        "Cosmetology in",
+        "Millinery",
+        "Fabric",
+        "Blending and",
+        "Work ethics in",
+        "Knitting",
+        "Uses of Paper",
+        "Safety Rules",
+        "First Aid",
+        "The Sewing",
+        "The Knitting",
+        "Bead Work",
+        "Good",
+        "Health Habits",
+        "Production of",
+        "Embroidery",
+        "Functional",
+        "Wardrobe",
+        "Dress Code",
+        "Accessories",
+        "Inner and",
+        "Colour",
+        "Principles of",
+        "Culture and",
+        "Recycling",
+        "Textile",
+        "Needlework",
+        "Forms of Design",
+        "Fibres, Yarns",
+        "Methods",
+        "Crossway Strips",
+        "Openings",
+        "Fastenings",
+        "Neckline",
+        "Interfacing,",
+        "Sleeves",
+        "Cuffs",
+        "Collars",
+        "Hem and Hem",
+        "Market",
+        "Enterprise",
+        "Elements of",
+        "Basketry",
+        "Stitches",
+        "Pressing and",
+        "Care and",
+        "Notions",
+        "Pattern",
+        "Disposal of",
+        "Pockets",
+        "Waistline",
+        "Consumer Rights"
+      ],
+      "assessmentMethods": ["enterprises set up accordingly"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.pdf",
-    "extractedAt": "2026-07-11T06:20:39.530Z",
-    "fileSize": 1173727
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=0, confidence=0.974) + deterministic CDC table parse. No fabricated content.",
+    "curated": true,
+    "recordCount": 84
   }
 }

@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "2b0f07c9287cad82904a403707ee78d4",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "makayo-kayo-ke-musango-wa-bi-ambwanembwa-waimena-pa-kuuba-ku",
+  "lesson": {
+    "week": 5,
+    "lesson": 35,
+    "title": "Makayo-kayo: ke musango wa biñambwanembwa waimena pa kuuba kupichila mu",
+    "topics": [
+      "ba nkaizhi kabiji ne kukilapo. Uno musango unembewa mujishinda ja minsambo",
+      "pakachi kabankaizhi apa bino ne pa kukaila.",
+      "Bya kuuba bafunda",
+      "Nemba nsansawilo ipi pa kachi ka bipelu bina ne bitanu na kamo.",
+      "Nemba mwinsambo mwipi pakachi ka bankaizhi babiji"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

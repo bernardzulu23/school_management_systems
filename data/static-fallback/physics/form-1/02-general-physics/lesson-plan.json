@@ -1,0 +1,23 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.pdf",
+  "md5": "79763015647465894bd7facf6ccb8fd6",
+  "detectedShift": 0,
+  "pageCount": 116,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "general-physics",
+  "lesson": {
+    "lesson": 2,
+    "title": "General Physics",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

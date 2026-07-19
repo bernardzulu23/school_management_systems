@@ -1,0 +1,24 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-LUVALE-TEACHING-MODULE-FROM-1-TERM-1.pdf",
+  "md5": "a04d312ff3971b9abaa654b3384cb8d3",
+  "detectedShift": 0,
+  "pageCount": 63,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "mujila-muka-vikilikita-vyachisemwa-vyeji-kusololangamo-vinji",
+  "lesson": {
+    "week": 2,
+    "lesson": 36,
+    "title": "Mujila muka vikilikita vyachisemwa vyeji kusololangamo vinjikizo vya Litilicha.",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.pdf",
+  "md5": "a70abf94924e00d63a6749a416a20207",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-11-sports-biomechanics",
+  "lesson": {
+    "lesson": 2,
+    "title": "1.11 SPORTS BIOMECHANICS",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

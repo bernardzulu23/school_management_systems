@@ -1,0 +1,45 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "fb9fd6d3f25fe71770d51796046dd022",
+  "detectedShift": 0,
+  "pageCount": 44,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "6-0-attributes-of-a-person-or-thing",
+  "lesson": {
+    "lesson": 1,
+    "title": "6.0: ATTRIBUTES OF A PERSON OR THING",
+    "topics": [
+      "Overview",
+      "This topic discusses qualities, characteristics or features that define a person or thing. It",
+      "explores physical attributes of a person such as height,weight, eye colour, complexion and",
+      "personality traits such as kindness, honesty, patience, confidence. The topic will also deal",
+      "with physical characteristics for a thing namely, size, shape, colour and material. The topic"
+    ],
+    "activities": [
+      " Provide a dialogue on colours.",
+      "Monique: Quelle est ta couleur préférée?",
+      "Jacques: Ma couleur préférée est le bleu, et toi?",
+      "Monique : Moi, j’aime le blanc.",
+      "Jacques:Tu aimes le rouge aussi?",
+      "Monique: No. Je n’aime pas le rouge.",
+      " Learners listen to a dialogue/conversation on colours and identify the names of colours in",
+      " Provide different objects with colours mentioned in the dialogue for learners to see."
+    ],
+    "resources": [],
+    "assessment": [
+      "competence.",
+      "the each topic",
+      "Key Points /Recap",
+      "Adjectives: l’ accord mas./fem.(m/f agreement), l’ accord singl/pl (sing./pl agreement).",
+      "ii. Adverbs: la formation (forming adverbs).",
+      "Teaching and Learning materials: Tempo 1/Alter ego"
+    ],
+    "notes": ""
+  }
+}

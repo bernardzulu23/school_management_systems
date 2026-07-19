@@ -1,0 +1,45 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+  "md5": "0b1838dd3d97a165f716846a59545c87",
+  "detectedShift": 0,
+  "pageCount": 33,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "6-pattern-and-design",
+  "lesson": {
+    "lesson": 2,
+    "title": "6 PATTERN AND DESIGN",
+    "topics": [
+      "Introduction",
+      "Patterns and Designs",
+      "The topic discusses patterns and designs around the environment, shaping our emotions,",
+      "behaviours and interactions. Patterns influence our experiences through various forms",
+      "(architecture, fashion…)."
+    ],
+    "activities": [
+      "Learning Environment set up:",
+      " in-door (classroom…)",
+      " out-door (school premises)",
+      " natural (natural motifs- flowers, leaves, butterflies…)",
+      " artificial (textured shoe sole, textured wall, pictures…)",
+      " technological (digital/ video watching)",
+      "Suggested Learning & Teaching Materials:",
+      "Charts and diagrams on patterns"
+    ],
+    "resources": [],
+    "assessment": [
+      " Observation of learners during pattern making activities",
+      " Review of learners’ art works for composition, texture and colour.",
+      "This topic looked at a variety of creative expressions of Pattern designs and types of",
+      "patterns.",
+      "Art and Design",
+      "Teaching Module"
+    ],
+    "notes": ""
+  }
+}

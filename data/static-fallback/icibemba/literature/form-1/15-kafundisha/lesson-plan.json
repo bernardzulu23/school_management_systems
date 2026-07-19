@@ -1,0 +1,30 @@
+{
+  "subject": "Icibemba",
+  "subjectSlug": "icibemba",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "ef382ed6b56f920d214fcd97ed1431ff",
+  "detectedShift": 0,
+  "pageCount": 69,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "kafundisha",
+  "lesson": {
+    "week": 1,
+    "lesson": 15,
+    "title": "Kafundisha:",
+    "topics": [
+      "Eba abasambi babebete ubupilibulo bwa Litilica ubwa",
+      "lekana-lekana",
+      "Eba abasambi bapalanye na ukupusanya ubipilibulo bwa",
+      "Litilica ubwa lekana-lekana",
+      "Eba abasambi balengulule ubipilibulo bwa Litilica ubwa"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

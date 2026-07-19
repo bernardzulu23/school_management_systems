@@ -1,0 +1,1713 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Biology Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Biology",
+    "slug": "biology",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.781) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 29,
+    "shiftConfidence": 0.781
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Nature of Science Inquiry in Biology",
+      "specificCompetences": ["Apply scientific inquiry in carrying out scientific investigations"],
+      "learningActivities": [
+        "Describing the scientific",
+        "Investigating the stages of",
+        "Applying scientific inquiry",
+        "Sharing the findings of the",
+        "Using the findings of the",
+        "Scientific inquiry method in"
+      ],
+      "expectedStandard": "",
+      "keywords": ["concepts", "methods", "biology", "nature", "science", "inquiry", "biology"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Nature of Biology",
+      "specificCompetences": ["Categorise the study of Biology"],
+      "learningActivities": [
+        "Exploring the nature of Biology",
+        "Identifying the branches of",
+        "Creating a concept map on the",
+        "Study of Biology categorised"
+      ],
+      "expectedStandard": "",
+      "keywords": ["concepts", "methods", "biology", "nature", "biology"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Levels of Biological Organisation",
+      "specificCompetences": [
+        "Classify the levels of biological organisation from simple to complex"
+      ],
+      "learningActivities": ["Classifying levels of biological", "Levels of biological"],
+      "expectedStandard": "simple to complex correctly",
+      "keywords": ["concepts", "methods", "biology", "levels", "biological", "organisation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Characteristics of Living Things=",
+      "specificCompetences": ["Analyse the characteristics of living things"],
+      "learningActivities": [
+        "Investigating the characteristics",
+        "Characteristics of living things",
+        "Distinguishing living things",
+        "Analysing the concept of life"
+      ],
+      "expectedStandard": "analysed correctly",
+      "keywords": ["concepts", "methods", "biology", "characteristics", "living", "things"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Characteristics of Living Things=",
+      "specificCompetences": ["Categorise life processes of living organisms"],
+      "learningActivities": [
+        "Describing life processes in",
+        "Analysing life processes in",
+        "Categorising life processes of",
+        "Life processes of living"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["concepts", "methods", "biology", "characteristics", "living", "things"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Microscopes=",
+      "specificCompetences": ["Use different types of microscopes to examine specimens"],
+      "learningActivities": [
+        "Exploring different types of",
+        "Relating parts of a compound",
+        "Practicing the use of",
+        "Calculating magnification of",
+        "Different types of microscopes"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "cellular", "life", "microscopes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Basic Cell Structure",
+      "specificCompetences": ["Explore the basic cell structure"],
+      "learningActivities": [
+        "Examining the basic structure",
+        "Illustrating the basic structure",
+        "Creating models of cells",
+        "Basic structure of cells"
+      ],
+      "expectedStandard": "explored correctly",
+      "keywords": ["principles", "cellular", "life", "basic", "cell", "structure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "Types of Cells",
+      "specificCompetences": ["Distinguish between eukaryotic and prokaryotic cells"],
+      "learningActivities": [
+        "Investigating eukaryotic cells",
+        "Differentiating eukaryotic and",
+        "Explaining the functions of",
+        "Comparing and contrasting"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "cellular", "life", "types", "cells"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "Cell Specialisation",
+      "specificCompetences": ["Relate adaptive features of specialised cells to their functions"],
+      "learningActivities": [
+        "Identifying specialised cells in",
+        "Observing adaptive features of",
+        "Relating the adaptive features",
+        "Adaptive features of"
+      ],
+      "expectedStandard": "their functions correctly",
+      "keywords": ["principles", "cellular", "life", "cell", "specialisation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Nutrition in Man",
+      "specificCompetences": ["Classify types of food nutrients"],
+      "learningActivities": [
+        "Exploring sources of food",
+        "Classifying foods according to",
+        "Discussing the importance of",
+        "Types of food nutrients"
+      ],
+      "expectedStandard": "classified correctly",
+      "keywords": ["maintenance", "organism", "nutrition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Dietary Needs of",
+      "specificCompetences": ["=^==~="],
+      "learningActivities": [
+        "Designing appropriate diets for",
+        "Good eating practices applied",
+        "Justifying the designed diets for"
+      ],
+      "expectedStandard": "",
+      "keywords": ["maintenance", "organism", "dietary", "needs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S3",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "1.3.3",
+      "subtopic": "Plant Nutrients",
+      "specificCompetences": ["=`~===~= nutrients"],
+      "learningActivities": [
+        "Identifying plant nutrients",
+        "Classifying macro and micro",
+        "Analysing the effects of macro",
+        "Types of plant nutrients"
+      ],
+      "expectedStandard": "categorised correctly",
+      "keywords": ["maintenance", "organism", "plant", "nutrients"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S4",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "1.3.4",
+      "subtopic": "Nutritional Deficiency Diseases and Disorders",
+      "specificCompetences": [
+        "=o=~~= nutrients to address deficiency diseases and disorders in plants and human beings"
+      ],
+      "learningActivities": [
+        "Investigating nutritional",
+        "Investigating the deficiency",
+        "Treating the deficiency",
+        "Appropriate nutrients to address"
+      ],
+      "expectedStandard": "recommended accordingly",
+      "keywords": ["maintenance", "organism", "nutritional", "deficiency", "diseases", "disorders"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Reproduction in Living Organisms",
+      "specificCompetences": ["Demonstrate understanding of how living organisms reproduce"],
+      "learningActivities": [
+        "Investigating reproduction in",
+        "Demonstrating asexual and",
+        "Comparing and contrasting",
+        "Understanding of reproduction"
+      ],
+      "expectedStandard": "demonstrated appropriately",
+      "keywords": ["continuity", "life", "reproduction", "living", "organisms"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "Reproduction and Development in Human Beings",
+      "specificCompetences": ["Demonstrate understanding of reproductive system in human beings"],
+      "learningActivities": [
+        "Describing the reproduction",
+        "Drawing the male and female",
+        "Explaining functions of",
+        "Outlining the secondary sexual",
+        "Practicing personal hygiene",
+        "Understanding of the"
+      ],
+      "expectedStandard": "beings demonstrated correctly",
+      "keywords": ["continuity", "life", "reproduction", "development", "human", "beings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "Reproduction in Viruses, Protozoa, Bacteria and Fungi",
+      "specificCompetences": [
+        "Demonstrate understanding of reproduction in viruses, protozoa, bacteria and fungi"
+      ],
+      "learningActivities": [
+        "Outlining the processes of",
+        "Investigating the structure of",
+        "Importance of reproduction in"
+      ],
+      "expectedStandard": "fungi evaluated correctly",
+      "keywords": [
+        "continuity",
+        "life",
+        "reproduction",
+        "viruses",
+        "protozoa",
+        "bacteria",
+        "fungi"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Coordination and Response",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Coordination and Response in Plants",
+      "specificCompetences": ["Explore tropisms in plants and their relevance"],
+      "learningActivities": [
+        "Describing tropisms in plants",
+        "Investigating the effect of light",
+        "Investigating the effect of water",
+        "Investigating the effect of",
+        "Evaluating the importance of",
+        "Tropisms in plants and their"
+      ],
+      "expectedStandard": "relevance explored accordingly",
+      "keywords": ["coordination", "response", "coordination", "response", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Coordination and Response",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "Coordination and Response in Animals",
+      "specificCompetences": ["Explore taxic responses in invertebrates and their relevance"],
+      "learningActivities": [
+        "Describing taxic responses",
+        "Investigating taxic responses to",
+        "Evaluating the relevance of",
+        "Applying the mechanism of",
+        "Differentiating tropic from taxic",
+        "Taxic responses in"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["coordination", "response", "coordination", "response", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Ecosystem",
+      "specificCompetences": ["Explore features of ecosystems in the local"],
+      "learningActivities": [
+        "Describing an ecosystem",
+        "Observing key features of",
+        "Features of ecosystems",
+        "Recording key features in the",
+        "Applying best practices to",
+        "Constructing models of different"
+      ],
+      "expectedStandard": "environment accordingly",
+      "keywords": ["ecological", "relationships", "evolution", "ecosystem"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "1.6.2",
+      "subtopic": "Biotic and Abiotic Interactions",
+      "specificCompetences": ["Interpret biotic and abiotic interactions"],
+      "learningActivities": [
+        "Distinguishing biotic and abiotic",
+        "Analysing the three kinds of",
+        "Biotic and abiotic interactions"
+      ],
+      "expectedStandard": "interpreted correctly",
+      "keywords": ["ecological", "relationships", "evolution", "biotic", "abiotic", "interactions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S3",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "1.6.3",
+      "subtopic": "Waste Management",
+      "specificCompetences": ["Manage waste in the local environment"],
+      "learningActivities": [
+        "Analysing types of waste found",
+        "Evaluating the benefits of living",
+        "Devising different ways of",
+        "Identifying the challenges",
+        "Creating waste-free zones in the",
+        "Reaching out to communities in",
+        "Waste in the local environment"
+      ],
+      "expectedStandard": "managed accordingly",
+      "keywords": ["ecological", "relationships", "evolution", "waste", "management"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S4",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "1.6.4",
+      "subtopic": "The Soil - Composition and Fertility",
+      "specificCompetences": ["Analyse soil composition and fertility"],
+      "learningActivities": [
+        "Identifying different soil",
+        "Classifying types of soil (clay,",
+        "Soil composition and fertility",
+        "Investigating features of fertile",
+        "Investigating causes of loss of",
+        "Practicing ways to improve and",
+        "Comparing crop yield in"
+      ],
+      "expectedStandard": "analysed appropriately",
+      "keywords": ["ecological", "relationships", "evolution", "soil", "composition", "fertility"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Experimental Design",
+      "specificCompetences": ["Apply experimental design in scientific investigations"],
+      "learningActivities": [
+        "Analysing sampling methods",
+        "Carrying out investigations using the",
+        "Practising the use of two or more",
+        "Experimental design applied"
+      ],
+      "expectedStandard": "",
+      "keywords": ["concepts", "methods", "biology", "experimental", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "Limits of Science",
+      "specificCompetences": ["f====="],
+      "learningActivities": [
+        "Explaining the limits of science (laws,",
+        "Classifying limits of science (beliefs,",
+        "Limits of science identified"
+      ],
+      "expectedStandard": "",
+      "keywords": ["concepts", "methods", "biology", "limits", "science"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "Scientific Ethics",
+      "specificCompetences": ["=b~~==== research"],
+      "learningActivities": [
+        "Determining scientific ethics of a given",
+        "Applying the ethics of scientific",
+        "Scientific ethics evaluated"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["concepts", "methods", "biology", "scientific", "ethics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Micrographs",
+      "specificCompetences": ["Interpret micrographs"],
+      "learningActivities": [
+        "Identifying types of micrographs",
+        "Explaining micrographs of plant and",
+        "Interpreting micrographs",
+        "Communicating scientific information",
+        "Micrographs interpreted"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "cellular", "life", "micrographs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "Staining Specimen and Preparation of permanent Slides",
+      "specificCompetences": ["Apply appropriate staining techniques on specimen"],
+      "learningActivities": [
+        "Exploring staining techniques on",
+        "Staining of specimen",
+        "Preparing permanent plant tissue slides",
+        "Appropriate staining"
+      ],
+      "expectedStandard": "applied accordingly",
+      "keywords": [
+        "principles",
+        "cellular",
+        "life",
+        "staining",
+        "specimen",
+        "preparation",
+        "permanent",
+        "slides"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "Detailed cell Structure",
+      "specificCompetences": ["Illustrate detailed cell structure of an organism"],
+      "learningActivities": [
+        "Drawing detailed cell structure",
+        "Designing detailed models of cells",
+        "Applying knowledge of organelles and",
+        "Detailed cell structure of an"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "cellular", "life", "detailed", "cell", "structure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S4",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "2.2.4",
+      "subtopic": "Properties of Water",
+      "specificCompetences": ["Analyse the properties of water in relation to supporting life"],
+      "learningActivities": [
+        "Investigating properties of water in",
+        "Properties of water in",
+        "Evaluating importance of water in a"
+      ],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["principles", "cellular", "life", "properties", "water"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Nutrition- Types of Nutrition",
+      "specificCompetences": ["Categorise types of nutrition in living organisms"],
+      "learningActivities": [
+        "Describing nutrition (autotrophic and",
+        "Identifying types of heterotrophic",
+        "Distinguishing autotrophic nutrition",
+        "Relating nutrition to different",
+        "Types of nutrition in living"
+      ],
+      "expectedStandard": "",
+      "keywords": ["maintenance", "organism", "nutrition", "types", "nutrition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "Autotrophic Nutrition",
+      "specificCompetences": ["=^~=== in plants"],
+      "learningActivities": [
+        "Examining external and internal",
+        "Explaining the process of",
+        "Tracing the fate of glucose produced",
+        "Identifying storage organs of the",
+        "Investigating factors necessary for the",
+        "Designing experiments on factors",
+        "Relating how the factors that affect",
+        "Constructing word and chemical",
+        "Phototrophic nutrition in"
+      ],
+      "expectedStandard": "plants analysed correctly",
+      "keywords": ["maintenance", "organism", "autotrophic", "nutrition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "Autotrophic Nutrition",
+      "specificCompetences": ["b~~==~== photosynthesis to the environment"],
+      "learningActivities": ["Explaining the importance of", "Importance of"],
+      "expectedStandard": "appropriately",
+      "keywords": ["maintenance", "organism", "autotrophic", "nutrition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S3",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "2.3.3",
+      "subtopic": "Heterotrophic",
+      "specificCompetences": ["^~==== nutrition in living organisms"],
+      "learningActivities": [
+        "Identifying the different types of",
+        "Illustrating types of heterotrophic",
+        "Types of heterotrophic"
+      ],
+      "expectedStandard": "analysed correctly",
+      "keywords": ["maintenance", "organism", "heterotrophic"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S3-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "2.3.3",
+      "subtopic": "Heterotrophic",
+      "specificCompetences": ["=b~~==~== heterotrophic nutrition to"],
+      "learningActivities": [
+        "Evaluating the need for heterotrophic",
+        "Importance of heterotrophic"
+      ],
+      "expectedStandard": "",
+      "keywords": ["maintenance", "organism", "heterotrophic"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S4",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "2.3.4",
+      "subtopic": "Transport in Plants",
+      "specificCompetences": ["Demonstrate understanding of transport system of flowering plants"],
+      "learningActivities": [
+        "Describing transport system of",
+        "Identifying the organs involved in the",
+        "Analysing root systems in",
+        "Examining the internal structures of",
+        "Examining the longitudinal section of",
+        "Understanding of transport",
+        "ylem and phloem",
+        "Tracing the uptake and movement of"
+      ],
+      "expectedStandard": "demonstrated appropriately",
+      "keywords": ["maintenance", "organism", "transport", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S4-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "2.3.4",
+      "subtopic": "Transport in Plants",
+      "specificCompetences": ["Analyse the process of transpiration in plants"],
+      "learningActivities": [
+        "Describing the process of transpiration",
+        "Investigating factors that affect the rate",
+        "Examining adaptive features in plants",
+        "Evaluating the significance of",
+        "Process of transpiration"
+      ],
+      "expectedStandard": "analysed correctly",
+      "keywords": ["maintenance", "organism", "transport", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Reproduction in plants",
+      "specificCompetences": ["Propagate different plants using asexual reproduction modes"],
+      "learningActivities": [
+        "Explaining the different modes of",
+        "Analysing the advantages and",
+        "Applying different modes of asexual",
+        "Different plants propagated"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["continuity", "life", "reproduction", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Reproduction in plants",
+      "specificCompetences": ["Analyse sexual reproduction in flowering plants"],
+      "learningActivities": [
+        "Describing sexual reproduction in",
+        "Collecting flowers from different plant",
+        "Identifying the male parts (stamen:",
+        "Observing, drawing and labelling parts",
+        "Explaining the functions of the parts of",
+        "Sexual reproduction in",
+        "Describing the process of pollination",
+        "Deducing the type of pollination based",
+        "Deducing the agents of pollination",
+        "Illustrating the path taken by a pollen"
+      ],
+      "expectedStandard": "",
+      "keywords": ["continuity", "life", "reproduction", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1-3",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Reproduction in plants",
+      "specificCompetences": ["a====="],
+      "learningActivities": [
+        "Collecting different seeds and fruits in",
+        "Comparing and contrasting features of",
+        "Predicting the method of seed and fruit",
+        "Methods of seed and fruit"
+      ],
+      "expectedStandard": "",
+      "keywords": ["continuity", "life", "reproduction", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "2.4.2",
+      "subtopic": "Germination, Growth and Development in Plants",
+      "specificCompetences": ["Explore germination, growth and development in plants"],
+      "learningActivities": [
+        "Describing germination in flowering",
+        "Investigating conditions necessary for",
+        "Distinguishing hypogeal and epigeal",
+        "Describing growth and development in",
+        "Examining regions of growth using",
+        "Germination, growth and"
+      ],
+      "expectedStandard": "explored accordingly",
+      "keywords": ["continuity", "life", "germination", "growth", "development", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Coordination",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Demonstrate understanding of the role of auxins in phototropism and geotropism",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Describing coordination and response",
+        "Investigating the effects of light on",
+        "Investigating the effects of gravity on",
+        "Understanding of the role of",
+        "Relating the effect of hormones to"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "coordination",
+        "demonstrate",
+        "understanding",
+        "role",
+        "auxins",
+        "phototropism",
+        "geotropism"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S2",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Coordination",
+      "subtopicNumber": "2.5.2",
+      "subtopic": "Health and Disease",
+      "specificCompetences": ["Explore infectious diseases that affect human beings"],
+      "learningActivities": [
+        "Describing health and disease",
+        "Identifying infectious diseases (TB,",
+        "Categorising infectious diseases",
+        "Exploring the causative agents, signs",
+        "Dispelling myths and misconceptions",
+        "Evaluating the economic importance of",
+        "Infectious diseases that affect"
+      ],
+      "expectedStandard": "",
+      "keywords": ["coordination", "health", "disease"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S2-2",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Coordination",
+      "subtopicNumber": "2.5.2",
+      "subtopic": "Health and Disease",
+      "specificCompetences": ["=b=non- infectious= diseases that affect human beings"],
+      "learningActivities": [
+        "Describing non-infectious diseases",
+        "Categorising non-infectious diseases:",
+        "Exploring causative agents, signs and",
+        "Investigating life cycles of a housefly",
+        "Identifying the role of houseflies and",
+        "Relating the control of malaria to the",
+        "Relating the control of waterborne",
+        "Non-infectious diseases",
+        "Devising home-made remedies to",
+        "Evaluating the economic importance of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["coordination", "health", "disease"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Classification of Organisms",
+      "specificCompetences": ["=`~==~= into kingdoms"],
+      "learningActivities": [
+        "Exploring the local environment to",
+        "Grouping organisms into specific",
+        "Analysing characteristics of organisms",
+        "Evaluating the importance of",
+        "Different organisms"
+      ],
+      "expectedStandard": "",
+      "keywords": ["ecological", "relationships", "evolution", "classification", "organisms"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "1a~=~== feeding relationships and energy flow in the ecosystem",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Illustrating the flow of energy along",
+        "Designing a food chain based on living",
+        "Designing a food web based on living",
+        "Distinguishing a food chain from a",
+        "Predicting effects of a disturbance in",
+        "Understanding of feeding"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": [
+        "ecological",
+        "relationships",
+        "evolution",
+        "feeding",
+        "relationships",
+        "energy",
+        "flow",
+        "ecosystem"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S3",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "2.6.3",
+      "subtopic": "Pollution",
+      "specificCompetences": ["Analyse the undesirable effects of pollution on the environment"],
+      "learningActivities": [
+        "Describing pollution",
+        "Categorizing types of pollution (air,",
+        "Analysing the undesirable effects of",
+        "Undesirable effects of",
+        "Recommending appropriate measures"
+      ],
+      "expectedStandard": "analysed appropriately",
+      "keywords": ["ecological", "relationships", "evolution", "pollution"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Chemicals of Life",
+      "specificCompetences": ["Explore the chemicals of life"],
+      "learningActivities": [
+        "Describing the chemicals of",
+        "Identifying the chemicals of",
+        "Using the burn test to",
+        "Analysing the chemical",
+        "Writing molecular and",
+        "Constructing molecular",
+        "Describing hydrolysis and",
+        "Evaluating the significance of",
+        "The chemicals of life"
+      ],
+      "expectedStandard": "explored accordingly",
+      "keywords": ["concepts", "methods", "biology", "chemicals", "life"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Chemicals of Life",
+      "specificCompetences": ["Prepare reagents used in investigating the chemicals of life"],
+      "learningActivities": ["Preparing reagents using", "Reagents used in"],
+      "expectedStandard": "of life prepared correctly",
+      "keywords": ["concepts", "methods", "biology", "chemicals", "life"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Food Confirmatory Tests",
+      "specificCompetences": [
+        "Carry out confirmatory tests for the presence of chemicals of life in food samples"
+      ],
+      "learningActivities": ["Carrying out food tests for", "Confirmatory tests for the"],
+      "expectedStandard": "carried out accordingly",
+      "keywords": ["concepts", "methods", "biology", "food", "confirmatory", "tests"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Concepts and Methods in Biology",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "Research Proposal",
+      "specificCompetences": ["Formulate a research proposal"],
+      "learningActivities": [
+        "Outlining components of a",
+        "Designing a research proposal",
+        "A research proposal"
+      ],
+      "expectedStandard": "formulated correctly",
+      "keywords": ["concepts", "methods", "biology", "research", "proposal"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Movement of substances across the cell",
+      "specificCompetences": ["Analyse the movement of substances across the cell membrane"],
+      "learningActivities": [
+        "Describing the processes of",
+        "Experimenting on diffusion",
+        "Investigating the factors that",
+        "Investigating the effects of",
+        "Applying the principle of",
+        "Movement of substances"
+      ],
+      "expectedStandard": "analysed appropriately",
+      "keywords": ["principles", "cellular", "life", "movement", "substances", "across", "cell"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "3.2.2",
+      "subtopic": "Energy and Metabolism",
+      "specificCompetences": ["Analyse metabolism processes in living cells"],
+      "learningActivities": [
+        "Describing the types of",
+        "Metabolism processes in",
+        "Comparing and contrasting the"
+      ],
+      "expectedStandard": "",
+      "keywords": ["principles", "cellular", "life", "energy", "metabolism"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S3",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "3.2.3",
+      "subtopic": "Enzymes and their Actions",
+      "specificCompetences": ["Demonstrate understanding of enzymes and their actions"],
+      "learningActivities": [
+        "Investigating enzymes and",
+        "Analysing characteristics of",
+        "Applying nomenclature to",
+        "Investigating the factors that",
+        "Applying enzymes in everyday",
+        "Understanding of"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["principles", "cellular", "life", "enzymes", "their", "actions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Nutrition: Dentition in Mammals",
+      "specificCompetences": ["Analyse dentition in mammals"],
+      "learningActivities": [
+        "Examining the structure",
+        "Describing the internal",
+        "Studying dental formulae of",
+        "Relating dentition of mammals",
+        "Identifying the causes, signs,",
+        "Devise remedies to address",
+        "Dentition in mammals"
+      ],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["maintenance", "organism", "nutrition", "dentition", "mammals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "Holozoic Nutrition",
+      "specificCompetences": ["Analyse holozoic nutrition"],
+      "learningActivities": [
+        "Describing holozoic nutrition",
+        "Explaining the main processes",
+        "Holozoic nutrition",
+        "Relating the main regions of",
+        "Describing the processes of",
+        "Drawing the alimentary canal",
+        "Making a model to trace the",
+        "Examining the internal detailed",
+        "Analysing the common",
+        "Describing the metabolic",
+        "Describing the effects of",
+        "Devising remedies to address"
+      ],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["maintenance", "organism", "holozoic", "nutrition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Transport in Animals",
+      "specificCompetences": ["Analyse the composition of blood"],
+      "learningActivities": [
+        "Identifying the components of",
+        "Identifying the sites where the",
+        "Distinguishing between the red",
+        "Investigating common blood",
+        "Composition of blood"
+      ],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["maintenance", "organism", "transport", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3-2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Transport in Animals",
+      "specificCompetences": ["Explore the functions of blood"],
+      "learningActivities": [
+        "Analysing the functions of",
+        "Exploring the mechanism of",
+        "Functions of blood"
+      ],
+      "expectedStandard": "explored accordingly",
+      "keywords": ["maintenance", "organism", "transport", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3-3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Transport in Animals",
+      "specificCompetences": ["Demonstrate understanding of ABO blood groups"],
+      "learningActivities": [
+        "Describing blood groups (A, B,",
+        "Explaining the importance of",
+        "Understanding of ABO",
+        "Relating the importance of",
+        "Determining the donor-"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["maintenance", "organism", "transport", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3-4",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Transport in Animals",
+      "specificCompetences": [
+        "Demonstrate understanding of the structure and function of the human heart"
+      ],
+      "learningActivities": [
+        "Describing the structure of the",
+        "Comparing and contrasting the",
+        "Drawing and labeling a",
+        "Describing the mechanism of",
+        "Investigating the causes of",
+        "Preventing coronary heart",
+        "Understanding of the"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["maintenance", "organism", "transport", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3-5",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Transport in Animals",
+      "specificCompetences": ["Demonstrate understanding of the blood circulatory system"],
+      "learningActivities": [
+        "Describing types of blood",
+        "Illustrating double circulation",
+        "Distinguishing between single",
+        "Relating the main blood",
+        "Comparing and contrasting the",
+        "Understanding of the"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["maintenance", "organism", "transport", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3-6",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Transport in Animals",
+      "specificCompetences": ["Demonstrate understanding of the lymphatic system"],
+      "learningActivities": [
+        "Describing the structure and",
+        "Identifying the structure of",
+        "Distinguishing the blood",
+        "Explaining the formation of",
+        "Understanding of the",
+        "Comparing and contrasting",
+        "Evaluating the significance of"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["maintenance", "organism", "transport", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S4",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "3.3.4",
+      "subtopic": "Gaseous Exchange and Respiration",
+      "specificCompetences": ["Demonstrate understanding of gaseous exchange and respiration"],
+      "learningActivities": [
+        "Describing the respiratory",
+        "Relating the parts of the",
+        "Demonstrating the mechanism",
+        "Making of models on gaseous",
+        "Investigating the composition",
+        "Exploring the adverse effects",
+        "Describing gaseous exchange",
+        "Describing types of tissue",
+        "Comparing and contrasting",
+        "Understanding of gaseous",
+        "Describing the conversion of",
+        "Investigating the production of",
+        "Evaluating the importance of",
+        "Exploring the significance of",
+        "Applying respiration in"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["maintenance", "organism", "gaseous", "exchange", "respiration"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Reproduction in",
+      "specificCompetences": ["Demonstrate understanding of reproduction in frogs"],
+      "learningActivities": [
+        "Investigating the process of",
+        "Identifying stages of",
+        "Evaluate advantages and",
+        "Understanding of"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["continuity", "life", "reproduction"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "Fertilisation and Development in Human Beings",
+      "specificCompetences": ["Demonstrate understanding of development in human beings"],
+      "learningActivities": [
+        "Describing the development",
+        "Analysing the menstrual cycle",
+        "Explaining the processes of",
+        "Describing development of the",
+        "Exploring health risks",
+        "Describing healthy pregnancy",
+        "Evaluating the advantages and",
+        "Understanding of the"
+      ],
+      "expectedStandard": "",
+      "keywords": ["continuity", "life", "fertilisation", "development", "human", "beings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "Infertility and birth control in humans",
+      "specificCompetences": ["Explore the causes of infertility in human beings"],
+      "learningActivities": [
+        "Identifying causes of",
+        "Causes of infertility in",
+        "Investigating ways of",
+        "Demystifying infertility in"
+      ],
+      "expectedStandard": "",
+      "keywords": ["continuity", "life", "infertility", "birth", "control", "humans"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "Infertility and birth control in humans",
+      "specificCompetences": ["Evaluate birth control methods in human beings"],
+      "learningActivities": [
+        "Describing birth control",
+        "Explaining some methods of",
+        "Evaluating the benefits and",
+        "Birth control methods in"
+      ],
+      "expectedStandard": "",
+      "keywords": ["continuity", "life", "infertility", "birth", "control", "humans"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Coordination and Response",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Immunity",
+      "specificCompetences": ["Relate immunity to disease prevention"],
+      "learningActivities": [
+        "Explaining immunity to",
+        "Categorising immunity",
+        "Investigating factors that",
+        "Recommending factors that",
+        "Evaluating the importance of",
+        "Demystifying vaccinations",
+        "Immunity to disease"
+      ],
+      "expectedStandard": "",
+      "keywords": ["coordination", "response", "immunity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Coordination and Response",
+      "subtopicNumber": "3.5.2",
+      "subtopic": "The Endocrine System",
+      "specificCompetences": ["Demonstrate understanding of the endocrine system"],
+      "learningActivities": [
+        "Describing hormones in",
+        "Identifying the endocrine",
+        "Analysing the functions of",
+        "Evaluate the importance of",
+        "Understanding of the"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["coordination", "response", "endocrine", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S3",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Coordination and Response",
+      "subtopicNumber": "3.5.3",
+      "subtopic": "The Nervous System",
+      "specificCompetences": ["Demonstrate understanding of the nervous system"],
+      "learningActivities": [
+        "Describing the composition of",
+        "Identifying main parts of the",
+        "Describing neurones",
+        "Elaborating the path taken by",
+        "Demonstrating spinal, cranial",
+        "Identifying the main parts of",
+        "Explaining the functions of",
+        "Understanding of the",
+        "Analysing the effects of abuse",
+        "Explaining the effects of",
+        "Comparing and contrasting"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["coordination", "response", "nervous", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Nutrient Cycles in the Ecosystem",
+      "specificCompetences": ["Explore the cycling of carbon and nitrogen in the biosphere"],
+      "learningActivities": [
+        "Describing carbon and",
+        "Designing the Carbon and",
+        "Evaluating the importance of",
+        "Investigating factors that",
+        "The cycling of carbon"
+      ],
+      "expectedStandard": "",
+      "keywords": ["ecological", "relationships", "evolution", "nutrient", "cycles", "ecosystem"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1-2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Nutrient Cycles in the Ecosystem",
+      "specificCompetences": ["Explore the water cycle"],
+      "learningActivities": [
+        "Describing the water cycle",
+        "Investigating the factors that",
+        "Evaluating the importance of",
+        "Water cycle explored"
+      ],
+      "expectedStandard": "",
+      "keywords": ["ecological", "relationships", "evolution", "nutrient", "cycles", "ecosystem"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Ecological Relationships and Evolution",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Levels of Classification",
+      "specificCompetences": ["Classify various types of plants and animals"],
+      "learningActivities": [
+        "Identifying various types of",
+        "Identifying various types of",
+        "Formulating a dichotomous",
+        "Using a dichotomous key to",
+        "Various types of plants"
+      ],
+      "expectedStandard": "",
+      "keywords": ["ecological", "relationships", "evolution", "levels", "classification"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Concepts and Method in Biology",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Research Project in Biology",
+      "specificCompetences": ["Conduct a research project"],
+      "learningActivities": [
+        "Carrying out research (data",
+        "Developing an innovation to",
+        "Research project"
+      ],
+      "expectedStandard": "conducted accordingly",
+      "keywords": ["concepts", "method", "biology", "research", "project", "biology"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Principles of Cellular Life",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Cell Division",
+      "specificCompetences": ["Demonstrate understanding of the process of cell division"],
+      "learningActivities": [
+        "Demonstrating the stages of cell",
+        "Observing cell division using a",
+        "Evaluating the importance of",
+        "Understanding of the"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["principles", "cellular", "life", "cell", "division"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Excretion in Plants and Animals",
+      "specificCompetences": ["Explore the mechanism of excretion in plants and animals"],
+      "learningActivities": [
+        "Describing the process of",
+        "Identifying excretory structures",
+        "Carrying out experiments to",
+        "Identifying the excretory organs",
+        "Relating the organs of the",
+        "Relating the internal structures",
+        "Mechanism of excretion in",
+        "Describing the mechanism of",
+        "Identifying common disorders",
+        "Investigating the role of the",
+        "Describing the role of the",
+        "Explaining the importance of",
+        "Exploring ways of managing",
+        "Exploring ways in which"
+      ],
+      "expectedStandard": "explored accordingly",
+      "keywords": ["maintenance", "organism", "excretion", "plants", "animals"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Maintenance of the Organism",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Homeostasis in Human Beings",
+      "specificCompetences": ["=^~==~= of the process of homeostasis in human beings"],
+      "learningActivities": [
+        "Describing homeostasis",
+        "Identifying organs involved in",
+        "Analysing the role of the kidney",
+        "Relating the structure of the",
+        "Analysing the mechanism of",
+        "Exploring the role of the liver in",
+        "Practising healthy habits for",
+        "Mechanism of the process"
+      ],
+      "expectedStandard": "",
+      "keywords": ["maintenance", "organism", "homeostasis", "human", "beings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Heredity",
+      "specificCompetences": [
+        "Demonstrate understanding of inheritance of traits in plants and animals"
+      ],
+      "learningActivities": [
+        "Describing inheritance",
+        "Exploring the terms used in the",
+        "Illustrating monohybrid",
+        "Demonstrating the inheritance",
+        "Demonstrating the inheritance",
+        "Understanding of",
+        "Determining the sex of a human",
+        "Exploring the inheritance of",
+        "Illustrating the mechanism of",
+        "Describing mutation",
+        "Identifying the causes of",
+        "Explaining effects of mutation",
+        "Applying mutations in everyday"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["continuity", "life", "heredity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Continuity of Life",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Heredity",
+      "specificCompetences": ["Explore variation in plants and animals."],
+      "learningActivities": [
+        "Describing variations in living",
+        "Investigating variations in",
+        "Investigating variations in",
+        "Distinguishing continuous and",
+        "Investigating the factors that",
+        "Applying the concept of",
+        "Variation in plants and"
+      ],
+      "expectedStandard": "animals explored correctly",
+      "keywords": ["continuity", "life", "heredity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Coordination and Response",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Sense Organs in Human Beings",
+      "specificCompetences": ["Analyse the sense organs in human beings"],
+      "learningActivities": [
+        "Describing sense organs (eye,",
+        "Relating the external and",
+        "Demonstrating accommodation",
+        "Exploring the causes of short",
+        "Explaining the correction of",
+        "Sense organs in human",
+        "Investigating the common",
+        "Drawing and labeling the",
+        "Relating the parts of the ear to",
+        "Investigating the causes and",
+        "Exploring the role of the skin as",
+        "Exploring the role of the",
+        "Exploring the role of the nose as",
+        "Caring for sense organs to",
+        "Relating the sense organs to the",
+        "Identifying the interdependence"
+      ],
+      "expectedStandard": "",
+      "keywords": ["coordination", "response", "sense", "organs", "human", "beings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S2",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Coordination and Response",
+      "subtopicNumber": "4.5.2",
+      "subtopic": "The Skeletal System",
+      "specificCompetences": ["Examine the structures and composition of skeletons"],
+      "learningActivities": [
+        "Describing the Skeletal System",
+        "Exploring the functions of the",
+        "Identifying various types of",
+        "Investigating the structure and",
+        "Identifying joints and muscles",
+        "Describing the general plan of",
+        "Explaining a bone as a living",
+        "Describing the structure of a",
+        "Demonstrating the action of",
+        "Identifying the parts and",
+        "Structure and composition",
+        "Distinguishing the ball and",
+        "Comparing the joints, muscle",
+        "Investigating the skeletal",
+        "Managing the skeletal disorders",
+        "Applying First-Aid measures"
+      ],
+      "expectedStandard": "",
+      "keywords": ["coordination", "response", "skeletal", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Ecological Relationship and Evolution",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "Biodiversity",
+      "specificCompetences": ["Conserve biodiversity in the environment"],
+      "learningActivities": [
+        "Describing biodiversity of",
+        "Investigating diversity of",
+        "Evaluating the importance of",
+        "Investigating the impact of",
+        "Evaluating effectiveness of",
+        "Exploring the economic reasons",
+        "Conserving Bio-diversity in the",
+        "Biodiversity in the"
+      ],
+      "expectedStandard": "",
+      "keywords": ["ecological", "relationship", "evolution", "biodiversity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S2",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Ecological Relationship and Evolution",
+      "subtopicNumber": "4.6.2",
+      "subtopic": "Conservation of Natural Resources",
+      "specificCompetences": [
+        "Practise sustainable use of natural resources in the local environment"
+      ],
+      "learningActivities": [
+        "Exploring the importance of",
+        "Sustainable use of natural",
+        "Practising effective ways of"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": [
+        "ecological",
+        "relationship",
+        "evolution",
+        "conservation",
+        "natural",
+        "resources"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S3",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Ecological Relationship and Evolution",
+      "subtopicNumber": "4.6.3",
+      "subtopic": "Natural Selection",
+      "specificCompetences": ["Applying the principles of natural selection in real world"],
+      "learningActivities": [
+        "Exploring the four principles of",
+        "Analysing how some organisms",
+        "Evaluating the importance of",
+        "Principles of natural"
+      ],
+      "expectedStandard": "selection correctly",
+      "keywords": ["ecological", "relationship", "evolution", "natural", "selection"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S4",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Ecological Relationship and Evolution",
+      "subtopicNumber": "4.6.4",
+      "subtopic": "Evolution",
+      "specificCompetences": ["Explore the process of evolution"],
+      "learningActivities": [
+        "Describing evolution (change",
+        "Investigating causes of",
+        "Process of evolution"
+      ],
+      "expectedStandard": "explored correctly",
+      "keywords": ["ecological", "relationship", "evolution", "evolution"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

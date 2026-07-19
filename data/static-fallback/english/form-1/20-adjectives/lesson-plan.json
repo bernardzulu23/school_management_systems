@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "adjectives",
+  "lesson": {
+    "lesson": 20,
+    "title": "ADJECTIVES",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Adjectives are words used to describe or modify nouns and pronouns. They",
+      "help add detail, emotion and colour to language, making speech and writing more vivid",
+      "and precise. Adjectives answer questions like what kind, how many, and which one.",
+      "Understanding how to use adjectives correctly can greatly improve one’s ability to"
+    ],
+    "activities": [
+      " Learners identify the adjectives in sentences.",
+      "Examples:",
+      "He is a kind handsome young man.",
+      "She wore a nice red dress.",
+      "I saw a cute little white cat on my way home.",
+      " Explain to the learners that there is need to follow an acceptable sequence when more",
+      "than one adjective is describing a noun.",
+      " Explain that the position of the adjective depends on how closely it is related in idea to"
+    ],
+    "resources": [],
+    "assessment": [
+      " Observe as the learners practice constructing sentences.",
+      " Learners rearrange the order of adjectives in sentences.",
+      " Individually, learners construct sentences with the correct order of adjectives.",
+      " The order of adjectives refers to the specific sequence in which multiple adjectives are",
+      "arranged before a noun.",
+      " Adjectives are words we can use to make our writing more vivid."
+    ],
+    "notes": ""
+  }
+}

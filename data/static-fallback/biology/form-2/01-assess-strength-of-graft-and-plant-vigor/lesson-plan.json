@@ -1,0 +1,39 @@
+{
+  "subject": "Biology",
+  "subjectSlug": "biology",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Biology-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "de96eadde048b75cdb81b327dc84d1b5",
+  "detectedShift": 0,
+  "pageCount": 153,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "assess-strength-of-graft-and-plant-vigor",
+  "lesson": {
+    "week": 6,
+    "lesson": 1,
+    "title": "Assess strength of graft and plant vigor.",
+    "topics": [
+      "xi) Ask groups to compare each other’s grafted plants during the time frame.",
+      "Discussion",
+      " If you were a farmer, which crop would you propagate by grafting and why?",
+      "Content Tip",
+      " Grafting is an artificial method of asexual reproduction where tissues of two plants are joined so they grow as one."
+    ],
+    "activities": [
+      "Procedure:",
+      "i) Put learners into small groups of 4-5",
+      "ii) Make all the necessary requirements available for the groups to use.",
+      "Biology Teaching Module Form 2-Term 1 &",
+      "iii) Ask the groups to select a healthy rootstock and a bud from the scion plant.",
+      "iv) Ask groups to make a T-shaped cut on the bark of the rootstock.",
+      "v) Ask the groups to carefully insert the bud into the cut, ensuring cambium contact.",
+      "vi) Ask the groups to wrap the union firmly with budding tape or polythene strip, leaving the bud exposed."
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

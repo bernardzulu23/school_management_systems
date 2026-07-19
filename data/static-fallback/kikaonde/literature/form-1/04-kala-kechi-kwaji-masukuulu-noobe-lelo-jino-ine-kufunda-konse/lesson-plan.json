@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "kala-kechi-kwaji-masukuulu-noobe-lelo-jino-ine-kufunda-konse",
+  "lesson": {
+    "week": 4,
+    "lesson": 4,
+    "title": "Kala kechi kwaji masukuulu noobe lelo jino ine, kufunda konse kwaji kwa kupichila mu",
+    "topics": [
+      "kwikala na bansemi ne bakulumpe.",
+      "BYAMBO BYANEMA.",
+      " Tuyukwe twa ndondolwelo.",
+      " Buluba.",
+      " Ňano."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

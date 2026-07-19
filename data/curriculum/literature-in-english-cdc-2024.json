@@ -1,0 +1,1385 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Literature in English Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Literature in English",
+    "slug": "literature-in-english",
+    "extractionNote": "Shift-corrected extract (detected_shift=0, confidence=0.962) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 0,
+    "shiftConfidence": 0.962
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "LITERATURE",
+      "specificCompetences": ["The Meaning of Literature"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "LITERATURE",
+      "specificCompetences": ["1. Use different definitions to derive the meaning of Literature"],
+      "learningActivities": [
+        "Discussing different",
+        "Distinguishing Literature as a",
+        "Different definitions to"
+      ],
+      "expectedStandard": "Literature used accordingly",
+      "keywords": ["literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "LITERATURE",
+      "specificCompetences": ["Functions of Literature"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "LITERATURE",
+      "specificCompetences": ["1. Relate functions of Literature to real life situations"],
+      "learningActivities": [
+        "Discussing different",
+        "Determining the importance",
+        "Relating the importance of",
+        "Functions of Literature"
+      ],
+      "expectedStandard": "",
+      "keywords": ["literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["Forms of Oral Literature"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["1. Use forms of Oral Literature in different linguistic contexts"],
+      "learningActivities": [
+        "Discussing Oral Literature",
+        "Distinguishing forms of Oral",
+        "Forms of Oral Literature"
+      ],
+      "expectedStandard": "contexts appropriately",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["Folktales"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of folktales"],
+      "learningActivities": [
+        "Discussing folktales and",
+        "Discussing functions of",
+        "Understanding of folktales"
+      ],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-5",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["2. Tell folktales"],
+      "learningActivities": ["Telling folktales (fairytales,", "Folktales told logically"],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-6",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["3. Analyse folktales"],
+      "learningActivities": ["Analysing folktales (themes,", "Folktales analysed"],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-7",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["4. Act out folktales"],
+      "learningActivities": ["Acting given folktales", "Folktales acted out skillfully"],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-8",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["Riddles"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-9",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["1. Relate riddles to real life situations"],
+      "learningActivities": [
+        "Discussing riddles and types",
+        "Discussing functions of",
+        "Solving riddles (asking and",
+        "Riddles related to real life"
+      ],
+      "expectedStandard": "situation accordingly",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-10",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["Proverbs"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-11",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of proverbs"],
+      "learningActivities": [
+        "Discussing different types of",
+        "Brainstorming on functions",
+        "Interpreting proverbs (slow",
+        "Understanding of proverbs"
+      ],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-12",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["2. Use proverbs in different linguistic contexts"],
+      "learningActivities": ["Using proverbs in different", "Proverbs used correctly in"],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-13",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["Songs"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-14",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of songs"],
+      "learningActivities": [
+        "Discussing different",
+        "Classifying songs (marriage,",
+        "Understanding of songs"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-15",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["2. Analyse songs"],
+      "learningActivities": [
+        "Analysing songs (meaning,",
+        "Making presentations",
+        "Songs analysed skillfully"
+      ],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-16",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["3. Perform songs"],
+      "learningActivities": [
+        "Performing different types of",
+        "Reviewing performed songs",
+        "Different types of songs"
+      ],
+      "expectedStandard": "performed correctly",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-17",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["4. Compose songs"],
+      "learningActivities": [
+        "Composing songs (modern,",
+        "Making presentations",
+        "Different types of songs"
+      ],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-18",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["Praises"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-19",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of Praises"],
+      "learningActivities": ["Discussing praises and types", "Understanding of Praises"],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-20",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["2. Recite Praises"],
+      "learningActivities": [
+        "Reciting Praises (self, heroes,",
+        "Discussing recited praises",
+        "Praises recited accordingly"
+      ],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-21",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["3. Analyse Praises"],
+      "learningActivities": [
+        "Analysing Praises (message,",
+        "Presenting analysed Praises",
+        "Praises analysed"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-22",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["4. Compose Praises"],
+      "learningActivities": [
+        "Composing Praises",
+        "Presentation of composed",
+        "Reviewing presented Praises",
+        "Praises composed correctly"
+      ],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-23",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["Idioms"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-24",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["1. Demonstrate knowledge of idioms"],
+      "learningActivities": ["Discussing Idioms", "Knowledge of idioms"],
+      "expectedStandard": "",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-25",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "ORAL LITERATURE",
+      "specificCompetences": ["2. Use idioms in different linguistic contexts"],
+      "learningActivities": ["Using idioms in contexts", "Idioms used in different"],
+      "expectedStandard": "appropriately",
+      "keywords": ["oral", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["Forms of Written Literature"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of Written Literature"],
+      "learningActivities": [
+        "Discussing written literature",
+        "Distinguishing forms of",
+        "Understanding of Written"
+      ],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["Prose"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of Prose"],
+      "learningActivities": ["Discussing prose and its", "Understanding of prose"],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-5",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["2. Compose short stories"],
+      "learningActivities": [
+        "Discussing elements of a",
+        "Composing short stories",
+        "Short stories composed"
+      ],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-6",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["Drama"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-7",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of Drama"],
+      "learningActivities": ["Discussing drama and its", "Understanding of Drama"],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-8",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["2. Perform Plays"],
+      "learningActivities": ["Performing Plays, (on cross-", "Plays performed skillfully"],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-9",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["Poetry"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-10",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["1. Demonstrate understanding of Poetry"],
+      "learningActivities": ["Discussing poetry and basic", "Understanding Poetry"],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-11",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "WRITTEN LITERATURE",
+      "specificCompetences": ["2. Perform Poems"],
+      "learningActivities": [
+        "Performing Poems",
+        "Reviewing performed poems",
+        "Poems performed skillfully"
+      ],
+      "expectedStandard": "",
+      "keywords": ["written", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["Development of Zambian Literature"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["1. Explore the Development of Zambian Literature"],
+      "learningActivities": ["Discussing Zambian", "The Development of"],
+      "expectedStandard": "",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["2. Show understanding of different Zambian Oral Traditions"],
+      "learningActivities": [
+        "Exploring different Zambian",
+        "Sharing different Zambian",
+        "Understanding of different"
+      ],
+      "expectedStandard": "shown appropriately",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["3. Analyse Zambian Oral Traditions"],
+      "learningActivities": [
+        "Analysing Zambian Oral",
+        "Presenting the analysed Oral",
+        "Reviewing the presented Oral",
+        "Zambian Oral Traditions"
+      ],
+      "expectedStandard": "",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-5",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["Themes in Zambian Literature"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-6",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["1. Apply Themes from Zambian Literature in real life situations"],
+      "learningActivities": [
+        "Discussing themes in",
+        "Relating discussed themes to",
+        "Understanding of themes in"
+      ],
+      "expectedStandard": "",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-7",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["Zambian Authors"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-8",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "INTRODUCTION TO ZAMBIAN LITERATURE",
+      "specificCompetences": ["1. Explore Prominent Zambian Authors, playwrights and poets"],
+      "learningActivities": ["Discussing works of", "Prominent Zambian Authors,"],
+      "expectedStandard": "",
+      "keywords": ["introduction", "zambian", "literature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["Fiction and Non-Fiction"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["1. Demonstrate understanding of Fiction and Non- Fiction"],
+      "learningActivities": [
+        "Defining fiction and non-",
+        "Distinguishing fiction from",
+        "Reading short stories (fiction)",
+        "Understanding of Fiction and"
+      ],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["2. Draw inferences from read texts"],
+      "learningActivities": [
+        "Drawing lessons from the",
+        "Applying drawn inferences",
+        "Inferences drawn from read"
+      ],
+      "expectedStandard": "stories accordingly",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-4",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["3. Compose Fiction and Non-fiction Stories"],
+      "learningActivities": ["Composing various types of", "Fiction and Non-Fiction"],
+      "expectedStandard": "stories composed correctly",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-5",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["Elements of Prose"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-6",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["1. Demonstrate understanding of Elements of Prose"],
+      "learningActivities": [
+        "Identify the elements of",
+        "Explaining the elements of",
+        "Understanding of elements of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-7",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["2. Create own Settings"],
+      "learningActivities": [
+        "Identifying settings in",
+        "Creating own settings",
+        "Own settings created"
+      ],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-8",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["3. Compose own Plots"],
+      "learningActivities": [
+        "Discussing elements of plot",
+        "Composing own plots",
+        "Own plots composed"
+      ],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-9",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["4. Demonstrate understanding of Character"],
+      "learningActivities": [
+        "Discussing types of",
+        "Reading sampled texts for",
+        "Role playing different",
+        "Understanding of Character"
+      ],
+      "expectedStandard": "demonstrated appropriately",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-10",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["5. Interpret themes from different texts"],
+      "learningActivities": [
+        "Discussing theme (the",
+        "Themes from different texts",
+        "Reading sampled texts for",
+        "Presenting the interpreted",
+        "Reviewing interpreted"
+      ],
+      "expectedStandard": "interpreted accordingly",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-11",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["6. Analyse text for point of view"],
+      "learningActivities": [
+        "Discussing different types of",
+        "Reading for Identification of",
+        "Analyse view points from",
+        "Text analysed for point of"
+      ],
+      "expectedStandard": "view correctly",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-12",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["7. Analyse prose"],
+      "learningActivities": ["Analysing Prose (setting,", "Prose analysed intensively"],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-13",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "PROSE",
+      "specificCompetences": ["8. Compose prose stories"],
+      "learningActivities": ["Composing prose stories that", "Prose stories composed"],
+      "expectedStandard": "",
+      "keywords": ["prose"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["Types of Drama"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["1 Demonstrate understanding of different types of drama"],
+      "learningActivities": ["Discussing types of drama", "Understanding of different"],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["Elements of Drama"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-4",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["1. Demonstrate understanding of elements of drama"],
+      "learningActivities": [
+        "Identifying the elements of",
+        "Understanding of elements of",
+        "Explaining the elements of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-5",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": [
+        "2. Analyse plot in drama Discussing the flow of events in a play (exposition, rising Action, climax, falling action, resolution) Outlining the flow of events in a given play."
+      ],
+      "learningActivities": ["Understanding of plot"],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-6",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["3. Demonstrate understanding of character"],
+      "learningActivities": [
+        "Discussing types of",
+        "Identity types of characters in",
+        "Understanding of character"
+      ],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-7",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["4. Analyse characters in a play"],
+      "learningActivities": [
+        "Characterising actors in a",
+        "Acting out different",
+        "Characters in a play analysed"
+      ],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-8",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["5. Analyse theme"],
+      "learningActivities": [
+        "Discussing various themes in",
+        "Identifying different types of",
+        "Theme analysed accordingly"
+      ],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-9",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["6. Demonstrate understanding of dialogue"],
+      "learningActivities": [
+        "Discussing characteristics of",
+        "Role playing different",
+        "Understanding of dialogue"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-10",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["7. Demonstrate understanding of setting"],
+      "learningActivities": [
+        "Identifying settings in plays",
+        "Comparing settings in",
+        "Understanding of setting"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-11",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["8. Demonstrate understanding of act"],
+      "learningActivities": [
+        "Discussing functions of an",
+        "Identifying acts in a given",
+        "Understanding of Act"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-12",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["9. Demonstrate understanding of scene"],
+      "learningActivities": [
+        "Discussing functions of a",
+        "Identifying scenes in a given",
+        "Understanding of scene"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-13",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["10. Demonstrate understanding of staging"],
+      "learningActivities": [
+        "Discussing staging (the",
+        "Demonstrating staging",
+        "Understanding of staging"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-14",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["Analysis of Drama"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-15",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["1. Analyse Drama"],
+      "learningActivities": ["Analysing dramatic works", "Dramatic works analysed"],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-16",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "DRAMA",
+      "specificCompetences": ["2. Dramatise Plays"],
+      "learningActivities": ["Dramatising Plays,", "Plays dramatised skillfully"],
+      "expectedStandard": "",
+      "keywords": ["drama"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["Types of poetry"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["1. Demonstrate understanding of poetry"],
+      "learningActivities": [
+        "Discussing the meaning of",
+        "Discussing types of poetry",
+        "Understanding of poetry"
+      ],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["Elements of poetry"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-4",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["1. Demonstrate understanding of elements of poetry"],
+      "learningActivities": ["Identifying the elements of"],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-5",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["2. Analyse imagery in poetry"],
+      "learningActivities": [
+        "Discussing the meaning of",
+        "Identifying imageries from",
+        "Analysing imagery in poetry",
+        "Imagery in poetry analysed"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-6",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["3. Use metaphors in different linguistic contexts"],
+      "learningActivities": [
+        "Discussing metaphors",
+        "Constructing simple",
+        "Metaphor used in different"
+      ],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-7",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["4. Interpret themes in poetry"],
+      "learningActivities": [
+        "Discussing themes (the main",
+        "Discussing different types of",
+        "Interpreting themes from",
+        "Themes in poetry interpreted"
+      ],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-8",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["5. Write own stanzas"],
+      "learningActivities": [
+        "Discussing stanza (a division",
+        "Own stanzas written",
+        "Identifying stanzas in poetic",
+        "Practising writing own"
+      ],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-9",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["6. Write own verses"],
+      "learningActivities": [
+        "Discussing verse (a single",
+        "Identifying verses in poetic",
+        "Practising writing own verses",
+        "Own verses written"
+      ],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-10",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["7. Recite Poems"],
+      "learningActivities": [
+        "Reciting various poems",
+        "Discussing recited poems",
+        "Poems recited skillfully"
+      ],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-11",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["8. Analyse Poems"],
+      "learningActivities": [
+        "Analysing Poems (sound",
+        "Making presentations based",
+        "Poems analysed accordingly"
+      ],
+      "expectedStandard": "",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-12",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "POETRY",
+      "specificCompetences": ["9. Compose poems"],
+      "learningActivities": [
+        "Composing poems (praise,",
+        "Exhibiting the poems",
+        "Poems composed",
+        "Discussing the background of",
+        "Discussing the synopsis of",
+        "Reading the selected text",
+        "Discussing the selected text",
+        "Understanding of",
+        "Analysing selected text (plot,",
+        "Carrying out follow- up",
+        "Text analysed accordingly",
+        "Text dramatised skillfully",
+        "Drafting a story (create plot,",
+        "Reviewing the stories",
+        "Writing stories (prose",
+        "Presenting stories",
+        "Stories written correctly"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

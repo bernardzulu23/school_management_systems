@@ -1,0 +1,45 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-3-1.pdf",
+  "md5": "aec298243b16b6a59e9d4a1cecd21f60",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "11-0-my-school",
+  "lesson": {
+    "lesson": 2,
+    "title": "11.0: MY SCHOOL",
+    "topics": [
+      "Overview",
+      "This topic is essential for learners as it provides foundational vocabulary and",
+      "expressions related to daily life in a school setting. By exploring classroom orders and",
+      "instructions, learners will learn how to navigate and communicate effectively in a",
+      "French speaking classroom environment. Understanding subjects and school time"
+    ],
+    "activities": [
+      "in English (Sortez - Entrez - Taisez-vous…).",
+      " Give instructions in French accompanied by gestures.",
+      " Learners listen to a set of demonstrated instructions and respond appropriately.",
+      "e.g. Entrez !/ Venez ! Va a ta place ! Levez-vous.!",
+      "Content Tips:",
+      " Revision on ‘Les adjectifs possessifs’.",
+      " In groups, learners find the meaning of the different classroom instructions",
+      "and commands."
+    ],
+    "resources": [],
+    "assessment": [
+      "specific competence.",
+      "learning activities from all the sub-topics taught and the summative",
+      "questions…)",
+      "Key Points/ Recap",
+      "Classroom objects in French.",
+      "ii. Les adjectifs démonstratifs"
+    ],
+    "notes": ""
+  }
+}

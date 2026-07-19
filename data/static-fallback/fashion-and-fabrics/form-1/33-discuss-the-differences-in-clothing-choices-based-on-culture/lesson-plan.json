@@ -1,0 +1,29 @@
+{
+  "subject": "Fashion and Fabrics",
+  "subjectSlug": "fashion-and-fabrics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FF-FORM-1-TERM-1-FINAL-MODULE-2025.pdf",
+  "md5": "36fd2c8aa7e348b706d1a8224dc6600f",
+  "detectedShift": 0,
+  "pageCount": 108,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "discuss-the-differences-in-clothing-choices-based-on-culture",
+  "lesson": {
+    "week": 2,
+    "lesson": 33,
+    "title": "Discuss the differences in clothing choices based on culture, function, and personal",
+    "topics": [
+      "preference.",
+      "Content Tips:",
+      "Clothing serves multiple functions beyond aesthetics.",
+      "Clothing serves mul7ple func7ons beyond just aesthe7cs. These include:"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

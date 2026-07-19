@@ -1,0 +1,27 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "conduct-research-among-the-members-of-the-community-teacher-",
+  "lesson": {
+    "week": 1,
+    "lesson": 18,
+    "title": "Conduct research among the members of the community (teacher’s compound, village or township)",
+    "topics": [
+      "to observe how people adhere to the values of citizenship. Write a report based on the information",
+      "obtained from the field."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

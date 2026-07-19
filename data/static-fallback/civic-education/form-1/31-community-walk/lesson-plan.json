@@ -1,0 +1,33 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "community-walk",
+  "lesson": {
+    "week": 3,
+    "lesson": 31,
+    "title": "Community walk",
+    "topics": [
+      "Take learners on a guided walk around the school and community",
+      "Ask them to observe and list different groups they see (e.g. teachers, prefects, shopkeepers,",
+      "parents)",
+      "Reflect on how these groups support the school and family"
+    ],
+    "activities": [
+      "Classifying special groups and their needs",
+      "Teaching and Learning materials: matching cards, Charts and pictures or videos classifying",
+      "special groups"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

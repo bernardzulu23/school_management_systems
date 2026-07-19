@@ -1,0 +1,30 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "ed6d1703ad82e1af6d8a143723263a95",
+  "detectedShift": 0,
+  "pageCount": 115,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "hana-lumbunwiso-yamazu-kweseka-najila-vanawazachisamo-mumiku",
+  "lesson": {
+    "week": 3,
+    "lesson": 29,
+    "title": "Hana lumbunwiso yamazu kweseka najila vanawazachisamo mumikuku.",
+    "topics": [
+      "Kukhukulula",
+      "Valongi vanalinangula lumbunwiso yamazu najila yakuwazachisa mumikuku.",
+      "Chihande 2: Kutanga Chakujimina.",
+      "Mutwe Wachihande: Kutanga Nakwivwishisa.",
+      "Kujimbula: Valongi navatanga mujimbu nakuwivwishisa kaha kusongo navakumbulula vihula"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

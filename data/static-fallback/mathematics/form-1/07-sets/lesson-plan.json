@@ -1,0 +1,36 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "MATHEMATICS-1-MODULE-FINAL.pdf",
+  "md5": "4276f7fdc41c7e5c2fd1dd57b187256b",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "sets",
+  "lesson": {
+    "lesson": 7,
+    "title": "SETS",
+    "topics": [
+      "Introduction",
+      "organization and logic as we encounter different kinds of information, objects, tools in the environment.",
+      "Key Terms:Subset, Complement, Union, Intersection, Notations, Venn Diagram"
+    ],
+    "activities": [
+      "In pairs learners gather objects/information",
+      "Instructions",
+      "Divide learners into small groups and assign each group a specific category to gather information about (names of villages where they",
+      "come from, seasons, rivers in Zambia, colors, groups of numbers, unit of sweets, letters of the English alphabet, all the teachers in",
+      "school, shoe sizes, teachers of mathematics at your school, members of your class, sets of numbers, whole numbers less than 10, set of",
+      "multiples of 10 less than 100,…).",
+      "Each group must either research online or brainstorm to list items at least 10 items that fit their assigned category.",
+      "Learners to then present their work to the class, using the blackboard, paperboard or power point."
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

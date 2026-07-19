@@ -1,0 +1,23 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Maths2_Teaching_Module.pdf",
+  "md5": "3c2a26b24aedaab36387e46ac55dee84",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "real-numbers",
+  "lesson": {
+    "lesson": 1,
+    "title": "REAL NUMBERS",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

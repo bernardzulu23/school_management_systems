@@ -1,0 +1,37 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "MATHEMATICS-1-MODULE-FINAL.pdf",
+  "md5": "4276f7fdc41c7e5c2fd1dd57b187256b",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "sets",
+  "lesson": {
+    "lesson": 4,
+    "title": "Sets ……………………………………………",
+    "topics": [
+      "Subtopic 1: Operations on Sets …….……………………………...……………..…...……..……………65",
+      "References ………………………………………...………………………………………………………..79",
+      "INTRODUCTION",
+      "The Form 1 Mathematics Teaching Module has been developed to guide teachers on how to facilitate"
+    ],
+    "activities": [
+      "a) are consistent with teaching and learning in a competence-based curriculum;",
+      "b) show processes that allow achievement of 21st Century Skills such as creativity, collaboration,",
+      "communication and critical thinking;",
+      "HOW TO USE THE MODULE",
+      "through manipulation of tasks that are interactive and learning through practice. We should bearing in mind",
+      "that the desired competences and 21st century skills will NOT be achieved by the topics ‘covered’ but by the",
+      "for their answers, whether or not the answer is right; to plan for solving a problem; to consider alternative ways",
+      "of solving a problem even if the first method yields a correct answer and to consider which of the methods is"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

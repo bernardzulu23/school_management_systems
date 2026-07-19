@@ -1,0 +1,28 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "baanabakazhi-nangwa-baanabalume-bonka-bonka",
+  "lesson": {
+    "week": 1,
+    "lesson": 33,
+    "title": "Baanabakazhi nangwa baanabalume bonka bonka",
+    "topics": [
+      "bafwainwa kwisongolanga mulwabo mambo muntu",
+      "wafwainwa kutemwa ne kusongola yense ye akeba",
+      "kikulutu awo muntu naye muntu ."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "fb9fd6d3f25fe71770d51796046dd022",
+  "detectedShift": 0,
+  "pageCount": 44,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "9-0-localisation-and-movement",
+  "lesson": {
+    "lesson": 4,
+    "title": "9.0: LOCALISATION AND MOVEMENT",
+    "topics": [
+      "Overview:",
+      "In French, localisation refers to the concept of ‘where’ something is, while movement",
+      "involves the concept of ‘where something is going’ or ‘how it is moving’. This topic",
+      "discusses the position of an object, person, or thing in a sentence. It is a crucial topic for",
+      "learners because it equips them with the vocabulary, expressions and grammatical structures"
+    ],
+    "activities": [
+      " Provide a passage with prepositions of place.",
+      " Learners read the passage on prepositions of place (sur, dans, sous …).",
+      " Demonstrate and explain the meaning of each preposition used in the passage by",
+      "using objects in class with different prepositions of place.",
+      "e.g Le stylo est sur la table.",
+      "Le sac est sous la chaise.",
+      "Les élèves sont en classe.",
+      "Le chien est dans la cour."
+    ],
+    "resources": [],
+    "assessment": [
+      "specific competence.",
+      "given at the end of each topic",
+      "questions…)",
+      "Key Points/ Recap",
+      "Expressions used to indicate distance.",
+      "Teaching and Learning Materials: Tempo 1, Equipe"
+    ],
+    "notes": ""
+  }
+}

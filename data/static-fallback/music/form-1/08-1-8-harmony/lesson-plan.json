@@ -1,0 +1,43 @@
+{
+  "subject": "Music",
+  "subjectSlug": "music",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "bf730864b2f0142afce9eb9e8ffe0420",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-8-harmony",
+  "lesson": {
+    "lesson": 8,
+    "title": "1.8 HARMONY",
+    "topics": ["SUB-TOPIC: TRIADS"],
+    "activities": [
+      "(This must come from the syllabus as it is)",
+      "Form 1 Term",
+      "Teaching Module",
+      "LESSON PROGRESSION",
+      "LEARNERS’"
+    ],
+    "resources": [
+      "EXPECTED STANDARD: Triads constructed correctly. (It will only be exhausted upon",
+      "completion of all the lined up activities)",
+      "(This must come from the syllabus as it is)",
+      "Form 1 Term",
+      "Teaching Module",
+      "LESSON PROGRESSION"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUC­",
+      "z Divide learners into three",
+      "groups and assign sol-fa",
+      "syllables to each group",
+      "(Do, Mi and So). Ask"
+    ],
+    "notes": ""
+  }
+}

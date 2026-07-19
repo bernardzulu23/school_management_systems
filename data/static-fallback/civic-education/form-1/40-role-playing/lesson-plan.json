@@ -1,0 +1,46 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "role-playing",
+  "lesson": {
+    "week": 8,
+    "lesson": 40,
+    "title": "Role-playing",
+    "topics": [
+      "Divide class into small groups and assign each group a scenario about a specific special",
+      "group (the blind, the infirm, the hearing impaired, the refugees)",
+      "Ask each group to role play the scenario using the role- playing cards or scripts"
+    ],
+    "activities": [
+      "Teacher to engage groups into a question-and-answer session",
+      "What did you learn about special people?",
+      "How can we promote empathy and understanding in our daily lives?",
+      "Content tips",
+      "Social justice is the belief that everyone deserves equal rights, opportunities, and fair treatment,",
+      "regardless of their background, status, or differences. It focuses on creating a society where everyone is",
+      "valued and treated with respect.",
+      "Two essential values in social justice are kindness and empathy."
+    ],
+    "resources": [
+      "B. Problems with accessing certain places within tall buildings",
+      "C. Lack of access to healthcare",
+      "D. Limited education",
+      "Question 2 Which ones of the following make children vulnerable?",
+      "A. They depend on adults for food",
+      "B. They depend on adults for protection"
+    ],
+    "assessment": [
+      "Question 1 Which of the following is a common barrier being experienced by differently abled people?"
+    ],
+    "notes": ""
+  }
+}

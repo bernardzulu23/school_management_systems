@@ -1,0 +1,29 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "be51a8334dbbdc1d39e63d991d07a29d",
+  "detectedShift": 0,
+  "pageCount": 131,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "tongolapo-ambilo-ibena-kwamba-pa-kulumbulula-bintu-mo-byaila",
+  "lesson": {
+    "week": 5,
+    "lesson": 39,
+    "title": "Tongolapo ñambilo ibena kwamba pa kulumbulula bintu mo byaila?",
+    "topics": [
+      "a) Kulumbulula nzolo kijoma.",
+      "b) Sabwalala ne pa katele.",
+      "c) Jikondakanya nsoke.",
+      "d) Pa kanyo ka mambo."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

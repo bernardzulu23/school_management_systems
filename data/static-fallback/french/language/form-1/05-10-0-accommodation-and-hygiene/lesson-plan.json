@@ -1,0 +1,45 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "fb9fd6d3f25fe71770d51796046dd022",
+  "detectedShift": 0,
+  "pageCount": 44,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "10-0-accommodation-and-hygiene",
+  "lesson": {
+    "lesson": 5,
+    "title": "10.0: ACCOMMODATION AND HYGIENE",
+    "topics": [
+      "Overview",
+      "Accommodation and hygiene are two sides of the same coin that are closely linked to",
+      "environment awareness. Hygiene plays a crucial role in ensuring good health, comfort and",
+      "overall well-being. Understanding the importance of accommodation and hygiene helps",
+      "learners to take care of their surroundings and make informed choices about where they live"
+    ],
+    "activities": [
+      "brique, en bous …).",
+      " Show pictures of different types of houses (traditional and modern).",
+      " Learners describe and identify modern and traditional houses in the pictures provided.",
+      "(en bois, en brique, en bous ciment/en terre battue, en étage …).",
+      " Explain the traditional and modern types of houses in French.",
+      "Traditionelle",
+      "Une maison en bous.",
+      "Une maison en bois."
+    ],
+    "resources": [],
+    "assessment": [
+      "competence.",
+      "end of the each topic",
+      "Key Points/ Recap",
+      "Ways of keeping personal hygiene.",
+      "ii. Materials used for personal hygiene.",
+      "Teaching and learning Materials: Tempo 1, Equipe"
+    ],
+    "notes": ""
+  }
+}

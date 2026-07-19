@@ -1,0 +1,46 @@
+{
+  "subject": "Biology",
+  "subjectSlug": "biology",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Biology-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "de96eadde048b75cdb81b327dc84d1b5",
+  "detectedShift": 0,
+  "pageCount": 153,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "assess-strength-of-union-and-plant-vigor",
+  "lesson": {
+    "week": 6,
+    "lesson": 2,
+    "title": "Assess strength of union and plant vigor.",
+    "topics": [
+      "x) Ask groups to compare each other’s plants during the time frame.",
+      "Discussion",
+      " If you were a farmer, which crop would you propagate by budding and why?",
+      "Biology Teaching Module Form 2-Term 1 & 2",
+      "Content Tip"
+    ],
+    "activities": [
+      "Procedure:",
+      "i) Put learners into small groups of 4-5",
+      "ii) Make all the necessary requirements available for the groups to use.",
+      "iii) Ask the groups to select a healthy, low-growing branch of the parent plant.",
+      "iv) Ask the groups to bend the branch down to the soil surface.",
+      "v) Ask the groups to make a small slit or wound on the underside of the branch (optional, to encourage rooting).",
+      "vi) Ask the groups to cover the wounded part with soil, leaving the tip of the branch exposed.",
+      "vii) Ask the groups to secure the branch with a peg or stone."
+    ],
+    "resources": [],
+    "assessment": [
+      "A school owns a small farm where they grow strawberries. They notice that new strawberry plants keep appearing around the",
+      "mother plant without them planting new seeds. These new plants are connected to the parent plant by thin stems that creep",
+      "along the soil.",
+      "(a) Identify the natural mode of vegetative propagation occurring in Maria’s farm.",
+      "(b) Explain how this method benefits the farmer in terms of crop yield and uniformity.",
+      "(c) What could be a limitation of relying only on this method for large-scale farming?"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "entrepreneurship",
+  "lesson": {
+    "lesson": 11,
+    "title": "ENTREPRENEURSHIP",
+    "topics": [
+      "Introduction",
+      "Entrepreneurship is the process of designing, launching, and running a business or enterprise,",
+      "often with the goal of earning a profit. It involves taking calculated risks, innovating, and",
+      "solving problems to create value for customers and stakeholders. For secondary school",
+      "learners, exploring entrepreneurship opens doors to limitless opportunities, whether it is"
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Create a learning environment that will facilitate a discussion on attributes of a good",
+      "entrepreneur. This can be:",
+      "Natural- Interview successful business people in the community.",
+      "Artificial- Classroom, workshop",
+      "Technology: Videos, Simulated scenarios showing attributes of a good",
+      "entrepreneur.",
+      "Suggested Teaching and Learning Materials"
+    ],
+    "resources": [
+      "together to produce products.",
+      "Subtopic: The Entrepreneur",
+      "Introduction",
+      "Entrepreneurs are essential drivers of economic growth, job creation and societal innovation,",
+      "shaping industries and transforming communities. They operate in various fields from",
+      "technology to healthcare leaving a lasting mark through their determination. In many countries,"
+    ],
+    "assessment": [
+      "Learners to provide a list of entrepreneurial attributes.",
+      "Assign a group task (e.g., designing flashcards attributes of an entrepreneur).",
+      "Observe leadership, teamwork, and adaptability",
+      "Attributes of an entrepreneur",
+      "Creative",
+      "Risk taker"
+    ],
+    "notes": ""
+  }
+}

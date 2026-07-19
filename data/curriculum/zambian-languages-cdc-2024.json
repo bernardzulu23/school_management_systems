@@ -1,0 +1,4369 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Zambian Languages Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Zambian Languages",
+    "slug": "zambian-languages",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.955) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 29,
+    "shiftConfidence": 0.955
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Dialogue"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["1 Use appropriate language to discuss cross-cutting issues"],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Debates"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["1 Debate on any given issues"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-5",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Cultural"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-6",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["1 =Discuss aspects of local cultures"],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-7",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "2 =Use appropriate language to discuss positive and negative beliefs in society"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S1-8",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Facts and"],
+      "learningActivities": [],
+      "expectedStandard": "¤=Simple topics debated accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Traditional and Contemporary"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["1 Explain the value of both traditional and contemporary songs"],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "RIDDLES",
+      "specificCompetences": ["Riddles"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "RIDDLES",
+      "specificCompetences": ["1 =Create riddles"],
+      "learningActivities": [],
+      "expectedStandard": "responded to correctly",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "RIDDLES",
+      "specificCompetences": ["Fiction and Non-Üction"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "RIDDLES",
+      "specificCompetences": [
+        "1 =Narrate Üction and non-Üction stories on given themes Distinguishing Üction from non-Üction stories Narrating Üction stories Narrating non-Üction VWRULHV"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "narrated accordingly",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S5",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.5",
+      "subtopic": "RIDDLES",
+      "specificCompetences": ["Talk"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S5-2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.5",
+      "subtopic": "RIDDLES",
+      "specificCompetences": ["1 Deliver a talk to an audience on a given WRSLF"],
+      "learningActivities": [],
+      "expectedStandard": "delivered accordingly",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4-3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "RIDDLES",
+      "specificCompetences": ["2 =Analyse stories"],
+      "learningActivities": [],
+      "expectedStandard": "analysed correctly",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "RIDDLES",
+      "specificCompetences": ["=Reading"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "RIDDLES",
+      "specificCompetences": [
+        "1 =Read form level texts of diඒerent genres with understanding Reading texts Answering diඒerent types of questions Summarising the read texts Paraphrasing the read texts Discussing meaning of YRFDEXODU\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "READING ALOUD",
+      "specificCompetences": ["=Fluency"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["reading", "aloud"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "READING ALOUD",
+      "specificCompetences": ["1 Read form level texts of diඒerent genres"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["reading", "aloud"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "EXTENSIVE",
+      "specificCompetences": ["Reading"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["extensive"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "EXTENSIVE",
+      "specificCompetences": [
+        "1 Read form level texts of diඒerent genres Reading a variety of texts Summarising read texts RUDOO\\ Variety of texts read DFFRUGLQJO\\ Read texts orally summarised DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["extensive"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": ["Reference"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": [
+        "1 =Locate information in books Locating information from given materials Using index and table of contents to locate information in books"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4-3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": [
+        "1 Skim given text/material to get general information Skimming texts (from magazines, newspapers ) Answering questions"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Questions answered correctly",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4-4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": [
+        "Skimming and Scanning Reading aloud with accuracy, pace and H[SUHVVLRQ Answering oral questions Text read aloud Ýuently Oral questions answered FRUUHFWO\\ Information located from given"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Information located correctly",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4-5",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": [
+        "2 Scan given text/material to get speciÜc information Scanning texts (from magazines, newspapersÈ) Answering questions Given text scanned FRUUHFWO\\ Questions answered FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["Structure of a composition"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= =Outline the structure of a= composition="],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-3",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["Paragraphing"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-4",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= =Build paragraphs from= given topic sentences="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-5",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["Autobiography"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-6",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1= Write an autobiography= =¤= Discussing the features and structure of an autobiography="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "presented accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-7",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["Narratives"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-8",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= =Write both Üction and= non-Üction narratives ="],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-9",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["Letter Writing =1.3.1.5.1= =Write an informal letter="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-10",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "2= Write a semi-formal letter= Discussing the structure and features of a semi-formal letter="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-11",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Descriptive= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-12",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1= Write a descriptive essay= ¤= Discussing the structure and features of descriptive composition="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-13",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Argumentative= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1-14",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= Write an argumentative= composition="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["Note Summary"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1 Take notes from any oral source Discussing features and structure of note summary Writing relevant points from an oral source Features and structure of note summary discussed DFFRUGLQJO\\ Relevant points from an oral source written FRUUHFWO\\ Writing of an informal letter Informal letter written FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-3",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["2= Make notes from a written source="],
+      "learningActivities": [],
+      "expectedStandard": "source written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-4",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["Prose Summary="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-5",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1= Summarise short passages= Discussing the features of prose summary Identifying key points from a text= Summarising a given text into a paragraph Features of a prose summary discussed DFFRUGLQJO\\ Key points of a text LGHQWL¿HG DFFRUGLQJO\\ Given text summarised into a paragraph DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-6",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Notices and Posters="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2-7",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1= Write notices and posters= ¤ Discussing the features of notices and posters Discussing the purpose of notices and posters Writing notices and posters Features of notices and posters discussed DFFRUGLQJO\\ Purpose of notices and posters discussed DFFRUGLQJO\\ Notices and posters written FUHDWLYHO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "WORD CLASSES=",
+      "specificCompetences": ["= Parts of= Speech="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "classes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "WORD CLASSES=",
+      "specificCompetences": [
+        "1= Categorise words= according to word classes= Identifying the word classes (nouns, pronouns, verbs, adverbs, adjectives, conjunctions, locatives, interjections) Discussing each word class with examples Classifying words according to classes Word classes identiÜed FRUUHFWO\\ Word classes discussed with"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "to classes correctly",
+      "keywords": ["word", "classes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Punctuation= Marks ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Punctuate sentences = Explaining the functions of punctuation marks capital letters, comma, full stop, exclamation, mark, question markÈ) Applying punctuation marks in sentences Functions of punctuation"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "marks explained accurately",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Countable and Uncountable Nouns="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Use countable and uncountable nouns= Discussing meaning of countable and uncountable QRXQV Identifying countable and uncountable nouns Sorting countable and uncountable nouns"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "sorted accordingly",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Collective, Abstract and Concrete Nouns="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-4",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Use collective, abstract and concrete nouns in sentences= Discussing meaning of collective, abstract and concrete nouns Identifying collective, abstract and concrete nouns Sorting collective, abstract and concrete nouns Constructing sentences using collective, abstract and concrete nouns Meanings of collective, abstract and concrete nouns"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-5",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Structure of a Noun="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-6",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Explain the structure of a noun= Discussing the structure of a noun= Segmenting nouns into constituent parts preÜx and stem) The structure of a noun"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constituent parts correctly",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-7",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Proper and Common Nouns="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3-8",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Use proper and common nouns= Discussing meaning of proper and common nouns Identifying proper and common nouns Meaning of proper and common nouns discussed DFFRUGLQJO\\ Proper and common nouns"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Adverbs sorted correctly",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S6",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.6",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Long and= Short Vowels="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S6-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.6",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Distinguish= word= meaning according to vowel length = Distinguishing word meaning according to short DQG long vowels Giving examples of words with long and short YRZHOV Meaning of words according to long and short YRZHOV distinguished FRUUHFWO\\ Examples of words with long and short vowels given FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S4",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.4",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Types of= Pronouns="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S4-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.4",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Use pronouns= Discussing the meaning and function of pronouns Identifying the diඒerent types of pronouns personal, possessive, and demonstrative) Using diඒerent types of pronouns in sentences The meaning and function of pronouns discussed DFFRUGLQJO\\ Diඒerent types of pronouns LGHQWL¿HG FRUUHFWO\\ Diඒerent types of pronouns"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "used in sentences correctly",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S5",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.5",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Types of Adverbs="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S5-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.5",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Use diඒerent types of adverbs= Explaining the meaning and function of adverbs Meaning and function of"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "adverbs explained correctly",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S8",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.8",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Aඒixation="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S8-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.8",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Use prefixes= and= suඓxes to build words Explaining the meaning and function of aඓxation Identifying the diඒerent types of aඓxes Classifying aඓxes according to type Forming words using D൵L[HV Meaning and function of"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "AfÜxes classiÜed correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S9",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.9",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Use diඒerent types of= ideophones in sentences= Explaining the meaning of LGLRSKRQHV Meaning of idiophones"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "explained correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S7",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.7",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Locatives="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S7-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.7",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Use locatives= in sentences= Explaining meaning and function of locatives Identifying locatives in sentences and texts Meaning and functions of"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Locatives correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S10",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.10",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= =Present Tense="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S10-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.10",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Use diඒerent forms of present tense= Discussing the functions of diඒerent forms of present tense (present simple, present continuous and present perfect, present perfect continuous) Identifying the present tense marker in words Constructing sentences using diඒerent forms of the present tense Constructing positive and negative sentences in the present tense Constructing interrogative sentences in the present tense= Meaning and function of present tense explained DFFRUGLQJO\\ Present tense marker"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "tense constructed correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S10-3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.10",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= =Past Tense="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S10-4",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.10",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "= =Use diඒerent forms of past tense= Explaining meaning and function of diඒerent forms of past tense (past simple, past continuous, past perfect, perfect continuous) Identifying the past tense marker in words Meaning and function of Past"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S11",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.11",
+      "subtopic": "DIRECT AND INDIRECT SPEECH=",
+      "specificCompetences": ["= =Direct Speech="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S11-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.11",
+      "subtopic": "DIRECT AND INDIRECT SPEECH=",
+      "specificCompetences": [
+        "1= Use Direct Speech Discussing the meaning and function of direct speech Identifying direct speech sentences in texts Punctuate direct speech VHQWHQFHV Construct sentences to express direct speech Meaning and function of Direct speech explained DFFRUGLQJO\\ Direct speech sentences"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed accordingly.",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S11-3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.11",
+      "subtopic": "DIRECT AND INDIRECT SPEECH=",
+      "specificCompetences": ["= =Indirect Speech="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S11-4",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.11",
+      "subtopic": "DIRECT AND INDIRECT SPEECH=",
+      "specificCompetences": [
+        "1= Construct indirect speech sentences Identifying indirect speech VHQWHQFHV Punctuating indirect speech VHQWHQFHV Constructing sentences to express indirect speech Change indirect to direct speech and vice-versa Indirect speech sentences"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "vice versa accordingly",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S13",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.13",
+      "subtopic": "FIGURATIVE= LANGUAGE=",
+      "specificCompetences": ["= =Proverbs="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S13-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.13",
+      "subtopic": "FIGURATIVE= LANGUAGE=",
+      "specificCompetences": [
+        "1= Use proverbs= Discussing the meaning and use of proverbs Categorising proverbs according to speciÜc IXQFWLRQV Identifying appropriate SURYHUEV to be used in particular situations Identifying appropriate situations in which to use particular proverbs Meaning and use of proverbs discussed DFFRUGLQJO\\ Proverbs categorised correctly according to speciÜc functions Appropriate proverbs to be used in particular situations"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed correctly",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S12",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.12",
+      "subtopic": "ACTIVE AND PASSIVE =VOICE",
+      "specificCompetences": ["= =Active and Passive Sentences="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S12-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.12",
+      "subtopic": "ACTIVE AND PASSIVE =VOICE",
+      "specificCompetences": [
+        "1= Use active and passive voice= Explaining the meaning and function of active and passive voice Distinguishing active from passive voice Meaning and function of active and passive voice"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Active voice correctly",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S14",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.14",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": ["= Word Meaning="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S14-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.14",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": [
+        "1= Use form level vocabulary= Discussing meaning of selected vocabulary Presenting meanings of YRFDEXODU\\ Using selected vocabulary in sentences Meaning of selected vocabulary discussed DFFRUGLQJO\\ Meanings of selected vocabulary presented FRUUHFWO\\ Selected vocabulary FRUUHFWO\\ used in VHQWHQFHV"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S14-3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.14",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": ["= Counting Numbers="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S14-4",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.14",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": ["1= Count from 1 to 1000"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S13-3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.13",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": ["= =Sayings="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S13-4",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.13",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": [
+        "1= Use sayings= Discussing the meaning and use of saying Categorising sayings according to speciÜc IXQFWLRQV Using sayings in discourse Meaning and use of sayings"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed correctly",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "= TRANSLATION=",
+      "specificCompetences": ["= Concepts in Translation="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1-2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "= TRANSLATION=",
+      "specificCompetences": [
+        "1= =Explain the concepts= used in translation= Discussing meaning and importance of translation"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "diඒerentiated accordingly",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1-3",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "= TRANSLATION=",
+      "specificCompetences": ["= Translation Techniques="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1-4",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "= TRANSLATION=",
+      "specificCompetences": [
+        "1= =Apply various translation techniques to translate a text from English into a Zambian Language and vice- versa= Translating a text from English into a Zambian Language and vice-versa using various techniques literal translation, substitution, borrowing, loaning, transliteration, description, generalisation) Various translation"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "techniques used accordingly",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": ["National = Values="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": [
+        "1= Use appropriate language= in discussions= Discussing national values and principles patriotism, respect, hard ZRUN National values and principles discussed accordingly using appropriate language"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": ["= Debate="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": [
+        "1= Use appropriate language= to debate with evidence= Gathering information on given topic Debating introducing motion, proposing, opposing, interjecting, rebutting È) Information on given topic"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "gathered accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-5",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": ["Cultural"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-6",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": [
+        "1 Use appropriate ODQJXDJH to discuss cultural values Discussing cultural values respect, hospitality, dressing, responsibilityÈ) Presenting Ündings from JURXSV Cultural values discussed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-7",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": ["Facts and"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1-8",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": [
+        "1 Distinguish facts from opinions Distinguishing facts from RSLQLRQV in conversations, speeches or meetings Facts distinguished from"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "opinions accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": ["Play"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2-2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": [
+        "1 Using appropriate language to act out SOD\\V on given cross- cutting themes Acting out plays on cross- cutting issues human, rights, mental health, social and emotional, OHDUQLQJ Plays acted out accordingly1 Using DSSURSULDWH ODQJXDJH"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": ["Traditional DQG"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S3-2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "= CONVERSATIONS=",
+      "specificCompetences": [
+        "1 Analyse the meaning of FRQWHPSRUDU\\ DQG traditional songs Listening to songs and answering oral questions Singing songs Discussing meaning in VRQJV Songs listened to attentively and questions answered FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Songs sang accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "RIDDLES= AND PUZZLES=",
+      "specificCompetences": ["= Puzzles ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["riddles", "puzzles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S4-2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "RIDDLES= AND PUZZLES=",
+      "specificCompetences": ["1= =Analyse puzzles= Initiating puzzles Providing answers"],
+      "learningActivities": [],
+      "expectedStandard": "Answers provided correctly",
+      "keywords": ["riddles", "puzzles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S5",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.5",
+      "subtopic": "STORY= TELLING=",
+      "specificCompetences": [
+        "= Fiction Stories= =2.1.5.1.1= =Tell Üction= stories= Narrating Üction stories Analysing the moral OHVVRQV in Üction stories"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["story", "telling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S6",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.6",
+      "subtopic": "PUBLIC= SPEAKING =",
+      "specificCompetences": ["= Speech ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["public", "speaking"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S6-2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.6",
+      "subtopic": "PUBLIC= SPEAKING =",
+      "specificCompetences": [
+        "1= =Use appropriate language= to deliver a speech on a= given topic= Delivering a speech"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Speech delivered accordingly",
+      "keywords": ["public", "speaking"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "=INTENSIVE= READING=",
+      "specificCompetences": ["= Reading= Comprehension="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["intensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "=INTENSIVE= READING=",
+      "specificCompetences": [
+        "1= Read a variety of form= level texts with= understanding = Reading texts Answering questions Discussing vocabulary Summarising read texts Paraphrasing texts"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["intensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "=READING=",
+      "specificCompetences": ["= Reading Fluency="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "=READING=",
+      "specificCompetences": [
+        "1= Read form= level texts= Reading aloud form level texts with accuracy, pace and expression Form level texts read with accuracy, pace and H[SUHVVLRQ"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "=EXTENSIVE= READING=",
+      "specificCompetences": ["= Extensive Reading="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["extensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "=EXTENSIVE= READING=",
+      "specificCompetences": [
+        "1= Read a variety of texts = Reading a variety of texts Summarising read texts RUDOO\\ and/ or in writing Variety of texts read DFFRUGLQJO\\ Read texts summarised DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["extensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S4",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.4",
+      "subtopic": "=STUDY SKILLS=",
+      "specificCompetences": ["= Reference= Resources="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S4-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.4",
+      "subtopic": "=STUDY SKILLS=",
+      "specificCompetences": [
+        "1= =Locate information= in books = Locating information from given materials dictionaries, magazinesÈ) Information located from given materials DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S4-3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.4",
+      "subtopic": "=STUDY SKILLS=",
+      "specificCompetences": ["= Skimming and= Scanning="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S4-4",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.4",
+      "subtopic": "=STUDY SKILLS=",
+      "specificCompetences": [
+        "1= =Skim and scan diඒerent materials = Finding speciÜc and general information from magazines, newspapers, booksÈ) Answering questions SpeciÜc and general information skimmed and"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "scanned correctly",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Biography="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= Write a biography= of a given personality= Discussing the features of a ELRJUDSK\\ Writing a biography Features of a biography"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-3",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Expository= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-4",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= Write expository composition= Discussing the features of an expository composition Writing an expository FRPSRVLWLRQ Features of an expository composition discussed DFFRUGLQJO\\ An expository composition"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-5",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Letter Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-6",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= Write an application letter= Discussing the structure and features of a formal letter"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-7",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Descriptive= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-8",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["1= Write a descriptive composition ="],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-9",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "= Report Writing= =2.3.1.5.1= =Write a report about a given event= Discussing the features and structure of a report Writing a report RQ a given HYHQW Features of a report"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "A report written correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-10",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Minutes="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-11",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= =Write minutes of proceedings = Discussing the structure and features of minutes The structure and features of minutes discussed adequately"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-12",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Argumentative= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-13",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= =Write an argumentative composition = Discussing the features and structure of an argumentative composition Writing an argumentative FRPSRVLWLRQ The features and structure of an argumentative composition discussed DFFRUGLQJO\\ An argumentative composition written DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Prose Summary="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= =Summarise given texts Discussing features of prose VXPPDU\\ Identifying key points of a WH[W Summarising a given text into a paragraph Features of prose summary"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "into a paragraph accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S3",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.3",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Passages="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S3-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.3",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= =Write dictated text= Writing a dictated text Dictated text written"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-14",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["= Articles="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-15",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= =Write articles for magazines and= newspapers= Discussing the structure and features of an article."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["Noun"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["1 Categorise nouns into noun classes"],
+      "learningActivities": [],
+      "expectedStandard": "classes correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1-3",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "2 Analyse grammatical agreement in VHQWHQFHV Identifying grammatical agreement in sentences Expressing agreement in sentences according to nouns classes Constructing sentences that express subject Î object grammatical FRQFRUG Grammatical agreement"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.2",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": ["Types of"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S2-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.2",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1 Classify pronouns according to type Identifying the diඒerent types of pronouns Possessive, DemonstrativeÈ) Classifying pronouns according to type Using diඒerent types of pronouns in sentences"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "used in sentences correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S3",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.3",
+      "subtopic": "COMPOSITION=",
+      "specificCompetences": [
+        "1= =Use adjectives in= sentences= Discussing the meaning and function of adjectives Identifying diඒerent types of adjectives number, colour, quality Sorting adjectives according to type Constructing sentences using diඒerent types of DGMHFWLYHV Meaning and functions of adjectives discussed Diඒerent types of adjectives"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Adjectives sorted correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S4",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.4",
+      "subtopic": "CONJUNCTIONS=",
+      "specificCompetences": ["= Types of= Conjunctions="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conjunctions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S4-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.4",
+      "subtopic": "CONJUNCTIONS=",
+      "specificCompetences": [
+        "1= =Use diඒerent types of= conjunctions in sentences= Discussing diඒerent types of conjunctions Identifying conjunctions in VHQWHQFHV coordinating, correlative, contrastiveÈ) Classifying conjunctions according to type Discussing the role of conjunctions in sentences contrast, reason, condition, addition comparison) Using conjunctions in VHQWHQFHV Diඒerent types of conjunction discussed DFFRUGLQJO\\ Conjunctions identiÜed DFFRUGLQJO\\ Conjunctions classiÜed DFFRUGLQJ"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "sentences correctly",
+      "keywords": ["conjunctions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S7",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.7",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Aඒixation="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S7-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.7",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["1= =Use aඓxes to build words="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S7-3",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.7",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Derivation ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S7-4",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.7",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["1= =Derive nouns from verbs= and vice-versa="],
+      "learningActivities": [],
+      "expectedStandard": "sentences correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S5",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.5",
+      "subtopic": "= INTERJECTIONS=",
+      "specificCompetences": ["= Interjections="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["interjections"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S5-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.5",
+      "subtopic": "= INTERJECTIONS=",
+      "specificCompetences": [
+        "1= =Use interjections= Identifying interjections in VHQWHQFHV Using interjections in VHQWHQFHV Interjections in sentences"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "sentences correctly",
+      "keywords": ["interjections"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S6",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.6",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["Punctuation = Marks="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S6-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.6",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= =Punctuate texts = Discussing the use of SXQFWXDWLRQ PDUNV capital, letters, comma, full stop, exclamation mark, question markÈ) Use of punctuation marks GLVFXVVHG DFFRUGLQJO\\ Texts punctuated DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S8",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.8",
+      "subtopic": "= ONOMATOPOEIA",
+      "specificCompetences": ["= Onomatopoeia= =2.4.8.1.1= =Use onomatopoeia="],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed accordingly",
+      "keywords": ["onomatopoeia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S9",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.9",
+      "subtopic": "= ONOMATOPOEIA",
+      "specificCompetences": ["= Future Tense="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["onomatopoeia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S9-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.9",
+      "subtopic": "= ONOMATOPOEIA",
+      "specificCompetences": ["1= =Use diඒerent forms of future tense="],
+      "learningActivities": [],
+      "expectedStandard": "tense constructed correctly",
+      "keywords": ["onomatopoeia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S10",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.10",
+      "subtopic": "ACTIVE AND= PASSIVE VOICE",
+      "specificCompetences": ["= =Active and= Passive= Sentences="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S10-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.10",
+      "subtopic": "ACTIVE AND= PASSIVE VOICE",
+      "specificCompetences": ["1= Construct sentences in active and passive voice="],
+      "learningActivities": [],
+      "expectedStandard": "vice versa accordingly",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S11",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.11",
+      "subtopic": "ACTIVE AND= PASSIVE VOICE",
+      "specificCompetences": ["= =Proverbs="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S11-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.11",
+      "subtopic": "ACTIVE AND= PASSIVE VOICE",
+      "specificCompetences": [
+        "= =Use diඒerent types of proverbs= Discussing the meaning and use of proverbs Categorising proverbs according to speciÜc IXQFWLRQV Identifying appropriate proverbs to use in particular situations Meaning and use of proverbs"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed correctly",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S11-3",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.11",
+      "subtopic": "ACTIVE AND= PASSIVE VOICE",
+      "specificCompetences": ["= =Sayings="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S11-4",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.11",
+      "subtopic": "ACTIVE AND= PASSIVE VOICE",
+      "specificCompetences": [
+        "1= Use sayings in sentences Discussing the meaning and use of saying Categorising sayings according to speciÜc IXQFWLRQV Identifying appropriate sayings to use in particular VLWXDWLRQV Meaning and use of sayings"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed accordingly",
+      "keywords": ["active", "passive", "voice"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S12",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.12",
+      "subtopic": "= VOCABULARY=",
+      "specificCompetences": ["= Word Meaning="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S12-2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.12",
+      "subtopic": "= VOCABULARY=",
+      "specificCompetences": [
+        "1= Use form level words in sentences= Discussing meaning of given vocabulary Meaning of selected vocabulary discussed DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "used in sentences correctly",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "= TRANSLATION =",
+      "specificCompetences": ["= Translation= Techniques="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1-2",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "= TRANSLATION =",
+      "specificCompetences": [
+        "1= Apply various translation= techniques to translate text= from English into a Zambian language and vice-versa= Translating a given text using various techniques adaptation, ampliÜcation, compensation, particularisation, established, equivalent and reduction) Translation techniques used DSSURSULDWHO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Dialogue"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 =Use appropriate language to distinguish facts from opinions on given themes Distinguishing facts from opinions in given GLVFRXUVH Presenting identiÜed facts and opinions on diඒerent cross-cutting issues (HIV and AIDS, climate change, good governance, drug, substance abuseÈ) Facts distinguished from"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "opinions accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Parliamentary"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-4",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 =Debate on issues by providing evidence and rebutting Gathering information on a given topic Debating in a parliamentary style Information on a given topic"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Given topic debated accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-5",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Cultural"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1-6",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 =Use appropriate language to discuss how modernity has aඒected the Zambian cultural values Identifying Zambian cultural values Discussing how modernity has aඒected the Zambian cultural YDOXHV Zambian cultural values"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Play"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 =Use appropriate language to act out a play Acting out plays Plays acted out accordingly using appropriate language"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "1Riddles",
+      "specificCompetences": [
+        "1 =Analyse the structure of riddles Identifying riddles Analysing the structure and meaning of riddles"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["1riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S4",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.4",
+      "subtopic": "1Riddles",
+      "specificCompetences": ["Speech"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["1riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S4-2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.4",
+      "subtopic": "1Riddles",
+      "specificCompetences": [
+        "1 Use appropriate language to deliver a speech Delivering a speech on a JLYHQ Speech delivered DFFRUGLQJO\\ Riddles identiÜed FRUUHFWO\\ Structure and meaning of riddles analysed FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["1riddles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "INTENSIVE READING=",
+      "specificCompetences": ["= Reading= Comprehension="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["intensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1-2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "INTENSIVE READING=",
+      "specificCompetences": [
+        "1= Read form level texts = Reading texts Answering questions from texts read Discussing vocabulary from read texts Summarising read texts Paraphrasing sentences from read texts Form level texts read DFFRUGLQJO\\ Questions answered FRUUHFWO\\ Vocabulary discussed DFFRUGLQJO\\ Form level text summarised DFFRUGLQJO\\ Form level text paraphrased DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["intensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1-3",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "INTENSIVE READING=",
+      "specificCompetences": [
+        "2= Evaluate materials read= Evaluating materials UHDG Materials evaluated DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["intensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.2",
+      "subtopic": "EXTENSIVE= READING=",
+      "specificCompetences": ["= Extensive= Reading="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["extensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S2-2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.2",
+      "subtopic": "EXTENSIVE= READING=",
+      "specificCompetences": [
+        "1= Read a variety of texts= Reading= a variety of texts Retelling what has been read= Variety of texts read DFFRUGLQJO\\ What has been read retold DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["extensive", "reading"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S3",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.3",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": ["= Reference Resources="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S3-2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.3",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": [
+        "1= Locate information= from= written source= Using =table =of =content, glossary and index to locate= information Information located DFFRUGLQJO\\ using table of content, glossary DQG index"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S3-3",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.3",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": ["= Skimming and= Scanning="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S3-4",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.3",
+      "subtopic": "STUDY SKILLS",
+      "specificCompetences": [
+        "1= Use appropriate study= skills to Ünd appropriate= information= Skimming Scanning Information skimmed DFFRUGLQJO\\ Information scanned DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["study", "skills"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Expository= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1= Write an expository= composition="],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Narratives="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-4",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1= Write narrative= composition ="],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-5",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Letter writing= UHFRPPHQGDWL on letter)"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-6",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1= Write a recommendation letter="],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-7",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Descriptive= Writing ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-8",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1= Write a= descriptive essay= about an event="],
+      "learningActivities": [],
+      "expectedStandard": "written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-9",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "= Report Writing= =3.3.1.5.1= Write reports on various situations/ events="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Report written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-10",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "= Speech Writing= =3.3.1.8.1= Write an introductory= speech= Discussing the features and structure of an introductory speech= Writing an introductory speech= Presenting an introductory speech= The features and structure of an introductory speech"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "presented accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-11",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "2= Write key note speech= Discussing the features and structure of a key note speech= Writing a key note speech Presenting a key note speech= Features and structure of a key note speech discussed DFFRUGLQJO\\ Key note speech written FRUUHFWO\\ Key note speech presented DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-12",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Letter to the= Editor="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-13",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1= Write a letter to the editor="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-14",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Argumentative= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1-15",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1= Write an argumentative composition ="],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Advertisements="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "1= Write advertisements= Discussing the structure and features of an advert Writing an advertisement Structure and features of an"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "advert discussed accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Passages="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3-2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "1= Write dictated text= Writing a dictated text Dictated text written DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["Prose Summary"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-4",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1 =Summarise given text"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-5",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["Tabulations"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-6",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1 =Summarise given text into a table"],
+      "learningActivities": [],
+      "expectedStandard": "into table form accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-7",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["2 =Summarise given text into a graph"],
+      "learningActivities": [],
+      "expectedStandard": "into graph form accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-8",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["Diary"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2-9",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["1 =Write diary entries"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Noun Classes="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "1= Use noun classes to show= agreement in sentences= Categorising nouns according to classes Constructing sentences that express grammatical agreement according to noun classes Correcting sentences with wrong agreement"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "= Verb Structure= =3.4.2.1.1= Explain the structure of a= verb= Identifying verbs Analysing the structure of a YHUE Constructing sentences using diඒerent verb forms Verbs identiÜed correc=tly Structure of verbs analysed FRUUHFWO\\ Sentences using diඒerent verb forms constructed FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": ["= Verbal= Extensions="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2-3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "= COMPOSITION=",
+      "specificCompetences": [
+        "1= Apply verbal extensions= Identifying verbal extensions (causative, reciprocal, reversal) Discussing the meaning of verbal extensions Using verbal extensions in VHQWHQFHV Verbal extensions identiÜed FRUUHFWO\\ Meaning of verbal extensions discussed DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Verbal extension correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": ["= Punctuation="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "PUNCTUATION=",
+      "specificCompetences": [
+        "1= Punctuate= paragraphs= Identifying punctuation marks in paragraphs capital letters, comma, full stop, exclamation mark, question markÈ) Punctuating short SDUDJUDSKV Punctuation in paragraphs"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed correctly",
+      "keywords": ["punctuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Aඒixation="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Use aඓxes to build words= Identifying aඓxes in words Using aඒixes to build words AfÜxes in words identiÜed DFFRUGLQJO\\ Words built correctly using aඒixes"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4-3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Derivation ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4-4",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Derive nouns from verbs= and vice-= versa= Forming nouns from verbs and vice-versa Using derived words in VHQWHQFHV Nouns and verbs formed FRUUHFWO\\ Derived words used in"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "sentences correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4-5",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Compound= Words="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4-6",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Use compound words in= sentences= Discussing the structure and meaning of compound ZRUGV Identifying compound ZRUGV Using compounds words in VHQWHQFHV Structure and meaning of compound words discussed DFFRUGLQJO\\ Compound words identiÜed FRUUHFWO\\ Compound words used in"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "sentences correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4-7",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Reduplicated= Words="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S4-8",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.4",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Form reduplication of given verbs= Identifying reduplicated ZRUGV Reduplicated words"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "words analysed correctly",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S5",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.5",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": ["= Future Tense="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S5-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.5",
+      "subtopic": "WORD BUILDING=",
+      "specificCompetences": [
+        "1= Use diඒerent forms of future tense = Identifying diඒerent forms of the future tense immediate future, remote IXWXUH Constructing sentences using diඒerent forms of the IXWXUH Diඒerent tenses identiÜed DFFRUGLQJO\\ Sentences constructed using diඒerent tenses FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "building"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S6",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.6",
+      "subtopic": "= COMPARISON=",
+      "specificCompetences": ["= Comparatives="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["comparison"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S6-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.6",
+      "subtopic": "= COMPARISON=",
+      "specificCompetences": [
+        "1= Use comparatives in sentences= Identifying comparative markers in language (size, height, appearance, colour, mannerÈ) Constructing sentences to express comparison Comparative markers in"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "language identiÜed correctly",
+      "keywords": ["comparison"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S7",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.7",
+      "subtopic": "DIRECT= AND INDIRECT= SPEECH=",
+      "specificCompetences": ["= Direct Speech="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S7-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.7",
+      "subtopic": "DIRECT= AND INDIRECT= SPEECH=",
+      "specificCompetences": [
+        "1= Change direct speech to indirect speech and vice-versa= Identifying Direct Speech VHQWHQFHV Punctuating Direct Speech VHQWHQFHV Constructing sentences to express Direct speech Changing sentences from direct to indirect speech and vice-versa Direct Speech sentences"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "vice-versa accordingly",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S7-3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.7",
+      "subtopic": "DIRECT= AND INDIRECT= SPEECH=",
+      "specificCompetences": ["= Indirect Speech="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S7-4",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.7",
+      "subtopic": "DIRECT= AND INDIRECT= SPEECH=",
+      "specificCompetences": [
+        "1= Change indirect speech= into direct speech and vice-versa= Identifying Indirect Speech VHQWHQFHV Punctuating Indirect Speech VHQWHQFHV Constructing sentences to express Indirect speech Changing sentences from indirect to direct speech and vice-versa Indirect Speech sentences"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "versa accordingly",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S8",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.8",
+      "subtopic": "DIRECT= AND INDIRECT= SPEECH=",
+      "specificCompetences": ["= Sentence= Structure="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S8-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.8",
+      "subtopic": "DIRECT= AND INDIRECT= SPEECH=",
+      "specificCompetences": [
+        "1= Analyse a sentence into parts= Discussing parts of a VHQWHQFH subject-predicate) Identifying parts of a VHQWHQFH Parts of a sentence discussed DFFRUGLQJO\\ Parts of a sentence identiÜed FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["direct", "indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S9",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.9",
+      "subtopic": "WORD RELATIONSHIPS",
+      "specificCompetences": ["= Homophones="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S9-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.9",
+      "subtopic": "WORD RELATIONSHIPS",
+      "specificCompetences": [
+        "1= Use homophones= in= sentences= Discussing the meaning of KRPRSKRQHV Identifying homophones Using homophones in VHQWHQFHV Meaning and use of homophones discussed DFFRUGLQJO\\ Homophones identiÜed FRUUHFWO\\ Homophones used in"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discourse appropriately",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S10",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.10",
+      "subtopic": "FIGURATIVE=",
+      "specificCompetences": ["= =Proverbs="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["figurative"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S10-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.10",
+      "subtopic": "FIGURATIVE=",
+      "specificCompetences": [
+        "1= Use diඒerent types of= proverbs= Discussing the meaning and use of proverbs Categorising proverbs Meaning and use of proverbs discussed DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "functions correctly",
+      "keywords": ["figurative"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S10-3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.10",
+      "subtopic": "FIGURATIVE=",
+      "specificCompetences": ["=Sayings"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["figurative"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S10-4",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.10",
+      "subtopic": "FIGURATIVE=",
+      "specificCompetences": ["1 =Use sayings"],
+      "learningActivities": [],
+      "expectedStandard": "functions correctly",
+      "keywords": ["figurative"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S10-5",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.10",
+      "subtopic": "FIGURATIVE=",
+      "specificCompetences": ["=Idioms"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["figurative"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S10-6",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.10",
+      "subtopic": "FIGURATIVE=",
+      "specificCompetences": ["1 =Use idioms"],
+      "learningActivities": [],
+      "expectedStandard": "functions correctly",
+      "keywords": ["figurative"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S11",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.11",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": ["= =Word Meaning="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S11-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.11",
+      "subtopic": "VOCABULARY=",
+      "specificCompetences": [
+        "1= Explain meaning of form level vocabulary Explaining the meanings of given vocabulary Using given vocabulary in sentences. Meanings of given YRFDEXODU\\ explained FRUUHFWO\\ Selected vocabulary used in"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "sentences correctly",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "=",
+      "specificCompetences": ["= Translation= Techniques="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": [],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1-2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "=",
+      "specificCompetences": [
+        "1= =Apply various translation= techniques to translate= texts from English into a Zambian= language and vice-versa= Translating a given text using various translation techniques to translate the source language into target language A given text translated DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": [],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Discussion"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1-2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 =Use appropriate language to discuss given topics Discussing given topics on cross-cutting issues health and nutrition, mental health, HQWUHSUHQHXUVKLS education È) Given cross-cutting issues"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1-3",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Debate"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1-4",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 =Present arguments in a logical order Gathering information on a given topic Debating a given topic Information on a given topic"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Given topic debated accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1-5",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Cultural"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1-6",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 =Identify ways of preserving cultural practices Identifying positive and negative practices of the Zambian culture Discussing ways of preserving positive practices of the Zambian culture Positive and negative practices of the Zambian culture"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "discussed accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.2",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": ["Speech"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S2-2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.2",
+      "subtopic": "CONVERSATIONS",
+      "specificCompetences": [
+        "1 Deliver a speech to an audience Delivering a speech on given topic TOPIC= SUB-TOPIC="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Speech delivered accordingly",
+      "keywords": ["conversations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "INTENSIVE",
+      "specificCompetences": ["=Reading"],
+      "learningActivities": [],
+      "expectedStandard": "= questions answered correctly",
+      "keywords": ["intensive"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1-2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "INTENSIVE",
+      "specificCompetences": ["2 =Evaluate materials UHDG Evaluating materials Presenting Ündings"],
+      "learningActivities": [],
+      "expectedStandard": "Findings presented accordingly",
+      "keywords": ["intensive"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "INTENSIVE",
+      "specificCompetences": ["Extensive"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["intensive"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2-2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "INTENSIVE",
+      "specificCompetences": [
+        "1 Read a variety of texts Reading and retelling what is read Making summaries of what is read Texts read and retold DFFRUGLQJO\\ Summaries of what is read made DFFRUGLQJO\\ TOPIC= SUB-TOPIC="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["intensive"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Essay Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= Write an essay="],
+      "learningActivities": [],
+      "expectedStandard": "An essay written correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-3",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Formal Letter= Complaint letter)"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-4",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1= Write a complaint letter= =¤= Discussing features of a complaint letter="
+      ],
+      "learningActivities": [],
+      "expectedStandard": "letter discussed accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-5",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Descriptive= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-6",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= Write a descriptive= composition="],
+      "learningActivities": [],
+      "expectedStandard": "written correctly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-7",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Report Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-8",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= Write reports on witnessed incidences ="],
+      "learningActivities": [],
+      "expectedStandard": "Report written accordingly",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-9",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Argumentative= Writing="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-10",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["1= Write an argumentative composition ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-11",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Curriculum= Vitae="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-12",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1= Write a curriculum vitae= ¤ Discussing features and VWUXFWXUH of a curriculum vitae= Writing a curriculum vitae Features and structure of a FXUULFXOXP vitae discussed DFFRUGLQJO\\ Curriculum vitae written"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "= Prose Summary= 4.3.2.1.1= Summarise a given text= Identifying relevant points Writing prose summary Relevant points identiÜed DFFRUGLQJO\\ Prose summary written DFFRUGLQJO\\ Writing an argumentative FRPSRVLWLRQ An argumentative composition written DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-13",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Speech="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1-14",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1 Write a vote of thanks Discussing features of a vote of thanks Features of vote of thanks discussed adequately"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": ["= Verbal= Extensions="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "= COMPOSITION",
+      "specificCompetences": [
+        "1 = Apply verbal extensions= Identifying verbal H[WHQVLRQV Discussing the meaning of verbal extensions (intensive applicative È) Changing the form of a verb using given verbal extensions Verbal extensions identiÜed FRUUHFWO\\ Meaning of verbal extensions discussed DFFRUGLQJO\\ Form of the verb changed FRUUHFWO\\ using given verbal extensions"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "WORD",
+      "specificCompetences": ["&RPSRXQG :RUGV"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "WORD",
+      "specificCompetences": [
+        "1 Use compound words in sentences Discussing the structure and meaning of compound of words Identifying compound ZRUGV Using compound words in VHQWHQFHV Structure and meaning of compound words discussed DFFRUGLQJO\\ Compound words"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "sentences correctly",
+      "keywords": ["word"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2-3",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "WORD",
+      "specificCompetences": ["Reduplicated"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2-4",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "WORD",
+      "specificCompetences": [
+        "1 Use reduplicated words in sentences Discussing the eඒect of reduplication on the meaning of words Identifying reduplicated ZRUGV Analysing the structure of reduplicated words Using reduplicated words in VHQWHQFHV Eඒect of reduplication on the meaning of words"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "words analysed correctly",
+      "keywords": ["word"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S3",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.3",
+      "subtopic": "WORD",
+      "specificCompetences": ["3XQFWXDWLRQ 0DUNV"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S3-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.3",
+      "subtopic": "WORD",
+      "specificCompetences": [
+        "1 Punctuate longer texts Punctuating longer texts capital letters, comma, full stop, exclamation Longer texts punctuated FRUUHFWO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S4",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.4",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": ["= Indirect Speech="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S4-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.4",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": [
+        "1= Change indirect speech into= direct speech and vice-versa= Identifying Indirect Speech VHQWHQFHV Punctuate Indirect Speech VHQWHQFHV Construct sentences to express Indirect speech Change sentences from indirect to direct speech and vice-versa Indirect Speech sentences"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "vice-versa accordingly",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S5",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.5",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": ["= Tenses="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S5-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.5",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": [
+        "1= Transform sentences from one tense to another= Identifying diඒerent types of tenses Present, Past and Future) Constructing sentences using diඒerent types of WHQVHV Transforming sentences from one tense to another Diඒerent types of tenses LGHQWL¿HG FRUUHFWO\\ Sentences using diඒerent types of tenses"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S6",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.6",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": ["= Adverbial= Phrase="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S6-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.6",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": [
+        "1= Write sentences containing adverbial phrases= Identifying adverbial phrases in sentences Constructing sentences containing adverbial SKUDVHV Adverbial phrases in sentences identiÜed FRUUHFWO\\ Sentences containing adverbial phrases"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S8",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.8",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": ["= Relative clauses="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S8-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.8",
+      "subtopic": "INDIRECT SPEECH=",
+      "specificCompetences": [
+        "1= =Construct sentences= containing relative= clauses= Identifying relative clauses in sentences Constructing sentences containing relative clauses Relative clauses in sentences identiÜed FRUUHFWO\\ Sentences containing relative clauses"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["indirect", "speech"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S9",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.9",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": ["= Synonyms="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S9-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.9",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": [
+        "1= =Use synonyms= Identifying synonyms of given words Constructing sentences using synonyms Synonyms identiÜed FRUUHFWO\\ Sentences using synonyms"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S9-3",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.9",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": ["= Antonyms="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S9-4",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.9",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": [
+        "1= =Use antonyms= Identifying antonyms of given words Constructing sentences using antonyms Antonyms of given words"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S9-5",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.9",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": ["= Homonyms="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S9-6",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.9",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": [
+        "1= =Use homonyms= Identifying homonyms Constructing sentences using homonyms Homophones identiÜed FRUUHFWO\\ Sentences using homonyms"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S7",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.7",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": ["= Adverbial= Clause="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S7-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.7",
+      "subtopic": "= WORD RELATIONSHIPS=",
+      "specificCompetences": [
+        "1= Write sentences= containing adverbial clauses= Identifying adverbial clauses in sentences Constructing sentences containing adverbial FODXVHV Adverbial clauses in sentences identiÜed FRUUHFWO\\ Sentences containing adverbial clauses"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "constructed correctly",
+      "keywords": ["word", "relationships"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S10",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.10",
+      "subtopic": "ACTIVE AND PASSIVE VOICES",
+      "specificCompetences": ["= =Active and= Passive Voice="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["active", "passive", "voices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S10-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.10",
+      "subtopic": "ACTIVE AND PASSIVE VOICES",
+      "specificCompetences": [
+        "1= Transform active to= passive voice and vice- versa= Identifying active and passive voice Constructing sentences in the active and passive voice Changing sentences from active to passive voice and vice versa Active and passive voice"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "vice versa accordingly",
+      "keywords": ["active", "passive", "voices"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S11",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.11",
+      "subtopic": "FIGURATIVE LANGUAGE=",
+      "specificCompetences": ["= =Proverbs="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S11-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.11",
+      "subtopic": "FIGURATIVE LANGUAGE=",
+      "specificCompetences": [
+        "1= Use appropriate= proverbs for particular= situations= Discussing the meaning and use of proverbs Categorising proverbs according to speciÜc Meaning and use of proverbs discussed DFFRUGLQJO\\ Proverbs categorised according to speciÜc"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identiÜed correctly",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S11-3",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.11",
+      "subtopic": "FIGURATIVE LANGUAGE=",
+      "specificCompetences": ["= =Sayings="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S11-4",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.11",
+      "subtopic": "FIGURATIVE LANGUAGE=",
+      "specificCompetences": [
+        "1= Use appropriate sayings for particular situations= Discussing the meaning and use of sayings Categorising sayings according to speciÜc Meaning and use of sayings"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "situations identiÜed correctly",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S11-5",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.11",
+      "subtopic": "FIGURATIVE LANGUAGE=",
+      "specificCompetences": ["= =Idioms="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S11-6",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.11",
+      "subtopic": "FIGURATIVE LANGUAGE=",
+      "specificCompetences": [
+        "1= Use appropriate idioms for particular situations= Discussing the meaning and use of idioms Categorising idioms according to speciÜc IXQFWLRQV Using idioms in discourse Identifying appropriate situations in which to use particular idioms Meaning and use of idioms"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "idioms identiÜed correctly",
+      "keywords": ["figurative", "language"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S12",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.12",
+      "subtopic": "VOCABULARY",
+      "specificCompetences": ["= =Word= Meaning="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S12-2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.12",
+      "subtopic": "VOCABULARY",
+      "specificCompetences": [
+        "1= Use vocabulary= connotatively and= denotatively in discourse= Analysing the denotative and connotative use of vocabulary in a given text Using selected vocabulary Denotative and connotative use of vocabulary in a given"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "text analysed correctly",
+      "keywords": ["vocabulary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "= TRANSLATION=",
+      "specificCompetences": ["= Translation= Techniques="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1-2",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "= TRANSLATION=",
+      "specificCompetences": [
+        "1= =Apply various translation= techniques to translate= from source language to= target language and vice-versa= Translating a given text using various translation techniques to translate the source language into target language and vice-versa A given text translated DFFRUGLQJO\\"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["translation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

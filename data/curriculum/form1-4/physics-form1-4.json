@@ -1,70 +1,703 @@
 {
   "subject": "Physics",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "48 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "Introduction to Physics",
-      "topics": ["What is Physics", "Measurements", "Scientific method"],
-      "duration": "2 weeks",
+      "title": "Form 1: Topic 1.1",
+      "topics": [
+        "Safety Rules (Laboratory Safety)",
+        "Waste Management",
+        "Apparatus in Physics",
+        "Fundamental Concepts of Physics",
+        "Application of Physics"
+      ],
       "learningOutcomes": [
-        "Explain the scope of physics in everyday life",
-        "Use SI units correctly in simple measurements"
+        "Practise laboratory safety rules",
+        "Practise waste management principles",
+        "Use apparatus in Physics",
+        "Demonstrate curiosity and inquiry when exploring fundamental concepts of physics",
+        "Relate the concepts of physics to everyday life"
       ],
       "suggestedActivities": [
-        "Measure length, mass and time with school apparatus",
-        "Discuss physics careers in Zambia"
+        "Practising laboratory safety protocols",
+        "Identifying potential hazards and",
+        "Using personal protective equipment",
+        "Creating posters to communicate",
+        "Demonstrating emergency response",
+        "Administering first aid",
+        "Safety laboratory rules",
+        "Identifying waste materials in the",
+        "Classifying waste materials",
+        "Principles of waste",
+        "Identifying apparatus in Physics",
+        "Using apparatus in Physics",
+        "Improvising apparatus in Physics",
+        "Apparatus in Physics",
+        "Recognising what physics is and its",
+        "Classifying branches of Physics",
+        "Exploring the scientific methods of",
+        "Curiosity and inquiry",
+        "Identifying applications of Physics in",
+        "Demonstrating the application of",
+        "Concepts of physics"
       ],
-      "assessmentMethods": ["Oral questions", "Short quiz"],
-      "resources": ["Ruler", "Stopwatch", "CDC Physics syllabus"]
+      "assessmentMethods": ["practised correctly", "used correctly"],
+      "resources": []
     },
     {
       "unitNumber": 2,
-      "title": "Forces and Motion",
-      "topics": ["Speed and velocity", "Acceleration", "Newton's laws (intro)"],
-      "duration": "3 weeks",
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "Basic Principles of Scientific Investigations",
+        "Physical Quantities",
+        "Precision and Accuracy",
+        "Equilibrium 1.2.4.1 Apply equilibrium concepts to design systems to solve real world problems"
+      ],
       "learningOutcomes": [
-        "Calculate average speed from distance and time",
-        "Describe effects of forces on motion"
+        "Apply principles of scientific investigations",
+        "Classify physical quantities as basic and derived",
+        "Demonstrate precision and accuracy in measurements",
+        "demonstrate stable, unstable and"
       ],
       "suggestedActivities": [
-        "Ticker-timer or phone-timer motion experiments",
-        "Push-pull force demonstrations"
+        "Designing an experiment that",
+        "Writing scientific reports to",
+        "Basic principles of",
+        "Identifying basic quantities and their",
+        "Discussing derived quantities and",
+        "Applying prefixes, multiples,",
+        "Using scientific notations",
+        "Using significant figures in",
+        "Converting basic and derived units",
+        "Physical quantities",
+        "Measuring length with precision and",
+        "Determining the area with precision",
+        "Precision and accuracy",
+        "Measuring volume of liquids, regular",
+        "Measuring mass of gases, liquids and",
+        "Determining density of gases, liquids",
+        "Measuring time with precision and",
+        "Experimenting on the factors that",
+        "Measuring weight with precision and",
+        "Carrying out experiments on",
+        "Locating the center of mass",
+        "Designing systems in equilibrium to",
+        "Analysing equilibrium in real world",
+        "Equilibrium concepts in"
       ],
-      "assessmentMethods": ["Practical worksheet", "End-of-unit test"],
-      "resources": ["Dynamics trolley", "Spring balance"]
+      "assessmentMethods": ["applied appropriately", "derived correctly", "demonstrated correctly"],
+      "resources": []
     },
     {
       "unitNumber": 3,
-      "title": "Energy",
-      "topics": ["Forms of energy", "Energy transfers", "Conservation"],
-      "duration": "2 weeks",
+      "title": "Form 1: Topic 1.3",
+      "topics": ["The Universe"],
       "learningOutcomes": [
-        "Identify forms of energy in common devices",
-        "Describe energy transfers in simple systems"
+        "Construct astronomical models to demonstrate conceptual understanding of elementary astronomy"
       ],
-      "suggestedActivities": ["Energy circus stations", "Local renewable energy discussion"],
-      "assessmentMethods": ["Poster", "Quiz"],
-      "resources": ["Charts", "Local examples"]
+      "suggestedActivities": [
+        "Creating a scale model or diagram of",
+        "Simulating astronomical events like",
+        "Astronomical models to",
+        "Simulating space exploration using",
+        "Using astronomical tools"
+      ],
+      "assessmentMethods": ["constructed accordingly"],
+      "resources": []
     },
     {
       "unitNumber": 4,
-      "title": "Heat and Temperature",
-      "topics": ["Temperature scales", "Expansion", "Heat transfer"],
-      "duration": "3 weeks",
-      "learningOutcomes": [
-        "Distinguish heat and temperature",
-        "Explain conduction, convection and radiation with examples"
+      "title": "Form 1: Topic 1.4",
+      "topics": [
+        "Structure and Composition of the Earth",
+        "Structure and Composition of the Earth’s Atmosphere"
       ],
-      "suggestedActivities": ["Metal rod conduction demo", "Convection current demo"],
-      "assessmentMethods": ["Practical report", "Short answer"],
-      "resources": ["Thermometer", "Bunsen / spirit burner"]
+      "learningOutcomes": [
+        "Demonstrate an understanding of the Earth",
+        "Analyse the structure and composition of the earth’s atmosphere"
+      ],
+      "suggestedActivities": [
+        "Exploring the structure and",
+        "Collecting and analyzing rock",
+        "Constructing a scale model of the",
+        "Understanding of the",
+        "Analysing the structure and",
+        "Making a scale model of the",
+        "The structure and"
+      ],
+      "assessmentMethods": ["analysed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": [
+        "Scalar and Vector Quantities",
+        "Linear Motion",
+        "Forces 1.5.3.1 Apply force-body",
+        "Circular Motion 1.5.4.1 Apply circular motion concepts to solve problems and make predictions",
+        "Moment of a Force",
+        "Equilibrium"
+      ],
+      "learningOutcomes": [
+        "Apply the concepts of scalar and vector quantities in everyday life",
+        "Apply concepts of linear motion in real life situations",
+        "Apply concepts of falling bodies in real life situations",
+        "Create a tool that applies moment of a force in solving problems in everyday life.",
+        "Apply equilibrium concepts to solve real world problems"
+      ],
+      "suggestedActivities": [
+        "Distinguishing scalar from vector",
+        "Analysing scalar from vector",
+        "Constructing vector diagrams",
+        "Concepts of scalar and",
+        "Determining resultant vectors using",
+        "Applying graphical methods to",
+        "Distinguish the terms used in",
+        "Determining distance, displacement,",
+        "Deriving the basic equations of",
+        "Using the equations of uniformly",
+        "Plotting linear motion graphs",
+        "Calculating thinking distance, breaking",
+        "Concepts of linear",
+        "Experimenting the motion of falling",
+        "Determining the numerical value of",
+        "Solving problems on free fall using",
+        "Concepts of falling",
+        "Investigating the effect of a force on",
+        "Describing the inertia law",
+        "Describing the relationship between",
+        "Demonstrating the effect of friction",
+        "Demonstrating the relationship",
+        "Solving problems involving force",
+        "Verifying Hooke’s law using an",
+        "Force-body interaction",
+        "Describing motion in a circular path",
+        "Showing that",
+        "Solving problems involving circular",
+        "Demonstrating how circular motion is",
+        "Demonstrating the concept of moment",
+        "Exploring how forces and distance",
+        "Solving real life problems involving",
+        "Designing tools that apply moment of a",
+        "A tool that applies",
+        "Locating the center of mass",
+        "Applying principle of moments as a",
+        "Designing systems in equilibrium to",
+        "Analysing equilibrium in real world",
+        "Equilibrium concept to"
+      ],
+      "assessmentMethods": [
+        "life applied correctly",
+        "predictions correctly",
+        "applied accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 2: Topic 2.1",
+      "topics": [
+        "Work, Energy, and Power",
+        "Linear Momentum",
+        "Simple Machines 2.1.3.1 Build simple machines to solve real life problems",
+        "Pressure"
+      ],
+      "learningOutcomes": [
+        "Create a system that applies work, energy, and",
+        "Apply the principle of linear momentum in everyday life",
+        "Apply the principles of pressure to solve real-life problems"
+      ],
+      "suggestedActivities": [
+        "Developing a system that maximises the",
+        "Determining the work done on an object",
+        "Investigating the relationship between",
+        "Conducting experiments to measure and",
+        "Demonstrating the law of conservation of",
+        "Exploring how machines can change the",
+        "Calculating the efficiency of energy",
+        "Solving mathematical problems",
+        "Calculating the efficiency of power using",
+        "A system that applies",
+        "Exploring linear momentum in real world",
+        "Exploring the concept of momentum",
+        "Solving numerical problems involving",
+        "Demonstrating an understanding the",
+        "The principle of linear",
+        "Building simple machines to solve real",
+        "Demonstrating the application of the",
+        "Determining Mechanical Advantage",
+        "Deriving the formula for efficiency of a",
+        "Simple machines built to",
+        "Describing pressure and assigning its",
+        "Establishing the relationship between",
+        "Measuring pressure using pressure",
+        "Determining pressure using the",
+        "Deriving the equation for pressure in",
+        "Calculating pressure in liquids and gas",
+        "Exploring factors affecting pressure in",
+        "Conducting an experiment to",
+        "Creating a model that uses the principle"
+      ],
+      "assessmentMethods": ["life applied correctly", "applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 2: Topic 2.2",
+      "topics": [
+        "Simple Kinetic Theory of Matter",
+        "Measurement of Temperature",
+        "Expansion of Solids, Liquids and Gases",
+        "The Internal Combustion Engine",
+        "Heat Transfer 2.2.5.1 Apply the concepts of heat transfer",
+        "Measurement of Heat"
+      ],
+      "learningOutcomes": [
+        "Analyse the impact of simple kinetic theory of matter on technological innovations",
+        "Measure temperature using appropriate instruments",
+        "Demonstrate expansion of solids, liquids and gases",
+        "Demonstrate how various internal combustion engines operate (four stroke engine)",
+        "Solve practical and numerical problems involving measurement of heat"
+      ],
+      "suggestedActivities": [
+        "Describing the kinetic theory of matter",
+        "Exploring the molecular model of matter",
+        "Demonstrating kinetic theory of matter",
+        "Developing an innovation on simple",
+        "The impact of simple",
+        "Measuring temperature using appropriate",
+        "Interpreting temperature data from",
+        "Recognising various types of",
+        "Determining the boiling and melting",
+        "Experimenting on the effects of pressure",
+        "Calibrating unmarked thermometer",
+        "Experimenting on the physical properties",
+        "Experimenting on suitability of alcohol",
+        "Exploring the relationship between",
+        "Temperature measured",
+        "Demonstrating thermal expansion of",
+        "Demonstrating that various solids, liquids",
+        "Expansion of solids,",
+        "Demonstrating the use of equations on",
+        "Recognising different types of internal",
+        "Exploring the operation of the internal",
+        "Creating a model of an internal",
+        "Comparing efficiency of diesel and petrol",
+        "Exploring emerging engine technologies",
+        "The operations of various",
+        "Describing heat transfer",
+        "Demonstrating heat transfer by",
+        "Applying heat transfer in everyday life",
+        "Demonstrating the use of bad and good",
+        "Distinguishing good from bad",
+        "The concepts of heat",
+        "Demonstrating greenhouse effects",
+        "Exploring terms used in the measurement",
+        "Solving practical and numerical problems",
+        "Exploring the differences between",
+        "Measuring heat capacity",
+        "Determining the latent heat of fusion",
+        "Practical and numerical"
+      ],
+      "assessmentMethods": [
+        "analysed correctly",
+        "instruments accordingly",
+        "demonstrated correctly",
+        "solved correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Longitudinal and Transverse Waves", "Electromagnetic Spectrum"],
+      "learningOutcomes": [
+        "Solve practical and numerical problems involving wave motion",
+        "Interpret information related to electromagnetic waves"
+      ],
+      "suggestedActivities": [
+        "Describing the terms associated with",
+        "Distinguishing between longitudinal and",
+        "Solving numerical problems involving",
+        "Creating a device that generates waves to",
+        "Practical and numerical",
+        "Describing the electromagnetic spectrum",
+        "Illustrating an electromagnetic spectrum",
+        "Exploring properties of electromagnetic",
+        "Exploring the sources, and uses of",
+        "Information related to",
+        "Recognising the methods of detection of",
+        "Exploring the harmful effects of each of",
+        "Practising safety precautions against"
+      ],
+      "assessmentMethods": ["motion solved accordingly", "interpreted correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Electromagnetic Spectrum"],
+      "learningOutcomes": ["Manipulate devices to demonstrate fundamental properties of sound"],
+      "suggestedActivities": [
+        "Identifying vibrating parts in the",
+        "Experimenting on the transmission of",
+        "Measuring sound using different",
+        "Demonstrating rarefaction and",
+        "Conducting experiments to determine the",
+        "Discussing properties of sound",
+        "Simulating the properties of sound using",
+        "Explaining factors that influence quality",
+        "Categorising types of sound based on;",
+        "Devices to demonstrate",
+        "Discussing application of sound (music",
+        "Researching the health and"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 3: Topic 3.1",
+      "topics": [
+        "Rectilinear Propagation of Light",
+        "Reflection of Light",
+        "Refraction of Light",
+        "Lenses 3.1.4.1 Demonstrate understanding of lenses"
+      ],
+      "learningOutcomes": [
+        "Apply the concept of rectilinear propagation of light",
+        "Apply the concept of reflection of light.",
+        "Apply the concept of refraction of light"
+      ],
+      "suggestedActivities": [
+        "Demonstrating rectilinear propagation",
+        "Analyzing shadows (eclipses) using",
+        "Exploring the behavior of rectilinear",
+        "Researching on the application of",
+        "Creating a pinhole camera to show how",
+        "The concept of rectilinear",
+        "Describing the concepts of reflection of",
+        "Creating a mirror maze to explore",
+        "Exploring images of plane, concave,",
+        "Carrying out experiments to verify the",
+        "Utilising simulation or applications to",
+        "Solving problems involving reflection,",
+        "Using formula:",
+        "The concept of reflection of",
+        "Designing and building a periscope",
+        "Creating a kaleidoscope to demonstrate",
+        "Describing the concept of refraction of",
+        "Creating optical illusions (mirage,",
+        "Carrying out an experiment to verify",
+        "Investigating dispersion and refraction",
+        "Demonstrating critical angle and total",
+        "Solving numerical problems on critical",
+        "The concept of refraction of",
+        "Exploring how the concept of refraction",
+        "Describing lenses and their associated",
+        "Investigating the action of converging",
+        "Exploring thin lenses and light sources",
+        "Applying the lens equation to calculate",
+        "Designing systems of thin lenses such",
+        "Exploring how lenses create real and",
+        "Exploring computer simulations on thin",
+        "Researching on thin lenses and",
+        "Understanding of lenses"
+      ],
+      "assessmentMethods": [
+        "applied accordingly",
+        "light applied accordingly",
+        "demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Introduction to Static Electricity", "Electric Cells"],
+      "learningOutcomes": [
+        "Design experiments to investigate static electricity",
+        "Install a lightning arrester",
+        "Apply electric cell technology to solve problems"
+      ],
+      "suggestedActivities": [
+        "Carrying out experiments with suitable",
+        "Generating static electricity by rubbing",
+        "Experiments to investigate",
+        "Investigating how heat causes static",
+        "Investigating how humidity causes",
+        "Demonstrating how an object can be",
+        "Discussing how lightning is formed",
+        "Testing how different materials conduct",
+        "Creating a patterns of static electric",
+        "Exploring how distance affects the",
+        "Demonstrating how contact and",
+        "Researching on real world application",
+        "Simulating charging and discharging",
+        "Describing a lightning",
+        "Simulating the danger of static",
+        "Discussing the importance of grounding",
+        "Proposing safety procedures for",
+        "Analysing real world cases of",
+        "A lightning arrestor installed",
+        "Developing a sustainable energy",
+        "Exploring the structure of electric cells",
+        "Exploring electric cells as a",
+        "Demonstrating charging and",
+        "Investigating internal resistance (r) of a",
+        "Exploring environmental implications",
+        "Electric cell technology to"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 3: Topic 3.3",
+      "topics": [
+        "Electric Charge, Current and Potential Difference",
+        "Ohm’s Law 3.3.3.1 Construct an electrical circuit system to apply the concept of ohms’ law",
+        "Electric Energy and Power",
+        "Electric Safety 3.3.5.1 Develop a domestic electric circuit, considering safety and efficiency"
+      ],
+      "learningOutcomes": [
+        "Construct a simple electric circuit",
+        "Solve practical and numerical problems involving electrical energy and power"
+      ],
+      "suggestedActivities": [
+        "Describing the terms associated with",
+        "Constructing a simple electric circuit",
+        "A simple electric circuit",
+        "Distinguishing between direction of",
+        "Measuring voltage (V), and current (I)",
+        "Calculating effective resistance (R) in",
+        "Investigating factors that affect",
+        "Calculating resistivity (",
+        "Investigating the relationship between",
+        "Creating an electrical circuit system",
+        "Verifying Ohm’s law using Ohmic",
+        "Analysing the properties of non-Ohmic",
+        "Solving numerical problems involving",
+        "An electrical circuit system",
+        "Describing electric power and energy",
+        "Constructing electrical energy efficient",
+        "Calculating power",
+        "Costing electrical energy in kilowatt-",
+        "Electrical energy efficient",
+        "Developing a domestic electric circuit,",
+        "Demonstrating uses of fuse and circuit",
+        "Insulating to prevent accidental contact",
+        "Exploring the importance of earthing",
+        "Demonstrating how surge protectors",
+        "Demonstrating adherence to set safety",
+        "A domestic electric circuit,"
+      ],
+      "assessmentMethods": ["constructed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Phenomenon of Magnetism"],
+      "learningOutcomes": ["Demonstrate understanding of the phenomenon of magnetism"],
+      "suggestedActivities": [
+        "Demonstrating the properties of",
+        "Exploring the domain theory",
+        "Demonstrating induced magnetism in",
+        "Carrying out experiments with suitable",
+        "Creating permanent and temporary",
+        "Demagnetising a magnet using",
+        "Demonstrating the use of magnetic",
+        "Designing an innovation that",
+        "Understanding of the"
+      ],
+      "assessmentMethods": ["demonstrated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Phenomenon of Magnetism"],
+      "learningOutcomes": ["Apply magnetic effect of electric current to solve problems"],
+      "suggestedActivities": [
+        "Demonstrating the magnetic field",
+        "Creating a system that uses the magnetic",
+        "Demonstrating the behaviour of an",
+        "Demonstrating the nature of forces",
+        "Investigating the effects of magnetic",
+        "Designing innovative solutions to real-",
+        "Magnetic effect of electric"
+      ],
+      "assessmentMethods": ["problems accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Topic 3.6",
+      "topics": [
+        "Introduction to Electromagneti c Induction",
+        "The Simple AC and DC Generators",
+        "Transformers 3.6.3.1 Solve practical and numeric problems involving transformers",
+        "Electrical Energy Transmission"
+      ],
+      "learningOutcomes": [
+        "Create a system that applies Faraday’s law of electromagnetic induction",
+        "Create simple AC and DC generators",
+        "Explore the transmission of electrical energy"
+      ],
+      "suggestedActivities": [
+        "Demonstrating Faraday’s law of",
+        "Demonstrating factors that affect the",
+        "Demonstrating the direction of the",
+        "A system that applies",
+        "Creating a simple generator using a",
+        "Researching on how Electric Vehicles",
+        "Exploring the benefits of EVs compared",
+        "Researching on the efficiency of EVs",
+        "Simple AC and DC",
+        "Demonstrating mutual induction",
+        "Demonstrating the operation of an iron",
+        "Solving problems involving",
+        "Calculating the efficiency of a",
+        "Demonstrating the effects of improper",
+        "Building a simple and efficient iron",
+        "Practical and numerical",
+        "Discussing electric energy transmission",
+        "Exploring the structure and function of",
+        "Investigating different types of",
+        "Transmission of electrical"
+      ],
+      "assessmentMethods": [
+        "created correctly",
+        "transformers solved correctly",
+        "energy explored accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 4: Topic 4.1",
+      "topics": [
+        "Introduction to Basic Electronics",
+        "Circuit Components",
+        "Digital Electronic System",
+        "Electronic Waste Management"
+      ],
+      "learningOutcomes": [
+        "Construct a system that applies the concept of thermionic emission",
+        "Design an electronic circuit",
+        "Create an electronic system",
+        "Practise sustainable ways of electronic waste management"
+      ],
+      "suggestedActivities": [
+        "Demonstrating thermionic",
+        "Investigating properties of",
+        "Distinguishing between",
+        "Exploring the application of",
+        "Describing the basic structure",
+        "Solving numerical problems on",
+        "Constructing a system that",
+        "A system that applies the",
+        "Identifying circuit components",
+        "Determining resistor values",
+        "Demonstrating the action and",
+        "Demonstrating the process of",
+        "Demonstrating the action of",
+        "Electronic circuit designed",
+        "Investigating the charging and",
+        "Designing an electronic circuit",
+        "Making circuits to demonstrate",
+        "Demonstrating the action of a",
+        "Discussing types of logic gates",
+        "Deriving truth tables of logic",
+        "Describing the use of bistable",
+        "Creating an electronic system",
+        "An electronic system created",
+        "Investigating effects of",
+        "Analysing the current electronic",
+        "Practising sustainable electronic",
+        "Sustainable ways of"
+      ],
+      "assessmentMethods": ["constructed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Communication System", "Renewable Energy Systems"],
+      "learningOutcomes": ["Create a communication system", "Explore renewable energy systems"],
+      "suggestedActivities": [
+        "Describing the principles of",
+        "Analysing stages in",
+        "A communication system",
+        "Investigating signal propagation",
+        "Demonstrating factors that affect",
+        "Investigating the use of",
+        "Creating a communication",
+        "Exploring renewable energy",
+        "Applying knowledge of",
+        "Exploring the contributions of",
+        "Renewable energy systems",
+        "Exploring the role of renewable",
+        "Researching on renewable energy"
+      ],
+      "assessmentMethods": ["created accordingly", "explored accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 4: Topic 4.3",
+      "topics": [
+        "Nuclear Atom",
+        "Radioactivity 4.3.2.1 Demonstrate understanding of the nature, characteristics, detection and application of radiations"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of a nuclear atom",
+        "Explore the applications of radioactive substances",
+        "Analysing innovative solutions for effective nuclear waste management"
+      ],
+      "suggestedActivities": [
+        "Exploring the basic structure of",
+        "Recognising the concepts of",
+        "Demonstrating the strong forces",
+        "Understanding of a nuclear",
+        "Exploring the role of",
+        "Creating a model of nuclear",
+        "Simulating radioactive decay by",
+        "Simulating nuclear fusion and",
+        "Exploring the nature of",
+        "Discussing characteristics of the",
+        "Detecting radiations using",
+        "Explaining the origin and effects",
+        "Explaining radioactive decay",
+        "Solving numerical problems on",
+        "Determining half-life of",
+        "Understanding of the",
+        "Discussing the applications of",
+        "Researching on precautions to",
+        "Discussing the effects of",
+        "Investigating nuclear waste",
+        "Applications of radioactive",
+        "Designing innovative solutions",
+        "Innovative solutions for"
+      ],
+      "assessmentMethods": [],
+      "resources": []
     }
   ],
   "metadata": {
+    "source": "PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.pdf",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 1899208,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
     "curated": true,
-    "note": "Sample unit JSON — replace after a good PDF parse review"
+    "recordCount": 59
   }
 }

@@ -1,0 +1,34 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "encourage-learners-to-interact-and-engage-critically-during-",
+  "lesson": {
+    "week": 3,
+    "lesson": 35,
+    "title": "Encourage learners to interact and engage critically during the analytical stages",
+    "topics": [
+      "Expected standard: Artwork showing prominent use of one or more of the Art principles",
+      "created appropriately"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [
+      "principles in practical activities",
+      "principles",
+      "This subtopic looked at art principles as guidelines which are used to arrange the art elements",
+      "and these are called art principles (balance, proportion, rhythm, harmony, space…).",
+      "SUBTOPIC: BASIC SHAPES",
+      "Introduction"
+    ],
+    "notes": ""
+  }
+}

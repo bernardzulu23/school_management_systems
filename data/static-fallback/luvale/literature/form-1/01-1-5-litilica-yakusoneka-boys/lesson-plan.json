@@ -1,0 +1,30 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LIT-IN-LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "a39ea3d76071bd0dcfd27ae209be95a5",
+  "detectedShift": 0,
+  "pageCount": 62,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-5-litilica-yakusoneka-boys",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.5 Litilica yakusoneka BOYS:",
+    "topics": ["GIRLS: 26", "SUB-TOPIC: 1.5.3 kulifwana nachihandwa chaLitilica yakusoneka."],
+    "activities": ["What should the", "teacher do?", "LEARNERS", "learners"],
+    "resources": [],
+    "assessment": [
+      "CRITERIA",
+      "| P a g e",
+      "(10 minutes)",
+      "Activity 1:",
+      "Introduction/Revisi",
+      "The previous lesson"
+    ],
+    "notes": ""
+  }
+}

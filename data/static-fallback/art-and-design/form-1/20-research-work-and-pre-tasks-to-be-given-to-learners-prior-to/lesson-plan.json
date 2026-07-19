@@ -1,0 +1,33 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "research-work-and-pre-tasks-to-be-given-to-learners-prior-to",
+  "lesson": {
+    "week": 2,
+    "lesson": 20,
+    "title": "Research work and pre-tasks to be given to learners prior to the lessons",
+    "topics": [],
+    "activities": [
+      "Artwork Analysis",
+      "Task 1: Provide learners with images or descriptions of famous Zambian artworks and guide",
+      "them through a structured critique, analyzing elements such as technique, theme, and cultural",
+      "significance.",
+      "Page 13 of",
+      "Class Discussion",
+      "Task 2: Learners discuss how pioneer artists have influenced contemporary Zambian art.",
+      "Presentation"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

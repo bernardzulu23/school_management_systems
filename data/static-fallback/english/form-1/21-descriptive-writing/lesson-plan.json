@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "descriptive-writing",
+  "lesson": {
+    "lesson": 21,
+    "title": "DESCRIPTIVE WRITING",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Descriptive writing is an essential skill in both personal and professional",
+      "contexts, as it allows individuals to vividly convey experiences, emotions, and",
+      "observations to others. In real life, effective descriptive writing helps people",
+      "communicate more clearly and persuasively, whether it is in creative writing,"
+    ],
+    "activities": [
+      " Divide learners into groups and provide them with a descriptive passage to read.",
+      "Alternatively, read the description to the class.",
+      "The Banking System and the Importance of Saving Money",
+      "A bank is a place where people trust their money to be kept safe and",
+      "secure. As you walk inside, the cool, refreshing air greets you, and the",
+      "atmosphere is calm and organised. The floors gleam under the bright",
+      "fluorescent lights, reflecting the polished surfaces of the counters and",
+      "walls. The scent of freshly cleaned tiles fills the space, and the sound of"
+    ],
+    "resources": [],
+    "assessment": [
+      " Observe that every learner is able to identify descriptive words in texts.",
+      " Learners to describe objects.",
+      " Descriptive writing uses sensory details to create vivid mental images.",
+      " Important features include structure (introduction, body, and conclusion) and",
+      "precise vocabulary.",
+      " Practicing descriptive writing improves communication skills in everyday"
+    ],
+    "notes": ""
+  }
+}

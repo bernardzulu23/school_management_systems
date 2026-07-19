@@ -1,0 +1,51 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.pdf",
+  "md5": "c365a013711120f2eb6252f41a63bfdc",
+  "detectedShift": 0,
+  "pageCount": 49,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-5-fitness-activities",
+  "lesson": {
+    "lesson": 5,
+    "title": "1.5 FITNESS ACTIVITIES",
+    "topics": [
+      "INTRODUCTION",
+      "Fitness goes beyond physical abilities like sit-ups or running. It’s about the body’s systems",
+      "working efficiently to meet every day’s demands and adapt to stress. Fitness connects closely",
+      "to developing overall well-being. It includes physical, social, emotional, spiritual, and mental"
+    ],
+    "activities": [
+      "INTRODUCTION",
+      "Fitness goes beyond physical abilities like sit-ups or running. It’s about the body’s systems",
+      "working efficiently to meet every day’s demands and adapt to stress. Fitness connects closely",
+      "to developing overall well-being. It includes physical, social, emotional, spiritual, and mental",
+      "and fitness are intertwined, emphasizing the importance of being fit enough to handle life’s",
+      "challenges, whether academic or athletic. This perspective teaches learners that total fitness",
+      "contributes to success in both sports and daily life.",
+      "a growing emphasis on health and fitness. However, the prevalence of sedentary lifestyles and"
+    ],
+    "resources": [
+      "Stop watch or mobile phone timer, low bench, meter rule or measuring tape, yoga mat, chalk or",
+      "marker, string, (local materials such as bricks, plastic bottles, old tires, ropes…)…",
+      "Form 1 Term",
+      "Teaching Module",
+      " Learning Activity:",
+      " Identifying health-related activities (Endurance, body composition. Flexibility, mus­"
+    ],
+    "assessment": [
+      "Multiple-choice quizzes",
+      "z Accuracy (correct selection of answers).",
+      "z time management (complete tasks within the given time)",
+      "z understanding of concepts (reflecting knowledge of concepts)",
+      "Short-answer questions",
+      "z Relevance (answers directly addressing the question"
+    ],
+    "notes": ""
+  }
+}

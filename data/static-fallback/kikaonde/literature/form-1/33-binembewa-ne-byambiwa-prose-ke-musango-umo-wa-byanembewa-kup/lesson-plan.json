@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "2b0f07c9287cad82904a403707ee78d4",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "binembewa-ne-byambiwa-prose-ke-musango-umo-wa-byanembewa-kup",
+  "lesson": {
+    "week": 3,
+    "lesson": 33,
+    "title": "Binembewa ne byambiwa (Prose) –ke musango umo wa byanembewa kupichila mu",
+    "topics": [
+      "ñambilo ne mulakazhilo wa tanchikiwa kwa kubula kubikamo mpoota nangwa",
+      "malonzhi. Ke musango umo waseeka ao wingijishiwa mu bya kusomba (ma novelo,",
+      "mashimikila epi) nangwa bya kuubala ne kusomba (bibabo, ponda bwanji, ponda",
+      "boobe) mukuleta lubulañano.",
+      "| P a g e"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

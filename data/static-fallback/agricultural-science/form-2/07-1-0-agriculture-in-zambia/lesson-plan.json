@@ -1,0 +1,45 @@
+{
+  "subject": "Agricultural Science",
+  "subjectSlug": "agricultural-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "df6a8d3579bb6bd33da1fcd4a3dc5cec",
+  "detectedShift": 0,
+  "pageCount": 132,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-0-agriculture-in-zambia",
+  "lesson": {
+    "lesson": 7,
+    "title": "1.0: AGRICULTURE IN ZAMBIA",
+    "topics": [
+      "Introduction",
+      "regions of Zambia and explore the various forms of land use practiced in the country."
+    ],
+    "activities": [
+      "as farming, housing or industry.",
+      "Lease hold-",
+      "A form of property ownership where a person (tenant or leaseholder) has the right to use and occupy land",
+      "or building for a fixed period.",
+      "State land -",
+      "Land owned and controlled by the state or government.",
+      "Subsistence farming-",
+      "Type of farming where crops and livestock are kept mainly for family consumption and not for sale."
+    ],
+    "resources": [
+      "as farming, housing or industry.",
+      "Lease hold-",
+      "A form of property ownership where a person (tenant or leaseholder) has the right to use and occupy land",
+      "or building for a fixed period.",
+      "State land -",
+      "Land owned and controlled by the state or government."
+    ],
+    "assessment": [
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 &",
+      "In Isoko Village, community members engage in various economic activities such as growing vegetables and field crops, rearing"
+    ],
+    "notes": ""
+  }
+}

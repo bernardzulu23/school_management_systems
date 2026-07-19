@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "comprehension",
+  "lesson": {
+    "lesson": 14,
+    "title": "COMPREHENSION",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Comprehension is a process of active engagement that leads to accurate",
+      "understanding and interpretation of what is heard or read. The importance of",
+      "comprehension lies in its application to real-life situations such as understanding",
+      "instructions, engaging in conversations, and interpreting information. Learners will read"
+    ],
+    "activities": [
+      "information or texts:",
+      " Ask learners to skim through the passage to get the general idea",
+      " Time learners to ensure that they read at a speed of 200 words per minute.",
+      " Guide learners to avoid bad reading habits",
+      "Stress is the body’s natural, human response to challenges or demands. It is a",
+      "feeling of being under pressure, overwhelmed, or unable to cope with certain",
+      "situations. Many different situations can cause stress, and this can change",
+      "depending on our age. For instance, stress in teenagers may be caused by"
+    ],
+    "resources": [],
+    "assessment": [
+      " Learners discuss the main points of the passage in pairs.",
+      " Use the question-and-answer technique to lead a discussion of the new vocabulary",
+      "in the passage.",
+      " Learners comprehensively answer questions based on the passage",
+      " Intensive Reading is the ability to read with understanding.",
+      " It allows a learner to understand other subjects in school."
+    ],
+    "notes": ""
+  }
+}

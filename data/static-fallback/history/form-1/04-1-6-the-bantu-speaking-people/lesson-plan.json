@@ -1,0 +1,52 @@
+{
+  "subject": "History",
+  "subjectSlug": "history",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "HISTORY-TERM-2-MODULE.pdf",
+  "md5": "aecd14100df28c99f62dbd56d3f8efa2",
+  "detectedShift": 0,
+  "pageCount": 32,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-6-the-bantu-speaking-people",
+  "lesson": {
+    "lesson": 4,
+    "title": "1.6 THE BANTU SPEAKING PEOPLE",
+    "topics": [
+      "Introduction",
+      "The Bantu speaking people are a diverse group of people who have similarities in languages,",
+      "culture and religious beliefs. This topic discusses the early Bantu settlement in Africa, Bantu",
+      "migrations into Zambia, decentralised and centralised societies in pre-colonial Zambia.",
+      "Hook: What language is the word ‘Bantu?’ Some people say that the Bantu"
+    ],
+    "activities": [
+      "Form 1 Term",
+      "TEACHING MODULE",
+      " Discussing the term, Bantu.",
+      " Identifying the Bantu speaking people.",
+      " Locating on the map of Africa, early Bantu settlement in West Africa.",
+      " Outlining reasons for early Bantu migration from West Africa.",
+      " Analysing the course of the early Bantu Migrations from the West Africa.",
+      "Discussing the term Bantu"
+    ],
+    "resources": [
+      " Desire to receive tribute and control trade",
+      " Discovery and use of iron technology",
+      " Need for fertile land",
+      "TEACHING MODULE",
+      " Shortage of pasture for animals",
+      " Social causes"
+    ],
+    "assessment": [
+      "In most of the Pre-colonial Centralised societies of Zambia, the Chief controlled the",
+      "Army. Why is it an important aspect of every society including modern Zambia to",
+      "have an army centrally controlled?",
+      "Most Pre-colonial societies in Zambia were located in specific regions of the country.",
+      "However, people have now changed and different ethnic groups are now settling in",
+      "any part of the country. What factors have contributed to this change in settlement"
+    ],
+    "notes": ""
+  }
+}

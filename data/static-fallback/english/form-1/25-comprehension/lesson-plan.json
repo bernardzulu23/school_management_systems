@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "comprehension",
+  "lesson": {
+    "lesson": 25,
+    "title": "COMPREHENSION",
+    "topics": [
+      "INTRODUCTION",
+      "Overview: Comprehension is a process of active engagement that leads to accurate",
+      "understanding and interpretation of what is heard or read. The importance of",
+      "comprehension lies in its application to real-life situations such as understanding",
+      "instructions, engaging in conversations, and interpreting information. Learners will read"
+    ],
+    "activities": [
+      "information or texts.",
+      " Ask learners to Skim through the passage to get the general idea",
+      " Ask learners to read the passage",
+      " Time learners to ensure that they read at a speed of 200 words per minute.",
+      " Guide learners to avoid bad reading habits",
+      "Inclusive education is an approach that values diversity and promotes",
+      "the participation of all learners, regardless of their abilities or",
+      "disabilities. It involves creating a learning environment that is"
+    ],
+    "resources": [],
+    "assessment": [
+      " Provide a comprehension passage and ask learners to answer the questions that follow.",
+      " Observe learners’ participation in discussions.",
+      " Check their ability to locate answers in the passage.",
+      " Assess group work and engagement.",
+      " Intensive reading involves the detailed reading of texts.",
+      " The two goals are to understand the text and learn language features through a"
+    ],
+    "notes": ""
+  }
+}

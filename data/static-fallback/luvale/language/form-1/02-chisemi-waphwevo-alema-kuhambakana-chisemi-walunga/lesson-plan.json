@@ -1,0 +1,24 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "ed6d1703ad82e1af6d8a143723263a95",
+  "detectedShift": 0,
+  "pageCount": 115,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "chisemi-waphwevo-alema-kuhambakana-chisemi-walunga",
+  "lesson": {
+    "week": 2,
+    "lesson": 2,
+    "title": "Chisemi waphwevo alema kuhambakana chisemi walunga.",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

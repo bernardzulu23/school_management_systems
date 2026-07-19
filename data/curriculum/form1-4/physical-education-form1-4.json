@@ -1,87 +1,713 @@
 {
   "subject": "Physical Education",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": [
+        "Physical Education and Sport.",
+        "Career opportunit ies in Physical Education and Sport.",
+        "Historical background of Physical Education and Sport in Zambia."
+      ],
       "learningOutcomes": [
-        "development of an individual and the nation as a whole.",
-        "Effective implementation of Competence Based Education requires that the following principles be observed: Clarity of focus, reflective designing,",
-        "setting high expectations for all learners and appropriate opportunities.",
-        "It is my sincere hope that this Competence Based Syllabus will greatly improve the quality of education provided at Ordinary Secondary Level (Form 1-",
-        "as defined and recommended in various policy documents and the Zambia Education Curriculum Framework of 2023.",
-        "Joel Kamoko (Mr.)",
-        "Permanent Secretary- Education Services",
-        "MINISTRY OF EDUCATION",
-        "PHYSICAL EDUCATION AND SPORT SYLLABUS Secondary Education Ordinary LEVEL FORM 1-4",
-        "ACKNOWLEDGEMENT",
-        "The Syllabus presented here is a result of broad-based consultation involving several stakeholders within and outside the education system.",
-        "Many individuals, institutions and organizations were consulted to gather their views on the existing syllabus and to accord them an opportunity to make",
-        "suggestions for the new Syllabus. The Ministry of Education wishes to express heartfelt gratitude to all those who participated for their valuable",
-        "contributions, which resulted in the development of this Syllabus.",
-        "The Curriculum Development Centre (CDC) worked closely with other sister departments and institutions to create this document. We sincerely thank",
-        "the Directorate of Teacher Education and Specialized Services, the Directorate of Planning and Information, the Directorate of Human Resource and",
-        "Administration, the Directorate of Open and Distance Education, the Examinations Council of Zambia, Public and Private Universities, Schools and",
-        "other institutions too numerous to mention, for their steadfast support.",
-        "We pay special tribute to co-operating partners for rendering financial and technical support in the production of this syllabus",
-        "Charles Ndakala (Dr.)",
-        "Director – Curriculum Development",
-        "MINISTRY OF EDUCATION",
-        "PHYSICAL EDUCATION AND SPORT SYLLABUS Secondary Education Ordinary LEVEL FORM 1-4",
-        "viii",
-        "INTRODUCTION",
-        "This Physical Education and Sport Syllabus focuses on fostering creativity, analytical thinking, problem-solving, interpersonal and intrapersonal skills,",
-        "as well as investigations and aesthetics in learners. Physical Education and Sport offer individuals and groups engaging, developmental, and educational",
-        "activities, leading to an appreciation of cultural heritage, and promoting social, mental, and emotional growth. It also encourages healthy habits,",
-        "teamwork, determination, and critical thinking.",
-        "Furthermore, Physical Education and Sport studies enable learners to participate in sports both for leisure and competition, potentially as a means of",
-        "livelihood. The purpose of this syllabus is to provide equal opportunities for all learners, including those with different abilities, to reach their highest",
-        "potential and acquire lifelong skills",
-        "Structure of the Syllabus",
-        "This syllabus seeks to instill a sense of appreciation of Physical Education and Sport to ensure that learners adapt and cope with changing situations. It",
-        "will also provide learners with broader concepts and principles in Physical Education and Sport which will allow them to expand their thinking capacity",
-        "to tackle real-life situations effectively.",
-        "competences to be attained are not the same. Hence, when preparing lessons teachers should strive at building on what the learners already know.",
-        "Suggested Teaching Methodologies",
-        "The approach to teaching and learning is competence based. This is best achieved when learners are actively involved in the learning process. However,",
-        "each learner has individual needs, pace of learning, experiences in life and abilities. To accommodate this, the teacher must determine the needs of the"
+        "Demonstrate understanding of the importance of Physical Education and Sport. Understanding of the importance of Physical Education and sport",
+        "Choose career opportunities in Physical Education and sport.",
+        "Outline the historical background of Physical Education and Sport in Zambia."
       ],
       "suggestedActivities": [
-        "Therefore, teaching strategies must be varied and flexible within well-structured sequence of lessons and should include among others:",
-        "·Demonstration",
-        "·Direct instruction",
-        "·Independent study",
-        "·Project work",
-        "·Enquiry/exploration",
-        "·Observation",
-        "·Excursions",
-        "·Field work",
-        "PHYSICAL EDUCATION AND SPORT SYLLABUS Secondary Education Ordinary LEVEL FORM 1-4",
-        "·Research",
-        "·Practical",
-        "·Portfolio",
-        "·Group work",
-        "·Pair work",
-        "The teacher should have reasons for choosing a particular teaching method and must employ strategies and techniques to make the lesson thought-",
-        "specific competences to be achieved, when it is best to let learners discover or explore information for themselves; when they need directed",
-        "learning; reinforcement or when the learners can be allowed to find their own way through a topic.",
-        "In this way, competences can be attained in a spiral manner considering that in any lesson, different competences can be covered through a set of learners'",
-        "activities prescribed. The objective is to ensure that learners are able to apply the knowledge gained in real life situations.",
-        "Time Allocation",
-        "The standard period allocation for Physical Education and Sports from Form 1-4 has been prescribed in the Zambia Education Curriculum Framework",
-        "(ZECF) of 2023. The minimum learner-teacher contact time is 8 hours per week, translating into 12 periods."
+        "Career opportunities in Physical",
+        "Outlining the historical",
+        "Historical background of Physical"
+      ],
+      "assessmentMethods": [
+        "demonstrated accordingly.",
+        "Education in Sport chosen correctly.",
+        "Zambia accordingly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "First-aid 1.2.1.1 Perform first-aid and safety activities",
+        "Environm ental Protection"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of environmental protection in Physical Education and Sport"
+      ],
+      "suggestedActivities": [
+        "Discussing first-aid and its",
+        "Identifying the basic",
+        "Performing a variety of",
+        "First-aid and safety activities",
+        "Stating the importance of",
+        "Demonstrating",
+        "Understanding of Environmental"
+      ],
+      "assessmentMethods": ["performed accordingly", "sport demonstrated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": [
+        "Sports Facility and Equipment in schools",
+        "Managem ent and Maintenan ce of sports facilities and equipment"
+      ],
+      "learningOutcomes": [
+        "Create sports facilities and equipment",
+        "Manage and maintain sports facilities and equipment."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": [
+        "Movement patterns and formations",
+        "Movement exploratio",
+        "Perceptual motor learning activities."
+      ],
+      "learningOutcomes": [
+        "Perform movement patterns and formations",
+        "Perform combination of movement patterns.",
+        "Perform perceptual motor learning activities."
+      ],
+      "suggestedActivities": [
+        "Performing a series of",
+        "Movement patterns and formations",
+        "Performing a combination",
+        "Performing elements of",
+        "Combination of movement patterns",
+        "Performing various"
+      ],
+      "assessmentMethods": ["performed correctly", "performed correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Health related componen ts", "Isotonic Activities.", "Isometric Activities."],
+      "learningOutcomes": [
+        "Perform health related activities.",
+        "Perform isotonic activities.",
+        "Perform isometric activities."
+      ],
+      "suggestedActivities": [
+        "Identifying health-",
+        "Discussing the benefits",
+        "Health related activities performed",
+        "Performing various",
+        "Describing the",
+        "Explaining the benefits of",
+        "Isotonic activities perfomed correctly.",
+        "Isometric activities performed"
       ],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["Gymnastic and Safety Rules."],
+      "learningOutcomes": ["Perform tumbling and stunts activities."],
+      "suggestedActivities": [
+        "Discussing the importance",
+        "Applying safety rules of",
+        "Performing tumbling and",
+        "Tumbling and stunts activities"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": [
+        "Aerobics. 1.7.1.1 Perform step and rhythmic patterns of aerobics.",
+        "Traditiona l games."
+      ],
+      "learningOutcomes": ["Perform traditional games."],
+      "suggestedActivities": [
+        "Demonstrating step and",
+        "Step and rhythmic patterns of",
+        "Performing traditional",
+        "Traditional games performed"
+      ],
+      "assessmentMethods": ["aerobics performed accurately."],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["Water safety", "Pool. 1.8.2.1 Practice pool hygiene."],
+      "learningOutcomes": ["Apply water safety practices."],
+      "suggestedActivities": [
+        "Creating simulated water",
+        "Researching and",
+        "Demonstrating water",
+        "Water safety practices applied",
+        "Practicing pool hygiene. • Pool hygiene practiced effectively.",
+        "Debating on pool hygiene"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Topic 1.9",
+      "topics": [
+        "Athletics. 1.9.1.1 Perform skills in track events.",
+        "Ball games.",
+        "Board games.",
+        "Racquet games."
+      ],
+      "learningOutcomes": [
+        "Perform skills in Football and Netball games.",
+        "Perform skills in Chess and Draught.",
+        "Perform skills in Badminton."
+      ],
+      "suggestedActivities": [
+        "Performing skills in track",
+        "Skills in track events performed",
+        "Performing basic skills in",
+        "Skills in Football and Netball games",
+        "Skills in Chess and Draught",
+        "Skills in Badminton performed"
+      ],
+      "assessmentMethods": ["Performed correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 1: Topic 1.10",
+      "topics": ["Human skeletal system"],
+      "learningOutcomes": ["Analyse the human skeletal system"],
+      "suggestedActivities": [
+        "Identifying the framework",
+        "Human skeletal system analysed",
+        "Identifying the types of",
+        "Examining the types of"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 1: Topic 1.11",
+      "topics": ["Forces 1.11.1.1 Illustrate forces in sporting activities", "Speed"],
+      "learningOutcomes": ["Illustrate Speed in sporting activities"],
+      "suggestedActivities": [
+        "Demonstrating forces in",
+        "Calculating simple forces",
+        "Forces in sporting activities",
+        "Demonstrating Speed in",
+        "Calculating speed in",
+        "Speed in sporting activities"
+      ],
+      "assessmentMethods": ["illustrated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 1: Topic 1.12",
+      "topics": ["Sports Entrepren eur ship", "Sports Industry."],
+      "learningOutcomes": [
+        "Analyse entrepreneurship roles in sports",
+        "Exhibit knowledge of sectors in sports industry."
+      ],
+      "suggestedActivities": [
+        "Discussing sports",
+        "Analysing the roles of",
+        "Entrepreneurship roles",
+        "Discussing various sectors",
+        "Knowledge of sectors in sports"
+      ],
+      "assessmentMethods": ["analysed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.1",
+      "topics": [
+        "History of Physical Education in ancient Greece.",
+        "Beliefs and origin of Olympic Games."
+      ],
+      "learningOutcomes": [
+        "Exhibit knowledge of the history of Physical Education in ancient Greece.",
+        "Demonstrate understanding of the beliefs and the origin of Olympic Games."
+      ],
+      "suggestedActivities": [
+        "Discussing the history of",
+        "Knowledge of the history",
+        "Discussing the beliefs and",
+        "Understanding of the"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.2",
+      "topics": [
+        "First-aid. 2.2.1.1 Exhibit knowledge on the types of sports injuries",
+        "Reproductive Health"
+      ],
+      "learningOutcomes": [
+        "Exhibit knowledge on causes and prevention of sports injuries",
+        "Demonstrate knowledge of reproductive health",
+        "Explore ways in which HIV and AIDS can be transmitted during sports and games."
+      ],
+      "suggestedActivities": [
+        "Discussing the types of",
+        "Knowledge on the types",
+        "Outlining the causes of",
+        "Stating Prevention",
+        "Knowledge on causes",
+        "Discussing basic elements",
+        "Knowledge of",
+        "Illustrating ways in which",
+        "Practising ways in which",
+        "Ways in which HIV and"
+      ],
+      "assessmentMethods": [
+        "exhibited accordingly",
+        "demonstrated correctly",
+        "explored correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Reproductive Health"],
+      "learningOutcomes": ["Perform skill related activities."],
+      "suggestedActivities": [
+        "Identifying skill-related",
+        "Discussing the benefits of",
+        "Performing various skill-",
+        "Skill-related activities"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Complex gymnastics."],
+      "learningOutcomes": ["Perform stunts on Apparatus."],
+      "suggestedActivities": ["Performing stunts on", "Stunts on apparatus"],
+      "assessmentMethods": ["performed correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Traditional games"],
+      "learningOutcomes": ["Perform traditional"],
+      "suggestedActivities": ["Performing traditional", "Traditional games"],
+      "assessmentMethods": ["performed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: Topic 2.6",
+      "topics": [
+        "The Sports Structure in Zambia",
+        "Sports associations in Zambia",
+        "International Sports bodies"
+      ],
+      "learningOutcomes": [
+        "Design a model of the sports structure in Zambia",
+        "Demonstrate of Sports associations in Zambia",
+        "Demonstrate knowledge of International Sports Bodies Discussing international sports bodies (FIFA, FINA, IOC, FIBA ). Comparing and contrasting different international sports bodies in the world. Knowledge international sports bodies demonstrated"
+      ],
+      "suggestedActivities": [
+        "Describing the sports",
+        "Describe the sports",
+        "Model of the sports",
+        "Discussing the Sports",
+        "Researching on key",
+        "Making presentations on",
+        "Understanding of sports"
+      ],
+      "assessmentMethods": ["designed accordingly", "demonstrate correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 2: Topic 2.7",
+      "topics": [
+        "Strokes",
+        "Basic competitive swimming and diving.",
+        "Survival skills in swimming."
+      ],
+      "learningOutcomes": [
+        "Perform different swimming strokes.",
+        "Apply competitive swimming and diving skills.",
+        "Apply survival skills in swimming"
+      ],
+      "suggestedActivities": [
+        "Identifying different",
+        "Demonstrating various",
+        "Performing different",
+        "Demonstrating",
+        "Competitive swimming and",
+        "Performing survival skills",
+        "Survival skills in swimming"
+      ],
+      "assessmentMethods": ["performed accordingly.", "applied correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 2: Topic 2.8",
+      "topics": [
+        "Athletics 2.8.1.1 Perform field events. • Performing field events (Jumps ).",
+        "Ball games 2.8.2.1 Use skills in Volleyball and Handball.",
+        "Board games 2.8.3.1 Utilise skills in Ludo and Snakes and Ladders.",
+        "Racquet games."
+      ],
+      "learningOutcomes": ["Use skills in Table and Lawn Tennis."],
+      "suggestedActivities": [
+        "Field events performed",
+        "Performing skills in",
+        "Skills in Volleyball and",
+        "Performing skills in Ludo",
+        "Skills in Ludo and Snakes",
+        "Performing skills in Table",
+        "Skills in Table and Lawn"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 2: Topic 2.9",
+      "topics": ["Human muscular system."],
+      "learningOutcomes": ["Demonstrate Knowledge of muscular system"],
+      "suggestedActivities": [
+        "Identifying the muscular",
+        "Discussing the functions",
+        "Knowledge of muscular"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 2: Topic 2.10",
+      "topics": ["Lever System"],
+      "learningOutcomes": ["Apply the lever system in physical activities and sports."],
+      "suggestedActivities": ["Applying the lever system", "Lever system in physical", "TOPIC"],
+      "assessmentMethods": ["appropriately."],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 2: Topic 2.11",
+      "topics": ["Sport Marketing.", "Sport Branding"],
+      "learningOutcomes": [
+        "Apply marketing skills. Applying sports marketing skills. (Business planning, marketing, finance, operations management ) Sports marketing skills applied properly.",
+        "Align specific features of branding in the sports industry. Aligning specific features of branding in the sports industry. (Brand identity, Consistence ). Specific features of branding in the sports industry aligned"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Drug and Substance abuse in sports"],
+      "learningOutcomes": ["Develop awareness of the effects of drug abuse"],
+      "suggestedActivities": [
+        "Identifying the types of",
+        "Discussing the effects of",
+        "Role-playing /or debating"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Methods of training."],
+      "learningOutcomes": ["Use methods of training."],
+      "suggestedActivities": [
+        "Identifying different",
+        "Discussing different",
+        "Performing different",
+        "Methods of training used"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["Complex Gymnastics."],
+      "learningOutcomes": ["Demonstrate complex floor agilities and stunts on apparatus."],
+      "suggestedActivities": ["Performing complex floor", "Complex floor agilities"],
+      "assessmentMethods": ["demonstrated correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Free combative activities"],
+      "learningOutcomes": ["Perform free combative activities."],
+      "suggestedActivities": ["Identifying free", "Performing free", "Free combative activities"],
+      "assessmentMethods": ["performed accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 3: Topic 3.5",
+      "topics": [
+        "Organising Events",
+        "Resource mobilisation",
+        "Partnership and Sponsorship.",
+        "Volunteering in sports"
+      ],
+      "learningOutcomes": [
+        "Organize games and sports events.",
+        "Mobilise resources for games and sports competitions.",
+        "Engage stakeholders in resource mobilisation",
+        "Participate in voluntary sports activities. Identifying voluntary sports activities in school and community Participating in school and community sports activities voluntarily Voluntary sports activities participated in"
+      ],
+      "suggestedActivities": [
+        "Organising games and",
+        "Games and sports events",
+        "Identifying different",
+        "Discussing types of",
+        "Engaging in fundraising",
+        "Mobilising resources for",
+        "Resources for games",
+        "Identifying possible",
+        "Stakeholders in resource"
+      ],
+      "assessmentMethods": ["organized accordingly.", "mobilised accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 3: Topic 3.6",
+      "topics": ["Nutrition and sports", "Diet in sports."],
+      "learningOutcomes": [
+        "Analyse types of nutrients and their functions. Identifying types of nutrients and their functions (Macro, micro). Analysing nutrients required by athletes. . Types of nutrients and their functions analysed",
+        "Plan a diet for a sports person. Planning a diet for a sports person. Practising good eating habits by observing balanced diet. Diet for a sports person"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["planned accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 3: Topic 3.7",
+      "topics": [
+        "Athletics",
+        "Ball games",
+        "Board games",
+        "Racquet games 3.7.4.1 Demonstrate skills in Squash.",
+        "Sports participation"
+      ],
+      "learningOutcomes": [
+        "Utilise skills in field events. Performing field events. (Throws ). Skills in field events",
+        "Practise skills in Basketball and baseball. Practising basic skills in Basketball and baseball. Skills in Basketball and baseball practiced",
+        "Use skills in Scrabble and Monopoly. Describing the game of scrabble and monopoly Performing basic skills in Scrabble and Monopoly. Skills in Scrabble and Monopoly used properly.",
+        "Research on the factors affecting sports participation.",
+        "Develop a solid foundation in motivation and goal setting."
+      ],
+      "suggestedActivities": [
+        "Explaining the game of",
+        "Performing basic skills in",
+        "Skills in Squash",
+        "Researching on the",
+        "Comparing female",
+        "Factors affecting sports",
+        "Developing a solid",
+        "Setting goals in sports",
+        "Solid foundation in"
+      ],
+      "assessmentMethods": ["utilised appropriately.", "appropriately."],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 3: Topic 3.8",
+      "topics": ["Human respiratory system."],
+      "learningOutcomes": ["Demonstrate knowledge of the respiratory system"],
+      "suggestedActivities": [
+        "Discussing the functions of",
+        "Drawing and labelling the",
+        "Designing sports programs",
+        "Knowledge of the"
+      ],
+      "assessmentMethods": ["demonstrated correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 3: Topic 3.9",
+      "topics": ["Energy and movement"],
+      "learningOutcomes": ["Demonstrate understanding of the body energy sources during exercise."],
+      "suggestedActivities": ["Describing the body", "Understanding of the"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 3: Topic 3.10",
+      "topics": ["Sports orienteering"],
+      "learningOutcomes": ["Locate places"],
+      "suggestedActivities": [
+        "Practising using maps and",
+        "Identifying and locate",
+        "Researching on the",
+        "Places located"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 3: Topic 3.11",
+      "topics": ["Sport Technology and innovation"],
+      "learningOutcomes": ["Use technology and innovative approaches in sports."],
+      "suggestedActivities": ["TOPIC"],
+      "assessmentMethods": ["used in sports correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Sports facilities and equipment."],
+      "learningOutcomes": [
+        "Design indoor and outdoor sports facilities and equipment. Identifying indoor and outdoor sports facilities and equipment (Swimming pools, sports halls ). (Pitches, route planning in cross- Country ). Discussing indoor and outdoor sports facilities and equipment. Designing indoor and outdoor sports facilities and equipment Indoor and outdoor sports facilities and equipment",
+        "Use public and private sports centres for practise. Comparing and contrasting public and private sports centres of excellence. Practicing sporting activities at sports centres of excellence of their choice: Public and private sports centres used for practise"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["designed correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Principles of Training.", "Sports Body Types"],
+      "learningOutcomes": [
+        "Use the principles of training in physical activities. Demonstrating the principles of training. (Specificity, Progression, Principles of training in physical activities used properly.",
+        "Demonstrate knowledge on the characteristics of different body types. Categorising body types relating to athletic performance and sports participation. (Endomorph, Ectomorph, Mesomorph) Knowledge on the characteristics of different body types demonstrated"
+      ],
+      "suggestedActivities": ["TOPIC"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["Tournament", "Officiating"],
+      "learningOutcomes": [
+        "Organise tournaments. Identifying types of tournaments (Knock-out, league, combination and challenge tournaments). Organising various tournaments. Tournaments organised",
+        "Apply sporting rules and laws in officiating games Discussing sporting rules and laws in sports officiating. (Ball games, board games, racquet games athletics, aquatics ). Applying various rules and laws in games and sport. Sporting rules and laws in officiating games applied"
+      ],
+      "suggestedActivities": ["TOPIC"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 4: Topic 4.4",
+      "topics": [
+        "Athletics",
+        "Ball games",
+        "Billiard games",
+        "Target games",
+        "Sports hooliganism",
+        "Modified Sports"
+      ],
+      "learningOutcomes": [
+        "Utilise sporting skills in track events Performing sporting skills in track events. (Long distance and hurdles ) Sporting skills in track events utilised properly.",
+        "Perform sporting skills in Rugby. Performing basic skills in Rugby. Sporting skills in Rugby performed properly.",
+        "Perform sporting skills in snooker and Pool. Performing basic skills in snooker and Pool. Sporting skills in snooker and Pool performed",
+        "Perform sporting skills in darts. Performing basic skills in darts. (Set-up, pull-back, release and follow- through). Sporting skills in darts performed properly.",
+        "Demonstrate knowledge on sports hooliganism Discussing factors of hooliganism in sports. (Lower working-athletes, a large crowd, alcohol, rivalries between teams, and the intensity of the match and between the players ). Organising sensitization programs on the dangers of hooliganism in sports. Knowledge on sports hooliganism demonstrated",
+        "Apply sporting rules of modified games and sporting activities. Applying the rules of modified games and sporting activities. Sporting rules of modified games and sporting activities applied"
+      ],
+      "suggestedActivities": ["TOPIC"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["Human Circulatory System."],
+      "learningOutcomes": [
+        "Perform aerobic activities. Drawing and labelling the structure of the Circulatory system. Discussing the functions of the circulatory system in relation to sporting activities. Performing aerobic activities. (Shuttle runs, jogging, swimming ). Aerobic activities"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["performed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["Newton’s laws of motion."],
+      "learningOutcomes": [
+        "Apply Newton’s laws of motion in sporting activities. Demonstrating Newton’s laws of motion. (1 st"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Form 4: Topic 4.7",
+      "topics": ["Environment terrains", "Safety", "Orienteerin expedition."],
+      "learningOutcomes": [
+        "Adapt to different environmental terrains Manipulating various environmental terrains. (Mountainous, rocky, forests, sandy, swampy, weather/climate ). Different environmental",
+        "Practise safety. Practising safety procedures in orienteering. (Pre, during and post orienteering events).",
+        "Apply skills in orienteering. Applying skills in orienteering. (Map reading, compass reading, route navigation ). Skills in orienteering"
+      ],
+      "suggestedActivities": ["TOPIC"],
+      "assessmentMethods": [
+        "terrains adapted accordingly",
+        "Safety practiced correctly.",
+        "applied correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Form 4: Topic 4.8",
+      "topics": ["Legal and ethical issues in sports entrepreneurship."],
+      "learningOutcomes": [
+        "Interpret sport legal frameworks in sports entrepreneurship. Interpreting sports related legal frameworks. (Sports contracts, intellectual property, and liability ). Discussing ethical issues in sports entrepreneurship. (Fair play, doping, and athlete welfare, breach of contract ). Sports legal frameworks in sports entrepreneurship"
+      ],
+      "suggestedActivities": [
+        "Isotonic Activities",
+        "Isometric Activities",
+        "Sports bodytypes",
+        "Sports Hooliganism"
+      ],
+      "assessmentMethods": ["interpreted correctly."],
       "resources": []
     }
   ],
   "metadata": {
     "source": "PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.pdf",
-    "extractedAt": "2026-07-11T06:20:41.832Z",
-    "fileSize": 2354896
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 2354896,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true,
+    "recordCount": 90
   }
 }

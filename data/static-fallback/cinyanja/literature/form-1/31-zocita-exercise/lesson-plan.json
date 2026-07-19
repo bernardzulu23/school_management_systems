@@ -1,0 +1,30 @@
+{
+  "subject": "Cinyanja",
+  "subjectSlug": "cinyanja",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-CINYANJA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "15b1addadb25328fe3c0ec18a5b9cbb9",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "zocita-exercise",
+  "lesson": {
+    "week": 31,
+    "lesson": 31,
+    "title": "Zocita-Exercise",
+    "topics": [
+      "MUTU 1: ZOYAMBILILA M’LITILICA",
+      "Phunziloli linena za Litilica. Litilica idziwika mosiyana-siyana kulingana ndi alembi",
+      "osiyana-siyana. Ngakhale lidziwika kuti Litilica, imafalitsidwa mnjila zosiyana-",
+      "siyana kupyolela m’nyimbo, masewelo, ndakatulo, miyambi, mikuluwiko ndi",
+      "zilapi (ndagi). Izi maka-maka zigwela m’mbali ziwili zimene zili mu zolembedwa"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

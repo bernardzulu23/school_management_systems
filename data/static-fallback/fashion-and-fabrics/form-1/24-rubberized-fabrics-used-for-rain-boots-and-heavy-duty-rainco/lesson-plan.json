@@ -1,0 +1,29 @@
+{
+  "subject": "Fashion and Fabrics",
+  "subjectSlug": "fashion-and-fabrics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FF-FORM-1-TERM-1-FINAL-MODULE-2025.pdf",
+  "md5": "36fd2c8aa7e348b706d1a8224dc6600f",
+  "detectedShift": 0,
+  "pageCount": 108,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "rubberized-fabrics-used-for-rain-boots-and-heavy-duty-rainco",
+  "lesson": {
+    "week": 3,
+    "lesson": 24,
+    "title": "Rubberized fabrics – Used for rain boots and heavy-duty raincoats.",
+    "topics": [
+      "Avoid:",
+      "Cotton and wool in wet conditions – These fabrics absorb water and take a long time to",
+      "dry. Example: If you are walking in the rain, wearing a nylon raincoat instead of a cotton",
+      "hoodie will keep you dry."
+    ],
+    "activities": ["wear clothes.", "Learning and Teaching Materials:"],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

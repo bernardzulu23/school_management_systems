@@ -1,0 +1,45 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Mathematics-1-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "4b033f61c02a6d1423fbe1f01b080bb8",
+  "detectedShift": 0,
+  "pageCount": 173,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "polygons",
+  "lesson": {
+    "lesson": 8,
+    "title": "POLYGONS",
+    "topics": [
+      "Introduction:",
+      "Polygons surround us in ways both obvious and subtle. They are two-dimensional shapes that form surfaces of",
+      "three-dimensional shapes such as pavers, road signs, windows and in the intricate geometric patterns woven",
+      "into traditional fabrics and crafts passed down through generations. These shapes formed by straight lines",
+      "meeting at angles are more than mere drawings on paper; they represent order, symmetry, and structure in the"
+    ],
+    "activities": [
+      "Materials Needed",
+      "Cut outs of polygons (both regular and irregular)",
+      "Rulers and protractors",
+      "regular polygons",
+      "on soccer ball",
+      "irregular polygon on a",
+      "surface of a building",
+      "Chart paper or poster boards"
+    ],
+    "resources": [],
+    "assessment": [
+      "Criteria",
+      "Excellent (4)",
+      "Good (3)",
+      "Basic (2)",
+      "Emerging (1)",
+      "Planning"
+    ],
+    "notes": ""
+  }
+}

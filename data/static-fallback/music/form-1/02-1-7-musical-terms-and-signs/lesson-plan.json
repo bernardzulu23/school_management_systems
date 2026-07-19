@@ -1,0 +1,23 @@
+{
+  "subject": "Music",
+  "subjectSlug": "music",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "bf730864b2f0142afce9eb9e8ffe0420",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-7-musical-terms-and-signs",
+  "lesson": {
+    "lesson": 2,
+    "title": "1.7 MUSICAL TERMS AND SIGNS",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

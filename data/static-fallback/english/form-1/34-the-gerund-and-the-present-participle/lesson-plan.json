@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "the-gerund-and-the-present-participle",
+  "lesson": {
+    "lesson": 34,
+    "title": "THE GERUND AND THE PRESENT PARTICIPLE",
+    "topics": [
+      "INTRODUCTION",
+      "Overview: The Gerund and the Present Participle look identical but they have different",
+      "grammatical functions. It is their identical nature that brings about confusion. This topic",
+      "therefore, describes the gerund and the present participle, distinguishing them and",
+      "discussing their functions."
+    ],
+    "activities": [
+      " Provide two sentences: one on gerunds and another on participles.",
+      "Examples:",
+      "Playing for a team is an honour. (Gerund)",
+      "He likes playing for the team. (Present participle)",
+      " Ask learners to differentiate the meaning between the two sentences.",
+      " Explain the difference between gerunds and participles.",
+      " Explain functions of gerunds and participles.",
+      "a gerund is that form of the verb which ends in –ing, and functions as a noun in"
+    ],
+    "resources": [],
+    "assessment": [
+      " Learners identify gerunds and present participles in sentences.",
+      " Learners use gerunds and present participles in dialogue.",
+      " Learners construct sentences using gerunds or present participles.",
+      " Gerunds and participles, though both derive from verbs and ending in -ing, have",
+      "distinct grammatical functions.",
+      " Gerunds function as nouns while participles function as adjectives or part of a verb"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,1390 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Physical Education Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Physical Education",
+    "slug": "physical-education",
+    "sourceFileBytes": 2354896,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing. Content is transcribed from the source, not fabricated."
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Physical Education and Sport.",
+      "specificCompetences": [
+        "Demonstrate understanding of the importance of Physical Education and Sport. Understanding of the importance of Physical Education and sport"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "demonstrated accordingly.",
+      "keywords": ["physical", "education", "sport"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Career opportunit ies in Physical Education and Sport.",
+      "specificCompetences": ["Choose career opportunities in Physical Education and sport."],
+      "learningActivities": ["Career opportunities in Physical"],
+      "expectedStandard": "Education in Sport chosen correctly.",
+      "keywords": ["career", "opportunit", "physical", "education", "sport"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Historical background of Physical Education and Sport in Zambia.",
+      "specificCompetences": [
+        "Outline the historical background of Physical Education and Sport in Zambia."
+      ],
+      "learningActivities": ["Outlining the historical", "Historical background of Physical"],
+      "expectedStandard": "Zambia accordingly.",
+      "keywords": ["historical", "background", "physical", "education", "sport", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "First-aid 1.2.1.1 Perform first-aid and safety activities",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Discussing first-aid and its",
+        "Identifying the basic",
+        "Performing a variety of",
+        "First-aid and safety activities"
+      ],
+      "expectedStandard": "performed accordingly",
+      "keywords": ["first", "perform", "first", "safety", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Environm ental Protection",
+      "specificCompetences": [
+        "Demonstrate understanding of environmental protection in Physical Education and Sport"
+      ],
+      "learningActivities": [
+        "Stating the importance of",
+        "Demonstrating",
+        "Understanding of Environmental"
+      ],
+      "expectedStandard": "sport demonstrated correctly",
+      "keywords": ["environm", "ental", "protection"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Sports Facility and Equipment in schools",
+      "specificCompetences": ["Create sports facilities and equipment"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sports", "facility", "equipment", "schools"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Managem ent and Maintenan ce of sports facilities and equipment",
+      "specificCompetences": ["Manage and maintain sports facilities and equipment."],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["managem", "maintenan", "sports", "facilities", "equipment"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Movement patterns and formations",
+      "specificCompetences": ["Perform movement patterns and formations"],
+      "learningActivities": ["Performing a series of", "Movement patterns and formations"],
+      "expectedStandard": "performed correctly",
+      "keywords": ["movement", "patterns", "formations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "Movement exploratio",
+      "specificCompetences": ["Perform combination of movement patterns."],
+      "learningActivities": [
+        "Performing a combination",
+        "Performing elements of",
+        "Combination of movement patterns"
+      ],
+      "expectedStandard": "performed correctly.",
+      "keywords": ["movement", "exploratio"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "Perceptual motor learning activities.",
+      "specificCompetences": ["Perform perceptual motor learning activities."],
+      "learningActivities": ["Performing various"],
+      "expectedStandard": "performed correctly.",
+      "keywords": ["perceptual", "motor", "learning", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Health related componen ts",
+      "specificCompetences": ["Perform health related activities."],
+      "learningActivities": [
+        "Identifying health-",
+        "Discussing the benefits",
+        "Health related activities performed",
+        "Performing various"
+      ],
+      "expectedStandard": "",
+      "keywords": ["health", "related", "componen"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "Isotonic Activities.",
+      "specificCompetences": ["Perform isotonic activities."],
+      "learningActivities": [
+        "Describing the",
+        "Explaining the benefits of",
+        "Performing various",
+        "Isotonic activities perfomed correctly."
+      ],
+      "expectedStandard": "",
+      "keywords": ["isotonic", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S3",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.3",
+      "subtopic": "Isometric Activities.",
+      "specificCompetences": ["Perform isometric activities."],
+      "learningActivities": [
+        "Describing the",
+        "Explaining the benefits of",
+        "Performing various",
+        "Isometric activities performed"
+      ],
+      "expectedStandard": "",
+      "keywords": ["isometric", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Gymnastic and Safety Rules.",
+      "specificCompetences": ["Perform tumbling and stunts activities."],
+      "learningActivities": [
+        "Discussing the importance",
+        "Applying safety rules of",
+        "Performing tumbling and",
+        "Tumbling and stunts activities"
+      ],
+      "expectedStandard": "",
+      "keywords": ["gymnastic", "safety", "rules"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S1",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.1",
+      "subtopic": "Aerobics. 1.7.1.1 Perform step and rhythmic patterns of aerobics.",
+      "specificCompetences": [],
+      "learningActivities": ["Demonstrating step and", "Step and rhythmic patterns of"],
+      "expectedStandard": "aerobics performed accurately.",
+      "keywords": ["aerobics", "perform", "step", "rhythmic", "patterns", "aerobics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S2",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.2",
+      "subtopic": "Traditiona l games.",
+      "specificCompetences": ["Perform traditional games."],
+      "learningActivities": ["Performing traditional", "Traditional games performed"],
+      "expectedStandard": "",
+      "keywords": ["traditiona", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S1",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "Topic 1.8",
+      "subtopicNumber": "1.8.1",
+      "subtopic": "Water safety",
+      "specificCompetences": ["Apply water safety practices."],
+      "learningActivities": [
+        "Creating simulated water",
+        "Researching and",
+        "Demonstrating water",
+        "Water safety practices applied"
+      ],
+      "expectedStandard": "",
+      "keywords": ["water", "safety"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S2",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "Topic 1.8",
+      "subtopicNumber": "1.8.2",
+      "subtopic": "Pool. 1.8.2.1 Practice pool hygiene.",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Practicing pool hygiene. • Pool hygiene practiced effectively.",
+        "Debating on pool hygiene"
+      ],
+      "expectedStandard": "",
+      "keywords": ["pool", "practice", "pool", "hygiene"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S1",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.1",
+      "subtopic": "Athletics. 1.9.1.1 Perform skills in track events.",
+      "specificCompetences": [],
+      "learningActivities": ["Performing skills in track", "Skills in track events performed"],
+      "expectedStandard": "",
+      "keywords": ["athletics", "perform", "skills", "track", "events"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S2",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.2",
+      "subtopic": "Ball games.",
+      "specificCompetences": ["Perform skills in Football and Netball games."],
+      "learningActivities": ["Performing basic skills in", "Skills in Football and Netball games"],
+      "expectedStandard": "Performed correctly.",
+      "keywords": ["ball", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S3",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.3",
+      "subtopic": "Board games.",
+      "specificCompetences": ["Perform skills in Chess and Draught."],
+      "learningActivities": ["Performing basic skills in", "Skills in Chess and Draught"],
+      "expectedStandard": "Performed correctly.",
+      "keywords": ["board", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S4",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.4",
+      "subtopic": "Racquet games.",
+      "specificCompetences": ["Perform skills in Badminton."],
+      "learningActivities": ["Performing basic skills in", "Skills in Badminton performed"],
+      "expectedStandard": "",
+      "keywords": ["racquet", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T10-S1",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "Topic 1.10",
+      "subtopicNumber": "1.10.1",
+      "subtopic": "Human skeletal system",
+      "specificCompetences": ["Analyse the human skeletal system"],
+      "learningActivities": [
+        "Identifying the framework",
+        "Human skeletal system analysed",
+        "Identifying the types of",
+        "Examining the types of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["human", "skeletal", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S1",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "Topic 1.11",
+      "subtopicNumber": "1.11.1",
+      "subtopic": "Forces 1.11.1.1 Illustrate forces in sporting activities",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Demonstrating forces in",
+        "Calculating simple forces",
+        "Forces in sporting activities"
+      ],
+      "expectedStandard": "illustrated correctly",
+      "keywords": ["forces", "illustrate", "forces", "sporting", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S2",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "Topic 1.11",
+      "subtopicNumber": "1.11.2",
+      "subtopic": "Speed",
+      "specificCompetences": ["Illustrate Speed in sporting activities"],
+      "learningActivities": [
+        "Demonstrating Speed in",
+        "Calculating speed in",
+        "Speed in sporting activities"
+      ],
+      "expectedStandard": "illustrated correctly",
+      "keywords": ["speed"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S1",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "Topic 1.12",
+      "subtopicNumber": "1.12.1",
+      "subtopic": "Sports Entrepren eur ship",
+      "specificCompetences": ["Analyse entrepreneurship roles in sports"],
+      "learningActivities": [
+        "Discussing sports",
+        "Analysing the roles of",
+        "Entrepreneurship roles"
+      ],
+      "expectedStandard": "analysed correctly",
+      "keywords": ["sports", "entrepren", "ship"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S2",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "Topic 1.12",
+      "subtopicNumber": "1.12.2",
+      "subtopic": "Sports Industry.",
+      "specificCompetences": ["Exhibit knowledge of sectors in sports industry."],
+      "learningActivities": ["Discussing various sectors", "Knowledge of sectors in sports"],
+      "expectedStandard": "",
+      "keywords": ["sports", "industry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "History of Physical Education in ancient Greece.",
+      "specificCompetences": [
+        "Exhibit knowledge of the history of Physical Education in ancient Greece."
+      ],
+      "learningActivities": ["Discussing the history of", "Knowledge of the history"],
+      "expectedStandard": "",
+      "keywords": ["history", "physical", "education", "ancient", "greece"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "Beliefs and origin of Olympic Games.",
+      "specificCompetences": [
+        "Demonstrate understanding of the beliefs and the origin of Olympic Games."
+      ],
+      "learningActivities": ["Discussing the beliefs and", "Understanding of the"],
+      "expectedStandard": "",
+      "keywords": ["beliefs", "origin", "olympic", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "First-aid. 2.2.1.1 Exhibit knowledge on the types of sports injuries",
+      "specificCompetences": [],
+      "learningActivities": ["Discussing the types of", "Knowledge on the types"],
+      "expectedStandard": "exhibited accordingly",
+      "keywords": ["first", "exhibit", "knowledge", "types", "sports", "injuries"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "First-aid. 2.2.1.1 Exhibit knowledge on the types of sports injuries",
+      "specificCompetences": ["Exhibit knowledge on causes and prevention of sports injuries"],
+      "learningActivities": [
+        "Outlining the causes of",
+        "Stating Prevention",
+        "Knowledge on causes"
+      ],
+      "expectedStandard": "",
+      "keywords": ["first", "exhibit", "knowledge", "types", "sports", "injuries"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "Reproductive Health",
+      "specificCompetences": ["Demonstrate knowledge of reproductive health"],
+      "learningActivities": ["Discussing basic elements", "Knowledge of"],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["reproductive", "health"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2-2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "Reproductive Health",
+      "specificCompetences": [
+        "Explore ways in which HIV and AIDS can be transmitted during sports and games."
+      ],
+      "learningActivities": [
+        "Illustrating ways in which",
+        "Practising ways in which",
+        "Ways in which HIV and"
+      ],
+      "expectedStandard": "explored correctly.",
+      "keywords": ["reproductive", "health"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Reproductive Health",
+      "specificCompetences": ["Perform skill related activities."],
+      "learningActivities": [
+        "Identifying skill-related",
+        "Discussing the benefits of",
+        "Performing various skill-",
+        "Skill-related activities"
+      ],
+      "expectedStandard": "",
+      "keywords": ["reproductive", "health"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Complex gymnastics.",
+      "specificCompetences": ["Perform stunts on Apparatus."],
+      "learningActivities": ["Performing stunts on", "Stunts on apparatus"],
+      "expectedStandard": "performed correctly.",
+      "keywords": ["complex", "gymnastics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Traditional games",
+      "specificCompetences": ["Perform traditional"],
+      "learningActivities": ["Performing traditional", "Traditional games"],
+      "expectedStandard": "performed accordingly",
+      "keywords": ["traditional", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "The Sports Structure in Zambia",
+      "specificCompetences": ["Design a model of the sports structure in Zambia"],
+      "learningActivities": ["Describing the sports", "Describe the sports", "Model of the sports"],
+      "expectedStandard": "designed accordingly",
+      "keywords": ["sports", "structure", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "Sports associations in Zambia",
+      "specificCompetences": ["Demonstrate of Sports associations in Zambia"],
+      "learningActivities": [
+        "Discussing the Sports",
+        "Researching on key",
+        "Making presentations on",
+        "Understanding of sports"
+      ],
+      "expectedStandard": "demonstrate correctly",
+      "keywords": ["sports", "associations", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S3",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.3",
+      "subtopic": "International Sports bodies",
+      "specificCompetences": [
+        "Demonstrate knowledge of International Sports Bodies Discussing international sports bodies (FIFA, FINA, IOC, FIBA ). Comparing and contrasting different international sports bodies in the world. Knowledge international sports bodies demonstrated"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["international", "sports", "bodies"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S1",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "Topic 2.7",
+      "subtopicNumber": "2.7.1",
+      "subtopic": "Strokes",
+      "specificCompetences": ["Perform different swimming strokes."],
+      "learningActivities": [
+        "Identifying different",
+        "Demonstrating various",
+        "Performing different"
+      ],
+      "expectedStandard": "performed accordingly.",
+      "keywords": ["strokes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S2",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "Topic 2.7",
+      "subtopicNumber": "2.7.2",
+      "subtopic": "Basic competitive swimming and diving.",
+      "specificCompetences": ["Apply competitive swimming and diving skills."],
+      "learningActivities": ["Demonstrating", "Competitive swimming and"],
+      "expectedStandard": "",
+      "keywords": ["basic", "competitive", "swimming", "diving"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S3",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "Topic 2.7",
+      "subtopicNumber": "2.7.3",
+      "subtopic": "Survival skills in swimming.",
+      "specificCompetences": ["Apply survival skills in swimming"],
+      "learningActivities": ["Performing survival skills", "Survival skills in swimming"],
+      "expectedStandard": "applied correctly.",
+      "keywords": ["survival", "skills", "swimming"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S1",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.1",
+      "subtopic": "Athletics 2.8.1.1 Perform field events. • Performing field events (Jumps ).",
+      "specificCompetences": [],
+      "learningActivities": ["Field events performed"],
+      "expectedStandard": "",
+      "keywords": [
+        "athletics",
+        "perform",
+        "field",
+        "events",
+        "performing",
+        "field",
+        "events",
+        "jumps"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S2",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.2",
+      "subtopic": "Ball games 2.8.2.1 Use skills in Volleyball and Handball.",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Performing skills in",
+        "Performing skills in",
+        "Skills in Volleyball and"
+      ],
+      "expectedStandard": "",
+      "keywords": ["ball", "games", "skills", "volleyball", "handball"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S3",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.3",
+      "subtopic": "Board games 2.8.3.1 Utilise skills in Ludo and Snakes and Ladders.",
+      "specificCompetences": [],
+      "learningActivities": ["Performing skills in Ludo", "Skills in Ludo and Snakes"],
+      "expectedStandard": "",
+      "keywords": ["board", "games", "utilise", "skills", "ludo", "snakes", "ladders"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S4",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.4",
+      "subtopic": "Racquet games.",
+      "specificCompetences": ["Use skills in Table and Lawn Tennis."],
+      "learningActivities": ["Performing skills in Table", "Skills in Table and Lawn"],
+      "expectedStandard": "",
+      "keywords": ["racquet", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S1",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.1",
+      "subtopic": "Human muscular system.",
+      "specificCompetences": ["Demonstrate Knowledge of muscular system"],
+      "learningActivities": [
+        "Identifying the muscular",
+        "Discussing the functions",
+        "Knowledge of muscular"
+      ],
+      "expectedStandard": "",
+      "keywords": ["human", "muscular", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S1",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "Topic 2.10",
+      "subtopicNumber": "2.10.1",
+      "subtopic": "Lever System",
+      "specificCompetences": ["Apply the lever system in physical activities and sports."],
+      "learningActivities": ["Applying the lever system", "Lever system in physical", "TOPIC"],
+      "expectedStandard": "appropriately.",
+      "keywords": ["lever", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S1",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "Topic 2.11",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Sport Marketing.",
+      "specificCompetences": [
+        "Apply marketing skills. Applying sports marketing skills. (Business planning, marketing, finance, operations management ) Sports marketing skills applied properly."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sport", "marketing"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S2",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "Topic 2.11",
+      "subtopicNumber": "2.11.2",
+      "subtopic": "Sport Branding",
+      "specificCompetences": [
+        "Align specific features of branding in the sports industry. Aligning specific features of branding in the sports industry. (Brand identity, Consistence ). Specific features of branding in the sports industry aligned"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sport", "branding"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Drug and Substance abuse in sports",
+      "specificCompetences": ["Develop awareness of the effects of drug abuse"],
+      "learningActivities": [
+        "Identifying the types of",
+        "Discussing the effects of",
+        "Role-playing /or debating"
+      ],
+      "expectedStandard": "",
+      "keywords": ["drug", "substance", "abuse", "sports"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Methods of training.",
+      "specificCompetences": ["Use methods of training."],
+      "learningActivities": [
+        "Identifying different",
+        "Discussing different",
+        "Performing different",
+        "Methods of training used"
+      ],
+      "expectedStandard": "",
+      "keywords": ["methods", "training"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Complex Gymnastics.",
+      "specificCompetences": ["Demonstrate complex floor agilities and stunts on apparatus."],
+      "learningActivities": ["Performing complex floor", "Complex floor agilities"],
+      "expectedStandard": "demonstrated correctly.",
+      "keywords": ["complex", "gymnastics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Free combative activities",
+      "specificCompetences": ["Perform free combative activities."],
+      "learningActivities": ["Identifying free", "Performing free", "Free combative activities"],
+      "expectedStandard": "performed accordingly.",
+      "keywords": ["free", "combative", "activities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Organising Events",
+      "specificCompetences": ["Organize games and sports events."],
+      "learningActivities": ["Organising games and", "Games and sports events"],
+      "expectedStandard": "organized accordingly.",
+      "keywords": ["organising", "events"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.2",
+      "subtopic": "Resource mobilisation",
+      "specificCompetences": ["Mobilise resources for games and sports competitions."],
+      "learningActivities": [
+        "Identifying different",
+        "Discussing types of",
+        "Engaging in fundraising",
+        "Mobilising resources for",
+        "Resources for games"
+      ],
+      "expectedStandard": "mobilised accordingly.",
+      "keywords": ["resource", "mobilisation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S3",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.3",
+      "subtopic": "Partnership and Sponsorship.",
+      "specificCompetences": ["Engage stakeholders in resource mobilisation"],
+      "learningActivities": ["Identifying possible", "Stakeholders in resource"],
+      "expectedStandard": "",
+      "keywords": ["partnership", "sponsorship"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S4",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.4",
+      "subtopic": "Volunteering in sports",
+      "specificCompetences": [
+        "Participate in voluntary sports activities. Identifying voluntary sports activities in school and community Participating in school and community sports activities voluntarily Voluntary sports activities participated in"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["volunteering", "sports"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Nutrition and sports",
+      "specificCompetences": [
+        "Analyse types of nutrients and their functions. Identifying types of nutrients and their functions (Macro, micro). Analysing nutrients required by athletes. . Types of nutrients and their functions analysed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["nutrition", "sports"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Diet in sports.",
+      "specificCompetences": [
+        "Plan a diet for a sports person. Planning a diet for a sports person. Practising good eating habits by observing balanced diet. Diet for a sports person"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "planned accordingly",
+      "keywords": ["diet", "sports"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S1",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.1",
+      "subtopic": "Athletics",
+      "specificCompetences": [
+        "Utilise skills in field events. Performing field events. (Throws ). Skills in field events"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "utilised appropriately.",
+      "keywords": ["athletics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S2",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.2",
+      "subtopic": "Ball games",
+      "specificCompetences": [
+        "Practise skills in Basketball and baseball. Practising basic skills in Basketball and baseball. Skills in Basketball and baseball practiced"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately.",
+      "keywords": ["ball", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S3",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.3",
+      "subtopic": "Board games",
+      "specificCompetences": [
+        "Use skills in Scrabble and Monopoly. Describing the game of scrabble and monopoly Performing basic skills in Scrabble and Monopoly. Skills in Scrabble and Monopoly used properly."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["board", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S4",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.4",
+      "subtopic": "Racquet games 3.7.4.1 Demonstrate skills in Squash.",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Explaining the game of",
+        "Performing basic skills in",
+        "Skills in Squash"
+      ],
+      "expectedStandard": "",
+      "keywords": ["racquet", "games", "demonstrate", "skills", "squash"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S5",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.5",
+      "subtopic": "Sports participation",
+      "specificCompetences": ["Research on the factors affecting sports participation."],
+      "learningActivities": ["Researching on the", "Comparing female", "Factors affecting sports"],
+      "expectedStandard": "appropriately.",
+      "keywords": ["sports", "participation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S5-2",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.5",
+      "subtopic": "Sports participation",
+      "specificCompetences": ["Develop a solid foundation in motivation and goal setting."],
+      "learningActivities": [
+        "Developing a solid",
+        "Setting goals in sports",
+        "Solid foundation in"
+      ],
+      "expectedStandard": "",
+      "keywords": ["sports", "participation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T8-S1",
+      "form": 3,
+      "topicNumber": "3.8",
+      "topic": "Topic 3.8",
+      "subtopicNumber": "3.8.1",
+      "subtopic": "Human respiratory system.",
+      "specificCompetences": ["Demonstrate knowledge of the respiratory system"],
+      "learningActivities": [
+        "Discussing the functions of",
+        "Drawing and labelling the",
+        "Designing sports programs",
+        "Knowledge of the"
+      ],
+      "expectedStandard": "demonstrated correctly.",
+      "keywords": ["human", "respiratory", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T9-S1",
+      "form": 3,
+      "topicNumber": "3.9",
+      "topic": "Topic 3.9",
+      "subtopicNumber": "3.9.1",
+      "subtopic": "Energy and movement",
+      "specificCompetences": [
+        "Demonstrate understanding of the body energy sources during exercise."
+      ],
+      "learningActivities": ["Describing the body", "Understanding of the"],
+      "expectedStandard": "",
+      "keywords": ["energy", "movement"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T10-S1",
+      "form": 3,
+      "topicNumber": "3.10",
+      "topic": "Topic 3.10",
+      "subtopicNumber": "3.10.1",
+      "subtopic": "Sports orienteering",
+      "specificCompetences": ["Locate places"],
+      "learningActivities": [
+        "Practising using maps and",
+        "Identifying and locate",
+        "Researching on the",
+        "Places located"
+      ],
+      "expectedStandard": "",
+      "keywords": ["sports", "orienteering"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T11-S1",
+      "form": 3,
+      "topicNumber": "3.11",
+      "topic": "Topic 3.11",
+      "subtopicNumber": "3.11.1",
+      "subtopic": "Sport Technology and innovation",
+      "specificCompetences": ["Use technology and innovative approaches in sports."],
+      "learningActivities": [],
+      "expectedStandard": "used in sports correctly.",
+      "keywords": ["sport", "technology", "innovation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T11-S1-2",
+      "form": 3,
+      "topicNumber": "3.11",
+      "topic": "Topic 3.11",
+      "subtopicNumber": "3.11.1",
+      "subtopic": "Sport Technology and innovation",
+      "specificCompetences": [],
+      "learningActivities": ["TOPIC"],
+      "expectedStandard": "",
+      "keywords": ["sport", "technology", "innovation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Sports facilities and equipment.",
+      "specificCompetences": [
+        "Design indoor and outdoor sports facilities and equipment. Identifying indoor and outdoor sports facilities and equipment (Swimming pools, sports halls ). (Pitches, route planning in cross- Country ). Discussing indoor and outdoor sports facilities and equipment. Designing indoor and outdoor sports facilities and equipment Indoor and outdoor sports facilities and equipment"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "designed correctly.",
+      "keywords": ["sports", "facilities", "equipment"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1-2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Sports facilities and equipment.",
+      "specificCompetences": [
+        "Use public and private sports centres for practise. Comparing and contrasting public and private sports centres of excellence. Practicing sporting activities at sports centres of excellence of their choice: Public and private sports centres used for practise"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sports", "facilities", "equipment"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Principles of Training.",
+      "specificCompetences": [
+        "Use the principles of training in physical activities. Demonstrating the principles of training. (Specificity, Progression, Principles of training in physical activities used properly."
+      ],
+      "learningActivities": ["TOPIC"],
+      "expectedStandard": "",
+      "keywords": ["principles", "training"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "Sports Body Types",
+      "specificCompetences": [
+        "Demonstrate knowledge on the characteristics of different body types. Categorising body types relating to athletic performance and sports participation. (Endomorph, Ectomorph, Mesomorph) Knowledge on the characteristics of different body types demonstrated"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sports", "body", "types"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Tournament",
+      "specificCompetences": [
+        "Organise tournaments. Identifying types of tournaments (Knock-out, league, combination and challenge tournaments). Organising various tournaments. Tournaments organised"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["tournament"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Officiating",
+      "specificCompetences": [
+        "Apply sporting rules and laws in officiating games Discussing sporting rules and laws in sports officiating. (Ball games, board games, racquet games athletics, aquatics ). Applying various rules and laws in games and sport. Sporting rules and laws in officiating games applied"
+      ],
+      "learningActivities": ["TOPIC"],
+      "expectedStandard": "",
+      "keywords": ["officiating"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Athletics",
+      "specificCompetences": [
+        "Utilise sporting skills in track events Performing sporting skills in track events. (Long distance and hurdles ) Sporting skills in track events utilised properly."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["athletics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "Ball games",
+      "specificCompetences": [
+        "Perform sporting skills in Rugby. Performing basic skills in Rugby. Sporting skills in Rugby performed properly."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["ball", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S3",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.3",
+      "subtopic": "Billiard games",
+      "specificCompetences": [
+        "Perform sporting skills in snooker and Pool. Performing basic skills in snooker and Pool. Sporting skills in snooker and Pool performed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["billiard", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S4",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.4",
+      "subtopic": "Target games",
+      "specificCompetences": [
+        "Perform sporting skills in darts. Performing basic skills in darts. (Set-up, pull-back, release and follow- through). Sporting skills in darts performed properly."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["target", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S5",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.5",
+      "subtopic": "Sports hooliganism",
+      "specificCompetences": [
+        "Demonstrate knowledge on sports hooliganism Discussing factors of hooliganism in sports. (Lower working-athletes, a large crowd, alcohol, rivalries between teams, and the intensity of the match and between the players ). Organising sensitization programs on the dangers of hooliganism in sports. Knowledge on sports hooliganism demonstrated"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sports", "hooliganism"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S6",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.6",
+      "subtopic": "Modified Sports",
+      "specificCompetences": [
+        "Apply sporting rules of modified games and sporting activities. Applying the rules of modified games and sporting activities. Sporting rules of modified games and sporting activities applied"
+      ],
+      "learningActivities": ["TOPIC"],
+      "expectedStandard": "",
+      "keywords": ["modified", "sports"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Human Circulatory System.",
+      "specificCompetences": [
+        "Perform aerobic activities. Drawing and labelling the structure of the Circulatory system. Discussing the functions of the circulatory system in relation to sporting activities. Performing aerobic activities. (Shuttle runs, jogging, swimming ). Aerobic activities"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "performed appropriately",
+      "keywords": ["human", "circulatory", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "Newton’s laws of motion.",
+      "specificCompetences": [
+        "Apply Newton’s laws of motion in sporting activities. Demonstrating Newton’s laws of motion. (1 st"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["newton", "laws", "motion"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S1",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.1",
+      "subtopic": "Environment terrains",
+      "specificCompetences": [
+        "Adapt to different environmental terrains Manipulating various environmental terrains. (Mountainous, rocky, forests, sandy, swampy, weather/climate ). Different environmental"
+      ],
+      "learningActivities": ["TOPIC"],
+      "expectedStandard": "terrains adapted accordingly",
+      "keywords": ["environment", "terrains"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S2",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.2",
+      "subtopic": "Safety",
+      "specificCompetences": [
+        "Practise safety. Practising safety procedures in orienteering. (Pre, during and post orienteering events)."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Safety practiced correctly.",
+      "keywords": ["safety"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S3",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.3",
+      "subtopic": "Orienteerin expedition.",
+      "specificCompetences": [
+        "Apply skills in orienteering. Applying skills in orienteering. (Map reading, compass reading, route navigation ). Skills in orienteering"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "applied correctly.",
+      "keywords": ["orienteerin", "expedition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S1",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.1",
+      "subtopic": "Legal and ethical issues in sports entrepreneurship.",
+      "specificCompetences": [
+        "Interpret sport legal frameworks in sports entrepreneurship. Interpreting sports related legal frameworks. (Sports contracts, intellectual property, and liability ). Discussing ethical issues in sports entrepreneurship. (Fair play, doping, and athlete welfare, breach of contract ). Sports legal frameworks in sports entrepreneurship"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "interpreted correctly.",
+      "keywords": ["legal", "ethical", "issues", "sports", "entrepreneurship"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S1-2",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.1",
+      "subtopic": "Legal and ethical issues in sports entrepreneurship.",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Isotonic Activities",
+        "Isometric Activities",
+        "Sports bodytypes",
+        "Sports Hooliganism"
+      ],
+      "expectedStandard": "",
+      "keywords": ["legal", "ethical", "issues", "sports", "entrepreneurship"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

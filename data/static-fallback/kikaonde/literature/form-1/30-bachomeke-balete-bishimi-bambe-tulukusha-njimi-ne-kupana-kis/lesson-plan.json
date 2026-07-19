@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "2b0f07c9287cad82904a403707ee78d4",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "bachomeke-balete-bishimi-bambe-tulukusha-njimi-ne-kupana-kis",
+  "lesson": {
+    "week": 4,
+    "lesson": 30,
+    "title": "Bachomeke, balete bishimi, bambe tulukusha njimi ne kupana kishimpi kimo",
+    "topics": [
+      "NGIPIPISHILO.",
+      "Uno mutwe wa amba pa misango ya biñambwañambwa ne byo bingila mingilo mu bwikalo.",
+      "MUTWE: Byanembewa .",
+      "Byonse bijimo",
+      "Uno mutwe muji lufunjisho lubena kutala pa misango ya byanembewa nabiji: nsansawilo,"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

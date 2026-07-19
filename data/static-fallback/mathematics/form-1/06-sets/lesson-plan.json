@@ -1,0 +1,39 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Maths2_Teaching_Module.pdf",
+  "md5": "3c2a26b24aedaab36387e46ac55dee84",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "sets",
+  "lesson": {
+    "lesson": 6,
+    "title": "SETS",
+    "topics": ["Introduction"],
+    "activities": [
+      "Specific Competence: Apply the concept of set-builder notation and set operations in real life.",
+      "Introduction",
+      "Sets are fundamental in Mathematics and help us classify objects, ideas and concepts in a structured way. Set theory connects with the",
+      "environment, foster observations, analysis, and reasoning skills among learners.",
+      "Suggested Teaching And Learning Materials to Set up Learning Environment",
+      "What to do: Put learners in small manageable groups of different abilities.",
+      "Task: Ask learners think about things or items they encounter in daily life that can be grouped together. Let the learners in their findings",
+      "discover that the mathematical term used for items or things of common characteristics is called a set. After some time, ask some groups"
+    ],
+    "resources": [],
+    "assessment": [
+      "entities.",
+      "Learning activity 2: Exploring types of sets",
+      "Introduction",
+      "Through explorations and inquiry based learning, learners will be expected to identify and define different types of sets, and develop",
+      "critical thinking by analyzing set related problems in diverse scenarios.",
+      "Activity 2.1: Research on Sets"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "persuasive-writing",
+  "lesson": {
+    "lesson": 30,
+    "title": "PERSUASIVE WRITING",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Persuasive writing is a form of writing where the writer attempts to",
+      "convince or persuade the audience to adopt a particular point of view or take a specific",
+      "action by presenting logical reasoning, supporting evidence, and compelling arguments.",
+      "It has the goal of influencing the reader to adopt a certain opinion, ideas or complete an"
+    ],
+    "activities": [
+      " Provide a passage and ask learners to read.",
+      "Model discursive composition",
+      "The world is facing a serious problem of how to balance the need for",
+      "economic growth and how to protect the environment and manage",
+      "pollution. Pollution in all its forms has become a threat to human well-",
+      "being, with far reaching consequences for our planet. This composition",
+      "will explore the complex relationship between environmental health",
+      "and pollution management."
+    ],
+    "resources": [
+      "growth. Government can also invest in clean technologies such as",
+      "renewable energy.",
+      "Furthermore, education and awareness raising campaigns can play an",
+      "important role in promoting environmental health and pollution",
+      "management.",
+      "I conclusion the pollution paradox is a complex challenge that requires"
+    ],
+    "assessment": [
+      " Learners read a model discursive essay and discuss its features.",
+      " Learners to write a discursive essay using appropriate language.",
+      " Discursive Composition explores both sides of a topic and draws a conclusion.",
+      " It could express opposing opinions, cause and effect, compare and contrast, problem",
+      "and solution, advantages and disadvantages or just exploratory.",
+      " A discursive essay uses appropriate words or expressions to transition from one point of"
+    ],
+    "notes": ""
+  }
+}

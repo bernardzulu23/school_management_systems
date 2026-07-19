@@ -1,0 +1,46 @@
+{
+  "subject": "Accounts",
+  "subjectSlug": "accounts",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "PRINCIPLES-OF-ACCOUNTS-TERM-2-MODULE.pdf",
+  "md5": "fa53db2b837ae83aaac97068397fb57d",
+  "detectedShift": 0,
+  "pageCount": 49,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "books-of-prime-entry",
+  "lesson": {
+    "lesson": 1,
+    "title": "Books of Prime Entry",
+    "topics": ["SUB-TOPIC: Types of Books of Prime Entry"],
+    "activities": [
+      "Explaining Books of Prime Entry",
+      "RATIONALE: To provide an accurate record to help in financial reporting and enable financial",
+      "analysis.",
+      "PRIOR KNOWLEDGE: Ledger Books and learners’ experiences about basic business",
+      "operations.",
+      "REFERENCES:",
+      "●Term Two, Principles of Account, Scheme of Work.",
+      "●2024 Commerce and Principles of Accounts Secondary Education Ordinary Level Sylla­"
+    ],
+    "resources": [
+      "Pens /Markers e.t.c.",
+      "EXPECTED STANDARD: Business Transactions recorded in the Books of Prime Entry",
+      "correctly.",
+      "Principles of Accounts",
+      "Teaching Module",
+      "LESSON PROGRESSION:"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION",
+      "Randomly pick learners one",
+      "after the other and narrate the",
+      "following:",
+      "“you are a cashier and you"
+    ],
+    "notes": ""
+  }
+}

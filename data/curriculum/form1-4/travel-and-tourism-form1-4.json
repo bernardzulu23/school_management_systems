@@ -6,8 +6,480 @@
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
+      "title": "Modern tourism trends.",
+      "topics": [
+        "Role Play: One group act as tourists, another as tour guides explaining Zambia’s",
+        "attractions.",
+        "Learners present their findings and receive feedback",
+        "Historical Evolution of Tourism in Zambia"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Research Project:",
+        "Assign learner to research a specific historical site in Zambia, such as Victoria Falls, the",
+        "Livingstone Museum, or the Mwenemutapa Kingdom ruins.",
+        "Have learners create a presentation or poster showcasing their findings, including the site's",
+        "history, significance, and cultural impact.",
+        "Task 1: Other suggested Historical Sites in Zambia",
+        "To guide learners, suggest key sites such as:",
+        "Victoria Falls (Mosi-oa-Tunya) – A UNESCO World Heritage Site."
+      ],
+      "assessmentMethods": [],
+      "resources": [
+        "tourism industry.",
+        "Ac#vity 3: Researching Historical Sites in Zambia",
+        "This activity can be done indoors and outdoors",
+        "Research Project:",
+        "Assign learner to research a specific historical site in Zambia, such as Victoria Falls, the"
+      ]
+    },
+    {
+      "unitNumber": 2,
+      "title": "Shiwa Ng’andu: A colonial-era estate built by British settler Sir Stewart Gore-Browne in the",
+      "topics": [
+        "early 20th century, located in Muchinga Province.",
+        "Significance:",
+        "Represents British colonial history and architecture in Zambia.",
+        "Played a role in Zambia’s independence movement, as Gore-Browne was an",
+        "advocate for African self-rule."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Nsingo Battle Site: Located in Eastern Zambia, this site marks the 1898 resistance led by",
+      "topics": [
+        "Nsingo, a Ngoni chief, against British colonial forces.",
+        "Significance:",
+        "Symbolizes Zambia’s resistance against European colonization.",
+        "Part of the broader history of Ngoni warriors who migrated from South Africa.",
+        "Recognized as an important site for studying African military resistance strategies."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Ing'ombe Ilede: An ancient archaeological site located near the Zambezi River in Southern",
+      "topics": [
+        "Zambia, known for its rich trade history.",
+        "Significance:",
+        "Dates back to around the 7th century AD.",
+        "Evidence of trade with Arab and Portuguese merchants, indicating pre-colonial",
+        "trade networks."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Livingstone Museum: Zambia’s oldest and largest museum, located in Livingstone. It was",
+      "topics": [
+        "established in 1934 and houses extensive collections of artifacts.",
+        "Significance:",
+        "Displays exhibits on pre-colonial, colonial, and post-colonial history.",
+        "Holds some of David Livingstone’s original belongings, including his journals.",
+        "Features sections on ethnography, archaeology, and natural history."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Chirundu Fossil Forest: Located in Southern Zambia, this site contains fossilized trees",
+      "topics": [
+        "estimated to be over 150 million years old.",
+        "Significance:",
+        "One of Africa’s most significant paleontological sites.",
+        "Provides evidence of prehistoric ecosystems and climate changes.",
+        "Protected as a national heritage site."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Nachikufu Cave: is one of Zambia’s most significant prehistoric sites, located in Mpika",
+      "topics": [
+        "District, Muchinga Province. The cave holds evidence of early human habitation dating back",
+        "thousands of years and provides insights into the lifestyles of Stone Age and Iron Age",
+        "communities.",
+        "Significance",
+        "ExcavaEons at Nachikufu Cave have revealed evidence of Stone Age and Iron Age"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Discussion",
+        "Brainstorming Session: Ask learners:",
+        "\"Have you or someone you know ever traveled to another place for fun, work, or",
+        "learning?\"",
+        "\"What was the purpose of the trip?\"",
+        "\"Do you think all tourists travel for the same reasons?\"",
+        "Take note of learners' responses and categorize them under different types of tourism.",
+        "Introduce the concept of Tourism and explain that it involves travel for various reasons."
+      ],
+      "assessmentMethods": [
+        "Practical Demonstration",
+        "Learners perform a Tour Guide Role-Play where they act as tour guides, explaining a",
+        "selected Zambian tourist attraction to a group (classmates acting as tourists).",
+        "Choose a tourist attraction/historical site.",
+        "Research its significance and visitor experience.",
+        "Deliver a 5–10 minutes guided tour (can be virtual or classroom-based)."
+      ],
+      "resources": [
+        "Encourages sustainable tourism practices like eco-tourism.",
+        "Raises awareness about environmental protection.",
+        "Poli#cal and Educa#onal Importance",
+        "Strengthens international relations through tourism exchanges.",
+        "Provides learning opportunities about history, geography, and different cultures.",
+        "Expected Standards: Forms of tourism explored accordingly"
+      ]
+    },
+    {
+      "unitNumber": 8,
+      "title": "Transportation: Transportation is a crucial component that enables people to move from one",
+      "topics": [
+        "place to another. It includes different modes:",
+        "Air Transport – Airlines and chartered flights",
+        "Land Transport – Buses, trains, taxis, and rental cars, Bikes, bicycles.",
+        "Water Transport – Cruises, ferries, and boats.",
+        "Specialty Transport – Cable cars, bicycles, and animal-drawn transport."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Accommodation: Accommodation refers to the place where tourists stay during their trip. It",
+      "topics": [
+        "varies in type and standard, depending on the needs and budget of travelers.",
+        "Types of Accommodation:",
+        "Hotels – Ranges from budget to luxury hotels.",
+        "Motels – Roadside lodgings for travelers."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Lodges and Guesthouses – Smaller, often family-run accommodations.",
+        "Hostels and Camping Sites – Budget-friendly options.",
+        "Role of Accommodation in Tourism:",
+        "Provides comfort and security for travelers.",
+        "Contributes to the tourism experience.",
+        "Generates employment and revenue for the economy."
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Attractions: Tourist attractions are places or events that draw visitors. They are the main reasons",
+      "topics": [
+        "why people travel to specific destinations.",
+        "Types of Attractions:",
+        "Natural Attractions – National parks, waterfalls, beaches (e.g., Victoria Falls, Great Barrier Reef).",
+        "Cultural Attractions – Museums, historical sites, festivals (e.g., UNESCO Heritage Sites,",
+        "Carnivals)."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Tour Operators and Travel Agencies",
+      "topics": [
+        "Tour operators and travel agencies are intermediaries that assist in planning and booking travel",
+        "services.",
+        "Roles of Tour Operators:",
+        "Design and package travel itineraries.",
+        "Offer guided tours."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Tourism Services and Hospitality: Tourism services refer to the support services that enhance a",
+      "topics": [
+        "traveler’s experience.",
+        "Examples of Tourism Services:",
+        "Hospitality Services – Restaurants, catering, and customer care.",
+        "Banking and Currency Exchange – Forex services for international travelers.",
+        "Safety and Security Services – Immigration, police, and emergency assistance."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Cooperation: Ability to work cooperatively and respectfully with peers.",
+        "Role Fulfillment: Fulfillment of assigned roles and responsibilities within group projects.",
+        "Cultural Awareness",
+        "Cultural Sensitivity: Understanding and respect for cultural diversity within the travel and",
+        "tourism industry.",
+        "Cultural Representation: Accurate and respectful representation of different cultures in",
+        "presentations and projects."
+      ],
+      "assessmentMethods": [
+        "Knowledge and Understanding",
+        "Content Accuracy: Learners demonstrate accurate knowledge of the key components of",
+        "the travel and tourism industry.",
+        "Terminology: Correct usage of industry-specific terms and concepts.",
+        "Comprehension: Ability to explain the roles and functions of different components within",
+        "the industry (e.g., transportation, accommodation, attractions)."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Attractions: Attractions are the main reasons why tourists visit a place. They can be:",
+      "topics": [
+        "Natural Attractions – Mountains, waterfalls, beaches, wildlife, lakes, forests. (e.g., Victoria Falls",
+        "in Zambia)",
+        "Cultural Attractions – Historical sites, museums, traditions, festivals. (e.g., Kuomboka Ceremony",
+        "Man-made Attractions – Theme parks, skyscrapers, shopping malls, entertainment centers. (e.g.,"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Accommodation: Accommodation is where tourists stay during their visit. It can be:",
+      "topics": [
+        "Hotels – High-end comfort and services (e.g., Royal Livingstone Hotel).",
+        "Lodges and resorts – Located in natural environments (e.g., Mfuwe Lodge in South",
+        "Luangwa National Park).",
+        "Budget accommodations – Guesthouses, hostels, campsites.",
+        "Why Accommodation is Important?"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Amenities: Amenities are the essential services and facilities available to tourists. They include:",
+      "topics": [
+        "Food & drink – Restaurants, cafés, local food stalls.",
+        "Healthcare – Hospitals, clinics, pharmacies.",
+        "Banking services – Automated teller machines ATMs, mobile money, money exchange services",
+        "(bureau).",
+        "Security – Police stations, emergency services."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Activities: are things that tourists can do for fun and adventure. These can be:",
+      "topics": [
+        "Wildlife safaris – Watching animals in their natural habitat (e.g., South Luangwa National Park)."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Wildlife safaris – Watching animals in their natural habitat (e.g., South Luangwa National Park).",
+        "Cultural experiences – Traditional dances, craft-making, village tours.",
+        "Adventure sports – Bungee jumping, hiking, zip-lining.",
+        "They make the trip exciting and memorable.",
+        "They help tourists engage with the local culture and environment.",
+        "They encourage longer stays, benefiting the economy",
+        "Practical Application – Mapping Tourism Components",
+        "For example;"
+      ],
+      "assessmentMethods": [
+        "Practical Demonstration",
+        "Learners to design and create a poster/brochure on a destination of their choice with information",
+        "about the destination's attraction, accommodation, amenities, accessibility and activities.",
+        "Essay questions interpreting the history of Travel and Tourism.",
+        "Written exercise on core elements of Travel and Tourism",
+        "Quiz on the forms of Tourism"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Interpersonal Skills (Working with others effectively)",
+      "topics": [
+        "Communication: Clear speaking, listening, and writing (e.g., helping tourists with",
+        "directions).",
+        "Teamwork: Collaborating with colleagues in hotels, airlines, or tour companies.",
+        "Cultural Sensitivity: Understanding different customs and traditions to serve tourists",
+        "better."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Have two learners act as a tourist and a tour guide.",
+        "Let them practice good and poor communication, then discuss what worked best."
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Intrapersonal Skills (Managing oneself effectively)",
+      "topics": [
+        "Self-Awareness: Understanding personal strengths and weaknesses in tourism roles.",
+        "Adaptability: Being flexible when plans change (e.g., flight delays or weather disruptions).",
+        "Self-Management: Being responsible and professional at work."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Present a situation: “A tourist’s flight is canceled, and they are upset. How should a travel agent",
+        "handle this?”. (Note: localize the scenario)",
+        "Let learners discuss solutions in small groups."
+      ],
+      "assessmentMethods": [
+        "Exit Ticket: learners Write down one interpersonal and one intrapersonal skill you need to",
+        "improve and why.",
+        "Activity 4: Practicing planning a tourism itinerary (travel plan) based on specific types of",
+        "This activity can be done indoors or outdoors",
+        "Activity: Brainstorming"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Ensures Proper Budgeting",
+      "topics": [
+        "Helps tourists determine how much money they need for transport, accommodation, food,"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Prevents overspending and financial stress.",
+        "Allows tourists to take advantage of discounts and promotions.",
+        "Example: A traveler visiting Livingstone can plan their expenses for hotels, safari tours, and meals",
+        "to avoid running out of money."
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Saves Time",
       "topics": [],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Reduces time wasted looking for transport, accommodation, or attractions.",
+        "Example: A tourist planning a three-day trip to Lusaka can schedule visits to the Lusaka National",
+        "Museum and Munda Wanga Wildlife Park without last-minute confusion."
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Ensures Availability of Services",
+      "topics": [
+        "Booking flights, hotels, and tourist attractions in advance guarantees availability.",
+        "Avoids disappointment due to fully booked accommodations or attractions.",
+        "Example: A tourist who books a room at the Royal Livingstone Hotel early will not struggle to",
+        "find accommodation upon arrival."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Enhances Safety and Security",
+      "topics": [
+        "Helps tourists research safe destinations and avoid risky areas.",
+        "Ensures that necessary vaccinations, travel insurance, and emergency contacts are in place.",
+        "Example: Before visiting a wildlife park, tourists can check safety guidelines for interacting with",
+        "animals."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Allows for a Better Experience",
+      "topics": [],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "tourism, or eco-tourism.",
+        "Helps in selecting the best restaurants, sightseeing locations, and entertainment options.",
+        "Example: A nature lover can plan a trip to Kafue National Park for game drives and birdwatching",
+        "instead of visiting places that don’t interest them."
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Helps in Understanding Local Culture and Laws",
+      "topics": [
+        "Tourists can research and respect the traditions and customs of the place they are visiting.",
+        "Prevents misunderstandings or legal issues.",
+        "Example: A visitor to Zambia should know that shaking hands is a common greeting and that",
+        "littering is against the law."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Ensures a Balanced Itinerary",
+      "topics": [
+        "Helps tourists avoid overloading their schedule or leaving too much free time.",
+        "Creates a mix of relaxation and adventure for a fulfilling trip.",
+        "Example: A three-day itinerary in Livingstone can include:",
+        "Day 1: Visit Victoria Falls and do a sunset boat cruise.",
+        "Day 2: Safari in Mosi-oa-Tunya National Park."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Understanding these elements helps in:",
+        "Planning effective tourism itineraries.",
+        "Enhancing tourist experiences.",
+        "Promoting sustainable tourism practices",
+        "TOPIC:1.2 TOURIST",
+        "As the world becomes increasingly interconnected, tourism has become a significant aspect of",
+        "modern life, with millions of people traveling to new destinations every year. While tourism can"
+      ],
+      "assessmentMethods": [
+        "Peer Review:",
+        "Groups exchange itineraries and provide feedback on clarity, organization, and creativity.",
+        "Self-Reflection Questions:",
+        "What was the most challenging part of planning the itinerary?",
+        "How does this itinerary meet the needs of tourists?",
+        "What improvements would you make next time?"
+      ],
+      "resources": [
+        "conscious of water usage in regions facing drought.",
+        "Respecting Natural Environments: Stay on designated paths in natural reserves or",
+        "national parks, avoid disturbing wildlife, and refrain from picking plants or collecting rocks",
+        "and other natural items.",
+        "Supporting Sustainable Businesses: Choose accommodations, restaurants, and activities",
+        "that are committed to sustainable and eco-friendly practices, such as those that use"
+      ]
+    },
+    {
+      "unitNumber": 26,
+      "title": "Lew, A. A., Hall, C. M., & Williams, D. R. (2017). The Tourism Geography Reader.",
+      "topics": ["Routledge."],
       "learningOutcomes": [],
       "suggestedActivities": [],
       "assessmentMethods": [],
@@ -15,8 +487,12 @@
     }
   ],
   "metadata": {
-    "source": "TRAVEL-AND-TOURISM-SYLLABUS.pdf",
-    "extractedAt": "2026-07-11T06:20:42.925Z",
-    "fileSize": 631524
+    "source": "TRAVEL_AND_TOURISM_MODULE_Final-2025.pdf",
+    "derivedFrom": ["data/teaching-modules/travel-and-tourism"],
+    "extractedAt": "2026-07-19T18:48:23.558Z",
+    "curated": true,
+    "cleaned": true,
+    "cleanedAt": "2026-07-19T18:48:37.454Z",
+    "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

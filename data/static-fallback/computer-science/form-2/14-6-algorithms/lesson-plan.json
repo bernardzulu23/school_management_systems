@@ -1,0 +1,52 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "6-algorithms",
+  "lesson": {
+    "lesson": 14,
+    "title": "6: ALGORITHMS",
+    "topics": [
+      "Overview",
+      "This topic introduces learners to the fundamental principles of algorithms. Learners will explore how to",
+      "design, represent, and refine step-by-step procedures to solve computational and real-world problems.",
+      "Emphasis is placed on algorithmic thinking, logic development, and the use of visual tools like flowcharts",
+      "and pseudocode."
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Artificial (Physical – Classroom):",
+      "Classroom arranged for interactive discussion and pair work",
+      "Open space at the front for demonstration (role-play of the nshima-making algorithm)",
+      "Technology Environment:",
+      "Projector/board to display examples of algorithms (recipes, routines, GPS routes)",
+      "Optional digital devices for viewing additional examples",
+      "Natural Environment:"
+    ],
+    "resources": [
+      "Computer Science Teaching Module – Form 2 | Ministry of Education, Zambia | 2026",
+      "Form 2 – Secondary Education",
+      "Introduction: This sub-topic introduces algorithms as step-by-step instructions that solve problems.",
+      "Teachers should explain the different types of algorithms and discuss their key characteristics, helping",
+      "learners understand how algorithms work in computing. Guide learners to design flowcharts and write",
+      "pseudocode, showing how algorithms can be applied to solve computational problems. Encourage"
+    ],
+    "assessment": [
+      "Problem-Solving: Identify errors and propose improvements to algorithms",
+      "Guided Inquiry: Teacher facilitates linking examples to key characteristics",
+      "▪ How to Conduct:",
+      "Present four instruction sets on the board and ask learners to evaluate each against the four algorithm",
+      "characteristics (finiteness, definiteness, input/output, effectiveness). Example 1: a good algorithm",
+      "(clear steps with a definite end). Example 2: an infinite loop (\"Keep counting up from 1\" – violates"
+    ],
+    "notes": ""
+  }
+}

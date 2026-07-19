@@ -1,0 +1,45 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.pdf",
+  "md5": "a70abf94924e00d63a6749a416a20207",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "must-come-from-the-syllabus-with-serial-numbers",
+  "lesson": {
+    "lesson": 8,
+    "title": "(Must come from the syllabus with serial numbers)",
+    "topics": ["SUB-TOPIC: (Must come from the syllabus with serial numbers)"],
+    "activities": [
+      "……………………………………………………………………………………………………",
+      "PRIOR KNOWLEDGE: …………………………………………………………………………",
+      "….…………………………………………………………………………………………………",
+      "REFERENCES: ………………………………………………………………………….………",
+      "……………………………………………………………………………………………………",
+      "LEARNING ENVIRONMENT: (Natural/Artificial/Technological)",
+      "……………………………………………………………………………………………………"
+    ],
+    "resources": [
+      "……………………………………………………………………………………………………",
+      "EXPECTED STANDARD: (Must come from the syllabus)",
+      "NB: where there are more learning activities, expected standard can only be attained at the end.",
+      "Form 1 Term",
+      "Teaching Module",
+      "LESSON PROGRESSION:"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION/",
+      "INITIAL PART (…",
+      "LESSON DEVEL­",
+      "MAIN PART (…",
+      "EXERCISE /PER­"
+    ],
+    "notes": ""
+  }
+}

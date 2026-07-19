@@ -1,0 +1,14 @@
+{
+  "subject": "Cinyanja",
+  "subjectSlug": "cinyanja",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+  "md5": "328080b486295e4051048dabc4ea1ea0",
+  "detectedShift": 0,
+  "pageCount": 134,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "lessonCount": 1
+}

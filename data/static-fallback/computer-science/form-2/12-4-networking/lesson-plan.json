@@ -1,0 +1,49 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "4-networking",
+  "lesson": {
+    "lesson": 12,
+    "title": "4: NETWORKING",
+    "topics": [
+      "Overview",
+      "Computer networking is the process of connecting multiple computing devices to enable the sharing of"
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Artificial (Physical – Classroom):",
+      "Classroom arranged for movement and group interaction to model physical networks",
+      "Space to safely form Star, Bus, Ring, and Mesh topologies with string and learners",
+      "Technology Environment:",
+      "Computers for reference to real network layouts",
+      "Natural Environment:",
+      "Supportive, interactive environment encouraging hands-on exploration, observation, and"
+    ],
+    "resources": [
+      "of network connections – and how they determine how information flows across a Local Area Network",
+      "General Competence(s):",
+      "Analytical Thinking",
+      "Analyses different network topologies and evaluates their",
+      "suitability for specific scenarios.",
+      "Collaboration and"
+    ],
+    "assessment": [
+      "Examples of Formative",
+      "Scenario: A small clinic in your area has four computers connected to a single switch in the reception",
+      "area. If the cable to one consultation room is unplugged, the other doctors and the receptionist can",
+      "still work.",
+      "(Topology Identification) What network topology is the clinic using? Explain why the failure of",
+      "one cable doesn’t affect the others."
+    ],
+    "notes": ""
+  }
+}

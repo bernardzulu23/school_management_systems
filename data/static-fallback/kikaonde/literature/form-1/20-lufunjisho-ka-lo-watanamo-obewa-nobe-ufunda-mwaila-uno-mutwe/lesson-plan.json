@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "lufunjisho-ka-lo-watanamo-obewa-nobe-ufunda-mwaila-uno-mutwe",
+  "lesson": {
+    "week": 3,
+    "lesson": 20,
+    "title": "Lufunjisho ka lo watanamo obewa nobe ufunda mwaila uno mutwe wa malwañano.",
+    "topics": [
+      "| P a g e",
+      "MUTWE- KACHE 3: NYIMBO",
+      "Kamina: Nyimbo ke lubaji lwa kisho kyanema mu mutundu yense kabiji imbiwa mu bimye",
+      "byapusana- pusana.",
+      "Ntendekelo: Nyimbo ke lubaji lwa kisho kya mutundu yense kabiji imbiwa mu bimye"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

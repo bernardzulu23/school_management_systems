@@ -1,0 +1,37 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Maths2_Teaching_Module.pdf",
+  "md5": "3c2a26b24aedaab36387e46ac55dee84",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "algebra",
+  "lesson": {
+    "lesson": 4,
+    "title": "ALGEBRA",
+    "topics": [
+      "HOW TO USE THIS MODULE",
+      "To effectively use this Mathematics Teaching Module for Form 1:"
+    ],
+    "activities": [],
+    "resources": [
+      "understanding.",
+      "Monitor learners progress and adjust your teaching strategies as needed, to ensure that all learners meet the learning objectives",
+      "By following these steps, you can effectively use this Mathematics Teaching Module for Form 1 to support your teaching and promote",
+      "learning.",
+      "INTRODUCTION",
+      "Mathematics, as a fundamental STEM subject, which plays an important role in shaping learners' understanding of the natural world. As learners"
+    ],
+    "assessment": [
+      "Plan your lessons in advance, using the module's suggested teaching and learning activities.",
+      "Use a variety of teaching methods, including demonstrations, discussions, group work, and hands-on activities.",
+      "Provide feedback and support to learners, helping them to identify areas for improvement and develop their skills."
+    ],
+    "notes": ""
+  }
+}

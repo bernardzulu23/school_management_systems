@@ -1,0 +1,45 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "2-data-representation",
+  "lesson": {
+    "lesson": 10,
+    "title": "2: DATA REPRESENTATION",
+    "topics": [
+      "Overview",
+      "Data representation refers to the way data such as numbers, text, images, and sound are stored and",
+      "processed in a computer. Since computers only understand binary, different number systems and coding",
+      "schemes are used. This topic introduces learners to binary, denary, octal, and hexadecimal number",
+      "systems, and how text is represented using coding systems like ASCII."
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Artificial (Physical – Classroom):",
+      "Classroom arranged for group work with space to create posters.",
+      "Clear view of board/projector for class discussion and comparison table.",
+      "Technology Environment:",
+      "Optional: computers or tablets for reference or digital base charts.",
+      "Projector/board to display examples of number systems.",
+      "Natural Environment:"
+    ],
+    "resources": [],
+    "assessment": [
+      "Examples of Formative",
+      "Scenario: Your younger cousin in Chipata sees you working on a computer at a community centre",
+      "and asks, “Bakamba (Elder), I heard that computers only understand 0 and 1. But we are learning",
+      "about numbers like 10, 25, and 100 in school. How can a computer work with many school numbers",
+      "if it only knows two digits?”",
+      "(Binary/Denary) Explain to your cousin how the computer takes the number he sees (like 5)"
+    ],
+    "notes": ""
+  }
+}

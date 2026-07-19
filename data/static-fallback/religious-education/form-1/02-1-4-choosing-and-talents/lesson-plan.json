@@ -1,0 +1,34 @@
+{
+  "subject": "Religious Education",
+  "subjectSlug": "religious-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "RELIGIOUS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "9dbcad673655b7812c7256a2d74b2b5e",
+  "detectedShift": 0,
+  "pageCount": 40,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-4-choosing-and-talents",
+  "lesson": {
+    "lesson": 2,
+    "title": "1.4 CHOOSING AND TALENTS",
+    "topics": [
+      "Sub-Topic:1.4.2. Central Teachings on Making Choices in Four Religions in Zambia....................... 19",
+      "Religious Education",
+      "Teaching Module"
+    ],
+    "activities": ["the CBC’s objectives."],
+    "resources": [
+      "with their own research and innovations to address potential gaps during implementation. The"
+    ],
+    "assessment": [
+      "to learners’ needs and levels.",
+      "The Ministry of Education acknowledges the challenges associated with transitioning to a new",
+      "curriculum. Consequently, this module reflects our commitment to providing teachers with",
+      "the CBC’s objectives."
+    ],
+    "notes": ""
+  }
+}

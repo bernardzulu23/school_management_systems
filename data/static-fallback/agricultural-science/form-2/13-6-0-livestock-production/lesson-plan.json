@@ -1,0 +1,49 @@
+{
+  "subject": "Agricultural Science",
+  "subjectSlug": "agricultural-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "df6a8d3579bb6bd33da1fcd4a3dc5cec",
+  "detectedShift": 0,
+  "pageCount": 132,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "6-0-livestock-production",
+  "lesson": {
+    "lesson": 13,
+    "title": "6.0 LIVESTOCK PRODUCTION",
+    "topics": [
+      "Introduction",
+      "anatomy and physiology for poultry livestock and rearing of broilers from day-old to maturity."
+    ],
+    "activities": [
+      "observing appropriate management practices such as feeding, housing, health care, and hygiene. In addition, learners will examine",
+      "methods of adding value to poultry products and explore effective marketing strategies. They will also analyse yields and assess the",
+      "quality of poultry products with the aim of identifying areas of improvement. Furthermore, learners will be encouraged to investigate",
+      "innovative approaches that can enhance productivity and efficiency in poultry production.",
+      "Specific Competences",
+      "Demonstrate understanding of poultry production",
+      "Demonstrate understanding of anatomy and physiology for poultry livestock",
+      "Rear broiler chickens to maturity"
+    ],
+    "resources": [
+      "Arrange a visit to a local poultry farm.",
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 &",
+      "Exploring poultry hatcheries in Zambia",
+      "Learning Materials Needed: Internet access or printed information, Map of Zambia, Flip charts or notebooks, Markers/pens",
+      "Activity 1: Exploring poultry hatcheries in Zambia",
+      "Procedure"
+    ],
+    "assessment": [
+      "In Zambia, poultry farming is a key component of livestock production that contributes to household nutrition, income generation, and",
+      "employment. Communities are increasingly adopting poultry rearing as a business, and learners are expected to acquire practical and",
+      "theoretical knowledge of poultry production. As a learner with knowledge of poultry production, management, and farm construction,",
+      "you are invited to prepare a presentation and practical demonstration for a school-based poultry awareness program.",
+      "i. Describe poultry and explain the importance of poultry production in Zambia;",
+      "ii. Categorise chickens according to their breeds and usage (e.g., meat, eggs, dual purpose);"
+    ],
+    "notes": ""
+  }
+}

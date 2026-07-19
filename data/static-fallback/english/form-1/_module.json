@@ -1,0 +1,14 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "TEACHING-MODULE-FOR-LITERATURE-FORM-1-TERM-1.pdf",
+  "md5": "25275e09394e62d1193ace54f450c52a",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "lessonCount": 4
+}

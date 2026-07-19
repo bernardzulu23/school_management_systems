@@ -1,0 +1,14 @@
+{
+  "subject": "Biology",
+  "subjectSlug": "biology",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Biology-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "de96eadde048b75cdb81b327dc84d1b5",
+  "detectedShift": 0,
+  "pageCount": 153,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "lessonCount": 2
+}

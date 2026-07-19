@@ -1,0 +1,46 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "group-work",
+  "lesson": {
+    "week": 1,
+    "lesson": 17,
+    "title": "Group Work",
+    "topics": [
+      "The teacher to invite a government official (Member of Parliament, Minister, Councillor, Mayor",
+      "or District Commissioner) or a Civil Society Leader as a guest speaker to make a presentation",
+      "on good and bad governance.",
+      "After the presentation, the teacher to provide learners with manila papers and place them in",
+      "groups. Then the teacher to assign some groups to write the characteristics of good governance"
+    ],
+    "activities": [
+      "Understanding the value of a good learner at School",
+      "Teaching and Learning Materials: Charts for presentation",
+      "Group Work",
+      "Teacher to put learners in groups and let them discuss what makes a good learner in the school.",
+      "After group discussions, each group to make a presentation based on the issues brought out during",
+      "the discussion emphasising the values which make a good learner.",
+      "Learners to work in groups identifying areas which need attention in the school (dirty",
+      "surrounding, vandalism, unruly behaviour, late coming, substance abuse, …)"
+    ],
+    "resources": [],
+    "assessment": [
+      "Task 1: Story writing",
+      "Learners to write a story of a community leader (present or past) who demonstrated traits of good",
+      "governance. The story should clearly state what values this leader possessed which are worthy",
+      "emulating.",
+      "Task 2: Quiz",
+      "A leader who practices good governance is one who"
+    ],
+    "notes": ""
+  }
+}

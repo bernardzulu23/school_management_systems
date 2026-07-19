@@ -1,0 +1,43 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.pdf",
+  "md5": "a70abf94924e00d63a6749a416a20207",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "10-anatomy-and-physiology",
+  "lesson": {
+    "lesson": 4,
+    "title": "10 ANATOMY AND PHYSIOLOGY",
+    "topics": [
+      "INTRODUCTION",
+      "Anatomy and Physiology is the study of the human body’s structure and function. In Physical",
+      "Education and Sport, it helps learners understand how the body moves, responds to exercise and"
+    ],
+    "activities": [
+      "This topic aims to introduce learners to the fundamental principles of anatomy and physiology,",
+      "focusing on their application to physical education and sports. Learners will explore the human",
+      "body structure and function, laying the groundwork for further study in exercise science and",
+      "sports performance.",
+      "General Competences:",
+      "Learners should acquire the following general competences:",
+      "Problem solving: The application of knowledge to tackle real life situations using various strat­",
+      "egies and providing solutions to challenging situations within the environment."
+    ],
+    "resources": [],
+    "assessment": [
+      "Multiple-choice quizzes",
+      "z Accuracy (correct selection of answers).",
+      "z time management (complete tasks within the given time)",
+      "z understanding of concepts (reflecting knowledge of concepts)",
+      "Short-answer questions",
+      "z Relevance (answers directly addressing the question"
+    ],
+    "notes": ""
+  }
+}

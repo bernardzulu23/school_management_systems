@@ -1,0 +1,48 @@
+{
+  "subject": "Geography",
+  "subjectSlug": "geography",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Geography-Module-Form1.Term-11.pdf",
+  "md5": "830c5919283d537a897943595cfaf095",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "geography",
+  "lesson": {
+    "lesson": 4,
+    "title": "Geography",
+    "topics": [
+      "Introduction",
+      "Geography is an important subject for secondary school learners, providing them with essential",
+      "knowledge and skills that are applicable in real-life situations. It fosters critical thinking, global",
+      "awareness and environmental stewardship, preparing learners to navigate and contribute",
+      "positively to an interconnected World. By understanding geographical principles, learners are"
+    ],
+    "activities": [
+      "c. Learning Environment",
+      "Indoor set up:",
+      "o Cluster the leaners in small groups to discuss the concepts of Geography",
+      "o Display World map or globe/pictures or videos of geographical features",
+      "o Leaners to identify geographical features",
+      "o Each group to share key ideas to the class",
+      "o Key responses to be written down by grouping similar ideas",
+      "o Learner responses should be connected to cement the concept Geography"
+    ],
+    "resources": [
+      "o Geographical skills include; map reading and interpretation, analysing spatial data and",
+      "patterns, conducting field studies and research."
+    ],
+    "assessment": [
+      "o Observe learners’ participation in small groups as they interact with the globe and maps to",
+      "identify physical and culture features.",
+      "o Observe learners’ manipulation of tools such as Maps, GPS and Google maps to identify",
+      "physical and cultural features.",
+      "o Quick quiz question - One thing I learnt about Geography today is…….",
+      "Activity 2: Identifying various branches of Geography (Physical and Human)"
+    ],
+    "notes": ""
+  }
+}

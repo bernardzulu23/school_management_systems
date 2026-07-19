@@ -1,0 +1,38 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Mathematics-1-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "4b033f61c02a6d1423fbe1f01b080bb8",
+  "detectedShift": 0,
+  "pageCount": 173,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "algebra",
+  "lesson": {
+    "lesson": 7,
+    "title": "ALGEBRA",
+    "topics": [
+      "Introduction",
+      "In Form 1, learners were introduced to the basics of algebra, such as variables, constants, coefficients, and",
+      "terms, and they practiced simplifying expressions. To build on this foundation, in form 2, learners will now focus",
+      "on the basic processes of algebra.",
+      "Key terms: Monomial, Binomial, Linear expression, Quadratic expression, Simplification, Factorization"
+    ],
+    "activities": [
+      "(monomial by binomial and binomial by binomial)",
+      "Instructions:",
+      "Scenario: Chanda goes to a shop to buy school exercise books and pens. Each exercise book costs k8, but the",
+      "learner does not know how many exercise books she will buy. Each pen costs k3, and she buys 4 pens.",
+      "a. Let x represent the number of exercise books bought, write an expression for the total cost of the exercise",
+      "books and pens.",
+      "b. Given that the total cost of the books and pens can be written as 4(2𝑥 + 3), compare the expression in",
+      "(a) with this one. What steps would we take to convert the expression in (b) to the expression in (a)"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

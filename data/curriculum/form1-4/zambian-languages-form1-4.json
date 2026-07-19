@@ -6,17 +6,3157 @@
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
+      "title": "Unit 1",
+      "topics": ["School – Kazungula"],
       "learningOutcomes": [],
       "suggestedActivities": [],
       "assessmentMethods": [],
       "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Unit 2",
+      "topics": ["Secondary School – Monze"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Unit 3",
+      "topics": ["School -Mazabuka"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Unit 4",
+      "topics": ["Education – Livingstone."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Unit 5",
+      "topics": ["School – Choma.", "MATALIKO"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Unit 6",
+      "topics": [
+        "NTALISYO",
+        "Bbuku lyakubelesya kugwasyilizya bamayi kuyiisya mu Foomu 1 naa Modyu (Teaching",
+        "module) lyakalembwa kugwasyilizya bamayi kuyiisya bweelede ciiyo ca Litilicca mu Chitonga",
+        "kubelesya nzila yakuyiisya mpya."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Chitonga: Kusinyuka kuyeeya kujana",
+      "topics": [
+        "bwiinguzi bweelede",
+        "(Analytical thinking)",
+        "Kusansaula kuzyiba zyintu mbozyeelede"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Chitonga: Kutuma akutambula milumbe",
+      "topics": [
+        "(Communication)",
+        "Tondezya nzila zyibotu zyakuswiilila,",
+        "kwaambaula akulemba.",
+        "Belesya mulaka weelede munzila",
+        "zyaandeene."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Chitonga: Busengwe-sengwe aluzyibo",
+      "topics": [
+        "lwakwaanza zyintu",
+        "(Creativity and innovation)",
+        "Kutuma akutambula mizeezo yamuntu",
+        "kubuleya.",
+        "Kubuzya mibuzyo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Chitonga: Kubelekela antoomwe",
+      "topics": ["(Collaboration)", "Kubelekela antoomwe."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Chitonga: Kuyeeyesya",
+      "topics": [
+        "(Critical thinking)",
+        "Kubuzya mibuzyo.",
+        "Kubelekela mutubunga akubandisyanya",
+        "Kubelekela antoomwe akubandisyanya",
+        "mutubunga."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Chitonga: Lwiiyo lwakuzyiba kubala",
+      "topics": [
+        "akulemba mumayuwe/luzyibo",
+        "lwakubelesya kompyuta",
+        "(Digital literacy)",
+        "Kuba abusongo bwakweendelanya maanza",
+        "ameso kumincini yamayuwe"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Chitonga: Busongo",
+      "topics": [
+        "bwamizeezo/Bucenjezu",
+        "butondezya mubili ncuuyanda",
+        "(Emotional intelligence)",
+        "Kutuma akutambula milumbe abamwi bantu.",
+        "Kubelekela amwi/antoomwe."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Chitonga: Luzyibo lwakucita makwebo",
+      "topics": [
+        "/Makwebo aakumanizya",
+        "mapenzi (Financial literacy)",
+        "(Entrepreneurship)",
+        "Kubelesya mulaka kutondezya nzila",
+        "zyuubauba zyabukkale mbuli kusambala"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Chitonga: Nzila yakumana mapenzi",
+      "topics": [
+        "(problem solving)",
+        "Kobelesya luzyibo lwatubala twa Alufabeti",
+        "kubamba mabala",
+        "MUTWE: MATALIKILO AA LITILICCA."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Chitonga: Kubupanduluzi buli mumubuzyo 1, balembe kwiimpana nkobatijane muli mbubo.",
+      "topics": [
+        "CAKUCITA 3: Kunongaula bupanduluzi bwa Litilicca.",
+        "Sololela basicikolo kunongaula bupanduluzi bwa Litilicca.",
+        "Gwasyilizya basicikolo kubona kuti mubandi weenda bweelede.",
+        "BASICIKOLO",
+        "Basicikolo bamana kulanganya kwiindana akukozyanya kuliko akati kabupanduluzi bwapegwa,"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Chitonga: Basicikolo basale bupanduluzi bomwe kuli boobu bwayiigwa, bamana balembe twaambo ntobayeeya",
+      "topics": ["kuti mbobweelede kwiinda bupanduluzi boonse bwapegwa."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Chitonga: Basicikolo basale abumwi bupanduluzi mbobayeeya kuti tabuzulide, bamana balembe twaambo",
+      "topics": [
+        "ncobayeeyela boobo.",
+        "MUTWE MUSYOONTO 3: Kubamba bupanduluzi bwa Litilicca.",
+        "NTALISYO: Ciindi basicikolo nibamana kusalangunya akulanganya bupanduluzi bwaandeene –andeene,",
+        "balajana luzyibo lujatikizya mizeezo iizwa mubupanduluzi oobu. Aboobo mucibeela eeci tulalanganya nzila",
+        "zyakubamba bupanduluzi bwa Litilicca kuzwa kuli sicikolo omwe-omwe kweendelanya ambwaacimvwa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Chitonga: Abalembe twaambo tukkutwa tuzuzikizya kuti bupanduluzi bwabo buleelela ncobeni.",
+      "topics": [
+        "Bayi balaangulukide kupa mulimo kweendelanya aciiyo.",
+        "KUMANINZYA.",
+        "Litilicca inga yapandululwa munzila zyaandeene-andeene kweendelanya asikupandulula",
+        "mbwacimvwa.",
+        "Litilicca taijatikizyi biyo zyintu zyilembedwe pele azyeezyo zyaambwa amulomo mpande mbuli"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Chitonga: MISYOBO IMBI YABWAAPAUZI.",
+      "topics": [
+        "a. Tusimpi/ Twaambyo/ Tusimyo –ntwaambo twabusongo tujisi lulayo lwakansiya-",
+        "nsiya lusisidwe.",
+        "b. Tulabi – ntwaambo tuyanda bwiinguzi bwabusongo. Tulakonzya kubelesyegwa",
+        "kukkomaninsya, kuyiisya akusimya mizeezo.",
+        "c. Nyimbo –majwi aakutembaula, kwaambilila, kulumbaizya, kuyumya-yumya"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Chitonga: ZYAKULENGELEZYA",
+      "topics": [
+        "a. Tubbuku- zyaano zyilembedwe mubulamfwu kujatikizya buponi bwabantu.",
+        "b. Twaano tufwaafwi – mbuponi bulembedwe muciimo cacaano mubufwaafwi",
+        "kuyiisya bukkale.",
+        "c. Novela – zyaano zyilembedwe zyili akati-kati ka twaano tufwaafwi atubbuku",
+        "zyiyiisya bukkale."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Chitonga: ZYAMASIMPE",
+      "topics": [
+        "a. Milaso – Oobu mbulembo bufwaafwi bupandulula mizeezo imwi.",
+        "b. Caano cabuponi bwamuntu – ooyu mulimo wabuponi bwamuntu uulembwa",
+        "abantu bambi kujatikizya buumi bwakwe azyintu nzyaakacita mubuponi bwakwe.",
+        "c. Caano camulembi lwakwe – eeci ncaano cilembwa amulembi lwakwe caamba",
+        "buumi bwakwe."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Unit 23",
+      "topics": ["BALEMBI"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Chitonga: Hamankolo Maureen – Senior Lecturer - Charles Lwanga College of",
+      "topics": ["Education – Monze"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Chitonga: Kalyata Kanyanga – Senior Lecturer - David Livingstone College of",
+      "topics": ["Education – Livingstone."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Unit 26",
+      "topics": ["Namwala."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Unit 27",
+      "topics": ["MATALIKILO"],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "CAKUCITA",
+        "DISCUSSION",
+        "MABALA MAPATI-PATI AABELESYEGWA",
+        "BAKAZAYA - Caamba kuti bakafwa",
+        "KUPEMPENUKA - Kubuka kuzwa kukunetuka",
+        "BWELA - Caamba kuzela mubunji",
+        "KUSENGULWA - Kusilikwa",
+        "CIBUKILAMBUTA - Caamba kucita cintu"
+      ],
+      "assessmentMethods": [
+        "ZYITONDEZYO",
+        "ACTIVITY",
+        "CAKUCITA",
+        "DISCUSSION",
+        "MABALA MAPATI-PATI AABELESYEGWA",
+        "BAKAZAYA - Caamba kuti bakafwa"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Chitonga: Kusinyuka kuyeeya kujana",
+      "topics": [
+        "bwiinguzi bweelede",
+        "(Analytical thinking)",
+        "Kusansaula kuzyiba zyintu mbozyeelede",
+        "Kutuma akutambula",
+        "milumbe"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Chitonga: Busengwe-sengwe aluzyibo",
+      "topics": [
+        "lwakwaanza zyintu",
+        "(Creativity and",
+        "innovation)",
+        "Kutuma akutambula mizeezo yamuntu",
+        "kubuleya."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Chitonga: Kubelekela antoomwe",
+      "topics": ["(Collaboration)", "Kubelekela antoomwe."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Chitonga: Kuyeeyesya",
+      "topics": [
+        "(Critical thinking)",
+        "Kubuzya mibuzyo.",
+        "Kubelekela mutubunga akubandisyanya",
+        "Kubelekela antoomwe akubandisyanya",
+        "mutubunga."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Chitonga: Lwiiyo lwakuzyiba kubala",
+      "topics": [
+        "akulemba",
+        "mumayuwe/luzyibo",
+        "lwakubelesya kompyuta",
+        "(Digital literacy)",
+        "Kuba abusongo bwakweendelanya"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Chitonga: Busongo",
+      "topics": [
+        "bwamizeezo/Bucenjezu",
+        "butondezya mubili",
+        "ncuuyanda",
+        "(Emotional intelligence)",
+        "Kutuma akutambula milumbe abamwi"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Chitonga: Nzila yakumana mapenzi",
+      "topics": [
+        "(problem solving)",
+        "Kubelesya luzyibo lwamisemo yamabala",
+        "(Alphabet) kubamba mabala",
+        "MUZEEZO 1: MIBANDI"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Chitonga: Ntalisyo",
+      "topics": [
+        " Buyale:",
+        "Cibeela eeci cilanganya mibandi. Cilalanganya milawo iitobelwa mumubandi; nkokuti",
+        "mbokubandikwa, nokubandikwa ancokubandikilwa. Mumuzeezo nguwenya ooyu, kuli",
+        "akubala kwakawiiwi akubala kwakupozya. Kwamana boobo, wiiya weelede kukonzya",
+        "kubikka cabandikwa mubulembo, nkokuti nkwiiya kulemba mulaso. Mukuzwidilizya"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Chitonga: Mwana wasika aciimo camyaka kkumi alusele weelede kuzwa abazyali akulizyibila",
+      "topics": ["bwakupona."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Chitonga: Bantu bajatwa akaambo kakubelesya misamu iikola beelede kwaangwa kwamyaka",
+      "topics": ["iitaleli kumakumi obilo."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Chitonga: Bazyali, kutali bamayi, mbabanyonganya bana.",
+      "topics": [
+        "Mwiiyi:",
+        "Pandulula milawo iitobelwa mukukazyanya mizeezo.",
+        "Bikka basicikolo mutubunga tobilo.",
+        "Bape mutwe wakaambo ngobatiikazyanye basicikolo.",
+        "Kopa tubunga ciindi cakulibambila akubikka twaambo antoomwe."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Chitonga: 1.3.1 MULASO (This must come from the syllabus with its serial number)",
+      "topics": [
+        "SUB-TOPIC: 1.3.1.6 MULASO WAKUPANDULULA MUNTU",
+        "(This must come from the syllabus with its serial number)"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Reading the model",
+        "description of a person",
+        "(books/magazine,",
+        "Basicikolo babale",
+        "mukozyanyo",
+        "wabupanduluzi",
+        "bwamuntu bwapegwa",
+        "descriptions of a"
+      ],
+      "assessmentMethods": [
+        "INTRODUCTIO",
+        " In small groups,",
+        "task learners to",
+        "investigate the",
+        "concept of"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Cinyanja: Zocita-Exercise",
+      "topics": [
+        "MUTU 1: ZOYAMBILILA M’LITILICA",
+        "Phunziloli linena za Litilica. Litilica idziwika mosiyana-siyana kulingana ndi alembi",
+        "osiyana-siyana. Ngakhale lidziwika kuti Litilica, imafalitsidwa mnjila zosiyana-",
+        "siyana kupyolela m’nyimbo, masewelo, ndakatulo, miyambi, mikuluwiko ndi",
+        "zilapi (ndagi). Izi maka-maka zigwela m’mbali ziwili zimene zili mu zolembedwa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Cinyanja: Sankha ziganizo ziwili cabe mwa zotsatilazi, zimene zimasulila Litilica:",
+      "topics": [
+        "a) Litilica ndi zimene zimafalitsidwa kapena kuphunzitsidwa",
+        "kumibadwo kudzela m’mau olankhulidwa.",
+        "b) Litilica ndi zonse zooneka ndi maso.",
+        "c) Litilica ndi zija zimene zili zolembedwa m’mabuku,",
+        "m’manyuzipepala, m’majano ndi zina"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Cinyanja: Peleka tanthauzo lako-lako la Litilica.",
+      "topics": [
+        "MUTU 2: MITUNDU YA LITILICA",
+        "Zamkati :",
+        "Pali mitundu ya Litilica iwili, Litilica ya Zapakamwa ndi Litilica ya Zolembedwa.",
+        "Litilica ya Zapakamwa ifalitsidwa kupyolela m’kulankhula monga zilapi,",
+        "masewelo, ndakatulo ndi zina. Litilica ya Zolembedwa ipezeka m’mabuku, zozile"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 43,
+      "title": "Cinyanja: Sankha zitsanzo ziwili zimene zinena za Litilica ya Zapakamwa mwa izi:",
+      "topics": [
+        "a) Buku, zilapi ndi miyambi.",
+        "b) Mbili ya Shaka yokambidwa.",
+        "c) Mbili yolembedwa ya Idiyamini.",
+        "d) Zilapi, miyambi ndi nthano."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 44,
+      "title": "Cinyanja: Nena kusiyana pakati pa Litilica ya Zapakamwa ndi Litilica ya",
+      "topics": ["Zolembedwa."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 45,
+      "title": "Cinyanja: Nena kufanana pakati pa Litilica ya Zapakamwa ndi Litilica ya",
+      "topics": ["Zolembedwa."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 46,
+      "title": "Cinyanja: Fotokoza ubwino wa Litilica ya Zolembedwa.",
+      "topics": [
+        "MUTU 3: NCHITO ZA LITILICA",
+        "Zamkati",
+        "Pali mitundu iwili ya Litilica. Litilica ya Zapakamwa ndi Litilica ya Zolembedwa.",
+        "Maguluwa ali ndi nchito zosiyana-siyana. Pali nchito za Litilica ya Zapakamwa",
+        "ndi nchito ya Litilica ya Zolembedwa."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 47,
+      "title": "Cinyanja: 1.3.1 Composition (This must come from the syllabus with its serial number)",
+      "topics": [
+        "SUB-TOPIC: 1.3.1.6 Describing a person or an animal (This must come from the syllabus",
+        "with its serial number)"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Reading the model",
+        "description of a person",
+        "(books/magazine,",
+        "Newspaper",
+        "descriptions of a",
+        "person read",
+        "aloud in a class",
+        "Explain the features of"
+      ],
+      "assessmentMethods": [
+        "INTRODUCTIO",
+        " In small groups,",
+        "task learners to",
+        "investigate the",
+        "concept of"
+      ],
+      "resources": [
+        " Samples of descriptive composition of people.",
+        " Pictures of different people.",
+        " Newspapers",
+        "EXPECTED STANDARD: Descriptive composition written correctly. (This must come from",
+        "the syllabus as it is)"
+      ]
+    },
+    {
+      "unitNumber": 48,
+      "title": "Cinyanja: Zocita-Exercise",
+      "topics": [
+        "CA PAMUTU 1: MAKHALIDWE OYENELELA AM’DZIKO",
+        "Zam’kati: Capamutuci, cidzaona pa makhalidwe oyenela a m’dziko kupyolela mu mvetselo ndi",
+        "lankhulo, ndondomeko zakawelengedwe, kulemba, cinenedwe, zikambi-kambi ndi tembenuzo.",
+        "Komanso nchito ndi zocita aphunzi zidzapelekedwa.",
+        "MVETSELO NDI LANKHULO"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 49,
+      "title": "Cinyanja: Sinthani ndime koma osasintha matanthauzo lake.",
+      "topics": [
+        "Mwacidule: Pa mutuyu, aphunzi awelenga nkhani momvetsetsa bwino lake",
+        "ayankha mafunso osiyana – siyana.",
+        "MUTU 3: KUWELENGA MOKWEZA MAU.",
+        "Mutu Waung’ono: Kuwelenga Mosalumila-lumila.",
+        "Lambulo: Pa mutuyu,aphunzi adzawelenga nkhani mofulumila mosalumila-lumila,"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 50,
+      "title": "Cinyanja: Atembunuze ziganizo zopatsidwa motstila ndondomeko zake zoyenelela.",
+      "topics": [
+        "Muyeso Woyembekezeleka: Njila zosiyana-siyana zotembenuzilamo nchito yopatsidwa",
+        "kucotsa m’cilankhulo cina kupeleka m’cinanso zagwilitsilidwa nchito moyenelela.",
+        "Mwacidule: Pa mutuyu, aphunzi aphunzila njila zosiyana-siyana",
+        "zotembenuzililamo nkhani zopatsidwa kucokela m’cilankhulo cina kupeleka",
+        "m’cilankhulo cinanso.Nchito za a phunzi zacitidwanso."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 51,
+      "title": "Cinyanja: Lemba kamzele munsi mwa mphatikizi wofunsidwayo.",
+      "topics": [
+        "(a) Wathawa (mphatikizim’mbuyo.)",
+        "(b) Tapitabe (mphatikizipatsogolo)",
+        "Lemba zidunswa zotsatila ngati aphatikizi kulingana ndi mtundu wa aphatikizi ofunsidwa.",
+        "(i) dzi (ii) nso (iii) A",
+        ".Peleka nthawi zolozeleka m’mene zikambi-kambi zotsatilazi zigwilitsidwila nchito."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 52,
+      "title": "Cinyanja: Aphunzi apelike Zoonadi ndi Malingalilo ao ku aphunzi anzao.",
+      "topics": [
+        "Mwacidule: Aphunzi aasiyanitsa pakati pa zocita za Zoonadi ndi Malingalilo komanso",
+        "apeleka zocitika za Zoonadi ndi Malingalilo.",
+        "WELENGO",
+        "MUTU 1: MNDANDANDA WA MAU",
+        "Mutu Waung’ono: Matanthauzo a Mau"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 53,
+      "title": "Cinyanja: Aphunzi apange ziganizo kugwilitsa nchito mau a matanthauzo",
+      "topics": [
+        "Mwacidule: Aphunzi akambilana pa matanthauzo a mau, apeleka matanthaauzo a mau",
+        "opatsidwa ndi kuyagwilitsila nchito m’ziganizo. Nchito ndi zocita zopatsidwa zacitidwa.",
+        "MUTU: KUWELENGA MOZAMA",
+        "Mutu Waung’ono: Mvetso",
+        "Lambulo: Pa mutuyu, aphunzi adzawelenga nkhani, adzayankha mafunso osiyana-osiyana,"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 54,
+      "title": "Icibemba: Litilica Yakulandafye 54",
+      "topics": [
+        "AMASHIWI YAMO-YAMO AYABOMFIWA MUCITABO",
+        "Amabumba – fintu ifyalingana ifibikilwe pamo",
+        "Iciunda – icongo ico icifuma mukulanda, mukulisha ing’oma nangu",
+        "icintu icapala akapyelele",
+        "Ifisolobelo – ifintu ifyo babomfya pakubomba umulimo umo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Ukufwailisha ifishinka pamilandu iyalekana-lekana (Research)",
+        "Ukusambilila ukupitila mukulanshanya (discussions)",
+        "Ukusambilila ukupitila mukufwaya nokusanga ifishinka pamilandu",
+        "iyalekana-lekana (discovery)",
+        "Ukulemba utumalyashi utwiipi (short stories",
+        "Ukubomfya kompyuta mukupanga amalyashi, utusela nama",
+        "Ukulundapo, kuli notumisango utunsela-nsela natumbi",
+        "utwamifundile uto kafundisha alingile ukubomfwa pakuti"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 55,
+      "title": "Icibemba: Kafundisha:",
+      "topics": [
+        "Eba abasambi batantike ubipilibulo bwa Litilica ubwa",
+        "lekana-lekana",
+        "Ifilangililo fya bupilibulo bwa Litilica:",
+        "i. Litilica ninshila imo iyo tupokelamo amalyashi",
+        "ayalekana-lekana ukupitila mukulanda na"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 56,
+      "title": "Icibemba: Abasambi:",
+      "topics": [
+        "Abasambi batantike ubipilibulo bwa Litilica ubwa lekana-",
+        "Abasambi balondolole ubipilibulo bwa Litilica ubwa",
+        "lekana-lekana",
+        "Peela abasambi ubupilibulo bwa Litilica ubwafikapo",
+        "Imibombele ileenekelwa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 57,
+      "title": "Icibemba: Pabulondoloshi bwa Litica bupelwe, salapo bumo ubo ulemona",
+      "topics": [
+        "ukuti nabufikapo ukupwililika elyo ulondololele ico wabusalila",
+        "ukuti buli ubwapwililika."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 58,
+      "title": "Icibemba: Pabulondoloshi bwa Litica bupelwe, salapo bumo ubo ulemona",
+      "topics": [
+        "ukuti tabufikelepo elyo ulondololele ico wabusalila ukuti buli",
+        "tabufikelepo.",
+        "Umutwe Unoono 2: Ukusobolola Ubupilibulo bwa Litilica ubwa lekana-",
+        "Ubulondoloshi:",
+        "Muli uyu mutwe, abasambi balasambilila pabupilibulo bwa Litilica"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 59,
+      "title": "Icibemba: Kafundisha:",
+      "topics": [
+        "Eba abasambi babebete ubupilibulo bwa Litilica ubwa",
+        "lekana-lekana",
+        "Eba abasambi bapalanye na ukupusanya ubipilibulo bwa",
+        "Litilica ubwa lekana-lekana",
+        "Eba abasambi balengulule ubipilibulo bwa Litilica ubwa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 60,
+      "title": "Icibemba: Abasambi",
+      "topics": [
+        "Babebete ubipilibulo bwa Litilica ubwa lekana-lekana",
+        "Bapalanye na ukupusanya ubipilibulo bwa Litilica ubwa",
+        "lekana-lekana",
+        "Babebete nokumonamo ubusuma nangula ubukankala",
+        "ubuli muli ubu bupilibulo bwa Litilica"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 61,
+      "title": "Icibemba: Palanya na ukupusanya ubupilibulo bwa lekana-lekana ubwa",
+      "topics": ["litilica"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 62,
+      "title": "Icibemba: Pabulondoloshi ubwa Litilica bupeelwe, bulapo bubili",
+      "topics": [
+        "ubulengulule mukufikapo",
+        "Umutwe Unoono 3: Ukupanga Ubupilibulo bwa Litilica",
+        "Ubulondoloshi:",
+        "Muli uyu mutwe, abasambi balapanga ubupilibulo bwa Litilica ubwa",
+        "lekana-lekana. Balabomfya ubwishibilo bwabo na ukuipangila"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 63,
+      "title": "Icibemba: Kafundisha",
+      "topics": [
+        "Londolwela abasambi ifyo ubupilibulo bwa Litilica",
+        "bwingapangwa",
+        "Pamo nabasambi pangenipo ubupilibulo bumo ubwa",
+        "Litilica",
+        "Eba abasambi baipangile ubipilibulo bwa Litilica"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 64,
+      "title": "Icibemba: Abasambi",
+      "topics": [
+        "Baipangile ubipilibulo bwa Litilica",
+        "Balange ifyo ubipilibulo bwa Litilica ubwakuipangila",
+        "bwinga suminishiwa ukupitila mukupalanya na ukupusanya",
+        "na ubipilibulo bwa Litilica ubwa lekana-lekana",
+        "Imibombele ileenekelwa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 65,
+      "title": "Icibemba: Panga ubulondoloshi bobe ubwa Litilica ukulingana na ifyo",
+      "topics": ["usambilile"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 66,
+      "title": "Icibemba: Langa ifyo ubulondoloshi bobe ubwa Litilica bwinga suminishiwa",
+      "topics": [
+        "ukukonka ififwaikwa mubulondoloshi",
+        "UMUTWE 2: IMISANGO YA LITILICA",
+        "Ubulondoloshi",
+        "Muli uyu mutwe, abasambi balasambilila pamisango ibili iya Litilica",
+        "apali, Litilica yakulandafye na Litilica iyalembwa. Muli Litilica"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 67,
+      "title": "Icibemba: Kafundisha:",
+      "topics": [
+        "Londolwela abasambi umwalola Litilica yakulandafye",
+        "Eba abasambi balondolole ubipilibulo bwa Litilica",
+        "yakulandafye",
+        "Eba abasambi balange ubipilibulo bwa Litilica"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 68,
+      "title": "Icibemba: Abasambi:",
+      "topics": [
+        "Balondolole ubipilibulo bwa Litilica yakulandafye",
+        "Balange ubipilibulo bwa Litilica yakulandafye",
+        "Babiike Litilica yakulandafye mumabumba ukulingana na",
+        "imbeela",
+        "Batantike imisango ya Litilica yakulandafye ukukonka na"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 69,
+      "title": "Icibemba: Peela amabumba ya Litilica yakulandafye elyo uyalondolole",
+      "topics": ["mukushika?"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 70,
+      "title": "Icibemba: Lumbulapo imibele ya Litilica yakulandafye isano?",
+      "topics": [
+        "Umutwe Unoono 2: Litilica Iyalembwa",
+        "Ubulondoloshi:",
+        "Muli uyu mutwe, abasambi balasambilila pali Litilica iyalembwa,",
+        "balalondolola ubupilibulo bwa Litilica iyalembwa. Balaishiba Litilica",
+        "yalembwa umo abela elyo balabiika Litilica yalembwa mumabumba"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 71,
+      "title": "Icibemba: Kafundisha",
+      "topics": [
+        "Londolwela abasambi ubupilibulo bwa Litilica iyalembwa",
+        "Eba abasambi balondolole ubipilibulo bwa Litilica",
+        "iyalembwa",
+        "Eba abasambi balange ubipilibulo bwa Litilica iyalembwa",
+        "Eba abasambi babiike Litilica iyalembwa mumabumba"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 72,
+      "title": "Icibemba: Abasambi",
+      "topics": [
+        "Balondolole ubipilibulo bwa Litilica iyalembwa",
+        "Balange ubipilibulo bwa Litilica iyalembwa",
+        "Babiike Litilica iyalembwa mumabumba ukulingana na",
+        "imbeela",
+        "Batantike imisango ya Litilica iyalembwa ukukonka na"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 73,
+      "title": "Icibemba: Peela amabunda ya Litilica yalembwa elyo uyalondolole",
+      "topics": ["mukushika?"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 74,
+      "title": "Icibemba: Lumbulapo imibele ya Litilica yalembwa isano?",
+      "topics": [
+        "Umutwe Unoono 3: Ubupusano na Ukupalana kwaba pakati ka Litilica",
+        "Yakulandafye na Iyalembwa",
+        "Ubulondoloshi",
+        "Muli uyu mutwe, abasambi balasambilila ubupusano na ukupalana",
+        "kwaba pakati ka Litilica yakulandafye na iyalembwa. Balantantika"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 75,
+      "title": "Icibemba: Kafundisha",
+      "topics": [
+        "Londolwela abasambi ubupusano bwaba pali Litilica",
+        "yakulandafye neyalembwa",
+        "Eba abasambi batantike ubupusano bwaba pakati ka",
+        "Litilica iyakulandafye na iyalembwa",
+        "Icilangililo;"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 76,
+      "title": "Icibemba: Abasambi",
+      "topics": [
+        "Batantike imipalanine yaba pakati ka Litilica yakulandafye",
+        "na iyalembwa",
+        "Batantike ubupusano bwaba pakati ka Litilica",
+        "yakulandafye na iyalembwa",
+        "Balanshyanye pabukankala bwa pali Litilica yakulandafye"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 77,
+      "title": "Icibemba: Peela ubupusano bwaba pakati ka Litilica yakulandafye na",
+      "topics": ["iyalembwa"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 78,
+      "title": "Icibemba: Peela imipalanine yaba pakati ka Litilica yakulandafye na",
+      "topics": ["iyalembwa."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 79,
+      "title": "Icibemba: Peela ubukankala bwa Litilica yakulandafye na iyalembwa",
+      "topics": [
+        "UMUTWE 3: IMILIMO LITILICA IBOMBA",
+        "Ubulondoloshi:",
+        "Muli uyu mutwe, abasambi balaishiba umulimo icisambililo ca litilica",
+        "cibomba, ico icaba mumbali shibili, mukulandafye na mukulemba.",
+        "Abasambi balaishiba intambi shabo na intambi shabantu bambi,"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 80,
+      "title": "Icibemba: Kafundisha",
+      "topics": [
+        "Eba abasambi balumbule imilimo Litilica yakulandafye",
+        "ibomba.",
+        "Amasuko kuti yaba nga aya elyo nayambi ayapalileko:",
+        "i. Ukutwala abasambi pantanshi mukutasha na",
+        "mukusansamusha"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 81,
+      "title": "Icibemba: Abasambi:",
+      "topics": [
+        "Balumbule imilimo Litilica yakulandafye ibomba",
+        "Balondolole imilimo Litilica yakulandafye ibomba",
+        "Balondolole icalenga Litilica yakulandafye ibe iikankala",
+        "mukupwisha amaafya ayalekana-lekana ayali nga"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 82,
+      "title": "Icibemba: Umutwe Unoono 3: Inshita na Incende Ya Ilyashi 68",
+      "topics": [
+        "AMASHIWI YAMO-YAMO AYABOMFIWA MUCITABO",
+        "Amabumba – Fintu ifyalingana ifibikilwe pamo",
+        "Bukaimbi – Ukuba uwakosa mukucita ifintu",
+        "Bukaitemwe – Ukufwaya fyonse fyawamina iwe",
+        "Iciunda – Icongo ico icifuma mukulanda, mukulisha ing’oma nangu icintu icapala akapyelele"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        " Ukufwailisha ifishinka pamilandu iyalekana-lekana (Research)",
+        " Ukusambilila ukupitila mukulanshanya (discussions)",
+        " Ukusambilila ukupitila mukufwaya nokusanga ifishinka pamilandu iyalekana-lekana (discovery)",
+        " Ukulemba utumalyashi utwiipi (short stories)",
+        " Ukubomfya kompyuta mukupanga amalyashi, utusela nama amalango",
+        "Ukulundapo, kuli notumisango utunsela-nsela natumbi utwamifundile uto kafundisha alingile",
+        "ukubomfwa pakuti akwanishe ukufunda abasambi abalekana-lekana abasangwa mu kalasi intu",
+        "afundamo. Bakafundisha baalishiba utu tunsela-nsela utwingi ukulingana nefyo baakanshiwa"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 83,
+      "title": "Icibemba: Insoselo:",
+      "topics": [
+        "Icilangililo:",
+        " Kabwe ni Namwelepete isembe lya mukuba. Icilepilibula ukuti",
+        "Kabwe munang’ ani."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 84,
+      "title": "Icibemba: Inshintu:",
+      "topics": [
+        "Icilangililo:",
+        " Witusamba buntu. Icalola mukutila witucita ifipuba",
+        "ifyo waba icipumbu.",
+        "Imilimo ya misango ya mabumba ya mapinda niyi:",
+        " Ukufunda abantu"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 85,
+      "title": "Icibemba: Imishikakulo:",
+      "topics": [
+        "Icilangililo: Umushikakulo wa mfula",
+        "Soloke-soloke wekungu langa",
+        "ifyo wapala nga akaice",
+        "Shimwisusha milonga",
+        "Imisombo ya kucuulu yali kwansha"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 86,
+      "title": "Icibemba: Amalumbo:",
+      "topics": [
+        "Icilangililo: Ilumbo lya bwali",
+        "Ulungococo, akalusese, intunkanika minwe",
+        "Ulwacushi njipi",
+        "Ulushikana uuleseka kano uufulilwe",
+        "Kalekanya mikowa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 87,
+      "title": "Icibemba: Ishamenga",
+      "topics": ["Icilangililo:", "Sekeseke twa kupandila, ni we mwine ukayonene"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 88,
+      "title": "Icibemba: Imipukumo",
+      "topics": [
+        "Imilimo ya misango ya mabumba ya nyimbo niyi:",
+        " Ukusansamusha abantu",
+        " Ukukoselesha abantu",
+        " Ukusoka abantu pafintu fimo ifilecitika nangula ifili",
+        "mukucitika"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 89,
+      "title": "Icibemba: Imilumbe:",
+      "topics": [
+        "Icilangililo:",
+        "Abantu baalimine ukuya mu kulebela. Ilyo baleeya mu nshila,",
+        "balipeeye inama. Balya bashakofye umutwe, basha bausamika",
+        "na pa cimuti ninshi uleetona umulopa. Uko baile, mukulebela",
+        "bailepwako inshiku ishingi. Ilyo ba bwelele baishile sanga ulya"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 90,
+      "title": "Icibemba: Insoselo:",
+      "topics": [
+        "Musango wakulandilamo uwashoka uukwete ubwasuko",
+        "Nga ifi:",
+        "Kabwe ni Namwelepete isembe lya mukuba. Icilepilibula ukuti",
+        "Kabwe munang’ ani."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 91,
+      "title": "Icibemba: Inshintu:",
+      "topics": [
+        "Kusosa mukushintuka.",
+        "Nga ifi:",
+        "Witusamba buntu. Icalola mukutila watucita ifipuba",
+        "ifyo waba icipuuba.",
+        "Imilimo ya misango ya mabumba ya mapinda niyi:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 92,
+      "title": "Icibemba: Imishikakulo:",
+      "topics": [
+        "Mashiwi ayalandwa mumusango wa kwanga ayaolele kuntulo ya",
+        "muntu atemwa umukowa na ifyo acita mubwikashi.",
+        "Icilangililo: Umushikakulo wa mfula",
+        "Soloke-soloke wekungu langa",
+        "Ifyo wapala nga akaice"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 93,
+      "title": "Icibemba: Amalumbo:",
+      "topics": [
+        "Kulanda kwa kulumbanya ifyo umuntu aba, ifyo acita atemwa",
+        "ubupe bwatula kufilengwa na Lesa.",
+        "Icilangililo: Ilumbo lya bwali",
+        "Ulungococo, akalusese, intunkanika minwe",
+        "Ulwacushi njipi"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 94,
+      "title": "Icibemba: Imilumbe:",
+      "topics": [
+        "Ulushimi ululekabila ubwasuko",
+        "Icilangililo:",
+        "Abantu baalimine ukuya mu kulebela. Ilyo baleeya mu nshila,",
+        "balipeeye inama. Balya bashakofye umutwe, basha bausamika",
+        "na pa cimuti ninshi uleetona umulopa. Uko baile, mukulebela"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 95,
+      "title": "Icibemba: Inyimbo 75",
+      "topics": [
+        "AMASHIWI AYABOMFIWA MUCITABO",
+        "Overview- Ubulondoloshi",
+        "Theme – Icipande",
+        "Topic - Umutwe",
+        "Sub-Topic – Umutwe Unoono"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "General Competence – Ubwishibilo",
+        "Specific Competence – Ifilekabilwa ukwishiba",
+        "Expected Standard – Imibombele ileenekelwa"
+      ],
+      "assessmentMethods": [
+        "Summary - Ukusupawila",
+        "Conclusion - Ukusondwelela",
+        "Methodology – Imifundile",
+        "INTENDEKELO",
+        "Ici citabo icakubomfya pakufunda Icibemba mu Fomu 1 capangiilwe ukwafwilisha ukupekanya",
+        "nokufunda amasambililo ukukonka nemipekanishe ipya iya masambililo iyamu 2024"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 96,
+      "title": "Icibemba: Ukusunga ifipe fyacintu- bwingi ifili nga ifibombelo fya ZESCO, ama desiki yesukulu",
+      "topics": ["fiilangililo fyafintu icaalo casuminamo. Bufi/Cishinka."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 97,
+      "title": "Icibemba: Mukutontonkanya koobe busumanshi bwaba mufisumino fyacaalo ubukumine ku",
+      "topics": ["masambililo?"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 98,
+      "title": "Icibemba: Kalemba atiila , Uwaikete fibili afwile ku Meenshi’, londolola ifintu fibili ifyo aleelandapo",
+      "topics": ["ifyo abalumendo baleetontonkanyapo."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 99,
+      "title": "Icibemba: Ukusunga ifipe fyacintu bwingi ifili nga ifibombelo fya ZESCO, ama desiki yesukulu",
+      "topics": ["fiilangililo fyafintu icaalo casuminamo. Bufi/Cishinka."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 100,
+      "title": "Icibemba: Mukutontonkanya koobe busumanshi bwaba mufisumino fyacaalo ubukumine ku",
+      "topics": ["masambililo?"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 101,
+      "title": "Icibemba: Kaleemba atiila , Uwaikete fibili afwile kumeenshi’, londolola ifintu fibili ifyo aleelandapo",
+      "topics": ["ifyo abalumendo baleetontonkanyapo."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 102,
+      "title": "Icibemba: Lishiwi nshi limbi mumulandu ili lepilibula cimo cine na ‘ukupanika’",
+      "topics": [
+        "ii. Abasambi:",
+        " Cilamusambi aasuka ameepusho ayalekana-lekana",
+        "Imibombele ileenekelwa: Amasuko yaasukwa bwino ukulingana na meepusho",
+        "Ifyakucita 3 Ukutantiika ifyasuminishiwa na ifishasuminishiwa ifili mumulandu",
+        "i. Kafundisha"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 103,
+      "title": "Icibemba: Uku-sos-a",
+      "topics": [
+        "uku-nw-a",
+        "uku-memeng-a",
+        "uku-beleng-a",
+        "Ifyakubomfya: Ifitabo fyalekana-lekana ifya Cibemba, ba Caati",
+        "Ifyakucita 1: Ukulondolola ubupilibulo na imibomfeshe yanundwa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 104,
+      "title": "Icibemba: Insoselo shikwatafye ubupilibulo bwayanguka 2. Amapinda yakwata ubupilibulo bwaanguka",
+      "topics": ["nobwashika (literal and deep meaning)"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 105,
+      "title": "Icibemba: Insoselo shapangwafye nomuseela umo",
+      "topics": ["uwapwililika"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 106,
+      "title": "Icibemba: Ipinda limo likwata ifiputulwa fibili",
+      "topics": [
+        "ifymuseela; Ukutampa na ukupwisha.",
+        "Ifyakubomfya: Ifitabo; Icibemba na amaano yaciko, Ubulungu tabupita pakafundo na ifitabo",
+        "fimbi ifyakwatamo insoselo.",
+        "Ifyakucita1: Ukulanshanya pabupilibulo bwansoselo nefyo shibomfiwa",
+        "i. Kafundisha:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 107,
+      "title": "Icibemba: Ukusendapo ubwafuufu A. Mwamba nabamusonta ukuba kapitao",
+      "topics": ["kanshi natemwa saana."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 108,
+      "title": "Icibemba: Ukukukulikila imbushi pamimena B. Lilyaline tucili tulelanda pali bayama na",
+      "topics": ["ukufika bafika."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 109,
+      "title": "Icibemba: Ukuba nkuma C. Chama nangu baamusendele kumo",
+      "topics": ["bakapokola, taibileko nicofye aaleangala", "nowaibile."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 110,
+      "title": "Icibemba: Ukubiika pacambaso D. Abakashana bacumfwakofye ati",
+      "topics": ["nabalwalisha bena kuyasosa ati nabafwa."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 111,
+      "title": "Icibemba: Ukufwa icanyongolo E. Abakashana na abalumendo ba balalika",
+      "topics": [
+        "ing’anda imo elyo batampa imisango iibi.",
+        "ii. Abasambi:",
+        " Cilamusambi asoobolole insosele ukulingana nenshita shingabomba",
+        "Imibombele ileenekelwa: Ubupilibulo nemibomfeshe ya nsoselo yalanshanishiwapo bwino",
+        "Ifyakucita 3: Ukufwaya insoselo shingabomfiwa ukulingana nenshita"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 112,
+      "title": "Icibemba: Waya kukutandalila abantu kumushi elo wayasanga ukutila nabo balekuteya, baalilonga notu",
+      "topics": ["bwalwa abati nalimo akeesa"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 113,
+      "title": "Icibemba: Abantu bafyalwa babili: Uwamwume ni mwalwa nabanga, ni puuti elyo kabili ififungo",
+      "topics": [
+        "naapwa; umwanashi mufuuke, alyupwafye bwino nangu bamupume shani kulilume abafye",
+        "uwakolopana"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 114,
+      "title": "Icibemba: Baisamweba abati palya mwacimona impungu shileshingauka inkalamo naikatilpo impelembe.",
+      "topics": ["Mwayako mwasanga pantu baseseele amakanga"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 115,
+      "title": "Icibemba: Namukanika inama palwino elyo umwaice aisalila imbwa umomwine mun’ganda. Yafungula",
+      "topics": [
+        "ulwino nokulyapo inama shimo",
+        "ii. Abasambi:",
+        " Babiikwa mumabumba",
+        " Bafwaye insoselo ukulingana nenshita shipeelwe peesamba",
+        " Umwiminishi alondolole ifilanshanishiwe"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 116,
+      "title": "Unit 118",
+      "topics": [
+        "NTENDEKELO",
+        "Uno buuku wa Fomu1 mu Kikaonde wanengezhiwa mujishinda ja kukumya,",
+        "mukukebesha kukwasha bafunjishi kufikizha mfunjishilo bulongo mu ino mfunjilo",
+        "(Curriculum) ya katataka. Auno buuku wa lutangijilo wanengezhiwa kwesekana na"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 117,
+      "title": "Kikaonde: Mambo ka bulumbuluzhi bwa biñambwanembwa kyo bwa lumbulwiwa mu",
+      "topics": ["mashinda apusana-pusana."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 118,
+      "title": "Kikaonde: Lupusano ka luji pakachi ka biñambwanembwa ne nembelotu ikwabo?",
+      "topics": [
+        "B.Mwingilo",
+        "Kwesakanya ne kupusanya kwa bulumbuluzhi buji mu kyambo kya biñambwanembwa.",
+        "Mufunjishi",
+        "Akambizhe bafunda kulumbulula mwaila kyambo kya biñambwanembwa.",
+        "Epuzhe bafunda kupusanya byanembewa ne biñambwañambwa."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 119,
+      "title": "Kikaonde: Isambai ne kwamba lupusano lwatanwamo.",
+      "topics": [
+        "C.Mwingilo",
+        "Buwame ne butame buji mu bulumbuluzhi bwa kyambo kya biñambwanembwa.",
+        "Mufunjishi wafwainwa:",
+        "Anengezhe bulumbuluzhi bwa biñambwanembwa bwa kwingijisha mu",
+        "uno mwingilo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 120,
+      "title": "Kikaonde: Besambe ne kwamba pa butame buji mu bulumbuluzhi bwa",
+      "topics": [
+        "Byaketekelwa kubiwa",
+        "Kupima bulumbuluzhi bwaingijiwe mokyafwainwa.",
+        "Kupashanya ne kupusanya kwa bulumbuluzhi bwa biñambwanembwa.",
+        "kwafikizhiwe.",
+        "Buwame ne butame bwa bulumbuluzhi bwa biñambwanembwa."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 121,
+      "title": "Kikaonde: Nemba lupusano",
+      "topics": [
+        "Ngipipishilo:",
+        "Luno lufunjisho lwaimena pa kutwezha bafunda milanguluko yazhika pa kwamba amba",
+        "balenge ne kuswisha bulumbuluzhi.",
+        "MUTWE : MITUNDU YA BIÑAMBWANEMBWA.",
+        "Byonse bijimo: Uno mutwe ubena kutala pa mafunjisho abiji."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 122,
+      "title": "Kikaonde: Mambo ka byoulangulukila amba biñambwañambwa bya nemene saba",
+      "topics": [
+        "kyangye kwingijisha biñambwanembwa pa kunembe.",
+        "B.Mwingilo.",
+        "Kusala biñambwañambwa (Olo Litilicha)",
+        "Mufunjishi wafwainwa:",
+        "Anengezhe biñambañamba byapusana-pusana byalamata ku biñambwañambwa."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 123,
+      "title": "Kikaonde: Nemba kilengela bijiji kwingijisha nyimbo.",
+      "topics": [
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa",
+        "Kutanchika ne kulumbulula kubiwe mo kyafwainwa",
+        "E. Mwingilo",
+        "Kulumbulula kyambo kya biñambwañambwa",
+        "Mufunjishi wafwainwa:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 124,
+      "title": "Kikaonde: Chocheka pa musango umo-umo biñambwanembwa.",
+      "topics": [
+        "D. Mwingilo",
+        "Kutanchika ne kulondolola buyuke bwa biñambwanembwa",
+        "Mufunjishi wafwainwa",
+        "Kukambizha bafunda kwisamba pa buyuke (biyukilo) byakuyukilako",
+        "biñambwanembwa."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 125,
+      "title": "Kikaonde: Nemba nsansawilo ne kwiyamba",
+      "topics": [
+        "Bipimo byaketekelwa kubiwa mo kyawfwainwa",
+        "Kulondolola byanembewa kubiwe mo kyafwainwa.",
+        "Lweseko"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 126,
+      "title": "Kikaonde: Lumbulula byo wafunda ku biñambwanembwa.",
+      "topics": [
+        "Ngipipishilo",
+        "Luno lufunjisho lwakwashako bafunda kuyuka bya kwingijisha biñambwanembwa.",
+        "Mutwe-kache:3 Lupusano ne Mwipashisha biñambwañambwa ne",
+        "byanembewa.",
+        "Byonse bijimo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 127,
+      "title": "Kikaonde: Nemba mashinda asatu mwipashisha Biñambwañambwa ne byanembwa.",
+      "topics": [
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa",
+        "Kutanchika kwa Mwipashisha biñambwañambwa kubiwe mo kyafwainwa.",
+        "B. Mwingilo:",
+        "Kutanchika lupusano luji pakachi ka biñambwañambwa ne byanembewa.",
+        "Mufunjishi wafwainwa:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 128,
+      "title": "Kikaonde: Lupusano ka luji mu ino ñambilo?",
+      "topics": [
+        "i) Ponda bwami ne ponda bobe",
+        "ii) Mabuku mwanembwa mpito ne mabuku mwanembwa mashimikila akusomba",
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa",
+        "Kutanchika lupusano luji pakachi ka biñambwañambwa ne byanembewa kubiwe mo",
+        "kyafwainwa."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 129,
+      "title": "Kikaonde: Mwaila milanguluko yobe, lumbulula buneme buji mu biñambwañambwa. Nemba",
+      "topics": ["mashinda atanu."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 130,
+      "title": "Kikaonde: Bafunda bashimikile bishimi bipibipi bibiji.",
+      "topics": [
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa :",
+        "Kutanchika mingilo ya biñambwañambwa kubiwe mo kyafwainwa.",
+        "Lweseko",
+        "Lumbulula buneme buji mu:",
+        "i) Luteleka ku bishimpi. Nemba bishite bisantu."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 131,
+      "title": "Kikaonde: Lumbulula mingilo ya biñambwañambwa yatala ku:",
+      "topics": [
+        "i. Kisangajimbwe.",
+        "ii. Lufunjisho lwa mu bwikalo bwa bantu.",
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa :",
+        "Kutanchika mingilo ya biñambwañambwa kubiwe mo kyafwainwa.",
+        "B. Mwingilo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 132,
+      "title": "Kikaonde: Nemba ulondolola mingilo ya biñambwañambwa",
+      "topics": [
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa :",
+        "Kulondolola mingilo ya biñambwañambwa kubiwe mokyafwainwa.",
+        "C.Mwingilo:",
+        "Kwitabizha mingilo ya biñambwañambwa.",
+        "Mufunjishi wafwainwa:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 133,
+      "title": "Kikaonde: Nemba bishinte bitanu witabizhe mingilo ya biñambwañambwa",
+      "topics": [
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa :",
+        "Kwitabizha mingilo ya biñambwañambwa kubiwe mo kyafwainwa.",
+        "D.Mwingilo:",
+        "Kulondolola bingila biñambwañambwa",
+        "Mufunjishi wafwainwa:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 134,
+      "title": "Kikaonde: Nembapo, jishinda jimo mwafwainwa kupwishisha ano makatazho:",
+      "topics": [
+        "i) Mazhikakanwa",
+        "ii) Lupimpu lwa lubesha",
+        "Bipimo byaketekelwa kubiwa mo kyafwainwa :",
+        "Kulondolola bingila biñambwañambwa kubiwe mo kyafwainwa.",
+        "Lweseko"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 135,
+      "title": "Kikaonde: Mwingilo.kukeba keba bya kisemwa lyetu bileta buyukishe mu bya mingilo.",
+      "topics": [
+        "B.MWINGILO.",
+        "Kukebakeba bya kisemwa byetu bileta buyukishe mu bya mingilo.",
+        "MUFUNJISHI.",
+        "Mufunjishi akambizhe bafunda kukeba keba bya kisemwa bileta buyukishe mu bya",
+        "mingilo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 136,
+      "title": "Kikaonde: Ba lumbulule bya kumwenako bya busendwe bitaanu pa byo batongola.",
+      "topics": [
+        "D.MWINGILO.",
+        "Kusongwesha kishina kya mingilo( nyimbo,bishimpi,mashimikila} na maana a",
+        "kisemwa {bwilamizhi, bupopweshishe, byabamupashi, kashinshi ne busendwa}",
+        "mufunjishi.",
+        "Mufunjishi akambizhe bafunda kusongwesha kishina kya kupichila mu nyimbo,"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 137,
+      "title": "Kikaonde: MINSAMBO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 138,
+      "title": "Kikaonde: BISHINKA NE BISHIMIKIZHO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 139,
+      "title": "Kikaonde: BUNDAMA-KYALO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 140,
+      "title": "Kikaonde: KULENGA BICHOMEKO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 141,
+      "title": "Kikaonde: Climate: Bukela-kela",
+      "topics": [
+        "NTENDEKELO",
+        "Uno buuku wa Fomu 1 mu Kikaonde wanengezhiwa mujishinda ja kukumya, mukukebesha",
+        "kukwasha bafunjishi kufikizha mfunjishilo bulongo mu ino mfunjilo (Curriculum) ya katataka."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 142,
+      "title": "Kikaonde: Mu kibaaba 2, bañanyi bo baketekejile kwibabula bishinka na mambo a bwikalo bwa kala?",
+      "topics": ["Kibaala", "Nsamushi", "Jikapa Malisopo", "Ba Jikapa Malisopo"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 143,
+      "title": "Kikaonde: Tongolapo ñambilo ibena kwamba pa kulumbulula bintu mo byaila?",
+      "topics": [
+        "a) Kulumbulula nzolo kijoma.",
+        "b) Sabwalala ne pa katele.",
+        "c) Jikondakanya nsoke.",
+        "d) Pa kanyo ka mambo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 144,
+      "title": "Kikaonde: Paana mutwe wa jino jishimikila.",
+      "topics": [
+        "a) Kuleka kwa mvula.",
+        "b) Kupimpulwa kwa lubesha.",
+        "c) Kutema kwa bichi.",
+        "d) Kujima bingi.",
+        "Panapo mashinda asatu mo wakonshesha kukwasha mvula kunoka."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 145,
+      "title": "Kikaonde: BYABUNEME BWA KYALO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 146,
+      "title": "Kikaonde: BISHINKA NE MILANGULUKO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 147,
+      "title": "Kikaonde: KWAMBA KU JIBUMBA",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 148,
+      "title": "Kikaonde: LUPACHIKO",
+      "topics": [
+        " Kuteleka ne kwamba",
+        " Kutanga",
+        " Kunemba",
+        " Mulaka-zhilo",
+        " Ntuntulwilo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 149,
+      "title": "Kikaonde: Climate: Bukela-kela",
+      "topics": [
+        "NTENDEKELO",
+        "Uno buuku wa Fomu 1 mu Kikaonde wanengezhiwa mujishinda ja kukumya, mukukebesha",
+        "kukwasha bafunjishi kufikizha mfunjishilo bulongo mu ino mfunjilo (Curriculum) ya katataka."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 150,
+      "title": "Kikaonde: Bafunjishi betu kechi baji na misalululo ine.",
+      "topics": [
+        "Kipimo kya ñingijilo kyaketekelwa kubiwa: Byambo byaingijishiwa mu bipelu",
+        "byalengewa bulongo.",
+        "Mutwe-2: Ntangilo Yazhika",
+        "Mutwe-Kache: Kutanga ne Kumvwisha",
+        "Buyuke: Bafunda batange ne kumvwisha bulongo bibaaba bya mu mabuku"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 151,
+      "title": "Kikaonde: Bishina bya kyalo biji nobe ka?",
+      "topics": ["a) Bantu", "b) Mizhilo", "c) Buneme", "d) Kwingila"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 152,
+      "title": "Kikaonde: Mu kibaaba 2, tongolapo bishina bya kyalo bisatu.",
+      "topics": [
+        "Ñanyi buneme buji mu bishina bya kyalo?",
+        "a) Bileta buumo muma nyaunda a bantu.",
+        "b) Bilengela misalululo",
+        "c) Bantu bafunjilako byavula",
+        "d) Bo bungikazhi bwa kyalo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 153,
+      "title": "Lunda: Ireen Malenji: Deputy Headteacher,",
+      "topics": ["Samahina Day Secondary School, Ikelenge"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 154,
+      "title": "Lunda: Christopher Josayi Ndeñi: Headteacher,",
+      "topics": ["Samuteba Primary School, Mwinilunga"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 155,
+      "title": "Lunda: Maureen Chinyala-Sakaumba: Deputy Headteacher,",
+      "topics": ["Kampemba Day Secondary School, Mwinilunga"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 156,
+      "title": "Lunda: Phillias Muhemba: Deputy Headteacher,",
+      "topics": ["Katuyola Primary School, Mwinilunga"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 157,
+      "title": "Lunda: Joylin Shindanyi: Teacher,",
+      "topics": ["Zambezi Day Secondary School, Zambezi"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 158,
+      "title": "Lunda: Harrison Katoka: Teacher,",
+      "topics": ["Zambezi Boarding Secondary School, Zambezi"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 159,
+      "title": "Lunda: Eunice Kapila-Sisala: Senior Teacher,",
+      "topics": ["Kapundu Primary School, Mwinilunga"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 160,
+      "title": "Lunda: Kamanda Malanji: Teacher,",
+      "topics": [
+        "Mwinilunga Boarding Secondary School, Mwinilunga",
+        "MAZU ATACHI",
+        "Kutachika kwanloñeshelu yayiha yayuma yikutachika kutañishewa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 161,
+      "title": "Lunda: MWATELA KUWUZATISHILA IWU MUKANDA",
+      "topics": [
+        "Muniwu mukanda mudi yuma yezhima yatela kutañishewa mu Temu 1 yamu",
+        "Fomu 1. Mukanda weniwu wunambulewi munyitu yansañu dichi nawa mutu",
+        "himutu wansañu wudi nayuma yakutañisha muyibalu yamboka, yidi neyi",
+        "Kuhosha Nakutiyilila, Kutaña, Mazu Akutaña, Kutaña Nakanañachima, Mwaya",
+        "Idimi, Kubalumuna Nsañu ni Kusoneka. Iyi yuma yakutañisha yinasonekewi"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "MUTU WANSAÑU: KUZATISHA YITUMBU HELA YUMA YASHETANA MUNZHILA",
+        "Kulumbulula",
+        "Zhidi muniwu mutu wansañu",
+        "Iwu mutu wansañu wunakushinshika hakuzatisha yitumbu niyuma yashetana",
+        "munzhila yaluwa. Muniwu mutu wansañu nawa mudi yibalu yitanu: Kuhosha",
+        "Nakutiyilila, Kutaña, Kusoneka, Mwaya Idimi Nikubakumuna Nsañu. Muchibalu",
+        "chakuhosha nakutiyilila mudi mutu wansañu wakuhanjeka nimutu wansañu",
+        "wanyanya wayuma yakwata hachihandilu chamuntu wezhima. Chibalu"
+      ],
+      "assessmentMethods": [],
+      "resources": [
+        "MUTU WANSAÑU: KUZATISHA YITUMBU HELA YUMA YASHETANA MUNZHILA",
+        "Kulumbulula",
+        "Zhidi muniwu mutu wansañu",
+        "Iwu mutu wansañu wunakushinshika hakuzatisha yitumbu niyuma yashetana",
+        "munzhila yaluwa. Muniwu mutu wansañu nawa mudi yibalu yitanu: Kuhosha",
+        "Nakutiyilila, Kutaña, Kusoneka, Mwaya Idimi Nikubakumuna Nsañu. Muchibalu"
+      ]
+    },
+    {
+      "unitNumber": 162,
+      "title": "Lunda: Kweseka nachisemwa chawaLunda, mwana wamubanda namwana",
+      "topics": ["weyala, walema wumu yodihi? Muloñadi?"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 163,
+      "title": "Lunda: Indi nzhilanyi yitunatweshi kuzatisha kulonda amayala nawambanda",
+      "topics": [
+        "atweshi kuzatila hamu?",
+        "Mazu Alema:",
+        "Kwikala iyala hela mubanda",
+        "Nyidimu yatela kuzata amayala nawambanda",
+        "CHIBALU: KUHOSHA NAKUTIYILILA."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 164,
+      "title": "Lunda: 1.5 Litilicha yakusoneka BOYS:",
+      "topics": ["GIRLS: 26", "SUB-TOPIC: 1.5.3 Chambu nikudifwana kwa Litilicha yakusoneka."],
+      "learningOutcomes": [],
+      "suggestedActivities": ["What should the", "teacher do?", "What should", "the learners"],
+      "assessmentMethods": [
+        "Activity 1:",
+        "Introduction/Revisi",
+        "learners to",
+        "state the",
+        "b) State the"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 165,
+      "title": "Lunda: 1.3.3 Composition",
+      "topics": ["SUB-TOPIC: 1.3.3.1 Descriptive Writing"],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        " Reading the",
+        "description of",
+        "a person",
+        "descriptions of a",
+        "person read by",
+        "all learners",
+        "accordingly",
+        "For example;"
+      ],
+      "assessmentMethods": [
+        " In small groups,",
+        "task learners to",
+        "investigate the",
+        "concept of"
+      ],
+      "resources": [
+        " Samples of descriptive composition of people.",
+        " Pictures of different people.",
+        "EXPECTED STANDARD: Description of a person written correctly. (This must come from",
+        "the syllabus as it is)",
+        "LESSON EVALUATION:"
+      ]
+    },
+    {
+      "unitNumber": 166,
+      "title": "Luvale: Watangaho, wamonaho, tahinyi wevwaho lyehi mujimbu wakwivwishile kuwaha chipwe",
+      "topics": ["kupihya?"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 167,
+      "title": "Luvale: Kweseka nomu watangile, wamwene chipwe wevwile, chinyingi muka wawanyinemo?",
+      "topics": [
+        "MAZU AMAHYA",
+        "Litilicha",
+        "Kuhunanana",
+        "kusambisa",
+        "MUTWE WACHIHANDE 1: KULUMBUNUNA LIZU LYA LITILICHA"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 168,
+      "title": "Luvale: Litilicha anapu mazu awa akusoneka kanawa mangana asangumune vishinganyeka vyamuthu",
+      "topics": ["nakuzamisa kunangakana."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 169,
+      "title": "Luvale: Litilicha vinapu vishinganyeka vyakutaka kuzachisa lilimi mangana isosolole nakuhilula",
+      "topics": ["vyuma vyechi kusolokanga mukatwamino kavathu."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 170,
+      "title": "Luvale: Litilicha inapu mijimbu yayihi, mikunyi navihemo chikumanyi vize vili naulemu kechi",
+      "topics": ["kutalisa kuviseke kahako."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 171,
+      "title": "Luvale: Litilicha unapu mulimo wavisonejeka nautala havyuma vyakutaka muvishinganyeka",
+      "topics": [
+        "vyamukakusoneka navyuma vyakuhona kutaka navihana ulemu hachisemwa chavathu.",
+        "SETEKO YAKUNANGAKANA: Kutanjika jilumbunwiso ja Litilicha mukutesama.",
+        "VYAKULINGA 2: KULUMBUNUNA JILUMBUNWISO JA LITILICHA.",
+        "Mulongeshi:",
+        "§ Alweze valongi vatanjike jilumbunwiso ja Litilicha jakuliseza-seza."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 172,
+      "title": "Luvale: Valongi vayenga mukatunda kamikanda chipwe kuzachisa makina amyaka ino mangana vawane",
+      "topics": [
+        "jilumbunwiso ja Litilicha jakuliseza-seza mulilimi lya Ingilishi nakujalumuna mu Luvale.",
+        "KUKHUKULULA:",
+        "Chihande echi, valongi vanatanjika lumbunwiso yalizu Litilicha mujijila jakulihandununa. Kaha",
+        "nawa, vanalumbununa jilumbunwiso ja Litilicha. Chamakumishilo, vanalumbununa Litilicha."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 173,
+      "title": "Luvale: Litilicha anapu mazu awa akusoneka kanawa mangana asangumune vishinganyeka vyamuthu",
+      "topics": ["nakuzamisa kunangakana."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 174,
+      "title": "Luvale: Litilicha vinapu vishinganyeka vyakutaka kuzachisa lilimi mangana isosolole nakuhilula",
+      "topics": ["vyuma vyechi kusolokanga mukatwamino kavathu."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 175,
+      "title": "Luvale: Litilicha inapu mijimbu yayihi, mikunyi navihemo chikumanyi vize vili naulemu kechi",
+      "topics": ["kutalisa kuviseke kahako."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 176,
+      "title": "Luvale: Litilicha unapu mulimo wavisonejeka nautala havyuma vyakutaka muvishinganyeka",
+      "topics": [
+        "vyamukakusoneka navyuma vyakuhona kutaka navihana ulemu hachisemwa chavathu.",
+        "SETEKO YAKUNANGAKANA: Kusandulula jilumbunwiso ja Litilicha jakuliseza-seza",
+        "mukwoloka.",
+        "VYAKULINGA 2: KULIFWANA NACHIHANDWA CHAJILUMBUNWISO JA LITILICHA",
+        "JAKULISEZA-SEZA"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 177,
+      "title": "Luvale: Valongi vahunanane jilumbunwiso ja Litilicha kweseka nachinyingi vanalinangula",
+      "topics": [
+        "nakujisoneka mumikanda yavo.",
+        "KUKHUKULULA:",
+        "Muchilongeselo echi, valongi vanashindakanya, vanawane kulifwana nachihandwa cha lizu Litilicha.",
+        "Kuhakilaho nawa vanasambisa jilumbunwiso jalizu Litilicha."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 178,
+      "title": "Luvale: Valongi vatunge jilumbunwiso ja Litilicha javo nakujihakwila.",
+      "topics": [
+        "KUKHUKULULA:",
+        "Muchilongeselo echi, valongi vanatungu nakusambisa jilumbunwiso javo ja Litilicha.",
+        "CHIHANDE: MIYACHI YA LITILICHA",
+        "KWAULA:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 179,
+      "title": "Luvale: Fwefwenya tuthachijilo tukwavo twa Litilicha yakuhanjika.",
+      "topics": [
+        "KUKHUKULULA:",
+        "Muchilongeselo chino, valongi vanalumbununa, vanatombola, vanahandununa nakutanjika vyuma",
+        "vyatwama mu Litilicha yakuhanjika. Kumakumishilo, valongi vanambulula cheka tuthachikijilo",
+        "twa Litilicha yakuhanjika."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 180,
+      "title": "Luvale: Fwefwenya tuthachijilo tukwavo twa Litilicha yakusoneka.",
+      "topics": [
+        "KUKHUKULULA:",
+        "Muchilongeselo chino, valongi vanalumbununa, vanatombola, vanahandununa nakutanjika vyuma",
+        "vyatwama mu Litilicha yakusoneka. Kumakumishilo, valongi vanambulula cheka tuthachikijilo",
+        "twa Litilicha yakusoneka."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 181,
+      "title": "Luvale: Soneka nakulumbununa ulemu uli ha Litilicha yakuhanjika na Litilicha yakusoneka.",
+      "topics": [
+        "KUKHUKULULA",
+        "Muchilongeselo chino, munapu kutanjika kulifwana chili mukachi ka Litilicha yakuhanjika na",
+        "Litilicha yakusoneka. Chamuchivali, munapu cheka kutanjika chihandwa chihandwa chili",
+        "mukachi ka Litilicha yakuhanjika na Litilicha yakusoneka. Chamakumishilo, munapu nw",
+        "kusambisa ulemu wa Litilicha yakuhanjika na Litilicha yakusoneka."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 182,
+      "title": "Luvale: Tako nakulumbununa chishimulonga unahase kuzachisa kukanda muthu nalingisa",
+      "topics": ["mumajikakanwa."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 183,
+      "title": "Luvale: Soneka nakulumbununa jijila jikwavo unahase kuzachishilamo Litilicha yakuhanjika",
+      "topics": [
+        "mangana ukumise ukalu uli nakusefuka mungalila yenu.",
+        "KUKHUKULULA",
+        "Muchilongeselo chino, valongi vanatanjika, vanalumbununa nakusambisa milimo ya Litilicha",
+        "yakuhanjika. Chamakumishilo, valongi vanalumbununa jijila jakuzachisa Litilicha yakuhanjika"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 184,
+      "title": "Luvale: Soneka nakulumbununa ulemu uli mu Litilicha yakuhanjika na Litilicha",
+      "topics": ["yakusoneka."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 185,
+      "title": "Luvale: Vyakulya vyamakumbi ano vili nakuneha misongo kuhambakana vaykulya",
+      "topics": [
+        "vyachisemwa. Unetavila tahinyi unakane?",
+        "KUKHUKULULA",
+        "Muchilongeselo chino, valongi vanatanjika, vanalumbununa nakusambisa milimo ya Litilicha",
+        "yakusoneka. Kuhakilaho, valongi vanalumbununa milimo ya Litilicha yakusoneka kukumisa",
+        "ukalu uli nakusefuka muvitungilo. Chamakumushilo, vanazachisa Litilicha yakusoneka"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 186,
+      "title": "Luvale: Vyuma vyakutenga mu Litilicha vyalipandama nachinyingi chakushikulu. Unetava",
+      "topics": [
+        "tahinyi unakane?",
+        "KUKUHUKULULA:",
+        "Chilongeselo chino, valongi vanapanjika milimo yamu Litilicha yakufwana nge myaso,",
+        "vishimo, mijimbu navikwavo kuchiyoyelo chavathu. Chikwavo nawa, vanasondwesa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 187,
+      "title": "Luvale: Hana vitalilo vyamiyachi ya Litilicha yakuhanjika unatombola muchihula chatete.",
+      "topics": [
+        "KUKHUKULULA:",
+        "Muchilongeselo chino, valongi vanatombola miyachi ya Litilicha yakuhanjika. Cheka",
+        "nawa, vanalumbununa miyachi ya Litilicha yakuhanjika. Chamakumishilo, valongi",
+        "vanahana vinjikizo vyamiyachi ya Litilicha yakuhanjika."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 188,
+      "title": "Luvale: Vichila kuheta munganda chiku kaha ove ngwove nangukashila halifunda.",
+      "topics": [
+        "(kuhuhumuna)",
+        "Kulumbununa: Tufwanyise nge kanyike vanamulweze ngwavo, kutukana mwangana",
+        "chapwa kasautu. Kaha uno ikhiye mwamba ngwenyi, ikhiye mwanguthachikizaze,",
+        "ami nangumusonekela mukanda. Chuma vanamukanyisa kasautu kakuzamukila",
+        "kutukana mwangana. Numba uyeveta, numba usoneka mukanda chuma"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 189,
+      "title": "Luvale: Kwijilila",
+      "topics": [
+        "Kuhonesa",
+        "KWIVWILILA NA NAKUHANJIKA",
+        "CHIHANDE: KUSHIMUTWILA",
+        "Mutwe Wachihande: Vyuma Vinakusefuka Mujingalila."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 190,
+      "title": "Luvale: Mujimbu wachisemwa chamuthu Autobiography",
+      "topics": ["| P a g e"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 191,
+      "title": "Luvale: Hula valongi vashimutwile hachihande chakusefuka mujingalila (vihande",
+      "topics": ["vyavilemu mulifuchi)."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 192,
+      "title": "Luvale: Hula valongi vambulule vyuma vanashimtwila hachihande chakusefuka",
+      "topics": [
+        "mujingalila (vihande vyavilemu mulifuchi).",
+        "Kukhukulula",
+        "Chihande echi chineulula valongi mwakushimutwila navakwavo.",
+        "KUTANGA",
+        "Mutwe wachihande: Mazu"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 193,
+      "title": "Luvale: Hula valongi valumbunune ovyo vanatange.",
+      "topics": [
+        "Kukhukulula",
+        "Mutwe wachihande ou unanangula valongi kutangila helu nakulamuna.",
+        "KUSONEKA",
+        "Chihande: Chaulo",
+        "Mutwe Wachihande: Kusoneka Chakulumbununa"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 194,
+      "title": "Luvale: Hana tushilikilo tumwe kuli valongi uvahule jila vazachishilamo tushilikilo",
+      "topics": [
+        "khana vaze.",
+        "Kukhukulula:",
+        "Mutwe wachihande ou uneulula valongi halumbunwiso nazachiso yatushilikilo.",
+        "KWALUMUNA MUJIMBU",
+        "Chihande: Kwalumuna Mujimbu"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 195,
+      "title": "Luvale: Kaumba ambanga ngwenyi nge nakumisa shikola mwakalinangula milimo",
+      "topics": ["yaundotolo."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 196,
+      "title": "Luvale: Chitengi alihamikanga ngwenyi keshi ikhiye ambatanga maliko.",
+      "topics": [
+        "Mulongeshi alumbunune chihandwa chili hamikuku ya hanjikilo na ambulwilo.",
+        "Vinoma: Mapepa amikuku yamu ambulwilo, mikanda.",
+        "Esekelo",
+        "Vahule vatombole ambulwilo mumikuku.",
+        "Valweze vakinge mikuku yamu ambulwilo."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 197,
+      "title": "Luvale: Hana tushilikilo tumwe kuli valongi uvahule jila vazachishilamo tushilikilo",
+      "topics": [
+        "Kukhukulula",
+        "Mutwe wachihande ou uneulula valongi halumbunwiso nazachiso yatushilikilo.",
+        "KWALUMUNA MUJIMBU",
+        "Chihande: Kwalumuna Mujimbu",
+        "Mutwe Wachihande: Jijila Jakwalumwinamo Mujimbu"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 198,
+      "title": "Luvale: Ngonde yavula ikhiko ngonde yamwaza kuhambakana ngonde yachishika.",
+      "topics": [
+        "Kukhukulula",
+        "Chihande echi chineulula valongi mwakulipulila jiphami.",
+        "KUTANGA",
+        "Mutwe wachihande : Mazu",
+        "Chihande 1: Lumbunwiso yamazu"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 199,
+      "title": "Luvale: Kusuhwa cha Kayombo nge kahwehwe. Kulumbununa nge Kayombo apwa",
+      "topics": ["wamusuku chikuma."],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 200,
+      "title": "Luvale: Chipango eji kutambuka nge mulalu. Kulumbununa nge chipango eji",
+      "topics": ["kutambuka washiwashi chikuma.", "Vinoma: Mapapilo, Mikanda.", "Esekelo"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 201,
+      "title": "Luvale: Hana lumbunwiso yamazu kweseka najila vanawazachisamo mumikuku",
+      "topics": [
+        "Kukhukulula",
+        "Valongi vanalinangula lumbunwiso yamazu najila yakuwazachisa mumikuku.",
+        "Chihande 2: Kutanga Chakujimina.",
+        "Mutwe Wachihande: Kutanga Nakwivwishisa.",
+        "Kujimbula: Valongi navatanga mujimbu nakuwivwishisa kaha kusongo navakumbulula"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 202,
+      "title": "Luvale: Vijinovumo vyakupwa chachuma; zwee, Kayombo vanamutenukila",
+      "topics": [
+        "nayikhiye zwee.",
+        "Vinoma: mikanda",
+        "Esekelo",
+        "Valongi vasoneke mikuku kuzachisa miyachi yajinovumo yakulisezaseza.",
+        "Kukhukulula"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 203,
+      "title": "Luvale: Hana tushilikilo tumwe kuli valongi uvahule jijila vazachishilamo tushilikilo",
+      "topics": [
+        "khana vaze.",
+        "Kukhukulula",
+        "Mutwe wachihande ou uneulula valongi halumbunwiso namilimo yatushilikilo.",
+        "KWALUMUNA MUJIMBU",
+        "Chihande: Kwalumuna Mujimbu"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "INTRODUCTIO",
+        " Mumazavu",
+        "amandende,",
+        "hula valongi",
+        "valumbunune"
+      ],
+      "resources": [
+        " Chinjikizo chakulumbununa muthu",
+        " Lipapilo lyavathu vakulisezaseza.",
+        "EXPECTED STANDARD: Kulumbununa muthu vanachisoneka mujila yakwoloka.",
+        "(This must come from the syllabus as it is)"
+      ]
+    },
+    {
+      "unitNumber": 204,
+      "title": "Silozi: 1.3. Functions of literature (This must come from the syllabus with its serial number)",
+      "topics": [
+        "SUB-TOPIC: 1.3.1. Oral literature (This must come from the syllabus with its serial number)"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "RATIONALE: This lesson is on Functions of Literature – specifically Oral literature. It is",
+        "particularly focused on the use of oral literature (FOLKTALES) in managing cross cutting issues.",
+        "Through library/ internet research, brainstorming, analysis and collaboration, learners will acquire",
+        "a skill of deducing hidden wisdom from orature like folktales to explain social phenomena. This is"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 205,
+      "title": "Silozi: of 3 on the topic and sub-topic.",
+      "topics": [
+        " 2024 Literature in Zambian Language Secondary Education Ordinary Level Syllabus-Form 1-4"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Revision of", "previous material", "on forms of", "literature"],
+      "resources": [
+        " Collection of folktales, proverbs, poems, songs etc.",
+        " Pictures of different people."
+      ]
+    },
+    {
+      "unitNumber": 206,
+      "title": "Silozi: Collaboration",
+      "topics": ["Kuswalisana"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 207,
+      "title": "Silozi: Creativity and",
+      "topics": ["innovation", "Kueza lika ka buikupuleli"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 208,
+      "title": "Silozi: Digital literacy Kuziba kubala ni kuñola ka likompyuta ni",
+      "topics": ["makepe a intaneti"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 209,
+      "title": "Silozi: Environmental",
+      "topics": ["sustainability", "Kusayundisa zefumaneha mwa libaka", "zelupotolohile"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 210,
+      "title": "Silozi: Problem solving",
+      "topics": [
+        "Kutungunyuna ni Kufumana likalabo za",
+        "matata a bupilo",
+        "MAKALELO:",
+        "Buka ye ya masupanzila a kuluta; ya Litilica mwa Silozi ku ba Foomu 1 iñolezwi",
+        "kutusa baluti kwa kubupa milelo ya zelukela kuluta (lesson plans) ya zazi ni zazi"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "MUSEBEZI 1: Kutalusa mihato ya kutosa tuto/ mayemo a likande la",
+        "kubulela ka mulomo (Explaining the steps of identifying the theme of an oral",
+        "Musebezi-nyana (a): Toloko ni taluso ya theme",
+        "Abeleke ni bana ba sikolo mwa ngambolo ya kutoloka ni kufa taluso ya",
+        "linzwi la theme.",
+        " Mulelo wa likande.",
+        " Butokwa bwa likande.",
+        " Mayemo a likande"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 211,
+      "title": "Silozi: Kuba mwa kezo",
+      "topics": [" Kuituta pina, kunatifaza mukwa wa pina"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 212,
+      "title": "Silozi: Kutamahana ni mutabelezi",
+      "topics": [" Kulatelela /kushowela hakutabelezwa"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 213,
+      "title": "Silozi: Kutunafaza muinelo wa manzwi a makalelo a pina",
+      "topics": [
+        " Buitusisi bwa lipangaliko za milumo",
+        " Kupanga / kubupa tumelelano (kunyalanisa",
+        "mishonjo)"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 214,
+      "title": "Silozi: Buñwi mwa kuopela ni mwa kuitusisa lipangaliko za",
+      "topics": [
+        "milumo.",
+        "Alaele bana ba sikolo kuunga kabelo mwa kuopela lipina zeshutana-",
+        "shutana.",
+        "Bana ba sikolo:",
+        "Baikupuze mifuta ya lipina."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "MUSEBEZI 1: Kutoloka symbolism mwa litilica (Defining symbolism in",
+        "literature).",
+        "Abeleke ni bana ba sikolo kubatisisa litoloko za symbolism mwa litilica.",
+        "Alaele bana ba sikolo kufa litoloko za symbolism mwa litilica ka kuitusisa",
+        "dictionary, encyclopedia ni makepe a intaneti.",
+        "Akenye bana ba sikolo mwa ngambolo ya kualunguta ni kunyakisisa toloko ya",
+        "symbolism mwa litilica.",
+        " Symbolism mwa litilica ki mukwa wa kuitusisa batu, miinelo,"
+      ],
+      "assessmentMethods": ["Revision of", "previous material", "on forms of", "literature"],
+      "resources": [
+        " Collection of folktales, proverbs, poems, songs etc.",
+        " Pictures of different people."
+      ]
+    },
+    {
+      "unitNumber": 215,
+      "title": "Silozi: Collaboration",
+      "topics": ["Kuswalisana"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 216,
+      "title": "Silozi: Communication",
+      "topics": ["Kufitisa mañusa ni maikuto ku babañwi"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 217,
+      "title": "Silozi: Creativity and",
+      "topics": ["innovation", "Kueza lika ka buikupuleli"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 218,
+      "title": "Silozi: Environmental",
+      "topics": ["sustainability", "Kusayundisa zefumaneha mwa libaka", "zelupotolohile"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 219,
+      "title": "Silozi: Problem solving",
+      "topics": [
+        "Kutungunyuna ni Kufumana likalabo za",
+        "matata a bupilo",
+        "MAKALELO:",
+        "Buka ye ya masupanzila a kuluta; ya Foomu 1 iñolezwi kutusa baluti kwa kubupa",
+        "milelo ya zelukela kuluta (lesson plans) ya zazi ni zazi kuya ka mutomo wa tuto;"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "MUSEBEZI: Kubuhisana fa litaba zefilwe (licinceho za myaha, buitusiso bwa",
+        "miliyani ka mafosisa, liswanelo za batu",
+        "Musebezi-nyana (a): Kuikambota kuli kubuhisana kiñi ni mayemo ateñi.",
+        "Akenye bana ba sikolo mwa ngambolo ya kukona kutaluhanya kuli",
+        "kanti kubuhisana kiñi ni mayemo ateñi?",
+        "Litaba za butokwa",
+        " Kubuhisana ki ngambolo yelumelelizwe mwahalaa batu bababeli kapa",
+        "kufitelela palo yeo. Kubuhisana ikona kuba ngambolo mwahalaa likwata"
+      ],
+      "assessmentMethods": [
+        "Ka nako ya kuituta kapa hasamulaho wa kuituta, bana ba sikolo",
+        "baswanela kukona",
+        "(a) Kutaluhanya makande akuipangela kwa makande a niti.",
+        "(b) Katalusa ni kutoloka makande akuipangela ni makande a niti.",
+        "(c) Kufa shutano ya makande a niti ni makande akuipangela.",
+        "(d) Kufa mitala ya makande akuikupulela ni makande aniti"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 220,
+      "title": "Silozi: Makalelo",
+      "topics": [
+        " Zeiputezi mwa mukanga:",
+        "Mukanga wo uama tamaiso. Mukanga wo ukaitusiswa kuluta likalulo",
+        "za kubulela ni kuteeleza, kubala ni kuñola. Zeñwi ki pupo ya puwo",
+        "mane ni kutoloka. Kalulo ni kalulo ina ni lituto zateñi.",
+        "Manzwi ni lipulelo za butokwa:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "responding to riddles)",
+        "Musebezinyana (a): Kuikambota kuli tukwaci kiñi.",
+        "Akenye bana ba sikolo mwa ngambolo ya kutaluhanya ni kutalusa kuli",
+        "kanti tukwaci kiñi.",
+        " Tuama mukwa wa kuitusisa lipuzo ze lyanganisa hamoho cwalo ni likalabo",
+        "ze makalisa ni kukomokisa.",
+        " Tukona kuitusisa sika sesiswana sina limisiteli Kamba lika zekataza",
+        "kuutwisisa."
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 221,
+      "title": "Silozi: Makalelo: Mwa Tuto-nyana ye, bana ba sikolo bakaituta kukona kubala",
+      "topics": [
+        "litaba zeama kubupa tukwaci, kubala lipuzo zeshutana, kukusufaza litaba",
+        "zebalilwe. Kwandaa zeo, bana ba sikolo bakaituta kukona kubulela kapa",
+        "kuñola ka mukwa omuñwi kusina kucinca muhupulo (Paraphrasing) ni",
+        "kuikambota litaluso za manzwi.",
+        "Sika luli sesilukela kukoniwa: Bana ba sikolo:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 222,
+      "title": "Silozi: Makalelo: Mwa Tuto-nyana ye, bana ba sikolo bakaituta kukona",
+      "topics": [
+        "kuipalela litaba zeama kubupa tukwaci ni kubalela kuikola. Nto ye, ikatisa",
+        "kuli bana ba sikolo baekeze zibo ya manzwi, kubala kusina kukakatela,",
+        "kubalela kunyakisisa, kekezo ya zibo ni kutwisiso ya lika. Kwandaa zeo,",
+        "bakaikambota litaba zehapile maikuto abona mwataba yebalilwe.",
+        "Sika luli sesilukela kukoniwa: Bana ba sikolo:"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 223,
+      "title": "Silozi: Mitala ya mashitanguti kiifi?",
+      "topics": [
+        " Atuse bana ba sikolo kubupa sikuka sa kuikambota zefitiswa mwa",
+        "lipatisiso kakubolosola hande litaba.",
+        "lipatisiso kakubolosola mokuitusiseza lisupo hande.",
+        " Kashimani kanaolo"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 224,
+      "title": "Silozi: Kalulo : Pupo ya Puwo.",
+      "topics": [
+        "Tuto :Milumo (vowels).",
+        "Tuto-nyana : Milumo(vowels) yemikuswani ni ye mitelele.",
+        "Makalelo :",
+        "Mwa Tuto-nyana ye bana ba sikolo bakaituta kukona kutaluhanya",
+        "milumo(vowels) ye mikuswani ku yemitelele,Kufa taluso ya manzwi yana ni"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "INTRODUCTI",
+        " Sing the lyrics in the famous folk",
+        "music song",
+        "Hanihupula yomunde,",
+        "Meeto ki muzilili,"
+      ],
+      "resources": [
+        " Samples of descriptive composition of people.",
+        " Pictures of different people.",
+        "EXPECTED STANDARD: Description of a person written correctly. (This must come from",
+        "the syllabus as it is)"
+      ]
+    },
+    {
+      "unitNumber": 225,
+      "title": "Silozi: Collaboration",
+      "topics": ["Kuswalisana"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 226,
+      "title": "Silozi: Communication",
+      "topics": ["Kufitisa mañusa ni maikuto ku babañwi"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 227,
+      "title": "Silozi: Creativity and",
+      "topics": ["innovation", "Kueza lika ka buikupuleli"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 228,
+      "title": "Silozi: Environmental",
+      "topics": ["sustainability", "Kusayundisa zefumaneha mwa libaka", "zelupotolohile"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 229,
+      "title": "Silozi: Problem solving",
+      "topics": [
+        "Kutungunyuna ni Kufumana likalabo za",
+        "matata a bupilo",
+        "MAKALELO:",
+        "Buka ye ya masupanzila a kuluta; ya Foomu 1 iñolezwi kutusa baluti kwa kubupa",
+        "milelo ya zelukela kuluta (lesson plans) ya zazi ni zazi kuya ka mutomo wa tuto;"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 230,
+      "title": "Silozi: Makalelo",
+      "topics": [
+        " Zeiputezi mwa mukanga:",
+        "Mukanga wo uama miinelo ni mitomo ya naha. Mukanga wo",
+        "ukaitusiswa kuluta likalulo za kubulela ni kuteeleza, kubala ni kuñola.",
+        "Zeñwi ki pupo ya puwo ni kutoloka. Kalulo ni kalulo ina ni lituto",
+        "zateñi."
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Muluti :",
+        "Akenye bana ba sikolo mwa ngambolo ya kukona kufa taluso ya",
+        "zeshangelwa kwa masina ni musebezi wa teñi.",
+        " Kushangela manzwi ki mukwa wa kuekeza zeshangelwa kwa masina a",
+        " Musebezi wa kushangela ki kubupa manzwi amanca, kucinca taluso",
+        "kapa musebezi wa manzwi.",
+        "Bana ba sikolo:",
+        "Bakene mwa ngambolo ya kukona kufa taluso ya kushangela manzwi ni"
+      ],
+      "assessmentMethods": [
+        "Ka nako yakuituta kapa hasamulaho wa kuituta, bana ba sikolo baswanela",
+        "a) Kuba mwa ngambolo ya kubuisana.",
+        "b) Kubatisisa ni kufumana likalabo za kuitusisa milyani ka mafosisa.",
+        "c) Kuamuhela milao yeswanela kulatelelwa hakubuisanwa.",
+        "d) Kubeleka ni muluti kubupa sikuka sa kuitusisa kubata likalabo.",
+        "e) Kuambola ni muluti kuama mayemo amande akubuisana."
+      ],
+      "resources": [
+        " Samples of descriptive composition of people.",
+        " Pictures of different people.",
+        "EXPECTED STANDARD: Description of a person written correctly. (This must come from",
+        "the syllabus as it is)"
+      ]
     }
   ],
   "metadata": {
-    "source": "ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.pdf",
-    "extractedAt": "2026-07-11T06:20:43.208Z",
-    "fileSize": 1246466
+    "source": "LITERATURE-IN-CHITONGA-TEACHING-MODULE-FORM-1-TERM-1.pdf; CHITONGA-FORM-1-TERM-2-TEACHING-MODULE-2025-VERSION.pdf; CHITONGA-FORM-1-TEACHING-MODULE-TERM-3.pdf; LITERATURE-IN-CINYANJA-TEACHING-MODULE-FORM-1-TERM-1.pdf; CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2 (1).pdf; CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf; LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.pdf; LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-2.pdf; ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-3-1.pdf; LITERATURE-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf; KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf; KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3-2025.pdf; LUNDA-TEACHING-MODULE-FORM-1-TERM-1.pdf; LIT-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf; LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3-1.pdf; LITERATURE-IN-LUVALE-TEACHING-MODULE-FROM-1-TERM-1.pdf; LUVALE-TEACHING-MODULE-FORM-1-TERM-1.pdf; LIT-IN-LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf; LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf; LIT-IN-SILOZI-TEACHING-MODULE-TERM-2.pdf; LIT-IN-SILOZI-TEACHING-MODULE-TERM-3.pdf; SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-2.pdf; SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+    "derivedFrom": [
+      "data/teaching-modules/chitonga",
+      "data/teaching-modules/cinyanja",
+      "data/teaching-modules/icibemba",
+      "data/teaching-modules/kikaonde",
+      "data/teaching-modules/lunda",
+      "data/teaching-modules/luvale",
+      "data/teaching-modules/silozi"
+    ],
+    "extractedAt": "2026-07-19T18:48:24.058Z",
+    "curated": true,
+    "cleaned": true,
+    "cleanedAt": "2026-07-19T18:48:37.479Z",
+    "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

@@ -1,0 +1,821 @@
+{
+  "syllabusDir": "F:\\Mobile Apps\\ZSMS\\school_management_systems\\Syllabus",
+  "modulesDir": "F:\\Mobile Apps\\ZSMS\\school_management_systems\\Teaching Module",
+  "syllabus": [
+    {
+      "file": "AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.986,
+      "page_count": 52,
+      "needs_manual_review": false,
+      "md5": "75c53d836f22225101813d32d78b92a6"
+    },
+    {
+      "file": "ART-AND-DESIGN-SYLLABUS-FINAL.pdf",
+      "out": "ingest\\extracted\\syllabus\\ART-AND-DESIGN-SYLLABUS-FINAL.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.94,
+      "page_count": 55,
+      "needs_manual_review": false,
+      "md5": "7680b507550837c6cd643c9a59c785cb"
+    },
+    {
+      "file": "BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.703,
+      "page_count": 65,
+      "needs_manual_review": false,
+      "md5": "b7bcd72882fa28b07c2132d0af1cdca4"
+    },
+    {
+      "file": "CHEMISTRY-SYLLABUS.pdf",
+      "out": "ingest\\extracted\\syllabus\\CHEMISTRY-SYLLABUS.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.962,
+      "page_count": 73,
+      "needs_manual_review": false,
+      "md5": "89d5e4a82938bf39e0d1c0b0c8151e20"
+    },
+    {
+      "file": "CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.951,
+      "page_count": 69,
+      "needs_manual_review": false,
+      "md5": "78e7224bdcc2193ee6e4703eca392bb1"
+    },
+    {
+      "file": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.json",
+      "detected_shift": 36,
+      "shift_confidence": 1.0,
+      "page_count": 65,
+      "needs_manual_review": false,
+      "md5": "8a6b0b32ab33539cc2ae74b09cba86fb"
+    },
+    {
+      "file": "COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.95,
+      "page_count": 61,
+      "needs_manual_review": false,
+      "md5": "ce267e428cc7e86f9e7e165c527aa1de"
+    },
+    {
+      "file": "DESIGN-AND-TECHNOLOGY-STUDIES.pdf",
+      "out": "ingest\\extracted\\syllabus\\DESIGN-AND-TECHNOLOGY-STUDIES.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.951,
+      "page_count": 56,
+      "needs_manual_review": false,
+      "md5": "d4750d8b956287b8841082089dc422e8"
+    },
+    {
+      "file": "ENGLISH-SYLABUS-FORM-1-4-O-LEVELCAMERA-READY.pdf",
+      "out": "ingest\\extracted\\syllabus\\ENGLISH-SYLABUS-FORM-1-4-O-LEVELCAMERA-READY.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.973,
+      "page_count": 139,
+      "needs_manual_review": false,
+      "md5": "183900a3eb0198b50e12d91079809c77"
+    },
+    {
+      "file": "FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.994,
+      "page_count": 55,
+      "needs_manual_review": false,
+      "md5": "cfb58d2d404c25de7eb53adae2556374"
+    },
+    {
+      "file": "FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.pdf",
+      "out": "ingest\\extracted\\syllabus\\FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.964,
+      "page_count": 45,
+      "needs_manual_review": false,
+      "md5": "86aca3e2e71a3f3b39a6c2f3896ac6ba"
+    },
+    {
+      "file": "FRENCH-LANGUAGE.pdf",
+      "out": "ingest\\extracted\\syllabus\\FRENCH-LANGUAGE.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.956,
+      "page_count": 106,
+      "needs_manual_review": false,
+      "md5": "56faa00154cd6497179642b8aebbbf7c"
+    },
+    {
+      "file": "GEOGRAPHY-SYLLABUS.pdf",
+      "out": "ingest\\extracted\\syllabus\\GEOGRAPHY-SYLLABUS.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.825,
+      "page_count": 68,
+      "needs_manual_review": false,
+      "md5": "7160f00e5f4cc8c3f85ae851333eb4bf"
+    },
+    {
+      "file": "HISTORY-SYLLABUS-FORMS-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\HISTORY-SYLLABUS-FORMS-1-4.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.963,
+      "page_count": 63,
+      "needs_manual_review": false,
+      "md5": "f617833606d6d6dbad3e8fc08958884b"
+    },
+    {
+      "file": "HOSPITALITY-MANAGEMENT.pdf",
+      "out": "ingest\\extracted\\syllabus\\HOSPITALITY-MANAGEMENT.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.963,
+      "page_count": 61,
+      "needs_manual_review": false,
+      "md5": "7c910587d0d8544e38179adefd791507"
+    },
+    {
+      "file": "ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.936,
+      "page_count": 35,
+      "needs_manual_review": false,
+      "md5": "a636b06da899a12befbbabcb456a383b"
+    },
+    {
+      "file": "LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.857,
+      "page_count": 41,
+      "needs_manual_review": false,
+      "md5": "3e7ccfa3b160bfa67e23b0577c494b1c"
+    },
+    {
+      "file": "MATHEMATICS-II-SYLLABUS.pdf",
+      "out": "ingest\\extracted\\syllabus\\MATHEMATICS-II-SYLLABUS.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.963,
+      "page_count": 51,
+      "needs_manual_review": false,
+      "md5": "89d39f562532040193d620dee0dbbf98"
+    },
+    {
+      "file": "MATHEMATICS-O-LEVEL-FORMS-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\MATHEMATICS-O-LEVEL-FORMS-1-4.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.967,
+      "page_count": 46,
+      "needs_manual_review": false,
+      "md5": "dd75fd1d10dc45a54c5318ab2636b8ff"
+    },
+    {
+      "file": "MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.pdf",
+      "out": "ingest\\extracted\\syllabus\\MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.json",
+      "detected_shift": 34,
+      "shift_confidence": 1.0,
+      "page_count": 39,
+      "needs_manual_review": false,
+      "md5": "62bdb350a76af27a73e191af80bcba22"
+    },
+    {
+      "file": "PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.946,
+      "page_count": 48,
+      "needs_manual_review": false,
+      "md5": "4c0756c7fe8cfaeb33003cc75b17d8f9"
+    },
+    {
+      "file": "PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.pdf",
+      "out": "ingest\\extracted\\syllabus\\PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.975,
+      "page_count": 51,
+      "needs_manual_review": false,
+      "md5": "085da66c60d166734431e852f7dd4a40"
+    },
+    {
+      "file": "RELIGIOUS-EDUCATION-SYLLABUS.pdf",
+      "out": "ingest\\extracted\\syllabus\\RELIGIOUS-EDUCATION-SYLLABUS.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.951,
+      "page_count": 54,
+      "needs_manual_review": false,
+      "md5": "b45146ef7591f043a62c48c1b3365126"
+    },
+    {
+      "file": "TRAVEL-AND-TOURISM-SYLLABUS.pdf",
+      "out": "ingest\\extracted\\syllabus\\TRAVEL-AND-TOURISM-SYLLABUS.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.977,
+      "page_count": 61,
+      "needs_manual_review": false,
+      "md5": "65ebbee3463aadf48ba9b207de681a0f"
+    },
+    {
+      "file": "ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.pdf",
+      "out": "ingest\\extracted\\syllabus\\ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.json",
+      "detected_shift": 29,
+      "shift_confidence": 0.923,
+      "page_count": 67,
+      "needs_manual_review": false,
+      "md5": "b68765c525eb604ade569e0e105e5ea8"
+    }
+  ],
+  "teachingModules": [
+    {
+      "file": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\ART-AN-DESIGN-MODULE-FORM-PDF.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.987,
+      "page_count": 45,
+      "needs_manual_review": false,
+      "md5": "e53cca0b98fb871a44a3d7f5f434004c"
+    },
+    {
+      "file": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\ART-AND-DESIGN-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.99,
+      "page_count": 33,
+      "needs_manual_review": false,
+      "md5": "0b1838dd3d97a165f716846a59545c87"
+    },
+    {
+      "file": "Chemistry-Teaching-Module-Form-1-final-version-3-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\Chemistry-Teaching-Module-Form-1-final-version-3-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.99,
+      "page_count": 80,
+      "needs_manual_review": false,
+      "md5": "13d33bbf46b6b8dda99c11fe145b07fa"
+    },
+    {
+      "file": "CHITONGA-FORM-1-TEACHING-MODULE-TERM-3.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\CHITONGA-FORM-1-TEACHING-MODULE-TERM-3.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.997,
+      "page_count": 91,
+      "needs_manual_review": false,
+      "md5": "785f883d92f698683a5a532e892e7d2a"
+    },
+    {
+      "file": "CHITONGA-FORM-1-TERM-2-TEACHING-MODULE-2025-VERSION.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\CHITONGA-FORM-1-TERM-2-TEACHING-MODULE-2025-VERSION.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.995,
+      "page_count": 87,
+      "needs_manual_review": false,
+      "md5": "589b740b71891c39f84d5a840d1730f1"
+    },
+    {
+      "file": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2 (1).pdf",
+      "out": "ingest\\extracted\\teaching-modules\\CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2 (1).json",
+      "detected_shift": 0,
+      "shift_confidence": 0.98,
+      "page_count": 193,
+      "needs_manual_review": false,
+      "md5": "8bffc002450d6a94e09c7ff5801b3bbd"
+    },
+    {
+      "file": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+      "out": "ingest\\extracted\\teaching-modules\\CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3 (1).json",
+      "detected_shift": 0,
+      "shift_confidence": 0.991,
+      "page_count": 134,
+      "needs_manual_review": false,
+      "md5": "328080b486295e4051048dabc4ea1ea0"
+    },
+    {
+      "file": "CIVIC-EDUCATION-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\CIVIC-EDUCATION-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.996,
+      "page_count": 60,
+      "needs_manual_review": false,
+      "md5": "bd35ddd33bedfb8bedddb0e16cecf77a"
+    },
+    {
+      "file": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\CIVIC_EDUCATION_TEACHING_MODULE-PDF.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.993,
+      "page_count": 51,
+      "needs_manual_review": false,
+      "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac"
+    },
+    {
+      "file": "commerce-Teaching-Module-PDF.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\commerce-Teaching-Module-PDF.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.994,
+      "page_count": 48,
+      "needs_manual_review": false,
+      "md5": "4d5742a009f6b468f486a1271704e6a1"
+    },
+    {
+      "file": "COMMERCE-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\COMMERCE-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.989,
+      "page_count": 48,
+      "needs_manual_review": false,
+      "md5": "4b2ed1e09b031a31d223ebf5e8c5fed6"
+    },
+    {
+      "file": "Design-and-Technology-Module-Final-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\Design-and-Technology-Module-Final-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.993,
+      "page_count": 96,
+      "needs_manual_review": false,
+      "md5": "15247711bafc47759854efd40befe752"
+    },
+    {
+      "file": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.988,
+      "page_count": 112,
+      "needs_manual_review": false,
+      "md5": "c5065c52117d8995de86e1e176b482aa"
+    },
+    {
+      "file": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.987,
+      "page_count": 90,
+      "needs_manual_review": false,
+      "md5": "cc8c7dbbe2eff4b4307de6424d4796c3"
+    },
+    {
+      "file": "FF-FORM-1-TERM-1-FINAL-MODULE-2025.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\FF-FORM-1-TERM-1-FINAL-MODULE-2025.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.987,
+      "page_count": 108,
+      "needs_manual_review": false,
+      "md5": "36fd2c8aa7e348b706d1a8224dc6600f"
+    },
+    {
+      "file": "FOOD-AND-NUTRITION-FORM-1-TERM-1-MODULE-Final-edited-Finaledition.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\FOOD-AND-NUTRITION-FORM-1-TERM-1-MODULE-Final-edited-Finaledition.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.992,
+      "page_count": 71,
+      "needs_manual_review": false,
+      "md5": "74467cd6c3ba4c6da36173963589ca54"
+    },
+    {
+      "file": "FORM-1-ICT-MODULE-Sample1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\FORM-1-ICT-MODULE-Sample1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.977,
+      "page_count": 15,
+      "needs_manual_review": false,
+      "md5": "33d06366ada5cf9dee9617585d61b549"
+    },
+    {
+      "file": "FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MODULE-FOR-TERM-2-1-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MODULE-FOR-TERM-2-1-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.992,
+      "page_count": 37,
+      "needs_manual_review": false,
+      "md5": "21083374c9edc75e3779f882703f0e4f"
+    },
+    {
+      "file": "FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MOULE-FOR-TERM-3-1-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MOULE-FOR-TERM-3-1-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.998,
+      "page_count": 26,
+      "needs_manual_review": false,
+      "md5": "71070be7c85e25c98293a3c0ff564d8c"
+    },
+    {
+      "file": "FRENCH-TEACHING-MODULE-TERM-2-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\FRENCH-TEACHING-MODULE-TERM-2-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.954,
+      "page_count": 44,
+      "needs_manual_review": false,
+      "md5": "fb9fd6d3f25fe71770d51796046dd022"
+    },
+    {
+      "file": "FRENCH-TEACHING-MODULE-TERM-3-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\FRENCH-TEACHING-MODULE-TERM-3-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.955,
+      "page_count": 37,
+      "needs_manual_review": false,
+      "md5": "aec298243b16b6a59e9d4a1cecd21f60"
+    },
+    {
+      "file": "Geography-Module-Form1.Term-11.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\Geography-Module-Form1.Term-11.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.969,
+      "page_count": 53,
+      "needs_manual_review": false,
+      "md5": "830c5919283d537a897943595cfaf095"
+    },
+    {
+      "file": "GEOGRAPHY-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\GEOGRAPHY-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.988,
+      "page_count": 48,
+      "needs_manual_review": false,
+      "md5": "ef626a40eb4e21d95d9ebb2064b5d6da"
+    },
+    {
+      "file": "HISTORY-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\HISTORY-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.985,
+      "page_count": 32,
+      "needs_manual_review": false,
+      "md5": "aecd14100df28c99f62dbd56d3f8efa2"
+    },
+    {
+      "file": "ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-2-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-2-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.968,
+      "page_count": 126,
+      "needs_manual_review": false,
+      "md5": "e9c9c70f7a3a4885fdd945677c28c7ce"
+    },
+    {
+      "file": "ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-3-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.991,
+      "page_count": 113,
+      "needs_manual_review": false,
+      "md5": "179c64c85fbbe80adda353482a70504c"
+    },
+    {
+      "file": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.997,
+      "page_count": 123,
+      "needs_manual_review": false,
+      "md5": "0d8e1db9510afca5185fb9a0fd283d17"
+    },
+    {
+      "file": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.973,
+      "page_count": 131,
+      "needs_manual_review": false,
+      "md5": "be51a8334dbbdc1d39e63d991d07a29d"
+    },
+    {
+      "file": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3-2025.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3-2025.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.995,
+      "page_count": 119,
+      "needs_manual_review": false,
+      "md5": "3db35d21d2fc8da2d625ac8d32d567c6"
+    },
+    {
+      "file": "LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.995,
+      "page_count": 93,
+      "needs_manual_review": false,
+      "md5": "a663d86482a53444ba8689bb2e821301"
+    },
+    {
+      "file": "LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-3.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-ICIBEMBA-FORM-1-MODULE-TERM-3.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.995,
+      "page_count": 65,
+      "needs_manual_review": false,
+      "md5": "47ad27a181331e1e9da44c6ba77c38ed"
+    },
+    {
+      "file": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.987,
+      "page_count": 91,
+      "needs_manual_review": false,
+      "md5": "2b0f07c9287cad82904a403707ee78d4"
+    },
+    {
+      "file": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.979,
+      "page_count": 64,
+      "needs_manual_review": false,
+      "md5": "584c83889d3da6df24b4442afbd9be14"
+    },
+    {
+      "file": "LIT-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.993,
+      "page_count": 62,
+      "needs_manual_review": false,
+      "md5": "1e0328322e67dd5db47a7a0e677db070"
+    },
+    {
+      "file": "LIT-IN-LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-LUVALE-TEACHING-MODULE-FORM-1-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.994,
+      "page_count": 62,
+      "needs_manual_review": false,
+      "md5": "a39ea3d76071bd0dcfd27ae209be95a5"
+    },
+    {
+      "file": "LIT-IN-SILOZI-TEACHING-MODULE-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-SILOZI-TEACHING-MODULE-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.987,
+      "page_count": 102,
+      "needs_manual_review": false,
+      "md5": "cacc883966112618237696b652bae359"
+    },
+    {
+      "file": "LIT-IN-SILOZI-TEACHING-MODULE-TERM-3.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LIT-IN-SILOZI-TEACHING-MODULE-TERM-3.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.996,
+      "page_count": 62,
+      "needs_manual_review": false,
+      "md5": "b4a07f3335247df00ccf7141c5c49cd8"
+    },
+    {
+      "file": "LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.994,
+      "page_count": 69,
+      "needs_manual_review": false,
+      "md5": "ef382ed6b56f920d214fcd97ed1431ff"
+    },
+    {
+      "file": "LITERATURE-IN-CHITONGA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LITERATURE-IN-CHITONGA-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.981,
+      "page_count": 57,
+      "needs_manual_review": false,
+      "md5": "e7af4f77e275c129891b2d9c40e1dd33"
+    },
+    {
+      "file": "LITERATURE-IN-CINYANJA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LITERATURE-IN-CINYANJA-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.977,
+      "page_count": 37,
+      "needs_manual_review": false,
+      "md5": "15b1addadb25328fe3c0ec18a5b9cbb9"
+    },
+    {
+      "file": "LITERATURE-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LITERATURE-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.979,
+      "page_count": 54,
+      "needs_manual_review": false,
+      "md5": "911b95546195795a833f108e7f0a7f1c"
+    },
+    {
+      "file": "LITERATURE-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LITERATURE-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.974,
+      "page_count": 48,
+      "needs_manual_review": false,
+      "md5": "c5e7d95268bf36986cd716cdc740994e"
+    },
+    {
+      "file": "LITERATURE-IN-LUVALE-TEACHING-MODULE-FROM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LITERATURE-IN-LUVALE-TEACHING-MODULE-FROM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.99,
+      "page_count": 63,
+      "needs_manual_review": false,
+      "md5": "a04d312ff3971b9abaa654b3384cb8d3"
+    },
+    {
+      "file": "LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.977,
+      "page_count": 101,
+      "needs_manual_review": false,
+      "md5": "4770ef23c7b03fdd358365661cbf9401"
+    },
+    {
+      "file": "LUNDA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LUNDA-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.987,
+      "page_count": 64,
+      "needs_manual_review": false,
+      "md5": "078a6b2cbe7cce47dae553c1fa9f8cc5"
+    },
+    {
+      "file": "LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LUNDA-TEACHING-MODULE-FORM-1-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.964,
+      "page_count": 105,
+      "needs_manual_review": false,
+      "md5": "c0c6f362c0f0f59d5564977e582e9804"
+    },
+    {
+      "file": "LUVALE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LUVALE-TEACHING-MODULE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.994,
+      "page_count": 123,
+      "needs_manual_review": false,
+      "md5": "36401086690d77a9b98b5d2394c50a76"
+    },
+    {
+      "file": "LUVALE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LUVALE-TEACHING-MODULE-FORM-1-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.997,
+      "page_count": 115,
+      "needs_manual_review": false,
+      "md5": "ed6d1703ad82e1af6d8a143723263a95"
+    },
+    {
+      "file": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+      "out": "ingest\\extracted\\teaching-modules\\LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).json",
+      "detected_shift": 0,
+      "shift_confidence": 0.997,
+      "page_count": 104,
+      "needs_manual_review": false,
+      "md5": "29ad092b9734bb89d25044f40ea2b62a"
+    },
+    {
+      "file": "MATHEMATICS-1-MODULE-FINAL.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\MATHEMATICS-1-MODULE-FINAL.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.858,
+      "page_count": 80,
+      "needs_manual_review": false,
+      "md5": "4276f7fdc41c7e5c2fd1dd57b187256b"
+    },
+    {
+      "file": "Maths2_Teaching_Module.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\Maths2_Teaching_Module.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.993,
+      "page_count": 90,
+      "needs_manual_review": false,
+      "md5": "3c2a26b24aedaab36387e46ac55dee84"
+    },
+    {
+      "file": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.989,
+      "page_count": 37,
+      "needs_manual_review": false,
+      "md5": "bf730864b2f0142afce9eb9e8ffe0420"
+    },
+    {
+      "file": "PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.988,
+      "page_count": 49,
+      "needs_manual_review": false,
+      "md5": "c365a013711120f2eb6252f41a63bfdc"
+    },
+    {
+      "file": "PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.994,
+      "page_count": 53,
+      "needs_manual_review": false,
+      "md5": "a70abf94924e00d63a6749a416a20207"
+    },
+    {
+      "file": "Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.999,
+      "page_count": 116,
+      "needs_manual_review": false,
+      "md5": "79763015647465894bd7facf6ccb8fd6"
+    },
+    {
+      "file": "PRINCIPLES-OF-ACCOUNTS-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\PRINCIPLES-OF-ACCOUNTS-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.963,
+      "page_count": 49,
+      "needs_manual_review": false,
+      "md5": "fa53db2b837ae83aaac97068397fb57d"
+    },
+    {
+      "file": "RELIGIOUS-EDUCATION-TERM-2-MODULE.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\RELIGIOUS-EDUCATION-TERM-2-MODULE.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.989,
+      "page_count": 40,
+      "needs_manual_review": false,
+      "md5": "9dbcad673655b7812c7256a2d74b2b5e"
+    },
+    {
+      "file": "SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-2.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.988,
+      "page_count": 236,
+      "needs_manual_review": false,
+      "md5": "8350dafb886af8bb1ebae5a162c97520"
+    },
+    {
+      "file": "SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-3.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.986,
+      "page_count": 220,
+      "needs_manual_review": false,
+      "md5": "4c080caa1bf102b6c295858225a0a217"
+    },
+    {
+      "file": "TEACHING-MODULE-FOR-LITERATURE-FORM-1-TERM-1.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\TEACHING-MODULE-FOR-LITERATURE-FORM-1-TERM-1.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.988,
+      "page_count": 53,
+      "needs_manual_review": false,
+      "md5": "25275e09394e62d1193ace54f450c52a"
+    },
+    {
+      "file": "TRAVEL_AND_TOURISM_MODULE_Final-2025.pdf",
+      "out": "ingest\\extracted\\teaching-modules\\TRAVEL_AND_TOURISM_MODULE_Final-2025.json",
+      "detected_shift": 0,
+      "shift_confidence": 0.985,
+      "page_count": 70,
+      "needs_manual_review": false,
+      "md5": "eddbd2b53114fbbd521b933e4807a63a"
+    },
+    {
+      "file": "Chemistry-Teaching-Module-Form-1-final-version-3.pdf",
+      "duplicateOf": "Chemistry-Teaching-Module-Form-1-final-version-3-1.pdf",
+      "md5": "13d33bbf46b6b8dda99c11fe145b07fa",
+      "skipped": true
+    },
+    {
+      "file": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2 (2).pdf",
+      "duplicateOf": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2 (1).pdf",
+      "md5": "8bffc002450d6a94e09c7ff5801b3bbd",
+      "skipped": true
+    },
+    {
+      "file": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+      "duplicateOf": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-2 (1).pdf",
+      "md5": "8bffc002450d6a94e09c7ff5801b3bbd",
+      "skipped": true
+    },
+    {
+      "file": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+      "duplicateOf": "CINYANJA-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+      "md5": "328080b486295e4051048dabc4ea1ea0",
+      "skipped": true
+    },
+    {
+      "file": "LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3.pdf",
+      "duplicateOf": "LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3-1.pdf",
+      "md5": "4770ef23c7b03fdd358365661cbf9401",
+      "skipped": true
+    },
+    {
+      "file": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+      "duplicateOf": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+      "md5": "29ad092b9734bb89d25044f40ea2b62a",
+      "skipped": true
+    }
+  ],
+  "syllabusUnique": 25,
+  "modulesUnique": 61,
+  "modulesSkippedDuplicates": 6
+}

@@ -1,103 +1,777 @@
 {
   "subject": "Music",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["Role of Music in Society"],
+      "learningOutcomes": ["Demonstrate the roles of music in Society"],
+      "suggestedActivities": [
+        "Identifying various roles of",
+        "Demonstrating the roles of music",
+        "Critiquing peer performance for",
+        "Performing music and dance to"
+      ],
+      "assessmentMethods": ["demonstrated appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "Pulse and Beat",
+        "Note Values",
+        "Time Signature 1.2.3.1 Compose rhythms in simple metre."
+      ],
       "learningOutcomes": [
-        "cquisition of knowledge, skills, techniques and values which ar",
-        "e very important for the total",
-        "development of the individual and the nation as a whole.(൵HFWLYH\u0003LPSOHPHQWDWLRQ\u0003RI\u0003&RPSHWHQFH\u0003%DVHG\u0003(GXFDWLRQ\u0003UHTXLUHV\u0003",
-        "WKDW\u0003WKH\u0003IROORZLQJ\u0003SULQFLSOHV\u0003EH\u0003REVHUYHG\u001d\u0003&ODULW\\\u0003RI\u0003IRFXV\u000f\u0003UH",
-        "ÀHFWLYH\u0003GHVLJQLQJ\u000f\u0003VHWWLQJ\u0003",
-        "high expectations for all learners and appropriate opportunitie",
-        "It is my sincere hope that this",
-        "Competence Based syllabus",
-        "will greatly improve the quality of education provided at Ordi",
-        "nary Secondary School Level as",
-        "GH¿QHG\u0003DQG\u0003UHFRPPHQGHG\u0003LQ\u0003YDULRXV\u0003SROLF\\\u0003GRFXPHQWV\u0003DQG\u0003WKH\u0003C=DP",
-        "ELD\u0003(GXFDWLRQ\u0003&XUULFXOXP\u0003)UDPHZRUN\u0003\u0015\u0013\u0015\u0016\u0011",
-        "Joel Kamoko (Mr.)Permanent Secretary- Educational Services MINISTRY OF EDUCATION",
-        "viii",
-        "MUSIC ARTS SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
-        "ACKNOWLEDGEMENT",
-        "The syllabus presented here is a result of broad-based consulta",
-        "tion involving several stakeholders within and outside the educ",
-        "ation system. Many individuals,",
-        "institutions and organizations were consulted to gather their v",
-        "iews on the existing syllabus and to accord them an opportunity",
-        "to make suggestions for the",
-        "new syllabus. The Ministry of Education wishes to express heart",
-        "felt gratitude to all those who participated for their valuable",
-        "contributions, which resulted in",
-        "the development of this syllabus.The Curriculum Development Centre worked closely with other sis",
-        "ter departments and institutions to create this document. We si",
-        "ncerely thank the Directorate",
-        "of Teacher Education and Specialized Services, the Directorate",
-        "of Planning and Information, the Directorate of Human Resource",
-        "and Administration, the",
-        "Directorate of Open and Distance Education, the Examinations Co",
-        "uncil of Zambia, the University of Zambia, schools and other in",
-        "stitutions too numerous to",
-        "mention, for their steadfast support.:H\u0003SD\\\u0003VSHFLDO\u0003WULEXWH\u0003WR\u0003FR\u0010RSHUDWLQJ\u0003SDUWQHUV\u0003IRU\u0003UHQGHULQJ\u0003¿",
-        "QDQFLDO\u0003DQG\u0003WHFKQLFDO\u0003VXSSRUW\u0003LQ\u0003WKH\u0003SURGXFWLRQ\u0003RI\u0003WKLV\u0003V\\OODEX",
-        "Charles Ndakala (Dr.)Director – Curriculum DevelopmentMINISTRY OF EDUCATION",
-        "MUSIC ARTS SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
-        "INTRODUCTION",
-        "This syllabus is for Secondary School Ordinary Level that is to"
+        "Demonstrate pulse and beat in a piece of music",
+        "Apply note values in simple rhythms"
       ],
       "suggestedActivities": [
-        "arranged from simple to complex.",
-        "REQUIREMENT 7KH\u0003VFKRRO\u0003WKDW\u0003LQWHQGV\u0003WR\u0003R൵HU\u00030XVLFDO\u0003$UWV\u0003(GXFDWLRQ\u0003DW\u00036HFRQ",
-        "GDU\\\u00032UGLQDU\\\u0003/HYHO\u0003PXVW\u0003PHHW\u0003WKH\u0003IROORZLQJ\u0003UHTXLUHPHQWV\u0011",
-        "Storage: The school should have a secured music storage in whi",
-        "ch all Musical instruments and Materials should be kept.",
-        "Instrument: The School must have at least a number of musical",
-        "instruments from each class.",
-        "Piano / Keyboard and Guitar (must have instruments)• Western musical instrument. (Strings, Woodwinds, Brass and Per",
-        "cussions)",
-        "African traditional instruments (Chordophone, Aerophone, Membr",
-        "anophone and Idiophone).",
-        "Music studio equipment (recording, mixing, mastering...)• Infrastructure: The school should have a music room/ hall and",
-        "studio.",
-        "Additional Materials• Graded books (theory and instrument)• Computers with music software• Costumes and ornaments",
-        "MUSIC ARTS SYLLABUS SECONDARY EDUCATION ORDINARY LEVEL FORMS 1 – 4",
-        "SUGGESTED TEACHING METHODOLOGIES/HDUQHU\u0010FHQWUHG\u0003LV\u0003WKH\u0003SUHIHUUHG\u0003WHDFKLQJ\u0012OHDUQLQJ\u0003DSSURDFK\u0003LQ\u0003",
-        "WKLV\u0003VXEMHFW\u0011\u00037KLV\u0003DSSURDFK\u0003HPSKDVLVHV\u0003DFWLYH\u0003OHDUQHU\u0003LQYROYHPH",
-        "QW\u0003LQ\u0003WKH\u0003OHDUQLQJ\u0003SURFHVV\u0011\u00037KLV\u0003",
-        "means learners play a pivotal role in their own education by pa",
-        "rticipating actively in activities and discussions. It is cruci",
-        "al to recognise that each learner has",
-        "unique needs, learning styles and backgrounds. Some students ma",
-        "y grasp concepts quickly while others may require more time and",
-        "support. The teacher must",
-        "assess the individual needs of each learner to tailor their tea",
-        "ching strategies accordingly. Furthermore, the teacher should c",
-        "onsider the diverse experiences",
-        "DQG\u0003DELOLWLHV\u0003RI\u0003WKHLU\u0003VWXGHQWV\u0003E\\\u0003DFNQRZOHGJLQJ\u0003DQG\u0003DFFHSWLQJ\u0003",
-        "WKHVH\u0003GL൵HUHQFHV\u0011\u0003,Q\u0003WKLV\u0003ZD\\\u000f\u0003HGXFDWRUV\u0003FUHDWH\u0003DQ\u0003LQFOXVLYH\u0003OH",
-        "DUQLQJ\u0003HQYLURQPHQW\u0003ZKHUH\u0003DOO\u0003",
-        "VWXGHQWV\u0003IHHO\u0003YDOXHG\u0003DQG\u0003VXSSRUWHG\u0011\u0003\u0003%\\\u0003HPEUDFLQJ\u0003WKHVH\u0003SULQFLS",
-        "OHV\u000f\u0003HGXFDWRUV\u0003FDQ\u0003FUHDWH\u0003HQJDJLQJ\u0003DQG\u0003H൵HFWLYH\u0003OHDUQLQJ\u0003H[SHUL",
-        "HQFHV\u0003WKDW\u0003HPSRZHU\u0003VWXGHQWV\u0003",
-        "to reach full potential.7KHUHIRUH\u000f\u0003WHDFKLQJ\u0003VWUDWHJLHV\u0003PXVW\u0003EH\u0003YDULHG\u0003DQG\u0003ÀH[LEOH\u0003ZLWKL",
-        "Q\u0003ZHOO\u0010VWUXFWXUHG\u0003VHTXHQFH\u0003RI\u0003OHVVRQV\u0003DQG\u0003VKRXOG\u0003LQFOXGH\u0003DPRQJ\u0003",
-        "RWKHUV\u001e",
-        "Demonstration • Independent study \u0003\u0003 3URMHFW\u0003ZRUN• Enquiry/exploration• Observation • Field work • Research • Practical• Portfolio• Group work • Pair work",
-        "TIME ALLOCATIONThe standard period allocation for Musical Arts Education at Se",
-        "condary Ordinary Level is 8 hours of 12 periods per week."
+        "Demonstrating pulse and beat in a",
+        "Identifying notes and their values.",
+        "Relating notes to corresponding",
+        "Identifying dotted and tied notes.",
+        "Playing rhythms with doted and",
+        "Identifying simple metre (duple,",
+        "Grouping musical notes according",
+        "Composing rhythms in simple"
+      ],
+      "assessmentMethods": ["music demonstrated correctly", "composed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["Fixed Pitch", "Relative Pitch", "Key Signature", "Tonic Sol-fa"],
+      "learningOutcomes": [
+        "Relate pitch to the staff",
+        "Identify tones and semi-tones",
+        "Demonstrate the understanding of tonal inflectors (accidentals)",
+        "Identify enharmonic equivalence",
+        "Construct major scales without key signature",
+        "Construct minor scales without key signature",
+        "Identify the technical names",
+        "Construct major scales with key signature",
+        "Construct minor scales with key signature",
+        "Apply tonic sol-fa to major and minor scales"
+      ],
+      "suggestedActivities": [
+        "Distinguishing pitch levels",
+        "Relating different pitch levels to",
+        "Locating letter names of pitch",
+        "Relating the staff to the piano",
+        "Identifying tones and semi-tone on",
+        "Demonstrating the understanding",
+        "Identifying enharmonic",
+        "Constructing major scales.",
+        "Constructing minor scales.",
+        "Identifying the technical names",
+        "Constructing major scales with",
+        "Constructing minor scales with",
+        "Applying tonic sol-fa to major and",
+        "Demonstrating tonic sofa hand"
+      ],
+      "assessmentMethods": ["identified correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": ["Simple Intervals"],
+      "learningOutcomes": ["Distinguish intervals in a piece of music"],
+      "suggestedActivities": [
+        "Identifying intervals by numerical",
+        "Describing intervals by qualitative",
+        "Inverting intervals. (major to",
+        "Distinguishing intervals in a piece"
+      ],
+      "assessmentMethods": ["distinguished correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Melodic Motion", "Simple Melody Writing"],
+      "learningOutcomes": ["Describe the melodic motion", "Compose simple melodies"],
+      "suggestedActivities": [
+        "Identifying conjunct and disjunct",
+        "Identifying the shape/contour of",
+        "Discussing motif in melody",
+        "Distinguishing various phrases in",
+        "Composing simple melody. (at"
       ],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["Binary and Ternary"],
+      "learningOutcomes": ["Construct melodies in binary and ternary forms"],
+      "suggestedActivities": [
+        "Detecting rhythmic and melodic",
+        "Constructing sections of equal",
+        "Constructing sections of unequal"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["Italian Terms", "Musical Signs"],
+      "learningOutcomes": [
+        "Interpret the Italian terms for tempo",
+        "Interpret the Italian terms for dynamics",
+        "Demonstrate musical signs in music composition"
+      ],
+      "suggestedActivities": [
+        "Interpreting the Italian terms for",
+        "Identifying music signs (staccato,",
+        "Demonstrating music signs"
+      ],
+      "assessmentMethods": ["interpreted correctly", "appropriately."],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["Triads"],
+      "learningOutcomes": [
+        "Construct triads",
+        "Apply primary and secondary triads in any given scale"
+      ],
+      "suggestedActivities": [
+        "Identifying triads (root, 3rd, 5th)",
+        "Constructing triads. (root, 3rd,",
+        "Describing triads (major, minor,",
+        "Inverting triads",
+        "Playing triads",
+        "Identifying primary and secondary",
+        "Applying primary and secondary"
+      ],
+      "assessmentMethods": ["Triads constructed correctly", "applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Topic 1.9",
+      "topics": ["Vocal Timbres", "Instrumental Timbre"],
+      "learningOutcomes": [
+        "Contrast female from male vocal timbres",
+        "Identify tone qualities of indigenous and"
+      ],
+      "suggestedActivities": [
+        "Identifying female and male vocal",
+        "Contrasting female and male vocal",
+        "Identifying tone qualities of"
+      ],
+      "assessmentMethods": ["timbres contrasted correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 1: Topic 1.10",
+      "topics": ["Principles of Singing"],
+      "learningOutcomes": ["Apply various principles of singing"],
+      "suggestedActivities": [
+        "Identifying various principles of",
+        "Applying various principles of",
+        "Singing various songs addressing"
+      ],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 1: Topic 1.11",
+      "topics": [
+        "Classification of Musical Instruments",
+        "Handling and Playing Musical Instrument"
+      ],
+      "learningOutcomes": [
+        "Identify classes of musical instruments",
+        "Apply basic principles in handling and playing of musical instruments."
+      ],
+      "suggestedActivities": [
+        "Identifying classes of musical",
+        "Discussing care of musical",
+        "Identifying parts of instruments",
+        "Manipulating musical instrument"
+      ],
+      "assessmentMethods": ["instrument applied correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 1: Topic 1.12",
+      "topics": ["Introduction to Music Technology"],
+      "learningOutcomes": [
+        "Identify available music hardware and soft wares",
+        "Demonstrate knowledge of music hardware and software"
+      ],
+      "suggestedActivities": ["Identifying available hardware", "Discussing basic function of the"],
+      "assessmentMethods": ["demonstrated appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.1",
+      "topics": ["Zambian music."],
+      "learningOutcomes": ["Perform Zambian music styles"],
+      "suggestedActivities": [
+        "Identifying different Zambian",
+        "Discussing foreign influences",
+        "Selecting Zambian musical",
+        "Performing Zambian musical",
+        "Zambian music styles"
+      ],
+      "assessmentMethods": ["performed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["Metre"],
+      "learningOutcomes": ["Apply compound time in a composition"],
+      "suggestedActivities": [
+        "Identifying compound times",
+        "Demonstrating the",
+        "Compound time in a"
+      ],
+      "assessmentMethods": ["composition applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["C Clefs.", "Double Sharps and Double Flats"],
+      "learningOutcomes": [
+        "Relate pitch to the C clefs",
+        "Apply double sharps and double flats in a music composition"
+      ],
+      "suggestedActivities": [
+        "Relating letter names to pitch",
+        "Relating the C clefs to",
+        "Pitch to the C clefs related",
+        "Describe the effect of double",
+        "Applying double sharps and",
+        "Double sharps and double"
+      ],
+      "assessmentMethods": ["composition correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Compound Intervals"],
+      "learningOutcomes": ["Apply compound intervals in music composition"],
+      "suggestedActivities": ["Describing compound", "Inverting compound intervals"],
+      "assessmentMethods": ["music composition correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 2: Topic 2.5",
+      "topics": [
+        "Melody Writing",
+        "Transposing",
+        "Translating",
+        "Sight Reading 2.5.4.1 Perform music written in any clef"
+      ],
+      "learningOutcomes": [
+        "Construct an eight bars melody",
+        "Transpose a diatonic melody",
+        "Translate a diatonic melody"
+      ],
+      "suggestedActivities": [
+        "Identifying composing",
+        "Constructing an eight bars",
+        "Transposing a diatonic",
+        "Punctuating rhythmic",
+        "Translating a diatonic melody",
+        "Performing music written in"
+      ],
+      "assessmentMethods": ["constructed correctly", "performed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Rondo"],
+      "learningOutcomes": ["Construct melody in rondo form"],
+      "suggestedActivities": [
+        "Detecting rhythmic and",
+        "Constructing sections of equal",
+        "Constructing sections of"
+      ],
+      "assessmentMethods": ["constructed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 2: Topic 2.7",
+      "topics": ["Musical Signs 2.7.1.1 Interpret musical signs"],
+      "learningOutcomes": [],
+      "suggestedActivities": ["Interpreting musical signs"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 2: Topic 2.8",
+      "topics": ["Triads", "Cadences", "Part Singing"],
+      "learningOutcomes": [
+        "Identify chord progression",
+        "Detect harmonic cadences in major keys",
+        "Perform two, three and four part scores in group singing"
+      ],
+      "suggestedActivities": [
+        "Identifying chord progression Chord progression identified",
+        "Detecting harmonic cadences",
+        "Performing in two, three and"
+      ],
+      "assessmentMethods": ["keys detected accurately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 2: Topic 2.9",
+      "topics": ["Density"],
+      "learningOutcomes": ["Identify density for a given music"],
+      "suggestedActivities": ["Identifying density for a"],
+      "assessmentMethods": ["identified correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 2: Topic 2.10",
+      "topics": ["Conducting Figures"],
+      "learningOutcomes": [
+        "Recognize types of conducting figures",
+        "Relate music accentuation to hand movements in conducting"
+      ],
+      "suggestedActivities": ["Identifying types of", "Relating music accentuation to"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 2: Topic 2.11",
+      "topics": ["Singing"],
+      "learningOutcomes": ["Apply singing techniques"],
+      "suggestedActivities": ["Practising singing techniques", "Applying singing techniques"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 2: Topic 2.12",
+      "topics": ["Instrument Playing"],
+      "learningOutcomes": ["Apply instrument playing techniques"],
+      "suggestedActivities": [
+        "Identifying keys or sound",
+        "Playing various scales",
+        "Playing simple melodies"
+      ],
+      "assessmentMethods": ["applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 2: Topic 2.13",
+      "topics": ["Writing Music", "Music Recording"],
+      "learningOutcomes": ["Write music using available software", "Record music"],
+      "suggestedActivities": [
+        "Identifying available music",
+        "Discussing features of",
+        "Determining the kind of",
+        "Writing music using the",
+        "Identifying available",
+        "Recording music"
+      ],
+      "assessmentMethods": ["Music recorded successfully"],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["African Music"],
+      "learningOutcomes": ["Demonstrate appreciation of African music"],
+      "suggestedActivities": [
+        "Identifying styles of African",
+        "Describing African music",
+        "Demonstrating African",
+        "Performing African music"
+      ],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Non-diatonic Scales"],
+      "learningOutcomes": [
+        "Identify non- diatonic scales",
+        "Perform chromatic scales",
+        "Perform Pentatonic scales"
+      ],
+      "suggestedActivities": [
+        "Identifying non-diatonic",
+        "Identifying chromatic scales",
+        "Constructing chromatic scale",
+        "Performing chromatic scale",
+        "Identifying differences",
+        "Constructing Pentatonic",
+        "Performing Pentatonic scales"
+      ],
+      "assessmentMethods": ["identified correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["Melody Writing", "Metrical Accent"],
+      "learningOutcomes": ["Compose a twelve bars melody", "Relate words to the rhythm and melody"],
+      "suggestedActivities": [
+        "Identifying composing",
+        "Composing a twelve bars",
+        "Discussing verbal",
+        "Dividing words into",
+        "Aligning rhythm to syllables",
+        "Applying pitch to the rhythm"
+      ],
+      "assessmentMethods": ["composed correctly", "and melody successfully"],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Aspects of Theme and Variation", "Minuet and Trio Form"],
+      "learningOutcomes": [
+        "Apply theme and variation in a composition",
+        "Perform minuet and trio form"
+      ],
+      "suggestedActivities": [
+        "Identifying theme and",
+        "Assessing variations in a",
+        "Applying theme and",
+        "Identifying minuet and trio",
+        "Composing a minuet and trio",
+        "Performing minuet and trio"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Modulation Techniques for Related Keys in Binary and Ternary"],
+      "learningOutcomes": ["Apply modulation techniques for related keys"],
+      "suggestedActivities": [
+        "Identifying related keys",
+        "Discussing modulation",
+        "Applying modulation"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 3: Topic 3.6",
+      "topics": ["Density in Various Texture"],
+      "learningOutcomes": ["Analyse density in Polyphonic, polyrhythm and heterophonic"],
+      "suggestedActivities": ["Discussing nature of", "Analysing density in"],
+      "assessmentMethods": ["analysed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 3: Topic 3.7",
+      "topics": ["Musical Ornaments"],
+      "learningOutcomes": ["Apply ornaments in a music composition"],
+      "suggestedActivities": [
+        "Identifying ornaments",
+        "Discussing the effects of",
+        "Applying the ornaments in a"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 3: Topic 3.8",
+      "topics": ["Four-Part Harmony", "Figured Bass", "Cadences"],
+      "learningOutcomes": ["Apply the rules of harmony", "Apply figured bass", "Apply cadences"],
+      "suggestedActivities": [
+        "Identifying the rules of",
+        "Analysing four-part harmony",
+        "Applying the rules of",
+        "Identifying the numbers and",
+        "Interpreting the numbers and",
+        "Applying figured bass",
+        "Identifying cadence (Perfect,",
+        "Applying cadences in"
+      ],
+      "assessmentMethods": ["Cadences applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 3: Topic 3.9",
+      "topics": ["Types of Singing"],
+      "learningOutcomes": ["Perform various types of singing"],
+      "suggestedActivities": [
+        "Identifying types of singing",
+        "Demonstrating various types",
+        "Performing various types of"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 3: Topic 3.10",
+      "topics": ["Playing Musical Instrument", "Orchestratio"],
+      "learningOutcomes": [
+        "Perform complex rhythms and melodies",
+        "Employ orchestration techniques"
+      ],
+      "suggestedActivities": [
+        "Playing complex rhythms",
+        "Playing complex melodies",
+        "Distinguishing between",
+        "Writing music for non-",
+        "Writing music for"
+      ],
+      "assessmentMethods": ["employed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 3: Topic 3.11",
+      "topics": ["Basic Music Production"],
+      "learningOutcomes": ["Demonstrate basic skills in music production"],
+      "suggestedActivities": ["Developing simple beats"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Western Music 4.1.1.1 Demonstrate appreciation of western music"],
+      "learningOutcomes": [],
+      "suggestedActivities": [
+        "Discussing development of",
+        "Describing western music",
+        "Discussing influence of"
+      ],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Non- Harmonic Tones"],
+      "learningOutcomes": ["Apply non- harmonic tones"],
+      "suggestedActivities": [
+        "Identifying non-harmonic",
+        "Interpreting effect of non-",
+        "Applying non-harmonic tones"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["Voice Performing"],
+      "learningOutcomes": ["Perform vocal arrangements"],
+      "suggestedActivities": ["Performing various vocal"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Form 4: Topic 4.4",
+      "topics": [
+        "Musical arrangements",
+        "Orchestration 4.4.2.1 Orchestrate music for various instruments"
+      ],
+      "learningOutcomes": ["Perform music arrangements"],
+      "suggestedActivities": ["Performing various music", "Orchestrating music for"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["Dance Performances"],
+      "learningOutcomes": ["Perform dances"],
+      "suggestedActivities": ["Determining the", "Performing various dances"],
+      "assessmentMethods": ["Dances performed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["Music Production"],
+      "learningOutcomes": ["Carry out a project in music using technology"],
+      "suggestedActivities": [
+        "Writing music",
+        "Recording music",
+        "Mixing music",
+        "Mastering music"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 43,
+      "title": "Form 4: Topic 4.7",
+      "topics": ["Artist Management", "Business Venture"],
+      "learningOutcomes": [
+        "Demonstrate understanding of managing an artist",
+        "Undertake music business ventures"
+      ],
+      "suggestedActivities": [
+        "Discussing concepts on",
+        "Discussing Artist management",
+        "Identifying business venture.",
+        "Managing the venture",
+        "Promoting the product",
+        "Music and dance to address",
+        "Styles of Zambian music",
+        "Foreign influences on",
+        "Styles of African",
+        "Development of",
+        "Western Music",
+        "Influence of",
+        "Pulse and beat",
+        "Notes and their values",
+        "Corresponding rests to",
+        "Dotted and tied notes",
+        "Simple meter (duple, triple",
+        "Compound times",
+        "The staff",
+        "clefs",
+        "ledger lines",
+        "Tones and semi-tone",
+        "Tonal inflectors",
+        "Enharmonic equivalence",
+        "Major scales",
+        "Minor scales",
+        "Technical names",
+        "Major and minor scales",
+        "Pitch levels",
+        "Letter names",
+        "Instruments related to C",
+        "Effect of double sharps",
+        "Non- diatonic",
+        "The use of the non-",
+        "Constructing",
+        "Major and minor",
+        "Compound intervals by",
+        "Qualitative value (Major,",
+        "Quantitative value (2nd,",
+        "Inversion of simple",
+        "Inversion of compound",
+        "Melodic motions (conjunct",
+        "Shape/contour of the",
+        "Motif",
+        "Phrases",
+        "Four bars melody",
+        "Eight bars melodies",
+        "Diatonic (by key,",
+        "Rhythmic punctuation",
+        "Staff notation to tonic",
+        "composing",
+        "Twelve bars melody",
+        "Verbal significance",
+        "Rhythm related",
+        "Pitch related to",
+        "Call and response",
+        "Rhythmic contrast",
+        "Melodic contrast",
+        "Exact repetition after",
+        "Modified repetition after",
+        "(Rhythmic, melodic",
+        "Minuet and Trio",
+        "Modulation",
+        "Monophonic, bi-phonic,",
+        "Polyphonic poly-",
+        "Accelerando, Calando,",
+        "Piano, Mezzo piano, Forte,",
+        "Agitato, Appasionata,",
+        "Slur",
+        "Detached notes",
+        "Smoothly connected",
+        "Repeat signs, D.C a/",
+        "Tremolo, glissando,",
+        "Triadic structure ( root, third",
+        "Triadic quality (primary",
+        "Inversion of triads",
+        "Progression of primary",
+        "Chord progression",
+        "Perfect, imperfect,",
+        "Vocal harmonies (2,3 or",
+        "Numbers and",
+        "Passing tones,",
+        "Range and colour for voice.",
+        "African (membrano-phone,",
+        "Western Instruments (brass,",
+        "Conducting figures",
+        "Hand movements",
+        "Breath control/management",
+        "Voice projection",
+        "Articulation",
+        "Posture …",
+        "Singing techniques",
+        "Singing styles",
+        "Western (brass, woodwind,",
+        "African (chordophone,",
+        "Scales in one octave",
+        "Simple melodies",
+        "Complex rhythm.",
+        "Complex melody",
+        "Transposing",
+        "Non-transposing",
+        "Orchestrate for",
+        "Music writing",
+        "Music Production",
+        "Various dances",
+        "Hardware and software",
+        "Basic functions of the",
+        "Music writing software",
+        "Basic sound recording",
+        "Features of available",
+        "Basic music",
+        "Music project",
+        "Recording devices",
+        "Recording music",
+        "Managing an Artist",
+        "Artist management",
+        "Making instrument",
+        "Concerts",
+        "Music production",
+        "Managing the"
+      ],
+      "assessmentMethods": ["undertaken correctly"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.pdf",
-    "extractedAt": "2026-07-11T06:20:41.527Z",
-    "fileSize": 1432141
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=0, confidence=0.958) + deterministic CDC table parse. No fabricated content.",
+    "curated": true,
+    "recordCount": 85
   }
 }

@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "descriptive-writing",
+  "lesson": {
+    "lesson": 18,
+    "title": "DESCRIPTIVE WRITING",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Descriptive writing is an essential skill in both personal and professional",
+      "contexts, as it allows individuals to vividly convey experiences, emotions, and",
+      "observations to others. In real life, effective descriptive writing helps people",
+      "communicate more clearly and persuasively, whether it is in creative writing,"
+    ],
+    "activities": [
+      " Learners read the passage.",
+      "A Description of a Monkey",
+      "A monkey is a lively creature, full of energy. Its fur is a soft blanket of golden-brown,",
+      "with a lighter cream colour on its belly. Like a crown, its fur glows in the sunlight,",
+      "shimmering as it moves. Its face is full of character: large, dark eyes that sparkle with",
+      "curiosity, a small, flat nose, and a mischievous smile that never fades.",
+      "The monkey’s hands are like tiny, delicate claws, quick and nimble. It swings through the",
+      "trees with the grace of a dancer, leaping from branch to branch, its long tail curling like"
+    ],
+    "resources": [],
+    "assessment": [
+      " Learners choose an animal (either familiar or exotic) and write a detailed description",
+      "focusing on sensory details like appearance, behaviour, and habitat",
+      " Learners write short descriptions on given topics (Describe including physical traits,",
+      "sounds, movements, and personal impressions to engage the reader).",
+      "Descriptive writing helps convey experiences, emotions, and observations clearly and",
+      "vividly."
+    ],
+    "notes": ""
+  }
+}

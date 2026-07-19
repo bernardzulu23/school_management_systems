@@ -1,0 +1,51 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Chemistry-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "a273913a2d9d647a810d4cb59ef50198",
+  "detectedShift": 0,
+  "pageCount": 130,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-bonding",
+  "lesson": {
+    "lesson": 5,
+    "title": "1: BONDING",
+    "topics": [
+      "Introduction:",
+      "Atoms of most elements are naturally unstable. In their tendency to become stable, they interact",
+      "with each other through the process of bonding. The bonding process involves the sharing or",
+      "transfer of electrons between atoms in order for them to obtain stable electron configurations. In",
+      "the process, molecules or ions are formed. Bonding is the formation of attraction forces between"
+    ],
+    "activities": [
+      "different types of bonding.",
+      "groups to research and find solutions to given questions.",
+      "Suggested Teaching and Learning Materials:",
+      " Natural Materials:",
+      " Artificial Materials: Computers connected to internet, science dictionary, text books,",
+      "charts, markers, work cards, bostik, name and chemical formula tags for oxygen molecule",
+      "(O2), sodium chloride (NaCl), magnesium oxide (MgO), water (H2O), hydrogen chloride",
+      "(HCl), copper metal (Cu), aluminium metal (Al)"
+    ],
+    "resources": [
+      "Learners’ Activities:",
+      " Researching the uses of the assigned metals in different fields (construction, medicine,",
+      "electronics, jewellery, transportation)",
+      " Working together to prepare a short presentation showing how the metal is used in real",
+      " Sharing findings with the class"
+    ],
+    "assessment": [
+      "HOOK: In some cultures, each man is expected to marry one woman while in other",
+      "cultures a man can marry two or more women. Would such combinations be possible",
+      "among atoms? Discuss.",
+      " Ask learners the different types of bonding they come up with",
+      " Check if learners are:",
+      "o describing bonding correctly"
+    ],
+    "notes": ""
+  }
+}

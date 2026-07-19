@@ -1,22 +1,399 @@
 {
   "subject": "Religious Education",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["=The Idea of Religion", "= Four Religions in Zambia"],
+      "learningOutcomes": [
+        "Recognise other peopleÓs Religions",
+        "Appreciate Religious Education in day to day living",
+        "Evaluating the four Religions in Zambia"
+      ],
       "suggestedActivities": [],
-      "assessmentMethods": [],
+      "assessmentMethods": ["recognised accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "Types of growth = =1.2.1.1 Analyse types of JURZWK",
+        "=Diඒerent ways people develop",
+        "= Growing up in diඒerent religions Hinduism, Islam, Christianity and ZTR)"
+      ],
+      "learningOutcomes": [
+        "Demonstrate responsible citizenship in growing up",
+        "Demonstrate diඒerent ways people develop",
+        "Care for the environment",
+        "= Communicate teachings of diඒerent religions on growing up"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately", "communicated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["Morality", "Sources of moral codes"],
+      "learningOutcomes": [
+        "Apply moral principles in daily living",
+        "Analyse moral dilemmas",
+        "Diඒerentiate sources of religious and secular moral codes"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["daily living accordingly", "diඒerentiated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": [
+        "=Making Choices=",
+        "Central teachings on making choices =in the four =religions =in Zambia.",
+        "Talents"
+      ],
+      "learningOutcomes": [
+        "=Accept responsibility for oneÓs choices",
+        "=Evaluate decision making steps",
+        "=Analyse central teachings on making choices in the four religions",
+        "=Use talent as a source of earning a living Responsibility for oneÓs",
+        "'HYHORS talent to promote HQWUHSUHQHXUVKLS Identifying talents that can develop into entrepreneurial ventures Tailoring, hair dressing, sportsÈ) 'HPRQVWUDWH how oneÓs"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["analysed =accordingly", "developed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": [
+        "=Competition and Cooperation",
+        "=Trust",
+        "Religious teachings on competition, cooperation and trust"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding the importance of competition and cooperation in society",
+        "Promote collaboration in competition and co- operation",
+        "Justify importance of trust in real life",
+        "Apply religious teachings on competition, cooperation and trust in society"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["demonstrated accordingly", "life justiÜed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": [
+        "Religious teachings on competition, cooperation and trust",
+        "=Religious teachings on learning and truth"
+      ],
+      "learningOutcomes": [
+        "=Analyse diඒerent types of learning Discussing learning Identifying types of learning guided and unguided) Identifying guided and unguided learning experiences at home and at school Discussing advantages and disadvantages of guided and unguided learning",
+        "=Explore use of social media to justify truth Discussing meaning of truth Describing social media",
+        "=Analyse religious teachings on learning and truth",
+        "Apply teachings of the four religions in Zambia on freedom in community"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["analysed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 2: Topic 2.1",
+      "topics": [
+        "=Division and hatred",
+        "=Division and hatred in the four religions",
+        "=Overcoming division and hatred",
+        "Sin, Forgiveness and Reconciliation"
+      ],
+      "learningOutcomes": [
+        "Practise unity and love in daily living",
+        "Recognise other peopleÓs beliefs and practices",
+        "Apply religious teachings on overcoming division and hatred Analysing religious teachings on overcoming division and hatred in Christianity (Jesus Overcoming divisions, Matt 8:5-13,Luke 5:27-",
+        "Relate religious teachings on sin, forgiveness and reconciliation to real life situation"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "practised accordingly",
+        "practices recognised accordingly",
+        "related accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Topic 2.2",
+      "topics": [
+        "=Freedom and Community",
+        "= The teachings of the four religions in Zambia on freedom in community="
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding the importance of freedom in community",
+        "= Practice Teamwork in the community= Describing collaboration in relation to freedom Interpreting the importance of collaboration in community Discussing the linkage between collaboration and freedom in FRPPXQLW\\ Showing how teamwork can practised in community Teamwork in the community",
+        "= Apply teachings of the four religions in Zambia on freedom in community Evaluating religious teachings of the four religions on freedom in community. Christianity Deuteronomy 24:10-18,Mark 3:1-"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately", "practised accordingly", "applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Topic 2.3",
+      "topics": [
+        "= Self-Esteem",
+        "= Social and Emotional learning (SEL)",
+        "= Religious teachings on self-esteem ="
+      ],
+      "learningOutcomes": [
+        "= Analyse personal strength and weakness Exploring the meaning of self HVWHHP Describing types of self-esteem Identifying factors inÝuencing self-esteem Conscious living, self- acceptance, self-responsibility, self-assertiveness, purposive living, personal integrity) Personal strength and weakness",
+        "Practise Social and Emotion Learning FRPSHWHQFHV Identifying Social and Emotional Learning competences Exploring self-awareness, self- management, social awareness, relationship skills and responsible decision making Discussing personal challenges with others Applying Social and Emotional Learning competences in daily life Social and Emotional Learning",
+        "= Apply teachings of the four religions in Zambia on self-esteem Examining the teaching of self- esteem in diඒerent religions; Christianity (Genesis 1: 26-27, Joshua 1:1-9, 1 Samuel 16:7, 2 Tim Hinduism, Islam, Zambia Traditional Religion (text from scholars, proverbs, songs, riddlesÈ) Applying teachings of the four religions in Zambia on self-esteem to real life situation Teachings of the four religions in Zambia"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "analysed accordingly",
+        "competences practised accordingly",
+        "on self-esteem applied accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["= =Ambitions=", "Religious teachings on Ambitions and"],
+      "learningOutcomes": [
+        "Promote oneÓs DPELWLRQV Explaining meaning of ambition Illustrating positive and negative effects of ambitions Describing factors that determine DPELWLRQV Promoting oneÓs ambitions Determination, set goalsÈ)",
+        "Demonstrate creativity and innovation in ambitions and hope Describing creativity and innovation Discussing the importance of creativity and innovation in ambition Explaining steps in designing a SURMHFW Identifying an ambition, describing it, planning the project and acting/conducting project) Designing a project based on their ambitions and hope Creativity and innovation in ambitions",
+        "Apply hope in daily life Describing hope Exploring attributes of hope Explaining the types of hope Analysing factors that inÝuence KRSH",
+        "Analyse religious teachings on ambitions and hope ([SORULQJ religious teachings on ambitions and hope in the four religions. Christianity Luke 12:16- Teachings of religions on ambitions and"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "OneÓs ambitions promoted appropriately",
+        "and hope demonstrated accordingly",
+        "Hope applied in daily life accordingly",
+        "hope analysed on accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["= =Justice and injustice", "Religious teachings on Justice in VRFLHW\\"],
+      "learningOutcomes": [
+        "Demonstrate understanding of justice in society Discussing justice and injustice in VRFLHW\\ Explaining forms of justice within a social system Distributive, Procedural, Retributive, Restorative) Analysing forms of injustice within a social system Bribery, Tribalism, Corruption, NepotismÈ) Describing steps needed to arrive at an informed decision Showing importance of justice in society ( equality, human dignity, equityÈ) Understanding of justice in society",
+        "'HPRQVWUDWH how good governance promotes social justice Discussing good governance Explaining importance of good governance in promoting social MXVWLFH Evaluating social justice and good",
+        "Apply religious teachings on Justice in VRFLHW\\ (YDOXDWLQJ religious teachings on MXVWLFH in the four religions,"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["demonstrated appropriately", "applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Work", "=Ethics", "=Religious teachings on work"],
+      "learningOutcomes": [
+        "=Recognise signiÜcance of work in society Describing types of work =(formal and informal) Analysing why people work Discussing vocation as work Examining interdependence of work in modern Zambia. Identifying solutions to dependence on formal employment SigniÜcance of work in society UHFRJQLVHG DFFRUGLQJO\\",
+        "=Use work as a source of investment Assessing diඒerent ways of earning money Evaluating diඒerent work opportunities available Exploring ways of using work as a source of investment Analysing reasons for saving Work as a source of investment",
+        "=Show that entrepreneurial activities constitute work Describing entrepreneurial activities Identifying entrepreneurial activities in the community Justifying entrepreneurial activities as a form of employment Entrepreneurial activities constitute",
+        "=Show positive attitudes towards work Describing ethics Demonstrating the relationship between ethics and work Evaluating attitudes to work in Zambia today Exploring importance of positive attitudes towards work Examining relevance of the Code Positive attitudes towards work",
+        "=Analyse teachings of the four religions on work Examining religious =teachings on work =in the four religions, Christianity =Gen 2: 15, Ex 20: 8-",
+        "Evaluate religious teachings on suඒering in the four=religions"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "used accordingly",
+        "work shown accordingly",
+        "shown accordingly",
+        "work analysed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Admission practices", "Religious teachings on admission practices"],
+      "learningOutcomes": [
+        "Evaluate role of admission practices in Zambian society",
+        "Exhibit Loyalty and devotion in society",
+        "Analyse teachings =of =the four religions on admission practices"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["exhibited accordingly", "appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["=Leisure", "Religious teachings =on Leisure"],
+      "learningOutcomes": [
+        "Promote positive leisure time activities in modern society",
+        "Recognise personal role in environmental management",
+        "Explore impact of digital literacy on leisure",
+        "Evaluate religious teachings on leisure in the four religions"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["promoted accordingly", "recognized accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["=Friendship", "Love", "Religious teaching on friendship and love"],
+      "learningOutcomes": [
+        "Demonstrate",
+        "Distinguish types of love",
+        "Justify importance of collaboration in friendship and love",
+        "Use appropriate language to express oneself in friendship and love",
+        "Examine religious teachings on friendship and love"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["used correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Faith", "Prayer", "Religious teachings on faith and prayer", "Wealth"],
+      "learningOutcomes": [
+        "Justify the role of faith in life",
+        "Interpret the signiÜcance of prayer in oneÓs life",
+        "Analyse religious teachings on faith and prayer in the four religions",
+        "Apply Ünancial management skills in wealthy creation"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["life interpreted accordingly", "analysed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Wealth", "Happiness", "Religious teachings on wealth and happiness"],
+      "learningOutcomes": [
+        "Use entrepreneurship skills in wealth creation",
+        "Apply emotional intelligence in maintaining happiness",
+        "Evaluate religious teachings on wealth and happiness",
+        "Apply religious teachings on wealthy and happiness in real life situation"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["applied accordingly", "¤ =Communicating and relating effectively"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 3: Topic 3.6",
+      "topics": ["=Types of Suඒering", "Religious teachings =on suඒering"],
+      "learningOutcomes": [
+        "Distinguish diඒerent types of suඒering in society",
+        "Apply problem solving skills in suඒering",
+        "Evaluate religious teachings on suඒering in the four religions",
+        "Analyse =religious teachings on courtship and marriage="
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["suඒering applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Death.", "Religious teachings about death"],
+      "learningOutcomes": [
+        "Demonstrate",
+        "6KRZ empathy for other people Exploring how people react to bereavement Showing ways of expressing empathy to other people who have lost the beloved one Analysing the essence of expressing",
+        "Analyse religious teachings on ([DPLQLQJ teachings on death and life after death Isa 38:-20, Dan 12:1-3, John 11:11=-44, 1 Cor 15:1-28, Luke Understanding of religious teachings on death and life after death analysed DFFRUGLQJO\\ Religious Education Syllabus 2024"
+      ],
+      "suggestedActivities": ["QGHUVWDQGLQJ"],
+      "assessmentMethods": ["demonstrated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["=Leadership", "Religious teachings on leadership and integrity"],
+      "learningOutcomes": [
+        "Demonstrate",
+        "Promote integrity in leadership",
+        "Advocate good governance in leadership"
+      ],
+      "suggestedActivities": ["QGHUVWDQGLQ", "QGHUVWDQGLQJ"],
+      "assessmentMethods": ["promoted accordingly", "demonstrated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["=Courtship", "Marriage", "Religious teachings on courtship and marriage"],
+      "learningOutcomes": [
+        "Explore importance of courtship",
+        "Demonstrate",
+        "Examine the importance of FRPPXQLFDWLRQ in marriage",
+        "Analyse factors that promote strong marriage relationships",
+        "Apply emotional intelligence in marital relationships",
+        "Analyse religious teachings on courtship and marriage"
+      ],
+      "suggestedActivities": ["QGHUVWDQGLQJ"],
+      "assessmentMethods": [
+        "marriage examined accordingly",
+        "relationships applied accordingly",
+        "marriage analysed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 4: Topic 4.4",
+      "topics": [
+        "=Parent- children UHODWLRQVKLS",
+        "Religious teachings on children- parent relationships="
+      ],
+      "learningOutcomes": [
+        "Appreciate parent- children relationships",
+        "Apply human rights in Parent- children relationships",
+        "Utilise religious teachings on children- parent relationships"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appreciated accordingly", "relationships applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["National Values and Principles"],
+      "learningOutcomes": [
+        "=Apply National Values and Principles in daily living Describing National Values and Principles Examining National Values and Principles Identifying Sources of National Values and Principles Discussing objectives of National Values and Principles =(Promotion of hard work and accountabilityÈ)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["daily living applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["(FXPHQLV", "Religious teachings on Ecumenism"],
+      "learningOutcomes": [
+        "=Explore merging technologies in promoting unity and cooperation",
+        "=Demonstrate collaboration in Ecumenical work Describing collaboration in ecumenical work Identifying possible areas in which collaboration can enhance ecumenical work Justifying collaboration in ecumenical work Collaboration in Ecumenical work",
+        "=Promote interfaith dialogue Explaining the concept of ecumenism and its signiÜcance in the four religions Discuss the importance of dialogue and c Examining Christian teachings on Ecumenism (Acts 15; Psalm 133, Eph"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["demonstrated accordingly"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "RELIGIOUS-EDUCATION-SYLLABUS.pdf",
-    "extractedAt": "2026-07-11T06:20:42.743Z",
-    "fileSize": 911427
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/RELIGIOUS-EDUCATION-SYLLABUS.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.976) + deterministic CDC table parse. No fabricated content.",
+    "curated": true,
+    "recordCount": 91
   }
 }

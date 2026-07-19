@@ -1,0 +1,45 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "5-cyber-security",
+  "lesson": {
+    "lesson": 13,
+    "title": "5: CYBER SECURITY",
+    "topics": [
+      "Overview",
+      "Cyber security focuses on keeping digital devices and information safe from threats such as viruses,",
+      "hacking, and online scams. In schools, homes, and workplaces in Zambia, people rely on computers and",
+      "mobile phones for communication and services. Learning cyber security helps learners protect their data,",
+      "avoid cybercrime, and use technology safely and responsibly."
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Artificial (Physical – Classroom):",
+      "Classroom arranged for small group discussions and board presentation",
+      "Tables or desks grouped to allow collaboration",
+      "Technology Environment:",
+      "Projector/board to display anonymised cybercrime stories, CIA Triad diagram, and examples",
+      "Optional computers for learners to research additional local cyber incidents",
+      "Natural Environment:"
+    ],
+    "resources": [],
+    "assessment": [
+      "Examples of Formative",
+      "Scenario: Your grandmother receives a text message: “Grandma, it’s me your grandson. I have lost my",
+      "phone. This is my new number. Please send me K200 for data so I can call you later.”",
+      "(Identifying Threats) What type of cyber threat is this message an example of?",
+      "(Policy Development) What are two specific pieces of advice you would give your grandmother to",
+      "help her avoid falling for this kind of trick in the future?"
+    ],
+    "notes": ""
+  }
+}

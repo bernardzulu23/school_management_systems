@@ -1,0 +1,52 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "expository-writing",
+  "lesson": {
+    "lesson": 24,
+    "title": "EXPOSITORY WRITING",
+    "topics": [
+      "INTRODUCTION",
+      "Expository writing is a type of writing that explains, describes, or informs. It is different from",
+      "narrative or persuasive writing because it focuses on giving clear and factual information",
+      "rather than telling a story or convincing someone. Good expository writing answers questions",
+      "such as:"
+    ],
+    "activities": [
+      "research …)",
+      " Explain to the learners that:",
+      "It helps one develop critical thinking",
+      "Allows Learners to organise ideas logically and express themselves effectively",
+      "using facts and explanations",
+      "It is important for gathering and sharing information, and research",
+      "Helps readers grasp complex ideas",
+      "It enhances the development of communication skills"
+    ],
+    "resources": [
+      "the planet for future generations.",
+      "(Slightly adapted from UN Environment Programme)",
+      " Learners discuss the features of an expository essay. The following are the expected",
+      "teaching points from the discussion:",
+      "Title: The title should reflect the topic being discussed and indicate the purpose of the",
+      "essay. For example, “The Effects of Climate Change on the Environment.”"
+    ],
+    "assessment": [
+      " Group learners and give them an expository composition and observe them as they",
+      "identify features of an essay (topic sentence, supporting details and transition words)",
+      " Individual work: ask learners to choose a simple topic and write a short expository essay",
+      "(e.g., How to Stay Healthy or The Importance of Education)",
+      " Peer review: learners exchange essays and give feedback for clarity and organisation.",
+      " Expository writing focuses on explaining, informing, or describing a topic clearly and"
+    ],
+    "notes": ""
+  }
+}

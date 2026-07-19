@@ -5,41 +5,31 @@
   "sourceFile": "GEOGRAPHY-TERM-2-MODULE.pdf",
   "lessons": [
     {
-      "title": "Module teaching activities",
+      "lesson": 1,
+      "title": "1.4. Natural Resources (This must come from the syllabus with its serial number)",
       "topics": [],
-      "activities": [
-        "and needs. As a Ministry, we understand the challenges that come with transitioning to a new",
-        "curriculum. This module reflects our commitment to making this journey as smooth as possible",
-        "with the CBC. However, we also encourage educators to supplement this module with their own",
-        "research and innovations to address any gaps that may arise during implementation. The suggested",
-        "thinking skills in learners while ensuring relevance and adaptability to different school contexts.",
-        "Teachers are encouraged to tailor these suggestions to their unique classroom dynamics and to",
-        "explore alternative acceptable approaches when necessary. This flexibility is key to ensuring that",
-        "all learners, regardless of their environment, benefit from meaningful and impactful Geography"
-      ],
+      "activities": [],
       "resources": [
-        "Geography",
-        "Teaching Module",
-        "Quality, life- long education for all which is accessible, inclusive and relevant to individual,",
-        "national and global needs.",
-        "Form 1 Term",
-        "Teaching Module",
-        "NAME SCHOOL/ORGANISATION",
-        "Cecilia Langi : Lua-Lua Secondary School, Kasama"
+        "GENERAL COMPETENCES: Analytical thinking, Citizenship, Collaboration, and",
+        "Environmental Sustainability.",
+        "responsibly. (This must come from the syllabus with its serial number)",
+        "the ability to use them responsibly and ensuring sustainable development.",
+        "identification. Through group discussions and collaboration, learners will acquire a value of",
+        "environment."
       ],
       "assessment": [
-        "and needs. As a Ministry, we understand the challenges that come with transitioning to a new",
-        "curriculum. This module reflects our commitment to making this journey as smooth as possible",
-        "with the CBC. However, we also encourage educators to supplement this module with their own",
-        "research and innovations to address any gaps that may arise during implementation. The suggested",
-        "thinking skills in learners while ensuring relevance and adaptability to different school contexts.",
-        "Teachers are encouraged to tailor these suggestions to their unique classroom dynamics and to"
+        "CRITERIA",
+        "Introduction",
+        "●Ask learners; ‘Have",
+        "you ever wondered",
+        "where your desk,",
+        "clothes and the food"
       ],
-      "notes": "Extracted from module without clear week/lesson headings"
+      "notes": ""
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-10T22:34:00.701Z",
+    "extractedAt": "2026-07-19T20:35:19.893Z",
     "rawTextLength": 97670
   }
 }

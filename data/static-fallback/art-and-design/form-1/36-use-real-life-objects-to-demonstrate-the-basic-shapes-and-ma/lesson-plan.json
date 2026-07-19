@@ -1,0 +1,24 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "use-real-life-objects-to-demonstrate-the-basic-shapes-and-ma",
+  "lesson": {
+    "week": 1,
+    "lesson": 36,
+    "title": "Use real-life objects to demonstrate the basic shapes and make it more relatable for",
+    "topics": ["learners.", "Page 19 of 45"],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

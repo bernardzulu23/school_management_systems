@@ -1,0 +1,46 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Chemistry-Teaching-Module-Form-1-final-version-3-1.pdf",
+  "md5": "13d33bbf46b6b8dda99c11fe145b07fa",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "introduction-to-chemistry",
+  "lesson": {
+    "lesson": 3,
+    "title": "Introduction to Chemistry",
+    "topics": ["Introduction"],
+    "activities": [
+      "Key Concepts: Main Branches of Chemistry",
+      "Analytical Chemistry",
+      "BioChemistry",
+      "Inorganic Chemistry",
+      "Organic Chemistry",
+      "Physical Chemistry",
+      "Suggested Teaching and Learning Materials:",
+      "Artificial Materials: board, markers. papers"
+    ],
+    "resources": [
+      "Technological Materials: Simulations, Videos (Documentaries or short clips related to various Chemistry fields)",
+      "Learning Environment Set-up:",
+      "Natural Environment: school surroundings",
+      "Artificial Environment: classroom",
+      "Technological Environment: simulations, or video documentaries or short clips related to various fields of Chemistry",
+      "Teacher’s Roles:"
+    ],
+    "assessment": [
+      "game or simulation, and writing reflections. Modifications are made for different learning styles, such as visual learners, auditory learners,",
+      "and kinesthetic learners. Safety considerations include awareness of potential hazards, providing personal protective equipment (PPE),",
+      "and ensuring proper training and equipment for handling laboratory waste. By following these guidelines, students can effectively manage",
+      "and dispose of laboratory waste, ensuring compliance with regulations and preventing environmental contamination.",
+      "Critical thinking",
+      "Collaboration"
+    ],
+    "notes": ""
+  }
+}

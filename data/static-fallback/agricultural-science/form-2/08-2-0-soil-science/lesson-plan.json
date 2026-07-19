@@ -1,0 +1,39 @@
+{
+  "subject": "Agricultural Science",
+  "subjectSlug": "agricultural-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "df6a8d3579bb6bd33da1fcd4a3dc5cec",
+  "detectedShift": 0,
+  "pageCount": 132,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "2-0-soil-science",
+  "lesson": {
+    "lesson": 8,
+    "title": "2.0 SOIL SCIENCE",
+    "topics": ["Introduction"],
+    "activities": [
+      "Analysing the nutrient cycles",
+      "Learning Materials: Textbooks, charts of nutrient cycles, worksheets, soil samples, compost manure…",
+      "Learning materials: Notebooks",
+      "Procedure",
+      "Divide learners into small groups of 3-4.",
+      "Ask learners to visit a school garden or nearby farming area.",
+      "Ask learners to observe the general appearance of growing crops or existing vegetation using their previous knowledge on",
+      "soil fertility."
+    ],
+    "resources": [],
+    "assessment": [
+      "The Provincial Department of Agriculture has organized a provincial conference titled “Future of Soil: Maintaining Its Fertility for",
+      "Future Productivity.” The conference aims to promote awareness of soil management and sustainable agricultural practices among",
+      "communities, farmers, and learners.",
+      "As learners who have acquired knowledge about nutrient cycles, particularly the nitrogen cycle and carbon cycle, your school has",
+      "been invited to participate in the conference. You are required to prepare key points that will help participants understand how soil",
+      "nutrients are maintained and how human activities influence these natural processes."
+    ],
+    "notes": ""
+  }
+}

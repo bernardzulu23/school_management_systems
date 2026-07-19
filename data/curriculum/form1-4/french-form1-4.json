@@ -1,22 +1,780 @@
 {
   "subject": "French",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: PHONETICS ====1.1.1 French Alphabet",
+      "topics": ["Subtopic 1.1.1", "Sounds", "Liaison", "Spelling Marks"],
+      "learningOutcomes": [
+        "Recite the French Alphabet Listening to the recitation of the alphabet and repeating it Pronouncing the individual vowels and consonants in French Identifying ==French vowels and consonants from the alphabet",
+        "Produce consonants and vowel sounds in French Listening to the vowels and the consonant sounds Combining consonants and vowels (m + a = ma Combining vowels (a + i = ai) Making nasal sounds (u + n = un, e + n",
+        "Apply liason in di൵erent situation Establishing the sound bridge between words. Reading simple sentences with liaison sound between words",
+        "Apply the four French spelling mark rules in writing Listening to di൵erent pronunciation of words read Pronouncing given words in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "The French alphabet recited correctly",
+        "Consonants and vowel sounds produced correctly",
+        "Liaison applied in di൵erent situations correctly",
+        "The four French spelling marks applied appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: GREETINGS ===1.2.1 Formal and Informal Greetings",
+      "topics": ["Spelling Marks", "The Well- being of a erson", "Taking Leave"],
+      "learningOutcomes": [
+        "=Use basic greetings in French at di൵erent times of the day",
+        "Use de¿nite and inde¿nite articles in di൵erent situations",
+        "Enquire about someone¶s health in French",
+        "Use French expressions for taking leave"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Basic greetings in French used accordingly",
+        "De¿nite and inde¿nite articles used correctly",
+        "One¶s health enquired correctly",
+        "French expressions to take leave used correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: IDENTIFICATION",
+      "topics": ["Introductions", "Countries and Nationalities", "Professions"],
+      "learningOutcomes": [
+        "Give information about one¶s identity and that of others in French",
+        "Tell one¶s nationality and country in French Identifying nationalities mentioned in a given dialogue (Zambien(ne), Americain(e) Introducing oneself (kge /adresse /date de naissance) country and one¶s nationality",
+        "Classify countries according to their gender Discussing the gender of countries using de¿nite articles. (La Zambie, L¶Angola, Le Canada, La France«)",
+        "=Apply gender on QDWLRQDOLW",
+        "Describe di൵erent professions in French. Identifying di൵erent professions (un avocat, un(e) professeur, un soldat, une in¿rmiere) Discussing professions for family members Reading a passage on professions= and identifying various professions in it",
+        "Apply gender on professions in French Writing the masculine and feminine form of professions (mecanicien/e, electricien/e, in¿rmier/e, boulanger/e«) Completing sentences with correct profession according to gender. (Paul est in¿rmier/ Marie est in¿rmiere«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Information about one¶s identity and that of others given correctly",
+        "One¶s nationality country told in French correctly.",
+        "Gender of countries classi¿ed appropriately.",
+        "Gender applied on nationality correctly.",
+        "Di൵erent professions described in French correctly.",
+        "Gender on professions applied correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: OWNERSHIP ===1.4.1 Possession",
+      "topics": ["Professions"],
+      "learningOutcomes": [
+        "State that something belongs to oneself or someone Classifying items and animals according to gender. ( un chat/une chatte, un stylo/une gomme « Identifying possessive adjectives from a given passage (mon/ma, ton/ta, son/sa",
+        "Use the plural forms of possessive adjectives in French Matching a possessive adjective =either with a masculine or feminine noun (ma voiture, mon stylo)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "One¶s or someone¶s possessions stated correctly",
+        "Plural forms of possessive adjectives used correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: FAMILY",
+      "topics": ["Family"],
+      "learningOutcomes": [
+        "'LVFXVV simple family UHODWLRQVKLSVLQ )UHQFK Identifying the types of families (la famille proche et la famille elargie). Discussing their family relationships (p",
+        "Explain the roles of each family member="
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Simple family relationships discussed in French correctly",
+        "Roles of each family member explained correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: ATTRIBUTES OF A PERSON OR A THING",
+      "topics": ["Colours"],
+      "learningOutcomes": [
+        "=Express preferences for colours in French Identifying colours of objects (Rouge, jaune, verte«) Discussing one¶s preference of colours (j¶aime la couleur verte/je n¶aime pas« Drawing and colouring the Àag of Zambia",
+        "Distinguish gender in FRORXU Describing the colour of an object or== thing (vert/e, blanc/he) Writing dictated words in on colours (masculine /feminine)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Preferences for colours expressed in French correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: NUMERACY ===1.7.1 Cardinal Numbers (0",
+      "topics": ["Colours", "Ordinal Numbers (First to twentieth)", "Counting Money"],
+      "learningOutcomes": [
+        "Count from 0",
+        "Demonstrate knowledge of ordinal numbers from 1 - 20 in French Listening to a passage on ordinal numbers and identify them= (premiere, deuxiqme «) Discussing ordinal numbers and their ending (iqme) except 1 VW (masc Premier) or (fem. premiere ) Reading a passage on ordinal numbers and answer the questions Writing ordinal numbers 1 - 20",
+        "Apply the four mathematical operationsonnumbers below 100 in French Adding, subtracting, dividing and multiplying small amounts Writing a small budget in French"
+      ],
+      "suggestedActivities": ["1000)"],
+      "assessmentMethods": [
+        "Knowledge of Ordinal numbers 1-20 demonstrated correctly",
+        "The four mathematical operations applied correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: NUMERACY ===1.7.1 Cardinal Numbers (0",
+      "topics": ["Physical Characteristics and Personality"],
+      "learningOutcomes": [
+        "Describe someone¶ s physical characteristics and personality in French Identifying physical characteristics and personality (cheveux longs, les yeux bruns) (calme, gentil/le) Describing a person or an object using information provided. (cheveux longs, les yeux bruns, petit(e), grand(e)) Formulating adverbs from adjectives (timide«timidement, gentil«gentilment, prudent«prudemment) Completing sentences with correct adjectives and adverbs"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Physical characteristics and personality described correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: PREFERENCES ==1.8.1 Likes and Dislikes",
+      "topics": ["Counting Money"],
+      "learningOutcomes": [
+        "Express likes and dislikes in French Responding to oral question=s =on likes and dislikes in French (Qu¶est ce que tu aimes? J¶aime/ je n¶ aime pas le chocolat«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Likes and dislikes expressed accurately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 1: LOCALISATION AND MOVEMENT",
+      "topics": ["Position"],
+      "learningOutcomes": [
+        "Describe the position of an object in French Identifying prepositions of place from a given passage /demonstration (sur, dans",
+        "State the location of a person, place or thing in French Locating a place on a given map or drawing (Notre ecole se trouve/ est pr de la banque, ma mere est devant toi, «) Discussing the campus (Est, Ouest, Nord, Sud) Locating the provinces of Zambia and their headquarters (Province du Nord- Kasama, Provence du Sud - Choma, Province du Nord- Ouest, Solwezi«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Position of an object described correctly",
+        "Location of a thing, place, and people stated in French accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 1: ACCOMMODATION AND HYGIENE",
+      "topics": ["Types of", "Distance"],
+      "learningOutcomes": [
+        "Compare modern and traditional houses in French Identifying the di൵erence between a modern and traditional house (en bois, en brique, en bous« )",
+        "Name di൵erent URRPV and their use in a house Naming diferent rooms in a house and their use (chambre, salle coucher) Describing one¶s own house in French (coleurs, taille, chambres",
+        "Discuss personal hygiene Mentioning ways of keeping oneself clean. (se laver, couper des cheveux, «) Drawing materials used for personal hygiene (le savon, la brosse j dent, de l¶eau Writing dictated words in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Modern and traditional houses compared in French correctly",
+        "Di൵erent rooms in a house and their use identi¿ed accordingly",
+        "Personal hygiene discussed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 1: ACCOMMODATION AND HYGIENE",
+      "topics": ["Direction", "Distance"],
+      "learningOutcomes": [
+        "Give directions to someone in French Listening to a dialogue on giving directions and identify=ing =expressions used (allez tout droit, ===tournez j gauche«) Reading a simple map and locating a place/ village/town/ any other /features Directing someone to a given place Giving directions to someone to =ones own place of choice in written Directions given to someone in French precisely",
+        "Indicate how far or near a point is from another in French Identifying expressions indicating how far or near a point is from another (pr de, loin de, dix kilometre de Discussing distance between two points ( prps de, loin de, dix kilom tre de Distance between two points indicated clearly"
+      ],
       "suggestedActivities": [],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 1: MY SCHOOL",
+      "topics": ["Classroom Orders and Instruction", "My School Subjects", "School Time-Table"],
+      "learningOutcomes": [
+        "Use classroom orders and instruction=s in French",
+        "Identify di൵erent school subject=s in French. Listing the di൵erent subjects o൵ered in the school (le Franoais, les Mathpmatiques«). Discussing school subjects (les matiqres prpferpes) Writing a simple composition on one¶s favourite subjects and explaining why",
+        "Draw up a school/personal timetable Discussing a school time table (Remplir son emploi du temps avec les matiqres de son pcole.) Formulating own study timetable (l¶horaire personnel)",
+        "Describe di൵erent classroom objects Listing di൵erent classroom objects ( la table, le tableau«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Classroom orders and instructions used in French correctly",
+        "Di൵erent school subjects identi¿ed in French correctly",
+        "School and personal time tables drawn correctly",
+        "described correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 1: MY SCHOOL",
+      "topics": ["Care for the Surrounding"],
+      "learningOutcomes": [
+        "Describe a clean and dirty place Describing a clean and dirty place in French Discussing ways of keeping the surrounding clean ( balayer, nettoyer, essuyer«) Identifying materials used for keep the surrounding clean (balai, torchon Stating negative e൵ects of dirty surrounding"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["A clean and dirty place described correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 1: DAILY",
+      "topics": ["Telling"],
+      "learningOutcomes": [
+        "Tell time in French",
+        "Narrate daily activities in French",
+        "Identify days of the week and months of the year in French Naming the days of the week (Lundi, Mardi and months (Janvier, Fevrier of the year in French Making calender"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Time expressed in French correctly",
+        "Daily activities narrated in French accordingly",
+        "Days of the week and months of the year identi¿ed in French correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 1: THE PAST",
+      "topics": ["Past Actions"],
+      "learningOutcomes": [
+        "Describe past actions in French Listening to a passage on past happenings (Je suis allp hier, J¶ai mangp«) Role playing past actions using rtre/avoir + participe passp== (passp composp) Reading a passage on passed happenings Writing a story on past events using pictures Composing a story from past events"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Past actions described in French correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 1: WEATHER ====1.14.1 Weather",
+      "topics": ["Past Actions", "Clothes and Activities", "Factors A൵ecting Weather"],
+      "learningOutcomes": [
+        "Describe what the weather is like in French Identifying the expressions used to talk about weather from a given dialogue. (il fait beau, froid «) Discussing what the weather is like on a particular day (il fait beau, froid «)",
+        "Identify various seasons in French Discussing the di൵erent seasons in Zambia (saison sqche, saison de pluie). Describing the di൵erent seasons in French (local/foreign) =(printenps,hiver, ptp automne)",
+        "Describe activities and clothes associated with seasons in French",
+        "Discuss factors a൵ecting weather in Zambia Identifying factors a൵ecting weather from a given passage (temp rature, vent) Discussing factors a൵ecting weather in Zambia Writing on factors a൵ecting weather in Zambia"
+      ],
+      "suggestedActivities": ["cultiver)"],
+      "assessmentMethods": [
+        "in French correctly",
+        "Seasons identi¿ed correctly",
+        "clothes for speci¿c seasons described in French correctly",
+        "Factors a൵ecting weather discussed in French correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: PERMISSION AND PROHIBITION",
+      "topics": ["Permission"],
+      "learningOutcomes": ["Ask and give SHUPLVVLRQ in"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Permission asked for and given in French correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 2: PERMISSION AND PROHIBITION",
+      "topics": ["Prohibition"],
+      "learningOutcomes": [
+        "Interpret prohibitive and non-prohibitive signs in French Identifying and interpreting prohibitive and non-prohibitive signs (N e fumez pas, Entrez s¶il vous plait«) Dramatisation giving orders and prohibitions (agent de police et feux rouges«) Discussing what is allowed and not allowed in a community/ at home/ in class. Writing and reading the school rules in French and answering questions Drawing a prohibitive sign"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Prohibitive and non-prohibitive signs interpreted in French correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 2: POSSIBILITY AND IMPOSSIBILITY",
+      "topics": ["Possibilities"],
+      "learningOutcomes": [
+        "Express possibility to do something in French Identifying expressions used when expressing possibility ( est possible de , c¶est facile de«, tu peux «) Role playing expressing possibility to do things (Est -ce possible d¶aller aux champs? Oui c¶est possible papa, maman«) Reading a passage expressing possibility do things and answering questions Writing on expressing the possibility to do things Possibility to do something expressed in French clearly",
+        "Express impossibility to do things Identifying expressions used for impossibility to do things (c¶est imponsible de/ c¶ est di৽cile de/ ce n¶est pas possible de/ tu ne peux pas+verb «) Role playing expressing impossibility to do things (Vous ne pouvez pas chanter«) Constructing sentences using expressions that are used to show impossibility (Je ne peux pas danser, travailler«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Impossibility to do things expressed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 2: LEISURE ACTIVITIES",
+      "topics": ["Hobbies", "Informal Letter"],
+      "learningOutcomes": [
+        "Discuss hobbies and interests =in French Mentioning hobbies and interests (regarder la t vision, ecouter la musique«)",
+        "Examine income generating hobbies Identifying Hobbies that can be translated into income generating activities (faire la cuisine, faire la couture, jouer au football,«) Discussing income generating activities. Writing on income generating activities",
+        "Discuss parts of an informal letter in French Reading an example of an informal letter and identifying the features (la date, l¶ adresse, la salutation, le d veloppement, la conclusion). Discussing parts of an informal letter (salutations: cher/ch re/cherie, le corps: comment est votre sant",
+        "Write an informal letter in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Hobbies and interests discussed in French accordingly",
+        "Income generating hobbies examined correctly",
+        "Parts of an informal letter discussed in French correctly",
+        "An informal letter written in French correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 2: LEISURE ACTIVITIES",
+      "topics": ["Means of Communication", "Semi - Formal Letter", "Telephone Call"],
+      "learningOutcomes": [
+        "Explain the di൵erent means of communication in French Discussing the di൵erent means of communication (Moderne: tplpphone, la radio, la tplpvision, la lettre. Traditionelle: Tam-tam, siÀet, chanson«) Dramatising on how to make a telephone call, how to communicate in the village« Di൵erent means of communication explained in French clearly.",
+        "Write a letter to parents/relative in French Reading and comparing samples of a semi -formal and informal letters ( similarities",
+        "Make a telephone call in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "A semi-formal letter written in French correctly",
+        "Telephone call made in French correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 2: POST OFFICE ==2.5.1 Postal Operations",
+      "topics": ["Telephone Call"],
+      "learningOutcomes": ["Discuss postal operations in"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Postal operations discussed in French correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 2: HOTELS AND RESTAURANTS",
+      "topics": ["Room and Table Reservation", "Food"],
+      "learningOutcomes": [
+        "Use appropriate expressions to make a room reservation in French",
+        "Use appropriate expressions to make a table reservation in French Identifying expressions used to make a table reservation in a restaurant ( Je voudrais rpserver /Pour combien de personnes ?« Role playing making a table reservation Reading a dialogue on table reservation and answering the questions Making a table reservation in writing",
+        "Discuss di൵erent types of food in French Listing di൵erent types of food in French (les legumes, les fruits, la viande «) Classifying di൵erent types of food into their food groups (les legumes, les boissons, les fruits, la viande Discussing healthy and unhealthy related food",
+        "Use appropriate expressions to order a meal in a hotel/ restaurant"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Expressions to make a room reservation in French used appropriately.",
+        "Expressions to make a table reservation in French used appropriately",
+        "Di൵erent types of food discussed in French correctly",
+        "Expressions to order a meal in a hotel/restaurant used appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 2: HOSPITAL",
+      "topics": ["Medical Personnel", "Parts of the Human Body"],
+      "learningOutcomes": [
+        "Demonstrate knowledge of various medical personnel =in French Identifying various medical personnel from a given passage (in¿rmier(qre), docteur, mpdecin). Discussing masculine/ feminine forms of medical personnel (i n¿rmier(qre), docteur(trice), mpdecin(e",
+        "Identify various parts of the human body in French Listening to a passage on parts of the body and identifying them (la trte, les mains, les pieds«) Discussing the parts of the body and their functions (les yeux - regarder, les jambe - marcher«) Reading a passage on parts of the body and answering the questions Drawing a sketch of a human body and label the external parts of the body."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Knowledge of various medical personnel demonstrated accordingly.",
+        "Various parts of the human body identi¿ed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 2: TRANSPORT ===2.8.1 Types of",
+      "topics": ["Parts of the Human Body"],
+      "learningOutcomes": [
+        "Discuss di൵erent types of transport in French Identifying di൵erent types of transports (l¶avion, le train, le bus«) Discussing the types of transport used locally and abroad (le bateau, vplo «)",
+        "Give information on ticket sales and fares Listening a conversation on ticket sales and fares at railway and bus stations."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Di൵erent types of transports discussed in French correctly",
+        "Information on ticket sales and fares given correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 2: TRANSPORT ===2.8.1 Types of",
+      "topics": ["Diseases"],
+      "learningOutcomes": [
+        "Discuss di൵erent diseases in French Listening to a passage on di൵erent diseases and identifying them (le sida, la malaria, OH cholera, covid 19, la diarrhee« Discussing the di൵erent diseases and telling what others are su൵ering from (j¶ai mal au ventre, il a mal i la trte, j¶ai la malaria«) Role playing administering medication Giving/receiving information on ways of preventing some diseases (HIV and AIDS",
+        "Explain causes and e൵ects of di൵erent diseases Discussing the causes and e൵ects of di൵erent diseases (HIV AIDS, Malaria, Cholera) Writing a short composition on the causes and e൵ects of di൵erent diseases. Causes and e൵ects of di൵erent diseases explained clearly"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Di൵erent diseases discussed in French accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 2: POLICE",
+      "topics": ["Reporting"],
+      "learningOutcomes": ["Give an account of an incident in French"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Account of an incident given correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 2: OWNERSHIP ==2.10.1 Possession",
+      "topics": ["Reporting"],
+      "learningOutcomes": [
+        "Use possessive adjectives in di൵erent situations",
+        "Use possessive pronouns in di൵erent situations Identifying possessive pronouns from a given passage (le mien, la tienne«) Discussing possessive pronouns according to their gender and number (le mien/,la mienne, les miens/ les miennes«) Completing a given passage with correct possessive pronouns"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Possessive pronouns used in di൵erent situations correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 2: PREFERENCES =2.11.1 Likes and",
+      "topics": ["Reporting"],
+      "learningOutcomes": [
+        "Express likes and dislikes in French Expressing likes and dislikes for people¶s objects and ideas (J¶ardore,je pr re, j¶ admire c¶est bon«je n¶adore pas, je ne pr re pas, je n¶admire pas, ce n¶est pas bon«) Writing sentences expressing likes and dislikes (J¶aime, Je n¶aime pas«)",
+        "Use coordination conjunctions in di൵erent situations"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Likes and dislikes expressed in French correctly",
+        "Coordinating conjunctions used in di൵erent situations correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 3: SHOPPING",
+      "topics": ["Prices", "Quality and Quantity of Goods", "Buying and Selling"],
+      "learningOutcomes": [
+        "Enquire about prices of goods in French Identifying expressions used when asking and telling prices in French (C¶est combien? C¶est cinq Kwacha, combien o te? te cinq kwacha) Role playing asking and telling prices of goods in French",
+        "Negotiate for prices of goods in French Listening a dialogue of people negotiating prices of goods in French Role playing negotiating for prices of goods (J¶ai seulement , rabaisser le prix,",
+        "Express mixed feelings on the quality of goods in French",
+        "Compare quantity =of goods Identifying expressions of quantity ( une bouteille de, un paquet de, un peu de sucre«) Reading a passage on quantity of goods and compare them. Creating a Àyer showing the quality and quantity of goods",
+        "Demonstrate knowledge of buying and selling Identifying places where one can buy goods. ( boucherie/ magasin /boulangerie supermarchp, charcuterie, pharmacie, quaincaillerie«) Listing goods one wants to buy (la viande, la culotte, le pain, «)",
+        "Use partitive articles and demonstrative pronouns Listening to a conversation on buying and selling Dramatizing buying and selling using les articles partitifs « (du /de la /de l¶/ des) Completing a given passage with les pronoms demostratifs (celui-ci/celui-lj / celle-ci/celle-lj"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Prices of goods enquired about in French accordingly",
+        "Prices of goods negotiated for in French correctly",
+        "Mixed feelings on the quality of goods expressed in French correctly",
+        "Quantity of goods compared accordingly",
+        "Knowledge of buying and selling demonstrated correctly",
+        "Partitive articles and demonstrative pronouns used appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 3: SPORTS",
+      "topics": ["Types of Sporting activities"],
+      "learningOutcomes": [
+        "Discuss di൵erent types of sporting activities in French Identifying di൵erent types of sporting activities ( le basketball, la natation) Discussing di൵erent types of indoor and outdoor sporting activities) Classifying di൵erent types of sports into indoor /outdoor activities (C hess, WHQQLV volleyball, football",
+        "Explain the bene¿ts of sports in French Identifying sporting activities common in Zambia (football, boxe) Reading a passage on di൵erent types of sports and answer the questions Listing the bene¿ts of sports ( la santp, source de revenue) Writing about one¶s sporting activity Bene¿ts of sports explained clearly"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Di൵erent types of sporting activities discussed in French correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 3: BANKING",
+      "topics": ["Bank Operations"],
+      "learningOutcomes": [
+        "Carry out di൵erent bank operations Idetifying activities one does in a bank (retirer et d poser l¶argent, ouvrir et fermer un compte, obtenir les credits Identifying expressions used in banking operations from a given dialogue (je voudrais retirer/d poser de l¶argent«) Role playing: ( opening and closing an"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 3: COMMUNICATION AND TECHNOLOGY",
+      "topics": ["Formal Letter"],
+      "learningOutcomes": [
+        "Write a formal letter in French",
+        "Discuss print media (written press) in French Discussing print media (Magazines",
+        "Discuss electronic media (broadcast media) Identifying the di൵erent types of electronic media (TV, Radio, L¶ordinateur, portable) Discussing digital media (ordinateur/ internet/ le t phone portable) Listening to conversation on broadcast and digital media in French. Discussing advantages /disadvantages of broadcast and digital media Writing about di൵erences /similarities between radio and TVmedia"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "A formal letter written in French correctly",
+        "Electronic media discussed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 3: OPINIONS",
+      "topics": ["Opinions and Feelings"],
+      "learningOutcomes": [
+        "Express one¶s RSLQLRQ in",
+        "Expressing one¶s feelings in French Listening a conversation on expressing feelings in French. Identifying phrases used to express one¶s feelings. (je suis content/e /fachp(e), il est triste, je suis dpsolp/ dpou«) Role playing asking about one¶s feelings and responding (Est ce que tu es fache/ da va? /Non, Je suis dpou«). One¶s feelings expressed in French clearly",
+        "Examine other people¶s views. Identifying expressions used to consider other people¶s views. (jtu as raison, mais/ tout a fait, par contre«) Debating on a given topic in French. (agreeing /disagreeing « Je crois /pense"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Other people¶s views examined accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 3: OPINIONS",
+      "topics": ["Ask and Give Information", "Giving Advice", "Curriculum"],
+      "learningOutcomes": [
+        "Give information to someone in French Listening to a conversation on asking and giving information Identifying the expressions used when asking and giving information (s¶il vous plait madam, pourriez vous me montrer o la poste est? Elle est Wp de la Banque«.) Role playing asking and giving information on time/ price /people /direction ( Quelle heure est-il? Il est",
+        "Use interrogative questions in French Reading a text with interrogative questions. Identifying interogative questions from the given text (qui, quoi, quand , comment, pourquoi, o, combien«) Role playing using interogative questions in di൵erent situations Reading and answering questions from a text ( FRPSUHKHQVLRQ",
+        "Acknowledge receipt or non-receipt of information",
+        "Use expressions to give advice to someone in French. Listening to a conversation/ dialogue of where one is giving advice to another (je vous conseille de, je vous en prie ) Role playing giving advice to someone against doing something ( il ne faut pas. je vous dpconseille de , je te recommande de + in¿nitif«) Reading short passages on di൵erent pieces of advice and identifying them Completing sentences with expressions used to give advice to someone",
+        "Write a curriculum vitae Reading an example of a curriculum vitae and explain the features of a CV Discussing the features of a curriculum Vitae (les details personnels, quali¿cations academiques /professionelles, references) writing own curriculum vitae"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Information given to someone in French correctly",
+        "Interrogative questions in French used correctly",
+        "Receipt or non-receipt of information acknowledged correctly",
+        "Expressions to give advice to someone in French used accordingly",
+        "A curriculum vitae written correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 3: ACCOMMODATION",
+      "topics": ["Types of Buildings"],
+      "learningOutcomes": [
+        "Identify di൵erent types of buildings in French Identifying di൵erent types of buildings from a given passage (l¶h{pital, l¶h{tel, la banque, = la maison«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Di൵erent types of buildings identi¿ed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 3: EVENTS",
+      "topics": ["Types of Buildings"],
+      "learningOutcomes": ["Use appropriate expressions to i nvite someone in"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Expressions to invite someone in French used appropriately."],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Form 3: OBLIGATION",
+      "topics": ["Carrying out"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Necessity to do things expressed in French accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Form 3: IMMIGRATION AND CUSTOMS",
+      "topics": ["Immigration and Customs Formalities", "Corrupt Practices"],
+      "learningOutcomes": [
+        "Carry out immigration and customs formalities =in French Listening to conversation/ passage on immigration and customs.",
+        "Discuss corrupt practices and their e൵ects on society in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Immigration and customs formalities carried out in French successfully",
+        "Corrupt practices and their e൵ects on society discussed in French correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Form 3: NUMERACY",
+      "topics": ["Counting Numbers"],
+      "learningOutcomes": ["Count from"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Counting from 1000 to 1,000,000 done correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Form 4: ENCOUNTER",
+      "topics": ["Counting Numbers"],
+      "learningOutcomes": ["Use appropriate expressions in a conversation"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Appropriate French expressions used in conversation correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 43,
+      "title": "Form 4: TOURISM",
+      "topics": ["Tourist Attractions", "Wild Life", "Travels"],
+      "learningOutcomes": [
+        "Give information on tourist attractions and wonders in Zambia =in French Listening to an advert or article on tourist attractions in Zambia Discussing tourist attractions and wonders in Zambia (Les Chutes Victoria, Chishimba, South Luangwa National Park, Les ceremonies Traditionelles Kuomboka«) Role playing giving information on tourist attractions and wonders in Zambia",
+        "Explain the economic bene¿ts of tourism in Zambia in French Listening to a conversation on economic bene¿ts of tourism discussing economic bene¿ts of tourism to Zambia (forex - les devises, emploi, les industries«) Writing a composition on the importance of tourism in Zambia Economic bene¿ts of tourism in Zambia explained in French clearly",
+        "Explain the importance of wild life in Zambia Listening to a passage on wild life in Zambia Discussing wild life in Zambia (the big",
+        "Identify Francophone countries Identifying Francophone countries from a given map of Africa (le Marroc, la C{te d¶Ivoire «) Locating Francophone countries on a given map Reading a passage on Francophone countries and answering the questions",
+        "Use direct and indirect object pronouns indi൵erent situations Identifying direct and indirect object pronouns from a given passage ( D.O.P me/te/le/la/ nous /vous/les) (I.O.P me/te/lui/nous/vous/ leur) Rewriting sentences using direct and indirect object pronouns (Elle mange la pomme«Elle OD mange, je parle a Marie«je lui parle , Il donne un cadeau a ses amis« Il le OHX r donne) Rewriting sentences using en/y (Nous allons en France « Nous y allons, Je viens du Zimbabwe « J¶en viens «"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Information on tourist attractions and wonders in Zambia given in French correctly",
+        "The importance of wild life in Zambia explained correctly",
+        "Francophone countries identi¿ed correctly",
+        "Direct and indirect object pronouns used in di൵erent situations correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 44,
+      "title": "Form 4: MUSIC",
+      "topics": ["Musical Instruments", "Poems"],
+      "learningOutcomes": [
+        "Describe di൵erent of musical instruments in French Identifying di൵erent types of musical instrument (le guitare, le piano, le tam tam, la À WH",
+        "Compare Zambian and French music Listening to pieces of French and Zambian music Discussing Zambian and French music Singing French songs (L¶hymne National de la Zambie, La Marseillaise«) Writing a composition on Zambian and French music",
+        "Analyze Poems in French Listening to di൵erent poems in French. Identifying theme, subject, topic and ¿gures of speech from a given poem (la metaphor, la personi¿cation«) Discussing features of a poem ( WK me, sujet, ¿gures de style«) Composing and reciting poems in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Di൵erent musical instruments described in French correctly",
+        "Zambian and French Music compared accordingly",
+        "Poems in French analyzed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 45,
+      "title": "Form 4: NARRATION",
+      "topics": ["Stories", "Short Stories"],
+      "learningOutcomes": [
+        "Narrate present, past, future events in French",
+        "Use direct and indirect speech in French Reading a passage on present and past actions. (target: passe¶ compose¶) Identifying the direct and indirect speech in the passage. Role playing using the direct and indirect speech Rewriting sentences from direct speech to indirect speech (Pauline dit¶ Je suis intelligente¶. Qu¶est-ce que Pauline dit ? Elle dit qu¶elle est intelligente«)",
+        "Analyse short stories in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Present, Past and Future events narrated correctly",
+        "Direct and indirect speech used correctly",
+        "Short stories in French analyzed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 46,
+      "title": "Form 4: THE FUTURE",
+      "topics": ["Future Plans"],
+      "learningOutcomes": [
+        "Discuss one¶s future plans in",
+        "Express wishes in French Identifying expressions used for wishes in French (J¶aimairais rtre, Je souhavte que«) Role playing expressing wishes in French Writing Wishes in French expressed clearly one¶s wishes in French"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Future plans discussed in French accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 47,
+      "title": "Form 4: EMPLOYMENT ===4.6.1 Future",
+      "topics": ["Future Plans", "Job", "Interviews"],
+      "learningOutcomes": [
+        "Demonstrate knowledge of di൵erent carriers in French",
+        "Apply for employment in French Reading di൵erent adverts and identifying a job advert. (quali¿cation",
+        "Use appropriate expressions in a job interview Listening to a job interview from a given dialogue /conversation Discussing interrogative phrases used in a job interview (parlez-nous de vous? Pourquoi choisissez-vous ce travail«) Outlining hints to consider when going for an interview (con¿ance, bien habillp, parlez clairement«) Role playing a job interview (Bonjour Monsieur/Madame«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Knowledge of di൵erent careers demonstrated correctly",
+        "Application letter for employment written correctly",
+        "Appropriate expressions in job interviews used correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 48,
+      "title": "Form 4: DEMOCRACY ====4.7.1 Government",
+      "topics": ["Interviews"],
+      "learningOutcomes": [
+        "Discuss organs of the Zambian Government Reading a passage on 3 organs of the Zambian Government. Discussing the functions of the three (3) organs of the zambian Government.",
+        "Discuss human rights in French Describing human rights in French Making a list of Human Rights in French (libertpe d¶ expression",
+        "Explain characteristics of democracy"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Organs of the Zambian Government discussed correctly",
+        "discussed in French accordingly",
+        "of democracy explained correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 49,
+      "title": "Form 4: EDUCATION AND TECHNOLOGY",
+      "topics": ["Education System"],
+      "learningOutcomes": [
+        "Compare and contrast the education system of Zambia =with any Francop=hone country Discussing the education structure in Zambia (Ecole maternelle, Primaire, Secondaire/ technique et universitaire) Comparing the Zambian education system to those in the region (Zambie -",
+        "Discuss the importance of education Identifying modes of teaching and learning (conventional, e- learning) Discussing the importance of education in French ( debate) Writing a composition on the importance of education in French Importance of education discussed thoroughly"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 50,
+      "title": "Form 4: HEALTH",
+      "topics": ["Terminal", "Drug Abuse"],
+      "learningOutcomes": [
+        "Demonstrate knowledge of terminal diseases Identifying terminal diseases from a given passage (Malaria, le SIDA, Fievre jaune)",
+        "=Explain ways of preventing YDULRXV diseases in French Discussing ways of preventing di൵erent diseases such as HIV (AIDS/STIs -",
+        "Discuss causes and e൵ects of drug abuse in French Mentioning the di൵erent types of drug (Cocain, Alcool, Marijuana, (Chamvre «) Discussing causes and e൵ects of drug abuse (causes: inÀuence d¶adolescence., eৼects: echoupr dans la vie«) Writing on the e൵ects of drug abuse"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Knowledge of terminal diseases demonstrated correctly",
+        "Causes and e൵ects =of drug abuse discussed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 51,
+      "title": "Form 4: ENVIRONMENT",
+      "topics": ["Climate Change", "Energy"],
+      "learningOutcomes": [
+        "Discuss the causes and e൵ects of climate change in French",
+        "Explain the importance of environmental protection in French",
+        "Discuss ways of conserving energy in French Listening to a conversation on di൵erent sources of energy (l¶pnergie"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "effects=ofclimate change discussed accordingly",
+        "Ways of conserving energy discussed in French accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 52,
+      "title": "Form 4: ENTREPRENE- URSHIP",
+      "topics": ["Small Businesses"],
+      "learningOutcomes": ["Discuss the bene¿ts of entrepreneurship in French"],
+      "suggestedActivities": [
+        "Comment oa va ? / Comment vas-tu ? / Comment allez-vous ? - Comment tu te portes ? / Comment vous vous portez ? / da va ?",
+        "Comme ci comme oa. / da va mal. / da ne va pas. / Je ne me se",
+        "Les pays: Le Ghana, le Senegal, le Mali, le Cameroun,le Portug",
+        "etre, avoir,habiter, s",
+        "combien de frqres/s°urs/cousin(s)/cousine(s) quel kge ?",
+        "Il /elle est « (petit/petite,/grand/grande/, gros/ grosse, mi",
+        "derriqre, devant, sur, sous, dans, entre, parmi, etc. Situer un endroit /La direction",
+        "il y a kilomqtres de «j«/c¶est j kilomqtres de j",
+        "par train, par bus, j pied, j vplo, par avion, par bateau.",
+        "voler, tuer, crier, dpclarer, voir, dire, pcraser, arrrter, m",
+        "table, pourboire, la bus de",
+        "pressions:"
+      ],
+      "assessmentMethods": ["Bene¿ts of entrepreneurship discussed in French accordingly"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "FRENCH-LANGUAGE.pdf",
-    "extractedAt": "2026-07-11T06:20:39.995Z",
-    "fileSize": 1015461
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/FRENCH-LANGUAGE.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 1015461,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true,
+    "recordCount": 132
   }
 }

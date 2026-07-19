@@ -1,0 +1,46 @@
+{
+  "subject": "Lunda",
+  "subjectSlug": "lunda",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "c0c6f362c0f0f59d5564977e582e9804",
+  "detectedShift": 0,
+  "pageCount": 105,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "1-3-3-composition",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.3.3 Composition",
+    "topics": ["SUB-TOPIC: 1.3.3.1 Descriptive Writing"],
+    "activities": [
+      " Reading",
+      "description",
+      "(books/magazi",
+      "Newspaper,…)",
+      "For example;",
+      "Nkundezhi",
+      "washakamaña",
+      "nawanvwali"
+    ],
+    "resources": [
+      " Samples of descriptive composition of people.",
+      " Pictures of different people.",
+      "EXPECTED STANDARD: Description of a person written correctly. (This must come",
+      "from the syllabus as it is)",
+      "LESSON PROGRESSION:",
+      "LESSON EVALUATION:"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION",
+      "learners",
+      "investigate",
+      "Descriptive writing.",
+      " Explain"
+    ],
+    "notes": ""
+  }
+}

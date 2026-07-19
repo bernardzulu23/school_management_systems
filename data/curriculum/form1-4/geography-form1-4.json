@@ -1,22 +1,482 @@
 {
   "subject": "Geography",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["Introduction to Geography"],
+      "learningOutcomes": ["Demonstrate understanding of"],
       "suggestedActivities": [],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "The Earth in the Solar System",
+        "Shape and Size of the Earth",
+        "=Movements of the Earth",
+        "=EarthÓs Graticule",
+        "=The EarthÓs Atmosphere"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of the position of the Earth in the solar system",
+        "Use model of the earth to show the EarthÓs shape and VL]H Describing the shape and size of the earth Analysing evidence of the earthÓs shape Relating the Earths spherical shape and size to natural and human activities (climatic patterns, ocean currents and weather phenomena, and earthÓs curvature in satellite positioning and communicationÈ) Model of the earth to show the EarthÓs shape and size",
+        "Apply knowledge of earth movements in diඒerent situations",
+        "Use latitudes and longitudes to locate places on the globe",
+        "Apply calculations of time and longitude in diඒerent situations",
+        "Use latitude to calculate distance",
+        "Apply calculations of the midday sun in real- life",
+        "Protect EarthÓs atmosphere"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["used correctly", "applied accordingly", "protected appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": [
+        "=Weather and Climate",
+        "Climate Change",
+        "= =Mitigation and Adaptation to Climate Change="
+      ],
+      "learningOutcomes": [
+        "Apply knowledge of weather and climate in daily activities=",
+        "Analyse climate change",
+        "= Practise mitigation measures to climate change= Identifying mitigation measures to climate change (reducing on waste generations, using renewable energy, conserving water, planting trees, ) Engaging in mitigation measures to climate change Sharing information on the climate change with family and community members Mitigation measures to climate change practised",
+        "Adapt lifestyles to local climate risks and disasters= Identifying ways of adapting to climate risks and disasters growing early maturing and drought resistant crops, water harvesting, limiting consumption, staying informed, having a family emergence planÈ) Engaging in adaptation measures to climate change Lifestyles adapted to climate risks and"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately", "disasters appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": [
+        "= =Natural Resources=",
+        "= Population and Natural Resources=",
+        "Sustainable Management of Natural"
+      ],
+      "learningOutcomes": [
+        "= Use Renewable and non- Renewable resources responsibly Identifying diඒerent natural resources Describing the types of natural resources:Renewable- water, land, wildlife, solarÈ and non- renewable-=minerals, fossil fuels ) Renewable and non- renewable resources used responsibly Geography Syllabus 2024",
+        "= Analyse the relationship between population and natural resources Discussing population and natural UHVRXUFHV Analysing the relationship between population and natural resources (natural resources attract high population whereas unsustainable use leads to depletionÈ) Engage in practices that ensure eਚcient use of resources, conservation of water resources, use of renewable energy, reducing waste. sustainable consumption, advocating for family planningÈ) Relationship between population and natural resources analysed FRUUHFWO\\",
+        "Practise sustainable management of natural resources Identifying sustainable ways of managing natural resources conservation farming, water conservation, wildlife protection, energy eਚciency, waste reduction and recycling, sustainable food choices, sustainable transportation, protecting biodiversity and ecosystems, Sustainable management of natural resources practised DSSURSULDWHO\\ Geography Syllabus 2024"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": [
+        "=Population Composition",
+        "=Population Distribution in Zambia",
+        "=Rapid Population Growth in Zambia",
+        "=Migration"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of population composition",
+        "Analyse population distribution",
+        "Address challenges of rapid population",
+        "Apply knowledge of migration in aspects of daily life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["analysed appropriately", "addressed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["=Settlements", "=Location of Settlements", "=Challenges in Settlements"],
+      "learningOutcomes": [
+        "=Promote orderliness in settlements",
+        "=Make settlement choices",
+        "=Resolve challenges experienced in settlements"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately", "made accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["=Urbanisation"],
+      "learningOutcomes": [
+        "=Relate urbanisation to daily lives and environment",
+        "Use 4-Ügure and 6-Ügure to grid references to locate points or features"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Topic 2.1",
+      "topics": [
+        "=Maps and Diagrams",
+        "=Map Symbols",
+        "=Map Reading and Interpretation",
+        "=Relief",
+        "=Drainage Features",
+        "=Land Use",
+        "=Direction and Orientation",
+        "=Measurement of Distance and Area"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of maps and diagrams",
+        "Use symbols and legend to recognise features",
+        "Use 4-Ügure and 6-Ügure to grid references to locate points or features",
+        "Use contours and other symbols to determine relief =",
+        "Analyse terrain",
+        "Analyse drainage patterns",
+        "Use symbols to interpret vegetation and land use",
+        "=Use compass bearing and cardinal directions for navigation",
+        "Practise distance and area measurement"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "demonstrated correctly",
+        "features correctly",
+        "relief used correctly.",
+        "analysed correctly",
+        "land use correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Topic 2.2",
+      "topics": [
+        "=Fieldwork",
+        "=Planning and Preparing for Field Work",
+        "=Data Collection/ Fieldwork",
+        "= Data processing=",
+        "Presenting"
+      ],
+      "learningOutcomes": [
+        "Analyse Üeldwork",
+        "Plan for field work",
+        "=Collect data in the Üeld",
+        "= Process Data Organising data Analysing data Interpreting data Discussing data (Make a conclusion on the objectives/hypothesis, support conclusion with relevant data taken from tables and graphs) Data processed DFFRUGLQJO\\",
+        "Use Ündings to address local challenges Writing a geography Üeldwork UHSRUW Creating visual presentations (maps infographicsÈ) Communicating results to academics and policy makers Research Ündings used to address local"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately", "Üeld accurately", "challenges accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["(QYLURQPHQW", "Environmental Protection", "Environmental Hazards and Disasters"],
+      "learningOutcomes": [
+        "Demonstrate understanding of environmental GHJUDGDWLRQ Conducting surveys to; LGHQWLI\\ degraded areas in the community, human activities and natural processes that lead to environmental degradation and impacts of environmental degradation È) Presenting Ündings in class Understanding of the environment demonstrated",
+        "=Conduct sustainable",
+        "=Analyse environmental hazards and disasters Identifying environmental hazards and disasters (Ýoods, drought, lead contamination, water pollutionÈ) Analysing the impacts of environmental hazards and disasters on the environment loss of life, destruction of propertyÈ) Reporting environmental hazards and disasters to authorities. teachers, parents, local leadersÈ) Environmental hazards and disasters analysed FRUUHFWO\\",
+        "Respond to natural hazards and disasters Identifying ways of responding to environmental hazards and disasters (Preparedness, immediate response, recovery, mitigationÈ) Practising best ways of responding to environmental hazards and disasters Natural hazards and disasters responded to DFFRUGLQJO\\ Geography Syllabus 2024"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.4",
+      "topics": [
+        "=ZambiaÓs Agro- Ecological Regions",
+        "=Climate and Agro- Ecological Regions",
+        "=Agriculture and Agro-Ecological"
+      ],
+      "learningOutcomes": [
+        "Analyse ZambiaÓs Agro Ecological Regions",
+        "Establish relationship between climate and Agro Ecological Regions",
+        "Show a relationship between Agriculture and Agro- Ecological Regions"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["=EarthÓs Internal Structure", "=Types of Rocks"],
+      "learningOutcomes": [
+        "Demonstrate understanding of the internal structure of the earth",
+        "Relate rocks to everyday life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["related accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 3: Topic 3.2",
+      "topics": [
+        "=Landforms Formed by Faulting and Folding",
+        "=Landforms formed by Earthquakes and Volcanic activities"
+      ],
+      "learningOutcomes": [
+        "Link faulting and folding to real life experiences",
+        "Relate earthquakes and volcanic activity to the natural environment",
+        "=Evaluate the impacts of earthquakes and volcanic activities on environment"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["experiences accordingly", "appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["=Weathering", "=Mass movement Mass Wasting)"],
+      "learningOutcomes": [
+        "Relate weathering to real-life experiences",
+        "Relate mass movement to real -life experiences"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["=Hydrological Cycle", "=River System"],
+      "learningOutcomes": [
+        "Practise sustainable use of water.",
+        "=Apply knowledge of river system in everyday life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["practised accordingly", "applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["=Climatic Regions", "=Tropical and Temperate Cyclonic Activities"],
+      "learningOutcomes": [
+        "Develop ways of adapting to climatic regions",
+        "= Plan for cyclonic Activities"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["developed accordingly", "planned for appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 3: Topic 3.6",
+      "topics": ["=World Population"],
+      "learningOutcomes": ["Demonstrate understanding of world population distribution/density"],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 3: Topic 3.7",
+      "topics": ["=HIV/AIDS and COVID 19"],
+      "learningOutcomes": ["Adopt ways of coping with pandemics"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["= = Location of Zambia=", "= Relief and Drainage =", "Cultural IHDWXUHV"],
+      "learningOutcomes": [
+        "= Analyse implications of ZambiaÓs location Using lines of latitude and longitude to indicate the absolute location of Zambia (latitude 8 o south-18 o south, longitude 22 east Î",
+        "= Relate relief and drainage features to real -life VLWXDWLRQV Identifying relief levels of Zambia High veld, Middle veld and Low veld and their features respectively) Describing the drainage system of Zambia (the four main rivers, lakes, dambos, swampsÈ) Relating relief and drainage to real life situations. (agriculture, disaster preparedness, tourism and recreation, water supplyÈ) Relief and drainage features related to real - life situations DFFRUGLQJO\\",
+        "Promote cultural features of Zambia Identifying the cultural features of Zambia ( roads, railways, bridges, pipelineÈ) Engaging in actions that help improve the cultural features clean up campaigns, avoiding vandalism) Cultural features of Zambia promoted DFFRUGLQJO\\ Geography Syllabus 2024"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Vegetation of Zambia", "Invasive Plant Species in", "Deforestation"],
+      "learningOutcomes": [
+        "Promote sustainable use of vegetation Describing the types of vegetation in Zambia :tropical rain forests, miombo woodlands, mopane woodlands, munga woodlands, riverine forest, montane, swamp forestsÈ) Identifying exotic plants and the areas of their location: forest plantations (Chichele, Chati, Itimpi on the Copperbelt, ShiwangnduÈSpecies: eucalyptus, pine, cedar, gmelina, CyprusÈ.) Identifying the forest products and their uses (timber, medicine, charcoal, fruits, vegetables,",
+        "Provide solutions to invasive plant species Identifying invasive plant species Lantana camara, Kafue weed, Mimosa pigra, AmaranthusÈ) Describing the eඒects of invasive plant species (block waterways, displacement of local tree species, produce toxins, reduce oxygen for Solutions to invasive plant species provided",
+        "=Address deforestation Discussing deforestation Identifying the causes of deforestation (human activities, diseases, Üres, destruction by animalsÈ) Examining the impact of"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 4: Topic 4.3",
+      "topics": [
+        "=Land Tenure Systems",
+        "=Types of Farming in Zambia",
+        "=Irrigation Farming",
+        "= =Farming and Climate= Change=",
+        "=Sustainable and unsustainable Farming",
+        "=Sugarcane Growing in the Sub-Region South Africa)",
+        "=Pastoral Farming in the Sub-Region Botswana)",
+        "=World Agriculture"
+      ],
+      "learningOutcomes": [
+        "=Analyse land tenure",
+        "=Demonstrate understanding of farming=in Zambia",
+        "=Practise irrigation farming",
+        "Analyse relationship = between farming and = climate change= Describing the impact of climate change on farming (seasonal variations and extreme weather conditions, temperature increase, change in rainfall patterns, shifts in growing season, impacts on pollinators, soil degradation and water scarcity on food production processesÈ) Providing solutions to the impact of climate change on agriculture (climate smart agricultural practices, crop and animal diversiÜcation, irrigation management, water harvesting, support for climate resilient agriculture research and developmentÈ) Discussing the impacts of commercial farming practices on biodiversity and climate change (emission of Relationship between farming and climate change analysed DFFRUGLQJO\\ Geography Syllabus 2024",
+        "=Practise sustainable farming",
+        "=Analyse unsustainable farming",
+        "=Relate sugar cane growing in South Africa to Zambia",
+        "Relate pastoral farming in Botswana to Zambia",
+        "=Demonstrate knowledge of major types of farming in the world"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 4: Topic 4.4",
+      "topics": [
+        "=Major Fisheries in Zambia",
+        "=Methods of Fishing and Processing",
+        "Fisheries Related (QWUHSUHQHXUVKLS",
+        "=Challenges and Solutions in Fishing",
+        "= Fish Farming Aquaculture)",
+        "=Fishing in the Sub-Region Malawi)",
+        "=Fish Farming in the Sub-Region Zimbabwe)"
+      ],
+      "learningOutcomes": [
+        "=Demonstrate understanding of Üsheries in Zambia",
+        "Demonstrate understanding of fish processing",
+        "Practise Üsheries related entrepreneurship",
+        "Provide solutions to Üshing challenges",
+        "=Practise Üsh farming",
+        "Adopt Üshing practices from Malawi",
+        "=Draw lessons of Üsh farming from Zimbabwe"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 4: Topic 4.5",
+      "topics": [
+        "=Local and International Tourism",
+        "=Sustainable Tourism",
+        "=Challenges of Tourism and Solutions",
+        "=Tourism in the Sub-Region Kenya and South Africa)"
+      ],
+      "learningOutcomes": [
+        "=Demonstrate knowledge of tourism in Zambia",
+        "Practise sustainable tourism",
+        "=Provide solutions to the challenges of tourism",
+        "=Adopt best tourism practices from Kenya and South Africa Locating the major tourist attractions in Kenya and South Africa (South Africa: Table Mountain, Kruger National Park, Robben IslandÈ Kenya: Massai Mara, Mombasa Old Town, Malindi, Fort JesusÈ) Analysing tourism development in Kenya (world class infrastructure e.g. roads, hotels, airports, world class national parks and game reserves, developed coast lines and beaches, rich cultural heritage, diverse outdoor activities, robust advertisement of tourist attractionsÈ) Analysing tourism development in South Africa (Ünancial incentives for tourism development, world class infrastructure e.g. roads, hotels, airports, historical sites, diverse outdoor activities, promotion of establishment of private game ranches, robust advertisement of tourist attractions, developed coast lines and beachesÈ) Best tourism practices from Kenya and South Africa adopted DSSURSULDWHO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 4: Topic 4.6",
+      "topics": [
+        "=Fuel, Power and Energy in Zambia",
+        "=Challenges and Solutions in Production of Energy",
+        "=Hydro-Electric Power (HEP) in Zambia",
+        "=Sustainable Energy",
+        "=Energy and Climate Change",
+        "HEP in the Sub- Region"
+      ],
+      "learningOutcomes": [
+        "=Examine renewable and non- renewable energy sources",
+        "Provide solutions to the challenges of transporting fuel and power",
+        "=Address challenges in production of diඒerent types of energy",
+        "=Analyse hydro-electric power in Zambia",
+        "=Adopt measures to reduce",
+        "=Use sustainable energy responsibly Discussing sustainable energy Identifying diඒerent sources of sustainable energy (solar, wind, hydro, geothermal and biomassÈ) Analysing conditions under which use of wood / biomass as fuel is sustainable requires replacement of the trees or other plant materials usedÈ) Using sustainable energy responsibly conserving energy, energy eඒicient practicesÈ) Sustainable energy used DFFRUGLQJO\\",
+        "=Examine relationship between energy and climate change Evaluating the potential of diඒerent renewable energy technologies to reduce global warming (solar photovoltaics, hydropowerÈ) Relationship between energy and climate change examined Geography Syllabus 2024",
+        "=Evaluate HEP in the Sub- Region"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 4: Topic 4.7",
+      "topics": [
+        "=Mining in Zambia",
+        "=Mineral Processing and Economic Growth in Zambia",
+        "=Uses of Major Minerals",
+        "=Marketing of Major Minerals",
+        "=Mining in the Sub-Region Angola and South Africa)"
+      ],
+      "learningOutcomes": [
+        "=Demonstrate understanding of mining in Zambia",
+        "Relate mineral processing to economic growth =in Zambia Describing stages of mineral processing in Zambia:blasting, crushing,",
+        "Use opportunities within ZambiaÓs mineral value chain.",
+        "=Provide solutions to challenges Zambia faces in mineral markets Solutions to challenges Zambia faces in mineral markets provided DFFRUGLQJO\\",
+        "=Draw lessons of mining from Angola and South Africa Locating mining areas on the map of Angola and South Africa: =Angola petroleum, diamond and goldÈ) South Africa (diamond, gold,"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 4: Topic 4.8",
+      "topics": [
+        "=Manufacturing and Processing Industries in Zambia",
+        "=Challenges in processing and manufacturing industries",
+        "=Manufacturing and Processing Industries in Sub-Region Zimbabwe and South Africa)",
+        "=Manufacturing Industries in the World( Japan and China)"
+      ],
+      "learningOutcomes": [
+        "Examine major processing and manufacturing industries in Zambia",
+        "=Provide solutions to challenges in processing and manufacturing industries",
+        "=Analyse manufacturing and processing industries in Zimbabwe and South Africa",
+        "=Draw lesson from rapid industrial expansion in Japan and China"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 4: Topic 4.9",
+      "topics": [
+        "=Transport and Communication in Zambia",
+        "=Environmental impact of diඒerent forms of transport",
+        "=Sustainable Mobility in Zambia",
+        "=Transport and communication the Sub-Region",
+        "=World Transport and Communication"
+      ],
+      "learningOutcomes": [
+        "=Demonstrate understanding of transport and communication in Zambia",
+        "Analyse environmental impacts of diඒerent forms of transport",
+        "Adopt sustainable mobility practices.",
+        "=Analyse eඒorts to improve transport and communication in landlocked countries Discussing the eඒorts made by landlocked countries to improve transport and communication: transformation from landlocked into land linked, improving connectivity and facilitating trade and economic growth, implementation of corridor approach to improve trade and transit transport in the region, implementation of land linked country regional integrationÈ) Analysing the beneÜts of the eඒorts made by landlocked countries to improve transport and communication: improved connectivity, increased trade, reduced transportation costs, enhanced economic competitiveness, job creation and poverty eradication, improved access to services, regional integrationÈ) Efforts to improve transport and communication in landlocked countries analysed",
+        "=Demonstrate understanding of new trends in transport and communication"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "GEOGRAPHY-SYLLABUS.pdf",
-    "extractedAt": "2026-07-11T06:20:40.258Z",
-    "fileSize": 1568271
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/GEOGRAPHY-SYLLABUS.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.953) + deterministic CDC table parse. No fabricated content.",
+    "curated": true,
+    "recordCount": 107
   }
 }

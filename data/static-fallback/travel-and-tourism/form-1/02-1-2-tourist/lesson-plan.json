@@ -1,0 +1,30 @@
+{
+  "subject": "Travel and Tourism",
+  "subjectSlug": "travel-and-tourism",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "TRAVEL_AND_TOURISM_MODULE_Final-2025.pdf",
+  "md5": "eddbd2b53114fbbd521b933e4807a63a",
+  "detectedShift": 0,
+  "pageCount": 70,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-2-tourist",
+  "lesson": {
+    "lesson": 2,
+    "title": "1.2 TOURIST",
+    "topics": ["Preface"],
+    "activities": ["the CBC's objectives."],
+    "resources": [
+      "their own research and innovations to address potential gaps during implementation. The suggested"
+    ],
+    "assessment": [
+      "tailored to learners' needs and levels",
+      "As the Ministry of Education, we acknowledge the challenges associated with transitioning to a",
+      "new curriculum. Consequently, this module reflects our commitment to providing teachers with",
+      "the CBC's objectives."
+    ],
+    "notes": ""
+  }
+}

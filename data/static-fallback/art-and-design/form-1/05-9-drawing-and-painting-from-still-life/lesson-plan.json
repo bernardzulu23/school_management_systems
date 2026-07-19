@@ -1,0 +1,45 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+  "md5": "0b1838dd3d97a165f716846a59545c87",
+  "detectedShift": 0,
+  "pageCount": 33,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "9-drawing-and-painting-from-still-life",
+  "lesson": {
+    "lesson": 5,
+    "title": "9 DRAWING AND PAINTING FROM STILL LIFE",
+    "topics": [
+      "Introduction",
+      "In this topic, the learners will acquire skills such as, creativity, observation and analytical",
+      "thinking. Still life drawing and painting is an artistic style that captures the aesthetics and essence",
+      "of static objects, often arranged in deliberate compositions. From everyday household items like",
+      "fruit and books to symbolic or luxurious objects, artists use light, colour, texture, proportion and"
+    ],
+    "activities": [
+      "Learning Environment Set-up:",
+      " in-door (art room, studio…)",
+      " out-door (a stack of arranged rocks, at the scrap metal junk yard, part of an engine",
+      " technological (mechanical approach, digital platforms…)",
+      "Suggested Teaching and Learning Materials:",
+      "Paint Brushes",
+      "Pencils: Graphite, charcoal, or coloured pencils used for drawing.",
+      "Art and Design"
+    ],
+    "resources": [],
+    "assessment": [
+      " Evaluate Still life drawings based on shape, texture, form, value (light and dark),",
+      "balance and proportion.",
+      "works, promoting critical thinking and constructive criticism.",
+      "In this sub-topic, different pictures were composed from Still-life drawing and or",
+      "painting. The key techniques and principles acquired and applied were, observation,",
+      "rendering, composition, colour theory, lighting and shading."
+    ],
+    "notes": ""
+  }
+}

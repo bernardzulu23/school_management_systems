@@ -1,0 +1,14 @@
+{
+  "subject": "Lunda",
+  "subjectSlug": "lunda",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "c0c6f362c0f0f59d5564977e582e9804",
+  "detectedShift": 0,
+  "pageCount": 105,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "lessonCount": 1
+}

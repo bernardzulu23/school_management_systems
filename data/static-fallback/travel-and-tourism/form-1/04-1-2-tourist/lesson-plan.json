@@ -1,0 +1,52 @@
+{
+  "subject": "Travel and Tourism",
+  "subjectSlug": "travel-and-tourism",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "TRAVEL_AND_TOURISM_MODULE_Final-2025.pdf",
+  "md5": "eddbd2b53114fbbd521b933e4807a63a",
+  "detectedShift": 0,
+  "pageCount": 70,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-2-tourist",
+  "lesson": {
+    "lesson": 4,
+    "title": "1.2 TOURIST",
+    "topics": [
+      "Introduction",
+      "As the world becomes increasingly interconnected, tourism has become a significant aspect of",
+      "modern life, with millions of people traveling to new destinations every year. While tourism can",
+      "bring numerous benefits, including cultural exchange, economic growth, and personal enrichment,",
+      "it also poses challenges and responsibilities for travelers. To ensure that tourism is a positive and"
+    ],
+    "activities": [
+      "natural, or recreational significance.",
+      "of a trip.",
+      "Sub Topic: 1.2.1 Tourists’ codes of behaviour",
+      "Introduction",
+      "Responsible tourism is about respecting the places we visit and the people who live there. The",
+      "Tourist Code of Behavior provides guidelines for traveling responsibly and sustainably, ensuring",
+      "a positive impact on destinations and local communities. By following these principles, tourists",
+      "can have a safe and enjoyable trip while preserving cultural and natural heritage for future"
+    ],
+    "resources": [
+      "conscious of water usage in regions facing drought.",
+      "Respecting Natural Environments: Stay on designated paths in natural reserves or",
+      "national parks, avoid disturbing wildlife, and refrain from picking plants or collecting rocks",
+      "and other natural items.",
+      "Supporting Sustainable Businesses: Choose accommodations, restaurants, and activities",
+      "that are committed to sustainable and eco-friendly practices, such as those that use"
+    ],
+    "assessment": [
+      "During the Activity:",
+      "Group Participation and Contribution: Observe and take notes on each learners’ level",
+      "of engagement and contribution to the group discussions during the brainstorming sessions.",
+      "Peer Feedback: After each group presents their findings, allow learners to give",
+      "constructive feedback on each other’s ideas and perspectives.",
+      "Observation Checklist: Use a checklist to assess the learners’ understanding of key"
+    ],
+    "notes": ""
+  }
+}

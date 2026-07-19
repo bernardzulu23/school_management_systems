@@ -1,0 +1,37 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "entrepreneurship",
+  "lesson": {
+    "lesson": 5,
+    "title": "ENTREPRENEURSHIP",
+    "topics": [],
+    "activities": [],
+    "resources": [
+      "preservation of the environment",
+      "§ Financial Education: Ability to apply knowledge of key financial concepts, financial",
+      "products and services to personal financial management.",
+      "§ Problem Solving: The ability to identify, analyse and find solutions to challenging",
+      "situations",
+      "About this module -"
+    ],
+    "assessment": [
+      "Summary: ……………",
+      "Bibliography…………………………………………………………………………………………………………………",
+      "Introduction",
+      "The Design and Technology Teaching Module for Form 1 has been developed to help",
+      "teachers implement the 2023 revised Design and Technology syllabus. The subject first",
+      "appeared in Zambian Curriculum in 2013 in place of the Industrial Arts subjects – Geometrical"
+    ],
+    "notes": ""
+  }
+}

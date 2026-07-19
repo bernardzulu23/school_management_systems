@@ -1,0 +1,40 @@
+{
+  "subject": "Silozi",
+  "subjectSlug": "silozi",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "SILOZI-LANG-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "4c080caa1bf102b6c295858225a0a217",
+  "detectedShift": 0,
+  "pageCount": 220,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "1-3-1-composition-this-must-come-from-the-syllabus-with-its-",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.3.1 Composition (This must come from the syllabus with its serial number)",
+    "topics": [
+      "SUB-TOPIC: 1.3.1.6 Descriptive Writing (This must come from the syllabus with its serial",
+      "number)"
+    ],
+    "activities": [],
+    "resources": [
+      " Samples of descriptive composition of people.",
+      " Pictures of different people.",
+      "EXPECTED STANDARD: Description of a person written correctly. (This must come from",
+      "the syllabus as it is)",
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTI",
+      " Sing the lyrics in the famous folk",
+      "music song",
+      "Hanihupula yomunde,",
+      "Meeto ki muzilili,"
+    ],
+    "notes": ""
+  }
+}

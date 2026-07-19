@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "jishimikila-jiipi-mukumbu-wa-ku-mwenako",
+  "lesson": {
+    "week": 2,
+    "lesson": 12,
+    "title": "Jishimikila jiipi (mukumbu wa ku mwenako)",
+    "topics": [
+      "Yoba wa sakishanga bingi kutokesha ba shanji pa muchima. Wasajiwa pa sukuulu",
+      "kutangijila jibumba ja boba be chocheka, po alangulukile amba kimye kya kwi batokesha",
+      "kyafika. Mino Yoba wajinga na makatazho pa kwamba mu kintu bwingi ne kuzakama",
+      "paku pitulukamo. Kwi kyombesha byo kwafwenyenyenga pa bwipi, wilangulwishenga",
+      "kana wafwainwe kushinda yewa moyo wanji nangwa kwikileka kutanwa mu joja jibumba"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

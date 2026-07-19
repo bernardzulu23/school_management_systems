@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "figurative-language",
+  "lesson": {
+    "lesson": 28,
+    "title": "FIGURATIVE LANGUAGE",
+    "topics": [
+      "INTRODUCTION:",
+      " Overview: Figurative language refers to the use of words in a way that deviates",
+      "from the conventional order and meaning in order to convey a hidden meaning.",
+      "These include similes, metaphors, hyperbole, personification, idioms, proverbs",
+      "and many more. This topic, shall look at riddles."
+    ],
+    "activities": [
+      " Explain riddles- questions, statements or short poems that are meant to be puzzling",
+      "or tricky.",
+      "Examples of riddles with answers",
+      "I am as clear as glass but polluted everyday by human actions, in a most harmful",
+      "way. What am I? Answer: water",
+      "leaving all behind. What am I? Answer: carbon dioxide.",
+      "I am a necessary process but often done with neglect. Leaving behind waste, a toxic",
+      "inspects. What am I? Answer: waste management"
+    ],
+    "resources": [],
+    "assessment": [
+      " Provide guided practice by giving learners a riddle to provide meaning in pairs or small",
+      " Allow learners to share their riddles with the class.",
+      " Assess participation by observing learners’ engagement and involvement in the activity.",
+      "(pair or group).",
+      " Learners to conduct a project of collecting riddles common in their communities.",
+      " Learners to interpret riddles."
+    ],
+    "notes": ""
+  }
+}

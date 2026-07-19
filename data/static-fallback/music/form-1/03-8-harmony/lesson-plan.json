@@ -1,0 +1,35 @@
+{
+  "subject": "Music",
+  "subjectSlug": "music",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "bf730864b2f0142afce9eb9e8ffe0420",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "8-harmony",
+  "lesson": {
+    "lesson": 3,
+    "title": "8 HARMONY",
+    "topics": [
+      "Appendix: SAMPLE LESSON TEMPLATE.........................................................................24",
+      "Appendix: SAMPLE LESSON PLAN....................................................................................26",
+      "Musical Arts Education",
+      "Teaching Module"
+    ],
+    "activities": ["the CBC’s objectives."],
+    "resources": [
+      "with their own research and innovations to address potential gaps during implementation. The"
+    ],
+    "assessment": [
+      "to learners’ needs and levels.",
+      "The Ministry of Education acknowledges the challenges associated with transitioning to a new",
+      "curriculum. Consequently, this module reflects our commitment to providing teachers with",
+      "the CBC’s objectives."
+    ],
+    "notes": ""
+  }
+}

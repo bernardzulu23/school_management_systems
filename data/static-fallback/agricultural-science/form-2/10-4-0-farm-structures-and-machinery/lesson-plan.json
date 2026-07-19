@@ -1,0 +1,46 @@
+{
+  "subject": "Agricultural Science",
+  "subjectSlug": "agricultural-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "df6a8d3579bb6bd33da1fcd4a3dc5cec",
+  "detectedShift": 0,
+  "pageCount": 132,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "4-0-farm-structures-and-machinery",
+  "lesson": {
+    "lesson": 10,
+    "title": "4.0 FARM STRUCTURES AND MACHINERY",
+    "topics": ["Introduction", "management."],
+    "activities": [
+      "Farm Machinery - Tools and machines to carryout farm work.",
+      "Hand tools -",
+      "Simple farm tools operated by hand.",
+      "Implements -",
+      "Equipment used with animals or machines to perform farm tasks.",
+      "Maintenance -",
+      "Care and repair of farm tools and machinery.",
+      "Efficiency-"
+    ],
+    "resources": [
+      "management.",
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 &",
+      "Introduction",
+      "In agriculture, implements are tools or equipment used to carryout farm tasks more efficiently. In this sub-topic, learners will study",
+      "animal and tractor drawn implements which are essential for land preparation, and other farm operations. Animal drawn implements",
+      "are attached to drought animals like oxen and are used for tasks such as ploughing, harrowing and cultivating small farms. Tractor"
+    ],
+    "assessment": [
+      "List four environmental factors to consider when choosing a site for farm structures.",
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 &",
+      "Sketch a simple farm layout and indicate the most suitable site for livestock shelter.",
+      "Explain why site selection is important before constructing farm buildings.",
+      "A proposed site is near a low-lying area prone to flooding. Suggest an alternative location to explain your reasoning.",
+      "Explain how proper site selection contributes to durability, cost savings and efficient farm management."
+    ],
+    "notes": ""
+  }
+}

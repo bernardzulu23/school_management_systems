@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "narratives",
+  "lesson": {
+    "lesson": 15,
+    "title": "NARRATIVES",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Narrative writing is a type of composition that tells a story with a clear",
+      "beginning, middle and end. It involves presenting a sequence of events, either real or",
+      "imagined, in a way that engages the reader. It usually has characters who drive the action.",
+      "Narratives can be written in different ways with characters as the main movers of the"
+    ],
+    "activities": [
+      " Ask Learners to read a given story (Teacher can also read the story aloud to the class)",
+      "Sample story",
+      "A Bridge for Nabwalya Village",
+      "In Nabwalya village of the Muchinga escarpment, there was a river that divided",
+      "the land. For many years, the villagers struggled to cross it, using canoes that",
+      "were often swept away by strong currents.",
+      "In the village was a young woman named Mulenga. She was not a village elder",
+      "and she did not have any position of leadership. Mulenga saw the struggles of"
+    ],
+    "resources": [],
+    "assessment": [
+      " Story writing involves telling a real or imaginary story",
+      " When writing short stories, there is need to follow a clear layout (beginning, middle and",
+      " A story needs to have a title, plot, characters, setting, theme, conflict, style (elements of a",
+      " It is possible to write stories based on given situations (completing story or writing from",
+      "a question,",
+      "STRUCTURE"
+    ],
+    "notes": ""
+  }
+}

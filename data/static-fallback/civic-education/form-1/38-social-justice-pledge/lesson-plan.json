@@ -1,0 +1,28 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "social-justice-pledge",
+  "lesson": {
+    "week": 6,
+    "lesson": 38,
+    "title": "Social Justice Pledge",
+    "topics": [
+      "Encourage learners to write personal commitments on how they will stand up for fairness",
+      "and equality.",
+      "They can share these pledges with the class or display them on a classroom wall."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

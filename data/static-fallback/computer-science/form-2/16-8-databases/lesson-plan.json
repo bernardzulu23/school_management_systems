@@ -1,0 +1,52 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "8-databases",
+  "lesson": {
+    "lesson": 16,
+    "title": "8: DATABASES",
+    "topics": [
+      "Overview",
+      "Databases are organised collections of data that allow for efficient storage, retrieval, and management of",
+      "information. This topic introduces Structured Query Language (SQL), the universal standard for interacting",
+      "with relational databases. Learners will move from understanding basic data organisation to designing",
+      "schemas and writing SQL scripts to create and modify database structures."
+    ],
+    "activities": [
+      "Specific Competence(s) – Learners will:",
+      "Design and create databases using SQL.",
+      "Learning Environment Setup",
+      "Artificial (Physical – Classroom):",
+      "Classroom arranged for group work and pair discussions",
+      "Space to lay out index cards for the physical database simulation",
+      "Technology Environment:",
+      "Computers with internet access to run SQL in an online sandbox (SQLiteOnline.com or"
+    ],
+    "resources": [
+      "Code.org. (2024). CS fundamentals. Retrieved from https://code.org/educate/csf",
+      "Google for Education. (2024). CS First: Computer science curriculum. Retrieved from",
+      "https://csfirst.withgoogle.com",
+      "MDN Web Docs. (2024). CSS: Cascading Style Sheets. Retrieved from",
+      "https://developer.mozilla.org/en-US/docs/Web/CSS",
+      "MDN Web Docs. (2024). HTML: HyperText Markup Language. Retrieved from"
+    ],
+    "assessment": [
+      "Examples of Formative",
+      "Scenario: A small video club in Matero, Lusaka, wants to move from a paper list to a computer",
+      "database. They have one notebook where they write the customer’s name, the movie they rented,",
+      "and the date. They notice that if “Banda” rents a movie three times, his name is written over and over",
+      "(Schema Design) Why is this “one notebook” method inefficient? Draw a quick sketch showing",
+      "how you could split this information into two tables (Customers and Rentals) to avoid repeating"
+    ],
+    "notes": ""
+  }
+}

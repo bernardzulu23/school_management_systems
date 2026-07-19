@@ -1,0 +1,252 @@
+[
+  {
+    "file": "AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
+    "subject": "Agricultural Science",
+    "slug": "agricultural-science",
+    "records": 53,
+    "units": 24,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "ART-AND-DESIGN-SYLLABUS-FINAL.pdf",
+    "subject": "Art and Design",
+    "slug": "art-and-design",
+    "records": 131,
+    "units": 46,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "subject": "Biology",
+    "slug": "biology",
+    "records": 82,
+    "units": 24,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "CHEMISTRY-SYLLABUS.pdf",
+    "subject": "Chemistry",
+    "slug": "chemistry",
+    "records": 122,
+    "units": 19,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "preserved-chemistry",
+    "unit": "richer"
+  },
+  {
+    "file": "CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
+    "subject": "Civic Education",
+    "slug": "civic-education",
+    "records": 97,
+    "units": 39,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.pdf",
+    "subject": "Commerce",
+    "slug": "commerce",
+    "records": 118,
+    "units": 21,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.pdf",
+    "subject": "Computer Science",
+    "slug": "computer-science",
+    "records": 59,
+    "units": 41,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "keep-curated"
+  },
+  {
+    "file": "DESIGN-AND-TECHNOLOGY-STUDIES.pdf",
+    "subject": "Design and Technology",
+    "slug": "design-and-technology",
+    "records": 92,
+    "units": 33,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "ENGLISH-SYLABUS-FORM-1-4-O-LEVELCAMERA-READY.pdf",
+    "subject": "English",
+    "slug": "english",
+    "records": 410,
+    "units": 20,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "subject": "Fashion and Fabrics",
+    "slug": "fashion-and-fabrics",
+    "records": 84,
+    "units": 42,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.pdf",
+    "subject": "Food and Nutrition",
+    "slug": "food-and-nutrition",
+    "records": 79,
+    "units": 22,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "FRENCH-LANGUAGE.pdf",
+    "subject": "French",
+    "slug": "french",
+    "records": 132,
+    "units": 52,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "GEOGRAPHY-SYLLABUS.pdf",
+    "subject": "Geography",
+    "slug": "geography",
+    "records": 109,
+    "units": 27,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "HISTORY-SYLLABUS-FORMS-1-4.pdf",
+    "subject": "History",
+    "slug": "history",
+    "records": 66,
+    "units": 26,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "HOSPITALITY-MANAGEMENT.pdf",
+    "subject": "Hospitality Management",
+    "slug": "hospitality-management",
+    "records": 80,
+    "units": 23,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "keep-curated"
+  },
+  {
+    "file": "ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.pdf",
+    "subject": "Computer Studies",
+    "slug": "computer-studies",
+    "records": 36,
+    "units": 18,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "subject": "Literature in English",
+    "slug": "literature-in-english",
+    "records": 85,
+    "units": 4,
+    "forms": [1, 2],
+    "dedicated": "wrote",
+    "unit": "keep-existing (old=603 new=191)"
+  },
+  {
+    "file": "MATHEMATICS-II-SYLLABUS.pdf",
+    "subject": "Mathematics",
+    "slug": "mathematics",
+    "records": 39,
+    "units": 36,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "MATHEMATICS-O-LEVEL-FORMS-1-4.pdf",
+    "subject": "Mathematics",
+    "slug": "mathematics",
+    "records": 41,
+    "units": 31,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "keep-curated"
+  },
+  {
+    "file": "MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.pdf",
+    "subject": "Music",
+    "slug": "music",
+    "records": 78,
+    "units": 43,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.pdf",
+    "subject": "Physical Education",
+    "slug": "physical-education",
+    "records": 90,
+    "units": 42,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.pdf",
+    "subject": "Physics",
+    "slug": "physics",
+    "records": 59,
+    "units": 18,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "RELIGIOUS-EDUCATION-SYLLABUS.pdf",
+    "subject": "Religious Education",
+    "slug": "religious-education",
+    "records": 91,
+    "units": 24,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "richer"
+  },
+  {
+    "file": "TRAVEL-AND-TOURISM-SYLLABUS.pdf",
+    "subject": "Travel and Tourism",
+    "slug": "travel-and-tourism",
+    "records": 52,
+    "units": 19,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "keep-curated"
+  },
+  {
+    "file": "ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.pdf",
+    "subject": "Zambian Languages",
+    "slug": "zambian-languages",
+    "records": 325,
+    "units": 20,
+    "forms": [1, 2, 3, 4],
+    "dedicated": "wrote",
+    "unit": "keep-curated"
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Physics-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "062c004a347f40168ba953627812f83e",
+  "detectedShift": 0,
+  "pageCount": 168,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "2-thermal-physics",
+  "lesson": {
+    "lesson": 2,
+    "title": "2: THERMAL PHYSICS",
+    "topics": [],
+    "activities": [
+      " Plan your lessons in advance, using the module's suggested teaching and learning",
+      "hands-on experiments.",
+      "and fostering problem-solving skills."
+    ],
+    "resources": [
+      "simulations to enhance student engagement and understanding.",
+      "students meet the learning objectives",
+      "By following these steps, you can effectively use this Physics Teaching Module for Form 2 to support",
+      "your teaching and promote learning",
+      "Introduction",
+      "The Physics Teaching Module for Form 2 provides guidance to teachers on how to deliver"
+    ],
+    "assessment": [
+      " Plan your lessons in advance, using the module's suggested teaching and learning",
+      "activities.",
+      " Use a variety of teaching methods, including demonstrations, discussions, group work, and",
+      "hands-on experiments.",
+      "and fostering problem-solving skills.",
+      " Provide feedback and support to learners, helping them to identify areas for improvement"
+    ],
+    "notes": ""
+  }
+}

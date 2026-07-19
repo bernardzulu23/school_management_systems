@@ -1,0 +1,52 @@
+{
+  "subject": "Religious Education",
+  "subjectSlug": "religious-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "RELIGIOUS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "9dbcad673655b7812c7256a2d74b2b5e",
+  "detectedShift": 0,
+  "pageCount": 40,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-3-morality-and-value",
+  "lesson": {
+    "lesson": 3,
+    "title": "1.3 MORALITY AND VALUE",
+    "topics": [
+      "Introduction",
+      "Morals are societal norms that dictate what is considered right and wrong within a community.",
+      "Values, on the other hand, are guiding principles, standards or behaviour that are regarded as",
+      "desirable or held in high esteem in society. Morality is a set of rules and beliefs that distinguish",
+      "good behaviour from bad behaviour. Morality refers to the principles and values that guide"
+    ],
+    "activities": [
+      "Describing morality",
+      "Learning environment",
+      " Cluster the learners in small groups to discuss the concept of morality",
+      " Each group to report key ideas from the discussion to the class",
+      " Key ideas to be grouped and written down on the board",
+      " Learners to connect the ideas and come up with the definition of morality",
+      " Teacher to consolidate the meaning of morality on the board",
+      "CONTENT TIPS"
+    ],
+    "resources": [
+      " Learners to present their findings in class",
+      " Teacher to consolidate and summarise the findings of the research on the board",
+      " Learners role play different moral dilemmas",
+      " Class discusses solutions to different moral dilemmas",
+      " Teachers to make a summary of meaningful points",
+      "CONTENT TIPS"
+    ],
+    "assessment": [
+      "Knowledge-based questions",
+      "Explain the meaning of morality.",
+      "Differentiate the following terms: moral, amoral and immoral.",
+      "Application-based questions",
+      "After losing his job, a man from one of the compounds in Lusaka decided to rob",
+      "a shop in order to make ends meet. He was arrested and sentenced to five years in"
+    ],
+    "notes": ""
+  }
+}

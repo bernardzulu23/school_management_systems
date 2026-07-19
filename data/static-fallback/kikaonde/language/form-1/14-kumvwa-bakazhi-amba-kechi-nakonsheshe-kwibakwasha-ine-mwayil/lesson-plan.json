@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "kumvwa-bakazhi-amba-kechi-nakonsheshe-kwibakwasha-ine-mwayil",
+  "lesson": {
+    "week": 5,
+    "lesson": 14,
+    "title": "Kumvwa bakazhi amba “kechi nakonsheshe kwibakwasha ine.” Mwayila jishimikila, ino",
+    "topics": [
+      "ñambilo yatala muka?",
+      "Bipimo byañingijilo byaketekelwa kubiwa: Bafunda bakumbule bulongo mepuzho apusana-",
+      "pusana.",
+      "Mwingilo wakuuba:",
+      "Bafunda bepipishe kibaba kyatangiwa"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

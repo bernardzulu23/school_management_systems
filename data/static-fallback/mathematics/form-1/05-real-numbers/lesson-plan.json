@@ -1,0 +1,46 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Maths2_Teaching_Module.pdf",
+  "md5": "3c2a26b24aedaab36387e46ac55dee84",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "real-numbers",
+  "lesson": {
+    "lesson": 5,
+    "title": "REAL NUMBERS",
+    "topics": ["Introduction"],
+    "activities": [
+      "Introduction: Real numbers include various types of numbers such as natural numbers, whole numbers, integers, rational numbers, and",
+      "irrational numbers. They form the basis for arithmetic and algebraic calculations. Real numbers are commonly used in everyday life, from",
+      "counting objects to physical quantities, such as distance, velocity and acceleration, in science and engineering. Real numbers are also",
+      "applied in finance and budgeting, inventory management, time keeping and scheduling, scoring and grading, distance and measurement,",
+      "game scores and points, just to mention but a few. Exploring real numbers is essential for building mathematical foundations, developing",
+      "problem-solving and critical thinking skills, and fostering curiosity and creativity.",
+      "Problem Posing",
+      "Find a number that is:"
+    ],
+    "resources": [
+      "What to do: Put learners into small manageable groups of mixed abilities. Give each group a large number line drawn on a long sheet of",
+      "paper or on the ground. Each number line should have a range of rational numbers you have provided. Give each group rational numbers",
+      "written on number cards. The cards should contain both fractions and decimals.",
+      "Task: Ask learners to arrange numbers from least to greatest on the number line. The first group to correctly order all their numbers wins.",
+      "Skills to be developed: Ordering skills, critical thinking and teamwork.",
+      "Conceptualisation: Make sure the concept of rational and irrational numbers is coming out accordingly. Clearly demonstrate the"
+    ],
+    "assessment": [
+      "Learning Activity 2: Distinguishing Rational and Irrational Numbers",
+      "Introduction: Rational numbers can be expressed as fractions, while irrational numbers cannot. Examples include and",
+      "respectively.",
+      "These classifications help in understanding patterns and calculations.",
+      "Activity 2.1: Classifying Numbers as Rational or Irrational",
+      "Suggested Teaching and Learning Materials to Set up Learning Environment."
+    ],
+    "notes": ""
+  }
+}

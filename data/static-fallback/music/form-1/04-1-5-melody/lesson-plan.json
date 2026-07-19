@@ -1,0 +1,45 @@
+{
+  "subject": "Music",
+  "subjectSlug": "music",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "bf730864b2f0142afce9eb9e8ffe0420",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-5-melody",
+  "lesson": {
+    "lesson": 4,
+    "title": "1.5 MELODY",
+    "topics": [
+      "Introduction",
+      "This topic is broken down into two subtopics which are: 1.5.1 Melodic motion and 1.5.2 Simple",
+      "melody writing.",
+      "What is Melody?",
+      "Melody is a fundamental element of music often considered the most memorable part of a song"
+    ],
+    "activities": [
+      "Problem solving: Ability to use music to identify, analyse and address social-economical",
+      "challenges and obstacles.",
+      "TERMINOLOGY",
+      "Antecedent: The first part of a melodic phrase that sets up a musical idea, often ending",
+      "in uncertainty, to be resolved by the consequent.",
+      "Conjunct motion: Smooth, stepwise movement between, consecutive pitches in",
+      "a melody e.g. (C-D-E).",
+      "Contour:"
+    ],
+    "resources": [],
+    "assessment": [
+      "z Provide learners with printed melodies and ask them to identify and label they valleys,",
+      "waves and hills.",
+      "z Give learners a melody with missing notes and ask them to complete the melody by",
+      "adding notes that create a specific contour.",
+      "z Play a series of melodies with different contours and ask learners to identify the type",
+      "of contour used in each melody."
+    ],
+    "notes": ""
+  }
+}

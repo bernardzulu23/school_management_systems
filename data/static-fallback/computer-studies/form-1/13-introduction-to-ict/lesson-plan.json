@@ -1,0 +1,52 @@
+{
+  "subject": "Computer Studies",
+  "subjectSlug": "computer-studies",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "FORM-1-ICT-MODULE-Sample1.pdf",
+  "md5": "33d06366ada5cf9dee9617585d61b549",
+  "detectedShift": 0,
+  "pageCount": 15,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "introduction-to-ict",
+  "lesson": {
+    "lesson": 13,
+    "title": "Introduction to ICT",
+    "topics": [
+      "Sub-Topic: Role of ICT in Daily Life",
+      "Introduction",
+      "Overview: This topic introduces learners to the significance of ICT in daily life, with a",
+      "focus on its role in communication, education, and business. Learners will understand how",
+      "ICT tools and applications enhance productivity, connectivity, and learning."
+    ],
+    "activities": [
+      "Describe how ICT is used in business operations",
+      "Businesses use ICT to streamline their operations and improve efficiency. Accounting",
+      "software simplifies financial management, while inventory systems track goods and",
+      "supplies. Communication tools like email and video calls help teams collaborate",
+      "effectively, even across different locations. ICT also supports online transactions and",
+      "customer management through e-commerce platforms and CRM software. This technology",
+      "helps businesses to grow, innovate, and stay competitive.",
+      "Identify real-life examples of ICT applications"
+    ],
+    "resources": [
+      "anywhere at any time. Interactive technologies, such as smartboards and simulations, make",
+      "learning engaging and practical. ICT also enables collaboration between learners and",
+      "teachers through tools like Google Classroom and Microsoft Teams. As a result, ICT",
+      "enhances both teaching methods and learning outcomes.",
+      "Describe how ICT is used in business operations",
+      "Businesses use ICT to streamline their operations and improve efficiency. Accounting"
+    ],
+    "assessment": [
+      "What is ICT?",
+      "Answer: ICT stands for Information and Communication Technology, encompassing",
+      "tools and applications for communication and data handling.",
+      "How does ICT help learner access information?",
+      "Answer: ICT provides access to information through online libraries, educational",
+      "websites, and research databases."
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.pdf",
+  "md5": "79763015647465894bd7facf6ccb8fd6",
+  "detectedShift": 0,
+  "pageCount": 116,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "general-physics",
+  "lesson": {
+    "lesson": 5,
+    "title": "General Physics",
+    "topics": ["quantities, precision and accuracy, and equilibrium."],
+    "activities": [
+      "learners will engage in as they explore.",
+      "Suggested Teaching and learning Materials",
+      "Natural Materials: Wood",
+      "Artificial Materials: Magnets, plastic, glass. ruler, spring balance or force sensor",
+      "Learning environment set up",
+      "Natural environment such as school surroundings",
+      "Artificial environment such as classroom",
+      "Technological environment: Video, computer simulation"
+    ],
+    "resources": [],
+    "assessment": [
+      "Check if learners are correctly designing and conducting an experiment",
+      "Ask questions such as:",
+      "What happened to the magnetic force when the distance between the magnets;",
+      "Increased",
+      "Decreased?",
+      "What is the conclusion of the activity?"
+    ],
+    "notes": ""
+  }
+}

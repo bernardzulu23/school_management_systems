@@ -1,0 +1,30 @@
+{
+  "subject": "Icibemba",
+  "subjectSlug": "icibemba",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "ef382ed6b56f920d214fcd97ed1431ff",
+  "detectedShift": 0,
+  "pageCount": 69,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "lumbulapo-imibele-ya-litilica-yakulandafye-isano",
+  "lesson": {
+    "week": 3,
+    "lesson": 27,
+    "title": "Lumbulapo imibele ya Litilica yakulandafye isano?",
+    "topics": [
+      "Umutwe Unoono 2: Litilica Iyalembwa",
+      "Ubulondoloshi:",
+      "Muli uyu mutwe, abasambi balasambilila pali Litilica iyalembwa,",
+      "balalondolola ubupilibulo bwa Litilica iyalembwa. Balaishiba Litilica",
+      "yalembwa umo abela elyo balabiika Litilica yalembwa mumabumba"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

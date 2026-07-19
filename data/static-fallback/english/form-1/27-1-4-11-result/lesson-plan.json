@@ -1,0 +1,39 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-4-11-result",
+  "lesson": {
+    "lesson": 27,
+    "title": "1.4.11. Result",
+    "topics": ["SUB-TOPIC: 1.4.11.1 Different ways of expressing result."],
+    "activities": [
+      "Tall learner touches the",
+      "other learners observe.",
+      "respond using various",
+      "expressions.",
+      "e.g. He/She is tall.",
+      "Therefore, he/she can",
+      "touch the board.",
+      "Different"
+    ],
+    "resources": [
+      " Charts/posters",
+      " Tables/Flashcards",
+      " Projector/laptop/computer",
+      "EXPECTED STANDARD: Different expressions of result in sentences used correctly.",
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE"
+    ],
+    "assessment": [],
+    "notes": ""
+  }
+}

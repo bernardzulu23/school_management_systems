@@ -1,0 +1,29 @@
+{
+  "subject": "Cinyanja",
+  "subjectSlug": "cinyanja",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-CINYANJA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "15b1addadb25328fe3c0ec18a5b9cbb9",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "sankha-zitsanzo-ziwili-zimene-zinena-za-litilica-ya-zapakamw",
+  "lesson": {
+    "week": 1,
+    "lesson": 35,
+    "title": "Sankha zitsanzo ziwili zimene zinena za Litilica ya Zapakamwa mwa izi:",
+    "topics": [
+      "a) Buku, zilapi ndi miyambi.",
+      "b) Mbili ya Shaka yokambidwa.",
+      "c) Mbili yolembedwa ya Idiyamini.",
+      "d) Zilapi, miyambi ndi nthano."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

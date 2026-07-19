@@ -1,0 +1,34 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.pdf",
+  "md5": "79763015647465894bd7facf6ccb8fd6",
+  "detectedShift": 0,
+  "pageCount": 116,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "precision-and-accuracy",
+  "lesson": {
+    "lesson": 3,
+    "title": "Precision and Accuracy",
+    "topics": ["Introduction"],
+    "activities": [],
+    "resources": [
+      "understanding.",
+      "By following these steps, you can effectively use this Physics Teaching Module for Form 1 to support your teaching and promote learning.",
+      "Suggested Teaching and Learning Materials",
+      "appreciation. To support the teaching and learning of Physics in Form 1, the suggested teaching and learning materials are meant to:",
+      "Enhance learner engagement and motivation in Physics",
+      "Develop practical skills and laboratory techniques"
+    ],
+    "assessment": [
+      "Plan your lessons in advance using the module's suggested teaching and learning activities.",
+      "Use a variety of teaching methods including demonstrations, discussions, group work, and hands-on experiments.",
+      "Provide feedback and support to learners, helping them to identify areas for improvement and develop their skills."
+    ],
+    "notes": ""
+  }
+}

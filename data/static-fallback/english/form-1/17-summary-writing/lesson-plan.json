@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "summary-writing",
+  "lesson": {
+    "lesson": 17,
+    "title": "SUMMARY WRITING",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: A summary is a concise and brief retelling of the main points and key details",
+      "from a larger piece of content, such as an article, book, movie or speech. It extracts the",
+      "essential information into a shorter format while preserving the core message or",
+      "storyline. Summarising is a vital skill in both academic and everyday settings. It allows"
+    ],
+    "activities": [
+      " Ask learners to read a given passage.",
+      "Too many challenges in one’s life affect mental health. Your overall well-",
+      "being, how you think, feel and handle life can show the state of your mental",
+      "health. Mental health care should be a priority in anyone’s life. It is all about,",
+      "consistent efforts that strengthen resilience and help you feel at ease. Making",
+      "self-care a priority, staying active, connecting with other people helps you to",
+      "improve your mental health. Setting realistic goals for yourself and seeking",
+      "professional help when you need it can also help."
+    ],
+    "resources": [],
+    "assessment": [
+      "Ask learners to read given passages and provide suitable titles.",
+      " A good title gives a clear idea of what a piece of writing contains, yet it uses very",
+      "few words.",
+      " It is supposed to be clear, brief and relevant.",
+      "CHAPTER 2: NATIONAL VALUES AND PRINCIPLES",
+      "LISTENING AND SPEAKING"
+    ],
+    "notes": ""
+  }
+}

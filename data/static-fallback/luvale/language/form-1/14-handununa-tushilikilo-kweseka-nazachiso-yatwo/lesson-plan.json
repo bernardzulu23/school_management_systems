@@ -1,0 +1,24 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+  "md5": "29ad092b9734bb89d25044f40ea2b62a",
+  "detectedShift": 0,
+  "pageCount": 104,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "handununa-tushilikilo-kweseka-nazachiso-yatwo",
+  "lesson": {
+    "week": 2,
+    "lesson": 14,
+    "title": "Handununa tushilikilo kweseka nazachiso yatwo.",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

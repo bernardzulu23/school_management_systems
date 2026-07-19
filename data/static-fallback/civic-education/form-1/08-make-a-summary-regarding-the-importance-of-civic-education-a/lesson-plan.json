@@ -1,0 +1,46 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "make-a-summary-regarding-the-importance-of-civic-education-a",
+  "lesson": {
+    "week": 3,
+    "lesson": 8,
+    "title": "Make a summary regarding the importance of civic education at individual and community",
+    "topics": [
+      "levels.",
+      "Summary",
+      "The topic covered the following major ideas:",
+      "Civic Education: Acquisition of knowledge, skills values necessary for effective citizen",
+      "participation."
+    ],
+    "activities": [
+      "Creating a school profile",
+      "Teaching and Learning Materials: Chart showing school profile, Posters",
+      "The teacher to present this lesson as follows:",
+      "Step 1: Divide the learners into groups to gather information about the history of the school.",
+      "Step 2: Learners to interview school administrators, teachers and former learners.",
+      "Step 3: Learners to create a timeline of key events in the development of the school.",
+      "Step 4: Each group to present their findings in a creative way using posters, drama or story telling",
+      "Content Tips"
+    ],
+    "resources": [
+      "British South Africa Company: a company which was led by Cecil Rhodes which acquired and",
+      "exercised commercial and administrative rights in south-central Africa.",
+      "Rhodesia: the former name of a large territory in central southern Africa which was divided into",
+      "Northern Rhodesia (now Zambia) and Southern Rhodesia (now Zimbabwe).",
+      "Nationalism: an ideology that emphasizes loyalty, devotion, or allegiance to a nation or nation-state",
+      "and holds that such obligations outweigh other individual or group interests."
+    ],
+    "assessment": [],
+    "notes": ""
+  }
+}

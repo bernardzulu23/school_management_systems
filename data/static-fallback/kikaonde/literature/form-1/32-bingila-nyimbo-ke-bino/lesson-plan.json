@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "bingila-nyimbo-ke-bino",
+  "lesson": {
+    "week": 1,
+    "lesson": 32,
+    "title": "Bingila nyimbo ke bino;",
+    "topics": [
+      " Nyimbo ya nema mambo yileta bantu pamo ne kwibalengela kukwantankana.",
+      " Kabiji nyimbo ya nema mambo mu nyimbo imo muji lufunjisho",
+      "| P a g e",
+      " Nyimbo ya nema mambo yileta lusangajiko ku bantu,wafwainwa kutana kuuba amba",
+      "muntu inge wajinga na bulanda bukatampe kupichilatu mu nyimbo imo isa kulengela"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "MATHEMATICS-1-MODULE-FINAL.pdf",
+  "md5": "4276f7fdc41c7e5c2fd1dd57b187256b",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "approximations-and-estimations",
+  "lesson": {
+    "lesson": 6,
+    "title": "APPROXIMATIONS AND ESTIMATIONS",
+    "topics": ["Introduction", "real-life contexts."],
+    "activities": [
+      "world applications, empowering learners to make sound, data-driven decisions in their everyday lives.",
+      "Key Terms:Approximation, Significant Figures, Scientific Notation, Estimation, Relative Error, Absolute Error, Percentage Errors,",
+      "Tolerance.",
+      "General Competence(s): Problem solving, analytical thinking, collaboration, communication, digital literacy and financial literacy.",
+      "The Heroes Stadium is",
+      "almost full, with just a",
+      "few seats remaining, how",
+      "would you tell the"
+    ],
+    "resources": [],
+    "assessment": [
+      "Accuracy in calculations:Determiningof errors.",
+      "Content Tip:",
+      "The objective of the activity is to increase learners’ awareness of how errors arise during manufacturing process as they",
+      "compare the measurements of the model to those on their design"
+    ],
+    "notes": ""
+  }
+}

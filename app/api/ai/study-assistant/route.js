@@ -21,6 +21,7 @@ ${PLAIN_TEXT_OUTPUT_RULES}`
 export const POST = withAILimits(async function POST(request) {
   const access = await authorizeAiRoute(request, {
     roles: ['student', 'STUDENT', 'teacher', 'TEACHER'],
+    featureId: 'ai-study-assistant',
     rateLimitPrefix: 'ai_study_assistant_',
   })
   if (!access.ok) return access.response

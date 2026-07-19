@@ -1,0 +1,23 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 2,
+  "sourceFile": "Mathematics-2-Teaching-Module-Form-2-Term-2.pdf",
+  "md5": "89aeadaa38c2debec589b6374a4458d5",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "variation",
+  "lesson": {
+    "lesson": 3,
+    "title": "VARIATION",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

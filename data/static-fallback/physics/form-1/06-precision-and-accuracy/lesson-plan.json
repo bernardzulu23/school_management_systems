@@ -1,0 +1,46 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Physics-Teaching-Module-Form-1Highridge-Feb-2025-1.pdf",
+  "md5": "79763015647465894bd7facf6ccb8fd6",
+  "detectedShift": 0,
+  "pageCount": 116,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "precision-and-accuracy",
+  "lesson": {
+    "lesson": 6,
+    "title": "Precision and Accuracy",
+    "topics": [],
+    "activities": [
+      "General Competence(s):",
+      "Analytical Thinking,",
+      "Communication,",
+      "Critical Thinking",
+      "Problem Solving",
+      "Real world application",
+      "Creativity and innovation",
+      "Introduction: Accuracy and Precision are critical factors in the evaluation of measuring equipment. However, both terms are often used"
+    ],
+    "resources": [
+      "problems",
+      "Understanding area is essential for data analysis, particularly in fields like geography, economics, and environmental science",
+      "Skills to be developed",
+      "Analytical Thinking,",
+      "Communication,",
+      "Critical Thinking"
+    ],
+    "assessment": [
+      "Check if learners are correctly using the meter rule and measuring tape to measure accurately and precisely",
+      "Ask learners questions on how they could use a broken mete ruler or measuring tape to measure lengths.",
+      "Activity 3.1.2: vernier calipers/ micrometer screw gauge",
+      "In this activity, learners will explore how a vernier calipers can be used to measure internal and external diameter including depths of",
+      "hollow objects and how a micrometer screw gauge can measure the thickness of thin objects with accuracy and precision.",
+      "Suggested Teaching and learning Materials"
+    ],
+    "notes": ""
+  }
+}

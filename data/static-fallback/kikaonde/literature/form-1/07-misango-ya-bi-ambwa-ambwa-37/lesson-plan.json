@@ -1,0 +1,29 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "911b95546195795a833f108e7f0a7f1c",
+  "detectedShift": 0,
+  "pageCount": 54,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "misango-ya-bi-ambwa-ambwa-37",
+  "lesson": {
+    "week": 7,
+    "lesson": 7,
+    "title": "Misango ya Biñambwañambwa ……………………………………...37",
+    "topics": [
+      "NTENDEKELO",
+      "Uno buuku wa Fomu1 mu Kikaonde wanengezhiwa mujishinda ja kukumya,",
+      "mukukebesha kukwasha bafunjishi kufikizha mfunjishilo bulongo mu ino mfunjilo",
+      "(Curriculum) ya katataka. Auno buuku wa lutangijilo wanengezhiwa kwesekana na"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

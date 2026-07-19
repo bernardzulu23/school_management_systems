@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "ngitabulwilo-ke-byambo-byo-bingijishiwa-pa-kuubazhimuka-nabi",
+  "lesson": {
+    "week": 8,
+    "lesson": 28,
+    "title": "Ngitabulwilo-Ke byambo byo bingijishiwa pa kuubazhimuka. Nabiji nafwa! mama yoyoyo!",
+    "topics": [
+      "Mwingilo wakuuba:",
+      "Bafunda basobolole byambo kwesakana na mwayila mitundu yabyo",
+      "Bipimo byañingijilo byaketekelwa kubiwa:",
+      "Bafunda basobolole byambo kwesakana na mwayila mitundu yabyo",
+      "Mwingilo wakuuba:"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

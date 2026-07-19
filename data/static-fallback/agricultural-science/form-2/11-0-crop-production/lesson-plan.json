@@ -1,0 +1,46 @@
+{
+  "subject": "Agricultural Science",
+  "subjectSlug": "agricultural-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "df6a8d3579bb6bd33da1fcd4a3dc5cec",
+  "detectedShift": 0,
+  "pageCount": 132,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "0-crop-production",
+  "lesson": {
+    "lesson": 11,
+    "title": "0 CROP PRODUCTION",
+    "topics": ["Introduction", "of increasing agricultural productivity."],
+    "activities": [
+      "Classifying different types of crops based on their life cycle (annual, biennial and perennial)",
+      "Learning Materials: Cabbage, onion, tomatoes. maize, groundnuts, cassava, lemons, oranges, pawpaw, mango, charts.",
+      "Procedure",
+      "Put learners into small working groups of 4 -5.",
+      "Ask learners to research and prepare a presentation on the meaning of annual, biennial and perennial crops with examples.",
+      "Ask learners to report their findings.",
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 &",
+      "Discussion"
+    ],
+    "resources": [
+      "Classifying different types of crops based on their life cycle (annual, biennial and perennial)",
+      "Learning materials: Notebook",
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 &",
+      "Activity 2. Study tour",
+      "Procedure",
+      "Put learners into small working groups of 4 - 5."
+    ],
+    "assessment": [
+      "A school agriculture club has started a garden demonstration to help learners understand plant growth and crop production. The club",
+      "intends to grow different crops, observe plant structures, and practice plant propagation techniques to improve crop production in the",
+      "community. As a learner with knowledge of crop classification, plant morphology, and plant propagation, you have been asked to",
+      "guide other club members on how plants grow and reproduce.",
+      "Classify crops according to their life cycles and give examples of each type;",
+      "Describe the external and internal morphology of plants, highlighting the main parts and their roles in plant growth;"
+    ],
+    "notes": ""
+  }
+}

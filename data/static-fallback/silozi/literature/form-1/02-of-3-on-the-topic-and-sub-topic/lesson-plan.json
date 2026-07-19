@@ -1,0 +1,41 @@
+{
+  "subject": "Silozi",
+  "subjectSlug": "silozi",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "LIT-IN-SILOZI-TEACHING-MODULE-TERM-2.pdf",
+  "md5": "cacc883966112618237696b652bae359",
+  "detectedShift": 0,
+  "pageCount": 102,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "of-3-on-the-topic-and-sub-topic",
+  "lesson": {
+    "week": 3,
+    "lesson": 2,
+    "title": "of 3 on the topic and sub-topic.",
+    "topics": [
+      "REFERENCES:",
+      "Literature in Zambian Language Secondary Education Ordinary Level Syllabus-Form 1-4",
+      "Literature mwa Silozi, Form 1-4 Teaching Module page…."
+    ],
+    "activities": [],
+    "resources": [
+      "Collection of folktales, proverbs, poems, songs etc.",
+      "Pictures of different people.",
+      "LESSON PROGRESSION:",
+      "TEACHERS ROLE",
+      "LEARNERS ROLE"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION",
+      "Revision",
+      "previous material",
+      "literature",
+      "[5 minutes]"
+    ],
+    "notes": ""
+  }
+}

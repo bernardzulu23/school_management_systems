@@ -1,0 +1,30 @@
+{
+  "subject": "Fashion and Fabrics",
+  "subjectSlug": "fashion-and-fabrics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FF-FORM-1-TERM-1-FINAL-MODULE-2025.pdf",
+  "md5": "36fd2c8aa7e348b706d1a8224dc6600f",
+  "detectedShift": 0,
+  "pageCount": 108,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "comfort-provides-ease-of-movement-and-suits-different-activi",
+  "lesson": {
+    "week": 5,
+    "lesson": 38,
+    "title": "Comfort: Provides ease of movement and suits different activities.",
+    "topics": [
+      "Creativity in how learners present their ideas.",
+      "Learners can express their ideas in various creative ways, such as:"
+    ],
+    "activities": [
+      "Creativity in how learners present their ideas.",
+      "Learners can express their ideas in various creative ways, such as:"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

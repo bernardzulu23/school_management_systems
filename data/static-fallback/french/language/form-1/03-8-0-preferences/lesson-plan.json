@@ -1,0 +1,45 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "fb9fd6d3f25fe71770d51796046dd022",
+  "detectedShift": 0,
+  "pageCount": 44,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "8-0-preferences",
+  "lesson": {
+    "lesson": 3,
+    "title": "8.0: PREFERENCES",
+    "topics": [
+      "Overview",
+      "Expressing one’s preferences is essential for effective daily communication. This skill",
+      "enables learners to share their interests and engage with others, which is crucial for building",
+      "relationships. This topic will cover essential vocabulary, key phrases, and sentence structures",
+      "necessary for discussing preferences. Additionally, it will introduce cultural aspects of"
+    ],
+    "activities": [
+      "norms surrounding likes and dislikes. By the end, learners will be able to articulate their likes",
+      "and dislikes in various contexts, thereby increasing their confidence in speaking French. This",
+      "topic has one sub topic.",
+      "General Competences",
+      "Communication",
+      "Develop basic conversational skills to express likes, dislikes, and preferences clearly and",
+      "confidently in French.",
+      "Emotional Intelligence"
+    ],
+    "resources": [],
+    "assessment": [
+      "specific competence.",
+      "given at the end of each topic",
+      "questions…)",
+      "Key Points Recap",
+      "Key Vocabulary for Likes and Dislikes.",
+      "Negation: Expressing dislikes."
+    ],
+    "notes": ""
+  }
+}

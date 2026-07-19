@@ -1,0 +1,42 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "the-topic-is-as-it-appears-in-the-syllabus",
+  "lesson": {
+    "lesson": 6,
+    "title": "The topic is as it appears in the syllabus",
+    "topics": [
+      "Introduction",
+      "Overview: What the topic will cover and it’s the importance in real life situations."
+    ],
+    "activities": [
+      "is either Natural: or Artificial",
+      "Artificial: (i) Virtual",
+      "Technological: (i) Physical (ii) Virtual",
+      "c. Suggested Teaching and Learning Material: The materials are prepared to suit",
+      "learning in the Competence-Based-Curriculum",
+      "Exploration",
+      "Feedback and Consolidation Session",
+      "f. Suggested Learning Points: Brief note on lesson content"
+    ],
+    "resources": [],
+    "assessment": [
+      "or after the learning activity because a “competence” involves applied knowledge, skills",
+      "and attitudes.",
+      "Summary: Key Points Recap: A bullet-point list of the major ideas covered in the topic.",
+      "The Role of the teacher in a Competence Based Curriculum",
+      "The role of the teacher has changed from an information giver to a facilitator.",
+      "§ Teachers should only provide a democratic environment, materials and guidance"
+    ],
+    "notes": ""
+  }
+}

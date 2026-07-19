@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "nembai-tubishina-tuno-twa-mpezho-twatu-majishimikila",
+  "lesson": {
+    "week": 1,
+    "lesson": 6,
+    "title": "Nembai tubishina tuno twa mpezho twatu majishimikila.",
+    "topics": [
+      "(i). ‘Mwanyike apane kajo ku mwenyi uji na nzala’.",
+      "(ii). ‘Nsongwakazhi bamupa mali ku bansemi kabiji wabwezhe ne ashalapo’.",
+      "(iii). ‘Mwanyike muyanji utongan’a kimye kyonse kusukuulu ne kutapo maana ku",
+      "byakufunda’.",
+      "Mukumbu yaketekelwa."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

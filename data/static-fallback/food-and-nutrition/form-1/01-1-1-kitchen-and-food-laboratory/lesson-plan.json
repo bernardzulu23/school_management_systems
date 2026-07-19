@@ -1,0 +1,34 @@
+{
+  "subject": "Food and Nutrition",
+  "subjectSlug": "food-and-nutrition",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FOOD-AND-NUTRITION-FORM-1-TERM-1-MODULE-Final-edited-Finaledition.pdf",
+  "md5": "74467cd6c3ba4c6da36173963589ca54",
+  "detectedShift": 0,
+  "pageCount": 71,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-1-kitchen-and-food-laboratory",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.1 KITCHEN AND FOOD LABORATORY",
+    "topics": [],
+    "activities": [
+      "aims to make the learning experience both meaningful and enjoyable.",
+      "Ultimately, our goal is to inspire a generation of informed, health-conscious individuals who",
+      "understand the profound impact of their food choices on their well-being and the environment. We"
+    ],
+    "resources": [
+      "them to confidently guide their learners through the complexities of food and nutrition. With a",
+      "focus on hands-on activities, real-world applications, and culturally relevant content, this module",
+      "aims to make the learning experience both meaningful and enjoyable.",
+      "Ultimately, our goal is to inspire a generation of informed, health-conscious individuals who",
+      "understand the profound impact of their food choices on their well-being and the environment. We",
+      "fostering healthy habits, and nurturing a lifelong appreciation for the role of food in our lives."
+    ],
+    "assessment": ["Activity", "Terminology", "Content tip"],
+    "notes": ""
+  }
+}

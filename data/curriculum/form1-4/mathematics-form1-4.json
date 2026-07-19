@@ -1,22 +1,421 @@
 {
   "subject": "Mathematics",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["Combined Operations on Real Numbers", "=Types of Numbers"],
+      "learningOutcomes": [
+        "Aply combined Operations on real numbers in real life situations",
+        "Use the different types of numbers in real life."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["life situations correctly", "used in real life correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": ["The Four Operations on Integers", "=Operations on Sets"],
+      "learningOutcomes": [
+        "Use Integers in real life",
+        "Apply the concept of set operations in real life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["The Four Operations on Integers"],
+      "learningOutcomes": [
+        "Use approximation to make informed decisions in real life Exploring approximations in real life situations. Investigating the signiÜcance of Ügures in PHDVXUHV Expressing measures (whole and decimal) to a required number of signiÜcant Ügures Exploring ways of expressing large and small PHDVXUHV Exploring scientiÜc notations using scientiÜc calculators and activities (notation Maze, scientiÜc notation Bingo, scientiÜc notation escape, room activity, card gamesÈ) Approximating measures in scientiÜc notation to a given degree of accuracy Approximations used to make informed decision in real life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": ["Operations on Sets"],
+      "learningOutcomes": ["Apply set operations in real life context"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["life context correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Algebraic Expressions"],
+      "learningOutcomes": ["Apply algebraic expressions in real life"],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["Operations on"],
+      "learningOutcomes": [
+        "Apply Matrices to real life situations Formulating matrices from real life situations (making a pay roll, shop records, distribution of resources, planningÈ) Identifying the order of PDWULFHV Transposing matrices ([SORULQJ various types of Matrices and their properties singular, equal, identity matrices È) Matrices applied to real life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["situations correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["Angles associated with straight lines", "Angle of Elevation and"],
+      "learningOutcomes": [
+        "Use angles associated with straight lines in everyday life",
+        "Use Angle of Elevation and Depression everyday OLIH Exploring angles of depression and elevation SUDFWLFDOO\\ using real life VLWXDWLRQV Distinguishing angles of elevation and depression in real life situations Finding the angle of depression and elevation Angle of Elevation and Depression used in everyday"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["life correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["Pythagoras Theorem"],
+      "learningOutcomes": [
+        "Use the Pythagoras theorem to solve problems in diඒerent contexts ([SORULQJ Pythagoras WKHRUHP through practical DFWLYLWLHV a ladder against a wall, creating Geo board with squares and trianglesÈ) Pythagoras theorem used to solve problems in diඒerent FRQWH[WV FRUUHFWO\\"
+      ],
+      "suggestedActivities": ["VLQJ"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Topic 1.9",
+      "topics": ["Statistical Presentations and Measures RI central WHQGHQF\\"],
+      "learningOutcomes": [
+        "Apply statistics in making informed decisions in real life Collecting data from the environment using various ways (height, shoe sizes, Favorite colourÈ) Distinguishing between qualitative and quantitative GDWD Distinguishing between discrete and continuous data Representing data in diඒerent ways (tally chart, Histogram, frequency polygons, frequency tables) recognizing possible limitations Interpreting data represented in diඒerent forms histogram, frequency density, frequency polygons, frequency tables) Applying measures of central tendency (mean, mode and median) of grouped data (in test scores, average incomeÈ) Statistics applied in making informed decisions in real life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.1",
+      "topics": ["Cartesian Plane", "Straight lines on the Cartesian Plane"],
+      "learningOutcomes": [
+        "Use the concept Cartesian Plane to solve problems in real life situations",
+        "Use straight lines to solve problems in real life"
+      ],
+      "suggestedActivities": ["=a, or y=b or y=x, y = -", ", y=mx + c)"],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.2",
+      "topics": [
+        "1Apply relations to model and solve problems Exploring the types of UHODWLRQV in real life situations. One to one, One to many, many to one, many to many) Relations to model and solve",
+        "1Apply functions to model and solve problems"
+      ],
       "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": ["problems applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Basic Processes of Algebra"],
+      "learningOutcomes": [
+        "Use algebraic expressions in problem VROYLQJ Exploring real life situations involving expanding monomial by binomial and binomial by binomial) Model real life situation using algebraic H[SUHVVLRQV and simplify WKHP PDQDJLQJ budgets, planning, production, tracking expenses, scheduling activitiesÈ)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Regular and Irregular Polygons", "Remainder and Factor Theorem"],
+      "learningOutcomes": [
+        "Create different objects using polygons",
+        "Use the remainder and factor theorems in diඒerent contexts"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["diඒerent objects appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Simultaneous Equations"],
+      "learningOutcomes": ["Use simultaneous equations in real life situations."],
+      "suggestedActivities": [],
+      "assessmentMethods": ["problem solving correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Distance time Graphs", "Velocity time Graphs"],
+      "learningOutcomes": [
+        "Apply distance time graphs in a variety of perspectives",
+        "Apply velocity time graphs in a variety of perspectives"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Topic 2.7",
+      "topics": ["Financial Interest", "Investment"],
+      "learningOutcomes": [
+        "Apply the Financial Interest in everyday life",
+        "Apply the concept of Investment in everyday life"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["everyday life correctly", "appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Indices"],
+      "learningOutcomes": ["Use index notation in problem solving"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["problem solving correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Two Dimensional Shapes circle)", "Three Dimensional Shapes"],
+      "learningOutcomes": [
+        "Use the concept of Two-dimensional shapes in real life situations",
+        "Use the concept of Three-dimensional shapes in real life VLWXDWLRQV Exploring three-dimensional shapes and their nets (face, edge and vertex) in real life(,FH cream Cones, waste binsÈ) Finding the total surface area of a cylinder, triangular prism, pyramid"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["1Apply the concept of", "Symmetry in 3 Dimensional Shapes"],
+      "learningOutcomes": ["Apply the concept of"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["symmetry applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Geometrical Constructions"],
+      "learningOutcomes": ["Apply geometric construction in real life"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Loci in Two Dimensions"],
+      "learningOutcomes": ["Use locus of points in a variety of real-life situations"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["situations correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 3: Topic 3.6",
+      "topics": ["Similar Figures", "Congruent Figures"],
+      "learningOutcomes": [
+        "Apply concept of similar Ügures in real life context",
+        "Apply concept of Congruent Ügures in real life context"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately", "context appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 3: Topic 3.7",
+      "topics": ["Cumulative Frequency and Measures of Dispersion"],
+      "learningOutcomes": ["Use statistics in real life to make informed decisions"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["decisions appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 3: Topic 3.8",
+      "topics": ["Compass and Three Figure Bearings"],
+      "learningOutcomes": ["Use bearings in real life"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 3: Topic 3.10",
+      "topics": ["Operations on 2x2 Matrices"],
+      "learningOutcomes": [
+        "Apply the concept Matrices to solve a variety of real-life problems. Exploring the determinant of a 2X2 matrix including matrices whose determinant is zero (singular matrix) Using the determinant of a 2x2 to determine a missing value in the PDWUL[ Exploring the inverse of a matrix Finding the inverse of a 2x2 matrix Using matrices in solving simultaneous equations in two variables arising from real life VLWXDWLRQV Concept of Matrices DSSOLHG to solve a variety of real-life SUREOHPV"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Quadratic Equations", "1Apply quadratic functions to model and solve problems"],
+      "learningOutcomes": [
+        "Apply quadratic Equations to model and solve problems",
+        "explore quadratic functions"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Inequations", "Linear Programming"],
+      "learningOutcomes": [
+        "Utilize Inequations in real life situations",
+        "Utilize linear programming in real life situations."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["life situations correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["1Apply vectors in problem solving"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": ["solving appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["Introduction to Trigonometry"],
+      "learningOutcomes": ["Use Trigonometry in problem solving"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["solving used correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["=Apply Isometric Transformations to problem solving"],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": ["problem solving correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["Introduction to Probability", "Integration"],
+      "learningOutcomes": [
+        "Use the concept of Probability to make informed decisions in various aspects of life",
+        "Apply concepts of integration in real life context"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 1: Topic 1.10",
+      "topics": ["Navigational Bearings"],
+      "learningOutcomes": [
+        "Apply concepts of directions and bearings in real life situations Exploring concepts of positions, directions and bearings Identifying the four cardinal points on the compass (North, East, West and South) Describing the direction of a place from a given point using the compass points NE, NNE) Identifying, reading and writing bearings in diඒerent formats: Compass/Quadrant bearings ("
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["life situations correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 1: Topic 1.11",
+      "topics": ["Similar and Congruent Figures"],
+      "learningOutcomes": [
+        "Use the concepts of similarity and congruency in real contexts Exploring similar things in the surrounding. Exploring the concepts of similarity and congruency Identifying similar and congruent shapes in the environment Making similar and congruent shapes and objects Designing similar and congruent shapes using ICT WRROV Creating appropriate scale drawings (e.g classroom, football pitch) Calculating the scale on a PDS Calculating length and area using a given scale Calculating the length, area The concepts of similarity and congruency used in real"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["contexts accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 1: Topic 1.12",
+      "topics": ["Pythagoras Theorem"],
+      "learningOutcomes": [
+        "Use Pythagoras Theorem in real life situations Exploring the use of the right angles in the environment Exploring the Pythagoras theorem Identifying sides in the right-angled triangle (two adjacent sides and hypotenuse) Deriving the Pythagoras theorem"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["real life situations accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 1: Topic 1.13",
+      "topics": ["The Circle"],
+      "learningOutcomes": [
+        "Apply concepts of the circle in real life VLWXDWLRQV Exploring the circular things in the environment Identifying parts of the circle. Demonstrating how to obtain the value of Pi through practical activities Finding the circumference, The concepts of a circle applied in real life situations FRUUHFWO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 2: Topic 2.8",
+      "topics": ["Symmetry of plane and solid shapes"],
+      "learningOutcomes": ["Use the concepts of symmetry in real life situations"],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 2: Topic 2.9",
+      "topics": ["Introduction to =Probability"],
+      "learningOutcomes": ["Apply concepts of probability in real life contexts"],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 3: Topic 3.9",
+      "topics": ["Statistical Presentations and Measures of Dispersion"],
+      "learningOutcomes": [
+        "Use statistical presentations and measures of dispersion in real life situations"
+      ],
       "suggestedActivities": [],
       "assessmentMethods": [],
       "resources": []
     }
   ],
   "metadata": {
-    "source": "MATHEMATICS-II-SYLLABUS.pdf",
-    "extractedAt": "2026-07-11T06:20:41.150Z",
-    "fileSize": 844866
+    "source": "MATHEMATICS-O-LEVEL-FORMS-1-4.pdf",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/MATHEMATICS-O-LEVEL-FORMS-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.979) + deterministic CDC table parse. No fabricated content.",
+    "curated": true,
+    "recordCount": 52
   }
 }

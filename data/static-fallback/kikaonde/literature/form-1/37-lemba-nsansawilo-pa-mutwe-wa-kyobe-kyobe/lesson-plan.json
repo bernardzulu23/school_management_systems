@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 2,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "md5": "2b0f07c9287cad82904a403707ee78d4",
+  "detectedShift": 0,
+  "pageCount": 91,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "lemba-nsansawilo-pa-mutwe-wa-kyobe-kyobe",
+  "lesson": {
+    "week": 2,
+    "lesson": 37,
+    "title": "Lemba nsansawilo pa mutwe wa kyobe-kyobe.",
+    "topics": [
+      "Ngipishilo",
+      "Luno lufunjisho lwaimena pa kuleta buyuke bwa misango ya byanembwa ne kwi",
+      "ilumbulula.",
+      "Mutwe-kache 2 : Mabanyo a misango ya bya nembewa.",
+      "Kamina: luno lufunjisho lwayimena pa kutala pa kusala, kulondolola ne kupana"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

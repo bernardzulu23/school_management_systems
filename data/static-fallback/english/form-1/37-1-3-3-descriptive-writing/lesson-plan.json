@@ -1,0 +1,46 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-3-3-descriptive-writing",
+  "lesson": {
+    "lesson": 37,
+    "title": "1.3.3 DESCRIPTIVE WRITING",
+    "topics": ["SUB-TOPIC: 1.3.3.1 Describing a person, an animal or an object"],
+    "activities": [
+      "Reading the model",
+      "description of an object.",
+      "Listen and take notes",
+      "descriptions of an",
+      "object read by all",
+      "learners",
+      "accordingly.",
+      "Group learners and ask"
+    ],
+    "resources": [
+      " Model descriptive text",
+      " Visual objects such as a money, cell phone, ATM card, mobile money booth",
+      " Chart showing descriptive words",
+      "EXPECTED STANDARD: Description of an object written correctly.",
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE"
+    ],
+    "assessment": [
+      "CRITERIA",
+      "INTRODUCTION",
+      "Ask learners how",
+      "describe a K100",
+      "note to a friend",
+      "from a foreign"
+    ],
+    "notes": ""
+  }
+}

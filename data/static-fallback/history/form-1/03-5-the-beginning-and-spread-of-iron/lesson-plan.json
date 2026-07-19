@@ -1,0 +1,52 @@
+{
+  "subject": "History",
+  "subjectSlug": "history",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "HISTORY-TERM-2-MODULE.pdf",
+  "md5": "aecd14100df28c99f62dbd56d3f8efa2",
+  "detectedShift": 0,
+  "pageCount": 32,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "5-the-beginning-and-spread-of-iron",
+  "lesson": {
+    "lesson": 3,
+    "title": "5: THE BEGINNING AND SPREAD OF IRON",
+    "topics": [
+      "WORKING AND FARMING",
+      "Introduction",
+      "The beginning of iron working and farming in the Middle East and its spread to Africa transformed",
+      "the livelihoods of people in Zambia. This topic will discuss the development of iron technology",
+      "and farming."
+    ],
+    "activities": [
+      " Locating on the map early areas of farming and Iron working",
+      " Identifying settlement areas of Iron Age farmers in Zambia",
+      " Relating Ing’ombe Ilede to the global trade environment",
+      " Analysing the importance of iron technology",
+      "Locating on the map early areas of farming and iron working",
+      "Suggested teaching and learning materials",
+      " Map showing early areas of farming and iron working in the Middle East and Africa.",
+      "early areas of farming and iron working in the Middle East and Africa"
+    ],
+    "resources": [
+      "global trade",
+      " Zambia exports goods such as minerals, maize and electricity to other countries",
+      " It also imports goods like oil, machinery, foodstuffs, and other goods",
+      "In this lesson learners will relate Ing’ombe Ilede to the global trade environment.",
+      "LEARNING ACTIVITY",
+      "Analysing the importance of iron technology"
+    ],
+    "assessment": [
+      "What challenges would early and modern farmers have faced if Iron-Technology had",
+      "not been discovered?",
+      "You have observed a reduction in food production in your community. Using the",
+      "knowledge of iron technology and farming, how would you promote crop production",
+      "in your local community?",
+      "Many young people in Zambia today have remained jobless even after acquiring"
+    ],
+    "notes": ""
+  }
+}

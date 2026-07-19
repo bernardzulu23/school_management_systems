@@ -1,0 +1,42 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "facilitate-group-discussions-to-compare-different-artistic-s",
+  "lesson": {
+    "week": 5,
+    "lesson": 25,
+    "title": "Facilitate group discussions to compare different artistic styles and perspectives.",
+    "topics": ["Expected standard: Pioneers of Zambian Visual Arts identified appropriately"],
+    "activities": [
+      "Learning Environment set up: in-door, out-door 1(natural, artificial and technological)",
+      "Suggested Teaching and Learning materials",
+      "Ready-made art works"
+    ],
+    "resources": [
+      "Drawing paper, sketchbooks, coloured pencils, paints, and brushes",
+      "Calligraphy pens or markers",
+      "Activity 1: Identifying Art Elements (Line, shape, space, value, texture, tone and colour).",
+      "Discussion and demonstration",
+      "Task1: Learners to identify, discuss and analyse Art Elements.",
+      "Demonstration and experimenting"
+    ],
+    "assessment": [
+      "artists (sculptors, painters, graphic designers, potters…) and their works.",
+      "Zambian Visual Artists.",
+      "This subtopic looked at Some of the pioneers of Zambian Visual Artists which included",
+      "Henry Tayali, Gabriel Ellison, Cynthia Zukas, Akwila Simpasa, Godfrey Setti, Shadreck",
+      "Simukanga, Martin Abasi Phiri as well as their works.",
+      "Page 14 of"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.pdf",
+  "md5": "c365a013711120f2eb6252f41a63bfdc",
+  "detectedShift": 0,
+  "pageCount": 49,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-8-swimming",
+  "lesson": {
+    "lesson": 8,
+    "title": "1.8 SWIMMING",
+    "topics": [
+      "INTRODUCTION",
+      "Swimming refers to the act of moving through water using coordinated movements of the arms",
+      "and legs typically employing specific strokes. It can also describe gliding or floating effortlessly",
+      "on the water’s surface. Throughout history, swimming has been an important survival skill and a"
+    ],
+    "activities": [
+      "In modern times, swimming is widely recognized for its many benefits. It provides a full-body",
+      "workout, improving cardiovascular endurance, muscle strength, flexibility and coordination.",
+      "Whether enjoyed for fun with friends and family or pursued as a competitive sport, swimming",
+      "promotes both physical and mental well-being.",
+      "This topic focuses on introducing learners to the fundamentals of swimming with special attention",
+      "to water safety practices and acceptable pool hygiene.",
+      "General Competencies to be attained by learners:",
+      "Creativity and Innovation: Applying knowledge and skills in new and creative ways."
+    ],
+    "resources": [],
+    "assessment": [
+      "Multiple-choice quizzes",
+      "Accuracy (correct selection of answers).",
+      "time management (complete tasks within the given time)",
+      "understanding of concepts (reflecting knowledge of concepts)",
+      "Short-answer questions",
+      "Relevance (answers directly addressing the question"
+    ],
+    "notes": ""
+  }
+}

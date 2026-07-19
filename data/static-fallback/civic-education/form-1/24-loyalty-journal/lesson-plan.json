@@ -1,0 +1,43 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "loyalty-journal",
+  "lesson": {
+    "week": 4,
+    "lesson": 24,
+    "title": "Loyalty Journal",
+    "topics": [
+      "Learners keep a journal for a week, writing daily examples of how they practised",
+      "loyalty in their lives."
+    ],
+    "activities": [
+      "Content Tips",
+      "Citizenship",
+      "Learners can show the value of loyalty in both family and school through their action and attitudes.",
+      "Here are some ways they can show loyalty:",
+      "In the Family",
+      "Respecting Parents and Guardians – listening to their advice and following household rules.",
+      "Supporting siblings – helping younger brothers or sisters with schoolwork and standing up for",
+      "Keeping family secrets – protecting family privacy and not sharing sensitive information"
+    ],
+    "resources": [
+      "Standing against bullying – defending classmates from unfair treatment and promoting",
+      "kindness.",
+      "Learning Activities",
+      "Describing the qualifications for Zambian Citizenship",
+      "Teaching and Learning Materials: Birth records, citizenship documents, Zambian",
+      "Constitution,"
+    ],
+    "assessment": [],
+    "notes": ""
+  }
+}

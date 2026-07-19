@@ -1,0 +1,24 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "911b95546195795a833f108e7f0a7f1c",
+  "detectedShift": 0,
+  "pageCount": 54,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "telaulapo-mashinda-atanu-motufunjila-bi-ambwa-ambwa",
+  "lesson": {
+    "week": 1,
+    "lesson": 26,
+    "title": "Telaulapo mashinda atanu motufunjila biñambwañambwa",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

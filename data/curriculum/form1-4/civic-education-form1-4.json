@@ -1,22 +1,647 @@
 {
   "subject": "Civic Education",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["Civic Education"],
+      "learningOutcomes": [
+        "Demonstrate understanding of Civic (GXFDWLRQ Discussing the concept of Civic Education (in line with social, political, economic, cultural and environmental landscape)",
+        "Engage in civic activities"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Understanding of Civic Education demonstrated accordingly",
+        "Civic activities engaged in accordingly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": ["Zambia¶s Political Development i", "Zambia¶s Symbols of National Identity"],
+      "learningOutcomes": [
+        "Analyse Zambia¶s political development from 1890 to date Creating a school pro¿le (Administrative history of the school«) Outlining the path to independence from 1890 to 1964 Describing Zambia¶s political development from 1964 to date Analysing Zambia¶s political development from 1890 to date",
+        "Show importance of symbols of National Identity Discussing the importance of school uniform (boys and girls «) Identifying symbols of National Identity ( National Flag, Coat of Arms, National Anthem, Independence Day, National Motto Showing respect to symbols of national identity (Singing the national anthem, saluting the national Àag «)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Zambia¶s political development from 1890 to date analysed correctly",
+        "Importance of symbols of National Identity shown accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["The Concept of Governance", "Characteristics of Good and Bad Governance"],
+      "learningOutcomes": [
+        "Apply knowledgef of",
+        "Distinguish characteristics of good governance from bad governance Distinguishing good governance from bad governance"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Knowledge on governance in real life situation applied correctly",
+        "Characteristics of good governance and bad governance distinguished correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": [
+        "Citizenship",
+        "Quali¿cations for Zambian Citizenship",
+        "Rights, Duties and Responsibilities",
+        "Factors that hinder good citizenship",
+        "Special Groups"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of citizenship Understanding the value of a good pupil at school ( wearing of school uniform, follow school rules«) Demonstrating knowledge on citizen and citizenship Explaining types of citizenship (Natural and Naturalized) Practising principles of patriotism and national identity (Defending your country, obeying the law, taking care of public property, paying tax«)",
+        "Practise principles of patriotism and national identity Show the value of loyalty in the family and school Describing the quali¿cations for Zambian Citizenship ( birth, descent Part IV of the Zambian Constitution (2016)",
+        "Demonstrate understanding of one¶s rights, duties and Identify duties, rights and responsibilities of a child at home or at school Understanding of rights, duties and responsibilities of",
+        "Analyse factors that hinder good citizenship",
+        "Promote social justice Identifying groups of people at family or school level (parents, children, dependants; teachers, administrators, learners «) Classifying special groups and their needs (children, orphans, women, aged, disabled, refugees«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Understanding of citizenship demonstrated accordingly",
+        "Principles of patriotism and national identity practised accordingly",
+        "a citizen demonstrated accordingly",
+        "Factors that hinder good citizenship analysed accordingly",
+        "Social justice promoted accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Political Party", "Political Party Systems"],
+      "learningOutcomes": [
+        "Analyse structure and organisation of a political party Describing a political party Di൵erentiating between ruling party and an opposition party Outlining the structure of a political party (National Executive Committee, Provincial Executive Committee «) Describing the functions of a political party ( Educate citizens, provide alternative leadership, providing checks and balances «) Dramatising a political campaign activity (meeting)",
+        "Evaluate political party V\\VWHPV Creating a leaner platform for campaigning (running for an oৼice; class monitor, school prefect«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Structure and organisation of a political party analysed accordingly",
+        "Political party systems evaluated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["Local Government in Zambia", "House of Chiefs", "Central Government in"],
+      "learningOutcomes": [
+        "Demonstrate understanding of local government Examining the history of local government in Zambia (Native authority, Urban authorities, Local government) Examining the structure of the local councils (city council, municipal council and town council)",
+        "Examine functions of Local Government",
+        "Care for the environment Exploring the role of local government in caring for the environment Identifying institutions and organisations that care for the environment",
+        "Demostrate",
+        "Demonstrate understanding of relationship between Central Government and Local Government Illustrating how stronger relationship can realised in school Examining the Organs of Central Government in Zambia"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Understanding of local government demonstrated accordingly",
+        "Functions of Local Government examined appropriately",
+        "Environment cared for accordingly",
+        "Understanding of the role of traditional rulers in the governance of the demostrated correctly",
+        "demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["Central Government in", "Spending"],
+      "learningOutcomes": [
+        "Show importance of money Discussing the concept and value of money Describing the characteristics of money ( Portability, durability, uniformity «) Analysing the functions of money ( Medium of exchange, measure of value «) Explaining the law of demand and supply Analysing money laundering activities ( Fraud, deceit, false pretense «) Evaluating di൵erent business opportunities",
+        "Practise di൵erent ways of saving Justifying why saving is signi¿cance (security, investment«) Describing the ways of saving ( Bank accounts, Mobile money, Village banking, pig banking «) Practising saving using any one of ways of saving",
+        "Exhibit personal ¿nancial management Exploring the signi¿cance of practising personal ¿nancial PDQDJHPHQW Demonstrating how to manage their ¿nances ( setting goals and priorities «)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Importance of money shown accordingly",
+        "Di൵erent ways of saving practised accordingly",
+        "Personal financial management exhibited accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["The Concept of Risk Management"],
+      "learningOutcomes": [
+        "Demonstrate understanding of risk management Understanding the concept of insurance Discussing ¿nancial risks Identifying insurance companies (ZISC, Madison"
+      ],
       "suggestedActivities": [],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Topic 1.9",
+      "topics": ["(QWUHSUHQHXUVKLS"],
+      "learningOutcomes": [
+        "Create a business plan Identifying business opportunities available Describing entrepreneurship Identifying characteristics of an entrepreneur (Hard working, creativity, innovative «) Outlining the bene¿ts of entrepreneurship to the: owner and to the community (Owner:"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Business plan created correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 1: Topic 1.10",
+      "topics": ["Types of Business Units"],
+      "learningOutcomes": ["Analyse process of Constitution making and adoption in Zambia"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Change to business environment adapted accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.1",
+      "topics": ["The Zambian Constitution", "Importance of Constitution"],
+      "learningOutcomes": [
+        "Analyse process of Constitution making and adoption in Zambia Describing the history of Constitution making in Zambia ( Chona constitution, Mvunga constitution«) Analysing Constitution adoption process ( Parliament, Referendum, Constituent Assembly «) Process of Constitution making and adoption in Zambia analysed clearly",
+        "Examine structure of Zambian Constitution Examining the structure of the Zambian Constitution ( Twenty (20) Parts and 275 Articles)",
+        "Explain importance of Constitution Explaining importance of Constitution ( promotes"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Structure of Zambian Constitution examined correctly",
+        "Importance of Constitution explained correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["(OHFWLRQV", "Electoral Commission of Zambia (ECZ)"],
+      "learningOutcomes": [
+        "Justify signi¿cance of electing leaders Assessing the signi¿cance of selecting leaders in any organisation Explaining the meaning of Elections Establishing importance of elections Describing characteristics of a credible election Classifying the types of elections ( Presidential, National Assembly and Local Government Analysing the forms of elections (General and By-elections)",
+        "Analyse the role of the Electoral Commission of Zambia (ECZ) Describing the role of the Electoral Commission of Zambia ( organise, conduct and manage elections«) Discussing the Electoral Process ( Legislation, delimitation, voter education, registration «) Describing the Electoral Code of Conduct of 2016 Discussing voters¶ rights Analyzing electoral malpractice in Zambia"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "leaders justi¿ed correctly",
+        "Role of Electoral Commission of Zambia analysed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.3",
+      "topics": [
+        "Electoral Systems",
+        "The concept Economic and Social Development",
+        "The role of Informal Sector to National Development"
+      ],
+      "learningOutcomes": [
+        "Examine electoral systems Examining electoral systems ( Single Member",
+        "Devise solutions in dealing with life challenges Exploring life challenges ( social, economical challenges) Explaining the concept Economic and Social Development Discussing human needs ( Food, Shelter, Clothes, Water «) Describing factors that a൵ect production (Land, Capital. Labour and enterprise Explaining the importance of standards in Economic and Social Development ( enhanced trade, public health and safety «)",
+        "Demonstrate understanding of the role of Informal Sector to National Development Analysing the role of Informal Sector to National Development ( Creation of Employment,"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Solutions in dealing with life challenges devised appropriately",
+        "Understanding of the role of Informal Sector to National Development demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Local and International Trade"],
+      "learningOutcomes": [
+        "Di൵erentiate between local and international trade Classifying trade ( Types: Local and International Forms: visible and invisible Identifying the challenges associated with Local and International Trade (Poor transport, communication, smuggling «) Describing the importance of Local and International Trade Discussing the terms of trade ( favourable and unfavourable, balance of trade, balance of payment «) Analyzing the functions of World Trade Organisation (WTO)( Enhance free Àow of trade, sets rules for the regulation of international trade «) Designing a model on the chain of distribution"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Local and International di൵ereciated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["History of Human Rights", "Categories of Human Rights", "The Bill of Rights"],
+      "learningOutcomes": [
+        "Promote human dignity Discussing Human Rights ( Claims and entitlement Describing the historical development of Human Rights ( Magna Carta",
+        "Examine categories of Human Rights Describing characteristics of Human Rights ( Inherent, inalienable, universal «) Explaining categories of Human Rights (Civic and political rights, economic, social and cultural rights «) Dramatising human rights violation at home (Right to Education)",
+        "Examine concept Bill of Rights Explaining meaning of the Bill of Rights Outlining elements of the Bill of Rights Analysing limitations of the Bill of rights"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Human dignity promoted accordingly",
+        "Categories of Human Rights examined correctly",
+        "Concept of Bill of Rights examined correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Topic 2.6",
+      "topics": [
+        "Culture of Peace",
+        "ConÀict in society",
+        "Role of the United Nations in promoting peace"
+      ],
+      "learningOutcomes": [
+        "Promote peace and non- violence in society Identifying factors that hinder peace (bullying, violating rules, greediness",
+        "Resolve conÀict in society Describing levels of",
+        "Examine the role of United Nations in promoting peace Discussing the role of United Nations in promoting peace ( Peace-Keeping, conÀict resolution «)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "resolved appropriately",
+        "Role of United Nations in promoting peace examined accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 2: Topic 2.7",
+      "topics": ["Regional Organisations"],
+      "learningOutcomes": [
+        "Analyse roles of Regional Organisations Identifying Regional Organisations to which Zambia is a member ( SADC, COMESA, AU«) Describing the regional oganisations Evaluating the structure of Regional Organisations. Discussing bene¿ts of Zambia¶s membership to Regional Organisations( Easy of trade)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Regional Organisations analysed accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: Topic 2.8",
+      "topics": ["International Organisations", "Specialised Agencies of the United Nations"],
+      "learningOutcomes": [
+        "Justify existence of International Organisations Identifying International Organisations to which Zambia is a member ( Commonwealth and United Nations«) Describing membership and structure of International Organisations. Discussing functions of International Organisations",
+        "Demonstrate understanding of Specialised Agencies of the United Nations Organisations Describing Specialised Agencies of the United Nations (UNESCO, UNICEF, WHO, FAO )"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Existence of International Organisations justi¿ed accordingly.",
+        "Understanding of Specialised Agencies of United Nations Organisations demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 2: Topic 2.9",
+      "topics": [
+        "Borrowing",
+        "Investment ===2.9.2.1 Apply knowledge of investment in real life Identifying types of investment ( Bond, Real Estate, stock «) Showing importance of investment Evaluating types of investment Identifying investment opportunities"
+      ],
+      "learningOutcomes": [
+        "Interpret terms of conditions of borrowing Identifying types of loans ( Personal, Business, salary advance, Agric. Loan, construction, Asset ¿nancing «) Describing sources of borrowing ( Banks and Micro¿nance institutions Analyzing reasons for borrowing Filing in loan application form"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Terms of borrowing interpreted accordingly",
+        "Knowledge of investment in real life applied accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 2: Topic 2.10",
+      "topics": ["The C oncept of Taxation"],
+      "learningOutcomes": [
+        "Practise paying tax Showing the signi¿cance of paying tax Identifying taxation laws in Zambia Explaining the role of Zambia Revenue Authority Describing the types of taxes ( Pay as you earn, Value Added Tax, «) Understanding the bene¿ts of tax compliance and consequences of not paying tax"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["paying tax practised accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 2: Topic 2.11",
+      "topics": [
+        "1Use banking and ¿nancial services Identifying the regulator of commercial banks Explaining documents in Banking (Deposit slip, withdraw slip, invoice «) Justifying the importance of commercial banks"
+      ],
+      "learningOutcomes": [
+        "Use E-Banking services Utilising the services o൵ered by commercial banks ( Bank transfers, E-banking, M-Banking «)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Banking and Financial services used appropriately",
+        "E-Banking services used correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 2: Topic 2.12",
+      "topics": [
+        "Business Idea =2.12.1.1 Evaluate di൵erent investment opportunities Identifying sources of business idea Discussing business ideas Identifying sources of business ideas Making a business plan",
+        "Marketing Plan",
+        "Financial Plan =2.12.2.2 Prepare a ¿nancial P ODQ Preparing pro¿t plan Preparing cash Àow plan",
+        "Finalising a Business plan",
+        "Business Startup capital"
+      ],
+      "learningOutcomes": [
+        "Generate business LGHDV Brainstorming various business ideas",
+        "Develop a marketing plan Conducting market research Making a marketing plan",
+        "Consolidate components of a business plan Compiling a business plan",
+        "Mobilise startup capital Identifying sources of startup capital Sourcing startup capital Startup capital mobilised adequately",
+        "Examine institutions that ¿ght corruption"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Di൵erent investment opportunities evaluated accordingly",
+        "Business ideas generated appropriately",
+        "Marketing plan developed correctly",
+        "Financial plan prepared correctly",
+        "Components of a business consolidated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 3: Topic 3.1",
+      "topics": [
+        "Business Startup capital",
+        "Fight against corruption",
+        "Institutions that Fight Corruption"
+      ],
+      "learningOutcomes": [
+        "Analyse methods used to ¿ght corruption Describing methods used to ¿ght corruption ( Prevention, community education, investigation and prosecution«) Explaining the role of public o൵icers, community and the youth in ¿ghting corruption ( Public",
+        "Recognise institutions that ¿ght corruption Evaluating institutions that ¿ght corruption (Anti- Corruption Commission, Auditor General¶s o৽ce )"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Responsibility for one¶s action and inaction taken correctly",
+        "Methods used to ¿ght corruption analysed accordingly",
+        "Institutions that ¿ght corruption recognised appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 3: Topic 3.2",
+      "topics": [
+        "Substance abuse",
+        "=Institutions involved in fighting substance abuse in Zambia."
+      ],
+      "learningOutcomes": [
+        "Demonstrate self-control Exploring substance abuse Identifying categories of substances ( over the counter, controlled substances Describing classi¿cations of substances ( Depressants, stimulants. Hallucinogens«.) Explaining reasons for substance abuse Analysing the e൵ects of di൵erent substances abused such as ( alcohol, tobacco, inhalants, cannabis, heroin, cocaine «)",
+        "Identify institutions involved in ¿ghting substance abuse in Zambia Outlining institutions involved in ¿ghting substance abuse in Zambia ( Drug Enforcement Commission, Transparency International Zambia ,Zambia Police «) Institutions involved in ¿ghting substance abuse in Zambia identi¿ed clearly"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Self-control demonstrated accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["Family"],
+      "learningOutcomes": [
+        "Build strong family relationships Explaining meaning of family Discussing the importance of a family ( Sense of belonging, working together«) Describing types of family ( Nuclear, Extended, Single, Child headed«) Analysing types of marriage ( Civil/Statutory and Customary/Traditional Explaining conditions in a marriage contract ( Rights, Obligations «) Practicing strong family relationships",
+        "Analyse elements of family law Outlining elements of family law ( marriage, divorce, death «) Discussing factors causing family crisis"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Strong Family relationships built appropriately",
+        "Elements of family law analysed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 3: Topic 3.4",
+      "topics": [
+        "Child Abuse ===3.4.2 Apply ways of protecting oneself and others Identifying ways of protecting oneself and others from being abused ( Avoid risk behaviors, being assertive, set boundaries«) Demonstrating respect for human dignity Examining concept of child abuse Analysing forms of child abuse ( sexual abuse, child sexual harassment, sexual assault, child de¿lement, child marriage«) Discussing ways of addressing child abuse ( Legislation, Community sensitization, stiৼ punishment on oৼenders",
+        "Promote good morals in society Discussing causes of teenage pregnancies ( peer pressure, lack of sex education, absent parents«) Analysing e൵ects of teenage pregnancies ( drop out from school, suicide,",
+        "Examine institutions that address Child Abuse Examining institutions that address child abuse ( Zambia Police, Judiciary- Courts, Young Women Christian Association«)"
+      ],
+      "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Ways of protecting oneself and others from being abused applied accordingly",
+        "Good morals in society promoted accordingly",
+        "Institutions addressing child abuse examined correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 3: Topic 3.5",
+      "topics": [
+        "Examine institutions that address Child Abuse Examining institutions that address child abuse ( Zambia Police, Judiciary- Courts, Young Women Christian Association«)",
+        "Analyse types of Culture Analysing types of Culture ( folk, popular, real«)",
+        "Participate in Zambia¶s Societal Core values Participating in Zambia¶s Societal Core Values ( respect for elders, cooperation, hard work«) Discussing Zambia¶s Cultural Practices ( respect for elders, extended family system«) Identifying harmful traditional practices ( Early marriages, sexual cleansing«)",
+        "Role of One Zambia One Nation in embracing Cultural Diversity in Zambia",
+        "Identify institutions that preserve cultural heritage Identifying institutions that preserve cultural heritage ( Museums, National Arts Council)"
+      ],
+      "learningOutcomes": [
+        "Appreciate indigenous culture in Zambian society Demonstrating of indigenous culture in Zambian society. Outlining components of Culture ( Language, Religion, Education«) Explaining characteristics of Culture ( dynamic, learnt, shared«) Discussing importance of Culture (contributions to re-enforcing ones identity, no development without culture«) Explaining relationship between culture and human rights (Article 27 of UDHR, cultural heritage, identity«)",
+        "Demonstrate understanding of the role of One Zambia One Nation in embracing cultural diversity in Zambia Discussing the role of One Zambia One Nation in embracing cultural diversity in Zambia"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Indigenous culture in Zambian society appreciated accordingly",
+        "Types of Culture analysed correctly",
+        "Participation in Zambia¶s Societal Core values achieved accordingly.",
+        "Role of one Zambia one Nation in embracing cultural diversity demonstrated accordingly.",
+        "Institutions that preserve cultural heritage identi¿ed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 3: Topic 3.6",
+      "topics": [
+        "Civil Society in",
+        "Use di൵erent media to express oneself Discussing the role of media in expressing oneself Identifying types of Media ( print and electronic Explaining the role of Media in governance ( inform and educate, act at watch dog«)"
+      ],
+      "learningOutcomes": [
+        "Promote Civil Society Organisations in governance Promoting Civil Society Organisations in governance in Zambia Describing Civil Society Organizations Identifying the various classes of Civil Societies in Zambia ( International organization, Pressure Groups, Civic Organizations«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Civil Society organisations in governance promoted appropriately",
+        "Using di൵erent media to express oneself used correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 3: Topic 3.7",
+      "topics": ["Debt Management"],
+      "learningOutcomes": [
+        "Practise good ¿nancial management Explaining the concept debt management ( Debt relief ± ability to pay back Discussing debt crisis ( Borrowing beyond one¶s capacity) Describing how debt can be managed Discussing e൵ects of debt crisis on Zambia (poor"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Good ¿nancial management practised accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 3: Topic 3.8",
+      "topics": [
+        "Entrepreneurial Activities",
+        "Manage ¿nancial records Recording business transactions ( records of sale, purchases, working capital and bank records"
+      ],
+      "learningOutcomes": [
+        "Established Businesses",
+        "Analyse trial stages in the Zambian Legal System"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Businesses established successfully",
+        "Financial records managed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 4: Topic 4.1",
+      "topics": [
+        "Concept of Legal System",
+        "Zambian Legal System",
+        "Capital Punishment",
+        "Legal Institutions and Organisations that promote justice"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of legal system Discussing concept legal system Describing legal system Examining elements of a good legal system ( comprehensive, simple certain «) Explaining sources of law ( common law, customary",
+        "Analyse trial stages in the Zambian Legal System Analysing trial stages in the Zambian Legal System ( Pre-trial stage, trial and post-trial stage Outlining procedure in the criminal justice process ( Arrest, plea, trial «) Explaining types of sentences ( Life sentence.",
+        "Critique Capital punishment Analysing Capital punishment (Arguments for and against capital punishment Describing methods of executing Capital punishment ( Hanging,",
+        "Justify legal institutions and organisations that promote justice Justifying legal institutions and organisations that promote justice Ministry of justice, courts of law, Legal Resource Foundation «)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Legal system understood accordingly",
+        "Trial stages in the Zambian legal system analysed accordingly",
+        "Capital punishment critiqued accordingly",
+        "Legal institutions and organisations that promote justice justi¿ed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["International Bill of Rights"],
+      "learningOutcomes": [
+        "Explore International Bill of Rights Exploring International Bill of Rights ( Universal"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["International Bill of Rights explored correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["Poverty in Zambia", "Poverty Alleviation Strategies"],
+      "learningOutcomes": [
+        "Analyse poverty in Zambia Discussing the impact of poverty in Zambia Explaining the causes of poverty in Zambia ( debt burden, climate variations, poor work culture«) Measuring poverty using di൵erent perspectives ( income perspective, basic needs perspective, capability perspective, human poverty index Describing the characteristics of poverty at various levels ( Personal and Physical status«) Analysing the e൵ects of poverty in Zambia ( hunger, food insecurity, increase in crime, corruption«)",
+        "Evaluate poverty alleviation strategies Analysing strategies to alleviate poverty ( improving education and health services, promoting rural electri¿cation,"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Poverty in Zambia analysed accordingly",
+        "Poverty alleviation strategies evaluated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["Gender Equity and Equality", "Gender Based Violence (GBV)"],
+      "learningOutcomes": [
+        "Promote social justice in society Promoting social justice in society Explaining the concept Gender Describing Gender Equity and Gender Equality ( a৽rmative Action. Gender: State of being male or female",
+        "Value Gender Equity and Gender Equality Adapting Gender Equity and Gender Equality Outlining historical background of Gender Equity and Gender Equality ( United Nations Declaration of all forms of Gender Equity and",
+        "Assess institutions that promote Gender Equity and Gender Equality",
+        "Di൵erentiate Gender roles from Sex UROHV",
+        "Express empathy towards others Expressing empathy towards other people Explaining forms of Gender Based Violence ( Physical, psychological, emotional «) Analysing causes of GBV ( Jealousy, In¿delity, family negligence, lack of communication«) Discussing e൵ects of GBV ( Depression, Death, Suicide, Divorce«)",
+        "Report cases of Gender Based violence Identifying institutions where cases of GBV are reported Reporting cases of GBV to relevant authorities"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Social justice in society promoted appropriately",
+        "Gender Equality valued accordingly.",
+        "Institutions that promote Gender Equity and Gender Equality assessed correctly.",
+        "Gender roles and Sex roles di൵erentiated correctly.",
+        "Empathy towards others expressed accordingly",
+        "Cases of GBV reported accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 4: Topic 4.5",
+      "topics": [
+        "Development Planning",
+        "Micro and Macro Economic Financial Institutions",
+        "Indicators of Development",
+        "Zambia¶s National Development Plans"
+      ],
+      "learningOutcomes": [
+        "Generate a development plan Describing levels of planning (individual, family, community«) Explaining Development Planning Examining types of Development Planning ( short term, medium term, long term«) Describing methods of Development Planning ( Centralised and decentralised)",
+        "Analyse functions of Micro and Macro (FRQRPLF Financial Institutions Distinguishing Micro from Macro Institutions Analysing the functions of Micro and Macro Economic Financial Institutions ( Micro ± provision of personal loans, servings, providing rural credit banks «Macro",
+        "Analyse Indicators of Development Evaluating indicators of Development ( Gross National Product, Gross Domestic Product, Human Development Index«)",
+        "Evaluate Zambia¶s National Development Plans Outlining Zambia¶s development plans ( Emergency Development"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "A development plan generated accordingly.",
+        "Functions of Micro and Macro Economic Financial Institutions analysed correctly.",
+        "Indicators of Development analysed accordingly",
+        "Zambia¶s National development plans evaluated correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["Credit Reference Bureau (CRB)"],
+      "learningOutcomes": ["Describe the function of Credit Reference"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Functions of CRB described correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 4: Topic 4.7",
+      "topics": ["Securities and Exchange Commissions (SEC)"],
+      "learningOutcomes": ["Examine the functions of Securities and Exchange Commission of"],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Functions of the Securities and Exchange Commissions examined accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 4: Topic 4.8",
+      "topics": ["Pension and Retirement planning"],
+      "learningOutcomes": [
+        "([KLELW a plan for retirement Explaining pension Planning for retirement"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Plan for retirement exhibited accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Form 4: Topic 4.9",
+      "topics": ["Dissolution of the business"],
+      "learningOutcomes": [
+        "Dissolve a business venture Counting remaining stock Valuing business assets Liquidating assets Calculating pro¿t or losses Calculating share of profit for each member Preparing capital refunds for members"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Business venture dissolved accordingly"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
-    "extractedAt": "2026-07-11T06:20:38.271Z",
-    "fileSize": 895123
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 895123,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true,
+    "recordCount": 97
   }
 }

@@ -1,0 +1,45 @@
+{
+  "subject": "Music",
+  "subjectSlug": "music",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "MUSICAL-ARTS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "bf730864b2f0142afce9eb9e8ffe0420",
+  "detectedShift": 0,
+  "pageCount": 37,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "8-harmony",
+  "lesson": {
+    "lesson": 6,
+    "title": "8 HARMONY",
+    "topics": [
+      "Introduction",
+      "In music, Harmony refers to the combination of different musical notes played or sung at the",
+      "same time to produce a pleasing sound. It usually supports the melody (the tune) and adds depth,",
+      "emotion and texture to a piece of music.",
+      "Harmony is created when two or more notes sound together, forming chords (like C major or"
+    ],
+    "activities": [
+      "Learning environment setup: Any environment such as, (any outdoor), artificial (music",
+      "room…) and technological (video…).",
+      "Suggested Teaching and Learning Materials: Piano, keyboard, guitars, charts…",
+      "Identifying triads (Root, 3rd and 5th).",
+      "Task 1: Ask learners to identify and label the triads as root, third and fifth on a staff using the",
+      "tonic triad in C major.",
+      "z Facilitate learners’ involvement in identifying and labelling the triads as root, third",
+      "and fifth."
+    ],
+    "resources": [],
+    "assessment": [
+      "Prepare tasks to be administered during and after learning sessions and give carry home tasks.",
+      "z Identify, construct and play/sing the triads given.",
+      "z Create a quiz to test learners’ ability to identify triads.",
+      "z Assign a project where learners analyse and identify triads in selected score.",
+      "z Give short answer questions by asking students to explain triad concepts and give",
+      "musical examples."
+    ],
+    "notes": ""
+  }
+}

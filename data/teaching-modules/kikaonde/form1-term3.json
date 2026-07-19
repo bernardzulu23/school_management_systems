@@ -2,19 +2,13 @@
   "subject": "Kikaonde",
   "form": 1,
   "term": 3,
-  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3-2025.pdf",
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
   "lessons": [
     {
       "week": 1,
       "lesson": 1,
-      "title": "BYABUNEME BWA KYALO",
-      "topics": [
-        " Kuteleka ne kwamba",
-        " Kutanga",
-        " Kunemba",
-        " Mulaka-zhilo",
-        " Ntuntulwilo"
-      ],
+      "title": "Amiwa na komejile ku Solwezi, kufunda sukuulu ne kutwela nkito.",
+      "topics": [],
       "activities": [],
       "resources": [],
       "assessment": [],
@@ -23,14 +17,8 @@
     {
       "week": 2,
       "lesson": 2,
-      "title": "BISHINKA NE MILANGULUKO",
-      "topics": [
-        " Kuteleka ne kwamba",
-        " Kutanga",
-        " Kunemba",
-        " Mulaka-zhilo",
-        " Ntuntulwilo"
-      ],
+      "title": "Ba Kamanga basemenwe mu Urban Clinic ku Solwezi bino sukuulu wabo bakafunjile ku",
+      "topics": ["Kasempa pa Mukinge Girls Secondary School."],
       "activities": [],
       "resources": [],
       "assessment": [],
@@ -39,14 +27,8 @@
     {
       "week": 3,
       "lesson": 3,
-      "title": "KWAMBA KU JIBUMBA",
-      "topics": [
-        " Kuteleka ne kwamba",
-        " Kutanga",
-        " Kunemba",
-        " Mulaka-zhilo",
-        " Ntuntulwilo."
-      ],
+      "title": "Nyuki iji bingi na lumvwañano ne buntangi, mambo byonse byo bengile bimwesha kino.",
+      "topics": ["Kuya nakutunta buluba ne mema. Nyuki imo ingilatu mwingilo wa bushilikale."],
       "activities": [],
       "resources": [],
       "assessment": [],
@@ -55,13 +37,13 @@
     {
       "week": 4,
       "lesson": 4,
-      "title": "LUPACHIKO",
+      "title": "Kala kechi kwaji masukuulu noobe lelo jino ine, kufunda konse kwaji kwa kupichila mu",
       "topics": [
-        " Kuteleka ne kwamba",
-        " Kutanga",
-        " Kunemba",
-        " Mulaka-zhilo",
-        " Ntuntulwilo"
+        "kwikala na bansemi ne bakulumpe.",
+        "BYAMBO BYANEMA.",
+        " Tuyukwe twa ndondolwelo.",
+        " Buluba.",
+        " Ňano."
       ],
       "activities": [],
       "resources": [],
@@ -71,311 +53,13 @@
     {
       "week": 1,
       "lesson": 5,
-      "title": "Specific Competence: byaketekelwa kubiwa bulongo",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 2,
-      "lesson": 6,
-      "title": "Expected standard: bipimo byañingijilo byaketekelwa kubiwa mwafwainwa",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 3,
-      "lesson": 7,
-      "title": "Assessment: lweseko",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 4,
-      "lesson": 8,
-      "title": "Summary: mpezho",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 5,
-      "lesson": 9,
-      "title": "Print concept: buyuke bwa byanembewa",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 6,
-      "lesson": 10,
-      "title": "Hook: kongolamilangwe",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 7,
-      "lesson": 11,
-      "title": "Key words: byambo byanema",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 8,
-      "lesson": 12,
-      "title": "Manuscript: kunemba kisopelo kimo kimo",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 9,
-      "lesson": 13,
-      "title": "Cursive: kunemba kwa kusendelela",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 10,
-      "lesson": 14,
-      "title": "Analytical analysis: Ndangulukilo ya kusobolola",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 11,
-      "lesson": 15,
-      "title": "Critical thinking: Ndangulukilo yazhika",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 12,
-      "lesson": 16,
-      "title": "Directionality: kwakutala pa kutanga",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 13,
-      "lesson": 17,
-      "title": "Descriptive composition: Nsombelo Ndumbulwilo",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 14,
-      "lesson": 18,
-      "title": "Argumentative composition: Nsomobelo ya lupachiko",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 15,
-      "lesson": 19,
-      "title": "Narrative Composition: Nsombelo ya lubulaňano",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 16,
-      "lesson": 20,
-      "title": "Fiction: Kisombwa",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 17,
-      "lesson": 21,
-      "title": "Non-fiction: Kya-kine",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 18,
-      "lesson": 22,
-      "title": "Character: Nkaizhi",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 19,
-      "lesson": 23,
-      "title": "Theme: Kishina",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 20,
-      "lesson": 24,
-      "title": "Narrative: Jishimikila",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 21,
-      "lesson": 25,
-      "title": "Climax: Kankomo",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 22,
-      "lesson": 26,
-      "title": "Plot: Ndonda ya ngubilo mu jishimikila",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 23,
-      "lesson": 27,
-      "title": "Gender: Bukazhi-lume",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 23,
-      "lesson": 28,
-      "title": "Autobiography: Mpito ya bwikalo bwami",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 24,
-      "lesson": 29,
-      "title": "Biography: Mpito ya bwikalo boobe.",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 25,
-      "lesson": 30,
-      "title": "Metaphor: Ngesakenyo",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 26,
-      "lesson": 31,
-      "title": "Euphemism: Bengakenyo",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 27,
-      "lesson": 32,
-      "title": "Simile: Mpashaňenyo",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 28,
-      "lesson": 33,
-      "title": "Personification: Kipasho-muntu",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 29,
-      "lesson": 34,
-      "title": "Hyperbole: Kintente",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
-      "notes": ""
-    },
-    {
-      "week": 30,
-      "lesson": 35,
-      "title": "Climate: Bukela-kela",
+      "title": "Baletepo jishimikila jiji jonse jo bayuka.",
       "topics": [
-        "NTENDEKELO",
-        "Uno buuku wa Fomu 1 mu Kikaonde wanengezhiwa mujishinda ja kukumya, mukukebesha",
-        "kukwasha bafunjishi kufikizha mfunjishilo bulongo mu ino mfunjilo (Curriculum) ya katataka."
+        "Mukumbu.",
+        "Balete jonse jishimikila jo bayuka.",
+        "Bipimo bya ñyingijilo bya ketekelwa kubiwa mo kyafwainwa",
+        "Byakulondela mu kusolola kishina mu jishimikila ja mu kanwa ja londololwa mo kyafwainwa.",
+        "B. Mwingilo."
       ],
       "activities": [],
       "resources": [],
@@ -384,8 +68,24 @@
     },
     {
       "week": 1,
-      "lesson": 36,
-      "title": "Kesha japita kwajinga bunsaji ku kipwilo kyetu.",
+      "lesson": 6,
+      "title": "Nembai tubishina tuno twa mpezho twatu majishimikila.",
+      "topics": [
+        "(i). ‘Mwanyike apane kajo ku mwenyi uji na nzala’.",
+        "(ii). ‘Nsongwakazhi bamupa mali ku bansemi kabiji wabwezhe ne ashalapo’.",
+        "(iii). ‘Mwanyike muyanji utongan’a kimye kyonse kusukuulu ne kutapo maana ku",
+        "byakufunda’.",
+        "Mukumbu yaketekelwa."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 7,
+      "title": "Londololapo bikabewa mu kulondola pa kusala kishina kiji kyonse.",
       "topics": [],
       "activities": [],
       "resources": [],
@@ -394,14 +94,360 @@
     },
     {
       "week": 2,
-      "lesson": 37,
-      "title": "Bafunjishi betu kechi baji na misalululo ine.",
+      "lesson": 8,
+      "title": "Nembapo kishina kimo panyumu ya kuteleka ku jishimikila ja pa kanwa.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 9,
+      "title": "Londolola jishimikila ja pakanwa ja panyiwa ne kishina kijimo.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 10,
+      "title": "Lumbulula bishina mu jishimikila ja mukanwa panyuma jiji jonse.",
       "topics": [
-        "Kipimo kya ñingijilo kyaketekelwa kubiwa: Byambo byaingijishiwa mu bipelu",
-        "byalengewa bulongo.",
-        "Mutwe-2: Ntangilo Yazhika",
-        "Mutwe-Kache: Kutanga ne Kumvwisha",
-        "Buyuke: Bafunda batange ne kumvwisha bulongo bibaaba bya mu mabuku"
+        "| Page",
+        "MUTWE KACHE 2: MALWAÑANO",
+        "Kamina: Uno mwingilo ubena kutala pa kulumbulula malwañano,kulondolola bishila mu",
+        "malwañano ne kusabaula malwañano mu jishimikila ja panyiwa.",
+        "Ntendekelo"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 11,
+      "title": "Nembapo ka jishimikila keepi ne kusabaulamo malwañano ajimo.",
+      "topics": [
+        "Mikumbu ya ketekelwa",
+        "Ndonda mwa kusabawila malwañano mu jishimikila yo ino;",
+        " Yuka ne kutala pa nkaizhi mukata.",
+        "Jishimikila jibena kwamba pa n’anyi?",
+        "Bena kukeba ka?"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 12,
+      "title": "Jishimikila jiipi (mukumbu wa ku mwenako)",
+      "topics": [
+        "Yoba wa sakishanga bingi kutokesha ba shanji pa muchima. Wasajiwa pa sukuulu",
+        "kutangijila jibumba ja boba be chocheka, po alangulukile amba kimye kya kwi batokesha",
+        "kyafika. Mino Yoba wajinga na makatazho pa kwamba mu kintu bwingi ne kuzakama",
+        "paku pitulukamo. Kwi kyombesha byo kwafwenyenyenga pa bwipi, wilangulwishenga",
+        "kana wafwainwe kushinda yewa moyo wanji nangwa kwikileka kutanwa mu joja jibumba"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 13,
+      "title": "Nkaizhi mukata - Yoba",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 14,
+      "title": "Nkaizhi ubena ku kebaka? - Kutokesha bashanji pa muchima pa kutangijila jibumba",
+      "topics": ["ja be chocheka"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 15,
+      "title": "Kika ki mukanya? – Moyo wa kwamba kuuba bantu bavula",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 16,
+      "title": "Mutundu wa Malwan’ano: - Malwañano a mukachi",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 17,
+      "title": "Malwañano awamina nangwa kutamina mwepi mu jishimikila? - Ilengele bantu",
+      "topics": [
+        "kushala na kijikila nangwa kushimikwa mu milanguluko.",
+        "Bipimo byañingijilo byaketekelwa kubiwa mo kyafwainwa.",
+        "Malwañano mu jishimikila ja pewa asabaulwe bulongo.",
+        "Lweseko"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 18,
+      "title": "Neemba mashinda a waminamo malwañano mu jishimikila.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 19,
+      "title": "Malwañano akwasha nkaizhi ku pimpula nangwa kufunjilako bintu nyi nangwa ine?",
+      "topics": ["londolola."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 20,
+      "title": "Lufunjisho ka lo watanamo obewa nobe ufunda mwaila uno mutwe wa malwañano.",
+      "topics": [
+        "| Page",
+        "MUTWE- KACHE 3: NYIMBO",
+        "Kamina: Nyimbo ke lubaji lwa kisho kyanema mu mutundu yense kabiji imbiwa mu bimye",
+        "byapusana- pusana.",
+        "Ntendekelo: Nyimbo ke lubaji lwa kisho kya mutundu yense kabiji imbiwa mu bimye"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 21,
+      "title": "Nembapo lwimbo umo amo mo usa kumwesha lufunjisho luji mu uno lwimbo.",
+      "topics": ["Mikumbu ya ketekelwa"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 22,
+      "title": "Nyimbo ya neema mambo yileeta baantu pamo ne kwibalengela kukwantankana.",
+      "topics": [
+        "b. Nyimbo ya nema mambo mu nyimbo muji mafunjisho.",
+        "c. Kabiji nyimbo ya neema mambo ileta lusangajiko ku bantu."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 23,
+      "title": "Bafunda ba nembe lwimbo amo muji lufunjisho.",
+      "topics": [
+        "| Page",
+        "B. Mwingilo",
+        "Kulumbulula byambo biji mu lwimbo kwesakanya na jishimikila ja panyiwa.",
+        "Mufunjishi",
+        " Kambizha bafunda kwimbapo lwimbo wa kishakulu."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 24,
+      "title": "Bembepo lwimbo ne kulumbulula byambo bya neema bijimo.",
+      "topics": [
+        "Mikumbu yaketekelwa.",
+        "Bafunda bembe lwimbo ne kulumbulula byambo bya nema bijimo.",
+        "Bipimo bya ñyingijilo bya ketekelwa kubiwa mo kyafwainwa",
+        "Kulumbulula byaambo biji mu lwimbo kwesakanya na jishimikila.",
+        "C. Mwingilo"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 25,
+      "title": "Bafunda basale lwimbo ne ku mupesapesa ñumwvino yayo.",
+      "topics": ["Mikumbu ya ketekelwa"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 26,
+      "title": "Bafunda banembe nyimbo yo bayuka.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 27,
+      "title": "Bembe nyimbo mu lufunjisho yo bayuka.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 28,
+      "title": "Basalepo lwimbo kabiji ba mupese-pese bulongo.",
+      "topics": ["Lweseko"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 29,
+      "title": "Lumbulula buneme bwa kwingijisha nyimbo mu bishimi.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 30,
+      "title": "Lumbulula lufunjisho lujimo mu jishimikila jo wapaana.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 31,
+      "title": "Nemba kishimi kiji na lwiimbo kyo akamba mu lufunjisho.",
+      "topics": ["Mikumbu ya ketekelwa"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 32,
+      "title": "Bingila nyimbo ke bino;",
+      "topics": [
+        " Nyimbo ya nema mambo yileta bantu pamo ne kwibalengela kukwantankana.",
+        " Kabiji nyimbo ya nema mambo mu nyimbo imo muji lufunjisho",
+        "| Page",
+        " Nyimbo ya nema mambo yileta lusangajiko ku bantu,wafwainwa kutana kuuba amba",
+        "muntu inge wajinga na bulanda bukatampe kupichilatu mu nyimbo imo isa kulengela"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 33,
+      "title": "Apaane lufunjisho lujimo mu jishimikila jo apaana.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 34,
+      "title": "Bonse bafunda balete bishimi muji nyimbo, bapaane ne lufunjisho",
+      "topics": [
+        "MUTWE – KACHE: 4 Bimwesho bimenako milanguluko (Bintunwa)",
+        "Kamina: Kintunwa ke kyambo kimwesha kusombolola byubilo bya muntu nangwa kintu",
+        "kupichila mu ṅambilo nangwa mu byubilo.",
+        "Ntendekelo: uno mutwe usa ku kwasha bafunda kwikala na buyuke bwa bintu, ne kukwasha",
+        "kusolola milanguluko yazhika. Nabiji Nkunda kwimenako mutende, muchima kwimenako"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 35,
+      "title": "Lumbululai kyambo kya luntunwa.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 36,
+      "title": "Nembapo bimwesho bisatu bya bintunwa.",
+      "topics": ["Mikumbu ya ketekelwa"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 37,
+      "title": "Kwingijisha bintu kwimenako milanguluko kupitaila pa byo byo bintu byobiji.",
+      "topics": [
+        "(i) Uji na mikupa ya mipundu.",
+        "(ii) Uji na myona ya kabwa.",
+        "| Page",
+        "(iii) Uji na muchima wa lumwengo.",
+        "(iv) Muchima wimenako butemwe."
       ],
       "activities": [],
       "resources": [],
@@ -411,8 +457,8 @@
     {
       "week": 1,
       "lesson": 38,
-      "title": "Bishina bya kyalo biji nobe ka?",
-      "topics": ["a) Bantu", "b) Mizhilo", "c) Buneme", "d) Kwingila"],
+      "title": "Mikupa ya mipundu.",
+      "topics": ["Mikupa ya baya."],
       "activities": [],
       "resources": [],
       "assessment": [],
@@ -421,8 +467,8 @@
     {
       "week": 2,
       "lesson": 39,
-      "title": "Mu kibaaba 1, buneme bwa kyalo bwalumbulula ka?",
-      "topics": [],
+      "title": "Kya bukonde baanshika kya kwanshika.",
+      "topics": ["Matako akatampe."],
       "activities": [],
       "resources": [],
       "assessment": [],
@@ -431,14 +477,8 @@
     {
       "week": 3,
       "lesson": 40,
-      "title": "Mu kibaaba 2, tongolapo bishina bya kyalo bisatu.",
-      "topics": [
-        "Ñanyi buneme buji mu bishina bya kyalo?",
-        "a) Bileta buumo muma nyaunda a bantu.",
-        "b) Bilengela misalululo",
-        "c) Bantu bafunjilako byavula",
-        "d) Bo bungikazhi bwa kyalo."
-      ],
+      "title": "Meeso noobe ñondo.",
+      "topics": ["Meeso atoka."],
       "activities": [],
       "resources": [],
       "assessment": [],
@@ -446,7 +486,7 @@
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-11T06:12:21.503Z",
-    "rawTextLength": 132260
+    "extractedAt": "2026-07-19T20:35:34.959Z",
+    "rawTextLength": 66409
   }
 }

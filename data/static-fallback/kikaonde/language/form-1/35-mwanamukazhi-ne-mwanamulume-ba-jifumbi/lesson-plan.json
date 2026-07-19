@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "mwanamukazhi-ne-mwanamulume-ba-jifumbi",
+  "lesson": {
+    "week": 1,
+    "lesson": 35,
+    "title": "Mwanamukazhi ne mwanamulume ba jifumbi",
+    "topics": [
+      "jimo, kechi bafikilamo kwisongola ine, mambo",
+      "baanabakazhi bakoma bukiji mu maana ne mu",
+      "kimino kukila babalume",
+      "Bafwainwa kwisongola mambo bonse baji mu",
+      "jifumbi jimo kabiji ne maana kechi apusenshatu"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

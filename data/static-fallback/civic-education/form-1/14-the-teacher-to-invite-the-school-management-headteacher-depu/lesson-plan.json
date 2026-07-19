@@ -1,0 +1,39 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "the-teacher-to-invite-the-school-management-headteacher-depu",
+  "lesson": {
+    "week": 2,
+    "lesson": 14,
+    "title": "The teacher to invite the school management (Headteacher/Deputy Headteacher or Head of",
+    "topics": [
+      "Department) and Head Prefects for an interview with the learners on their roles in the school.",
+      "Learners to take note of the responses then engage in a guided class discussion based on the",
+      "responses given with emphasis on their roles as learners in promoting the well-being of the",
+      "school.",
+      "Content Tips"
+    ],
+    "activities": [
+      "Showing understanding of the systems of Governance",
+      "Teaching and Learning Materials: Pictures or videos showing democratic and dictatorship forms of",
+      "government, materials for conducting mock elections",
+      "The teacher to divide the class into groups, and assign each group a system of governance",
+      "(Democracy Group and Dictatorship Group).",
+      "Democracy Group",
+      "Learners to conduct a mock election to choose leaders. The leader presents to inform the group",
+      "about the available amount of money to be spent on one of the two projects (think about any"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

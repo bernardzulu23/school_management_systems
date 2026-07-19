@@ -1,0 +1,52 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "discuss-what-led-to-the-formation-of-the-federation-of-rhode",
+  "lesson": {
+    "week": 2,
+    "lesson": 10,
+    "title": "Discuss what led to the formation of the federation of Rhodesia and Nyasaland and describe",
+    "topics": [
+      "how it was defeated.",
+      "Content Tips",
+      "From Northern Rhodesia to Zambia",
+      "In 1958, Nkumbula agreed to take part in elections based on a new constitution for Northern",
+      "Rhodesia, and this provoked a major split in the African National Congress (ANC). Kaunda,"
+    ],
+    "activities": [
+      "Describing Zambia’s political development from 1964 to date",
+      "Teaching and Learning Materials: Chart showing the table of events, Pictures of the current and",
+      "former Presidents of Zambia.",
+      "the First, Second and Third Republics. After the research, each group to make a presentation on the",
+      "findings and this should be followed by class discussion and consolidation of the salient points",
+      "Content Tips",
+      "Zambia after Independence"
+    ],
+    "resources": [
+      "The greatest challenge Zambia faced after independence was that the economy was still under the",
+      "control of white settlers.",
+      "Since independence, Zambia has been governed by seven Presidents, and four Political Parties under",
+      "three Republics based on the political system as shown in the table below:",
+      "Expected Standard",
+      "Zambia’s political development from 1890 to date analysed correctly"
+    ],
+    "assessment": [
+      "Leaners to answer the following questions",
+      "Explain what you understand by the following words?",
+      "Colonialism",
+      "Nationalism",
+      "Federation",
+      "What methods did the nationalists employ to fight for freedom?"
+    ],
+    "notes": ""
+  }
+}

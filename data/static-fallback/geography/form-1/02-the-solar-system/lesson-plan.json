@@ -1,0 +1,23 @@
+{
+  "subject": "Geography",
+  "subjectSlug": "geography",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Geography-Module-Form1.Term-11.pdf",
+  "md5": "830c5919283d537a897943595cfaf095",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "the-solar-system",
+  "lesson": {
+    "lesson": 2,
+    "title": "The Solar System",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

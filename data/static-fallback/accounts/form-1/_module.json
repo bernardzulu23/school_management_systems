@@ -1,0 +1,14 @@
+{
+  "subject": "Accounts",
+  "subjectSlug": "accounts",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "PRINCIPLES-OF-ACCOUNTS-TERM-2-MODULE.pdf",
+  "md5": "fa53db2b837ae83aaac97068397fb57d",
+  "detectedShift": 0,
+  "pageCount": 49,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "lessonCount": 1
+}

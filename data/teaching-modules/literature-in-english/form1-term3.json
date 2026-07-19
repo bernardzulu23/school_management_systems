@@ -5,51 +5,71 @@
   "sourceFile": "FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MOULE-FOR-TERM-3-1-1.pdf",
   "lessons": [
     {
-      "week": 1,
       "lesson": 1,
-      "title": "Provide a poem and ask learners to identify the elements of poetry in that poem.",
-      "topics": [],
-      "activities": [],
-      "resources": [],
-      "assessment": [],
+      "title": "1.2.2 WRITTEN LITERATURE",
+      "topics": ["INTRODUCTION"],
+      "activities": [
+        "The Ministry understands the challenges that come with transitioning to a new curriculum that is",
+        "Competence-Based. The choice of the Competence-Based Curriculum (CBC) marks a",
+        "transformative step in improving education quality and relevance. This module reflects the",
+        "Ministry’s unwavering commitment to making this journey as smooth as possible for teachers,",
+        "the CBC’s objectives. However, teachers are encouraged to supplement this module with their",
+        "own research and innovations in order to address any gaps that may arise during implementation.",
+        "and critical thinking skills in learners while ensuring relevance and adaptability to different",
+        "school contexts. Teachers are encouraged to tailor these pedagogical skills to their unique"
+      ],
+      "resources": [
+        "new Competence-Based Curriculum, enhancing their ability to inspire and equip learners with",
+        "essential literary knowledge, skills and positive attitudes desired to create a vibrant and",
+        "responsive education system.",
+        "HOW THE MODULE SHOULD BE USED",
+        "This module contains the content scheduled for teaching in the third term of Form 1 Literature in",
+        "English. It is divided into topics and sub-topics for different components. The content provided"
+      ],
+      "assessment": [
+        "The Ministry understands the challenges that come with transitioning to a new curriculum that is",
+        "Competence-Based. The choice of the Competence-Based Curriculum (CBC) marks a",
+        "transformative step in improving education quality and relevance. This module reflects the",
+        "Ministry’s unwavering commitment to making this journey as smooth as possible for teachers,",
+        "the CBC’s objectives. However, teachers are encouraged to supplement this module with their",
+        "own research and innovations in order to address any gaps that may arise during implementation."
+      ],
       "notes": ""
     },
     {
-      "week": 2,
       "lesson": 2,
-      "title": "Homework: Assign poems to learners to be performed in the next lesson.",
+      "title": "1.2.2 WRITTEN LITERATURE",
       "topics": [
-        "Summary",
-        "Conclude the lesson by highlighting the following:",
-        " Poetry- is a form of literature that uses rhythmic and figurative language to express",
-        "emotions and ideas.",
-        " A poem is a literary work that expresses emotions and ideas."
+        "INTRODUCTION",
+        "Written Literature has a number of genres that appeal to the mind of the audience. One such",
+        "genre is drama. Drama is a genre of literature and performance that involves a serious emotional,",
+        "or thought-provoking narrative, presented in front of the audience."
       ],
       "activities": [
-        "climate change, corruption, human rights, teenage pregnancies",
-        " Play a poem for the learners to listen to.",
-        " Lead a discussion on how to perform poems on different cross-cutting issues. (drug abuse,",
-        "climate change, corruption, human rights, teenage pregnancies",
-        " Put learners in groups, ask them to perform poems on different cross-cutting issues given",
-        "pregnancies",
-        " Lead a discussion on reviewing performed poems (Content and meaning, poetic devices",
-        "and techniques, structure and organisation"
+        "performed on stage: plot, character (actor), dialogue, setting, conflict, staging, theme,",
+        "symbolism, irony",
+        " Introduce drama and its elements to the learners and how drama can be performed as",
+        "provided in the excerpt below.",
+        "“The Price of a Shortcut”",
+        "(Stage Director- provides stage directions in this play)",
+        "Characters (actors)",
+        "Mwamba – A Form 1 learner, smart but tempted by shortcuts."
       ],
       "resources": [],
-      "assessment": [],
+      "assessment": [
+        "Assign topics to learners on which they can write scripts to be acted in the next lesson",
+        "Conclude the lesson by highlighting the following;",
+        " Drama is a genre of literature that is intended to be performed by actors in front of an",
+        "audience. It can also be experienced through reading scripts.",
+        " Plot- the sequence of events in a play.",
+        " Characters (Actors)-performers of actions in a play."
+      ],
       "notes": ""
     },
     {
-      "week": 1,
       "lesson": 3,
-      "title": "In groups, assign learners to perform at least one poem.",
-      "topics": [
-        "Summary",
-        "Conclude the lesson by highlighting the following:",
-        " Content and Meaning-The content of a performed poem often reflects personal",
-        "experiences, cultural identity, historical themes, or contemporary social issues.",
-        " Poetic Devices: Effective poetry performances emphasize literary devices such as"
-      ],
+      "title": "1.2.2 Written Literature TOTAL NO. OF LEARNERS:",
+      "topics": ["SUB-TOPIC: 1.2.2.4 Poetry"],
       "activities": [
         "(30 Minutes)",
         "Home work",
@@ -80,7 +100,7 @@
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-11T06:12:17.950Z",
+    "extractedAt": "2026-07-19T20:35:17.806Z",
     "rawTextLength": 33740
   }
 }

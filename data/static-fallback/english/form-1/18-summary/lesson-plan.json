@@ -1,0 +1,39 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "summary",
+  "lesson": {
+    "lesson": 18,
+    "title": "SUMMARY",
+    "topics": [
+      "APPENDIX 1: SUGGESTED ANSWERS TO INTENSIVE READING PASSAGES ............................................ 98",
+      "PREFACE"
+    ],
+    "activities": [],
+    "resources": [
+      "the new Competence-Based Curriculum, enhancing their ability to inspire and equip learners",
+      "with essential English Language knowledge, skills and positive attitudes desired to create a",
+      "vibrant and responsive education system.",
+      "CHAPTER 1: FINANCIAL EDUCATION",
+      "LISTENING AND SPEAKING"
+    ],
+    "assessment": [
+      "supplement this module with their own research and innovations in order to address any gaps",
+      "that may arise during implementation.",
+      "Kelvin Mambwe (PhD.)",
+      "Permanent Secretary- Educational Services",
+      "MINISTRY OF EDUCATION",
+      "ACKOWLEDGEMENT"
+    ],
+    "notes": ""
+  }
+}

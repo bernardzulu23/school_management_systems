@@ -1,0 +1,52 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "TEACHING-MODULE-FOR-LITERATURE-FORM-1-TERM-1.pdf",
+  "md5": "25275e09394e62d1193ace54f450c52a",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-2-1-oral-literature",
+  "lesson": {
+    "lesson": 4,
+    "title": "1.2.1 ORAL LITERATURE",
+    "topics": [
+      "INTRODUCTION",
+      "This topic provides learners with a comprehensive exploration of Oral Literature and its",
+      "various forms as used in different linguistic contexts. This will help learners to have a deeper",
+      "understanding of oral literature as used in their own cultural settings. Oral literature is formed",
+      "through various expressive forms that are passed down verbally, rather than in written form."
+    ],
+    "activities": [
+      "Lead a discussion on the meaning of Oral Literature. (Oral Literature is literature that",
+      "is transmitted by word of mouth from one generation to the next…)",
+      "Divide the class into groups and task each group to come up with a narrative story of",
+      "their own.",
+      "Let each group representative present to the class their story orally.",
+      "Conduct a class discussion of what each group presented based on an oral story.",
+      "the class as noted below:",
+      "ü An Oral Story must have the following features: plot (sequence of events), setting"
+    ],
+    "resources": [
+      "disposal to find solutions.",
+      "Critical thinking: become more open minded towards different views.",
+      "Creativity and Innovation: justify one’s reasoning and procedures.",
+      "Collaboration: learners to participate fully in groups towards accomplishing given",
+      "Communication: Effectively share one’s thoughts and emotions and understand others",
+      "Emotional Intelligence: communicate and relate effectively with others."
+    ],
+    "assessment": [
+      "Put learners in pairs to come up with an oral story from their cultural setting or background",
+      "bearing the key features they learnt in the learning activity.",
+      "Oral literature refers to a body of works that is passed down through generations by word of",
+      "mouth, rather than written texts.",
+      "Page 19 of",
+      "It includes:"
+    ],
+    "notes": ""
+  }
+}

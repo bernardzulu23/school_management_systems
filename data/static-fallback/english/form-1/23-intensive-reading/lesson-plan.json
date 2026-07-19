@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "intensive-reading",
+  "lesson": {
+    "lesson": 23,
+    "title": "INTENSIVE READING",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Comprehension is a process of active engagement that leads to accurate",
+      "understanding and interpretation of what is heard or read. The importance of",
+      "comprehension lies in its application to real-life situations such as understanding",
+      "instructions, engaging in conversations, and interpreting information. Learners will read"
+    ],
+    "activities": [
+      " Ask learners to Skim through the passage to get the general idea",
+      " Ask learners to read the passage",
+      " Time learners to ensure that they read at a speed of 200 words per minute.",
+      " Guide learners to avoid bad reading habits",
+      "Read the passage below and answer the questions that follow.",
+      "In today’s fast-changing world, knowing how to use digital technology is not just helpful—it",
+      "is very important. Digital literacy means being able to find, understand, create, and share",
+      "information using computers, smartphones, and the internet. It is not only about using a phone or"
+    ],
+    "resources": [],
+    "assessment": [
+      "During the Lesson",
+      "Observe learners' participation in discussions.",
+      "Check their ability to locate answers in the passage.",
+      "Assess group work and engagement.",
+      "At the end of the Lesson ask",
+      "Oral questions on key ideas from the passage."
+    ],
+    "notes": ""
+  }
+}

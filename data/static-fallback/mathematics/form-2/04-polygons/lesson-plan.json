@@ -1,0 +1,35 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Mathematics-1-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "4b033f61c02a6d1423fbe1f01b080bb8",
+  "detectedShift": 0,
+  "pageCount": 173,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "polygons",
+  "lesson": {
+    "lesson": 4,
+    "title": "POLYGONS",
+    "topics": [
+      "INTRODUCTION",
+      "The Mathematics I Form 2 Teaching Module has been developed to guide teachers on how to facilitate"
+    ],
+    "activities": [
+      "a) are consistent with teaching and learning in a competence-based curriculum;",
+      "b) show processes that allow achievement of 21st Century Skills such as creativity, collaboration,",
+      "communication and critical thinking;",
+      "HOW TO USE THE MODULE",
+      "through manipulation of tasks that are interactive and learning through practice. We should bear in mind that",
+      "the desired competences and 21st century skills will NOT be achieved by the topics ‘covered’ but by the",
+      "for their answers, whether or not the answer is correct; to plan for solving a problem; to consider alternative",
+      "ways of solving a problem even if the first method yields a correct answer and to consider which of the"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

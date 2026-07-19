@@ -1,0 +1,45 @@
+{
+  "subject": "French",
+  "subjectSlug": "french",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "FRENCH-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "fb9fd6d3f25fe71770d51796046dd022",
+  "detectedShift": 0,
+  "pageCount": 44,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "7-0-numeracy",
+  "lesson": {
+    "lesson": 2,
+    "title": "7.0: NUMERACY",
+    "topics": [
+      "Overview",
+      "Numeracy refers to the ability to understand, interpret and work with numbers and",
+      "mathematical concepts. Numbers are a basic and essential part of any language. They appear",
+      "in everyday conversation, from telling time and dates to handling money, giving phone",
+      "numbers or counting items. Understanding numbers in French helps learners to engage in"
+    ],
+    "activities": [
+      " Teacher counts objects or items in French. E.g. un, deux, trois, quatre, cinq …",
+      " Learners listen and count after the teacher with correct pronunciation.",
+      " Display a chart with objects and their numbers in French. E.g. one pen: Un stylo, ten",
+      "oranges: Dix oranges…",
+      " In groups, learners count different items in French.",
+      "Content Tips",
+      " Numbers from 11 (onze) to 16 (seize) end with ‘ze’",
+      " Numbers from 17 to 19 are ten - seven (dix-sept), ten-eight (dix-huit) and ten-nine (dix-"
+    ],
+    "resources": [],
+    "assessment": [
+      "competence.",
+      "of the each topic",
+      "Key points/ Recap:",
+      "Use of Addition ,Subtraction, Division and Multiplication in French",
+      "ii. Writing a simple budget in French",
+      "Teaching and Learning Materials: Tempo 1, GSCE French, Luangwa"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "condition",
+  "lesson": {
+    "lesson": 27,
+    "title": "CONDITION",
+    "topics": [
+      "INTRODUCTION",
+      "Overview: Conditional sentences are an important aspect of language that enable us to",
+      "express hypothetical or uncertain situations and their potential consequences. They also",
+      "allow us to address the question ‘what if’, which makes them an important tool for",
+      "critical thinking, problem solving and effective communication. Conditional sentences"
+    ],
+    "activities": [
+      " Display a chart with three conditional sentences.",
+      " Divide learners into groups and ask them to discuss the differences they note in given",
+      "conditional sentences.",
+      "Examples:",
+      "If you work hard, you will be successful.",
+      "If you worked hard, you would be successful.",
+      "If you had worked hard, you would have been successful.",
+      "Explain the three types of conditional sentences."
+    ],
+    "resources": [
+      "Headline: \"Creating a More Autism-Friendly World\"",
+      "education to help create a more autism-friendly community. Contact",
+      "us to learn more!\"",
+      "Advertisement 3: Special Needs Support Group",
+      "Headline: \"You're Not Alone: Join Our Support Group\"",
+      "Body: \"Our support group provides a safe space for families and"
+    ],
+    "assessment": [
+      " Learners distinguish types of conditionals.",
+      " Learners match the conditional clause with the appropriate main clause.",
+      " There are three types of conditional sentences.",
+      " They express a condition and its corresponding consequence.",
+      " They consist of two clauses; the if-clause (or condition) and the main clause (or",
+      "consequence)."
+    ],
+    "notes": ""
+  }
+}

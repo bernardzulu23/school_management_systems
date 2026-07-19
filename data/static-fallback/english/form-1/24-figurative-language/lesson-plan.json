@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "figurative-language",
+  "lesson": {
+    "lesson": 24,
+    "title": "FIGURATIVE LANGUAGE",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Figurative language refers to the use of words in a way that deviates",
+      "from the conventional order and meaning in order to convey a hidden meaning.",
+      "These include similes, metaphors, hyperbole, personification, idioms, proverbs",
+      "and many more. This topic, shall look at proverbs."
+    ],
+    "activities": [
+      " Put Learners into small groups and ask them to do the following:",
+      "a. Discuss proverbs",
+      "b. Interpret their meanings",
+      "c. State the situations in which proverbs are applied.",
+      "Example: Honesty is the best policy",
+      "Meaning: It is always best to tell the truth, even if it is difficult.",
+      "Application: Use it when advising someone struggling with telling the truth.",
+      "Group representatives to present their work and teacher to give guidance during"
+    ],
+    "resources": [],
+    "assessment": [
+      " Pair learners and provide them with proverbs to interpret.",
+      " Give learners situations and ask them to supply proverbs that could be used.",
+      " Proverbs are well known sayings that offer guidance or advice.",
+      " They also declare a well-acknowledged fact or universal truth.",
+      " Proverbs are often metaphorical.",
+      " They are a collection of generations of wisdom and applies to life on Earth."
+    ],
+    "notes": ""
+  }
+}

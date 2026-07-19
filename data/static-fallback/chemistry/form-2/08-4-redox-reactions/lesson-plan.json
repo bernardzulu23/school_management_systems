@@ -1,0 +1,45 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Chemistry-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "a273913a2d9d647a810d4cb59ef50198",
+  "detectedShift": 0,
+  "pageCount": 130,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "4-redox-reactions",
+  "lesson": {
+    "lesson": 8,
+    "title": "4.: REDOX REACTIONS",
+    "topics": [
+      "Introduction:",
+      "Redox reactions are chemical processes in which electrons are transferred from one substance to",
+      "another, causing changes in oxidation states. These reactions are in two types; reduction and",
+      "oxidation. These reactions are part of our everyday life. They occur when iron rusts, when",
+      "batteries generate electricity, when fuels burn in car engines, and even when our bodies release"
+    ],
+    "activities": [
+      "oxide and hydrogen. After observing the reaction, learners will write the equation for the reaction",
+      "and discuss what happened to oxygen and hydrogen during the reaction.",
+      "Suggested Teaching and Learning Materials:",
+      "Natural Materials:",
+      "Artificial Materials: Copper (II) oxide powder, Hydrogen gas source (or hydrogen",
+      "generated from reaction between zinc and dilute hydrochloric acid), test tube and test-",
+      "tube holder, Bunsen burner or spirit lamp, delivery tube and rubber stopper, heatproof",
+      "Learning environment setup:"
+    ],
+    "resources": [],
+    "assessment": [
+      "Check learners’ participation and teamwork",
+      "Oral questioning during the activity",
+      "Review of balanced chemical equations",
+      "Teacher can give learners homework questions such as:",
+      "In the reaction Fe2O3 + 3CO → 2Fe + 3CO₂",
+      "a) Which substance is oxidised? Explain."
+    ],
+    "notes": ""
+  }
+}

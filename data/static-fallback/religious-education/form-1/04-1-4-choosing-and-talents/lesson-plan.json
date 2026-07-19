@@ -1,0 +1,52 @@
+{
+  "subject": "Religious Education",
+  "subjectSlug": "religious-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "RELIGIOUS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "9dbcad673655b7812c7256a2d74b2b5e",
+  "detectedShift": 0,
+  "pageCount": 40,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-4-choosing-and-talents",
+  "lesson": {
+    "lesson": 4,
+    "title": "1.4 CHOOSING AND TALENTS",
+    "topics": [
+      "Introduction",
+      "Choosing and talents are like the two sides of a coin as they cannot be separated. They both",
+      "play important roles in people’s lives. Life is full of choices, as a result people make choices",
+      "throughout their life time. Some of the choices people make are good and others are bad, hence",
+      "we have to follow all the necessary steps in order to make good choices. Choices can be made"
+    ],
+    "activities": [
+      "have been designed to promote practical demonstrations with a view that learners will develop",
+      "competences that will help them in life.",
+      "In this topic, there are three sub-topics. These are Choices, Choices in the four religions in",
+      "Zambia and Talents. From the presentations, teachers are expected to gain understanding and",
+      "skills in order to present the topic effectively and confidently.",
+      "GENERAL COMPETENCES",
+      "Analytical Thinking",
+      "Analyse central teachings on making choices in the four"
+    ],
+    "resources": [
+      "Hinduism",
+      "The main aim of a Hindu is to be free from all selfishness. This is because Hindus",
+      "believe that sin and suffering come about from people’s evil desires. The Bhagavad Gita",
+      "says: ‘The person who gives up all desires without thinking ‘mine’ or ‘I’ is the one who",
+      "gains peace.’’",
+      "Form 1 Term"
+    ],
+    "assessment": [
+      "ACTIVITY PROCESS",
+      " Learners to evaluate a given situation where steps for decision making are followed",
+      "in arriving at the final decision and action",
+      " Groups to present their findings inform of reports to the teacher",
+      " Teacher assesses the report and discusses them with the learners",
+      " Teacher to emphasise the importance of each step in decision making in life"
+    ],
+    "notes": ""
+  }
+}

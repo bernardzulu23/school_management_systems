@@ -1,0 +1,45 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Chemistry-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "a273913a2d9d647a810d4cb59ef50198",
+  "detectedShift": 0,
+  "pageCount": 130,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "3-chemical-kinetics",
+  "lesson": {
+    "lesson": 7,
+    "title": "3: CHEMICAL KINETICS",
+    "topics": [
+      "Introduction:",
+      "Chemical kinetics is the branch of Chemistry that studies, among other things, the rates at which",
+      "chemical reactions occur and the factors that influence these rates. It provides understanding of",
+      "the rate at which reactants are converted into products. Chemical kinetics is vital in a number of",
+      "fields, such as manufacturing, environmental conservation, mining, agriculture and in the"
+    ],
+    "activities": [
+      "chemical reactions and investigate factors that affect the rates of chemical reactions.",
+      "Suggested Teaching and Learning Materials:",
+      " Natural Materials:",
+      " Artificial Materials: Text books, science dictionary, digital devices connected to internet",
+      "Learning Environment Set-up:",
+      " Natural Environment: School surroundings",
+      " Artificial Environment: Classroom/Computer laboratory",
+      "Teacher’s Roles:"
+    ],
+    "resources": [],
+    "assessment": [
+      " Check if learners are describing rate of chemical reaction correctly",
+      "HOOK: You are baking cookies for your school's science fair. You mix baking powder",
+      "into the dough and place your cookies in the oven. Your cookies puff up in just",
+      "minutes. When your friend uses the same amount of baking powder in her batch, her",
+      "cookies barely rise, taking over 30 minutes to show any change.",
+      "What's going on?"
+    ],
+    "notes": ""
+  }
+}

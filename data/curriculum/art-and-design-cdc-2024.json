@@ -1,0 +1,1879 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Art and Design Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — ART-AND-DESIGN-SYLLABUS-FINAL.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Art and Design",
+    "slug": "art-and-design",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.964) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 29,
+    "shiftConfidence": 0.964
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Art Awareness and Appreciation",
+      "specificCompetences": [
+        "=Categorise branches of Art Defining Art (performing, literary and visual) Categorising branches of Art (Visual Art, performing Arts, Digital ArtÈ) Visiting diඒerent places where the named branches of Art are found. Museum, cultural centresÈ) Critiquing various artworks Branches of Art categorised"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["awareness", "appreciation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "= Careers in Art and Design",
+      "specificCompetences": [
+        "=Classify careers in Art and Design Identifying careers in Art and Design Classifying careers in Art and design Art Teacher, fabric designer, curatorÈ) Matching the artworks to the speciÜc categories of art. (Graphic designer,"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "classiÜed accordingly",
+      "keywords": ["careers", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "=Visual Arts",
+      "specificCompetences": [
+        "=Identify forms of Visual Arts. Identifying forms of Visual arts (Fine Arts, Crafts, Design) Discussing the functions of Visual arts (income generation, identity, cultural heritageÈ) Analysing forms of visual arts. Forms of visual arts identiÜed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately.",
+      "keywords": ["visual", "arts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Pioneers of Zambian Visual Arts",
+      "specificCompetences": [
+        "=Identify pioneers of Zambian Visual Arts Identifying pioneers of Zambian Visual Arts Henry Tayali, Gabriel Ellison, Cynthia Zukas, Akwila Simpasa, Godfrey Setti, Shadreck Simukanga, Martin Abasi PhiriÈ) Critiquing works of the pioneer visual artists Pioneers of Zambian Visual Arts"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identified accordingly",
+      "keywords": ["pioneers", "zambian", "visual", "arts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S5",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.5",
+      "subtopic": "=Elements of Art",
+      "specificCompetences": [
+        "=Apply Art elements in practical activities Identifying elements of Art (Line, shape, space, value, texture, tone and colour). Experimenting with lines to express and communicate ideas Using lines to create contour, gesture drawings and calligraphy writing Analysing the use of shape, form and space Creating Artworks with the use of shape, form and space Art elements applied in"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "practical activities correctly",
+      "keywords": ["elements"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S6",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.6",
+      "subtopic": "=Principles of Art",
+      "specificCompetences": ["Create Artworks using principles of art."],
+      "learningActivities": [],
+      "expectedStandard": "principles of art appropriately.",
+      "keywords": ["principles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S7",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.7",
+      "subtopic": "=Basic Shapes",
+      "specificCompetences": [
+        "=Apply knowledge of basic shapes in drawing Identifying basic shapes (cuboid, pyramid, cone, rectangular boxÈ) Using basic shapes to draw Knowledge of basic shapes"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "applied in drawings correctly",
+      "keywords": ["basic", "shapes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S8",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.8",
+      "subtopic": "=Types of Shading =1.1.8.1 =Apply shading techniques Discussing various shading techniques (pointillism/stippling, hatching, cross hatching, smudging, scribbling, smashÈ) Applying tonal gradation on drawings Applying various shading techniques Shading techniques applied",
+      "specificCompetences": [],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": [
+        "types",
+        "shading",
+        "apply",
+        "shading",
+        "techniques",
+        "discussing",
+        "various",
+        "shading",
+        "techniques",
+        "pointillism",
+        "stippling",
+        "hatching"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S9",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.9",
+      "subtopic": "=Diඒerent Textures",
+      "specificCompetences": [
+        "=Compose pictures using a variety of textures and values Defining the Art elements (texture and value) Identifying diඒerent textures (actual and visual texture) Exploring a variety of textures, value and shading Composing pictures using a variety of textures and values Pictures composed using a variety of textures and values"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["erent", "textures"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Pre-historic Rock Art of Zambia",
+      "specificCompetences": ["Research the Pre- historic Rock Art of Zambia"],
+      "learningActivities": [],
+      "expectedStandard": "Zambia researched correctly",
+      "keywords": ["historic", "rock", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Traditional Crafts",
+      "specificCompetences": ["=Identify traditional crafts"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["traditional", "crafts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Post-independence and Contemporary Art",
+      "specificCompetences": ["=Explain Post- independence"],
+      "learningActivities": [],
+      "expectedStandard": "explained correctly",
+      "keywords": ["post", "independence", "contemporary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Post-independence and Contemporary Art",
+      "specificCompetences": ["=Explain Contemporary Art"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["post", "independence", "contemporary"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2-4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Traditional Decorations",
+      "specificCompetences": ["=Make traditional decorations"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["traditional", "decorations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S5",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.5",
+      "subtopic": "Traditional Artefacts",
+      "specificCompetences": [
+        "Create traditional Artefacts Creating traditional Artefacts Basketry, weaving, pottery, beadworkÈ) Traditional Artefacts created skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["traditional", "artefacts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Types of Colours",
+      "specificCompetences": [
+        "Experiment colours of the spectrum = Experimenting colours of the spectrum primary, secondary and tertiary) Colours of the spectrum experimented skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["types", "colours"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "=Colour Schemes",
+      "specificCompetences": [
+        "Use colour schemes in painting= Using colour schemes in the painting Monochromatic, Analogous, Tertiary, Complementary, Colour triads Split complementaryÈ) Colour schemes used in the"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "painting appropriately",
+      "keywords": ["colour", "schemes"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "= Tools and Materials",
+      "specificCompetences": [
+        "=Use variety of tools and materials for drawing and painting Discussing the use of variety of tools and materials for drawing: Tools charcoal, chalk, pastels, crayons, pencils, pensÈ). Materials (paper, ink, walls, Ýoors, fabricsÈ) Experimenting with tools and materials Variety of tools and materials"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "for drawing used accordingly",
+      "keywords": ["tools", "materials"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "=Types of Drawing and Painting",
+      "specificCompetences": ["=Identify types of drawing and painting"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["types", "drawing", "painting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2-2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "=Types of Drawing and Painting",
+      "specificCompetences": [
+        "=Apply types of drawing and painting Identifying realistic and abstract drawings. (Realistic, abstract and non- objective) Applying the types of drawing and painting Types of drawing / painting"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "identified and applied correctly",
+      "keywords": ["types", "drawing", "painting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S3",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.3",
+      "subtopic": "=Forms of Drawing =1.4.3.1 Demonstrate forms of drawing Demonstrating forms of drawing sketches, studies, complete work) Forms of drawing",
+      "specificCompetences": ["DESIGN"],
+      "learningActivities": [],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": [
+        "forms",
+        "drawing",
+        "demonstrate",
+        "forms",
+        "drawing",
+        "demonstrating",
+        "forms",
+        "drawing",
+        "sketches",
+        "studies",
+        "complete",
+        "work"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Lettering",
+      "specificCompetences": [
+        "Design letters Identifying and deÜning letters / related terms (lower case, upper case / types of letters, Letter spacing, word spacing, block and Roman letteringÈ) Defining calligraphy Discussing functions of lettering Identifying careers relating to lettering works Designing letters"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Letters designed correctly",
+      "keywords": ["lettering"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "Poster making",
+      "specificCompetences": [
+        "=Design posters. Identifying examples of posters Designing various posters on crosscutting issues to convey messages conservations, social activities) Posters designed creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["poster", "making"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S3",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.3",
+      "subtopic": "Computer Aided Design CAD)",
+      "specificCompetences": [
+        "=Design types of cards using a computer Defining Computer Aided Design Designing various types of cards using a computer (E-cards, animated cards. Digital invitation, Christmas, anniversary, birthday, graduation, Easter, Kitchen partyÈ) Relating careers to computer aided designing (Architectural Designer, Product Designer, Mechanical DesignerÈ) Types of cards using a"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "computer designed accurately.",
+      "keywords": ["computer", "aided", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "Topic 1.6",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Patterns",
+      "specificCompetences": ["Make patterns"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["patterns"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T7-S1",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "Topic 1.7",
+      "subtopicNumber": "1.7.1",
+      "subtopic": "Imaginative Compositions",
+      "specificCompetences": [
+        "Compose pictures based on a given theme Composing pictures from the given themes (my family, market place, huntingÈ) Interpreting ideas and Crosscutting issues (environmental education, GBV, National values and principlesÈ) Drawing and painting (Landscape, Village scenery, TownscapeÈ) Pictures based on a given theme composed creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["imaginative", "compositions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T8-S1",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "Topic 1.8",
+      "subtopicNumber": "1.8.1",
+      "subtopic": "=Drawing or Painting from Natural or ManÎ made objects",
+      "specificCompetences": ["=Draw or paint pictures from observation"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["drawing", "painting", "from", "natural", "made", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T9-S1",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "Topic 1.9",
+      "subtopicNumber": "1.9.1",
+      "subtopic": "Still Life Drawing and or Painting",
+      "specificCompetences": [
+        "Compose pictures from Still life Composing pictures from Still Life Household objects, fruits, still objectsÈ) Pictures from Still life"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "composed appropriately.",
+      "keywords": ["still", "life", "drawing", "painting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S1",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "Topic 1.11",
+      "subtopicNumber": "1.11.1",
+      "subtopic": "=Picture Making",
+      "specificCompetences": [
+        "Compose pictures using different techniques Defining picture making (collage, montage, mosaic and friezeÈ) Experimenting with possibilities and limitations of materials and techniques in picture making (found objects, accidentalsÈ) Composing pictures using diඒerent techniques (collage, mosaic, montageÈ) Pictures composed using different techniques creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["picture", "making"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T11-S2",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "Topic 1.11",
+      "subtopicNumber": "1.11.2",
+      "subtopic": "=Weaving",
+      "specificCompetences": [
+        "Create woven items Defining weaving (warps, wefts, loomÈ) Exploring possibilities and limitations with materials and techniques in weaving (Plain weave, twill, twinning, Dutch, Satin, Ghordes knotÈ) Weaving, plaiting and knotting Decorative wall mats, baskets, tablemats, Üsh traps, reed matsÈ) Woven items created skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["weaving"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S1",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "Topic 1.12",
+      "subtopicNumber": "1.12.1",
+      "subtopic": "=Book Crafts",
+      "specificCompetences": [
+        "Apply book binding skills Applying binding skills in book making and repairing Binding skills in book making"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "applied correctly",
+      "keywords": ["book", "crafts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S2",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "Topic 1.12",
+      "subtopicNumber": "1.12.2",
+      "subtopic": "Papier-mch",
+      "specificCompetences": [
+        "Create items using Papier-mch Defining Papier-mch Craft Identifying tools and materials to use in papier-mch. Creating items using Papier-mch toys, plates, animal shapes mask modelsÈ) Decorating models Items using Papier-mch created creatively ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["papier"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T12-S3",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "Topic 1.12",
+      "subtopicNumber": "1.12.3",
+      "subtopic": "General Crafts=",
+      "specificCompetences": [
+        "Make items using found materials Making various items using found materials (Egg decorations, bead workÈ) Items made from found materials creatively."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["general", "crafts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T13-S1",
+      "form": 1,
+      "topicNumber": "1.13",
+      "topic": "Topic 1.13",
+      "subtopicNumber": "1.13.1",
+      "subtopic": "Introduction to Sculpture",
+      "specificCompetences": [
+        "Apply basic approaches in sculpture making Defining sculpture (free standing, relief sculpture, MarquetteÈ) Identifying local materials used for sculpture making Applying basic approaches in sculpture making (additive, subtractive, castingÈ) Basic approaches in sculpture"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "making applied appropriately",
+      "keywords": ["introduction", "sculpture"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T13-S2",
+      "form": 1,
+      "topicNumber": "1.13",
+      "topic": "Topic 1.13",
+      "subtopicNumber": "1.13.2",
+      "subtopic": "Construction and Assemblage=",
+      "specificCompetences": [
+        "Construct and assemble sculptures Defining constructional and assemblage sculptures Exploring techniques, materials and tools used in constructional sculptures nailing, tying, Ütting, gluingÈ) Creating constructional and assemblage sculptures (soft toys, cars, aero plane, insects, puppets, marionettesÈ) Sculptures constructed and assembled skilfully."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["construction", "assemblage"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T13-S3",
+      "form": 1,
+      "topicNumber": "1.13",
+      "topic": "Topic 1.13",
+      "subtopicNumber": "1.13.3",
+      "subtopic": "Carving=",
+      "specificCompetences": ["Carve various items DeÜning subtractive carving methods,"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["carving"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T14-S1",
+      "form": 1,
+      "topicNumber": "1.14",
+      "topic": "Topic 1.14",
+      "subtopicNumber": "1.14.1",
+      "subtopic": "Entrepreneurship in Art",
+      "specificCompetences": [
+        "Use Art as a business DeÜning entrepreneurship Using Art as a business Appreciating Art (study tours, guided online tutorials, talk showsÈ) Hosting annual art exhibitions (Galleries, studio, schools, public spacesÈ) Art used as a business"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["entrepreneurship"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Art Organizations",
+      "specificCompetences": ["=Identify art organisations"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["organizations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "Pioneer Zambian Visual Artists",
+      "specificCompetences": ["= Critique works of the Zambian Visual Artists"],
+      "learningActivities": [],
+      "expectedStandard": "Artist critiqued accordingly",
+      "keywords": ["pioneer", "zambian", "visual", "artists"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "Forms of Zambian Traditional Art",
+      "specificCompetences": [
+        "Make Zambian traditional bodily ornamental features of identity Discussing forms of Zambian Traditional Art Identifying traditional bodily ornamental features of identity tattoos, ornaments, attiresÈ) Stating the use of sculptures in Zambian communities Making various Zambian traditional bodily ornamental features of identity, using (fabric. Beads, stone, wood, terracotta, hornsÈ) Forms of Zambian Traditional bodily ornamental features of identity made skilfully."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["forms", "zambian", "traditional"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "Secular, Religious and Functional Craft items",
+      "specificCompetences": [
+        "=Analyse secular, religious and functional craft items Analysing secular, religious and functional craft items (Traditional bodily / ornaments, traditional attires, sculpture, potteryÈ) Secular, religious and functional craft items analysed comparatively ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["secular", "religious", "functional", "craft", "items"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S5",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.5",
+      "subtopic": "Pottery",
+      "specificCompetences": [
+        "= Create pottery works Explaining the historical development of pottery Discussing the importance of local traditional and modern pottery Discussing sources of clay from the locality (types of clay- ball, china, redÈ). Identifying tools for pottery Preparing clay Creating pottery works. Traditional pottery (clay preparationÈ) Decorating pottery (firingÈ) Works of pottery created skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["pottery"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S6",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.6",
+      "subtopic": "Weaving",
+      "specificCompetences": [
+        "Explore weaving using local materials Discussing tools and materials used for weaving (loom, knife, scissors, threading hook and sisal, reeds, threadsÈ) Identifying local woven products Basketry, mat making, Üsh traps, animal nets/trapsÈ) Weaving using local materials Baskets, fish traps, animal netsÈ) Weaving using local materials explored creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["weaving"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Colour Pigments",
+      "specificCompetences": [
+        "=Mix colour pigments and vehicles/binders Discussing pigment and paint vehicle/ binders Identifying examples of pigments and paint vehicles/binders Describing sources of pigments Mixing colour pigments and vehicles/binders Colour pigments and vehicles/binders mixed proportionately"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["colour", "pigments"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "Colour Use",
+      "specificCompetences": [
+        "=Paint using a chosen colour scheme Analysing qualities of optical colours Analysing the use of colour by any famous Zambian Artist painter (Henry Tayali, Godfrey Setti, Gabriel Ellison, Cynthia Zukas, Lawrence Yombwe, Martin Abasi PhiriÈ) Discussing the use of optical and arbitrary colours in Artworks Painting using a chosen colour scheme Colour scheme used to paint"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["colour"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Colour Use",
+      "specificCompetences": [
+        "Create paintings= Analyse the techniques and processes (brush strokes, washing out, palette knife, resist, dry pigment, and mixed media.) Exploring painting techniques spraying, splattering, dubbing, dotting/pointillism). Creating paintings based on given themes Paintings created"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["colour"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1-2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Painting",
+      "specificCompetences": [
+        "=Compose paintings of aesthetic value Discussing a variety of themes in painting (abstract and realistic ideas) Identifying tools and materials for painting (brushes, pallet knife, sponges, paper, boardsÈ) Utilizing tools and materials to compose paintings of aesthetic value Paintings of aesthetic value composed skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["painting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Apply types of Perspectives Exploring types of perspectives linear, 2 and 3 point, scale and proportion, overlapping, aerial/ atmospheric, foreshortening perspectiveÈ) Categorising the types of views; BirdÓs, normal, frog, wormsÓ eye views) Applying the rules of perspective receding colours, depth, heightÈ) Types of Perspectives applied",
+      "specificCompetences": [],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": [
+        "apply",
+        "types",
+        "perspectives",
+        "exploring",
+        "types",
+        "perspectives",
+        "linear",
+        "point",
+        "scale",
+        "proportion",
+        "overlapping",
+        "aerial"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "Topic 2.5",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Imaginative composition",
+      "specificCompetences": [
+        "=Compose pictures based on given themes Composing pictures based on given themes (climate change, public health concernsÈ) water and sanitation, traditional ceremonies, celebrations, festivalsÈ) Pictures based on given themes composed creatively."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["imaginative", "composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "Topic 2.6",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Natural or man- made objects",
+      "specificCompetences": [
+        "Create pictures from natural objects / scenes = Creating pictures from Nature tree trunks, logs, twigs / landscapeÈ) Pictures from Nature created creatively ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["natural", "made", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S1",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "Topic 2.7",
+      "subtopicNumber": "2.7.1",
+      "subtopic": "Natural, Man made and Traditional",
+      "specificCompetences": [
+        "=Compose pictures from Still Life objects Composing pictures from Still Life objects (household objects, parts of simple machines, bottles, traditional utensilsÈ) Pictures from Still life objects composed skilfully."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["natural", "made", "traditional"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T8-S1",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "Topic 2.8",
+      "subtopicNumber": "2.8.1",
+      "subtopic": "Human Figure Drawing",
+      "specificCompetences": [
+        "=Draw human body parts Drawing studies of human body parts (head, bust, torso, palm, limbs, facial featuresÈ) Studies of human body parts"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "drawn correctly",
+      "keywords": ["human", "figure", "drawing"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S1",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.1",
+      "subtopic": "Picture Making",
+      "specificCompetences": [
+        "=Make frieze, montage, collage and mosaic Making frieze, montage, collage and mosaic Frieze, montage, collage and mosaic made creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["picture", "making"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S2",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.2",
+      "subtopic": "Appliqu and Stitchery",
+      "specificCompetences": [
+        "=Create works of applique and stitchery Discussing applique and stitchery Creating works of applique and stitchery (table cloth, bags, wall decorationÈ) Works of applique and stitchery created skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["appliqu", "stitchery"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S3",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.3",
+      "subtopic": "Weaving, Plaiting and Knotting",
+      "specificCompetences": [
+        "Create works of weaving, plaiting and knotting Discussing weaving, plaiting and knotting Exploring weaving, plaiting and knotting using a variety of Art elements and principles Creating works of weaving, plaiting and knotting (handbags, folders, ropes, belts, doormat,"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "and knotting created correctly",
+      "keywords": ["weaving", "plaiting", "knotting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S4",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.4",
+      "subtopic": "Book Craft",
+      "specificCompetences": [
+        "=Bind books Binding various books- single section (staplingÈ) Books bound skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["book", "craft"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S5",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.5",
+      "subtopic": "Pottery and Ceramics",
+      "specificCompetences": [
+        "Create works of pottery and ceramics Discussing pottery and ceramics bisque, glaze, decorating) Discussing materials and tools Testing types of Üring kilns traditional, modern È) Works of pottery and ceramics created skilfully ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["pottery", "ceramics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S6",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.6",
+      "subtopic": "Papier-mch",
+      "specificCompetences": [
+        "=Create crafts using papier-mch Analysing papier-mch craft works Making crafts using papier- mch (toys, Ügurines, decorative modelsÈ) Decorating crafts made out of papier-mch Works of Art using papier- mch created skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["papier"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T9-S7",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "Topic 2.9",
+      "subtopicNumber": "2.9.7",
+      "subtopic": "General Crafts",
+      "specificCompetences": [
+        "Make different crafts Making different crafts (twig decorations, necklace and bunglesÈ) Diඒerent crafts made creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["general", "crafts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S1",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "Topic 2.10",
+      "subtopicNumber": "2.10.1",
+      "subtopic": "=Computer Aided Design Î CAD",
+      "specificCompetences": [
+        "Design Art works using a computer Analysing qualities of computer aided designs Designing artworks using a computer (lettering, logo, emblem, cards, letterheadÈ) Artworks designed using a"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "computer appropriately",
+      "keywords": ["computer", "aided", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S2",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "Topic 2.10",
+      "subtopicNumber": "2.10.2",
+      "subtopic": "=Lettering",
+      "specificCompetences": [
+        "Design diඒerent font types Designing different font types Calligraphy writing, signage, labellingÈ) Different font types designed creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["lettering"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S3",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "Topic 2.10",
+      "subtopicNumber": "2.10.3",
+      "subtopic": "=Poster Design",
+      "specificCompetences": [
+        "Design various posters based on given themes Discussing careers related to poster designing (Graphic designer, Creative Designer, MuralistÈ) Designing various posters based on given themes (drug abuse, climate change, money laundering corruption, , human rights population concerns È) Various posters based on given themes designed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["poster", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T10-S4",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "Topic 2.10",
+      "subtopicNumber": "2.10.4",
+      "subtopic": "=Illustrations",
+      "specificCompetences": [
+        "Develop illustrations based on related themes Discussing types of illustrations caricature, editorial illustration, storyboardÈ) Illustrations on related themes developed creatively. ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["illustrations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S1",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "Topic 2.11",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Modelling",
+      "specificCompetences": [
+        "Model free standing sculptures= Analysing qualities of free standing sculptures, techniques and processes involved Modelling free standing sculptures (human Ügure, head, bustÈ) Free standing sculptures"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "modelled appropriately",
+      "keywords": ["modelling"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S2",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "Topic 2.11",
+      "subtopicNumber": "2.11.2",
+      "subtopic": "Relief Sculpture",
+      "specificCompetences": [
+        "Create relief sculptures Creating relief sculptures (wall plaque, metal coinsÈ) Relief sculptures created skilfully ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["relief", "sculpture"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S3",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "Topic 2.11",
+      "subtopicNumber": "2.11.3",
+      "subtopic": "Construction =",
+      "specificCompetences": [
+        "=Construct different objects Organising assorted materials Constructing diඒerent objects toy cars, sculptures, mobiles, bicycles, housesÈ) Diඒerent objects constructed skilfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["construction"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T11-S4",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "Topic 2.11",
+      "subtopicNumber": "2.11.4",
+      "subtopic": "Carving =",
+      "specificCompetences": [
+        "Create objects by carving wood Demonstrating wood carving techniques (subtractive method) Creating objects by woodcarving stools, toys, spoons, cooking sticksÈ) Carved wooden objects"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "created appropriately",
+      "keywords": ["carving"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T12-S1",
+      "form": 2,
+      "topicNumber": "2.12",
+      "topic": "Topic 2.12",
+      "subtopicNumber": "2.12.1",
+      "subtopic": "Art Appreciation",
+      "specificCompetences": [
+        "Appreciate Art Appreciating Art (Üeld project, study tours, guided online tutorialsÈ) Hold annual exhibitions Galleries, studio spaces, schools, public and private spacesÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Art appreciated appropriately",
+      "keywords": ["appreciation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "=Types of African Art=",
+      "specificCompetences": [
+        "Demonstrate knowledge of types of African Art Discussing various Art styles from different parts of Africa North, East, Southern AfricaÈ) Identifying the types of African Art (rock paintings, masks, terracotta ÜguresÈ) Comparing functions of African Art (ritual, utilitarian, functional, religious, divination, prestigiousÈ) Knowledge of the types of African Art demonstrated"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["types", "african"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "=Sculpture materials",
+      "specificCompetences": [
+        "Analyse sculpture materials Analysing Sculpture materials Stone, wood, metalÈ) Sculpture materials analysed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sculpture", "materials"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "Crafts",
+      "specificCompetences": ["Create African crafts"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["crafts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S4",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.4",
+      "subtopic": "= Traditional Sculptures from Africa",
+      "specificCompetences": [
+        "Construct sculptures based on African traditional styles Analysing Art styles and traditional sculptures from Africa East, West, Central, Southern and North Africa) Constructing sculptures based on various African traditional styles Sculptures based on African traditional styles constructed creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["traditional", "sculptures", "from", "africa"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Composition in colour",
+      "specificCompetences": [
+        "Compose pictures based on given themes Composing pictures based on given themes (festivals, traditional dances, cross cutting issuesÈ) Pictures based on given themes composed creatively ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["composition", "colour"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Drawing or painting natural objects",
+      "specificCompetences": [
+        "=Create pictures to depict the structure of natural objects Creating pictures to depict the structure of natural objects (leaf, bark, branch, twig, bone, foliage, stone, tree, trunkÈ) Pictures depicting the structure of natural objects created skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["drawing", "painting", "natural", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "Drawing or painting man Î made objects",
+      "specificCompetences": [
+        "=Generate pictures to depict man-made objects Generating pictures to depict man-made-objects (shoe, bottle, boxes, tinsÈ) Pictures depicting man-made objects generated"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["drawing", "painting", "made", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Drawing or painting Rural / Urban setting",
+      "specificCompetences": [
+        "=Compose pictures to depict an urban or rural setting Composing pictures to depict a given setting (Rural or Urban) Pictures to depict given"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "settings composed correctly",
+      "keywords": ["drawing", "painting", "rural", "urban", "setting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Drawing or painting natural objects",
+      "specificCompetences": [
+        "=Compose pictures to depict natural objects Composing pictures to depict natural objects (bones, skull plank, logÈ) Pictures to depict natural objects composed skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["drawing", "painting", "natural", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.2",
+      "subtopic": "Drawing or painting Man Î Made objects",
+      "specificCompetences": [
+        "=Compose pictures to depict Man Î made objects Composing pictures to depict Man Î made objects (parts of simple machines, bottlesÈ) Pictures to depict man-made"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "objects composed correctly",
+      "keywords": ["drawing", "painting", "made", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S3",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.3",
+      "subtopic": "Drawing",
+      "specificCompetences": [
+        "=Compose pictures to depict traditional objects Composing pictures to depict traditional objects (baskets, traditional stools, gourds, wooden plate, walking sticksÈ) Pictures to depict tradition objects composed skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["drawing"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Human Figure",
+      "specificCompetences": [
+        "Compose human Ügure drawings or paintings Composing human Ügure drawings or paintings (Persons in action"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["human", "figure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Textile Design",
+      "specificCompetences": [
+        "Create a print for textile production Discussing fabric print making Experimenting with printing techniques (block, stencil, intaglioÈ) Creating fabric printing motifs for textile production (geometric, organicÈ) Prints for textile production creatively designed ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["textile", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Picture making",
+      "specificCompetences": [
+        "=Create collage Discussing examples of modern and local forms of collage Creating collage Collage created skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["picture", "making"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2-2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "Picture making",
+      "specificCompetences": [
+        "=Create montage Discussing examples of montage Creating montage Montage created skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["picture", "making"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S3",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.3",
+      "subtopic": "Papier-mch",
+      "specificCompetences": [
+        "=Make objects using papier-mch Discussing examples of papier- mch artefacts Making objects using papier- mch (puppets, masksÈ) Objects using papier-mch made skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["papier"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S4",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.4",
+      "subtopic": "Fabric work",
+      "specificCompetences": [
+        "=Create a batik work Discussing batik Exploring batik making methods Creating batik works suitable for different situations (wall hanging, waist or head wrapper, decorative artefactÈ) Batik works suitable for different situations created"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["fabric", "work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S4-2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.4",
+      "subtopic": "Fabric work",
+      "specificCompetences": [
+        "=Create tie and dye items =¤ Discussing tie and dye Exploring materials for tie and dye (traditional/natural and convectionalÈ) Fabric tying techniques gathering, stitching, capping, crumpling, foldingÈ) Analysing tie and dye works Creating tie and dye art works curtain fabric, dress materialÈ) Tie and dye items created creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["fabric", "work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S5",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.5",
+      "subtopic": "Weaving",
+      "specificCompetences": [
+        "Produce woven items Analysing traditional and modern weaving art works (baskets, mats, lampshade, handbagÈ) Producing woven art works (mat, curtain, carpet, dressÈ) Woven art works produced skilfully ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["weaving"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S6",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.6",
+      "subtopic": "Book Craft",
+      "specificCompetences": [
+        "=Bind books Binding books using multi- section methods (stitching, spiral, staplingÈ)"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "Books bound appropriately",
+      "keywords": ["book", "craft"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S7",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.7",
+      "subtopic": "Ornaments",
+      "specificCompetences": [
+        "=Make types of jewellery Identifying types of Jewellery Bone, Metal, paperÈ) Exploring various materials and techniques used to make jewellery Making various types of jewellery Decorating by painting, texturing and vanishing Types of jewellery made creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["ornaments"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S8",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.8",
+      "subtopic": "Leather work",
+      "specificCompetences": [
+        "=Create Artefacts from leather Identifying traditional and modern uses of leather Analysing leather work techniques Discussing tools, materials and equipment used for leatherwork Creating artefacts from leather handbags, hats, traditional drums, stools, belts, Yoke strap leather, handbagsÈ) Artefacts from leather created skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["leather", "work"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S9",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.9",
+      "subtopic": "Basketry",
+      "specificCompetences": [
+        "=Create basketry works Discussing basketry Describing traditional and modern forms of basketry Identifying local materials for basketry Experimenting with techniques of basketry (wickerwork, coiled, plaiting, twinningÈ) Creating basketry works baskets, winnowsÈ) Basketry works crafted skillfully ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["basketry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S2",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.2",
+      "subtopic": "Emblem",
+      "specificCompetences": ["Design various emblems"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["emblem"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S3",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.3",
+      "subtopic": "Cards",
+      "specificCompetences": [
+        "=Design cards for various occasions Identifying diඒerent types of cards Designing cards for various occasions (Birthday, valentine, ChristmasÈ) Various occasional cards"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "designed appropriately",
+      "keywords": ["cards"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S4",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.4",
+      "subtopic": "Posters",
+      "specificCompetences": [
+        "=Design posters based on different themes Discussing various posters Analysing the design process Designing posters based on different themes (Advertise products, future eventsÈ) Posters based on different themes designed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["posters"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S5",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.5",
+      "subtopic": "Mural designs",
+      "specificCompetences": [
+        "Compose mural designs Discussing mural designs Identifying career opportunities in mural designing (interior/ exterior designer) Developing the designing process Composing mural designs Mural designs composed aesthetically ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["mural", "designs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S6",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.6",
+      "subtopic": "Package design",
+      "specificCompetences": [
+        "=Make various packaging designs Analysing package design Discussing the process of package design Discussing the functions of packaging designs Making various packaging designs Various package designs made creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["package", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T7-S7",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "Topic 3.7",
+      "subtopicNumber": "3.7.7",
+      "subtopic": "Product model design",
+      "specificCompetences": [
+        "=Design various product models Analysing product model designs Identifying examples of model designs problem Analysing qualities of product model designs and the process involved in the designs Designing various product models (toys, cars, tools È) Various product models designed skillfully"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["product", "model", "design"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T8-S1",
+      "form": 3,
+      "topicNumber": "3.8",
+      "topic": "Topic 3.8",
+      "subtopicNumber": "3.8.1",
+      "subtopic": "Photography",
+      "specificCompetences": [
+        "Produce pictures using photography Discussing photography Identifying various kinds of photography (portrait, landscape, still life, street È) Categorising pictures (lifestyle, documentary, traditional, posed artisticÈ) Analysing picture compositions Producing pictures based on different themes (photomontage, frieze, propsÈ) Pictures using photography"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "produced appropriately",
+      "keywords": ["photography"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T8-S2",
+      "form": 3,
+      "topicNumber": "3.8",
+      "topic": "Topic 3.8",
+      "subtopicNumber": "3.8.2",
+      "subtopic": "=Filming =",
+      "specificCompetences": ["Produce motion pictures"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["filming"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T9-S1",
+      "form": 3,
+      "topicNumber": "3.9",
+      "topic": "Topic 3.9",
+      "subtopicNumber": "3.9.1",
+      "subtopic": "=Sculptures",
+      "specificCompetences": ["Make sculptures using different materials"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sculptures"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T10-S1",
+      "form": 3,
+      "topicNumber": "3.10",
+      "topic": "Topic 3.10",
+      "subtopicNumber": "3.10.1",
+      "subtopic": "Creative Art projects",
+      "specificCompetences": ["Develop Creative Art projects ="],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["creative", "projects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Careers in Art",
+      "specificCompetences": [
+        "=Develop Art portfolios Identifying careers in Art Art Teacher, Art administrator, fashion designer, makeup Artist, creative director, museum docent, illustrator, cartoonist, photographer, costume designer, textile designer, interior/exterior decorator, stage designer, graphic designer, tattoo Artist, muralistÈ) Designing work models/ portfolios / work samples for careers in Art (Muralist- mural painting/ Makeup artist- facial painting demo, Curator- art class display critic sessionÈ ) Art Portfolios developed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["careers"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.2",
+      "subtopic": "Importance of Visual Arts",
+      "specificCompetences": [
+        "Produce Visual Arts Discussing the importance of Visual Arts in the economy Exhibiting Artworks (in Schools, Galleries, Exhibition hallways, Public, private residencesÈ) Producing different Visual Art works Visual Arts Produced"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["importance", "visual", "arts"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Famous movements =",
+      "specificCompetences": [
+        "=Explore famous movements in Art Discussing the characteristics of Gothic Art Stating the masters of Gothic Art (Giotto, Botticelli, Simone MartiniÈ) Describing the significance of Renaissance Art (working styles, exhibition spacesÈ) Listing the masters of Renaissance Art Michelangelo Buonarroti, Leonardo Da Vinci, Raphaeli Santi, Merisi Da Caravaggio È) Analysing the famous movements in Art Discussing contemporary Art (Vincent Van goh, Vassily Kandinsky, Pablo PicassoÈ) Exploring famous movements in Art repainting the Gothic, Renaissance, Contemporary masters worksÈ) Famous movements in Art"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "explored appropriately",
+      "keywords": ["famous", "movements"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "Conceptual Art",
+      "specificCompetences": [
+        "Explore Conceptual Art Describing conceptual Art Exploring Conceptual Art Marcel Duchamp, Yoko Ono, Hans HaackeÈ) Conceptual Art explored comprehensively ART AND DESIGN SYLLABUS - Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["conceptual"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Imaginative Composition",
+      "specificCompetences": ["=Compose imaginative pictures based on different themes"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["imaginative", "composition"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Natural Objects",
+      "specificCompetences": ["=Compose pictures to depict natural objects"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["natural", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "Urban Settings",
+      "specificCompetences": ["=Compose pictures to depict urban settings"],
+      "learningActivities": [],
+      "expectedStandard": "settings composed correctly",
+      "keywords": ["urban", "settings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S3",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "Topic 4.4",
+      "subtopicNumber": "4.4.3",
+      "subtopic": "Rural Settings",
+      "specificCompetences": ["=Compose pictures to depict rural settings"],
+      "learningActivities": [],
+      "expectedStandard": "settings composed correctly",
+      "keywords": ["rural", "settings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Natural Objects",
+      "specificCompetences": ["=Compose pictures to depict natural objects"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["natural", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S2",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.2",
+      "subtopic": "Man Î Made Objects",
+      "specificCompetences": ["=Compose pictures to depict man-made objects"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["made", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S3",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "Topic 4.5",
+      "subtopicNumber": "4.5.3",
+      "subtopic": "Traditional Objects",
+      "specificCompetences": ["=Compose pictures to depict traditional objects"],
+      "learningActivities": [],
+      "expectedStandard": "objects composed correctly",
+      "keywords": ["traditional", "objects"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "Topic 4.6",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "Human Ügures",
+      "specificCompetences": ["=Draw human Ügures in action using different techniques"],
+      "learningActivities": [],
+      "expectedStandard": "techniques appropriately",
+      "keywords": ["human", "gures"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S1",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.1",
+      "subtopic": "Print making",
+      "specificCompetences": ["Make prints using various techniques"],
+      "learningActivities": [],
+      "expectedStandard": "techniques made correctly",
+      "keywords": ["print", "making"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S2",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.2",
+      "subtopic": "Masks",
+      "specificCompetences": ["=Create various masks"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["masks"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S3",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.3",
+      "subtopic": "Mobiles and VWDELOHV",
+      "specificCompetences": [
+        "=Make mobiles and stabiles Discussing mobiles and stabiles Identifying functions of mobiles and stabiles Making mobiles and stabiles Mobiles and stabiles made creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["mobiles", "vwdelohv"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T7-S4",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "Topic 4.7",
+      "subtopicNumber": "4.7.4",
+      "subtopic": "Ceramics",
+      "specificCompetences": ["Apply techniques used in ceramics"],
+      "learningActivities": [],
+      "expectedStandard": "appropriately",
+      "keywords": ["ceramics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S1",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.1",
+      "subtopic": "Calligraphy",
+      "specificCompetences": ["Use various calligraphic fonts"],
+      "learningActivities": [],
+      "expectedStandard": "used appropriately",
+      "keywords": ["calligraphy"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S3",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.3",
+      "subtopic": "Emblem",
+      "specificCompetences": [
+        "Design various emblems Designing various emblem Universities, Colleges, SchoolsÈ) Various emblems designed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["emblem"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S4",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.4",
+      "subtopic": "Badges",
+      "specificCompetences": [
+        "Design various badges Designing various badges school badge, association badgeÈ) Various badges designed"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["badges"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S5",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.5",
+      "subtopic": "Cards",
+      "specificCompetences": ["Design various cards"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["cards"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T8-S6",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "Topic 4.8",
+      "subtopicNumber": "4.8.6",
+      "subtopic": "Posters",
+      "specificCompetences": [
+        "Design different types of posters Designing different types of posters (Informative poster - substance abuse, Educative Poster-child labour, Advertisement Poster- advertisementÈ) Different types of posters"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "designed appropriately",
+      "keywords": ["posters"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T9-S1",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "Topic 4.9",
+      "subtopicNumber": "4.9.1",
+      "subtopic": "Introduction to Animation",
+      "specificCompetences": [
+        "=Produce =Art works using animation Discussing animation Traditional scenes, computer aided animationÈ) Exploring animation (2D and 3D) Producing Art works using animation Making Art works using camera photography/ ArtiÜcial Intelligence, based on diඒerent themes sceneries, portraits, natureÈ) Art works using animation produced creatively"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["introduction", "animation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T10-S1",
+      "form": 4,
+      "topicNumber": "4.10",
+      "topic": "Topic 4.10",
+      "subtopicNumber": "4.10.1",
+      "subtopic": "Sculpture in the round",
+      "specificCompetences": [
+        "Create sculptures in the round Utilizing the beneÜts of collecting and recycling materials from the environment Create sculptures using various materials (clay, cement, Plaster of Paris, stoneÈ) Creating sculptures in the round (human Ügure, head, footÈ) Sculptures in the round created proportionately."
+      ],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["sculpture", "round"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T10-S2",
+      "form": 4,
+      "topicNumber": "4.10",
+      "topic": "Topic 4.10",
+      "subtopicNumber": "4.10.2",
+      "subtopic": "Installation and Casting=",
+      "specificCompetences": [
+        "Mount installation art pieces Discussing installation and casting Explaining casting materials (metal,"
+      ],
+      "learningActivities": [],
+      "expectedStandard": "mounted correctly",
+      "keywords": ["installation", "casting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T11-S1",
+      "form": 4,
+      "topicNumber": "4.11",
+      "topic": "Topic 4.11",
+      "subtopicNumber": "4.11.1",
+      "subtopic": "Value Addition =4.11.1.1 Add value to Art works",
+      "specificCompetences": ["Use of colour in daily life. The"],
+      "learningActivities": [],
+      "expectedStandard": "",
+      "keywords": ["value", "addition", "value", "works"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

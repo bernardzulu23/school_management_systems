@@ -1,0 +1,52 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.pdf",
+  "md5": "a70abf94924e00d63a6749a416a20207",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "12-entrepreneurship-in-sports",
+  "lesson": {
+    "lesson": 6,
+    "title": "12 ENTREPRENEURSHIP IN SPORTS",
+    "topics": [
+      "Introduction:",
+      "Entrepreneurship in sports is about using business ideas to create value in the world of sports. It",
+      "brings together the love for sports and the skills to start and grow businesses. Sports entrepreneurs",
+      "can be involved in many areas, such as organizing sports events, selling sportswear, running",
+      "gyms, or creating new sports apps."
+    ],
+    "activities": [
+      "TERMINOLOGY",
+      "Branding: Creating and promoting a unique identity for a business or product.",
+      "Business Model: A plan for generating revenue and sustaining a business",
+      "Event management: Planning and executing sports events, such as tournaments or",
+      "Innovation: Introducing new or improved products, services, or processes to the sports",
+      "industry.",
+      "Investment: Funding providing to support a business or project.",
+      "Marketing Strategy: A plan for promoting a business or product."
+    ],
+    "resources": [
+      "quality of each business venture.",
+      " Example: A sports startup focused only on developing high-quality sports apparel",
+      "might grow more successfully than one trying to do too much, such as managing",
+      "events or running a gym.",
+      "Sports businesses should prioritize profitability over social impact.”",
+      "Form 1 Term"
+    ],
+    "assessment": [
+      "Multiple-choice quizzes",
+      "z Accuracy (correct selection of answers).",
+      "z time management (complete tasks within the given time)",
+      "z understanding of concepts (reflecting knowledge of concepts)",
+      "Short-answer questions",
+      "z Relevance (answers directly addressing the question"
+    ],
+    "notes": ""
+  }
+}

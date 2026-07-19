@@ -1,0 +1,23 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "MATHEMATICS-1-MODULE-FINAL.pdf",
+  "md5": "4276f7fdc41c7e5c2fd1dd57b187256b",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "integers-24",
+  "lesson": {
+    "lesson": 2,
+    "title": "Integers ………………………………………………………………………………….……….24",
+    "topics": ["Subtopic 1: The Four Operations on Integers ……………………………………..……………………25"],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

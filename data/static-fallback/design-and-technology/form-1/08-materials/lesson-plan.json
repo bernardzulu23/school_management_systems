@@ -1,0 +1,45 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "materials",
+  "lesson": {
+    "lesson": 8,
+    "title": "MATERIALS",
+    "topics": [
+      "Introduction",
+      "Materials are basic ingredients of technology. They make modern life possible, they range from",
+      "a metal ballpoint you normally use to the wooden or plastic or metal chair you sit on and to",
+      "mega structures around us, such as; bridges and buildings. The evolution of technology has",
+      "largely been determined by the availability of materials. This has created new opportunities to"
+    ],
+    "activities": [
+      "(i) Classifying types of wood (softwood and hardwood)",
+      "(ii) Analyzing properties of wood (physical and mechanical)",
+      "Learning Environment Setup",
+      "Natural: Physical – Natural forest and Exotic forest, assorted solid timber pieces, Logs",
+      "Artificial: Physical – Workshops, Classrooms",
+      "Technology - Video conferencing, Computer, Projector",
+      "Field trips: a planned excursion or visit to a location outside a classroom",
+      "Collaborative: learners work in teams, developing communication, teamwork and"
+    ],
+    "resources": [],
+    "assessment": [
+      "The learners' understanding and skills will be evaluated through a combination",
+      "of the following:",
+      "Formative",
+      "Observation",
+      "Checklist/worksheet",
+      "Written tests"
+    ],
+    "notes": ""
+  }
+}

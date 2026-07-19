@@ -1,0 +1,23 @@
+{
+  "subject": "Commerce",
+  "subjectSlug": "commerce",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "commerce-Teaching-Module-PDF.pdf",
+  "md5": "4d5742a009f6b468f486a1271704e6a1",
+  "detectedShift": 0,
+  "pageCount": 48,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "commerce",
+  "lesson": {
+    "lesson": 1,
+    "title": "COMMERCE",
+    "topics": [],
+    "activities": ["vi | P a g e"],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

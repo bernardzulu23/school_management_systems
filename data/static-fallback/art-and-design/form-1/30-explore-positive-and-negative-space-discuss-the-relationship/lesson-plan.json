@@ -1,0 +1,38 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "explore-positive-and-negative-space-discuss-the-relationship",
+  "lesson": {
+    "week": 5,
+    "lesson": 30,
+    "title": "Explore positive and negative space: Discuss the relationship between objects and the",
+    "topics": ["space around them"],
+    "activities": [],
+    "resources": [
+      "Principles.",
+      "Art materials and tools (paints, markers, coloured pencils, paper…) that learners can",
+      "use to create their artworks.",
+      "Activity 1: Defining Art Principles",
+      "Research",
+      "Task 1: Learners to collect readily made images (illustrations, photographs, magazine image"
+    ],
+    "assessment": [
+      "Provide constructive feedback: Offer feedback that encourages learners to refine their",
+      "understanding of elements of Art (Line, shape, space, value, texture, tone and colour).",
+      "elements of art.",
+      "This subtopic looked at elements of art as parts used to make artwork and examples include:",
+      "line, shape, tone, form colour, texture and pattern.",
+      "Introduction"
+    ],
+    "notes": ""
+  }
+}

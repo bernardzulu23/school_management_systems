@@ -1,22 +1,671 @@
 {
   "subject": "Computer Science",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
-      "suggestedActivities": [],
-      "assessmentMethods": [],
-      "resources": []
+      "title": "Form 1: Fundamentals of Computing",
+      "topics": [
+        "Computer Basics",
+        "Operating System and File Management",
+        "Application Software",
+        "Basic Troubleshooting"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of essential computer software and hardware",
+        "Demonstrate proper management of operating system and files",
+        "Operate commonly used application software",
+        "Diagnose and resolve common computer problems"
+      ],
+      "suggestedActivities": [
+        "Discussing history and evolution of computers",
+        "Classifying types of computers and types of software",
+        "Analyzing components of computer hardware",
+        "Discussing functions of an operating system and demonstrating proper handling",
+        "Installing and updating the operating system",
+        "Applying file management tasks such as copying, pasting, renaming and deleting",
+        "Organizing files and folders using appropriate naming conventions and directory structures",
+        "Identifying and installing commonly used application software",
+        "Analyzing computer error messages and isolating common computer problems",
+        "Accessing help resources and recovering lost data from corrupted or damaged storage devices"
+      ],
+      "assessmentMethods": [
+        "Understanding of essential computer hardware and software components demonstrated correctly",
+        "Proper management of operating system and files demonstrated correctly",
+        "Commonly used application software appropriately operated",
+        "Common computer problems effectively resolved"
+      ],
+      "resources": [
+        "Computers and peripherals",
+        "Operating system",
+        "Application software (VLC, Chrome, Adobe)"
+      ]
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Productivity Tools - Word Processing",
+      "topics": ["Word Processing"],
+      "learningOutcomes": ["Create documents using word processing software"],
+      "suggestedActivities": [
+        "Exploring the word processing interface and describing its basic functions",
+        "Demonstrating correct typing skills",
+        "Creating and formatting documents using text editing features such as font styles, paragraph alignment and spacing",
+        "Inserting and manipulating visual elements like tables, images and charts",
+        "Applying templates to design professional documents",
+        "Utilizing tools for reviewing and editing documents",
+        "Importing and exporting documents in different formats"
+      ],
+      "assessmentMethods": ["Documents successfully created using word processing software"],
+      "resources": ["Word processing software"]
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Data Representation",
+      "topics": ["Number Systems"],
+      "learningOutcomes": ["Apply number systems in computing"],
+      "suggestedActivities": [
+        "Discussing the basic concepts of number systems including binary and decimal",
+        "Exploring the role of number systems in computer systems",
+        "Converting between number systems",
+        "Analyzing binary code to understand its representation in real world applications",
+        "Demonstrating the use of binary numbers in programming and hardware configurations"
+      ],
+      "assessmentMethods": ["Number systems correctly applied in computing"],
+      "resources": ["Number system conversion worksheets"]
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Computer Networks",
+      "topics": ["Network Design and Implementation"],
+      "learningOutcomes": ["Configure and install networks"],
+      "suggestedActivities": [
+        "Discussing basic concepts of computer networks",
+        "Identifying basic networking devices and software",
+        "Discussing types of connections",
+        "Configuring a local area network (LAN) using basic networking devices such as routers and switches",
+        "Implementing basic network sharing settings for devices such as printers, files and folders across the network"
+      ],
+      "assessmentMethods": ["Computer networks correctly configured and installed"],
+      "resources": ["Routers", "Switches", "Network cables"]
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Cybersecurity",
+      "topics": ["Fundamentals of Cyber Security"],
+      "learningOutcomes": ["Apply online safety and security measures"],
+      "suggestedActivities": [
+        "Discussing terminologies and key concepts in cyber security",
+        "Identifying different types of cyber threats such as hacking, phishing and social engineering attacks",
+        "Detecting potential cyber threats using monitoring tools and logs",
+        "Describing the importance of cyber security in the digital world",
+        "Implementing strong password policies and multifactor authentication to protect user accounts"
+      ],
+      "assessmentMethods": ["Online safety and security measures successfully applied"],
+      "resources": ["Security monitoring tools"]
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Data Processing",
+      "topics": ["Data Collection, Cleaning and Analysis"],
+      "learningOutcomes": ["Collect and clean data"],
+      "suggestedActivities": [
+        "Discussing key concepts of data processing and cleaning",
+        "Exploring types of data in computing and identifying data processing techniques",
+        "Discussing tools for capturing and cleaning data",
+        "Collecting data from multiple sources and demonstrating how to clean and validate data",
+        "Designing visualizations to present processed data (Power BI, Tableau, Google Data Studio)",
+        "Developing testing protocols to ensure accuracy and consistency of processed data"
+      ],
+      "assessmentMethods": ["Data effectively collected and cleaned"],
+      "resources": ["Power BI", "Tableau", "Google Data Studio"]
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Web Design",
+      "topics": ["Fundamentals of Web Design"],
+      "learningOutcomes": ["Design and structure web pages using web design tools"],
+      "suggestedActivities": [
+        "Discussing the key concepts of web design",
+        "Identifying the components of a web page",
+        "Describing the roles of HTML, CSS and JavaScript in creating and designing web pages",
+        "Designing and structuring simple web pages using HTML and semantic tags"
+      ],
+      "assessmentMethods": ["Simple web pages and structures successfully implemented"],
+      "resources": ["HTML/CSS editors"]
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Digital Citizenship",
+      "topics": ["Digital Ethics"],
+      "learningOutcomes": ["Demonstrate ethical behavior in a digital environment"],
+      "suggestedActivities": [
+        "Discussing digital citizenship",
+        "Demonstrating respectful communication in online interaction",
+        "Distinguishing between fact, opinion and bias in digital content",
+        "Demonstrating how to balance screen time with offline activities to maintain physical and mental wellbeing",
+        "Demonstrating a culture of inclusion, respect and fairness in online communities"
+      ],
+      "assessmentMethods": ["Ethical behavior in a digital environment demonstrated appropriately"],
+      "resources": ["Digital citizenship case studies"]
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Databases",
+      "topics": ["Introduction to Databases"],
+      "learningOutcomes": ["Create and manage databases"],
+      "suggestedActivities": [
+        "Defining databases and discussing key concepts such as tables, records, fields and keys",
+        "Differentiating types of databases and describing database models",
+        "Identifying popular database software (Access, Oracle, MariaDB)",
+        "Creating tables and defining their structures using database tools"
+      ],
+      "assessmentMethods": ["Databases successfully created and managed"],
+      "resources": ["Microsoft Access", "Oracle", "MariaDB"]
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 1: Artificial Intelligence",
+      "topics": ["Fundamentals of Artificial Intelligence (AI)"],
+      "learningOutcomes": ["Design Artificial Intelligence (AI) models"],
+      "suggestedActivities": [
+        "Defining AI",
+        "Discussing the core concepts of AI including machine learning, deep learning and natural language processing",
+        "Identifying the problems to be solved and determining objectives of the model",
+        "Collecting and preparing datasets for creating AI models",
+        "Using simple machine learning to create AI models"
+      ],
+      "assessmentMethods": ["Artificial Intelligence (AI) models designed"],
+      "resources": ["AI/ML learning platforms"]
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 1: Internet of Things (IoT)",
+      "topics": ["Basic Components of Internet of Things (IoT)"],
+      "learningOutcomes": ["Demonstrate understanding of IoT components"],
+      "suggestedActivities": [
+        "Discussing the concepts of IoT",
+        "Identifying key components of IoT systems such as sensors, actuators, microcontrollers and communication modules"
+      ],
+      "assessmentMethods": ["Understanding of IoT components demonstrated appropriately"],
+      "resources": ["Sensors", "Actuators", "Microcontrollers"]
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 1: Logic Gates",
+      "topics": ["Introduction to Logic Gates"],
+      "learningOutcomes": ["Create digital control systems"],
+      "suggestedActivities": [
+        "Discussing the concept of logic gates and their role in digital circuits",
+        "Identifying types of logic gates and their symbols",
+        "Analyzing combinational and sequential logic gates",
+        "Working with truth tables",
+        "Creating a simple digital control system such as an alarm system or traffic lights"
+      ],
+      "assessmentMethods": ["Digital control systems successfully created"],
+      "resources": ["Logic gate simulation software"]
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Productivity Tools - Spreadsheets",
+      "topics": ["Spreadsheets"],
+      "learningOutcomes": ["Use spreadsheets for data entry and analysis"],
+      "suggestedActivities": [
+        "Discussing the basic components of the spreadsheet interface (rows, cells, shortcuts)",
+        "Performing arithmetic operations using basic formulas and functions",
+        "Filtering and sorting data to identify trends, patterns or specific values",
+        "Performing statistical analysis using functions (COUNTIF, AVERAGE, MEDIAN)",
+        "Creating charts to visualize data",
+        "Protecting cells, sheets and workbooks",
+        "Sharing spreadsheets using cloud-based collaborative tools and creating macros"
+      ],
+      "assessmentMethods": ["Data entered and analyzed correctly using a spreadsheet"],
+      "resources": ["Spreadsheet software"]
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Data Representation",
+      "topics": ["Number Systems"],
+      "learningOutcomes": ["Apply number system operations"],
+      "suggestedActivities": [
+        "Discussing concepts of hexadecimal and octal number systems",
+        "Converting numbers between systems",
+        "Converting text using ASCII",
+        "Developing financial models using what-if scenarios"
+      ],
+      "assessmentMethods": ["Number system operations applied accordingly"],
+      "resources": ["ASCII tables"]
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Introduction to Programming",
+      "topics": ["Block-based Programming"],
+      "learningOutcomes": ["Construct programs using block-based software"],
+      "suggestedActivities": [
+        "Exploring different types of block-based programming software (Scratch)",
+        "Describing key features of block-based programming such as drag-and-drop blocks and visual workspace",
+        "Identifying basic programming constructs including loops, conditions, variables and events",
+        "Constructing simple programs by sequencing blocks to create specific outcomes"
+      ],
+      "assessmentMethods": ["Block-based programs constructed correctly"],
+      "resources": ["Scratch"]
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Networking",
+      "topics": ["Network Topologies"],
+      "learningOutcomes": ["Develop and configure network topologies"],
+      "suggestedActivities": [
+        "Discussing different types of network topologies",
+        "Analyzing the roles of network topology",
+        "Creating network cables (Ethernet UTP, STP, FTP)",
+        "Designing, creating and configuring network topologies"
+      ],
+      "assessmentMethods": ["Network topologies developed and configured correctly"],
+      "resources": ["Network cables", "Networking devices"]
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 2: Cybersecurity",
+      "topics": ["Introduction to Cybersecurity"],
+      "learningOutcomes": ["Utilize cybersecurity tools and technologies"],
+      "suggestedActivities": [
+        "Discussing cyber security and its importance in digital systems",
+        "Investigating cyber vulnerabilities in operating systems, software and hardware",
+        "Using cybersecurity tools and technologies",
+        "Developing policies to protect data, devices and networks from cyber threats"
+      ],
+      "assessmentMethods": ["Cybersecurity tools and technologies utilized accordingly"],
+      "resources": ["Cybersecurity tools"]
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: Algorithms",
+      "topics": ["Fundamentals of Algorithms"],
+      "learningOutcomes": ["Design algorithms"],
+      "suggestedActivities": [
+        "Identifying different types of algorithms",
+        "Discussing characteristics of algorithms",
+        "Designing flowcharts and pseudocode",
+        "Using different types of algorithm design techniques"
+      ],
+      "assessmentMethods": ["Algorithms designed correctly"],
+      "resources": ["Flowchart tools"]
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 2: Web Development",
+      "topics": ["Cascading Style Sheets (CSS) Concepts"],
+      "learningOutcomes": ["Apply CSS concepts to websites"],
+      "suggestedActivities": [
+        "Defining Cascading Style Sheets (CSS) and explaining their purpose in web design",
+        "Identifying the different types of CSS (inline, internal and external)",
+        "Describing the basic structure of a CSS rule including selectors, properties and values",
+        "Using text properties to style fonts including font family, font size and color",
+        "Applying background properties such as background color, background image and background repeat",
+        "Styling borders and spacing using properties like border, margin and padding"
+      ],
+      "assessmentMethods": ["CSS concepts applied to websites correctly"],
+      "resources": ["Code editor", "Web browser"]
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 2: Database",
+      "topics": ["Database Design and Creation"],
+      "learningOutcomes": ["Design and create databases using SQL"],
+      "suggestedActivities": [
+        "Discussing Structured Query Language (SQL) concepts",
+        "Writing SQL scripts to create and modify database structures"
+      ],
+      "assessmentMethods": ["Databases designed and created using SQL correctly"],
+      "resources": ["SQL database management system"]
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 2: Artificial Intelligence (AI)",
+      "topics": ["AI Models"],
+      "learningOutcomes": ["Develop AI models"],
+      "suggestedActivities": [
+        "Exploring the problems to be solved",
+        "Selecting suitable models",
+        "Designing and developing the model",
+        "Evaluating the models"
+      ],
+      "assessmentMethods": ["AI models developed successfully"],
+      "resources": ["Machine learning frameworks"]
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 2: Internet of Things",
+      "topics": ["IoT Model Development"],
+      "learningOutcomes": ["Develop an IoT model"],
+      "suggestedActivities": [
+        "Discussing different development platforms and exploring the user interfaces",
+        "Creating code for IoT devices",
+        "Connecting IoT devices using wireless communication protocols like WiFi, Bluetooth, Zigbee or LoRaWAN",
+        "Building a basic IoT system using sensors, microcontrollers (Arduino, Raspberry Pi) and actuators (LEDs)"
+      ],
+      "assessmentMethods": ["IoT model developed accordingly"],
+      "resources": ["Arduino", "Raspberry Pi", "Sensors and actuators"]
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 2: Robotics",
+      "topics": ["Fundamentals of Robotics"],
+      "learningOutcomes": ["Design simple robots"],
+      "suggestedActivities": [
+        "Discussing the basic concepts of robotics including ethical use of robots",
+        "Classifying types of robots",
+        "Identifying the core components of a robot mechanism",
+        "Designing a basic robotic system considering functionality, form and purpose"
+      ],
+      "assessmentMethods": ["Simple robots correctly designed"],
+      "resources": ["Robotics kits"]
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 3: Productivity Tools - Presentation and Desktop Publishing",
+      "topics": ["Presentation Software", "Desktop Publishing Software"],
+      "learningOutcomes": [
+        "Design and create presentations",
+        "Create and format desktop publishing publications"
+      ],
+      "suggestedActivities": [
+        "Exploring and identifying different types of presentation software",
+        "Creating presentations using templates and themes and applying design principles",
+        "Embedding hyperlinks and other advanced interactive elements",
+        "Discussing and identifying different types of publications and publishing software (Publisher, Adobe, Canva)",
+        "Designing, laying out, creating and formatting publications"
+      ],
+      "assessmentMethods": [
+        "Presentations designed and created correctly",
+        "Publications created and formatted correctly"
+      ],
+      "resources": ["Presentation software", "Microsoft Publisher", "Adobe", "Canva"]
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 3: Logic Gates",
+      "topics": ["Application of Logic Gates"],
+      "learningOutcomes": ["Design digital circuits"],
+      "suggestedActivities": [
+        "Simulating logic gate circuits using digital design software (CircuitVerse)",
+        "Analyzing the output of logic circuits for various inputs",
+        "Implementing Boolean expressions using logic gates",
+        "Integrating logic gates into microcontroller-based systems for automation",
+        "Designing sequential circuits for time-dependent applications (counters, timers)"
+      ],
+      "assessmentMethods": ["Digital circuits designed correctly"],
+      "resources": ["CircuitVerse", "Academo digital simulator"]
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 3: Networking",
+      "topics": ["The Internet"],
+      "learningOutcomes": ["Create and share online content"],
+      "suggestedActivities": [
+        "Exploring the internet and its key components (search engines, servers, clients)",
+        "Discussing internet services",
+        "Setting up accounts on different platforms for professional and personal use",
+        "Engaging in video conferencing and webinars using platforms such as Zoom and Google Meet",
+        "Creating and sharing online content using different internet platforms"
+      ],
+      "assessmentMethods": ["Online content created and shared appropriately"],
+      "resources": ["Web browsers", "Zoom", "Google Meet"]
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 3: Cybersecurity",
+      "topics": ["Data Protection and Privacy"],
+      "learningOutcomes": ["Mitigate and respond to cyber threats"],
+      "suggestedActivities": [
+        "Discussing data protection laws (GDPR, CCPA) in handling user information",
+        "Analysing the impact of online actions on personal and professional reputation",
+        "Applying encryption techniques to secure sensitive data during storage and transmission (symmetric and asymmetric encryption)",
+        "Employing Virtual Private Networks (VPNs) to secure remote connections",
+        "Developing security policies and guidelines to ensure compliance with best practices"
+      ],
+      "assessmentMethods": ["Cyber threats mitigated and responded to correctly"],
+      "resources": ["VPN software", "Encryption tools"]
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 3: Programming",
+      "topics": ["Python Programming", "Coding in Python"],
+      "learningOutcomes": ["Use Python to code", "Develop practical Python applications"],
+      "suggestedActivities": [
+        "Identifying various Integrated Development Environments (IDEs) such as Jupyter and PyCharm",
+        "Exploring Python syntax and control structures",
+        "Installing and configuring Python IDEs (VS Code, Jupyter)",
+        "Writing Python scripts using conditional statements (if, else, else-if) to manage decision making",
+        "Creating Python projects for task automation, data analysis and web development"
+      ],
+      "assessmentMethods": [
+        "Python used to code programs correctly",
+        "Practical Python applications developed accordingly"
+      ],
+      "resources": ["Python", "PyCharm", "Jupyter", "VS Code"]
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 3: Web Development",
+      "topics": ["Web Interactivity"],
+      "learningOutcomes": ["Develop dynamic interactive web pages"],
+      "suggestedActivities": [
+        "Discussing concepts of JavaScript and its role in web development",
+        "Analyzing JavaScript and other web technologies",
+        "Integrating Object Oriented Programming (OOP) principles in JavaScript",
+        "Creating animations using JavaScript and CSS transitions"
+      ],
+      "assessmentMethods": ["Dynamic interactive web pages developed accordingly"],
+      "resources": ["JavaScript", "Code editor"]
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 3: Database",
+      "topics": ["Database Management"],
+      "learningOutcomes": ["Manage databases"],
+      "suggestedActivities": [
+        "Discussing key components of database management",
+        "Configuring user roles and permissions to control access to database resources",
+        "Upgrading and migrating databases to newer versions or platforms",
+        "Applying the first, second and third normal forms to organize data",
+        "Integrating a database with programming languages (Python, Java, PHP)"
+      ],
+      "assessmentMethods": ["Database managed correctly"],
+      "resources": ["Database management system"]
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 3: Artificial Intelligence",
+      "topics": ["AI Models"],
+      "learningOutcomes": ["Deploy AI models"],
+      "suggestedActivities": [
+        "Discussing deployment tools",
+        "Training and testing models",
+        "Deploying models",
+        "Monitoring and maintaining models"
+      ],
+      "assessmentMethods": ["AI models deployed correctly"],
+      "resources": ["AI deployment platforms"]
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 3: Internet of Things (IoT)",
+      "topics": ["Application of Internet of Things (IoT)"],
+      "learningOutcomes": ["Create IoT solutions"],
+      "suggestedActivities": [
+        "Developing IoT dashboards to visualize sensor data in real time",
+        "Exploring real world IoT applications (transportation, education, healthcare, agriculture, smart homes)",
+        "Developing IoT solutions for a chosen sector"
+      ],
+      "assessmentMethods": ["IoT solutions created accordingly"],
+      "resources": ["IoT development kits"]
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 3: Mobile Application",
+      "topics": ["Introduction to Mobile Applications"],
+      "learningOutcomes": ["Create mobile applications"],
+      "suggestedActivities": [
+        "Exploring mobile applications and explaining their use in daily life",
+        "Discussing native, web and hybrid mobile applications",
+        "Identifying core features of mobile applications",
+        "Discussing common tools and programming languages used in app development",
+        "Analyzing common security risks in mobile applications and describing strategies for protecting personal data"
+      ],
+      "assessmentMethods": ["Mobile applications created correctly"],
+      "resources": ["Mobile app development tools"]
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 3: Cloud Computing",
+      "topics": ["Fundamentals of Cloud Computing"],
+      "learningOutcomes": ["Develop and manage cloud computing models"],
+      "suggestedActivities": [
+        "Defining the key concepts and models of cloud computing",
+        "Discussing the benefits and challenges of cloud computing for business and individuals",
+        "Designing and developing cloud computing models",
+        "Managing the three main cloud services using modeling tools such as AWS EC2, Google Cloud and Microsoft Azure"
+      ],
+      "assessmentMethods": ["Cloud computing models correctly developed and managed"],
+      "resources": ["AWS", "Google Cloud", "Microsoft Azure"]
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 3: Robotics",
+      "topics": ["Mechanical and Electronic Systems"],
+      "learningOutcomes": ["Implement control systems"],
+      "suggestedActivities": [
+        "Designing robotic system structures using CAD software",
+        "Installing and aligning robotic motors and gears",
+        "Setting up power supply systems for robots",
+        "Testing electronic circuits to ensure proper functioning of robotic components",
+        "Writing programs to control movement using languages (Python, C)",
+        "Combining mechanical, electronic and software components into a functional robotic system",
+        "Integrating robotics with Internet of Things (IoT) systems for remote monitoring"
+      ],
+      "assessmentMethods": ["Control systems implemented accordingly"],
+      "resources": ["CAD software", "Robotic motors and gears"]
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 4: Computer Systems",
+      "topics": ["Fundamentals of Computer Systems"],
+      "learningOutcomes": ["Demonstrate understanding of computer systems"],
+      "suggestedActivities": [
+        "Discussing the key components of computer systems",
+        "Exploring different types of computer systems and their functions (expert system, batch processing system, control system)"
+      ],
+      "assessmentMethods": ["Understanding of computer systems demonstrated accordingly"],
+      "resources": ["Computer systems reference materials"]
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 4: Databases",
+      "topics": ["Database Management Systems"],
+      "learningOutcomes": ["Create and manage databases"],
+      "suggestedActivities": [
+        "Discussing the purpose and functions of a database management system",
+        "Identifying and installing common DBMS software (MS Access)",
+        "Creating databases",
+        "Inserting, updating and deleting data in tables"
+      ],
+      "assessmentMethods": ["Databases created and managed accordingly"],
+      "resources": ["Microsoft Access"]
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 4: Computer Networking",
+      "topics": ["Network Design and Configurations"],
+      "learningOutcomes": ["Design and configure computer networks"],
+      "suggestedActivities": [
+        "Discussing key networking concepts including OSI layers and TCP/IP models",
+        "Explaining the role of DNS, IP addressing and MAC addressing in networking",
+        "Discussing key networking protocols (TCP, UDP, HTTP, FTP, DHCP)",
+        "Implementing VLANs to segment network traffic for efficiency and security",
+        "Designing subnets to optimize IP address allocation using subnet masks",
+        "Configuring static and dynamic IP addresses on devices",
+        "Configuring Virtual Private Networks (VPNs) and Quality of Service (QoS)",
+        "Implementing encryption protocols such as WPA for wireless networks"
+      ],
+      "assessmentMethods": ["Computer networks correctly designed and configured"],
+      "resources": ["Network simulation software", "Networking devices"]
+    },
+    {
+      "unitNumber": 39,
+      "title": "Form 4: Programming",
+      "topics": ["Programming in C"],
+      "learningOutcomes": ["Develop C programs"],
+      "suggestedActivities": [
+        "Discussing the main concepts of the C programming language",
+        "Describing the structure of a C program (headers, functions, main)",
+        "Writing simple programs using basic syntax and structures in C",
+        "Creating programs that use loops, arrays and strings for data storage and manipulation",
+        "Defining classes and objects in C to encapsulate data and behavior",
+        "Applying techniques to identify and fix errors",
+        "Writing C programs for object oriented applications like simulations and GUIs"
+      ],
+      "assessmentMethods": ["C programs developed accordingly"],
+      "resources": ["C compiler", "IDE"]
+    },
+    {
+      "unitNumber": 40,
+      "title": "Form 4: Mobile Application Development",
+      "topics": ["Mobile Application Design"],
+      "learningOutcomes": ["Develop mobile applications"],
+      "suggestedActivities": [
+        "Setting up and designing environments using tools (Android Studio, Xcode, VS Code)",
+        "Writing code to implement app functionality using programming languages (Java, Kotlin)",
+        "Designing and building responsive app interfaces that adapt to screen sizes and orientations",
+        "Integrating device features (GPS, camera and sensors) into mobile apps",
+        "Building offline capabilities using caching or local databases"
+      ],
+      "assessmentMethods": ["Mobile applications developed accordingly"],
+      "resources": ["Android Studio", "Xcode", "VS Code"]
+    },
+    {
+      "unitNumber": 41,
+      "title": "Form 4: Emerging Technologies",
+      "topics": ["Fundamentals of Emerging Technologies"],
+      "learningOutcomes": ["Demonstrate understanding of emerging technologies"],
+      "suggestedActivities": [
+        "Exploring emerging technologies and their role in transforming industries",
+        "Identifying key emerging technologies (AI, IoT, AR, VR)",
+        "Applying emerging technologies into industries",
+        "Discussing the potential impact of emerging technologies on society, economy and daily life",
+        "Discussing the concept of 3D printing and its role in manufacturing and design"
+      ],
+      "assessmentMethods": ["Understanding of emerging technologies demonstrated appropriately"],
+      "resources": ["Emerging technology case studies"]
+    },
+    {
+      "unitNumber": 42,
+      "title": "Form 4: Cloud Computing",
+      "topics": ["Cloud Deployment"],
+      "learningOutcomes": ["Deploy cloud platforms"],
+      "suggestedActivities": [
+        "Launching cloud-based applications and services including databases, storage and compute resources (DynamoDB, Firestore, Azure)",
+        "Designing cloud-native applications using microservices architecture",
+        "Using APIs for cloud-based services to integrate with other systems",
+        "Integrating cloud services with Internet of Things (IoT) devices for real-time data processing",
+        "Designing and implementing cloud migration strategies"
+      ],
+      "assessmentMethods": ["Cloud platforms deployed correctly"],
+      "resources": ["AWS", "Microsoft Azure", "Google Cloud"]
     }
   ],
   "metadata": {
-    "source": "COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.pdf",
-    "extractedAt": "2026-07-11T06:20:38.633Z",
-    "fileSize": 871754
+    "source": "Computer Science Syllabus, Secondary Education Ordinary Level, Form 1-4 (ISBN 978-9982-54-005-7)",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "publisher": "Zambia Educational Publishing House",
+    "publicationYear": 2024,
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 871754,
+    "extractionNote": "Transcribed from the official CDC PDF. The PDF's embedded font ships no ToUnicode map and no space glyphs, so text was recovered by decoding the font's fixed +29 character offset and re-segmenting words from the syllabus tables (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true
   }
 }

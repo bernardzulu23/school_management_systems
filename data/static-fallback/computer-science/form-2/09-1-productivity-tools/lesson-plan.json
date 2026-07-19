@@ -1,0 +1,45 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-productivity-tools",
+  "lesson": {
+    "lesson": 9,
+    "title": "1: PRODUCTIVITY TOOLS",
+    "topics": [
+      "Overview",
+      "This topic introduces learners to essential productivity tools, with a primary focus on spreadsheets.",
+      "Learners will understand how software applications enhance efficiency in organising, calculating,",
+      "analysing, and presenting data across various contexts such as schools, offices, and homes. By the end",
+      "of this topic, learners will be able to perform fundamental data entry, analysis, and visualisation tasks."
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Choose any of the following but not limited to:",
+      "Artificial (Physical – Classroom)",
+      "Classroom: Use board or charts to discuss spreadsheet components.",
+      "Charts and Posters: Display labelled spreadsheet parts.",
+      "Hands-On Demo: Learners explore spreadsheet software on computers.",
+      "Technology Environment",
+      "Computer Laboratory: Learners interact directly with spreadsheet tools."
+    ],
+    "resources": [],
+    "assessment": [
+      "Examples of Formative",
+      "Scenario: Your cousin Bwalya runs a small kantemba at Soweto Market in Lusaka. She sells vegetables such",
+      "as tomatoes, onions, and cabbage. She has an exercise book where she writes each day’s sales, but at the",
+      "end of the week, she spends hours adding everything with a calculator and often makes mistakes. She has",
+      "heard that a computer can help her.",
+      "(Data Entry & Interface) You open a blank spreadsheet for Bwalya. She looks at all the empty boxes"
+    ],
+    "notes": ""
+  }
+}

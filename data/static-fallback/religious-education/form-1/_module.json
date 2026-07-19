@@ -1,0 +1,14 @@
+{
+  "subject": "Religious Education",
+  "subjectSlug": "religious-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "RELIGIOUS-EDUCATION-TERM-2-MODULE.pdf",
+  "md5": "9dbcad673655b7812c7256a2d74b2b5e",
+  "detectedShift": 0,
+  "pageCount": 40,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "lessonCount": 5
+}

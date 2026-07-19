@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "TEACHING-MODULE-FOR-LITERATURE-FORM-1-TERM-1.pdf",
+  "md5": "25275e09394e62d1193ace54f450c52a",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-1-1-literature",
+  "lesson": {
+    "lesson": 3,
+    "title": "1.1.1 LITERATURE",
+    "topics": [
+      "INTRODUCTION",
+      "Literature is an interesting avenue for learners to learn worthwhile values and skills necessary",
+      "for their existence by connecting to the real world where they live as well as appreciate life in",
+      "a broader sense. Various scholars have defined literature differently and some of these",
+      "definitions will be explored in this topic. Our interactions ranging from social, cultural,"
+    ],
+    "activities": [
+      "Put learners in groups and assign each group to discuss the meanings provided.",
+      "(teacher to come up with meanings of literature on flip charts)",
+      "Plenary: Carry-out a plenary session where meanings of Literature will be presented.",
+      "Consolidate on the learners’ presentations and highlight the definitions suggested",
+      "ü Literature is defined as the study of society through oral and written works of",
+      "art/pieces of writing that are valued as works of art",
+      "ü Literature is a study of what goes on in society using written and unwritten works of",
+      "ü Literature is the written works, especially those that have artistic value and should"
+    ],
+    "resources": [],
+    "assessment": [
+      "Ask learners to explore other definitions of Literature. This activity to be done",
+      "individually with learners understanding that they would share with their peers in the next",
+      "activity",
+      "Conclude the lesson by asking learners to give various definitions of Literature as a",
+      "recap of the activity.",
+      "Learners give response as discussed."
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,1170 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Agricultural Science Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Agricultural Science",
+    "slug": "agricultural-science",
+    "extractionNote": "Shift-corrected extract (detected_shift=0, confidence=0.98) + deterministic CDC table parse. No fabricated content.",
+    "detectedShift": 0,
+    "shiftConfidence": 0.98
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "AGRICULTURE IN ZAMBIA",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Importance of Agriculture",
+      "specificCompetences": [
+        "Demonstrate understanding of the importance of Agriculture in Zambia"
+      ],
+      "learningActivities": [
+        "Classifying Agriculture as an",
+        "Investigating the value of",
+        "Evaluating the impact of",
+        "Developing new ideas and",
+        "Understanding of the"
+      ],
+      "expectedStandard": "",
+      "keywords": ["agriculture", "zambia", "importance", "agriculture"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "AGRICULTURE IN ZAMBIA",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Agricultural Activities in Zambia",
+      "specificCompetences": ["Explore the main agricultural activities in Zambia"],
+      "learningActivities": ["Investigating the main", "Main agricultural activities"],
+      "expectedStandard": "",
+      "keywords": ["agriculture", "zambia", "agricultural", "activities", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "AGRICULTURE IN ZAMBIA",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Factors that Influence Agricultural Development in Zambia",
+      "specificCompetences": ["Explore factors that influence agricultural development in Zambia"],
+      "learningActivities": [
+        "Investigating factors that",
+        "Investigating agencies and",
+        "Illustrating on the map of",
+        "Factors that influence"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "agriculture",
+        "zambia",
+        "factors",
+        "that",
+        "influence",
+        "agricultural",
+        "development",
+        "zambia"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "AGRICULTURE IN ZAMBIA",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Types of Farmers",
+      "specificCompetences": ["Classify the types of farmers"],
+      "learningActivities": ["Categorising farmers based", "Types of farmers"],
+      "expectedStandard": "classified appropriately",
+      "keywords": ["agriculture", "zambia", "types", "farmers"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "SOIL SCIENCE",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Composition of Soil",
+      "specificCompetences": ["Examine the composition of soil"],
+      "learningActivities": [
+        "Describing soil composition",
+        "Identifying types of rocks",
+        "Studying soil and its",
+        "Analysing soil composition",
+        "Analysing the importance of,",
+        "Composition of soil"
+      ],
+      "expectedStandard": "examined correctly",
+      "keywords": ["soil", "science", "composition", "soil"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "SOIL SCIENCE",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Properties of Soil",
+      "specificCompetences": ["Explore properties of soil"],
+      "learningActivities": [
+        "Investigating the types of",
+        "Determining the physical",
+        "Determining the chemical",
+        "Profiling soils in the local"
+      ],
+      "expectedStandard": "",
+      "keywords": ["soil", "science", "properties", "soil"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "SOIL SCIENCE",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "Soil Fertility",
+      "specificCompetences": ["Conserve soil fertility."],
+      "learningActivities": [
+        "Describing soil fertility",
+        "Investigating factors that",
+        "Classifying nutrients into",
+        "Distinguishing organic",
+        "Categorising inorganic",
+        "Maintaining soil fertility",
+        "Improving soil fertility",
+        "Making compost manure",
+        "Investigating soil erosion and",
+        "Soil fertility conserved"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["soil", "science", "soil", "fertility"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "SOIL SCIENCE",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "Soil Water",
+      "specificCompetences": ["Investigate soil water and retention"],
+      "learningActivities": [
+        "Describing soil water and",
+        "Experimenting on drainage",
+        "Demonstrating capillarity of",
+        "Analysing the types of soil",
+        "Practising the different",
+        "Interpreting the significance",
+        "Soil water and its"
+      ],
+      "expectedStandard": "",
+      "keywords": ["soil", "science", "soil", "water"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "CLIMATE- SMART AGRICUTURE",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Climate-Smart Agriculture",
+      "specificCompetences": ["Demonstrate understanding of Climate-Smart Agriculture"],
+      "learningActivities": [
+        "Describing Climate-Smart",
+        "Investigating the key",
+        "Identifying factors that affect",
+        "Analysing the benefits of",
+        "Understanding of"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["climate", "smart", "agricuture", "climate", "smart", "agriculture"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S2",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "CLIMATE- SMART AGRICUTURE",
+      "subtopicNumber": "1.3.2",
+      "subtopic": "Application of Drones",
+      "specificCompetences": ["Use drones to enhance productivity in agriculture"],
+      "learningActivities": [
+        "Describing drones",
+        "Identifying types of drones",
+        "Evaluating the importance of",
+        "Applying drones in various",
+        "Drones to enhance"
+      ],
+      "expectedStandard": "",
+      "keywords": ["climate", "smart", "agricuture", "application", "drones"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S3",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "CLIMATE- SMART AGRICUTURE",
+      "subtopicNumber": "1.3.3",
+      "subtopic": "Climate Change",
+      "specificCompetences": ["Show understanding of climate change and its causes"],
+      "learningActivities": [
+        "Describing climate change",
+        "Distinguishing climate",
+        "Analysing the effects of",
+        "Investigating the main causes",
+        "Relating the effects of climate",
+        "Identifying ways of",
+        "Understanding of climate"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["climate", "smart", "agricuture", "climate", "change"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Garden Tools and Equipment",
+      "specificCompetences": ["Use Garden tools and equipment for better production"],
+      "learningActivities": [
+        "Identifying different garden",
+        "Handling garden tools and",
+        "Practicing the proper care,",
+        "Identifying major parts of",
+        "Improvising of garden tools",
+        "Garden tools and"
+      ],
+      "expectedStandard": "equipment appropriately",
+      "keywords": ["farm", "structures", "machinery", "garden", "tools", "equipment"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "CROP PRODUCTION",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Vegetable Production",
+      "specificCompetences": ["Grow a variety of vegetables"],
+      "learningActivities": [
+        "Exploring the common",
+        "Choosing one representative",
+        "Selecting a site suitable for",
+        "Designing a simple crop",
+        "Analysing the characteristics",
+        "Analysing mode of action for",
+        "Practicing effective weed",
+        "Observing the safety when",
+        "Managing vegetable growing",
+        "A variety of vegetables",
+        "Adding value, storing and",
+        "Analysing yields and quality",
+        "Exploring innovative ways of"
+      ],
+      "expectedStandard": "grown accordingly",
+      "keywords": ["crop", "production", "vegetable", "production"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Importance of Livestock",
+      "specificCompetences": [
+        "Demonstrate understanding of the importance of livestock production"
+      ],
+      "learningActivities": [
+        "Describing livestock",
+        "Evaluating the economic",
+        "Exploring the challenges",
+        "Understanding the"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["livestock", "production", "importance", "livestock"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T6-S2",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "1.6.2",
+      "subtopic": "Nutrition and Feed Formulation in Livestock",
+      "specificCompetences": ["Formulate animal feeds"],
+      "learningActivities": [
+        "Identifying different types of",
+        "Describing the nutritive value",
+        "Distinguishing between",
+        "Formulating rations for",
+        "Animal feed formulated"
+      ],
+      "expectedStandard": "",
+      "keywords": ["livestock", "production", "nutrition", "feed", "formulation", "livestock"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "AGRICULTURE IN ZAMBIA",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Land Tenure Systems and Land Use",
+      "specificCompetences": ["Interpret the land tenure systems and land use in Zambia"],
+      "learningActivities": [
+        "Describing land tenure and land",
+        "Exploring existing land tenure",
+        "Analysing the effects of land",
+        "Investigating factors that limit",
+        "Classifying different forms of",
+        "Land tenure systems and"
+      ],
+      "expectedStandard": "interpreted correctly",
+      "keywords": ["agriculture", "zambia", "land", "tenure", "systems", "land"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "SOIL SCIENCE",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Soil Fertility (Nutrient Cycles)",
+      "specificCompetences": [
+        "Demonstrate understanding of nutrient cycles Analysing the nutrient cycles (nitrogen and carbon cycles) Illustrating the nitrogen and the carbon cycles"
+      ],
+      "learningActivities": ["Applying the nitrogen and", "Understanding of nutrient"],
+      "expectedStandard": "",
+      "keywords": ["soil", "science", "soil", "fertility", "nutrient", "cycles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "CLIMATE- SMART AGRICULTURE",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Soil Fertility (Nutrient Cycles)",
+      "specificCompetences": [
+        "Demonstrate understanding of the relationship of climate change, agriculture and food security"
+      ],
+      "learningActivities": [
+        "Exploring effects of climate",
+        "Exploring how agricultural",
+        "Discussing food security and",
+        "Understanding of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["climate", "smart", "agriculture", "soil", "fertility", "nutrient", "cycles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Farm Buildings",
+      "specificCompetences": ["Construct farm structures"],
+      "learningActivities": [
+        "Exploring a suitable site for",
+        "Preparing a basic layout and",
+        "Building farm structures",
+        "Farm structures constructed"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "structures", "machinery", "farm", "buildings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S2",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "2.4.2",
+      "subtopic": "Farm Buildings",
+      "specificCompetences": ["Operate animal and tractor drawn implements"],
+      "learningActivities": [
+        "Comparing animal and tractor",
+        "Preparing animal and tractor",
+        "Using animal and tractor",
+        "Maintaining animal and",
+        "Animal and tractor drawn"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["farm", "structures", "machinery", "farm", "buildings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "CROP PRODUCTION",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "External and Internal Morphology of Plants",
+      "specificCompetences": [
+        "Demonstrate understanding of external and internal morphology of plants"
+      ],
+      "learningActivities": [
+        "Classifying different types of",
+        "Analysing the external and",
+        "Drawing and relating the",
+        "Comparing types of propagation",
+        "Relating the main parts of a seed",
+        "Identifying suitable conditions",
+        "Practising different methods of",
+        "Understanding of external"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["crop", "production", "external", "internal", "morphology", "plants"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T5-S2",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "CROP PRODUCTION",
+      "subtopicNumber": "2.5.2",
+      "subtopic": "Field Crop Production",
+      "specificCompetences": ["Grow cereal crops"],
+      "learningActivities": [
+        "Exploring cereal crops locally",
+        "Selecting a site suitable for cereal",
+        "Designing a simple crop rotation",
+        "Determining plant population,",
+        "Managing maize and any other",
+        "Adding value, storing and",
+        "Analysing yields and quality of",
+        "Exploring innovative ways of",
+        "Cereal crops grown"
+      ],
+      "expectedStandard": "",
+      "keywords": ["crop", "production", "field", "crop", "production"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Poultry Production in Zambia",
+      "specificCompetences": ["Demonstrate understanding of poultry production"],
+      "learningActivities": [
+        "Describing poultry.",
+        "Investigating the importance of",
+        "Categorizing chickens according",
+        "Exploring some of poultry",
+        "Exploring different systems of",
+        "Analysing the characteristics of a",
+        "Identifying various poultry",
+        "Making various poultry equipment",
+        "Constructing a simple poultry",
+        "Understanding of poultry"
+      ],
+      "expectedStandard": "appropriately",
+      "keywords": ["livestock", "production", "poultry", "production", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1-2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Poultry Production in Zambia",
+      "specificCompetences": [
+        "Demonstrate understanding of anatomy and physiology for poultry livestock"
+      ],
+      "learningActivities": [
+        "Exploring the external structures",
+        "Exploring parts of the digestive",
+        "Illustrating the parts of the",
+        "Examining the parts of the",
+        "Illustrating the parts of the",
+        "Relating the structure to the",
+        "Understanding of the"
+      ],
+      "expectedStandard": "",
+      "keywords": ["livestock", "production", "poultry", "production", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1-3",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Poultry Production in Zambia",
+      "specificCompetences": ["Rear broiler chickens to maturity"],
+      "learningActivities": [
+        "Managing broiler chickens from",
+        "Preparing a poultry house for the",
+        "Formulating feed for broiler",
+        "Carrying out routine management",
+        "Adding value and marketing",
+        "Analysing yields and quality of the",
+        "Exploring innovative ways of",
+        "Broiler chickens reared to"
+      ],
+      "expectedStandard": "",
+      "keywords": ["livestock", "production", "poultry", "production", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S1-4",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Poultry Production in Zambia",
+      "specificCompetences": ["Rear layer chickens to production age"],
+      "learningActivities": [
+        "Managing layer chickens from day",
+        "Formulating feed for Layer",
+        "Carrying out routine management",
+        "Hatching eggs (selection, storage)",
+        "Practising incubation of hatching",
+        "Adding value and marketing of",
+        "Analysing yields and quality of the",
+        "Exploring innovative ways of",
+        "Layer chickens reared"
+      ],
+      "expectedStandard": "",
+      "keywords": ["livestock", "production", "poultry", "production", "zambia"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "Pig Production 2.6.2.1 Demonstrate understanding of pig production",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Investigating the importance of pig",
+        "Categorizing pigs according to",
+        "Comparing indigenous and exotic",
+        "Identifying pig breeders in Zambia",
+        "Exploring different systems of pig",
+        "Analysing the characteristics of a",
+        "Exploring types piggery pens",
+        "Designing a piggery house",
+        "Understanding of pig"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "livestock",
+        "production",
+        "production",
+        "demonstrate",
+        "understanding",
+        "production"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2-2",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "Pig Production 2.6.2.1 Demonstrate understanding of pig production",
+      "specificCompetences": ["Demonstrate understanding of anatomy and physiology of pigs"],
+      "learningActivities": [
+        "Identifying the external parts of",
+        "Relating parts of the digestive",
+        "Identifying the parts of the",
+        "Understanding of the"
+      ],
+      "expectedStandard": "pigs demonstrated correctly",
+      "keywords": [
+        "livestock",
+        "production",
+        "production",
+        "demonstrate",
+        "understanding",
+        "production"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T6-S2-3",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "2.6.2",
+      "subtopic": "Pig Production 2.6.2.1 Demonstrate understanding of pig production",
+      "specificCompetences": ["Manage the pig from birth to slaughter weight"],
+      "learningActivities": [
+        "Carrying out routine management",
+        "Adding value (dressing,",
+        "Analysing yields and quality of",
+        "Exploring innovative ways of",
+        "Pig managed to slaughter"
+      ],
+      "expectedStandard": "weight successfully",
+      "keywords": [
+        "livestock",
+        "production",
+        "production",
+        "demonstrate",
+        "understanding",
+        "production"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T7-S1",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "FARM MANAGEMENT",
+      "subtopicNumber": "2.7.1",
+      "subtopic": "Farm as a Business Unit",
+      "specificCompetences": ["Demonstrate understanding of a farm as a business"],
+      "learningActivities": [
+        "Exploring activities that make a",
+        "Identifying the resources the farm",
+        "Analysing ways of improving",
+        "Keeping farm records (financial",
+        "Discussing the law of diminishing",
+        "Applying the law of diminishing",
+        "Preparing financial records (profit",
+        "Understanding of a farm as a"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "management", "farm", "business", "unit"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "FARM MANAGEMENT",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Soil Fertility",
+      "specificCompetences": ["Determine radicals in a sample of fertiliser"],
+      "learningActivities": [
+        "Analysing the absorption of",
+        "Determining the availability",
+        "Determining suitable",
+        "Radicals in a sample of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "management", "soil", "fertility"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "CLIMATE-SMART AGRICULTURE",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Climate-Smart Agriculture Practices",
+      "specificCompetences": ["Practise Climate-Smart Agriculture"],
+      "learningActivities": [
+        "Exploring the importance of",
+        "Practicing the strategies",
+        "Enhancing productivity:",
+        "Climate-Smart Agriculture"
+      ],
+      "expectedStandard": "practices practised correctly",
+      "keywords": [
+        "climate",
+        "smart",
+        "agriculture",
+        "climate",
+        "smart",
+        "agriculture",
+        "practices"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Farm Power",
+      "specificCompetences": ["Use different sources of power on the farm"],
+      "learningActivities": [
+        "Exploring different sources of",
+        "Applying different sources of",
+        "Different sources of power"
+      ],
+      "expectedStandard": "on the farm used correctly",
+      "keywords": ["farm", "structures", "machinery", "farm", "power"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S2",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "3.3.2",
+      "subtopic": "Brick Laying and Workshop Tools",
+      "specificCompetences": ["Use brick laying and workshop tools"],
+      "learningActivities": [
+        "Exploring different brick",
+        "Using brick laying and",
+        "Practicing the proper care,",
+        "Brick laying and workshop"
+      ],
+      "expectedStandard": "tools used correctly",
+      "keywords": ["farm", "structures", "machinery", "brick", "laying", "workshop", "tools"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Farm Structures",
+      "specificCompetences": ["Construct basic farm structures"],
+      "learningActivities": [
+        "Identifying basic farm",
+        "Construction of basic farm",
+        "Designing basic farm",
+        "Constructing basic structures"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "structures", "machinery", "farm", "structures"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "CROP PRODUCTION 3.4.1 Fruit and Tuber Crop Production",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Farm Structures",
+      "specificCompetences": ["Grow fruit crops"],
+      "learningActivities": [
+        "Describing a fruit crop",
+        "Exploring varieties of the",
+        "Investigating the nutritive and",
+        "Selecting a site suitable for",
+        "Carrying out routine",
+        "Adding value, storing and",
+        "Analysing yields and quality of",
+        "Exploring innovative ways of",
+        "Fruit crops grown"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "crop",
+        "production",
+        "fruit",
+        "tuber",
+        "crop",
+        "production",
+        "farm",
+        "structures"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1-2",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "CROP PRODUCTION 3.4.1 Fruit and Tuber Crop Production",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Farm Structures",
+      "specificCompetences": ["Grow tuber crops"],
+      "learningActivities": [
+        "Describing a tuber crop",
+        "Exploring varieties of the",
+        "Tuber crops grown",
+        "Investigating the nutritive and",
+        "Selecting a site suitable for",
+        "Carrying out routine",
+        "Adding value, storing and",
+        "Analysing yields and quality of",
+        "Exploring innovative ways of"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "crop",
+        "production",
+        "fruit",
+        "tuber",
+        "crop",
+        "production",
+        "farm",
+        "structures"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Pasture Management",
+      "specificCompetences": ["Manage different pastures for livestock"],
+      "learningActivities": [
+        "Describing pasture",
+        "Exploring types of pastures",
+        "Carrying out routine",
+        "Illustrating different grazing",
+        "Calculating carrying capacity",
+        "Preserving pastures in the form",
+        "Different Pastures for",
+        "Exploring innovative ways of"
+      ],
+      "expectedStandard": "livestock managed correctly",
+      "keywords": ["livestock", "production", "pasture", "management"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "3.5.2",
+      "subtopic": "Ruminant Animal Production",
+      "specificCompetences": ["Rear ruminant animals"],
+      "learningActivities": [
+        "Categorising ruminant animals",
+        "Investigating the economic",
+        "Describing ruminant animals",
+        "Exploring different systems of",
+        "Examining the anatomic",
+        "Constructing appropriate",
+        "Selecting ruminant animals for",
+        "Exploring on the different",
+        "Investigating on methods of",
+        "Ruminant animals reared"
+      ],
+      "expectedStandard": "",
+      "keywords": ["livestock", "production", "ruminant", "animal", "production"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S2-2",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "3.5.2",
+      "subtopic": "Ruminant Animal Production",
+      "specificCompetences": ["Manage ruminant animals"],
+      "learningActivities": [
+        "Categorising ruminant animals",
+        "Investigating the economic",
+        "Describing ruminant animals",
+        "Exploring different systems of",
+        "Examining the anatomic",
+        "Constructing appropriate",
+        "Selecting ruminant animals for",
+        "Exploring on the different",
+        "Investigating methods of",
+        "Carrying out routine",
+        "Ruminant animals managed",
+        "Demonstrating skills of",
+        "Investigating and suggesting",
+        "Analysing yields and quality of",
+        "Exploring innovative ways of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["livestock", "production", "ruminant", "animal", "production"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "FARM MANAGEMENT",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Agricultural Economics",
+      "specificCompetences": ["Demonstrate understanding of agricultural economics"],
+      "learningActivities": [
+        "Describing agricultural",
+        "Applying opportunity cost in",
+        "Analysing the law of supply",
+        "Investigating the effects of",
+        "Investigating risks in",
+        "Understanding agricultural",
+        "Practising insurance policies in"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "management", "agricultural", "economics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "CLIMATE-SMART AGRICULTURE",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Research on Climate-Smart Agriculture",
+      "specificCompetences": ["Carryout research on Climate-Smart Agriculture"],
+      "learningActivities": [
+        "Identifying basic steps in",
+        "Researching on various",
+        "Reporting on the findings on",
+        "Research on Climate-Smart"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "climate",
+        "smart",
+        "agriculture",
+        "research",
+        "climate",
+        "smart",
+        "agriculture"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Structures for Water Supply",
+      "specificCompetences": ["Use different water supply structures on a farm"],
+      "learningActivities": [
+        "Exploring different sources",
+        "Managing water supply",
+        "Investigating the main causes",
+        "Preventing pollution of water",
+        "Different water supply"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "structures", "machinery", "structures", "water", "supply"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "Engines",
+      "specificCompetences": ["Demonstrate the operation of engines"],
+      "learningActivities": [
+        "Describing the internal",
+        "Examining the main parts of",
+        "Relating the parts of the",
+        "Operation of engines",
+        "Demonstrating, using models,",
+        "Comparing the petrol and"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["farm", "structures", "machinery", "engines"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S2-2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "4.2.2",
+      "subtopic": "Engines",
+      "specificCompetences": ["Maintain engines of farm machinery"],
+      "learningActivities": [
+        "Describing the main systems",
+        "Maintaining main systems of",
+        "Engines of farm machinery"
+      ],
+      "expectedStandard": "maintained correctly",
+      "keywords": ["farm", "structures", "machinery", "engines"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S3",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "FARM STRUCTURES AND MACHINERY",
+      "subtopicNumber": "4.2.3",
+      "subtopic": "Farm Mechanisation",
+      "specificCompetences": ["Demonstrate understanding of farm mechanisation"],
+      "learningActivities": [
+        "Describing farm",
+        "Exploring different types of",
+        "Investigating the advantages",
+        "Operating different farm",
+        "Exploring innovative ways of",
+        "Understanding of farm"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "structures", "machinery", "farm", "mechanisation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "CROP PRODUCTION 4.3.1 Legume Crop Production",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Farm Mechanisation",
+      "specificCompetences": ["Grow legume crops"],
+      "learningActivities": [
+        "Describing a legume crop",
+        "Exploring varieties of",
+        "Investigating nutritive and",
+        "Selecting a suitable site for a",
+        "Managing a legume crop being",
+        "Adding value, storing and",
+        "Analysing yields and quality",
+        "Exploring innovative ways of",
+        "Legume crops grown"
+      ],
+      "expectedStandard": "",
+      "keywords": ["crop", "production", "legume", "crop", "production", "farm", "mechanisation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Apiculture (Bee Farming).",
+      "specificCompetences": ["Practise Bee farming"],
+      "learningActivities": [
+        "Describing bee farming",
+        "Investigating the value of bee",
+        "Exploring systems of Bee",
+        "Analysing the advantages and",
+        "Examining the Bee colony",
+        "Constructing a top bar bee",
+        "Making protective gear for bee",
+        "Establishing an apiary",
+        "Managing an apiary (handling,",
+        "Processing, grading honey and",
+        "Analysing yields and quality",
+        "Exploring innovative ways of",
+        "Bee farming practised"
+      ],
+      "expectedStandard": "",
+      "keywords": ["livestock", "production", "apiculture", "farming"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "LIVESTOCK PRODUCTION",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "Aquaculture",
+      "specificCompetences": ["Rear fish from fingerings to maturity"],
+      "learningActivities": [
+        "Describing aquaculture and",
+        "Investigating the value of fish",
+        "Exploring systems of fish",
+        "Fish from fingerings reared to",
+        "Analysing the advantages and",
+        "Exploring common species of",
+        "Exploring methods of fish",
+        "Selecting site and constructing",
+        "Managing a fish pond (Pond",
+        "Harvesting of fish using",
+        "Practising integrated fish",
+        "Handling, preserving and",
+        "Analysing yields and quality",
+        "Exploring innovative ways of"
+      ],
+      "expectedStandard": "maturity successfully",
+      "keywords": ["livestock", "production", "aquaculture"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "FARM MANAGEMENT",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Budgeting",
+      "specificCompetences": ["Formulate farm enterprise budgets"],
+      "learningActivities": [
+        "Describing a budget",
+        "Exploring types of budgets",
+        "Preparing a budget for an",
+        "Preparing a cash flow budget",
+        "Farm enterprise budgets"
+      ],
+      "expectedStandard": "formulated appropriately",
+      "keywords": ["farm", "management", "budgeting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S2",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "FARM MANAGEMENT",
+      "subtopicNumber": "4.5.2",
+      "subtopic": "Costing and Accounting",
+      "specificCompetences": ["Utilise costing and accounting to meet financial needs"],
+      "learningActivities": [
+        "Using costing and accounting",
+        "Distinguishing between direct",
+        "Calculating gross margins of",
+        "Exploring ways of increasing",
+        "Calculating profit/loss of an",
+        "Costing and accounting to"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "management", "costing", "accounting"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S3",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "FARM MANAGEMENT",
+      "subtopicNumber": "4.5.3",
+      "subtopic": "Farm Valuation",
+      "specificCompetences": ["Evaluate the value of a Farm"],
+      "learningActivities": [
+        "Identifying a farm inventory",
+        "Preparing an inventory of",
+        "Describing farm valuation",
+        "Preparing an opening and",
+        "Applying various methods of",
+        "The value of a farm evaluated"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "management", "farm", "valuation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T5-S4",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "FARM MANAGEMENT",
+      "subtopicNumber": "4.5.4",
+      "subtopic": "Cooperatives",
+      "specificCompetences": ["Form Cooperatives"],
+      "learningActivities": [
+        "Describing a cooperative",
+        "Investigating how",
+        "Cooperatives formed",
+        "Exploring the common",
+        "Forming a cooperative",
+        "Analysing the importance of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["farm", "management", "cooperatives"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

@@ -2,8 +2,7 @@ export const dynamic = 'force-dynamic'
 
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 import { withAILimits } from '@/lib/middleware/withAILimits'
@@ -11,13 +10,13 @@ import { generateTermReportForStudent } from '@/lib/ai/term-report-service'
 import { authorizeAiRoute } from '@/lib/ai/routeAuth'
 
 export const GET = withErrorHandler(async function GET(request) {
-  const auth = await authMiddleware(request)
-  if (!auth.isAuthenticated) return auth.response
+  const access = await authorizeAiRoute(request, {
+    featureId: 'ai-term-reports',
+    rateLimitPrefix: 'ai_term_reports_list_',
+  })
+  if (!access.ok) return access.response
 
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-  if (!schoolId) throw new ApiError('School context required', 400)
+  const { schoolId, user } = access
 
   const { searchParams } = new URL(request.url)
   const status = safeQueryString(searchParams.get('status'))
@@ -30,9 +29,9 @@ export const GET = withErrorHandler(async function GET(request) {
     ...(term != null && Number.isFinite(term) ? { term } : {}),
   }
 
-  if (roleCheck(auth.user, ['student', 'STUDENT'])) {
+  if (roleCheck(user, ['student', 'STUDENT'])) {
     const student = await prisma.student.findFirst({
-      where: { userId: auth.user.id, schoolId },
+      where: { userId: user.id, schoolId },
       select: { id: true },
     })
     if (!student) return NextResponse.json({ success: true, data: [] })
@@ -54,6 +53,7 @@ export const POST = withAILimits(
   withErrorHandler(async function POST(request) {
     const access = await authorizeAiRoute(request, {
       roles: ['hod', 'HOD', 'headteacher', 'ADMIN'],
+      featureId: 'ai-term-reports',
       rateLimitPrefix: 'ai_term_reports_gen_',
     })
     if (!access.ok) return access.response

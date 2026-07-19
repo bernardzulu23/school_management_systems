@@ -1,0 +1,50 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Maths2_Teaching_Module.pdf",
+  "md5": "3c2a26b24aedaab36387e46ac55dee84",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "algebra",
+  "lesson": {
+    "lesson": 8,
+    "title": "ALGEBRA",
+    "topics": [
+      "Introduction",
+      "work for formulating equations, solving problems and representing relationships between variables.",
+      "In this topic, the sub-topic is algebraic expressions."
+    ],
+    "activities": [
+      "Introduction: Construction of algebraic expressions from word statements can be a rewarding experience for learners as it provides a mix",
+      "Sound knowledge of the basics such as translation of word statements, building complexities, practice with examples, real-world",
+      "application, review and reinforcements through quizzes and games would make the lesson more understandable and captivating.",
+      "Suggested Teaching and Learning Materials to Set up Learning Environment",
+      "Artificial Environment: Cards with Word Problems",
+      "What to do: Divide the class into small manageable groups of mixed abilities.",
+      "Assign each group with different types of word statements involving addition, subtraction, multiplication and division. Let the learners",
+      "discuss and write their agreed statements. For example, If each apple costs kwacha and you buy apples, write an expression for the"
+    ],
+    "resources": [
+      "Learning Activity 9: Evaluating Algebraic Expressions by Substituting Variables with Numbers",
+      "Introduction",
+      "Substitution in algebra is a fundamental concept where variables are replaced with specific values to simplify expressions. This helps",
+      "learners grasp the concept that letters in algebra stand for numbers and can be replaced accordingly.",
+      "Activity 9.1: Evaluating of Algebraic Expressions by Substitution.",
+      "Suggested Teaching and Learning Materials to set up the Learning Environment"
+    ],
+    "assessment": [
+      "Zambia Secondary School Syllabus book 10 (page 61), and Progress in Mathematics book 8 (page 48 - 49).",
+      "Learning Activity 2: Relating letters and numbers.",
+      "Introduction",
+      "Relating letters and numbers in algebra is important for several reasons; one of them is that letters (variables) allow us to represent",
+      "general cases and patterns, making it easier to solve a wide range of problems without specifying particular values. Moreover, using letters",
+      "encourages abstract reasoning, helping learners and mathematicians think about relationships and structures rather than just specific"
+    ],
+    "notes": ""
+  }
+}

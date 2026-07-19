@@ -2,27 +2,43 @@
   "subject": "Lunda",
   "form": 1,
   "term": 2,
-  "sourceFile": "LIT-IN-LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
+  "sourceFile": "LUNDA-TEACHING-MODULE-FORM-1-TERM-2.pdf",
   "lessons": [
     {
       "lesson": 1,
-      "title": "1.5 Litilicha yakusoneka BOYS:",
-      "topics": ["GIRLS: 26", "SUB-TOPIC: 1.5.3 Chambu nikudifwana kwa Litilicha yakusoneka."],
-      "activities": ["What should the", "teacher do?", "LEARNERS", "What should", "the learners"],
-      "resources": [],
+      "title": "1.3.3 Composition",
+      "topics": ["SUB-TOPIC: 1.3.3.1 Descriptive Writing"],
+      "activities": [
+        " Reading the",
+        "description of",
+        "a person",
+        "(books/magazi",
+        "Newspaper,",
+        "For example;",
+        "Nkundezhi",
+        "washakamaña"
+      ],
+      "resources": [
+        " Samples of descriptive composition of people.",
+        " Pictures of different people.",
+        "EXPECTED STANDARD: Description of a person written correctly. (This must come",
+        "from the syllabus as it is)",
+        "LESSON PROGRESSION:",
+        "LESSON EVALUATION:"
+      ],
       "assessment": [
         "CRITERIA",
-        "Activity 1:",
-        "Introduction/Revisi",
-        "learners to",
-        "state the",
-        "b) State the"
+        "INTRODUCTION",
+        " In small groups,",
+        "task learners to",
+        "investigate the",
+        "concept of"
       ],
       "notes": ""
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-11T06:22:02.954Z",
-    "rawTextLength": 67776
+    "extractedAt": "2026-07-19T20:35:56.333Z",
+    "rawTextLength": 110302
   }
 }

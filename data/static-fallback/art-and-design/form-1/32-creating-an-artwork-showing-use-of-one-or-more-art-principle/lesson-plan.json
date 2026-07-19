@@ -1,0 +1,30 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "creating-an-artwork-showing-use-of-one-or-more-art-principle",
+  "lesson": {
+    "week": 2,
+    "lesson": 32,
+    "title": "Creating an Artwork Showing Use of One or More Art Principles",
+    "topics": [
+      "Demonstration",
+      "Task 1: Learners to create artworks that demonstrate art principles.",
+      "Page 17 of 45",
+      "Task 2: Learners to experiment with different materials and techniques to create unique",
+      "artworks."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

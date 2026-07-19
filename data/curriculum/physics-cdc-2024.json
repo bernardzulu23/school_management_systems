@@ -1,0 +1,1314 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Physics Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.pdf",
+    "level": "Secondary Education Ordinary Level",
+    "forms": [1, 2, 3, 4],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Physics",
+    "slug": "physics",
+    "sourceFileBytes": 1899208,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing. Content is transcribed from the source, not fabricated."
+  },
+  "curriculum": [
+    {
+      "id": "F1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Safety Rules (Laboratory Safety)",
+      "specificCompetences": ["Practise laboratory safety rules"],
+      "learningActivities": [
+        "Practising laboratory safety protocols",
+        "Identifying potential hazards and",
+        "Using personal protective equipment",
+        "Creating posters to communicate",
+        "Demonstrating emergency response",
+        "Administering first aid",
+        "Safety laboratory rules"
+      ],
+      "expectedStandard": "practised correctly",
+      "keywords": ["safety", "rules", "laboratory", "safety"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Waste Management",
+      "specificCompetences": ["Practise waste management principles"],
+      "learningActivities": [
+        "Identifying waste materials in the",
+        "Classifying waste materials",
+        "Principles of waste"
+      ],
+      "expectedStandard": "",
+      "keywords": ["waste", "management"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Apparatus in Physics",
+      "specificCompetences": ["Use apparatus in Physics"],
+      "learningActivities": [
+        "Identifying apparatus in Physics",
+        "Using apparatus in Physics",
+        "Improvising apparatus in Physics",
+        "Apparatus in Physics"
+      ],
+      "expectedStandard": "used correctly",
+      "keywords": ["apparatus", "physics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Fundamental Concepts of Physics",
+      "specificCompetences": [
+        "Demonstrate curiosity and inquiry when exploring fundamental concepts of physics"
+      ],
+      "learningActivities": [
+        "Recognising what physics is and its",
+        "Classifying branches of Physics",
+        "Exploring the scientific methods of",
+        "Curiosity and inquiry"
+      ],
+      "expectedStandard": "",
+      "keywords": ["fundamental", "concepts", "physics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T1-S5",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "Topic 1.1",
+      "subtopicNumber": "1.1.5",
+      "subtopic": "Application of Physics",
+      "specificCompetences": ["Relate the concepts of physics to everyday life"],
+      "learningActivities": [
+        "Identifying applications of Physics in",
+        "Demonstrating the application of",
+        "Concepts of physics"
+      ],
+      "expectedStandard": "",
+      "keywords": ["application", "physics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Basic Principles of Scientific Investigations",
+      "specificCompetences": ["Apply principles of scientific investigations"],
+      "learningActivities": [
+        "Designing an experiment that",
+        "Writing scientific reports to",
+        "Basic principles of"
+      ],
+      "expectedStandard": "applied appropriately",
+      "keywords": ["basic", "principles", "scientific", "investigations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S2",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.2",
+      "subtopic": "Physical Quantities",
+      "specificCompetences": ["Classify physical quantities as basic and derived"],
+      "learningActivities": [
+        "Identifying basic quantities and their",
+        "Discussing derived quantities and",
+        "Applying prefixes, multiples,",
+        "Using scientific notations",
+        "Using significant figures in",
+        "Converting basic and derived units",
+        "Physical quantities"
+      ],
+      "expectedStandard": "derived correctly",
+      "keywords": ["physical", "quantities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S3",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.3",
+      "subtopic": "Precision and Accuracy",
+      "specificCompetences": ["Demonstrate precision and accuracy in measurements"],
+      "learningActivities": [
+        "Measuring length with precision and",
+        "Determining the area with precision",
+        "Precision and accuracy",
+        "Measuring volume of liquids, regular",
+        "Measuring mass of gases, liquids and",
+        "Determining density of gases, liquids",
+        "Measuring time with precision and",
+        "Experimenting on the factors that",
+        "Measuring weight with precision and",
+        "Carrying out experiments on"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["precision", "accuracy"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T2-S4",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "Topic 1.2",
+      "subtopicNumber": "1.2.4",
+      "subtopic": "Equilibrium 1.2.4.1 Apply equilibrium concepts to design systems to solve real world problems",
+      "specificCompetences": ["demonstrate stable, unstable and"],
+      "learningActivities": [
+        "Locating the center of mass",
+        "Designing systems in equilibrium to",
+        "Analysing equilibrium in real world",
+        "Equilibrium concepts in"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "equilibrium",
+        "apply",
+        "equilibrium",
+        "concepts",
+        "design",
+        "systems",
+        "solve",
+        "real",
+        "world",
+        "problems"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "Topic 1.3",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "The Universe",
+      "specificCompetences": [
+        "Construct astronomical models to demonstrate conceptual understanding of elementary astronomy"
+      ],
+      "learningActivities": [
+        "Creating a scale model or diagram of",
+        "Simulating astronomical events like",
+        "Astronomical models to",
+        "Simulating space exploration using",
+        "Using astronomical tools"
+      ],
+      "expectedStandard": "constructed accordingly",
+      "keywords": ["universe"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Structure and Composition of the Earth",
+      "specificCompetences": ["Demonstrate an understanding of the Earth"],
+      "learningActivities": [
+        "Exploring the structure and",
+        "Collecting and analyzing rock",
+        "Constructing a scale model of the",
+        "Understanding of the"
+      ],
+      "expectedStandard": "",
+      "keywords": ["structure", "composition", "earth"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T4-S2",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "Topic 1.4",
+      "subtopicNumber": "1.4.2",
+      "subtopic": "Structure and Composition of the Earth’s Atmosphere",
+      "specificCompetences": ["Analyse the structure and composition of the earth’s atmosphere"],
+      "learningActivities": [
+        "Analysing the structure and",
+        "Making a scale model of the",
+        "The structure and"
+      ],
+      "expectedStandard": "analysed accordingly",
+      "keywords": ["structure", "composition", "earth", "atmosphere"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Scalar and Vector Quantities",
+      "specificCompetences": [
+        "Apply the concepts of scalar and vector quantities in everyday life"
+      ],
+      "learningActivities": [
+        "Distinguishing scalar from vector",
+        "Analysing scalar from vector",
+        "Constructing vector diagrams",
+        "Concepts of scalar and",
+        "Determining resultant vectors using",
+        "Applying graphical methods to"
+      ],
+      "expectedStandard": "life applied correctly",
+      "keywords": ["scalar", "vector", "quantities"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "Linear Motion",
+      "specificCompetences": ["Apply concepts of linear motion in real life situations"],
+      "learningActivities": [
+        "Distinguish the terms used in",
+        "Determining distance, displacement,",
+        "Deriving the basic equations of",
+        "Using the equations of uniformly",
+        "Plotting linear motion graphs",
+        "Calculating thinking distance, breaking",
+        "Concepts of linear"
+      ],
+      "expectedStandard": "",
+      "keywords": ["linear", "motion"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S2-2",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.2",
+      "subtopic": "Linear Motion",
+      "specificCompetences": ["Apply concepts of falling bodies in real life situations"],
+      "learningActivities": [
+        "Experimenting the motion of falling",
+        "Determining the numerical value of",
+        "Solving problems on free fall using",
+        "Concepts of falling"
+      ],
+      "expectedStandard": "",
+      "keywords": ["linear", "motion"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S3",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.3",
+      "subtopic": "Forces 1.5.3.1 Apply force-body",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Investigating the effect of a force on",
+        "Describing the inertia law",
+        "Describing the relationship between",
+        "Demonstrating the effect of friction",
+        "Demonstrating the relationship",
+        "Solving problems involving force",
+        "Verifying Hooke’s law using an",
+        "Force-body interaction"
+      ],
+      "expectedStandard": "",
+      "keywords": ["forces", "apply", "force", "body"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S4",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.4",
+      "subtopic": "Circular Motion 1.5.4.1 Apply circular motion concepts to solve problems and make predictions",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Describing motion in a circular path",
+        "Showing that",
+        "Solving problems involving circular",
+        "Demonstrating how circular motion is"
+      ],
+      "expectedStandard": "predictions correctly",
+      "keywords": [
+        "circular",
+        "motion",
+        "apply",
+        "circular",
+        "motion",
+        "concepts",
+        "solve",
+        "problems",
+        "make",
+        "predictions"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S5",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.5",
+      "subtopic": "Moment of a Force",
+      "specificCompetences": [
+        "Create a tool that applies moment of a force in solving problems in everyday life."
+      ],
+      "learningActivities": [
+        "Demonstrating the concept of moment",
+        "Exploring how forces and distance",
+        "Solving real life problems involving",
+        "Designing tools that apply moment of a",
+        "A tool that applies"
+      ],
+      "expectedStandard": "",
+      "keywords": ["moment", "force"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F1-T5-S6",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "Topic 1.5",
+      "subtopicNumber": "1.5.6",
+      "subtopic": "Equilibrium",
+      "specificCompetences": ["Apply equilibrium concepts to solve real world problems"],
+      "learningActivities": [
+        "Locating the center of mass",
+        "Applying principle of moments as a",
+        "Designing systems in equilibrium to",
+        "Analysing equilibrium in real world",
+        "Equilibrium concept to"
+      ],
+      "expectedStandard": "applied accordingly",
+      "keywords": ["equilibrium"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Work, Energy, and Power",
+      "specificCompetences": ["Create a system that applies work, energy, and"],
+      "learningActivities": [
+        "Developing a system that maximises the",
+        "Determining the work done on an object",
+        "Investigating the relationship between",
+        "Conducting experiments to measure and",
+        "Demonstrating the law of conservation of",
+        "Exploring how machines can change the",
+        "Calculating the efficiency of energy",
+        "Solving mathematical problems",
+        "Calculating the efficiency of power using",
+        "A system that applies"
+      ],
+      "expectedStandard": "",
+      "keywords": ["work", "energy", "power"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "Linear Momentum",
+      "specificCompetences": ["Apply the principle of linear momentum in everyday life"],
+      "learningActivities": [
+        "Exploring linear momentum in real world",
+        "Exploring the concept of momentum",
+        "Solving numerical problems involving",
+        "Demonstrating the law of conservation of",
+        "Demonstrating an understanding the",
+        "The principle of linear"
+      ],
+      "expectedStandard": "life applied correctly",
+      "keywords": ["linear", "momentum"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "Simple Machines 2.1.3.1 Build simple machines to solve real life problems",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Building simple machines to solve real",
+        "Demonstrating the application of the",
+        "Determining Mechanical Advantage",
+        "Deriving the formula for efficiency of a",
+        "Simple machines built to"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "simple",
+        "machines",
+        "build",
+        "simple",
+        "machines",
+        "solve",
+        "real",
+        "life",
+        "problems"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T1-S4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "Topic 2.1",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "Pressure",
+      "specificCompetences": ["Apply the principles of pressure to solve real-life problems"],
+      "learningActivities": [
+        "Describing pressure and assigning its",
+        "Establishing the relationship between",
+        "Measuring pressure using pressure",
+        "Determining pressure using the",
+        "Deriving the equation for pressure in",
+        "Calculating pressure in liquids and gas",
+        "Exploring factors affecting pressure in",
+        "Conducting an experiment to",
+        "Conducting an experiment to",
+        "Creating a model that uses the principle"
+      ],
+      "expectedStandard": "applied accordingly",
+      "keywords": ["pressure"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Simple Kinetic Theory of Matter",
+      "specificCompetences": [
+        "Analyse the impact of simple kinetic theory of matter on technological innovations"
+      ],
+      "learningActivities": [
+        "Describing the kinetic theory of matter",
+        "Exploring the molecular model of matter",
+        "Demonstrating kinetic theory of matter",
+        "Developing an innovation on simple",
+        "The impact of simple"
+      ],
+      "expectedStandard": "analysed correctly",
+      "keywords": ["simple", "kinetic", "theory", "matter"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S2",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.2",
+      "subtopic": "Measurement of Temperature",
+      "specificCompetences": ["Measure temperature using appropriate instruments"],
+      "learningActivities": [
+        "Measuring temperature using appropriate",
+        "Interpreting temperature data from",
+        "Recognising various types of",
+        "Determining the boiling and melting",
+        "Experimenting on the effects of pressure",
+        "Calibrating unmarked thermometer",
+        "Experimenting on the physical properties",
+        "Experimenting on suitability of alcohol",
+        "Exploring the relationship between",
+        "Temperature measured"
+      ],
+      "expectedStandard": "instruments accordingly",
+      "keywords": ["measurement", "temperature"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S3",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.3",
+      "subtopic": "Expansion of Solids, Liquids and Gases",
+      "specificCompetences": ["Demonstrate expansion of solids, liquids and gases"],
+      "learningActivities": [
+        "Demonstrating thermal expansion of",
+        "Demonstrating that various solids, liquids",
+        "Determining the boiling and melting",
+        "Experimenting on the effects of pressure",
+        "Expansion of solids,",
+        "Demonstrating the use of equations on"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["expansion", "solids", "liquids", "gases"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S4",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.4",
+      "subtopic": "The Internal Combustion Engine",
+      "specificCompetences": [
+        "Demonstrate how various internal combustion engines operate (four stroke engine)"
+      ],
+      "learningActivities": [
+        "Recognising different types of internal",
+        "Exploring the operation of the internal",
+        "Creating a model of an internal",
+        "Comparing efficiency of diesel and petrol",
+        "Exploring emerging engine technologies",
+        "The operations of various"
+      ],
+      "expectedStandard": "demonstrated correctly",
+      "keywords": ["internal", "combustion", "engine"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S5",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.5",
+      "subtopic": "Heat Transfer 2.2.5.1 Apply the concepts of heat transfer",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Describing heat transfer",
+        "Demonstrating heat transfer by",
+        "Applying heat transfer in everyday life",
+        "Exploring the relationship between",
+        "Demonstrating the use of bad and good",
+        "Distinguishing good from bad",
+        "The concepts of heat",
+        "Demonstrating greenhouse effects"
+      ],
+      "expectedStandard": "",
+      "keywords": ["heat", "transfer", "apply", "concepts", "heat", "transfer"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T2-S6",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "Topic 2.2",
+      "subtopicNumber": "2.2.6",
+      "subtopic": "Measurement of Heat",
+      "specificCompetences": [
+        "Solve practical and numerical problems involving measurement of heat"
+      ],
+      "learningActivities": [
+        "Exploring terms used in the measurement",
+        "Solving practical and numerical problems",
+        "Exploring the differences between",
+        "Measuring heat capacity",
+        "Determining the latent heat of fusion",
+        "Practical and numerical"
+      ],
+      "expectedStandard": "solved correctly",
+      "keywords": ["measurement", "heat"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Longitudinal and Transverse Waves",
+      "specificCompetences": ["Solve practical and numerical problems involving wave motion"],
+      "learningActivities": [
+        "Describing the terms associated with",
+        "Distinguishing between longitudinal and",
+        "Solving numerical problems involving",
+        "Creating a device that generates waves to",
+        "Practical and numerical"
+      ],
+      "expectedStandard": "motion solved accordingly",
+      "keywords": ["longitudinal", "transverse", "waves"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T3-S2",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "Topic 2.3",
+      "subtopicNumber": "2.3.2",
+      "subtopic": "Electromagnetic Spectrum",
+      "specificCompetences": ["Interpret information related to electromagnetic waves"],
+      "learningActivities": [
+        "Describing the electromagnetic spectrum",
+        "Illustrating an electromagnetic spectrum",
+        "Exploring properties of electromagnetic",
+        "Exploring the sources, and uses of",
+        "Information related to",
+        "Recognising the methods of detection of",
+        "Exploring the harmful effects of each of",
+        "Practising safety precautions against"
+      ],
+      "expectedStandard": "interpreted correctly",
+      "keywords": ["electromagnetic", "spectrum"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "Topic 2.4",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Electromagnetic Spectrum",
+      "specificCompetences": ["Manipulate devices to demonstrate fundamental properties of sound"],
+      "learningActivities": [
+        "Identifying vibrating parts in the",
+        "Experimenting on the transmission of",
+        "Measuring sound using different",
+        "Demonstrating rarefaction and",
+        "Conducting experiments to determine the",
+        "Discussing properties of sound",
+        "Simulating the properties of sound using",
+        "Explaining factors that influence quality",
+        "Categorising types of sound based on;",
+        "Devices to demonstrate",
+        "Discussing application of sound (music",
+        "Researching the health and"
+      ],
+      "expectedStandard": "",
+      "keywords": ["electromagnetic", "spectrum"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Rectilinear Propagation of Light",
+      "specificCompetences": ["Apply the concept of rectilinear propagation of light"],
+      "learningActivities": [
+        "Demonstrating rectilinear propagation",
+        "Analyzing shadows (eclipses) using",
+        "Exploring the behavior of rectilinear",
+        "Researching on the application of",
+        "Creating a pinhole camera to show how",
+        "The concept of rectilinear"
+      ],
+      "expectedStandard": "applied accordingly",
+      "keywords": ["rectilinear", "propagation", "light"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "Reflection of Light",
+      "specificCompetences": ["Apply the concept of reflection of light."],
+      "learningActivities": [
+        "Describing the concepts of reflection of",
+        "Creating a mirror maze to explore",
+        "Exploring images of plane, concave,",
+        "Carrying out experiments to verify the",
+        "Utilising simulation or applications to",
+        "Solving problems involving reflection,",
+        "Using formula:",
+        "The concept of reflection of",
+        "Designing and building a periscope",
+        "Creating a kaleidoscope to demonstrate"
+      ],
+      "expectedStandard": "light applied accordingly",
+      "keywords": ["reflection", "light"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "Refraction of Light",
+      "specificCompetences": ["Apply the concept of refraction of light"],
+      "learningActivities": [
+        "Describing the concept of refraction of",
+        "Creating optical illusions (mirage,",
+        "Carrying out an experiment to verify",
+        "Investigating dispersion and refraction",
+        "Demonstrating critical angle and total",
+        "Solving numerical problems on critical",
+        "The concept of refraction of",
+        "Exploring how the concept of refraction"
+      ],
+      "expectedStandard": "light applied accordingly",
+      "keywords": ["refraction", "light"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T1-S4",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "Topic 3.1",
+      "subtopicNumber": "3.1.4",
+      "subtopic": "Lenses 3.1.4.1 Demonstrate understanding of lenses",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Describing lenses and their associated",
+        "Investigating the action of converging",
+        "Exploring thin lenses and light sources",
+        "Applying the lens equation to calculate",
+        "Designing systems of thin lenses such",
+        "Exploring how lenses create real and",
+        "Exploring computer simulations on thin",
+        "Researching on thin lenses and",
+        "Understanding of lenses"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["lenses", "demonstrate", "understanding", "lenses"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Introduction to Static Electricity",
+      "specificCompetences": ["Design experiments to investigate static electricity"],
+      "learningActivities": [
+        "Carrying out experiments with suitable",
+        "Generating static electricity by rubbing",
+        "Experiments to investigate",
+        "Investigating how heat causes static",
+        "Investigating how humidity causes",
+        "Demonstrating how an object can be",
+        "Discussing how lightning is formed",
+        "Testing how different materials conduct",
+        "Creating a patterns of static electric",
+        "Exploring how distance affects the",
+        "Demonstrating how contact and",
+        "Researching on real world application",
+        "Simulating charging and discharging"
+      ],
+      "expectedStandard": "",
+      "keywords": ["introduction", "static", "electricity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1-2",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Introduction to Static Electricity",
+      "specificCompetences": ["Install a lightning arrester"],
+      "learningActivities": [
+        "Describing a lightning",
+        "Simulating the danger of static",
+        "Discussing the importance of grounding",
+        "Proposing safety procedures for",
+        "Analysing real world cases of",
+        "A lightning arrestor installed"
+      ],
+      "expectedStandard": "",
+      "keywords": ["introduction", "static", "electricity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Electric Charge, Current and Potential Difference",
+      "specificCompetences": ["Construct a simple electric circuit"],
+      "learningActivities": [
+        "Describing the terms associated with",
+        "Constructing a simple electric circuit",
+        "A simple electric circuit",
+        "Distinguishing between direction of",
+        "Measuring voltage (V), and current (I)",
+        "Calculating effective resistance (R) in",
+        "Investigating factors that affect",
+        "Calculating resistivity ("
+      ],
+      "expectedStandard": "constructed accordingly",
+      "keywords": ["electric", "charge", "current", "potential", "difference"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T2-S1-3",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "Topic 3.2",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Electric Cells",
+      "specificCompetences": ["Apply electric cell technology to solve problems"],
+      "learningActivities": [
+        "Developing a sustainable energy",
+        "Exploring the structure of electric cells",
+        "Exploring electric cells as a",
+        "Demonstrating charging and",
+        "Investigating internal resistance (r) of a",
+        "Exploring environmental implications",
+        "Electric cell technology to"
+      ],
+      "expectedStandard": "",
+      "keywords": ["electric", "cells"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S3",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.3",
+      "subtopic": "Ohm’s Law 3.3.3.1 Construct an electrical circuit system to apply the concept of ohms’ law",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Investigating the relationship between",
+        "Creating an electrical circuit system",
+        "Verifying Ohm’s law using Ohmic",
+        "Analysing the properties of non-Ohmic",
+        "Solving numerical problems involving",
+        "An electrical circuit system"
+      ],
+      "expectedStandard": "",
+      "keywords": ["construct", "electrical", "circuit", "system", "apply", "concept", "ohms"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S4",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.4",
+      "subtopic": "Electric Energy and Power",
+      "specificCompetences": [
+        "Solve practical and numerical problems involving electrical energy and power"
+      ],
+      "learningActivities": [
+        "Describing electric power and energy",
+        "Constructing electrical energy efficient",
+        "Calculating power",
+        "Costing electrical energy in kilowatt-",
+        "Electrical energy efficient"
+      ],
+      "expectedStandard": "",
+      "keywords": ["electric", "energy", "power"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T3-S5",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "Topic 3.3",
+      "subtopicNumber": "3.3.5",
+      "subtopic": "Electric Safety 3.3.5.1 Develop a domestic electric circuit, considering safety and efficiency",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Developing a domestic electric circuit,",
+        "Demonstrating uses of fuse and circuit",
+        "Insulating to prevent accidental contact",
+        "Exploring the importance of earthing",
+        "Demonstrating how surge protectors",
+        "Demonstrating adherence to set safety",
+        "A domestic electric circuit,"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "electric",
+        "safety",
+        "develop",
+        "domestic",
+        "electric",
+        "circuit",
+        "considering",
+        "safety",
+        "efficiency"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "Topic 3.4",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Phenomenon of Magnetism",
+      "specificCompetences": ["Demonstrate understanding of the phenomenon of magnetism"],
+      "learningActivities": [
+        "Demonstrating the properties of",
+        "Exploring the domain theory",
+        "Demonstrating induced magnetism in",
+        "Carrying out experiments with suitable",
+        "Creating permanent and temporary",
+        "Demagnetising a magnet using",
+        "Demonstrating the use of magnetic",
+        "Designing an innovation that",
+        "Understanding of the"
+      ],
+      "expectedStandard": "demonstrated accordingly",
+      "keywords": ["phenomenon", "magnetism"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "Topic 3.5",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Phenomenon of Magnetism",
+      "specificCompetences": ["Apply magnetic effect of electric current to solve problems"],
+      "learningActivities": [
+        "Demonstrating the magnetic field",
+        "Creating a system that uses the magnetic",
+        "Demonstrating the behaviour of an",
+        "Demonstrating the nature of forces",
+        "Investigating the effects of magnetic",
+        "Designing innovative solutions to real-",
+        "Magnetic effect of electric"
+      ],
+      "expectedStandard": "problems accordingly",
+      "keywords": ["phenomenon", "magnetism"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Introduction to Electromagneti c Induction",
+      "specificCompetences": [
+        "Create a system that applies Faraday’s law of electromagnetic induction"
+      ],
+      "learningActivities": [
+        "Demonstrating Faraday’s law of",
+        "Demonstrating factors that affect the",
+        "Demonstrating the direction of the",
+        "A system that applies"
+      ],
+      "expectedStandard": "created correctly",
+      "keywords": ["introduction", "electromagneti", "induction"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S2",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.2",
+      "subtopic": "The Simple AC and DC Generators",
+      "specificCompetences": ["Create simple AC and DC generators"],
+      "learningActivities": [
+        "Creating a simple generator using a",
+        "Researching on how Electric Vehicles",
+        "Exploring the benefits of EVs compared",
+        "Researching on the efficiency of EVs",
+        "Simple AC and DC"
+      ],
+      "expectedStandard": "",
+      "keywords": ["simple", "generators"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S3",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.3",
+      "subtopic": "Transformers 3.6.3.1 Solve practical and numeric problems involving transformers",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Demonstrating mutual induction",
+        "Demonstrating the operation of an iron",
+        "Solving problems involving",
+        "Calculating the efficiency of a",
+        "Demonstrating the effects of improper",
+        "Building a simple and efficient iron",
+        "Practical and numerical"
+      ],
+      "expectedStandard": "transformers solved correctly",
+      "keywords": [
+        "transformers",
+        "solve",
+        "practical",
+        "numeric",
+        "problems",
+        "involving",
+        "transformers"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F3-T6-S4",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "Topic 3.6",
+      "subtopicNumber": "3.6.4",
+      "subtopic": "Electrical Energy Transmission",
+      "specificCompetences": ["Explore the transmission of electrical energy"],
+      "learningActivities": [
+        "Discussing electric energy transmission",
+        "Exploring the structure and function of",
+        "Investigating different types of",
+        "Transmission of electrical"
+      ],
+      "expectedStandard": "energy explored accordingly",
+      "keywords": ["electrical", "energy", "transmission"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Introduction to Basic Electronics",
+      "specificCompetences": ["Construct a system that applies the concept of thermionic emission"],
+      "learningActivities": [
+        "Demonstrating thermionic",
+        "Investigating properties of",
+        "Distinguishing between",
+        "Exploring the application of",
+        "Describing the basic structure",
+        "Solving numerical problems on",
+        "Constructing a system that",
+        "A system that applies the"
+      ],
+      "expectedStandard": "constructed accordingly",
+      "keywords": ["introduction", "basic", "electronics"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S2",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.2",
+      "subtopic": "Circuit Components",
+      "specificCompetences": ["Design an electronic circuit"],
+      "learningActivities": [
+        "Identifying circuit components",
+        "Determining resistor values",
+        "Demonstrating the action and",
+        "Demonstrating the process of",
+        "Demonstrating the action of",
+        "Electronic circuit designed",
+        "Investigating the charging and",
+        "Designing an electronic circuit"
+      ],
+      "expectedStandard": "",
+      "keywords": ["circuit", "components"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S3",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.3",
+      "subtopic": "Digital Electronic System",
+      "specificCompetences": ["Create an electronic system"],
+      "learningActivities": [
+        "Making circuits to demonstrate",
+        "Demonstrating the action of a",
+        "Discussing types of logic gates",
+        "Deriving truth tables of logic",
+        "Describing the use of bistable",
+        "Creating an electronic system",
+        "An electronic system created"
+      ],
+      "expectedStandard": "",
+      "keywords": ["digital", "electronic", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T1-S4",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "Topic 4.1",
+      "subtopicNumber": "4.1.4",
+      "subtopic": "Electronic Waste Management",
+      "specificCompetences": ["Practise sustainable ways of electronic waste management"],
+      "learningActivities": [
+        "Investigating effects of",
+        "Analysing the current electronic",
+        "Practising sustainable electronic",
+        "Sustainable ways of"
+      ],
+      "expectedStandard": "",
+      "keywords": ["electronic", "waste", "management"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Communication System",
+      "specificCompetences": ["Create a communication system"],
+      "learningActivities": [
+        "Describing the principles of",
+        "Analysing stages in",
+        "A communication system",
+        "Investigating signal propagation",
+        "Demonstrating factors that affect",
+        "Investigating the use of",
+        "Creating a communication"
+      ],
+      "expectedStandard": "created accordingly",
+      "keywords": ["communication", "system"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Nuclear Atom",
+      "specificCompetences": ["Demonstrate understanding of a nuclear atom"],
+      "learningActivities": [
+        "Exploring the basic structure of",
+        "Recognising the concepts of",
+        "Demonstrating the strong forces",
+        "Understanding of a nuclear",
+        "Exploring the role of",
+        "Creating a model of nuclear"
+      ],
+      "expectedStandard": "",
+      "keywords": ["nuclear", "atom"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Radioactivity 4.3.2.1 Demonstrate understanding of the nature, characteristics, detection and application of radiations",
+      "specificCompetences": [],
+      "learningActivities": [
+        "Simulating radioactive decay by",
+        "Simulating nuclear fusion and",
+        "Exploring the nature of",
+        "Discussing characteristics of the",
+        "Detecting radiations using",
+        "Explaining the origin and effects",
+        "Explaining radioactive decay",
+        "Solving numerical problems on",
+        "Determining half-life of",
+        "Understanding of the"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "radioactivity",
+        "demonstrate",
+        "understanding",
+        "nature",
+        "characteristics",
+        "detection",
+        "application",
+        "radiations"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2-2",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Radioactivity 4.3.2.1 Demonstrate understanding of the nature, characteristics, detection and application of radiations",
+      "specificCompetences": ["Explore the applications of radioactive substances"],
+      "learningActivities": [
+        "Discussing the applications of",
+        "Researching on precautions to",
+        "Discussing the effects of",
+        "Investigating nuclear waste",
+        "Applications of radioactive"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "radioactivity",
+        "demonstrate",
+        "understanding",
+        "nature",
+        "characteristics",
+        "detection",
+        "application",
+        "radiations"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T3-S2-3",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "Topic 4.3",
+      "subtopicNumber": "4.3.2",
+      "subtopic": "Radioactivity 4.3.2.1 Demonstrate understanding of the nature, characteristics, detection and application of radiations",
+      "specificCompetences": [
+        "Analysing innovative solutions for effective nuclear waste management"
+      ],
+      "learningActivities": ["Designing innovative solutions", "Innovative solutions for"],
+      "expectedStandard": "",
+      "keywords": [
+        "radioactivity",
+        "demonstrate",
+        "understanding",
+        "nature",
+        "characteristics",
+        "detection",
+        "application",
+        "radiations"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    },
+    {
+      "id": "F4-T2-S1-2",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "Topic 4.2",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Renewable Energy Systems",
+      "specificCompetences": ["Explore renewable energy systems"],
+      "learningActivities": [
+        "Exploring renewable energy",
+        "Applying knowledge of",
+        "Exploring the contributions of",
+        "Renewable energy systems",
+        "Exploring the role of renewable",
+        "Researching on renewable energy"
+      ],
+      "expectedStandard": "explored accordingly",
+      "keywords": ["renewable", "energy", "systems"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"]
+    }
+  ]
+}

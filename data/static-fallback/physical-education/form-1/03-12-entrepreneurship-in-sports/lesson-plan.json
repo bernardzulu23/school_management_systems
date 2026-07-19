@@ -1,0 +1,36 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-3-MODULE.pdf",
+  "md5": "a70abf94924e00d63a6749a416a20207",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "12-entrepreneurship-in-sports",
+  "lesson": {
+    "lesson": 3,
+    "title": "12 ENTREPRENEURSHIP IN SPORTS",
+    "topics": [
+      "Sub-Topic: 1.12.1- Sports Entrepreneurship................................................................. 34",
+      "Sub-Topic: 1.12.1- Sports Industry:.............................................................................. 37",
+      "SAMPLE OF THE THEORY/ PRACTICAL LESSON PLAN TEMPLATE.................... 44",
+      "Physical Education and Sport",
+      "Teaching Module"
+    ],
+    "activities": ["the CBC’s objectives."],
+    "resources": [
+      "with their own research and innovations to address potential gaps during implementation. The"
+    ],
+    "assessment": [
+      "tailored to learners’ needs and levels.",
+      "The Ministry of Education acknowledges the challenges associated with transitioning to a new",
+      "curriculum. Consequently, this module reflects our commitment to providing teachers with",
+      "the CBC’s objectives."
+    ],
+    "notes": ""
+  }
+}

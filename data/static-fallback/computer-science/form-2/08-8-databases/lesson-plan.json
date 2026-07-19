@@ -1,0 +1,44 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "8-databases",
+  "lesson": {
+    "lesson": 8,
+    "title": "8: DATABASES",
+    "topics": [
+      "Computer Science Teaching Module – Form 2 | Ministry of Education, Zambia | 2026",
+      "Form 2 – Secondary Education",
+      "Quality, lifelong education for all which is accessible, inclusive and relevant to individual,"
+    ],
+    "activities": [
+      "As a Ministry, we understand the challenges that come with transitioning to a new",
+      "curriculum framework. This module reflects our commitment to making this journey as"
+    ],
+    "resources": [
+      "new competence-based curriculum, enhancing their ability to inspire and equip learners",
+      "with essential Computer Science knowledge and skills. Together, let us work towards",
+      "creating a vibrant and responsive education system that prepares our learners for the",
+      "demands of the digital age.",
+      "Kelvin Mambwe (PhD.)",
+      "Permanent Secretary- Educational Services"
+    ],
+    "assessment": [
+      "As a Ministry, we understand the challenges that come with transitioning to a new",
+      "curriculum framework. This module reflects our commitment to making this journey as",
+      "smooth as possible for teachers, by providing structured guidance, suggested activities,",
+      "encourage educators to supplement this module with their own research and innovations",
+      "to address any gaps that may arise during implementation.",
+      "practical and critical thinking skills in learners while ensuring relevance and adaptability to"
+    ],
+    "notes": ""
+  }
+}

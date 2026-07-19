@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "mashinda-ka-bantu-lelo-jino-mo-babena-kwingijisha-bizhima",
+  "lesson": {
+    "week": 2,
+    "lesson": 9,
+    "title": "Mashinda ka bantu lelo jino mo babena kwingijisha bizhima?",
+    "topics": [
+      "Ñanyi buwame buji mu kwingijisha bizhima bulongo?",
+      "Ñanyi butame bo wamona buji mu kwingijisha bizhima kutama?",
+      "Bafunda:",
+      "n Bafunda bafwainwa kuyuka kuuba amba Kafulumende wabika mabumba atala pa kukanya",
+      "ñingijisho ya bizhima kutama, abino bipanyi ke ba DEC (DRUG INFORCEMET"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

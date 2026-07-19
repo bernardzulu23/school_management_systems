@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "bonse-bafunda-balete-bishimi-muji-nyimbo-bapaane-ne-lufunjis",
+  "lesson": {
+    "week": 3,
+    "lesson": 34,
+    "title": "Bonse bafunda balete bishimi muji nyimbo, bapaane ne lufunjisho",
+    "topics": [
+      "MUTWE – KACHE: 4 Bimwesho bimenako milanguluko (Bintunwa)",
+      "Kamina: Kintunwa ke kyambo kimwesha kusombolola byubilo bya muntu nangwa kintu",
+      "kupichila mu ṅambilo nangwa mu byubilo.",
+      "Ntendekelo: uno mutwe usa ku kwasha bafunda kwikala na buyuke bwa bintu, ne kukwasha",
+      "kusolola milanguluko yazhika. Nabiji Nkunda kwimenako mutende, muchima kwimenako"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "subject": "Food and Nutrition",
+  "subjectSlug": "food-and-nutrition",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FOOD-AND-NUTRITION-FORM-1-TERM-1-MODULE-Final-edited-Finaledition.pdf",
+  "md5": "74467cd6c3ba4c6da36173963589ca54",
+  "detectedShift": 0,
+  "pageCount": 71,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-1-kitchen-and-food-laboratory",
+  "lesson": {
+    "lesson": 2,
+    "title": "1.1 KITCHEN AND FOOD LABORATORY",
+    "topics": ["Introduction"],
+    "activities": [
+      "will develop critical competences that will serve them throughout their lives. They will learn to",
+      "apply scientific methods to everyday cooking, make informed choices about nutrition, and",
+      "cultivate a lifelong appreciation for healthy eating habits.",
+      "By the end of this chapter, teachers will have a comprehensive toolkit to inspire and gage learners,",
+      "fostering a deep understanding of the kitchen's role in promoting health, wellness, and creativity.",
+      "General Competences",
+      "Analytical Thinking",
+      "Understanding the nutritional value of different foods."
+    ],
+    "resources": [
+      "substitute for traditional utensils. Improvisation can be necessary when traditional utensils are",
+      "preparedness for emergencies, and sustainability. It is also crucial to keep in mind safety",
+      "considerations such as cleanliness, food safety, and careful handling.",
+      "Specific Competence: Make kitchen utensils",
+      "Learning Activity 1 Discussing improvisation of kitchen utensils and equipment:(",
+      "definition, benefits of improvisation…)"
+    ],
+    "assessment": [
+      "Sample Questions",
+      "Multiple Choice Questions (MCQs)",
+      "Describe open kitchens? (a) These are designed to be part of the living space, with minimal",
+      "separation between the cooking area and the rest of the room. (b) These are found in",
+      "restaurants, cafes, hotels and other food service establishments. (c) These serve hospitals,",
+      "schools, colleges, universities and other institutions. (d) layout that is not fully enclosed"
+    ],
+    "notes": ""
+  }
+}

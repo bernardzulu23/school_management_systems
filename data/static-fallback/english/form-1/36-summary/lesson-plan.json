@@ -1,0 +1,52 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "summary",
+  "lesson": {
+    "lesson": 36,
+    "title": "SUMMARY",
+    "topics": [
+      "INTRODUCTION",
+      "Overview: Summarising is a skill that is required for one purpose or another. A",
+      "summary is a brief and concise explanation or account of the main ideas or essential",
+      "points of a large text or event. A summary focuses on capturing the core meaning while",
+      "omitting unnecessary details, making it easier to understand the gist of the content."
+    ],
+    "activities": [
+      " Ask learners why organising information is important in daily life",
+      "example: in school, business, research.",
+      " Introduce tabulation as a method of organising information into rows and columns for",
+      "clarity and analysis.",
+      " Pair learners and ask them to discuss how they make data easy to understand.",
+      "Example: a list of learners’ names and grades, class timetable",
+      " Provide pairs with pre-made tables containing information",
+      "Examples: sales figures, survey responses."
+    ],
+    "resources": [
+      "Programs such as therapy, counseling, and mindfulness",
+      "practices have been shown to significantly improve mental",
+      "health outcomes. Additionally, creating awareness about",
+      "mental health can reduce stigma and encourage",
+      "individuals to seek help.",
+      "Globally, mental health initiatives are gaining momentum,"
+    ],
+    "assessment": [
+      " Ask individual learners to create a table using data from daily activities (e.g. smart",
+      "phone usage habits)",
+      " Homework",
+      "Smartphone Usage Habits",
+      "A research study on smartphone usage habits revealed that",
+      "among 200 participants, 80 used smartphones for social"
+    ],
+    "notes": ""
+  }
+}

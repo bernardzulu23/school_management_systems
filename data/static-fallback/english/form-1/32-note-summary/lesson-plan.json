@@ -1,0 +1,51 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "note-summary",
+  "lesson": {
+    "lesson": 32,
+    "title": "NOTE SUMMARY",
+    "topics": [
+      "INTRODUCTION:",
+      " Overview: A note summary is a set of points or notes obtained from a passage or an",
+      "oral source. It is a collection of all the important points. These points are listed. The",
+      "points do not need to be written in full sentences. Abbreviations may also be used."
+    ],
+    "activities": [
+      " Pair learners and ask them to name sources of information.",
+      "Oral sources: Television, YOUTUBE videos, Radio, Speeches",
+      "Written sources: Newspapers, Articles, Journals, Magazines, Textbooks",
+      " Explain that we take notes from an oral source, while we make notes from a written",
+      "source i.e. Note making and Note taking.",
+      "Note making is the process of writing down important information in a short and",
+      "organised form for future reference from a written source.",
+      "Note taking is the process of quickly taking down information as you listen to an oral"
+    ],
+    "resources": [
+      "major drivers of biodiversity loss. The consequences of biodiversity are far",
+      "reaching and can have significant impact on human well-being.",
+      "Use the following questions to make note summaries of the passage.",
+      "What is biodiversity?",
+      "Why is biodiversity important?",
+      "What are the benefits of biodiversity?"
+    ],
+    "assessment": [
+      " Observe learners as lesson is progressing to monitor their progress and understanding of",
+      "note summary skills",
+      " Learners to write note summaries by giving them individual exercise.",
+      " There are two types of note summaries which are note- making and note taking.",
+      " Note making entails making note from a written source whereas note-taking entails",
+      "taking note from an oral source."
+    ],
+    "notes": ""
+  }
+}

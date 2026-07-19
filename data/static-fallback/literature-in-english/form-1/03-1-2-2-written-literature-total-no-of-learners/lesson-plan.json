@@ -1,0 +1,46 @@
+{
+  "subject": "Literature in English",
+  "subjectSlug": "literature-in-english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "FORM-1-LITERATURE-IN-ENGLISH-TEACHING-MOULE-FOR-TERM-3-1-1.pdf",
+  "md5": "71070be7c85e25c98293a3c0ff564d8c",
+  "detectedShift": 0,
+  "pageCount": 26,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "1-2-2-written-literature-total-no-of-learners",
+  "lesson": {
+    "lesson": 3,
+    "title": "1.2.2 Written Literature TOTAL NO. OF LEARNERS:",
+    "topics": ["SUB-TOPIC: 1.2.2.4 Poetry"],
+    "activities": [
+      "(30 Minutes)",
+      "Home work",
+      " Provide a poem and ask",
+      "learners to identify the",
+      "elements of poetry in",
+      "that poem: form, line",
+      "and stanza.",
+      " Assign learners to go"
+    ],
+    "resources": [
+      "recorded poems, flip charts and markers.",
+      "EXPECTED STANDARD: Understanding of poetry demonstrated adequately.",
+      "LESSON PROGRESSION:",
+      "TEACHER’S ROLE",
+      "LEARNERS’ ROLE",
+      "PERFORMANCE"
+    ],
+    "assessment": [
+      "Activity",
+      "(30 Minutes)",
+      "Home work",
+      " Provide a poem and ask",
+      "learners to identify the",
+      "elements of poetry in"
+    ],
+    "notes": ""
+  }
+}

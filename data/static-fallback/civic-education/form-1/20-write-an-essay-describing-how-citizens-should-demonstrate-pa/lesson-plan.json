@@ -1,0 +1,39 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "write-an-essay-describing-how-citizens-should-demonstrate-pa",
+  "lesson": {
+    "week": 3,
+    "lesson": 20,
+    "title": "Write an essay describing how citizens should demonstrate patriotism and national identity towards",
+    "topics": [
+      "the nation in their daily lives.",
+      "Qualifications for Zambian Citizenship",
+      "Introduction",
+      "Countries provide different parameters or qualifications to determine citizenship. This subtopic will",
+      "looks at how individuals qualify for Zambian citizenship. Studying the qualifications of Zambian"
+    ],
+    "activities": [
+      "Showing the value of loyalty in the family and school",
+      "Teaching and Learning Materials: Pictures or videos demonstrating loyalty, Posters …",
+      "Role-Playing Scenarios",
+      "Divide the class into small groups and assign different scenarios, such as:",
+      "A learner defending a classmate from being bullied",
+      "A child helping a sibling with homework",
+      "A learner showing respect to teachers",
+      "A learner choosing to obey school rules"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

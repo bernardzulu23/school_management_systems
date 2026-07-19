@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "nemba-jishimikila-pa-muvyala-obe-umo-ye-bakashile-na-mambo-a",
+  "lesson": {
+    "week": 3,
+    "lesson": 20,
+    "title": "Nemba jishimikila pa muvyala obe umo ye bakashile na mambo a kwingijisha bizhima kutama.",
+    "topics": [
+      "Mepuzho:",
+      "Mufunjishi abuule Bafunda kwambapo bishinka bimo byo bafunda. Apa bino ne aye apitulukemo",
+      "pacheche byafunda Bafunda.",
+      "KIBESE D: MULAKAZHILO",
+      "Mutwe: Mitundu ya Byambo"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,22 +1,624 @@
 {
   "subject": "Hospitality Management",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
-      "suggestedActivities": [],
-      "assessmentMethods": [],
-      "resources": []
+      "title": "Form 1: Introduction to Hospitality",
+      "topics": [
+        "Historical Overview",
+        "Benefits of the Hospitality Industry",
+        "Departments of the Hospitality Facility"
+      ],
+      "learningOutcomes": [
+        "Apply traditional and modern hospitality practices in Zambia",
+        "Explore benefits of the hospitality industry",
+        "Analyse departments of the hospitality facility"
+      ],
+      "suggestedActivities": [
+        "Discussing hospitality industry sectors (lodging, food and beverage, travel and tourism, recreation and entertainment, event management)",
+        "Explaining the history of the hospitality industry (ancient times, middle ages, renaissance, enlightenment)",
+        "Describing the link between hospitality and tourism (hotels and resorts, restaurants and bars, tour operations, travel agencies)",
+        "Identifying job and career opportunities in the hospitality business (hotel manager, receptionist, chef, event coordinator, entrepreneur)",
+        "Undertaking an educational tour to a hospitality facility",
+        "Practicing traditional and modern social, cultural, organizational and group hospitality norms",
+        "Discussing departments in a hospitality facility (front office, housekeeping, food and beverage, food production, supporting departments)"
+      ],
+      "assessmentMethods": [
+        "Understanding of the historical background of the hospitality industry demonstrated appropriately",
+        "Traditional and modern hospitality practices in Zambia applied accordingly",
+        "Departments of the hospitality facility analysed appropriately"
+      ],
+      "resources": ["Hospitality facility visit", "Industry guest speakers"]
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Front Office Operations",
+      "topics": ["Front Office Operations", "Front Office Equipment"],
+      "learningOutcomes": ["Perform roles of the front office", "Utilize front office equipment"],
+      "suggestedActivities": [
+        "Identifying front office personnel (front office manager, receptionist, concierge, porters)",
+        "Discussing personal hygiene and general appearance of front office personnel",
+        "Explaining characteristics of front office personnel (communication skills, positive attitude, professionalism, teamwork)",
+        "Performing front office roles (guest reservation, guest registration, room assignment)",
+        "Identifying and making use of front office equipment (property management system, point of sale, key card system, printer)",
+        "Classifying front office security and surveillance equipment (alarm system, CCTV camera, fireproof safe)"
+      ],
+      "assessmentMethods": [
+        "Roles of the front office performed correctly",
+        "Front office equipment utilized correctly"
+      ],
+      "resources": ["Property management system", "Front office equipment"]
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Food and Beverage Operations",
+      "topics": [
+        "Food and Beverage Operations",
+        "Hygiene Practices in the Cooking Area",
+        "Safety and Security in the Cooking Area",
+        "Nutrition in Cookery",
+        "Introduction to Cookery",
+        "Methods of Cooking",
+        "Basic Cookery Skills"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of food and beverage operations",
+        "Demonstrate understanding of hygiene practices",
+        "Practice safety and security in the cooking area",
+        "Apply nutritional knowledge in cookery",
+        "Demonstrate understanding of cookery and apply a variety of methods of cooking",
+        "Exhibit basic cookery skills"
+      ],
+      "suggestedActivities": [
+        "Defining food and beverage operations and discussing the organizational structure (kitchen brigade, restaurant personnel, bar personnel)",
+        "Describing kitchen, personal and food hygiene practices in the cooking area",
+        "Making use of safe work practices (personal protective equipment, knife safety, fire safety, electrical safety, emergency procedures) and describing safety signs and symbols",
+        "Discussing nutrition terminologies, nutrient functions and sources, meal planning and diets for different lifestyles",
+        "Classifying kitchen equipment and utensils, including traditional utensils and equipment",
+        "Making use of moist, dry and combination methods of cooking (steaming, boiling, stewing, roasting, grilling, stir frying)",
+        "Practicing knife skills, stock making, thickening agents and basic sauces"
+      ],
+      "assessmentMethods": [
+        "Understanding of food and beverage operations demonstrated correctly",
+        "Safety and security in the cooking area practiced effectively",
+        "Nutritional knowledge in cookery applied suitably",
+        "A variety of methods of cooking applied efficiently",
+        "Basic cookery skills exhibited methodically"
+      ],
+      "resources": ["Kitchen equipment and utensils", "Personal protective equipment"]
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Housekeeping Operations",
+      "topics": [
+        "Cleanliness, Hygiene and Safety in the Housekeeping Department",
+        "Housekeeping Operations",
+        "Cleaning Operations",
+        "Interior and Exterior Decoration in a Hospitality Facility"
+      ],
+      "learningOutcomes": [
+        "Practice housekeeping operations",
+        "Practice routine cleaning",
+        "Develop skills in interior and exterior decorations"
+      ],
+      "suggestedActivities": [
+        "Identifying and eradicating pests in hospitality facilities (chemical, biological, cultural and physical control)",
+        "Practicing safety precautions and handling waste in housekeeping (reduce, reuse, recycling)",
+        "Planning routine cleaning schedules (daily, weekly, monthly) and identifying cleaning areas",
+        "Applying different methods of cleaning (dusting, sweeping, mopping, scrubbing) and using cleaning agents",
+        "Making a bed and demonstrating steps in bed making",
+        "Making use of colour schemes and applying principles and elements of decoration",
+        "Practicing landscaping and gardening"
+      ],
+      "assessmentMethods": [
+        "Cleanliness, hygiene and safety measures in housekeeping applied correctly",
+        "Understanding of housekeeping operations demonstrated appropriately",
+        "Skills in interior and exterior decorations developed creatively"
+      ],
+      "resources": ["Cleaning equipment and agents", "Housekeeping supplies"]
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Introduction to Laundry Processes",
+      "topics": ["Introduction to Laundry Processes"],
+      "learningOutcomes": ["Practice laundry processes"],
+      "suggestedActivities": [
+        "Identifying fibers and fabric (natural fibers, synthetic fibers, blended fibers)",
+        "Discussing laundry equipment (washing, drying and finishing equipment)",
+        "Making use of laundry materials (detergents, fabric softeners, stain removers, bleach, whitening agents)",
+        "Demonstrating household laundry (care labels, laundry process, special care)"
+      ],
+      "assessmentMethods": ["Laundry in the home practiced appropriately"],
+      "resources": ["Laundry equipment", "Laundry materials"]
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Cosmetology",
+      "topics": [
+        "History of Cosmetology",
+        "Introduction to Cosmetology Practices",
+        "Tools and Equipment in Cosmetology"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of the history of cosmetology",
+        "Demonstrate understanding of cosmetology practices",
+        "Make use of tools and equipment in cosmetology"
+      ],
+      "suggestedActivities": [
+        "Discussing the background of cosmetology (ancient civilizations, middle ages, renaissance, modern and contemporary eras)",
+        "Discussing components of cosmetology (nail technology, barbering, cosmetic chemistry and fitness)",
+        "Explaining terminologies used in cosmetology and the importance of cosmetology for personal development",
+        "Identifying hair, makeup and nail tools and equipment (cutting tools, colouring tools, styling brushes, sponges)",
+        "Sanitizing and sterilizing esthetic equipment and tools"
+      ],
+      "assessmentMethods": [
+        "Understanding of cosmetology demonstrated accordingly",
+        "Tools and equipment in cosmetology made use of correctly"
+      ],
+      "resources": ["Cosmetology tools and equipment", "Sanitizing supplies"]
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Entrepreneurship",
+      "topics": ["Ethics and Business Opportunities"],
+      "learningOutcomes": ["Identify business opportunities"],
+      "suggestedActivities": [
+        "Discussing entrepreneurship",
+        "Describing qualities of an entrepreneur (risk taking, disciplined)",
+        "Exploring business opportunities (selling sweets, scones, pens, landscaping)"
+      ],
+      "assessmentMethods": ["Business ideas explored extensively"],
+      "resources": ["Local business case studies"]
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Introduction to Hospitality",
+      "topics": ["Economic Effect in the Hospitality Industry"],
+      "learningOutcomes": ["Evaluate the effects of the hospitality industry on the economy"],
+      "suggestedActivities": [
+        "Discussing the effects of the hospitality industry on the economy (local economic development, small and medium enterprises, job creation, foreign exchange earnings, infrastructure development, tourism growth)",
+        "Undertaking an education tour to appreciate the benefit of the hospitality industry on the economy"
+      ],
+      "assessmentMethods": [
+        "Effects of the hospitality industry on the economy evaluated accordingly"
+      ],
+      "resources": ["Economic reports", "Industry tour"]
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Front Office and Housekeeping Records",
+      "topics": ["Front Office Operations", "Record Keeping in Housekeeping"],
+      "learningOutcomes": [
+        "Apply skills to deliver exceptional front office services",
+        "Make use of records in the housekeeping department"
+      ],
+      "suggestedActivities": [
+        "Creating a mock scenario for front office desk customer service across the pre-arrival, arrival, occupancy and departure stages",
+        "Practicing social skills (posture, eye contact, poise and deportment, gestures)",
+        "Documenting housekeeping records (attendance book, handing over report, housekeeper's room report, lost and found book, room checklist)",
+        "Organizing records in the housekeeping department and conducting a mock audit of housekeeping records"
+      ],
+      "assessmentMethods": [
+        "Delivery of exceptional front office services applied skillfully",
+        "Records in the housekeeping department made use of correctly"
+      ],
+      "resources": ["Front office desk", "Housekeeping record templates"]
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Housekeeping - Cleaning, Laundry and Maintenance",
+      "topics": [
+        "Cleaning Areas and Processes",
+        "Laundry in a Hospitality Facility",
+        "Maintenance"
+      ],
+      "learningOutcomes": [
+        "Apply correct cleaning processes",
+        "Perform laundry procedures in a hospitality facility",
+        "Conduct routine housekeeping maintenance"
+      ],
+      "suggestedActivities": [
+        "Identifying cleaning areas (guest rooms, corridors, public areas, conference rooms)",
+        "Using correct cleaning processes for different areas (sanitizing, sterilizing, disinfecting, polishing, mopping, vacuuming)",
+        "Demonstrating laundry procedures for guest linen (collecting and sorting, pretreatment, washing, drying, ironing, storage, distribution)",
+        "Conducting routine and preventive maintenance (clean and sanitize guest rooms, check and restock mini bar, test emergency lighting systems)"
+      ],
+      "assessmentMethods": [
+        "Cleaning processes applied skillfully",
+        "Laundry procedures performed accordingly",
+        "Routine housekeeping maintenance carried out successfully"
+      ],
+      "resources": ["Cleaning equipment", "Laundry facilities"]
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Food and Beverage Services",
+      "topics": [
+        "Menu Planning",
+        "Catering",
+        "Basic Sequence of Service",
+        "Serving of Food and Beverages",
+        "Food Costing",
+        "Food Commodities"
+      ],
+      "learningOutcomes": [
+        "Create different menus",
+        "Cater for different functions",
+        "Carry out the basic sequence in food and beverage services",
+        "Show skillful serving of food and beverages",
+        "Cost food and beverage",
+        "Employ various food commodities in cookery"
+      ],
+      "suggestedActivities": [
+        "Discussing functions of the menu and identifying types of menus (table d'hote, a la carte, carte du jour, cyclical menu, static menu, banqueting menu)",
+        "Discussing menu planning considerations (seasonality, budget, dietary requirements, preparation time, variety)",
+        "Coordinating event catering logistics and preparing indigenous foods depicting a ceremony from a province in Zambia",
+        "Illustrating the basic sequence of service (pre-service, service, post-service)",
+        "Displaying table setting skills (formal and informal) and practicing serving of food using different styles of service (plated, assisted, self service)",
+        "Costing food and beverages (menu planning, recipe development, ingredient and dish costing)",
+        "Classifying food commodities (animal foods, plant foods, oils and fats, condiments, sugar and sweeteners, beverages, groceries)"
+      ],
+      "assessmentMethods": [
+        "Different menus created effectively",
+        "Catering for functions carried out effectively",
+        "Basic sequence of service carried out accordingly",
+        "Serving of food and beverages shown skillfully",
+        "Costing of food and beverages done correctly",
+        "Various food commodities employed in cookery correctly"
+      ],
+      "resources": ["Food service equipment", "Menu cards", "Food commodities"]
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Cosmetology - Hair Care",
+      "topics": ["Hair Care", "Hair Dye and Colouring"],
+      "learningOutcomes": ["Care of hair and scalp", "Apply hair dye and colouring techniques"],
+      "suggestedActivities": [
+        "Explaining hair anatomy and discussing hair properties (texture, porosity, elasticity)",
+        "Identifying hair and scalp problems (dandruff, hair fall, dry and damaged hair, oily scalp)",
+        "Practicing hair care (shampooing, plaiting, barbing, locking)",
+        "Differentiating hair colour and dye products and applying hair colour",
+        "Streaking hair (horizontal, vertical, diagonal, balayage) and discussing advantages and disadvantages of streaking"
+      ],
+      "assessmentMethods": [
+        "Hair and scalp cared for skillfully",
+        "Hair dye and colouring techniques applied artfully"
+      ],
+      "resources": ["Hair care products", "Hair colouring products"]
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Entrepreneurship",
+      "topics": ["Types of Businesses"],
+      "learningOutcomes": ["Set up a business venture"],
+      "suggestedActivities": [
+        "Exploring different types of businesses (partnership, sole trader, limited business)",
+        "Explaining the requirements for setting up a business (pre-operational requirements, business plan, registration and licensing, financial and location requirements)",
+        "Discussing regulatory compliance, health and safety requirements"
+      ],
+      "assessmentMethods": ["Business ventures set up successfully"],
+      "resources": ["Business plan templates"]
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Health and Safety",
+      "topics": ["Health Hazards in the Workplace", "Health and Safety Control"],
+      "learningOutcomes": [
+        "Apply safety protocols and procedures in the hospitality facility",
+        "Exhibit compliance with regulations and laws"
+      ],
+      "suggestedActivities": [
+        "Identifying causes of health hazards (poor lighting, inadequate ventilation, chemical exposure, poor ergonomics)",
+        "Applying first aid (save life, give assurance, transport)",
+        "Making use of safety equipment used in the hospitality industry (PPE, kitchen safety equipment, cleaning and disinfecting equipment)",
+        "Applying the occupational health and safety policy (purpose and scope, responsibilities, hazard identification and risk management)",
+        "Demonstrating a fire drill (pre-drill briefing, drill scenario, evacuation procedure)"
+      ],
+      "assessmentMethods": [
+        "Safety protocols and procedures applied correctly",
+        "Compliance with regulations and laws exhibited correctly"
+      ],
+      "resources": ["First aid kits", "Personal protective equipment"]
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Food Safety",
+      "topics": ["Food Safety", "Food Spoilage"],
+      "learningOutcomes": ["Implement a food safety plan", "Prevent food spoilage"],
+      "suggestedActivities": [
+        "Identifying types of food contamination (biological, chemical, physical, cross contamination)",
+        "Inspecting a kitchen to identify potential food safety hazards",
+        "Practicing proper hand washing techniques",
+        "Implementing a food safety plan that minimises risks",
+        "Explaining the causes and symptoms of food spoilage and researching strategies to prevent it (canning, freezing, vacuum sealing)"
+      ],
+      "assessmentMethods": [
+        "Food safety plan implemented successfully",
+        "Food spoilage prevented successfully"
+      ],
+      "resources": ["Food safety guidelines", "Kitchen inspection checklists"]
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 3: Customer Care",
+      "topics": [
+        "Customers in a Hospitality Facility",
+        "Benefits of Good Customer Care",
+        "Competitive Edge in a Hospitality Facility",
+        "Interpersonal Skills in Customer Care"
+      ],
+      "learningOutcomes": [
+        "Deliver exceptional customer service",
+        "Apply customer care service",
+        "Maintain a competitive edge in a hospitality facility",
+        "Exhibit interpersonal skills in good customer care"
+      ],
+      "suggestedActivities": [
+        "Identifying types of customers and their specific needs",
+        "Assessing ways of dealing with different customers including those with special needs",
+        "Profiling customers (demographic, psychographic, behavioral personas)",
+        "Illustrating how unconscious bias can affect customer service",
+        "Performing tailored service and carrying out research to assess customer satisfaction",
+        "Identifying and engaging in interpersonal skills (listening skills, teamwork, conflict resolution) and practicing mediating skills"
+      ],
+      "assessmentMethods": [
+        "Exceptional service delivered successfully",
+        "Customer care service applied skillfully",
+        "Competitive edge in customer service maintained efficiently",
+        "Retention levels of interpersonal skills in customer care exhibited correctly"
+      ],
+      "resources": ["Customer service scenarios", "Feedback surveys"]
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 3: Etiquette and Consumerism",
+      "topics": ["Etiquette in Tourism and Hospitality", "Consumerism"],
+      "learningOutcomes": [
+        "Apply acceptable etiquettes in tourism and hospitality",
+        "Demonstrate understanding of consumerism"
+      ],
+      "suggestedActivities": [
+        "Discussing cultural differences and their impact on tourism experiences",
+        "Handling complaints (active listening, apologizing sincerely, offering solutions)",
+        "Applying table etiquette",
+        "Discussing consumerism (economic, social, environmental, cultural aspects)",
+        "Identifying consumer rights and responsibilities and describing organizations that protect consumers"
+      ],
+      "assessmentMethods": [
+        "Acceptable etiquette in tourism and hospitality applied correctly",
+        "Understanding of consumerism demonstrated correctly"
+      ],
+      "resources": ["Etiquette guides", "Consumer protection materials"]
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 3: Cosmetology - Makeup and Facial Skin Care",
+      "topics": ["Introduction to Makeup", "Face Mapping", "Facial Skin Care", "Basic Makeup"],
+      "learningOutcomes": [
+        "Apply basic makeup",
+        "Map faces according to desired shape",
+        "Implement customized treatment for facial skin types"
+      ],
+      "suggestedActivities": [
+        "Identifying the problems associated with makeup and describing its importance",
+        "Applying makeup (priming, foundation, concealing, highlighting, contouring)",
+        "Identifying different shapes of faces (oval, round, square, heart-shaped, triangular, diamond)",
+        "Illustrating the steps of contouring and highlighting for different faces",
+        "Identifying skin types and preparing the skin (cleansing, exfoliating, toning, moisturizing)",
+        "Treating normal, dry, oily and combination skin types"
+      ],
+      "assessmentMethods": [
+        "Basic makeup applied correctly",
+        "Desired facial mapping worked out successfully",
+        "Customized treatment for facial skin types implemented correctly"
+      ],
+      "resources": ["Makeup kits", "Facial skin care products"]
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 3: Professional Conduct",
+      "topics": [
+        "Professionalism in the Hospitality Industry",
+        "Confidentiality in the Hospitality Industry"
+      ],
+      "learningOutcomes": [
+        "Practice professionalism in a hospitality facility",
+        "Maintain confidentiality in a hospitality facility"
+      ],
+      "suggestedActivities": [
+        "Discussing the importance of professional conduct in the hospitality industry (satisfaction, reputation, trust)",
+        "Role playing professional conduct (greeting a guest, taking a food order, handling a room service request)",
+        "Identifying confidential information (room numbers, credit card transactions)",
+        "Performing guest privacy drills and discussing consequences of breaching confidentiality"
+      ],
+      "assessmentMethods": [
+        "Professionalism in a hospitality facility practiced effectively",
+        "Confidentiality upheld successfully"
+      ],
+      "resources": ["Role play scenarios"]
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 3: Communication",
+      "topics": ["Types of Communication", "Barriers to Communication"],
+      "learningOutcomes": [
+        "Apply different types of communication skills",
+        "Recognise barriers to communication in a hospitality facility"
+      ],
+      "suggestedActivities": [
+        "Practising written communication skills (notices, memorandum, letters)",
+        "Practising the use of technological communication (emails, social media, electronic business, online reservations)",
+        "Exploring common barriers to communication (language, cultural, noise and distractions, emotional)",
+        "Illustrating effective communication (cultural awareness, active listening, non-judgmental attitude, patience)"
+      ],
+      "assessmentMethods": [
+        "Communication skills applied effectively",
+        "Barriers to communication in a hospitality facility recognised efficiently"
+      ],
+      "resources": ["Communication scenarios"]
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 3: Conflict Resolution and Security",
+      "topics": ["Conflict Resolution", "Security in Hospitality"],
+      "learningOutcomes": [
+        "Resolve conflicts in communication",
+        "Create a safe environment for guests and staff"
+      ],
+      "suggestedActivities": [
+        "Analyzing current conflicts and communication strategies",
+        "Creating cards with conflict scenarios and responding with effective communication strategies",
+        "Creating a security plan for a hypothetical establishment (assessment, security protocols, guest and staff safety, asset protection)",
+        "Participating in scenario-based training exercises to practice security response (active shooter, fire evacuation, communication protocols)"
+      ],
+      "assessmentMethods": [
+        "Conflicts in communication resolved amicably",
+        "Safe environment for guests and staff created suitably"
+      ],
+      "resources": ["CCTV systems", "Security protocols"]
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 3: Entrepreneurship",
+      "topics": ["Security Risks in a Hospitality Facility", "Business Plan"],
+      "learningOutcomes": [
+        "Mitigate security risks in a hospitality facility",
+        "Develop a business plan"
+      ],
+      "suggestedActivities": [
+        "Discussing potential security risks in a hospitality facility (theft, violence, cyber security, property damage)",
+        "Developing security mitigation strategies (risk assessment protocol, access control, emergency preparedness)",
+        "Developing a business plan for any business of choice from any component of hospitality management",
+        "Nurturing and growing an identified business venture"
+      ],
+      "assessmentMethods": [
+        "Security risks in a hospitality facility mitigated successfully",
+        "Business plan developed concisely"
+      ],
+      "resources": ["Business plan templates", "Risk assessment tools"]
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 4: Components of the Hospitality Industry",
+      "topics": ["Relationships Between Sub Divisions in a Hospitality Facility"],
+      "learningOutcomes": ["Establish relationships between the subdivisions in hospitality"],
+      "suggestedActivities": [
+        "Explaining the relationship between the subdivisions in hospitality (front office and housekeeping, front office and food and beverage, housekeeping and maintenance, events and banqueting)",
+        "Designing a themed event and coordinating how each department contributes to the event's success",
+        "Creating service guidelines for interdepartmental relationships (protocols, request and task management, feedback and evaluation)"
+      ],
+      "assessmentMethods": [
+        "Relationships between the subdivisions of hospitality established accordingly"
+      ],
+      "resources": ["Interdepartmental protocol guides"]
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 4: Principles of Food Preparation",
+      "topics": ["Food Preparation"],
+      "learningOutcomes": ["Display cooking methods and techniques"],
+      "suggestedActivities": [
+        "Preparing three course meals (mise en place, appetiser, entree, dessert)",
+        "Cooking using various techniques and methods (frying, roasting, steaming)",
+        "Plating the food considering size, occasion, visual appeal, balance and harmony (portion control)",
+        "Creating a mock buffet setup in the classroom"
+      ],
+      "assessmentMethods": ["Cooking methods and techniques displayed correctly"],
+      "resources": ["Kitchen equipment", "Food ingredients"]
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 4: Gastronomy",
+      "topics": [
+        "Culinary Techniques and Methods",
+        "Sous Vide Cooking Technique",
+        "Food and Culture",
+        "Gastronomy and Innovation",
+        "Food Preservation"
+      ],
+      "learningOutcomes": [
+        "Present culinary styles of cuisines",
+        "Apply the techniques of sous vide",
+        "Utilise cultural uniqueness and their cuisines",
+        "Reinvent indigenous dishes",
+        "Apply food preservation methods"
+      ],
+      "suggestedActivities": [
+        "Displaying culinary skills using nouvelle techniques to prepare different cuisines and traditional dishes",
+        "Preparing different styles of cuisines (Mediterranean, oriental, classical, fusion, haute, molecular)",
+        "Discussing sous vide cooking and demonstrating how to set up the sous vide machine, vacuum seal ingredients and cook at controlled temperature and time",
+        "Researching the relationship between food and Zambian culture and discussing culinary highlights of different regions",
+        "Preserving different foods using suitable methods (heat treatment, sterilization, pasteurization, sun drying, smoking, salting, bottling) and adding value to food"
+      ],
+      "assessmentMethods": [
+        "Culinary styles of cuisines presented skillfully",
+        "Techniques of sous vide applied correctly",
+        "Cultural uniqueness and their cuisines utilised accordingly",
+        "Indigenous dishes reinvented successfully",
+        "Food preservation methods applied skillfully"
+      ],
+      "resources": ["Sous vide machine", "Vacuum sealer", "Preservation equipment"]
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 4: Management",
+      "topics": ["Introduction to Management", "Events", "Banqueting"],
+      "learningOutcomes": [
+        "Demonstrate understanding of management",
+        "Manage an event",
+        "Organise banquets"
+      ],
+      "suggestedActivities": [
+        "Explaining the concept of management (planning, staffing, organizing) and its importance in hospitality operations",
+        "Discussing the benefits of good management (improved productivity, enhanced quality)",
+        "Discussing key elements in events (event budget, event timeline, venue selection) and exploring event planning stages (definition, preparation, implementation, evaluation)",
+        "Demonstrating events planning skills by planning school events",
+        "Discussing and planning banquets (logistics planning, menu and beverages)",
+        "Applying cost control (food cost control, sales control) and purchasing considerations (right source, right quality, right quantity, right time, right price)"
+      ],
+      "assessmentMethods": [
+        "Understanding of management demonstrated correctly",
+        "Events managed effectively",
+        "Banquets organized effectively"
+      ],
+      "resources": ["Event planning templates", "Management case studies"]
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 4: Cosmetology - Nail Care, Barbering and Spa Services",
+      "topics": ["Nail Care", "Barbering", "Spa Services"],
+      "learningOutcomes": [
+        "Apply skills in nail care",
+        "Apply barbering skills",
+        "Apply spa services"
+      ],
+      "suggestedActivities": [
+        "Discussing nail anatomy and identifying nail disorders (trauma, ingrown toenails, fungal infections)",
+        "Performing basic manicure and pedicure and demonstrating proper techniques for shaping, cuticle care and polish application",
+        "Applying nail tips or overlays to enhance nail shape and appearance",
+        "Demonstrating proper sanitation and safety procedures and proficiency in cutting and shaving techniques (straight cut, diagonal cut, wet shaving, dry shaving)",
+        "Mastering fading and tapering techniques (gradual transitions, feathering, layering, blending)",
+        "Identifying the importance of spas and discussing spa services (massage therapy, body treatments)"
+      ],
+      "assessmentMethods": [
+        "Skills in nail care applied artfully",
+        "Barbering skills applied artfully",
+        "Spa services applied correctly"
+      ],
+      "resources": ["Nail care tools", "Barbering equipment", "Spa supplies"]
     }
   ],
   "metadata": {
-    "source": "HOSPITALITY-MANAGEMENT.pdf",
-    "extractedAt": "2026-07-11T06:20:40.640Z",
-    "fileSize": 620887
+    "source": "Hospitality Management Syllabus, Secondary Education Ordinary Level, Form 1-4",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/HOSPITALITY-MANAGEMENT.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 620887,
+    "extractionNote": "Transcribed from the official CDC PDF. The PDF's embedded font ships no ToUnicode map and no space glyphs, so text was recovered by decoding the font's fixed +29 character offset and re-segmenting words from the syllabus tables (TOPIC / SUBTOPIC / SPECIFIC COMPETENCIES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true
   }
 }

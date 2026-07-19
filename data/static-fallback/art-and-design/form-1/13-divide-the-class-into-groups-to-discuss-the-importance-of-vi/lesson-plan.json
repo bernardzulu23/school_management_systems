@@ -1,0 +1,30 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "divide-the-class-into-groups-to-discuss-the-importance-of-vi",
+  "lesson": {
+    "week": 2,
+    "lesson": 13,
+    "title": "Divide the class into groups to discuss the importance of Visual Arts in economic and",
+    "topics": [
+      "cultural development.",
+      "Producing Artworks Using Forms of Visual Arts",
+      "Practical",
+      "Task 1: Learners create simple artworks using different materials (painting, sculpture, textile",
+      "Creative Workshop"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

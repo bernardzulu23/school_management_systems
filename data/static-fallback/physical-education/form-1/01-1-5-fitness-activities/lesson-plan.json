@@ -1,0 +1,25 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.pdf",
+  "md5": "c365a013711120f2eb6252f41a63bfdc",
+  "detectedShift": 0,
+  "pageCount": 49,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-5-fitness-activities",
+  "lesson": {
+    "lesson": 1,
+    "title": "1.5 FITNESS ACTIVITIES",
+    "topics": [
+      "Sub-Topic 1.5.1 Health-Related Components of Fitness................................................ 2"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

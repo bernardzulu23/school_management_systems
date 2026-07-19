@@ -1,0 +1,46 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "safety",
+  "lesson": {
+    "lesson": 7,
+    "title": "SAFETY",
+    "topics": ["Introduction"],
+    "activities": [
+      "humming, and sparks flying. Now, picture the consequences if safety takes a backseat. One",
+      "careless moment could turn progress into peril. Workshop safety isn't just a set of rules; it's the",
+      "shield that protects lives, preserves tools and ensures every project reaches its full potential",
+      "without compromise.\"",
+      "Overview:",
+      "Safety in the workshop is the foundation of a productive, efficient, and hazard-free working",
+      "environment. Workshops, whether they are used for industrial manufacturing, carpentry,",
+      "engineering, or other hands-on tasks, are inherently dynamic spaces filled with tools,"
+    ],
+    "resources": [
+      "topic on safety is broken down into four subtopics namely; personal safety, workplace safety,",
+      "first aid and fire-fighting.",
+      "General Competences:",
+      "This topic is anchored on the following competences:",
+      "Collaboration: learners will learn to work with others in order to create a safe",
+      "working environment."
+    ],
+    "assessment": [
+      "Safety Guard: A protective device on machinery to prevent accidents.",
+      "Safety Protocols: Established procedures to ensure a safe working environment.",
+      "Sub-topic: Personal Safety",
+      "Introduction",
+      "Personal safety is safeguarding oneself in the workshop and highlights how proactive measures",
+      "not only protect individuals but also contribute to a productive and professional environment."
+    ],
+    "notes": ""
+  }
+}

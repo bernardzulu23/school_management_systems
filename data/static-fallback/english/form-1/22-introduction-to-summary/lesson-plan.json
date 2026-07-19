@@ -1,0 +1,52 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "introduction-to-summary",
+  "lesson": {
+    "lesson": 22,
+    "title": "INTRODUCTION TO SUMMARY",
+    "topics": [
+      "Introduction",
+      "Overview: A summary is a concise and clear restatement of the main ideas or",
+      "points from a larger piece of text. It distils essential information while omitting",
+      "unnecessary details, allowing readers to grasp the core meaning in a shorter form.",
+      "Summarising can be done in various ways, and one of the most common methods"
+    ],
+    "activities": [
+      " Provide a paragraph to the learners for reading.",
+      "In recent years, the global community has witnessed an increasing shift",
+      "toward renewable energy sources. As the harmful effects of fossil fuels",
+      "become more evident, countries are looking for sustainable alternatives.",
+      "Solar power, wind energy, and hydropower are leading the way, with",
+      "advancements in technology making these sources more efficient and cost-",
+      "effective. Governments around the world are investing in green energy",
+      "projects, and many companies are beginning to transition to more eco-"
+    ],
+    "resources": [
+      "Activity 3: Discussing passage read",
+      " Lead the discussion by asking questions about the stories and information read.",
+      "Example:",
+      "What is passage about?",
+      "What lesson(s) do we get from the story?",
+      " Learners share by retelling stories or explaining the information read. (Stories could be"
+    ],
+    "assessment": [
+      "Ask learners to pair up and share their sentence summaries with each other.",
+      "Encourage learners to give constructive feedback on how well the sentence",
+      "captures the core message of the paragraph.",
+      "Encourage learners to practise writing sentence summaries for other passages as a",
+      "way of improving their comprehension and synthesis skills.",
+      "Home work:"
+    ],
+    "notes": ""
+  }
+}

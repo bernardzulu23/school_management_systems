@@ -1,0 +1,46 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "MATHEMATICS-1-MODULE-FINAL.pdf",
+  "md5": "4276f7fdc41c7e5c2fd1dd57b187256b",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "numbers",
+  "lesson": {
+    "lesson": 5,
+    "title": "NUMBERS",
+    "topics": ["INTRODUCTION", "on real numbers.", "Key terms"],
+    "activities": [
+      "numbers, even numbers, odd numbers, rational, irrational, composite numbers) using materials (puzzles, number",
+      "cards, games….)",
+      "Learners in pairs examine the groups of numbers given to them. Their task is to figure out the properties that numbers in each group",
+      "share. What do they have in common?",
+      "a. {1,2,3,4,5,6,7,…}",
+      "b. {0,1,2,3,4,5,…",
+      "c. {…,-3,-2.-1,0,1,2,3,…)",
+      "d. {…-5,-3.-1,1,3,5,7,9,11,13, 15…}"
+    ],
+    "resources": [
+      "overlapping events, and Time Management, Building Projects (Like Fencing),…)",
+      "LCM is useful when finding smallest common interval or multiple when events with different cycles need to align or",
+      "match, (purchasing items in bulk, coordinating schedules, Finding Common Time Intervals, Planning Work Cycles, Working",
+      "with Timetables…).",
+      "Learning Activity 4:Creating number patterns (games, puzzles)",
+      "Activity 4.1 : Project: Design and Present a Math Board Game"
+    ],
+    "assessment": [
+      "Accuracy: Correctly identifying and explaining properties of numbers, finding factors, and calculating HCF and LCM.",
+      "Creativity: Originality and design of the number-based games, puzzles, and patterns.",
+      "Presentation: Clear and confident explanation of the final project (board game), with an emphasis on the math concepts",
+      "involved.",
+      "Expected standard: Numbers applied in real life situations consistently.",
+      "INTRODUCTION"
+    ],
+    "notes": ""
+  }
+}

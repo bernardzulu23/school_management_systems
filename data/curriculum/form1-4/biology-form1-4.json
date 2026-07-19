@@ -1,61 +1,906 @@
 {
   "subject": "Biology",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "48 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "Introduction to Biology",
-      "topics": ["Characteristics of living things", "Branches of biology"],
-      "duration": "2 weeks",
-      "learningOutcomes": [
-        "List characteristics of living organisms",
-        "Relate biology to health and agriculture in Zambia"
+      "title": "Form 1: Concepts and Methods in Biology",
+      "topics": [
+        "Nature of Science Inquiry in Biology",
+        "Nature of Biology",
+        "Levels of Biological Organisation",
+        "Characteristics of Living Things="
       ],
-      "suggestedActivities": ["Living vs non-living sort", "Field walk around school"],
-      "assessmentMethods": ["Oral", "Quiz"],
-      "resources": ["CDC Biology syllabus", "Local specimens"]
+      "learningOutcomes": [
+        "Apply scientific inquiry in carrying out scientific investigations",
+        "Categorise the study of Biology",
+        "Classify the levels of biological organisation from simple to complex",
+        "Analyse the characteristics of living things",
+        "Categorise life processes of living organisms"
+      ],
+      "suggestedActivities": [
+        "Describing the scientific",
+        "Investigating the stages of",
+        "Applying scientific inquiry",
+        "Sharing the findings of the",
+        "Using the findings of the",
+        "Scientific inquiry method in",
+        "Exploring the nature of Biology",
+        "Identifying the branches of",
+        "Creating a concept map on the",
+        "Study of Biology categorised",
+        "Classifying levels of biological",
+        "Levels of biological",
+        "Investigating the characteristics",
+        "Characteristics of living things",
+        "Distinguishing living things",
+        "Analysing the concept of life",
+        "Describing life processes in",
+        "Analysing life processes in",
+        "Categorising life processes of",
+        "Life processes of living"
+      ],
+      "assessmentMethods": ["simple to complex correctly", "analysed correctly", "appropriately"],
+      "resources": []
     },
     {
       "unitNumber": 2,
-      "title": "Cell Structure",
-      "topics": ["Plant and animal cells", "Microscopes", "Cell functions"],
-      "duration": "3 weeks",
-      "learningOutcomes": ["Compare plant and animal cells", "Use a light microscope safely"],
-      "suggestedActivities": ["Onion epidermis slide", "Cheek cell demo where permitted"],
-      "assessmentMethods": ["Practical drawing", "Labelled diagram test"],
-      "resources": ["Microscope", "Slides", "Iodine"]
+      "title": "Form 1: Principles of Cellular Life",
+      "topics": ["Microscopes=", "Basic Cell Structure", "Types of Cells", "Cell Specialisation"],
+      "learningOutcomes": [
+        "Use different types of microscopes to examine specimens",
+        "Explore the basic cell structure",
+        "Distinguish between eukaryotic and prokaryotic cells",
+        "Relate adaptive features of specialised cells to their functions"
+      ],
+      "suggestedActivities": [
+        "Exploring different types of",
+        "Relating parts of a compound",
+        "Practicing the use of",
+        "Calculating magnification of",
+        "Different types of microscopes",
+        "Examining the basic structure",
+        "Illustrating the basic structure",
+        "Creating models of cells",
+        "Basic structure of cells",
+        "Investigating eukaryotic cells",
+        "Differentiating eukaryotic and",
+        "Explaining the functions of",
+        "Comparing and contrasting",
+        "Identifying specialised cells in",
+        "Observing adaptive features of",
+        "Relating the adaptive features",
+        "Adaptive features of"
+      ],
+      "assessmentMethods": ["explored correctly", "their functions correctly"],
+      "resources": []
     },
     {
       "unitNumber": 3,
-      "title": "Nutrition",
-      "topics": ["Nutrients", "Balanced diet", "Digestive system intro"],
-      "duration": "3 weeks",
-      "learningOutcomes": [
-        "Classify nutrients and their roles",
-        "Plan a balanced meal using local foods"
+      "title": "Form 1: Maintenance of the Organism",
+      "topics": [
+        "Nutrition in Man",
+        "Dietary Needs of",
+        "Plant Nutrients",
+        "Nutritional Deficiency Diseases and Disorders"
       ],
-      "suggestedActivities": ["Food group sorting", "School garden link"],
-      "assessmentMethods": ["Project", "Quiz"],
-      "resources": ["Food charts", "Local produce examples"]
+      "learningOutcomes": [
+        "Classify types of food nutrients",
+        "=^==~=",
+        "=`~===~= nutrients",
+        "=o=~~= nutrients to address deficiency diseases and disorders in plants and human beings"
+      ],
+      "suggestedActivities": [
+        "Exploring sources of food",
+        "Classifying foods according to",
+        "Discussing the importance of",
+        "Types of food nutrients",
+        "Designing appropriate diets for",
+        "Good eating practices applied",
+        "Justifying the designed diets for",
+        "Identifying plant nutrients",
+        "Classifying macro and micro",
+        "Analysing the effects of macro",
+        "Types of plant nutrients",
+        "Investigating nutritional",
+        "Investigating the deficiency",
+        "Treating the deficiency",
+        "Appropriate nutrients to address"
+      ],
+      "assessmentMethods": [
+        "classified correctly",
+        "categorised correctly",
+        "recommended accordingly"
+      ],
+      "resources": []
     },
     {
       "unitNumber": 4,
-      "title": "Ecology Basics",
-      "topics": ["Habitats", "Food chains", "Human impact"],
-      "duration": "2 weeks",
-      "learningOutcomes": [
-        "Construct a simple food chain from a local habitat",
-        "Describe human impacts on ecosystems"
+      "title": "Form 1: Continuity of Life",
+      "topics": [
+        "Reproduction in Living Organisms",
+        "Reproduction and Development in Human Beings",
+        "Reproduction in Viruses, Protozoa, Bacteria and Fungi"
       ],
-      "suggestedActivities": ["School ground habitat survey", "Litter audit"],
-      "assessmentMethods": ["Field notebook", "Short essay"],
-      "resources": ["Notebooks", "Local environment"]
+      "learningOutcomes": [
+        "Demonstrate understanding of how living organisms reproduce",
+        "Demonstrate understanding of reproductive system in human beings",
+        "Demonstrate understanding of reproduction in viruses, protozoa, bacteria and fungi"
+      ],
+      "suggestedActivities": [
+        "Investigating reproduction in",
+        "Demonstrating asexual and",
+        "Comparing and contrasting",
+        "Understanding of reproduction",
+        "Describing the reproduction",
+        "Drawing the male and female",
+        "Explaining functions of",
+        "Outlining the secondary sexual",
+        "Practicing personal hygiene",
+        "Understanding of the",
+        "Outlining the processes of",
+        "Investigating the structure of",
+        "Importance of reproduction in"
+      ],
+      "assessmentMethods": [
+        "demonstrated appropriately",
+        "beings demonstrated correctly",
+        "fungi evaluated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Coordination and Response",
+      "topics": ["Coordination and Response in Plants", "Coordination and Response in Animals"],
+      "learningOutcomes": [
+        "Explore tropisms in plants and their relevance",
+        "Explore taxic responses in invertebrates and their relevance"
+      ],
+      "suggestedActivities": [
+        "Describing tropisms in plants",
+        "Investigating the effect of light",
+        "Investigating the effect of water",
+        "Investigating the effect of",
+        "Evaluating the importance of",
+        "Tropisms in plants and their",
+        "Describing taxic responses",
+        "Investigating taxic responses to",
+        "Evaluating the relevance of",
+        "Applying the mechanism of",
+        "Differentiating tropic from taxic",
+        "Taxic responses in"
+      ],
+      "assessmentMethods": ["relevance explored accordingly", "appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Ecological Relationships and Evolution",
+      "topics": [
+        "Ecosystem",
+        "Biotic and Abiotic Interactions",
+        "Waste Management",
+        "The Soil - Composition and Fertility"
+      ],
+      "learningOutcomes": [
+        "Explore features of ecosystems in the local",
+        "Interpret biotic and abiotic interactions",
+        "Manage waste in the local environment",
+        "Analyse soil composition and fertility"
+      ],
+      "suggestedActivities": [
+        "Describing an ecosystem",
+        "Observing key features of",
+        "Features of ecosystems",
+        "Recording key features in the",
+        "Applying best practices to",
+        "Constructing models of different",
+        "Distinguishing biotic and abiotic",
+        "Analysing the three kinds of",
+        "Biotic and abiotic interactions",
+        "Analysing types of waste found",
+        "Evaluating the benefits of living",
+        "Devising different ways of",
+        "Identifying the challenges",
+        "Creating waste-free zones in the",
+        "Reaching out to communities in",
+        "Waste in the local environment",
+        "Identifying different soil",
+        "Classifying types of soil (clay,",
+        "Soil composition and fertility",
+        "Investigating features of fertile",
+        "Investigating causes of loss of",
+        "Practicing ways to improve and",
+        "Comparing crop yield in"
+      ],
+      "assessmentMethods": [
+        "environment accordingly",
+        "interpreted correctly",
+        "managed accordingly",
+        "analysed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 2: Concepts and Methods in Biology",
+      "topics": ["Experimental Design", "Limits of Science", "Scientific Ethics"],
+      "learningOutcomes": [
+        "Apply experimental design in scientific investigations",
+        "f=====",
+        "=b~~==== research"
+      ],
+      "suggestedActivities": [
+        "Analysing sampling methods",
+        "Carrying out investigations using the",
+        "Practising the use of two or more",
+        "Experimental design applied",
+        "Explaining the limits of science (laws,",
+        "Classifying limits of science (beliefs,",
+        "Limits of science identified",
+        "Determining scientific ethics of a given",
+        "Applying the ethics of scientific",
+        "Scientific ethics evaluated"
+      ],
+      "assessmentMethods": ["appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Principles of Cellular Life",
+      "topics": [
+        "Micrographs",
+        "Staining Specimen and Preparation of permanent Slides",
+        "Detailed cell Structure",
+        "Properties of Water"
+      ],
+      "learningOutcomes": [
+        "Interpret micrographs",
+        "Apply appropriate staining techniques on specimen",
+        "Illustrate detailed cell structure of an organism",
+        "Analyse the properties of water in relation to supporting life"
+      ],
+      "suggestedActivities": [
+        "Identifying types of micrographs",
+        "Explaining micrographs of plant and",
+        "Interpreting micrographs",
+        "Communicating scientific information",
+        "Micrographs interpreted",
+        "Exploring staining techniques on",
+        "Staining of specimen",
+        "Preparing permanent plant tissue slides",
+        "Appropriate staining",
+        "Drawing detailed cell structure",
+        "Designing detailed models of cells",
+        "Applying knowledge of organelles and",
+        "Detailed cell structure of an",
+        "Investigating properties of water in",
+        "Properties of water in",
+        "Evaluating importance of water in a"
+      ],
+      "assessmentMethods": ["applied accordingly", "analysed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Maintenance of the Organism",
+      "topics": [
+        "Nutrition- Types of Nutrition",
+        "Autotrophic Nutrition",
+        "Heterotrophic",
+        "Transport in Plants"
+      ],
+      "learningOutcomes": [
+        "Categorise types of nutrition in living organisms",
+        "=^~=== in plants",
+        "b~~==~== photosynthesis to the environment",
+        "^~==== nutrition in living organisms",
+        "=b~~==~== heterotrophic nutrition to",
+        "Demonstrate understanding of transport system of flowering plants",
+        "Analyse the process of transpiration in plants"
+      ],
+      "suggestedActivities": [
+        "Describing nutrition (autotrophic and",
+        "Identifying types of heterotrophic",
+        "Distinguishing autotrophic nutrition",
+        "Relating nutrition to different",
+        "Types of nutrition in living",
+        "Examining external and internal",
+        "Explaining the process of",
+        "Tracing the fate of glucose produced",
+        "Identifying storage organs of the",
+        "Investigating factors necessary for the",
+        "Designing experiments on factors",
+        "Relating how the factors that affect",
+        "Constructing word and chemical",
+        "Phototrophic nutrition in",
+        "Explaining the importance of",
+        "Importance of",
+        "Identifying the different types of",
+        "Illustrating types of heterotrophic",
+        "Types of heterotrophic",
+        "Evaluating the need for heterotrophic",
+        "Importance of heterotrophic",
+        "Describing transport system of",
+        "Identifying the organs involved in the",
+        "Analysing root systems in",
+        "Examining the internal structures of",
+        "Examining the longitudinal section of",
+        "Understanding of transport",
+        "ylem and phloem",
+        "Tracing the uptake and movement of",
+        "Describing the process of transpiration",
+        "Investigating factors that affect the rate",
+        "Examining adaptive features in plants",
+        "Evaluating the significance of",
+        "Process of transpiration"
+      ],
+      "assessmentMethods": [
+        "plants analysed correctly",
+        "appropriately",
+        "analysed correctly",
+        "demonstrated appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Continuity of Life",
+      "topics": ["Reproduction in plants", "Germination, Growth and Development in Plants"],
+      "learningOutcomes": [
+        "Propagate different plants using asexual reproduction modes",
+        "Analyse sexual reproduction in flowering plants",
+        "a=====",
+        "Explore germination, growth and development in plants"
+      ],
+      "suggestedActivities": [
+        "Explaining the different modes of",
+        "Analysing the advantages and",
+        "Applying different modes of asexual",
+        "Different plants propagated",
+        "Describing sexual reproduction in",
+        "Collecting flowers from different plant",
+        "Identifying the male parts (stamen:",
+        "Observing, drawing and labelling parts",
+        "Explaining the functions of the parts of",
+        "Sexual reproduction in",
+        "Describing the process of pollination",
+        "Deducing the type of pollination based",
+        "Deducing the agents of pollination",
+        "Illustrating the path taken by a pollen",
+        "Collecting different seeds and fruits in",
+        "Comparing and contrasting features of",
+        "Predicting the method of seed and fruit",
+        "Methods of seed and fruit",
+        "Describing germination in flowering",
+        "Investigating conditions necessary for",
+        "Distinguishing hypogeal and epigeal",
+        "Describing growth and development in",
+        "Examining regions of growth using",
+        "Germination, growth and"
+      ],
+      "assessmentMethods": ["appropriately", "explored accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Coordination",
+      "topics": [
+        "Demonstrate understanding of the role of auxins in phototropism and geotropism",
+        "Health and Disease"
+      ],
+      "learningOutcomes": [
+        "Explore infectious diseases that affect human beings",
+        "=b=non- infectious= diseases that affect human beings"
+      ],
+      "suggestedActivities": [
+        "Describing coordination and response",
+        "Investigating the effects of light on",
+        "Investigating the effects of gravity on",
+        "Understanding of the role of",
+        "Relating the effect of hormones to",
+        "Describing health and disease",
+        "Identifying infectious diseases (TB,",
+        "Categorising infectious diseases",
+        "Exploring the causative agents, signs",
+        "Dispelling myths and misconceptions",
+        "Evaluating the economic importance of",
+        "Infectious diseases that affect",
+        "Describing non-infectious diseases",
+        "Categorising non-infectious diseases:",
+        "Exploring causative agents, signs and",
+        "Investigating life cycles of a housefly",
+        "Identifying the role of houseflies and",
+        "Relating the control of malaria to the",
+        "Relating the control of waterborne",
+        "Non-infectious diseases",
+        "Devising home-made remedies to"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Ecological Relationships and Evolution",
+      "topics": [
+        "Classification of Organisms",
+        "1a~=~== feeding relationships and energy flow in the ecosystem",
+        "Pollution"
+      ],
+      "learningOutcomes": [
+        "=`~==~= into kingdoms",
+        "Analyse the undesirable effects of pollution on the environment"
+      ],
+      "suggestedActivities": [
+        "Exploring the local environment to",
+        "Grouping organisms into specific",
+        "Analysing characteristics of organisms",
+        "Evaluating the importance of",
+        "Different organisms",
+        "Illustrating the flow of energy along",
+        "Designing a food chain based on living",
+        "Designing a food web based on living",
+        "Distinguishing a food chain from a",
+        "Predicting effects of a disturbance in",
+        "Understanding of feeding",
+        "Describing pollution",
+        "Categorizing types of pollution (air,",
+        "Analysing the undesirable effects of",
+        "Undesirable effects of",
+        "Recommending appropriate measures"
+      ],
+      "assessmentMethods": ["demonstrated accordingly", "analysed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 3: Concepts and Methods in Biology",
+      "topics": ["Chemicals of Life", "Food Confirmatory Tests", "Research Proposal"],
+      "learningOutcomes": [
+        "Explore the chemicals of life",
+        "Prepare reagents used in investigating the chemicals of life",
+        "Carry out confirmatory tests for the presence of chemicals of life in food samples",
+        "Formulate a research proposal"
+      ],
+      "suggestedActivities": [
+        "Describing the chemicals of",
+        "Identifying the chemicals of",
+        "Using the burn test to",
+        "Analysing the chemical",
+        "Writing molecular and",
+        "Constructing molecular",
+        "Describing hydrolysis and",
+        "Evaluating the significance of",
+        "The chemicals of life",
+        "Preparing reagents using",
+        "Reagents used in",
+        "Carrying out food tests for",
+        "Confirmatory tests for the",
+        "Outlining components of a",
+        "Designing a research proposal",
+        "A research proposal"
+      ],
+      "assessmentMethods": [
+        "explored accordingly",
+        "of life prepared correctly",
+        "carried out accordingly",
+        "formulated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Principles of Cellular Life",
+      "topics": [
+        "Movement of substances across the cell",
+        "Energy and Metabolism",
+        "Enzymes and their Actions"
+      ],
+      "learningOutcomes": [
+        "Analyse the movement of substances across the cell membrane",
+        "Analyse metabolism processes in living cells",
+        "Demonstrate understanding of enzymes and their actions"
+      ],
+      "suggestedActivities": [
+        "Describing the processes of",
+        "Experimenting on diffusion",
+        "Investigating the factors that",
+        "Investigating the effects of",
+        "Applying the principle of",
+        "Movement of substances",
+        "Describing the types of",
+        "Metabolism processes in",
+        "Comparing and contrasting the",
+        "Investigating enzymes and",
+        "Analysing characteristics of",
+        "Applying nomenclature to",
+        "Applying enzymes in everyday",
+        "Understanding of"
+      ],
+      "assessmentMethods": ["analysed appropriately", "demonstrated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Maintenance of the Organism",
+      "topics": [
+        "Nutrition: Dentition in Mammals",
+        "Holozoic Nutrition",
+        "Transport in Animals",
+        "Gaseous Exchange and Respiration"
+      ],
+      "learningOutcomes": [
+        "Analyse dentition in mammals",
+        "Analyse holozoic nutrition",
+        "Analyse the composition of blood",
+        "Explore the functions of blood",
+        "Demonstrate understanding of ABO blood groups",
+        "Demonstrate understanding of the structure and function of the human heart",
+        "Demonstrate understanding of the blood circulatory system",
+        "Demonstrate understanding of the lymphatic system",
+        "Demonstrate understanding of gaseous exchange and respiration"
+      ],
+      "suggestedActivities": [
+        "Examining the structure",
+        "Describing the internal",
+        "Studying dental formulae of",
+        "Relating dentition of mammals",
+        "Identifying the causes, signs,",
+        "Devise remedies to address",
+        "Dentition in mammals",
+        "Describing holozoic nutrition",
+        "Explaining the main processes",
+        "Holozoic nutrition",
+        "Relating the main regions of",
+        "Describing the processes of",
+        "Drawing the alimentary canal",
+        "Making a model to trace the",
+        "Examining the internal detailed",
+        "Analysing the common",
+        "Describing the metabolic",
+        "Describing the effects of",
+        "Devising remedies to address",
+        "Identifying the components of",
+        "Identifying the sites where the",
+        "Distinguishing between the red",
+        "Investigating common blood",
+        "Composition of blood",
+        "Analysing the functions of",
+        "Exploring the mechanism of",
+        "Functions of blood",
+        "Describing blood groups (A, B,",
+        "Explaining the importance of",
+        "Understanding of ABO",
+        "Relating the importance of",
+        "Determining the donor-",
+        "Describing the structure of the",
+        "Comparing and contrasting the",
+        "Drawing and labeling a",
+        "Describing the mechanism of",
+        "Investigating the causes of",
+        "Preventing coronary heart",
+        "Understanding of the",
+        "Describing types of blood",
+        "Illustrating double circulation",
+        "Distinguishing between single",
+        "Relating the main blood",
+        "Describing the structure and",
+        "Identifying the structure of",
+        "Distinguishing the blood",
+        "Explaining the formation of",
+        "Comparing and contrasting",
+        "Evaluating the significance of",
+        "Describing the respiratory",
+        "Relating the parts of the",
+        "Demonstrating the mechanism",
+        "Making of models on gaseous",
+        "Investigating the composition",
+        "Exploring the adverse effects",
+        "Describing gaseous exchange",
+        "Describing types of tissue",
+        "Understanding of gaseous",
+        "Describing the conversion of",
+        "Investigating the production of",
+        "Evaluating the importance of",
+        "Exploring the significance of",
+        "Applying respiration in"
+      ],
+      "assessmentMethods": [
+        "analysed accordingly",
+        "explored accordingly",
+        "demonstrated correctly",
+        "demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 3: Continuity of Life",
+      "topics": [
+        "Reproduction in",
+        "Fertilisation and Development in Human Beings",
+        "Infertility and birth control in humans"
+      ],
+      "learningOutcomes": [
+        "Demonstrate understanding of reproduction in frogs",
+        "Demonstrate understanding of development in human beings",
+        "Explore the causes of infertility in human beings",
+        "Evaluate birth control methods in human beings"
+      ],
+      "suggestedActivities": [
+        "Investigating the process of",
+        "Identifying stages of",
+        "Evaluate advantages and",
+        "Understanding of",
+        "Describing the development",
+        "Analysing the menstrual cycle",
+        "Explaining the processes of",
+        "Describing development of the",
+        "Exploring health risks",
+        "Describing healthy pregnancy",
+        "Evaluating the advantages and",
+        "Understanding of the",
+        "Identifying causes of",
+        "Causes of infertility in",
+        "Investigating ways of",
+        "Demystifying infertility in",
+        "Describing birth control",
+        "Explaining some methods of",
+        "Evaluating the benefits and",
+        "Birth control methods in"
+      ],
+      "assessmentMethods": ["demonstrated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 3: Coordination and Response",
+      "topics": ["Immunity", "The Endocrine System", "The Nervous System"],
+      "learningOutcomes": [
+        "Relate immunity to disease prevention",
+        "Demonstrate understanding of the endocrine system",
+        "Demonstrate understanding of the nervous system"
+      ],
+      "suggestedActivities": [
+        "Explaining immunity to",
+        "Categorising immunity",
+        "Investigating factors that",
+        "Recommending factors that",
+        "Evaluating the importance of",
+        "Demystifying vaccinations",
+        "Immunity to disease",
+        "Describing hormones in",
+        "Identifying the endocrine",
+        "Analysing the functions of",
+        "Evaluate the importance of",
+        "Understanding of the",
+        "Describing the composition of",
+        "Identifying main parts of the",
+        "Describing neurones",
+        "Elaborating the path taken by",
+        "Demonstrating spinal, cranial",
+        "Identifying the main parts of",
+        "Explaining the functions of",
+        "Analysing the effects of abuse",
+        "Explaining the effects of",
+        "Comparing and contrasting"
+      ],
+      "assessmentMethods": ["demonstrated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 3: Ecological Relationships and Evolution",
+      "topics": ["Nutrient Cycles in the Ecosystem", "Levels of Classification"],
+      "learningOutcomes": [
+        "Explore the cycling of carbon and nitrogen in the biosphere",
+        "Explore the water cycle",
+        "Classify various types of plants and animals"
+      ],
+      "suggestedActivities": [
+        "Describing carbon and",
+        "Designing the Carbon and",
+        "Evaluating the importance of",
+        "Investigating factors that",
+        "The cycling of carbon",
+        "Describing the water cycle",
+        "Investigating the factors that",
+        "Water cycle explored",
+        "Identifying various types of",
+        "Formulating a dichotomous",
+        "Using a dichotomous key to",
+        "Various types of plants"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 4: Concepts and Method in Biology",
+      "topics": ["Research Project in Biology"],
+      "learningOutcomes": ["Conduct a research project"],
+      "suggestedActivities": [
+        "Carrying out research (data",
+        "Developing an innovation to",
+        "Research project"
+      ],
+      "assessmentMethods": ["conducted accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 4: Principles of Cellular Life",
+      "topics": ["Cell Division"],
+      "learningOutcomes": ["Demonstrate understanding of the process of cell division"],
+      "suggestedActivities": [
+        "Demonstrating the stages of cell",
+        "Observing cell division using a",
+        "Evaluating the importance of",
+        "Understanding of the"
+      ],
+      "assessmentMethods": ["demonstrated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 4: Maintenance of the Organism",
+      "topics": ["Excretion in Plants and Animals", "Homeostasis in Human Beings"],
+      "learningOutcomes": [
+        "Explore the mechanism of excretion in plants and animals",
+        "=^~==~= of the process of homeostasis in human beings"
+      ],
+      "suggestedActivities": [
+        "Describing the process of",
+        "Identifying excretory structures",
+        "Carrying out experiments to",
+        "Identifying the excretory organs",
+        "Relating the organs of the",
+        "Relating the internal structures",
+        "Mechanism of excretion in",
+        "Describing the mechanism of",
+        "Identifying common disorders",
+        "Investigating the role of the",
+        "Describing the role of the",
+        "Explaining the importance of",
+        "Exploring ways of managing",
+        "Exploring ways in which",
+        "Describing homeostasis",
+        "Identifying organs involved in",
+        "Analysing the role of the kidney",
+        "Relating the structure of the",
+        "Analysing the mechanism of",
+        "Exploring the role of the liver in",
+        "Practising healthy habits for",
+        "Mechanism of the process"
+      ],
+      "assessmentMethods": ["explored accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 4: Continuity of Life",
+      "topics": ["Heredity"],
+      "learningOutcomes": [
+        "Demonstrate understanding of inheritance of traits in plants and animals",
+        "Explore variation in plants and animals."
+      ],
+      "suggestedActivities": [
+        "Describing inheritance",
+        "Exploring the terms used in the",
+        "Illustrating monohybrid",
+        "Demonstrating the inheritance",
+        "Understanding of",
+        "Determining the sex of a human",
+        "Exploring the inheritance of",
+        "Illustrating the mechanism of",
+        "Describing mutation",
+        "Identifying the causes of",
+        "Explaining effects of mutation",
+        "Applying mutations in everyday",
+        "Describing variations in living",
+        "Investigating variations in",
+        "Distinguishing continuous and",
+        "Investigating the factors that",
+        "Applying the concept of",
+        "Variation in plants and"
+      ],
+      "assessmentMethods": ["demonstrated correctly", "animals explored correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 4: Coordination and Response",
+      "topics": ["Sense Organs in Human Beings", "The Skeletal System"],
+      "learningOutcomes": [
+        "Analyse the sense organs in human beings",
+        "Examine the structures and composition of skeletons"
+      ],
+      "suggestedActivities": [
+        "Describing sense organs (eye,",
+        "Relating the external and",
+        "Demonstrating accommodation",
+        "Exploring the causes of short",
+        "Explaining the correction of",
+        "Sense organs in human",
+        "Investigating the common",
+        "Drawing and labeling the",
+        "Relating the parts of the ear to",
+        "Investigating the causes and",
+        "Exploring the role of the skin as",
+        "Exploring the role of the",
+        "Exploring the role of the nose as",
+        "Caring for sense organs to",
+        "Relating the sense organs to the",
+        "Identifying the interdependence",
+        "Describing the Skeletal System",
+        "Exploring the functions of the",
+        "Identifying various types of",
+        "Investigating the structure and",
+        "Identifying joints and muscles",
+        "Describing the general plan of",
+        "Explaining a bone as a living",
+        "Describing the structure of a",
+        "Demonstrating the action of",
+        "Identifying the parts and",
+        "Structure and composition",
+        "Distinguishing the ball and",
+        "Comparing the joints, muscle",
+        "Investigating the skeletal",
+        "Managing the skeletal disorders",
+        "Applying First-Aid measures"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 4: Ecological Relationship and Evolution",
+      "topics": [
+        "Biodiversity",
+        "Conservation of Natural Resources",
+        "Natural Selection",
+        "Evolution"
+      ],
+      "learningOutcomes": [
+        "Conserve biodiversity in the environment",
+        "Practise sustainable use of natural resources in the local environment",
+        "Applying the principles of natural selection in real world",
+        "Explore the process of evolution"
+      ],
+      "suggestedActivities": [
+        "Describing biodiversity of",
+        "Investigating diversity of",
+        "Evaluating the importance of",
+        "Investigating the impact of",
+        "Evaluating effectiveness of",
+        "Exploring the economic reasons",
+        "Conserving Bio-diversity in the",
+        "Biodiversity in the",
+        "Exploring the importance of",
+        "Sustainable use of natural",
+        "Practising effective ways of",
+        "Exploring the four principles of",
+        "Analysing how some organisms",
+        "Principles of natural",
+        "Describing evolution (change",
+        "Investigating causes of",
+        "Process of evolution"
+      ],
+      "assessmentMethods": ["appropriately", "selection correctly", "explored correctly"],
+      "resources": []
     }
   ],
   "metadata": {
+    "source": "BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.781) + deterministic CDC table parse. No fabricated content.",
     "curated": true,
-    "note": "Sample unit JSON — replace after a good PDF parse review"
+    "recordCount": 84
   }
 }

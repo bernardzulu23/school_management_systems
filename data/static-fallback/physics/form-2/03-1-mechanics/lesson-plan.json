@@ -1,0 +1,52 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Physics-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "062c004a347f40168ba953627812f83e",
+  "detectedShift": 0,
+  "pageCount": 168,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-mechanics",
+  "lesson": {
+    "lesson": 3,
+    "title": "1: MECHANICS",
+    "topics": [
+      "INTRODUCTION",
+      "Mechanics is the branch of Physics that deals with the motion of objects and the forces acting upon",
+      "them. It is all about understanding how objects move, respond to forces and interact with their",
+      "environment. It is divided into kinematics (describing motion) and dynamics (explaining why objects",
+      "move). Mechanics 2 comprises of four (4) sub-topics; Work, Energy and Power, Linear Momentum,"
+    ],
+    "activities": [
+      "syllabus, page 10.",
+      "Specific Competence",
+      " Create a system that applies work, energy, and power concepts.",
+      "Key terms",
+      " Work is the product of the force applied and the distance moved in the direction of the force.",
+      " A joule is the amount of work done when a force of 1N moves an object through a distance of",
+      "m in the direction of the force.",
+      " Energy is the ability or capacity to do work."
+    ],
+    "resources": [
+      " Guide learners in designing and testing their systems",
+      " Provide feedback on energy conversion",
+      " Ensure safety",
+      "Learners’ Tasks",
+      " Researching and Brainstorming on the given scenario of mechanical energy (e.g in a simple pendulum,",
+      "inclined plane, water tank,"
+    ],
+    "assessment": [
+      " Evaluate system design",
+      " Assess understanding of energy conversion",
+      " Observe demonstration of problem-solving and critical thinking skills",
+      "Skills Developed",
+      " Problem-solving: Designing systems for maximising mechanical energy",
+      " Critical thinking: Analysing energy conversions"
+    ],
+    "notes": ""
+  }
+}

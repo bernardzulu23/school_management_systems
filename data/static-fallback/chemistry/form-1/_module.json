@@ -1,0 +1,14 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Chemistry-Teaching-Module-Form-1-final-version-3-1.pdf",
+  "md5": "13d33bbf46b6b8dda99c11fe145b07fa",
+  "detectedShift": 0,
+  "pageCount": 80,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "lessonCount": 4
+}

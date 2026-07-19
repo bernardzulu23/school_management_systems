@@ -1,0 +1,43 @@
+{
+  "subject": "Agricultural Science",
+  "subjectSlug": "agricultural-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "df6a8d3579bb6bd33da1fcd4a3dc5cec",
+  "detectedShift": 0,
+  "pageCount": 132,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "6-0-livestock-production",
+  "lesson": {
+    "lesson": 6,
+    "title": "6.0 LIVESTOCK PRODUCTION",
+    "topics": [
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 & 2",
+      "PREFACE",
+      "The Agricultural Science Ordinary Level Teaching Module has been developed to provide guidance to the"
+    ],
+    "activities": [
+      "minds-on experiences through manipulation of real objects, interaction with nature and learning through",
+      "for their personal and national development.",
+      "It is hoped that the guidance provided in this module will make learning of Agricultural Science at Ordinary level",
+      "Constructivist way of learning.",
+      "Kelvin Mambwe (PhD.)",
+      "Permanent Secretary- Educational Services",
+      "MINISTRY OF EDUCATION",
+      "AGRICULTURAL SCIENCE TEACHING MODULE FORM 2 TERM 1 &"
+    ],
+    "resources": [],
+    "assessment": [
+      "opportunities will also occur during this normal process.",
+      " Observation – watching learners working (good for assessing skills and values)",
+      " Conversation – asking questions and talking to learners (good for assessing knowledge and understanding",
+      " Product – appraising the learners’ work (writing reports, translation, calculations, presentations, maps,",
+      "diagrams, models etc.) in this context the product is seen as something physical and permanent that the",
+      "teacher can keep and look at."
+    ],
+    "notes": ""
+  }
+}

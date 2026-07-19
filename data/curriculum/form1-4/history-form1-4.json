@@ -1,22 +1,455 @@
 {
   "subject": "History",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": [
+        "Reasons for Learning History",
+        "Local History",
+        "Types or Branches of History",
+        "Sources of History",
+        "Learning about the past using digital resources"
+      ],
+      "learningOutcomes": [
+        "Communicate relevance of past events Explaining the meaning of History (Past events) Describing past events in the family (funerals, weddings, outings «) Describing the importance of past events (past experience",
+        "Interpret local history",
+        "Classify types or branches of",
+        "Assess credibility of sources of historical information Discussing methods of gathering information about the past (Oral WUDGLWLRQ Written records, Anthropology, Archaeology, Linguistics, Genetics",
+        "Apply digital resources in learning about the past Identifying digital resources (phone, computer«) Using digital resources to ¿nd out new information about the past"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Relevance of past events communicated correctly",
+        "Local history interpreted accordingly",
+        "Types or branches of history classi¿ed correctly",
+        "Credibility of sources of historical information assessed appropriately",
+        "Digital resources applied in learning about the past correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "Periods of Time",
+        "Importance of Chronology in History",
+        "Constructing a timeline",
+        "The use of Abbreviations to denote Historical Periods"
+      ],
+      "learningOutcomes": [
+        "Explore patterns of historical durations Mentioning historical durations (year, decade, generation, century, millennium) Calculating number of years in a given period. Converting a year into a century.",
+        "Arrange series of related events in chronological order Explaining the meaning of chronology.",
+        "Apply chronology in writing time line Discussing types of time lines (Progressive time lines, regressive time lines, pictorial time lines) Constructing a personal timeline under speci¿ed guidelines. Constructing events timeline under speci¿ed guidelines. Describing the importance of a timeline.",
+        "Use abbreviations (BC/BCE and AD/CE) to denote historical periods Explaining the meaning of abbreviations BC or BCE and AD or CE (BC = Before"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Patterns of historical durations explored accordingly.",
+        "Series of related events arranged in chronological order correctly",
+        "Chronology in writing timeline applied correctly.",
+        "(BC/BCE and AD/CE) to denote historical periods demonstrated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["Views on the Origins of Man"],
+      "learningOutcomes": [
+        "Analyse religious and scienti¿c views on the origins of man Describing creation of man according to religion (Christianity and Islam) Explaining the beginning of life on earth according to Scientists (Charles Darwin¶s theory) Contrasting religious and scienti¿c views on the origins of man"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Religion and scienti¿c views on the origins of man analysed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": ["The Way of Life in Stone Age", "Stone Age Sites in Zambia"],
+      "learningOutcomes": [
+        "Draw lessons from Stone Age way of life",
+        "Assess importance of Stone Age sites in Zambia Locating Stone Age sites on the map of Zambia (Mwela rocks, Nachikufu caves, Gwisho Hot Spring«) Analysing the importance of Stone Age sites (Tourism, Cultural Heritage )"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Importance of Stone Age sites in Zambia assessed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": [
+        "Development of Iron Technology and Farming",
+        "Development of Iron-Technology and Farming"
+      ],
+      "learningOutcomes": [
+        "Analyse impact of Iron technology in farming Locating on the map early areas of farming and Iron-working (In the Middle East and Africa) Identifying settlement areas of Iron Age farmers in Zambia (Kalundu, Isamu Pati in Kalomo and In¶gombe Ilede).",
+        "Analyse impact of Iron technology in farming working Identifying settlement areas of Iron Age farmers in Zambia (Kalundu, Isamu Pati in Kalomo and In¶gombe Ilede). Relating In¶gombe Ilede in to the global trade environment. Analysing the importance of Iron technology (agriculture, trade, and hunting, ¿shing ) DFFRUGLQJO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Impact of Iron technology in farming analysed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": [
+        "Early Bantu Settlement in Africa",
+        "Bantu Migrations into Zambia",
+        "DecentralisedSocieties in PreColonial Zambia",
+        "Centralised Societies in Pre-Colonial Zambia"
+      ],
+      "learningOutcomes": [
+        "Locate origins of Bantu",
+        "Use knowledge of common origins of Zambian people to promote National unity Discussing causes for movement of various Bantu Speaking groups into Zambia (From Katanga: political, economic, social«; From South Africa: eৼects of Mfecane Discussing the course of Bantu Migrations into Zambia (East Africa, Katanga, South Africa)",
+        "Analyse features of decentralised societies",
+        "Integrate features of Centralised Societies in modern Zambian society Drawing a map of Zambia showing historical settlements for Bantu Speaking People. Analysing the e൵ects of Bantu migrations on national unity Using shared heritage to foster National Unity i"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Origins of Bantu Speaking People in Africa located correctly.",
+        "Knowledge of common origins of Zambian people, used to promote National unity accordingly",
+        "national heritage sites utilised accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["Centralised Societies in Pre-Colonial Zambia", "Importance of Heritage Sites"],
+      "learningOutcomes": [
+        "=Promote heritage sites",
+        "Utilise business opportunities found in national heritage sites",
+        "Conserve historical VLWHV"
+      ],
       "suggestedActivities": [],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["Traditional"],
+      "learningOutcomes": [
+        "Analyse importance of traditional ceremonies Describing Zambia¶s",
+        "Evaluate various human societies"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Importance of traditional ceremonies analysed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Topic 2.1",
+      "topics": [
+        "Development of Slavery and Slave Trade",
+        "Europe and the bene¿ts from Slave trade",
+        "Slave Trade and Black Friday",
+        "Human Tra൶cking asa morden formof slave trade"
+      ],
+      "learningOutcomes": [
+        "Show respect for human dignity Discussing slavery and slave trade Identifying forms of slavery (forced labour, domestic servitude, unlawful recruitment, debt bondage«) Assessing reasons for the development of slavery and slave trade Locating on the map of Africa major slave trade routes Describing the major stages of the triangular slave trade.",
+        "Analyse Europeans¶s bene¿ts from slave trade",
+        "Relate Black Friday to modern day commerce Explaining the origin of Black Friday (When slave traders sold slaves at a reduced price) Showing how Zambia has embraced black Friday (reduced prices of goods in most outlets stores)",
+        "Show respect for Human rights Discussing human tra൶cking Identifying forms of human tra൶cking (escort"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Respect for human dignity shown appropriately.",
+        "European bene¿ts from Slave trade analysed correctly",
+        "Black Friday related to modern day commerce accordingly",
+        "Respect for Human rights shown accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["Missionary Work in Zambia"],
+      "learningOutcomes": ["Analyse impact of missionary activities in"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Impact of Missionary activities in Zambia analysed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["=British Occupation of Northern Rhodesia"],
+      "learningOutcomes": [
+        "=Analyse process of colonial occupation of Northern Rhodesia Discussing colonisation Analysing motives for colonisation. Identifying the regions that formed Northern Rhodesia in 1911 (North-Eastern and North- Western Rhodesia)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["occupation of Northern Rhodesia analysed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Topic 2.4",
+      "topics": [
+        "Types of governance in Northern Rhodesia",
+        "The Central African Federation (1953-1963)"
+      ],
+      "learningOutcomes": [
+        "Critique colonial types of governance Discussing types of governance introduced by colonial administration (direct and indirect rule) Discussing features of colonial governance (Hatch system, racial discrimination in education, health, employment«) Assessing the impact of colonial administration (loss of land, loss",
+        "Demonstrate understanding of Central African Federation"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Understanding of Central African Federation demonstrated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Primary and Secondary Resistance to Colonial Rule"],
+      "learningOutcomes": [
+        "Interpret resistance methods to colonial rule Discussing Primary/Early resistance (Chiefs: Kazembe and mpezeni, African Independent churches«) Discussing Secondary/Later resistance (Welfare societies, trade unions, political Parties)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Various forms of resistance by indigenous people interpreted correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Nationalists in Zambia¶s Independence Struggle"],
+      "learningOutcomes": [
+        "Appreciate the role of nationalists and Freedom ¿ghters during Independence struggle Summarising the role of Zambia¶s leading nationalists in the struggle for independence",
+        "construct an argument on the source of conÀict"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Role of Nationalists and freedom ¿ghters during independence struggle appreciated accordingly",
+        "Dispose garbage, trash, electric refuse appropriately."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Nationalists in Zambia¶s Independence Struggle"],
+      "learningOutcomes": [
+        "Explore Copper mining in Zambia Describing the background of copper mining in Zambia (Mining in pre-colonial, colonial and post-colonial) Analysing the impact of copper mining in Zambia (Economic, social, political )"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Copper Mining in Zambia explored accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Labour Migration in Colonial and Post-Colonial Zambia."],
+      "learningOutcomes": [
+        "Assess impact of labour migration in colonial and post-colonial Zambia Examining the causes of labour migration in colonial and post-colonial Zambia (hut tax, incentives «) Identifying organisations that recruited labour migration in colonial Zambia (Northern Rhodesia Native labour Bureau, WENELA«)."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Impact of labour migration in colonial and post-colonial Zambia assessed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["Zambia¶s role in the liberation struggle of Southern Africa"],
+      "learningOutcomes": [
+        "Evaluate Zambia¶s role in liberation struggle of Southern Africa Identifying countries in Southern Africa which Zambia helped to Liberate Zimbabwe, Angola, Namibia, South Africa, Mozambique) Analysing Zambia¶s role in the liberation struggle of Southern Africa (Contribution"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Zambia¶s role in the liberation struggle of Southern Africa evaluated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["The Pan=-Africanism"],
+      "learningOutcomes": [
+        "Promote unity in Africa through Pan Africanism Describing the aims of the Pan-African movement Examining the role played by African leaders (Kenneth Kaunda, Kwame Nkrumah, Muammar Gada৽«) in promoting unity"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Unity in Africa through Pan=-Africanis=m promoted correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["United National", "UNIP and the Search for National Unity."],
+      "learningOutcomes": [
+        "Examine UNIP¶s domestic policies (Political and socio economic)",
+        "Promote culture of national unity Discussing the meaning of One Zambia One Nation motto Assessing the e൵orts of UNIP government in promoting national unity (Boarding school"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Policies of the UNIP government examined accordingly",
+        "Culture of national unity promoted accordingly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 3: Topic 3.6",
+      "topics": [
+        "UNIP and the Lumpa Church",
+        "UNIP and the Insurgency of Adamson Mushala",
+        "UNIP¶s reign and attempted military coups.",
+        "UNIP¶s Foreign policy",
+        "Zambia under the Movement for Multi-Party Democracy (MMD): 1991 ±2011.",
+        "Zambia under the Patriotic Front (PF): 2011",
+        "Zambia under the United Party for National Development (UPND): since 2021"
+      ],
+      "learningOutcomes": [
+        "Utilise di൵erent strategies in responding to challenges",
+        "Engage in ways of conÀict resolution in society Exploring ways of conÀict resolution Accounting for the rise of Adamson Mushala Describing activities of Adamson Mushala",
+        "Promote the culture of ascending to power democratically",
+        "Examine UNIP¶s foreign policies (Political and socio economic) Discussing the Foreign policy of UNIP government (Non- Alignment, Pan-Africanism«) Evaluating the e൵ects of UNIP¶s foreign policy on Zambia",
+        "Analyse policies of the MMD government",
+        "Examine PF government policies Identifying the Presidents of Zambia under the PF (Michael C. Sata, Edgar C. Lungu) Discussing the domestic policy of the PF government (Political, socio economic ) Discussing the Foreign policy of the PF government. Analysing the",
+        "Analyse UPND¶s policies since 2021 Identifying the president of Zambia under the UPND ( Hakainde Hichilema)",
+        "Construct an argument on the source of conÀict"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Di൵erent strategies in responding to challenges utilised accordingly",
+        "Ways of engaging in conÀict resolution in society explored accordingly",
+        "Democratic methods of ascending to power promoted accordingly",
+        "UNIP¶s foreign policy examined correctly",
+        "Policies of the MMD government analysed correctly",
+        "Policies of the PF government examined correctly",
+        "Policies of the UPND government analysed accordingly",
+        "Analyse ideas and adjust them accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Causes of the First World War"],
+      "learningOutcomes": [
+        "Analyse events leading to the First World War Analysing events in Europe that led to tension building between 1900 ±"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["The Paris Peace Conference (1919)", "The League of Nations."],
+      "learningOutcomes": [
+        "Promote peaceful methods of conÀict resolution Discussing the terms of the Versailles Treaty of Versailles Critiquing the impact of the Versailles Treaty on defeated nations Analysing the views of the μBig Three¶ at resolving future conÀicts",
+        "Assess the work of the League of Nations Identifying factors for the formation of the League. Assessing the work of the League of Nations (successes and events leading to its failure)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Peaceful methods of conÀict resolution promoted accordingly",
+        "The work of the League of Nations assessed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 4: Topic 4.3",
+      "topics": [
+        "=Causes of the Second World War",
+        "Zambia and World Wars",
+        "Capitalist versus Communist World (Cold War)"
+      ],
+      "learningOutcomes": [
+        "==Analyse events leading to the Second World War",
+        "Evaluate Zambia¶s role in World Wars Describing Zambia¶s involvement in World Wars",
+        "Examine ideologies of Capitalism and Communism since 1945 Discussing ideologies Communism and Capitalism."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Events leading to Second W=orld War analysed appropriately",
+        "Zambia¶s role in World Wars evaluated accordingly",
+        "Ideologies of Capitalism and Communism examined correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["=The United Nations (UN) since 1945", "The African Union (AU)"],
+      "learningOutcomes": [
+        "Assess the work of the UN since 1945",
+        "Demonstrate understanding the role of African unity Describing the historical background of the AU (prelude of the OAU) Evaluating aims of the AU Analysing the role of the AU in promoting peace and unity Assessing the achievements and failures of the AU Examining Zambia¶s contributions to the AU"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Work of the UN since 1945 assessed accordingly",
+        "Understanding the role of African unity demonstrated appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["Zambia and its international partners"],
+      "learningOutcomes": [
+        "Appreciate bilateral relations between Zambia and its international partners Identifying Zambia¶s cooperating partners since independence ( Britain, China, Russia, Cuba, Finland, Japan, Sweden, Denmark and USA)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Bilateral relations between Zambia and its international partners appreciated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 4: Topic 4.6",
+      "topics": [
+        "Pandemics and Epidemics",
+        "National Values and Principles",
+        "=Street vending in Zambia",
+        "=Emerging social vices in Zambia",
+        "Terrorism",
+        "The Middle East Crises",
+        "DR Congo regional conÀict",
+        "The 1994 Rwandan Genocide"
+      ],
+      "learningOutcomes": [
+        "Participate in awareness campaign on the prevention of pandemics and epidemics Discussing pandemic and epidemic Identifying pandemics (HIV=\\AIDS, COVID=-19«) and epidemics (Cholera, Typhoid, dysentery«) Discussing causes of Pandemics and Epidemics. Analysing the impact of pandemics and epidemics in our society. Exploring ways of preventing pandemics and epidemics",
+        "Engage in awareness campaigns on the prevention of communicable and non-communicable diseases Identifying communicable and non-communicable diseases Causes of communicable and non-communicable diseases.",
+        "Promote culture of respect Discussing National Values and Principles. Recognising elders in our society (In families, church, national leaders, traditional, spiritual«) Demonstrating ways of showing respect to elders and leaders. Promoting the culture of",
+        "Assess impact of street vending. Discussing street vending. Examining causes of street vending Analysing the impact of street vending (positive",
+        "==Promote good morals",
+        "Recognise ways of promoting a culture ofpeace in society",
+        "Analyse conÀicts in the Middle East since 1948 Discussing causes of conÀicts in the Middle East since 1948 Showing how conÀicts have escalated today",
+        "Demonstrate understanding of Congo DR conÀicts Discussing the origins of the between Congo DR and the M23 Rebels of Rwanda Analysing the impact of the conÀict to regional peace",
+        "Assess the impact of Rwandan Genocide"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Awareness campaigns on the prevention of pandemics and epidemics participated in accordingly",
+        "Culture of respect promoted accordingly",
+        "Impact of street vending assessed accordingly",
+        "promoted accordingly",
+        "Ways of promoting a culture ofpeace in society recognised appropriately",
+        "ConÀicts in the Middle East since 1948 analysed accordingly",
+        "Understanding of Congo DR conÀicts demonstrated accordingly",
+        "Impact of the Rwandan Genocide assessed accordingly"
+      ],
       "resources": []
     }
   ],
   "metadata": {
     "source": "HISTORY-SYLLABUS-FORMS-1-4.pdf",
-    "extractedAt": "2026-07-11T06:20:40.447Z",
-    "fileSize": 1142375
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/HISTORY-SYLLABUS-FORMS-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 1142375,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true,
+    "recordCount": 66
   }
 }

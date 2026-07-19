@@ -1,0 +1,23 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Physics-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "062c004a347f40168ba953627812f83e",
+  "detectedShift": 0,
+  "pageCount": 168,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-mechanics",
+  "lesson": {
+    "lesson": 1,
+    "title": "1: MECHANICS",
+    "topics": [],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

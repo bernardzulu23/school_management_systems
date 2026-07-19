@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "diary-writing",
+  "lesson": {
+    "lesson": 33,
+    "title": "DIARY WRITING",
+    "topics": [
+      "INTRODUCTION",
+      "Overview: Writing composition is about sharing your thoughts, ideas and stories in a",
+      "structured and creative way. It is not just about putting words together, but about",
+      "organising them to communicate effectively, entertain, inform or persuade. This topic",
+      "will explore diary writing."
+    ],
+    "activities": [
+      "events, or experiences.",
+      "SUB-TOPIC: Introduction to Writing Diary Entries",
+      "INTRODUCTION",
+      "Diary entries are a form of personal writing used to capture thoughts, feelings,",
+      "experiences, and daily events. A diary serves as a private space for self-expression and",
+      "reflection, often written in chronological order with dated entries. The diary helps",
+      "improve self-expression, emotional awareness and writing skills. Imagine reading your",
+      "diary years later and reliving your happiest moments, learning from your challenges, or"
+    ],
+    "resources": [],
+    "assessment": [
+      "Homework",
+      " Learners write a diary entry for the next few days and reflect on how it feels to maintain",
+      "a diary.",
+      " Diary entries are a form of personal writing used to capture thoughts, feelings,",
+      "experiences, and daily events in real life.",
+      " It serves as a private space for self-expression and reflection, often written in"
+    ],
+    "notes": ""
+  }
+}

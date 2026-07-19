@@ -23,6 +23,7 @@ import { formatSubjectContent } from '@/lib/ai/contentFormatters'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
+import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 
 const StoryWeaverInputSchema = z.object({
   grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']).optional(),
@@ -157,7 +158,15 @@ export const POST = withAILimits(async function POST(request: Request) {
       subject: input.subject,
     })
 
-    const prompt = buildPrompt(input)
+    const promptBase = buildPrompt(input)
+    const rag = await buildRagContextForQuery({
+      query: `${input.subject || 'English'} ${input.grade || 'Form 3'} ${input.topic} ${input.storyType}`,
+      schoolId,
+      schoolPlan: school.plan,
+      subject: input.subject || 'English',
+      gradeLevel: input.grade || 'Form 3',
+    })
+    const prompt = rag.block ? appendRagToSystemPrompt(promptBase, rag.block) : promptBase
     const startTime = Date.now()
 
     const stream = createGroqTextEventStream({

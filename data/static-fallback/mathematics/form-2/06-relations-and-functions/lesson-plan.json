@@ -1,0 +1,38 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Mathematics-1-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "4b033f61c02a6d1423fbe1f01b080bb8",
+  "detectedShift": 0,
+  "pageCount": 173,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "relations-and-functions",
+  "lesson": {
+    "lesson": 6,
+    "title": "RELATIONS AND FUNCTIONS",
+    "topics": [
+      "INTRODUCTION",
+      "Relations and functions are important concepts in Mathematics that help us understand how different quantities are",
+      "connected. A relation describes a relationship between two sets of values, showing how elements from one set",
+      "correspond to elements in another. A function is a special type of relation where each input is linked to exactly one",
+      "output. Relations and functions are widely used in areas such as science, economics, engineering, and technology,"
+    ],
+    "activities": [
+      "many to many)",
+      "Instructions",
+      "Divide learners into small groups.",
+      "Provide each group with at least 4 cards. Each card should contain a pair of real-life sets, for example:",
+      "Learners and ID numbers",
+      "Teachers and subjects taught",
+      "Learners and their favorite sports",
+      "Countries and languages spoken"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

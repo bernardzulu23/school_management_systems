@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-TERM-2-1.pdf",
+  "md5": "cc8c7dbbe2eff4b4307de6424d4796c3",
+  "detectedShift": 0,
+  "pageCount": 90,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "adverbs",
+  "lesson": {
+    "lesson": 19,
+    "title": "ADVERBS",
+    "topics": [
+      "Introduction",
+      "Overview: Adverbs are words that modify or give more information about verbs,",
+      "adjectives, or other adverbs in a sentence. Understanding the position of adverbs is",
+      "crucial in constructing clear and accurate sentences. This topic will explore the different",
+      "positions where adverbs can appear within a sentence, such as before or after the main"
+    ],
+    "activities": [
+      " Introduce and explain the different kinds of adverbs: adverbs of place, time,",
+      "frequency, manner, and degree.",
+      "Adverbs of place answer the question \"Where?\" (e.g., here, there,",
+      "everywhere).",
+      "Adverbs of time answer the question \"When?\" (e.g., now, later,",
+      "Adverbs of frequency answer the question \"How often?\" (e.g.,",
+      "always, often, never).",
+      "Adverbs of manner answer the question \"How?\" (e.g., quickly,"
+    ],
+    "resources": [],
+    "assessment": [
+      "Observation: Teacher observes learners as they classify adverbs and",
+      "provide examples, checking for understanding of each adverb's type",
+      "(place, time, frequency, manner, degree).",
+      "Questioning: Ask learners to give additional examples of each type of",
+      "adverb and explain their function in the sentence. This will help gauge",
+      "whether they can identify adverbs correctly."
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "directions",
+  "lesson": {
+    "lesson": 19,
+    "title": "DIRECTIONS",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Directions are instructions or guidelines that help individuals",
+      "navigate from one place to another or complete a specific task. They can be",
+      "given verbally, written down, or represented through symbols, maps, or",
+      "diagrams. Understanding and following directions is an essential skill in daily"
+    ],
+    "activities": [
+      "directions.",
+      " Pair learners and introduce common phrases they can use when asking for directions.",
+      "Examples:",
+      "“Excuse me, how do I get to the bank?”",
+      "“Excuse” me, where is the nearest ATM or mobile money agent?”",
+      "\"Excuse me, is there a market near here?”",
+      " Explain that clear directions improve accessibility, prevent confusion, and save time,",
+      "especially in emergencies."
+    ],
+    "resources": [],
+    "assessment": [
+      "Project/Homework:",
+      "Assign a project-based task where learners create a simple map of their",
+      "town or community and indicate any key financial institutions, mobile",
+      "money agents, shops, and markets.",
+      "Learners to give an oral presentation on the map by describing how to",
+      "get to a bank, ATM, shop, or mobile money agent using proper"
+    ],
+    "notes": ""
+  }
+}

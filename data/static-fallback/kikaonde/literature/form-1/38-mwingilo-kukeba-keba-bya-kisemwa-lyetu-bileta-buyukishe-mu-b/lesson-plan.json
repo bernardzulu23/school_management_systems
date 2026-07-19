@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "911b95546195795a833f108e7f0a7f1c",
+  "detectedShift": 0,
+  "pageCount": 54,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "mwingilo-kukeba-keba-bya-kisemwa-lyetu-bileta-buyukishe-mu-b",
+  "lesson": {
+    "week": 2,
+    "lesson": 38,
+    "title": "Mwingilo.kukeba keba bya kisemwa lyetu bileta buyukishe mu bya mingilo.",
+    "topics": [
+      "B.MWINGILO.",
+      "Kukebakeba bya kisemwa byetu bileta buyukishe mu bya mingilo.",
+      "MUFUNJISHI.",
+      "Mufunjishi akambizhe bafunda kukeba keba bya kisemwa bileta buyukishe mu bya",
+      "mingilo."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

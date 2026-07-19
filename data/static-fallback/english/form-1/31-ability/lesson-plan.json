@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "ability",
+  "lesson": {
+    "lesson": 31,
+    "title": "ABILITY",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Ability refers to the capacity to perform a specific task or function. It can",
+      "also refer to a natural talent or skill that someone or something possesses.",
+      "Understanding ability is important in real-life situations because it helps individuals to",
+      "talk about skills in conversations, explain past experiences, ask for or offer help. This"
+    ],
+    "activities": [
+      " Select a learner to perform a few tasks. (touch the board, close the window, ride a",
+      "bicycle, sing, spell a word, breath in, breath out …).",
+      " Ask learners to use the word ‘can’ or ‘be able to’ to describe what their classmate is",
+      "able to do.",
+      " Explain the different ways of expressing ability:",
+      "Can and be able to both express ability in the present but can is more",
+      "Note: Can and be able to should not be used together.",
+      "I can be able to come tomorrow. (Wrong)"
+    ],
+    "resources": [],
+    "assessment": [
+      " Learners discuss ways of expressing ability in the present, past and future.",
+      " Learners construct sentences expressing ability using different expressions.",
+      " Ability refers to capacity to perform a specific task or function.",
+      " It can also refer to a natural talent or skill that someone or something possesses.",
+      " Expressing ability in English can be done using various grammatical structures and",
+      "vocabulary."
+    ],
+    "notes": ""
+  }
+}

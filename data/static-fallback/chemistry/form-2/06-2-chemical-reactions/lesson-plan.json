@@ -1,0 +1,45 @@
+{
+  "subject": "Chemistry",
+  "subjectSlug": "chemistry",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Chemistry-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "a273913a2d9d647a810d4cb59ef50198",
+  "detectedShift": 0,
+  "pageCount": 130,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "2-chemical-reactions",
+  "lesson": {
+    "lesson": 6,
+    "title": "2: CHEMICAL REACTIONS",
+    "topics": [
+      "Introduction:",
+      "Chemical reactions are the heart of Chemistry. The essence of chemistry is to study chemical",
+      "reactions. They involve the combination of the elements and their compounds to give new",
+      "substances. Chemists have used chemical reactions to produce a range of various materials which",
+      "are so vital in life. Plants, animals and even ourselves are chemical reactions factories. Chemical"
+    ],
+    "activities": [
+      "types of chemical reactions.",
+      "reactions",
+      "chemical reactions. They will further demonstrate the types of chemical reactions through a",
+      "hands-on task.",
+      "Suggested Teaching and Learning Materials:",
+      " Natural Materials:",
+      "Artificial Materials: Text books, science dictionary, paper letter cuttings (A, B, C, D, E,",
+      "F, AB, CB, AD), flip charts, markers, bostik, computers connected to internet"
+    ],
+    "resources": [],
+    "assessment": [
+      " Check if learners are:",
+      "o describing chemical reactions and the types correctly",
+      "o formulating hypothetical reactions correctly",
+      "Key Learning Points:",
+      " A chemical reaction is the process of bond breaking and bond forming. The bonds of the",
+      "reactants break while new bonds form producing new substances called products."
+    ],
+    "notes": ""
+  }
+}

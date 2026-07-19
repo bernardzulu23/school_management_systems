@@ -1,0 +1,52 @@
+{
+  "subject": "Travel and Tourism",
+  "subjectSlug": "travel-and-tourism",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "TRAVEL_AND_TOURISM_MODULE_Final-2025.pdf",
+  "md5": "eddbd2b53114fbbd521b933e4807a63a",
+  "detectedShift": 0,
+  "pageCount": 70,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-1-introduccon-to-travel-and-tourism-industry",
+  "lesson": {
+    "lesson": 3,
+    "title": "1.1 IntroducCon to Travel and Tourism Industry",
+    "topics": [
+      "Introduction",
+      "This topic invites you to help learners to explore the dynamic journey of Zambia's tourism industry,",
+      "from its historical roots to its present landscape. Learners will examine the key aspects such as the",
+      "historical foundation of tourism in Zambia, the evolution of captivating tourist attractions, the",
+      "innovative concept of tourist packages, and the exciting rise of modern tourism."
+    ],
+    "activities": [
+      "their usual environment for leisure, business, or other purposes. It encompasses the entire",
+      "travel experience, from planning and booking to the actual trip and return.",
+      "Industry: In the context of tourism, it signifies the businesses and organizations involved",
+      "in providing goods and services to tourists. This includes hotels, restaurants, transportation",
+      "companies, travel agencies, tour operators, and many more.",
+      "History: This explores the past of tourism in Zambia, from its early beginnings to its",
+      "current state. It examines how historical events, figures, and developments have shaped the",
+      "tourism industry in the country."
+    ],
+    "resources": [
+      "tourism industry.",
+      "Ac#vity 3: Researching Historical Sites in Zambia",
+      "Learning Environment set-up",
+      "This activity can be done indoors and outdoors",
+      "Research Project:",
+      "Assign learner to research a specific historical site in Zambia, such as Victoria Falls, the"
+    ],
+    "assessment": [
+      "Practical Demonstration",
+      "Learners perform a Tour Guide Role-Play where they act as tour guides, explaining a",
+      "selected Zambian tourist attraction to a group (classmates acting as tourists).",
+      "Choose a tourist attraction/historical site.",
+      "Research its significance and visitor experience.",
+      "Deliver a 5–10 minutes guided tour (can be virtual or classroom-based)."
+    ],
+    "notes": ""
+  }
+}

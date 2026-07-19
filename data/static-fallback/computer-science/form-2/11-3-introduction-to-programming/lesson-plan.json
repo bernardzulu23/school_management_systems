@@ -1,0 +1,44 @@
+{
+  "subject": "Computer Science",
+  "subjectSlug": "computer-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "851f6c79d9c710f457e55d5357de8915",
+  "detectedShift": 0,
+  "pageCount": 94,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "3-introduction-to-programming",
+  "lesson": {
+    "lesson": 11,
+    "title": "3: INTRODUCTION TO PROGRAMMING",
+    "topics": [
+      "Overview",
+      "This topic introduces learners to the fundamental concepts of programming through visual, block-based",
+      "environments. It focuses on how to think logically, sequence instructions, and create simple programs",
+      "using drag-and-drop coding blocks."
+    ],
+    "activities": [
+      "Learning Environment Setup",
+      "Artificial (Physical – Classroom):",
+      "Classroom arranged for individual exploration and pair discussion",
+      "Clear view of board/projector for demonstrations and comparisons",
+      "Technology Environment:",
+      "Computers or laptops with internet access",
+      "Block-based programming software: Scratch, Blockly, MIT App Inventor, Code.org",
+      "Projector to show interface overview and examples"
+    ],
+    "resources": [],
+    "assessment": [
+      "Examples of Formative",
+      "Scenario: In your Scratch class, a learner named Chileshe has created a simple animation of a goat (sprite).",
+      "He wants the goat to walk 10 steps, then bleat, then walk another 10 steps. He has put the blocks in this order:",
+      "play sound “Meee” → move 10 steps → move 10 steps.",
+      "(Debugging) When Chileshe runs his program, the goat bleats first, then moves 20 steps all at once.",
+      "What is wrong with his sequence? Explain how he should reorder the blocks to make it work as he"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "learners-to-carry-out-research-and-develop-a-report-on-facto",
+  "lesson": {
+    "week": 1,
+    "lesson": 28,
+    "title": "Learners to carry out research and develop a report on factors that hinder good citizenship",
+    "topics": [
+      "among the members of the community.",
+      "Special Groups",
+      "Introduction",
+      "This subtopic will look at issues of promoting social justice especially among the less privileged and",
+      "the needy. It is cardinal that you learn about ways of promoting social justice in society as a way to"
+    ],
+    "activities": [
+      "Identifying groups of people at family or school level",
+      "Teaching Materials: Pictorial or video presentation of a Family Tree and School Groups"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

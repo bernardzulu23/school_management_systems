@@ -1,104 +1,760 @@
 {
   "subject": "Commerce",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [
-        "LEARNING ACTIVITIES",
-        "COMMERCE",
+      "title": "Form 1: Topic 1.1",
+      "topics": [
         "Introduction to Commerce",
-        "Show understanding of the importance of Commerce",
-        "Describing Commerce:(Trade and Aids to Trade)",
-        "Discussing the importance o",
-        "Commerce (",
-        "to an Individual,",
-        "Nation and the World)",
-        "Identifying career prospectsin Commerce (",
-        "Entrepreneur,",
-        "Marketer, Economist...)",
-        "Understanding of the importance of Commerce shown accordingly",
-        "PRODUCTION",
-        "Stages of Production",
-        "Demonstrate knowledge o",
-        "stages of production",
-        "Explaining production",
-        "Describing needs and wants",
-        "Discussing the methods ofproduction (",
-        "Direct and",
-        "Indirect",
-        "Discussing the stages ofproduction (",
-        "Primary,",
-        "Secondary and Tertiary",
-        "Researching on linkages inthe sta",
-        "es of production",
-        "Knowledge of stages of production demonstrated accordingly",
-        "Specialisation",
-        "Exhibit understanding of the importance of Specialisation to trade",
-        "Explaining Specialisation",
-        "Exploring the drivers ofSpecialisation (",
-        "Division of",
-        "Labour, GovernmentPolicies, Technology",
-        "Discussing various forms ofSpecialisation (",
-        "Nation,",
-        "Region, Individual,Process...)",
-        "Researching on real lifescenarios on the benefits andchallenges of Specialisation",
-        "Explaining the linkagebetween Specialisation andTrade",
-        "The importance of Specialisation to trade exhibited accordingly"
+        "Introduction to Principles of Accounts",
+        "Users of Accounting Information",
+        "Accounting Terminologies",
+        "Accounting"
+      ],
+      "learningOutcomes": [
+        "Show understanding of the importance of Commerce Describing Commerce: (Trade and Aids to Trade) Discussing the importance of Commerce (to an Individual, Nation and the World) Identifying career prospects in Commerce (Entrepreneur, Marketer, Economist…) Understanding of the importance",
+        "Demonstrate Knowledge of Principles of Accounts Explaining Accounting Explaining Principles of Accounts Defining book keeping Stating the importance of Principles of Accounts Identifying Career prospects (Accountant, Accounts Clerk, Cashier, Auditor, Finance Manager, Book Keeper, Bursar, Financial Controller …) Knowledge of Principles of Accounts demonstrated",
+        "Describe Users of Accounting Information",
+        "Use Accounting Terminologies",
+        "Apply Accounting Concepts in recording Business Transactions"
       ],
       "suggestedActivities": [
-        "EXPECTED STANDARD",
-        "COMMERCE",
-        "Introduction to Commerce",
-        "Show understanding of the importance of Commerce",
-        "Describing Commerce:(Trade and Aids to Trade)",
-        "Discussing the importance o",
-        "Commerce (",
-        "to an Individual,",
-        "Nation and the World)",
-        "Identifying career prospectsin Commerce (",
-        "Entrepreneur,",
-        "Marketer, Economist...)",
-        "Understanding of the importance of Commerce shown accordingly",
-        "PRODUCTION",
-        "Stages of Production",
-        "Demonstrate knowledge o",
-        "stages of production",
-        "Explaining production",
-        "Describing needs and wants",
-        "Discussing the methods ofproduction (",
-        "Direct and",
-        "Indirect",
-        "Discussing the stages ofproduction (",
-        "Primary,",
-        "Secondary and Tertiary",
-        "Researching on linkages inthe sta",
-        "es of production",
-        "Knowledge of stages of production demonstrated accordingly",
-        "Specialisation",
-        "Exhibit understanding of the importance of Specialisation to trade",
-        "Explaining Specialisation",
-        "Exploring the drivers ofSpecialisation (",
-        "Division of",
-        "Labour, GovernmentPolicies, Technology",
-        "Discussing various forms ofSpecialisation (",
-        "Nation,",
-        "Region, Individual,Process...)",
-        "Researching on real lifescenarios on the benefits andchallenges of Specialisation",
-        "Explaining the linkagebetween Specialisation andTrade",
-        "The importance of Specialisation to trade exhibited accordingly"
+        "Explaining Accounting",
+        "Describing users of",
+        "Outlining the Accounting",
+        "Explaining each of the",
+        "Matching text with",
+        "Outlining Accounting",
+        "Interpreting the Accounting"
       ],
-      "assessmentMethods": [],
+      "assessmentMethods": [
+        "of Commerce shown accordingly",
+        "Terminologies used correctly",
+        "transactions applied correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "Stages of Production",
+        "Specialisation",
+        "Factors of Production",
+        "Production and the environment",
+        "Ethics in Accountancy"
+      ],
+      "learningOutcomes": [
+        "Demonstrate knowledge of stages of production Explaining production Describing needs and wants Discussing the methods of production (Direct and Indirect) Discussing the stages of production (Primary, Secondary and Tertiary) Researching on linkages in the stages of production Knowledge of stages of production demonstrated",
+        "Exhibit understanding of the importance of Specialisation to trade Explaining Specialisation Exploring the drivers of Specialisation (Division of Labour, Government Policies, Technology…) Discussing various forms of Specialisation (Nation, Region, Individual, Process…) Researching on real life scenarios on the benefits and challenges of Specialisation Explaining the linkage between Specialisation and Trade The importance of Specialisation",
+        "Demonstrate knowledge on the use of factors of production Explaining factors of production (Land, Capital, Enterprise, Labour, Technology) Discussing the rewards of factors of production Demonstrating the use of factors of production in productive activities Knowledge on the use of factors of production demonstrated",
+        "Apply technological factors of production in production processes Identifying technological factors of production (Information Technology, Automation, Machinery…) Researching on the benefits of technological factors of production Demonstrating use of technological factors in production processes Technological factors of",
+        "Practise environmental management strategies in production processes Stating the effects of production on the environment (Pollution, Littering, Deforestation…) Investigating possible solutions to the environmental effects (Applying Acceptable Waste Management Methods, Tree Planting, Public Awareness, Community Involvement, 3 Rs…) Practising possible solutions to the effects of production on the environment (as indicated above) Environmental management strategies in production processes",
+        "Apply Ethics in Accountancy",
+        "Demonstrate understanding of the roles of the Accountancy Regulatory body in Zambia"
+      ],
+      "suggestedActivities": [
+        "Identifying Ethics in",
+        "Explaining the Ethics in",
+        "Determining the effects of",
+        "Illustrating Ethics in",
+        "Describing roles of ZICA"
+      ],
+      "assessmentMethods": [
+        "to trade exhibited accordingly",
+        "production applied accordingly",
+        "practised appropriately",
+        "demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": [
+        "Retail Trade",
+        "Wholesale Trade 1.3.2.1 Practise running a wholesale business Describing wholesale trade Demonstrating functions of a wholesaler Investigating opportunities and challenges of running a wholesale business Practising running a wholesale business Running a wholesale business",
+        "Documents used in Home Trade",
+        "Types of Business Transactions",
+        "Accounting Equation"
+      ],
+      "learningOutcomes": [
+        "Practise running a Retail Business Describing home trade Demonstrating the functions of a retailer Researching on the factors to consider before putting up a retail business (Location, Capital, Trading Hours…) Investigating opportunities and challenges of running a retail business Practising running a retail business Running a retail business",
+        "Prepare documents used in home trade Describing documents used in home trades (Enquiry, Debit note, Invoice…) Applying the terms and conditions of sale and payments (Trade and Cash Discounts) Preparing documents used in home trade Documents used in home trade",
+        "Demonstrate knowledge of Business Transactions",
+        "Use Accounting Equation to determine the financial position of a business"
+      ],
+      "suggestedActivities": [
+        "Explaining the meaning of",
+        "Identifying types of",
+        "Explaining types of",
+        "Classifying types of",
+        "Constructing business",
+        "Explaining the accounting",
+        "Explaining Capital, Assets",
+        "Illustrating effects of",
+        "Applying Accounting"
+      ],
+      "assessmentMethods": ["practised successfully", "prepared correctly", "appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": [
+        "Business Contracts",
+        "Classes of Accounts",
+        "Principle of Double Entry",
+        "Types of Ledgers"
+      ],
+      "learningOutcomes": [
+        "Exhibit knowledge of a Business Contract",
+        "Classify Ledger Accounts",
+        "Apply double entry system in recording business transactions",
+        "Balance off ledger accounts",
+        "Record Business Transactions in the appropriate Ledger"
+      ],
+      "suggestedActivities": [
+        "Explaining simple business",
+        "Explaining the importance of",
+        "Identifying parties to a",
+        "Describing the elements of a",
+        "Distinguishing between an",
+        "Discussing discharge of a",
+        "Explaining the Ledger",
+        "Describing a Ledger",
+        "Identifying classes of",
+        "Explaining classes of",
+        "Discussing the importance",
+        "Categorising classes of",
+        "Explaining double entry",
+        "Outlining steps in",
+        "Recording Business",
+        "Outlining the steps in",
+        "Balancing off ledger",
+        "Identifying the types of",
+        "Explaining the types of",
+        "Classifying Accounts",
+        "Entering Business"
+      ],
+      "assessmentMethods": [
+        "contract exhibited accordingly",
+        "classified correctly",
+        "transactions correctly",
+        "Ledger correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": [
+        "Business Contracts",
+        "Entrepreneurial Activities",
+        "Types of Books of Prime Entry"
+      ],
+      "learningOutcomes": [
+        "Exhibit Personal Entrepreneurial Characteristics (PECs)",
+        "Engage in entrepreneurial activities",
+        "Record Business Transactions in the Books of Prime Entry"
+      ],
+      "suggestedActivities": [
+        "Explaining Entrepreneurship",
+        "Describing Personal",
+        "Practising ways of",
+        "Identifying entrepreneurial",
+        "Discussing reasons for",
+        "Engaging in entrepreneurial",
+        "Identifying Books of Prime",
+        "Explaining Books of Prime",
+        "Stating the source",
+        "Entering Business",
+        "Posting Transactions to the",
+        "Extracting the Trial"
+      ],
+      "assessmentMethods": ["appropriately", "engaged in successfully", "Prime Entry correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 2: Topic 2.1",
+      "topics": [
+        "Entrepreneurial Activities",
+        "Financing Businesses",
+        "Fraud",
+        "Wages and Salaries",
+        "Personal Financial Management",
+        "Types of Books of Prime Entry"
+      ],
+      "learningOutcomes": [
+        "Generate business idea Discussing business ideas Exploring sources of business ideas (Self, Family, Books…) Analysing business ideas using Strengths, Weakness, Opportunities and Threats (SWOT) analysis model Developing suitable business idea Business idea generated",
+        "Prepare a business plan Discussing contents of a business Plan (Executive Summary, Marketing, Financial Planning…) Describing the functions of a business plan Preparing a business plan Business plan prepared",
+        "Utilise sources of financing businesses Exploring sources of financing businesses (Leasing, Subletting, Savings, Loans…) Using suitable sources of financing businesses Ways of financing businesses",
+        "Apply safety measures to prevent fraudulent activities/situations",
+        "Show knowledge of calculating Wages and Salaries",
+        "Apply knowledge of personal financial management.",
+        "Practise different methods of saving.",
+        "Engage in different methods of Investment.",
+        "Prepare a budget.",
+        "Practise ways of managing debt",
+        "Apply Financial Risk Management Strategies",
+        "Record Business Transactions in the Books of Prime Entry Identifying Books of Prime Entry [Cash Book (One Column, Two Column, Three Column and Petty Cash), General Journal] Explaining Books of Prime Entry Stating the source documents for each Book of Prime Entry (Original/Duplicate Receipts/Tax Invoice, Cheque stab, Petty Cash Voucher, Tickets, Cash Sale Slip, Deposit slip, Bank Statement) Recording Business Transactions in the Books of Prime Entry Business Transactions recorded in the Books of",
+        "Post Business Transactions to the Ledger Posting Business Transactions from Book of prime entry to the Ledger Extracting the Trial Balance from the Ledger Business Transactions posted to the Ledger"
+      ],
+      "suggestedActivities": [
+        "Explaining fraud",
+        "Investigating common areas",
+        "Detecting fraudulent",
+        "Describing different",
+        "Discussing Effects of fraud",
+        "Identify institutions where",
+        "Applying safety measures",
+        "Explaining wages and salaries",
+        "Stating methods of calculating",
+        "Preparing Time Cards",
+        "Interpreting pay slip (Gross",
+        "Preparing wage sheets",
+        "Explaining personal financial",
+        "Explaining the importance of",
+        "Practising personal financial",
+        "Discussing methods of",
+        "Practising suitable saving",
+        "Explaining investment.",
+        "Discovering methods of",
+        "Discussing the importance of",
+        "Distinguishing saving from",
+        "Applying different methods of",
+        "Explaining budgeting",
+        "Describing types of budgets",
+        "Examining reasons for",
+        "Preparing a budget",
+        "Explaining borrowing",
+        "Discussing reasons for",
+        "Interpreting and negotiating",
+        "Discussing dangers of over",
+        "Explaining debt management",
+        "Demonstrating debt",
+        "Explaining Financial Risk",
+        "Discussing importance of",
+        "Researching strategies for",
+        "Exploring social security",
+        "Applying Financial Risk"
+      ],
+      "assessmentMethods": [
+        "utilised accordingly",
+        "applied accordingly",
+        "practised accordingly.",
+        "of investment successfully",
+        "practised accordingly",
+        "Strategies applied accordingly.",
+        "Prime Entry correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["Methods of buying and selling on credit", "Extracting the Trial Balance"],
+      "learningOutcomes": [
+        "Use suitable methods of buying and selling on credit.",
+        "Prepare the Trial Balance"
+      ],
+      "suggestedActivities": [
+        "Explaining buying and selling",
+        "Analysing methods of buying",
+        "Practising different methods",
+        "Explaining Trial Balance",
+        "Outlining the purpose of",
+        "Extracting the Trial",
+        "Preparing the Trial"
+      ],
+      "assessmentMethods": ["on credit used accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Concept of International Trade", "Capital and Revenue Receipts and Expenditure"],
+      "learningOutcomes": [
+        "Demonstrate knowledge of conducting business internationally.",
+        "Classify Capital and Revenue Receipts and Expenditure"
+      ],
+      "suggestedActivities": [
+        "Explaining International",
+        "Describing the importance of",
+        "Exploring challenges",
+        "Researching on documents",
+        "Investigating the means of",
+        "Differentiating balance of",
+        "Discussing measures to",
+        "Explaining Capital and",
+        "Identifying Capital and",
+        "Distinguishing between",
+        "Categorising Capital and"
+      ],
+      "assessmentMethods": ["demonstrated appropriately", "classified correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Topic 2.4",
+      "topics": [
+        "Zambia Revenue Authority (ZRA).",
+        "Statement of Profit or Loss (Income Statement)",
+        "Statement of Financial Position (Balance Sheet)"
+      ],
+      "learningOutcomes": [
+        "Show knowledge on Tax Compliance",
+        "Prepare the Statement of Profit or Loss",
+        "Prepare the Statement of Financial Position/Balance Sheet"
+      ],
+      "suggestedActivities": [
+        "Explaining the functions of",
+        "Participating in Tax",
+        "Explaining the Statement",
+        "Describing the Statement",
+        "Outlining the lay out of",
+        "Calculating Net Sales, Net",
+        "Preparing the Statement of",
+        "Calculating capitals",
+        "Drawing up the Statement"
+      ],
+      "assessmentMethods": [
+        "shown appropriately.",
+        "prepared correctly",
+        "Position prepared correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Electronic Commerce (E- Commerce)", "Accounting Ratios"],
+      "learningOutcomes": ["Practise Electronic Commerce", "Calculate Accounting Ratios"],
+      "suggestedActivities": [
+        "Describing E-Commerce",
+        "Exploring features of",
+        "Analysing advantages and",
+        "Practising E-commerce",
+        "Explaining the accounting",
+        "Computing the accounting"
+      ],
+      "assessmentMethods": ["Practised accordingly", "calculated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Consumer Education and Awareness"],
+      "learningOutcomes": ["Demonstrate ways of protecting consumers from exploitative tendencies"],
+      "suggestedActivities": [
+        "Describing reasons for",
+        "Interpreting exploitative",
+        "Investigating ways of",
+        "Identifying organisations that",
+        "Practising ways of protection"
+      ],
+      "assessmentMethods": ["demonstrated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 3: Topic 3.1",
+      "topics": [
+        "Types of Business Units",
+        "Introduction to adjustments to Financial Statements",
+        "Accruals and Prepayments",
+        "Bad Debts",
+        "Bad Debts Recovered",
+        "Allowance (Provision) for Doubtful Debts",
+        "Financial Statements with Adjustments"
+      ],
+      "learningOutcomes": [
+        "Demonstrate knowledge of Business Units Identifying different types of Business Units: Private sector (Sole Trader, Partnership, Cooperatives, Private Limited Companies And Public Limited Companies) Public sector (public corporations) Explaining each Business Units in relation to, formation, characteristics, ownership, management, advantages and disadvantages and dissolution Knowledge of different types of Business Units demonstrated",
+        "Demonstrate knowledge of procedures for registering a business Outlining steps for registering a business Discussing the roles of institutions involved in registering a business (Local Authorities, PACRA, ZRA, ZPPA…) Practising online and physical business registration Knowledge of procedures for registering a business",
+        "Describe the roles of statutory bodies in running Business Units Identifying various statutory bodies (PACRA, NAPSA, ZRA, ZPPA, ZEMA, ZABS…) Investigating the roles of various statutory bodies involved in running a business The roles of statutory bodies in running Business Units",
+        "Justify adjustments to Financial Statements Explaining adjustments to Financial Statements Outlining types of adjustments (Accrued expenses and Incomes, Prepaid expenses and incomes, Bad debts, Bad debts recovered, Provision for Doubtful debts…) Describing the importance of adjustments to Financial Statements Adjustments to Financial Statements justified",
+        "Show treatment of Accrued Expenses and Incomes in Financial Statements Explaining accrued expenses and incomes Preparing Ledger accounts for accrued expenses and Incomes Calculating Accrued Expenses and Incomes Recording Accrued Expenses and Incomes in the Financial Statements Treatment of Accrued Expenses and Incomes in Financial Statements shown",
+        "Show treatment of Prepaid Expenses and Incomes in Financial Statements Explaining Prepaid Expenses and Incomes Preparing Ledger accounts for prepaid Expenses and Incomes Calculating Prepaid Expenses and Incomes Recording Prepaid Expenses and Incomes in the Financial Statements Treatment of Prepaid Expenses and Incomes in Financial Statements shown",
+        "Show treatment of Bad Debts in Financial Statements Explaining Bad Debts Discussing reasons for Bad Debts Calculating Bad Debts Preparing Ledger accounts for Bad Debts Treatment of Bad Debts in Financial Statements shown",
+        "Show treatment of Bad Debts Recovered in Financial Statements",
+        "Show treatment of Allowance for Doubtful Debts in Financial Statements",
+        "Prepare adjusted Financial Statements"
+      ],
+      "suggestedActivities": [
+        "Recording Bad Debts in Financial",
+        "Explaining Bad Debts Recovered",
+        "Calculating Bad Debts Recovered",
+        "Preparing Ledger Accounts for",
+        "Recording Bad Debts Recovered",
+        "Explaining Doubtful Debts",
+        "Explaining Allowance for",
+        "Calculating Allowance for",
+        "Recording Allowance for",
+        "Calculating the amount of",
+        "Applying Adjustments to"
+      ],
+      "assessmentMethods": [
+        "demonstrated correctly",
+        "described accordingly",
+        "Statements correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 3: Topic 3.2",
+      "topics": [
+        "Capital Market Securities",
+        "Regulation of Capital Market",
+        "Revised Cash book",
+        "Bank Reconciliation Statement"
+      ],
+      "learningOutcomes": [
+        "Practise investing in securities",
+        "Demonstrate knowledge on the functions of Securities and Exchange Commission (SEC)",
+        "Prepare Revised Cash Book",
+        "Prepare Bank Reconciliation Statement"
+      ],
+      "suggestedActivities": [
+        "Explaining capital markets",
+        "Discussing instruments of",
+        "Exploring types of securities",
+        "Discussing the benefits of",
+        "Describing players on the",
+        "Explaining functions of",
+        "Illustrating the procedure of",
+        "Describing Securities and",
+        "Explaining the functions of",
+        "Explaining bank reconciliation",
+        "Discussing reasons for differences",
+        "Outlining steps in Bank",
+        "Identifying items needed to",
+        "Revising the Cash Book",
+        "Drawing up Bank Reconciliation"
+      ],
+      "assessmentMethods": ["appropriately", "Statement prepared correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Topic 3.3",
+      "topics": [
+        "Banking and non-Banking Institutions",
+        "Services offered by Banking Institutions",
+        "Documents used in Banking",
+        "Trends in Banking",
+        "Central Bank (Bank of Zambia)",
+        "Errors not revealed by the Trial Balance",
+        "Errors revealed by the Trial Balance",
+        "Suspense Account"
+      ],
+      "learningOutcomes": [
+        "Demonstrate knowledge of Banking and non- Banking Institutions",
+        "Use services offered by Banking institutions",
+        "Demonstrate knowledge of filling in documents used in Banking",
+        "Use modern trends in Banking",
+        "Demonstrate knowledge on functions of the Central Bank",
+        "Correct errors not revealed by the Trial Balance",
+        "Correct errors revealed by the Trial Balance",
+        "Prepare Suspense Account"
+      ],
+      "suggestedActivities": [
+        "Describing types Of Banking",
+        "Describing non-Banking",
+        "Discussing the services",
+        "Exploring means of payment",
+        "Researching on types of bank",
+        "Pairing appropriate scenarios",
+        "Demonstrating the procedures",
+        "Explaining rights of a",
+        "Presenting specimen",
+        "Discussing documents used in",
+        "Practising filling in documents",
+        "Exploring modern trends in",
+        "Exploring and reviewing",
+        "Examining digital finance",
+        "Analysing the challenges in",
+        "Discussing the functions of",
+        "Investigating the role of the",
+        "Identifying errors not revealed by",
+        "Describing errors not revealed by",
+        "Preparing Journal entries to",
+        "Describing errors revealed by the",
+        "Making Journal entries to correct",
+        "Explaining Suspense Account",
+        "Drawing up Suspense Account to"
+      ],
+      "assessmentMethods": ["demonstrated accordingly", "Institutions used accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Topic 3.4",
+      "topics": [
+        "Purpose of Insurance",
+        "Principles of Insurance",
+        "Insurance Covers",
+        "Insurance Regulator (Pensions and Insurance Authority- PIA)",
+        "Types of Control Accounts"
+      ],
+      "learningOutcomes": [
+        "Justify the importance of Insurance",
+        "Exhibit knowledge on Insurable and Non- Insurable Risks",
+        "Exhibit knowledge on Principles of Insurance",
+        "Take out an Insurance Policy",
+        "Exhibit knowledge on the procedure of making an insurance claim",
+        "Demonstrate knowledge of the functions of Insurance Regulator",
+        "Prepare Control Accounts"
+      ],
+      "suggestedActivities": [
+        "Explaining insurance",
+        "Assessing the importance of",
+        "Researching On Insurable and",
+        "Distinguishing Insurable from",
+        "Identifying the Principles of",
+        "Describing Principles of",
+        "Demonstrating application of",
+        "Describing insurance covers",
+        "Outlining the functions of",
+        "Exploring the procedure for",
+        "Demonstrating taking out an",
+        "Investigating the procedure for",
+        "Demonstrating making an",
+        "Describing functions of the",
+        "Explaining Control Accounts",
+        "Identifying types of Control",
+        "Outlining sources of information",
+        "Calculating Opening and Closing",
+        "Calculating missing figures for",
+        "Drawing up Control Accounts"
+      ],
+      "assessmentMethods": [
+        "appropriately",
+        "Insurance exhibited accordingly",
+        "exhibited correctly",
+        "demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 4: Topic 4.1",
+      "topics": [
+        "Importance of Communication",
+        "Postal Services",
+        "Telecommunication Services",
+        "Regulators of Communication Services (Zambia Information and Communication Technology Authority)",
+        "Trends in Communication",
+        "Non-Profit Making Organisations",
+        "Receipts and Payments Account",
+        "Income and Expenditure Account",
+        "Statement of Financial Position"
+      ],
+      "learningOutcomes": [
+        "Analyse the importance of Communication to trade Explaining Communication Discussing the importance of communication to trade Importance of Communication analysed",
+        "Use Postal Services Exploring Postal Services (Post Office Boxes, Private Bags, Express Mail, Courier, Cash On Delivery, Agency Services: Electricity Bills, Water Bills, Road Tax, Transport Services, Money Transfer…) Demonstrating the use of Postal Services Postal Services used",
+        "Use Telecommunication Services Exploring Telecommunication Services (Telephone Fax, Radio Message, Cellular Phone, Video Conferencing, Conference Calls, Computer, E-Mail, Networking Services) Demonstrating the use of Telecommunication services Telecommunication services",
+        "Practise compliance to Communication Regulations Identifying regulators of Telecommunication in Zambia (ZICTA) Examining functions of communication regulators Investigating ZICTA regulations on Postal, Courier and Digital Communication Demonstrating compliance to Communication Regulations Compliance to Communication Regulations",
+        "User trends in Communication Researching on trends in Communication (use of Social Media, Computer Hardware (tablets, smart phones, in- touch inter faces…) Using trends in communication to facilitate a business transaction Trends in Communication",
+        "Describe Non-Profit Making Organisations Explaining Non-Profit Making Organisations Identifying Non-Profit Making Organisations (Churches, Clubs/Societies …) Discussing differences between profit and Non-Profit Making Organisations Outlining sources of Income of Non-Profit Making Organisations Identifying Accounts and Financial Statements of Non- Profit Making Organisations (Receipts and Payments Account, Income and Expenditure Account, Statement of Financial Position/Balance Sheet) Non-Profit Making Organisations described",
+        "Prepare Receipts and Payments Account Explaining Receipts and Payments Account Drawing up Receipts and Payments Account (Computing Bank Balance) Receipts and Payments",
+        "Prepare Income and Expenditure Account Explaining Income and Expenditure Account Calculating missing figures for Sales, Income and Expenditure",
+        "Prepare Statement of Financial Position"
+      ],
+      "suggestedActivities": [
+        "Drawing up a",
+        "Constructing",
+        "Preparing Income and",
+        "Explaining Accumulated",
+        "Calculating",
+        "Preparing Statement of"
+      ],
+      "assessmentMethods": [
+        "appropriately",
+        "used appropriately",
+        "practised accordingly",
+        "used accordingly",
+        "Account prepared correctly",
+        "prepared correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 4: Topic 4.2",
+      "topics": [
+        "Importance of Transport",
+        "Documents used in Transportation",
+        "Containerisation",
+        "Trends in Transport 4.2.5.1 Utilise trends in Transportation for trade activities Analysing trends in Transport (One Stop Border Post, Increased Use Of Courier, Electric Vehicles, Drones, Unmanned Vehicles…) Demonstrating use of trends in Transportation for trade activities Trends in Transportation",
+        "Formation of Partnership",
+        "Statement of Profit or Loss and Appropriation",
+        "Statement of Financial Position"
+      ],
+      "learningOutcomes": [
+        "Exhibit knowledge on importance of Transport to trade Explaining Transport Discussing the importance of Transport to trade Knowledge on the importance of Transport to",
+        "Utilise documents used in Transportation Identifying the documents used in TRANSPORT (Tickets, Charter Party, Bill Of Lading, Consignment Note…) Discussing the documents used in Transport Preparing documents used in transportation Documents used in Transportation utilised",
+        "Justify the use of containerisation in the Transportation of goods Outlining the main features of containerisation Discussing the importance of containerisation Use of Containerisation in transportation of goods",
+        "Show knowledge on formation of Partnership",
+        "Prepare Statement of Profit or Loss and Appropriation",
+        "Prepare Partnership Statement of Financial Position"
+      ],
+      "suggestedActivities": [
+        "Defining Partnership",
+        "Explaining formation of",
+        "Identifying Partnership",
+        "Explaining Statement",
+        "Drawing up Statement",
+        "Explaining Capital",
+        "Drawing up Capital and",
+        "Preparing Partnership"
+      ],
+      "assessmentMethods": [
+        "trade exhibited appropriately",
+        "justified appropriately",
+        "utilised accordingly",
+        "Partnership shown accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 4: Topic 4.3",
+      "topics": [
+        "Importance of Warehousing",
+        "Trends in Warehousing",
+        "Introduction to Incomplete Records and Single Entry"
+      ],
+      "learningOutcomes": [
+        "Show understanding of the importance of Warehousing in trade Explaining warehousing Describing the types of Warehouses (Private: Manufacturers, Wholesalers, Retailers Public: Bonded, Warehouses At Public Places…) Discussing the importance of Warehousing in trade Knowledge of the importance of Warehousing in trade",
+        "Use trends in Warehousing for trade activities Researching trends in Warehousing Assessing trends in warehousing (Warehouse Automation, Automated Inventory Tracking Systems…) Demonstrating the use of trends in Warehousing for trade activities Trends in Warehousing used for trade activities",
+        "Demonstrate knowledge on Incomplete Records and Single Entry",
+        "Prepare Financial Statements using Net Worth Method",
+        "Construct Financial Statements using the Conversion Method"
+      ],
+      "suggestedActivities": [
+        "Explaining the meaning",
+        "Discussing differences",
+        "Explaining Increase and",
+        "Calculating Opening and",
+        "Preparing Statement of",
+        "Preparing Statements of",
+        "Calculating missing"
+      ],
+      "assessmentMethods": [
+        "shown accordingly",
+        "demonstrated accordingly",
+        "constructed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 4: Topic 4.4",
+      "topics": [
+        "Importance of Advertising",
+        "Modes of Advertising",
+        "Types of Advertising",
+        "Methods of Appeal",
+        "Ethics in Advertising",
+        "Sales promotion",
+        "Trends in Advertising",
+        "Manufacturing Costs",
+        "Types of Inventory/Stocks",
+        "Manufacturing Account",
+        "Financial Statements"
+      ],
+      "learningOutcomes": [
+        "Show importance of Advertising in trade Describing Advertising Discussing the importance of Advertising in trade activities Justifying the importance of Advertising in trade Knowledge on the importance of Advertising in trade activities shown",
+        "Choose suitable modes of Advertising Identifying Advertising modes (Print Media: Newspaper, Flyers, Brochures, Electronic Media, Exhibitions) Discussing modes of Advertising and their uses Evaluating factors to consider when choosing the mode of Advertising Choosing appropriate modes of Advertising for specific products Suitable modes of Advertising chosen",
+        "Apply different types of Advertising in trade Describing types of Advertising (Informative, Persuasive, Collective, Competitive) Applying the different types of Advertising in trade activities Types of Advertising applied in different trade activities",
+        "Design an advertisement using different methods of appeal Describing methods of appeal (Romance, Personality, Excellency, Window Display…) Analysing the factors to consider when designing an advert Preparing an advert using different methods of appeal Advertisement using different methods of appeal designed",
+        "Practise ethics in Advertising Explaining ethics in Advertising Identifying ethics in Advertising (Legal, Honest, Decent, Truthful…) Discussing the control of Advertising (Government, Associations, Whistle Blowers) Demonstrating application of ethics in Advertising Ethics in Advertising",
+        "Create sales promotions x Identifying sales promotion techniques (Digital Bill Boards, Point of Sale, Loyalty Programs, Loss Leaders, Branding…) Discussing sales promotion techniques Creating sales promotion Sales promotions created",
+        "Use trends in Advertising for trade activities Discussing trends in Advertising (Digital Bill Boards, Content Marketing, Social Media…) Using trends in Advertising to showcase various trade activities Trends in Advertising used",
+        "Classify types of Accounts",
+        "Classify Manufacturing Costs",
+        "Exhibit knowledge on types of Inventories",
+        "Draw up the Manufacturing Account",
+        "Prepare Financial Statements of Manufacturing Firms"
+      ],
+      "suggestedActivities": [
+        "Explaining",
+        "Classifying",
+        "Identifying different",
+        "Explaining types of",
+        "Identifying the Financial",
+        "Calculating Prime Cost",
+        "Calculating Total",
+        "Calculating Total Cost",
+        "Preparing",
+        "Preparing Statement of",
+        "Drawing up Statement"
+      ],
+      "assessmentMethods": [
+        "appropriately",
+        "practised appropriately",
+        "inventories exhibited correctly",
+        "drawn up correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Depreciation of Non-Current Assets", "Calculating Depreciation"],
+      "learningOutcomes": [
+        "Demonstrate understanding of the effects of Depreciation of Non-Current Assets",
+        "Use different methods to calculate Depreciation",
+        "Show the Allowance/Provision for Depreciation of Non- Current Assets in Financial Statements"
+      ],
+      "suggestedActivities": [
+        "Explaining Depreciation",
+        "Outlining causes of Depreciation",
+        "Discussing the effects of",
+        "Identifying Methods of",
+        "Describing Methods of",
+        "Computing Depreciation",
+        "Preparing Ledger Accounts of",
+        "Preparing the",
+        "Showing Allowance for"
+      ],
+      "assessmentMethods": ["demonstrated correctly", "Statements correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["Manual Systems", "Electronic Systems"],
+      "learningOutcomes": [
+        "Demonstrate knowledge of Manual Accounting Systems",
+        "Explain Electronic Accounting Systems"
+      ],
+      "suggestedActivities": [
+        "Describing data",
+        "Explaining methods of",
+        "Explaining",
+        "Discussing advantages",
+        "Outlining",
+        "Describing the use of",
+        "Comparing Manual and"
+      ],
+      "assessmentMethods": ["demonstrated accordingly", "explained appropriately"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.pdf",
-    "extractedAt": "2026-07-11T06:20:38.448Z",
-    "fileSize": 534037
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=1) + deterministic CDC table parse. No fabricated content.",
+    "curated": true,
+    "recordCount": 115
   }
 }

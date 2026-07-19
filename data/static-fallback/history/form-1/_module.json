@@ -1,0 +1,14 @@
+{
+  "subject": "History",
+  "subjectSlug": "history",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "HISTORY-TERM-2-MODULE.pdf",
+  "md5": "aecd14100df28c99f62dbd56d3f8efa2",
+  "detectedShift": 0,
+  "pageCount": 32,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "lessonCount": 5
+}

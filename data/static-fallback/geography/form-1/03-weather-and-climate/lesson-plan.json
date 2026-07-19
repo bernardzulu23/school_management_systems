@@ -1,0 +1,45 @@
+{
+  "subject": "Geography",
+  "subjectSlug": "geography",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": null,
+  "sourceFile": "Geography-Module-Form1.Term-11.pdf",
+  "md5": "830c5919283d537a897943595cfaf095",
+  "detectedShift": 0,
+  "pageCount": 53,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "weather-and-climate",
+  "lesson": {
+    "lesson": 3,
+    "title": "Weather and Climate",
+    "topics": [
+      "Sub-Topic 3 - Practice Mitigation Measures to Climate change ................................................ 40",
+      "Preface"
+    ],
+    "activities": [
+      "learners’ level and needs. As a Ministry, we understand the challenges that come with",
+      "transitioning to a new curriculum framework. This module reflects our commitment to making",
+      "this journey as smooth as possible for teachers, by providing structured guidance, suggested",
+      "encourage educators to supplement this module with their own research and innovations to"
+    ],
+    "resources": [
+      "the new competence-based curriculum, enhancing their ability to inspire and equip learners",
+      "with essential Geography knowledge and skills.",
+      "Faculty of Social Sciences",
+      "The Curriculum Development Centre",
+      "Ministry of Education",
+      "ACKNOWLEDGEMENTS"
+    ],
+    "assessment": [
+      "learners’ level and needs. As a Ministry, we understand the challenges that come with",
+      "transitioning to a new curriculum framework. This module reflects our commitment to making",
+      "this journey as smooth as possible for teachers, by providing structured guidance, suggested",
+      "encourage educators to supplement this module with their own research and innovations to",
+      "address any gaps that may arise during implementation. The suggested activities and",
+      "in learners while ensuring relevance and adaptability to different school contexts. Teachers are"
+    ],
+    "notes": ""
+  }
+}

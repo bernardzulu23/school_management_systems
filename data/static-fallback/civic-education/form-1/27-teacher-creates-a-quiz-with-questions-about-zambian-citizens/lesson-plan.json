@@ -1,0 +1,53 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "teacher-creates-a-quiz-with-questions-about-zambian-citizens",
+  "lesson": {
+    "week": 3,
+    "lesson": 27,
+    "title": "Teacher creates a quiz with questions about Zambian citizenship laws. Learners can play in groups",
+    "topics": [
+      "to answer correctly.",
+      "Rights, Duties and Responsibilities of a Zambian Citizen",
+      "Introduction",
+      "This subtopic will introduce learners to rights, duties and responsibilities of a Zambian citizen.",
+      "Studying rights, duties and responsibilities will provide learners with insights into the importance of"
+    ],
+    "activities": [
+      "Identifying rights, duties and responsibilities of a child at home and at school",
+      "Teaching and Learning Materials: Charts showing duties and responsibilities of children",
+      "at home and school",
+      "Teacher to organise learners into groups. Each group should come up with what they expect their",
+      "school and their parents at home should do for them. These are their rights",
+      "Learners to undertake a role play indicating their duties and responsibilities towards their school",
+      "and home.",
+      "Content Tips"
+    ],
+    "resources": [
+      "participation in school activities",
+      "At home children have the duties and responsibilities to …",
+      "respect and obey their parents or guardians",
+      "help with house chores",
+      "care for their young siblings and elderly members",
+      "be honest and truthful at all times"
+    ],
+    "assessment": [
+      "Project Work",
+      "Learners to design an awareness campaign using placards and songs to promote human rights and",
+      "responsibilities of citizens",
+      "Factors that Hinder Good Citizenship",
+      "Introduction",
+      "Good citizenship is very cardinal in promoting the wellbeing of the nation. However, there are certain"
+    ],
+    "notes": ""
+  }
+}

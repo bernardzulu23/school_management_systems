@@ -1,0 +1,52 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "energy",
+  "lesson": {
+    "lesson": 10,
+    "title": "ENERGY",
+    "topics": [
+      "Introduction",
+      "Human beings need energy to live, move and grow. Equally, machines need energy to perform",
+      "work. “Energy is the ability to do work” and comes in different forms, where each has unique",
+      "characteristics and application. Work involves the transfer of energy in which an object is",
+      "moved to a certain distance. Example of work include; moving, lifting, jumping, warming or"
+    ],
+    "activities": [
+      "come from different sources which are grouped into renewable and non-renewable sources.",
+      "The forms of energy include; potential, kinetic, mechanical, heat, light among others.",
+      "General competences:",
+      "In this topic, learners are expected acquire the following competences;",
+      "Analytical thinking: Learners to analyse the sources of energy, their forms and how",
+      "they are interconnected",
+      "Communication: Learners to share information, ideas and messages on the different",
+      "forms and sources of energy"
+    ],
+    "resources": [
+      "can be replenished over time and are a sustainable way of generating energy.",
+      "Non-renewable energy Sources: This is a form of energy that comes from natural",
+      "Potential energy: Refers to stored energy or energy possessed by an object due to its",
+      "position.",
+      "Kinetic Energy: Refers to the energy an object possesses due to its motion.",
+      "Carbon print: refers to the amount of greenhouse gasses particularly carbon dioxide"
+    ],
+    "assessment": [
+      "What type of energy is produced by the DC motor",
+      "Explain how the intensity of sunlight affect the speed of the fan blades?",
+      "Expected standard: Forms of energy utilised accordingly",
+      "the following methods:",
+      "Observe learner’s behavior and engagement as they discuss forms of energy.",
+      "Provide Quiz and classroom work (exercise) to the learners to assess learner’s"
+    ],
+    "notes": ""
+  }
+}

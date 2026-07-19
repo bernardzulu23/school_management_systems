@@ -4,17 +4,32 @@ import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { FileText, CheckCircle, Send } from 'lucide-react'
+import { FileText, CheckCircle, Send, Download } from 'lucide-react'
 import toast from 'react-hot-toast'
+import { useAuth } from '@/lib/auth'
+
+const STAFF_ROLES = ['admin', 'headteacher', 'hod', 'teacher']
+
+function sanitizeFilenamePart(value) {
+  return String(value || '')
+    .trim()
+    .replace(/[^\w-]+/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_|_$/g, '')
+}
 
 /**
  * HOD / headteacher term report review (Phase 3 P3.4).
  */
 export function TermReportsPanel({ canGenerate = false }) {
   const queryClient = useQueryClient()
+  const role = useAuth((s) => String(s.user?.role || '').toLowerCase())
+  const isStaff = STAFF_ROLES.includes(role)
   const [term, setTerm] = useState(1)
   const [year, setYear] = useState(new Date().getFullYear())
   const [studentId, setStudentId] = useState('')
+  // Tracks the in-flight download keyed by `${reportId}:${format}`.
+  const [downloadingKey, setDownloadingKey] = useState(null)
 
   const { data, isLoading } = useQuery({
     queryKey: ['term-reports', term, year],
@@ -58,6 +73,33 @@ export function TermReportsPanel({ canGenerate = false }) {
     if (!res.ok) throw new Error(json.error || 'Update failed')
     queryClient.invalidateQueries({ queryKey: ['term-reports'] })
     toast.success(action === 'publish' ? 'Published to parent/student' : 'Updated')
+  }
+
+  const downloadReport = async (report, format) => {
+    const ext = format === 'pdf' ? 'pdf' : 'docx'
+    const key = `${report.id}:${format}`
+    setDownloadingKey(key)
+    try {
+      const res = await fetch(`/api/ai/term-reports/${report.id}/export?format=${format}`, {
+        credentials: 'include',
+      })
+      if (!res.ok) throw new Error('Download failed')
+
+      const blob = await res.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `${sanitizeFilenamePart(report.student?.name || 'student')}_Term${report.term}_${report.academicYear}.${ext}`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+      toast.success(`Downloaded ${format === 'pdf' ? 'PDF' : 'Word document'}`)
+    } catch {
+      toast.error('Failed to download')
+    } finally {
+      setDownloadingKey(null)
+    }
   }
 
   return (
@@ -129,7 +171,7 @@ export function TermReportsPanel({ canGenerate = false }) {
                         Term {r.term} · {r.academicYear} · {r.status}
                       </p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2">
                       {r.status === 'DRAFT' ? (
                         <Button
                           size="sm"
@@ -145,6 +187,29 @@ export function TermReportsPanel({ canGenerate = false }) {
                           <Send className="h-4 w-4 mr-1" />
                           Publish
                         </Button>
+                      ) : null}
+                      {/* Staff can export any status; students only their PUBLISHED report. */}
+                      {isStaff || r.status === 'PUBLISHED' ? (
+                        <>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={downloadingKey === `${r.id}:word`}
+                            onClick={() => downloadReport(r, 'word')}
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            {downloadingKey === `${r.id}:word` ? 'Downloading…' : 'Word'}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            disabled={downloadingKey === `${r.id}:pdf`}
+                            onClick={() => downloadReport(r, 'pdf')}
+                          >
+                            <Download className="h-4 w-4 mr-1" />
+                            {downloadingKey === `${r.id}:pdf` ? 'Downloading…' : 'PDF'}
+                          </Button>
+                        </>
                       ) : null}
                     </div>
                   </div>

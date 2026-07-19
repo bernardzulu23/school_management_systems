@@ -1,0 +1,29 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "KIKAONDE-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "0d8e1db9510afca5185fb9a0fd283d17",
+  "detectedShift": 0,
+  "pageCount": 123,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "bansongwakazhi-bakoma-bukiji-mu-maana-1-bansongwalume-kechi-",
+  "lesson": {
+    "week": 1,
+    "lesson": 32,
+    "title": "Bansongwakazhi bakoma bukiji mu maana 1. Bansongwalume kechi bakoma mu maana bukiji",
+    "topics": [
+      "kukila bansongwalume, maambo javula batanwa",
+      "ne bainabo bebafunjisha byavula.",
+      "ine, mambo batemwa kufuma pa nzubo kuya na",
+      "kukaya bingi ne kutanwa ne bashabo."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

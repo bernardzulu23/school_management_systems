@@ -346,6 +346,49 @@ export default function TeacherQuizMakerPage() {
     }
   }
 
+  const handleExportPdf = async () => {
+    const questions = Array.isArray(quiz?.questions) ? quiz.questions : []
+    if (!questions.length) {
+      toast.error('Generate a quiz before exporting')
+      return
+    }
+    try {
+      const { buildPdfDocument } = await import('@/lib/ai/pdf-generator')
+      const blocks = []
+      questions.forEach((q, idx) => {
+        blocks.push({ type: 'subheading', text: `Q${idx + 1}. ${q.question || ''}` })
+        if (Array.isArray(q.options)) {
+          q.options.forEach((o, i) => {
+            blocks.push({ type: 'paragraph', text: `${String.fromCharCode(65 + i)}. ${o}` })
+          })
+        }
+        if (q.answer) blocks.push({ type: 'paragraph', text: `Answer: ${q.answer}` })
+        if (q.explanation) blocks.push({ type: 'paragraph', text: `Explanation: ${q.explanation}` })
+        blocks.push({ type: 'spacer' })
+      })
+
+      const doc = buildPdfDocument({
+        title: quiz.title || 'Quiz',
+        subtitle: [quiz.grade, quiz.subject, quiz.topic].filter(Boolean).join(' • '),
+        infoRows:
+          quiz.totalMarks != null
+            ? [{ label: 'Total marks:', value: String(quiz.totalMarks) }]
+            : [],
+        blocks,
+        footer: `Generated on ${new Date().toLocaleDateString('en-GB')}`,
+      })
+
+      const filename =
+        `Quiz_${quiz.subject || form.subject}_${quiz.topic || form.topic}`
+          .replace(/[^a-zA-Z0-9]+/g, '_')
+          .replace(/^_+|_+$/g, '')
+          .substring(0, 50) + '.pdf'
+      doc.save(filename)
+    } catch (e) {
+      toast.error(e?.message || 'Failed to generate PDF')
+    }
+  }
+
   useEffect(() => {
     if (!loading && error) {
       toast.error(error?.error || error?.message || 'Quiz generation failed')
@@ -611,8 +654,8 @@ export default function TeacherQuizMakerPage() {
                   >
                     {publishing ? 'Submitting...' : 'Submit to HOD for approval'}
                   </Button>
-                  <Button variant="outline" onClick={() => window.print()}>
-                    Print / Save PDF
+                  <Button variant="outline" onClick={handleExportPdf}>
+                    Save PDF
                   </Button>
                 </div>
                 {publishedAssignmentId ? (

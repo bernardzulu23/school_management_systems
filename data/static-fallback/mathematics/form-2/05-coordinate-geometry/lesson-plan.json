@@ -1,0 +1,45 @@
+{
+  "subject": "Mathematics",
+  "subjectSlug": "mathematics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Mathematics-1-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "4b033f61c02a6d1423fbe1f01b080bb8",
+  "detectedShift": 0,
+  "pageCount": 173,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "coordinate-geometry",
+  "lesson": {
+    "lesson": 5,
+    "title": "COORDINATE GEOMETRY",
+    "topics": [
+      "INTRODUCTION",
+      "Coordinate Geometry is a branch of Mathematics that helps us locate and describe the position of points on a",
+      "plane using ordered pairs (𝑥, 𝑦). It connects Algebra and Geometry, allowing us to draw graphs, measure",
+      "distances, and understand shapes more clearly. Beyond the classroom, Coordinate Geometry plays a vital role",
+      "in everyday life. It is used in maps and Global Positioning System (GPS) to find locations, in architecture and"
+    ],
+    "activities": [
+      "Instructions:",
+      "Ensure that learners are in clearly defined rows and columns.",
+      "Ask learners to describe their own location using rows and columns.",
+      "Ask learners to find a friend’s location using rows and columns.",
+      "Content Tips",
+      "Rows and columns can be numbered to make the location description easier.",
+      "Instruction:",
+      "In small groups learners should perform the following assignment:"
+    ],
+    "resources": [],
+    "assessment": [
+      "Draw a rectangular park on the cartesian plane and state the coordinates of its vertices.",
+      "A football pitch is represented on a Cartesian plane with corners at A(0,0), B(0,90), C(120,90), and",
+      "D(120,0).",
+      "a) Plot the pitch.",
+      "b) Find the coordinates of the centre of the football pitch.",
+      "A road runs through two towns represented by points M(2,−3) and N(6,5)."
+    ],
+    "notes": ""
+  }
+}

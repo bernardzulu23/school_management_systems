@@ -1,0 +1,30 @@
+{
+  "subject": "Kikaonde",
+  "subjectSlug": "kikaonde",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LIT-IN-KIKAONDE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
+  "md5": "584c83889d3da6df24b4442afbd9be14",
+  "detectedShift": 0,
+  "pageCount": 64,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "nembapo-ka-jishimikila-keepi-ne-kusabaulamo-malwa-ano-ajimo",
+  "lesson": {
+    "week": 2,
+    "lesson": 11,
+    "title": "Nembapo ka jishimikila keepi ne kusabaulamo malwañano ajimo.",
+    "topics": [
+      "Mikumbu ya ketekelwa",
+      "Ndonda mwa kusabawila malwañano mu jishimikila yo ino;",
+      " Yuka ne kutala pa nkaizhi mukata.",
+      "Jishimikila jibena kwamba pa n’anyi?",
+      "Bena kukeba ka?"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -2,7 +2,7 @@
   "subject": "Luvale",
   "form": 1,
   "term": 3,
-  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3.pdf",
   "lessons": [
     {
       "week": 1,
@@ -384,7 +384,7 @@
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-11T06:12:28.119Z",
+    "extractedAt": "2026-07-19T20:36:05.552Z",
     "rawTextLength": 115991
   }
 }

@@ -2,7 +2,7 @@
   "subject": "Lunda",
   "form": 1,
   "term": 3,
-  "sourceFile": "LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3-1.pdf",
+  "sourceFile": "LUNDA-LANGUAGE-FORM-1-TEACHING-MODULE-TERM-3.pdf",
   "lessons": [
     {
       "lesson": 1,
@@ -38,7 +38,7 @@
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-11T06:22:04.913Z",
+    "extractedAt": "2026-07-19T20:35:54.438Z",
     "rawTextLength": 97818
   }
 }

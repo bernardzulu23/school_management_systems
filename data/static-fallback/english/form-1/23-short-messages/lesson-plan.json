@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "short-messages",
+  "lesson": {
+    "lesson": 23,
+    "title": "SHORT MESSAGES",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Short messages are a quick and effective way to communicate",
+      "important information in everyday life. Whether sending reminders, invitations,",
+      "or urgent updates, short messages must be clear and to the point. In this topic,",
+      "learners will appreciate the purpose of short messages and how to write them"
+    ],
+    "activities": [
+      " In pairs/groups, learners analyse different SMS samples displayed on a chart (or written",
+      "on the chalkboard) and identify their key features.",
+      "Examples:",
+      "LOL – Laugh out loud",
+      "OMG - Oh my God",
+      "BRB - Be Right Back",
+      "TY - Thank You",
+      "IDK - I Don’t Know"
+    ],
+    "resources": [],
+    "assessment": [
+      " Learners compose clear and concise SMS messages.",
+      " Learners use abbreviations and symbols appropriately.",
+      " Learners differentiate between formal and informal SMS writing.",
+      " Group Project/Homework: Learners to create a collection of SMS",
+      "messages for various real-life situations. These should be displayed on a",
+      "chart in the classroom. Learners should be encouraged to add new SMS"
+    ],
+    "notes": ""
+  }
+}

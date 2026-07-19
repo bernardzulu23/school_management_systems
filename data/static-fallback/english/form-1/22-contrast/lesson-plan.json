@@ -1,0 +1,45 @@
+{
+  "subject": "English",
+  "subjectSlug": "english",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "c5065c52117d8995de86e1e176b482aa",
+  "detectedShift": 0,
+  "pageCount": 112,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "contrast",
+  "lesson": {
+    "lesson": 22,
+    "title": "CONTRAST",
+    "topics": [
+      "INTRODUCTION",
+      " Overview: Contrast is an important concept in the English language that helps",
+      "express differences between ideas, events, or situations. In writing and speaking,",
+      "contrast allows for clearer communication by highlighting opposing thoughts.",
+      "Understanding contrast helps one improve their sentence structure, express their"
+    ],
+    "activities": [
+      " Introduce ‘but’ and ‘yet’ with examples and discuss their usage in sentences.",
+      "a. ‘But’ introduces an unexpected or opposite idea.",
+      "Example:",
+      "Mutinta is smart but she doesn’t spend her money wisely.”",
+      "b. ‘Yet’ is similar to ‘but’ but can imply a stronger contrast or a",
+      "surprising twist.",
+      "Example:",
+      "“He had all the money needed, yet he failed to buy school"
+    ],
+    "resources": [],
+    "assessment": [
+      " Learners construct sentences using ‘but’ and ‘yet’ correctly.",
+      " Learners correctly punctuate sentences with contrast conjunctions.",
+      " Learners explain why ‘but’ or ‘yet’ is used in a given sentence.",
+      " Class Project: As an after-class activity, learners select ten best written sentences,",
+      "write them on the chart and display on the classroom wall.",
+      " ‘But’ and ‘yet’ are used to show contrast between two ideas in a sentence."
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "learners-to-write-the-entire-zambia-national-anthem-and-draw",
+  "lesson": {
+    "week": 2,
+    "lesson": 12,
+    "title": "Learners to write the entire Zambia national Anthem and draw the national flag and the Coat of",
+    "topics": [
+      "Summary",
+      "The topic covered the following major issues:",
+      "Zambia’s earliest societies were traditionally organised.",
+      "Zambia’s colonisation began with the coming of Cecil Rhodes through the British South Africa"
+    ],
+    "activities": [
+      "Describing family and school governance systems",
+      "Teaching and Learning Materials: Pictographic representation of home and school",
+      "governance"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

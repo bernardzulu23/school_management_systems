@@ -1,0 +1,43 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+  "md5": "0b1838dd3d97a165f716846a59545c87",
+  "detectedShift": 0,
+  "pageCount": 33,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "5-graphic-design",
+  "lesson": {
+    "lesson": 1,
+    "title": "5 GRAPHIC DESIGN",
+    "topics": [
+      "SUB-TOPIC 1.5.1 POSTER MAKING",
+      "Introduction",
+      "In this subtopic, learners will explore the art of Poster making, focusing on how to convey"
+    ],
+    "activities": [
+      "Through creative design, learners will learn to express ideas visually.",
+      "Specific Competence",
+      "Design various posters on crosscutting issues to convey messages.",
+      "Identifying examples of posters",
+      "Designing various posters on crosscutting issues to convey messages (conservations,",
+      "Learning Environment set-up: In-door / out-door (natural, artificial and technological)",
+      " Classroom with access to design materials (paper, markers, computers)",
+      " Access to examples of posters (physical or digital)"
+    ],
+    "resources": [],
+    "assessment": [
+      "Clarity of message",
+      "Creativity and originality",
+      "Effective use of colours and design elements",
+      "Overall aesthetic appeal.",
+      "This topic emphasised the importance of Graphic Design in communicating vital mes­",
+      "sages through posters. Learners gained practical skills in poster creation while exploring"
+    ],
+    "notes": ""
+  }
+}

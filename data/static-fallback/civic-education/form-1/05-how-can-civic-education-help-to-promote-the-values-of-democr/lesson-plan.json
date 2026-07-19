@@ -1,0 +1,33 @@
+{
+  "subject": "Civic Education",
+  "subjectSlug": "civic-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "CIVIC_EDUCATION_TEACHING_MODULE-PDF.pdf",
+  "md5": "8087fe7d4f4c30fcd9b3b09505fe38ac",
+  "detectedShift": 0,
+  "pageCount": 51,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "how-can-civic-education-help-to-promote-the-values-of-democr",
+  "lesson": {
+    "week": 5,
+    "lesson": 5,
+    "title": "How can Civic Education help to promote the values of democracy?",
+    "topics": [],
+    "activities": [
+      "Participating in the welfare of the school organization",
+      "Teaching and Learning Materials: carton boxes for making mock ballot boxes, voting cards for mock",
+      "ballot papers, rope for tag of war,",
+      "Teacher to come up with a scenario on choosing members of the student council in the school.",
+      "Step 1: The teacher to put learners in groups",
+      "Step 2: Each group to nominate a candidate for the student council",
+      "Step 3: Learners to perform a mock election campaign to choose their representatives in the",
+      "student council."
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

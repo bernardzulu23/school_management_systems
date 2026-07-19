@@ -1,0 +1,38 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "ART-AND-DESIGN-TERM-2-MODULE.pdf",
+  "md5": "0b1838dd3d97a165f716846a59545c87",
+  "detectedShift": 0,
+  "pageCount": 33,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-7-drawing-and-painting-from-imagination",
+  "lesson": {
+    "lesson": 3,
+    "title": "1.7 DRAWING AND PAINTING FROM IMAGINATION",
+    "topics": [
+      "Introduction:",
+      "This topic will help learners unlock the power of their imagination, it will give them freedom to",
+      "explore their thoughts, emotions, experiences and express them in a visual language. Drawing",
+      "and painting from imagination is a creative process that allows learners to tap into their inner",
+      "world and bring forth unique and innovative ideas."
+    ],
+    "activities": [
+      "Learning Environment set up:",
+      " in-door (classroom set-up…)",
+      " out-door (at the market, school premises, outside the classroom…)",
+      " natural (interacting with natural /organic shapes…)",
+      " artificial (graphic software, photo montage…)",
+      " technological (graphics, Computer Aided, Artificial intelligence- AI…)",
+      "Form 1 Term",
+      "Teaching Module"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

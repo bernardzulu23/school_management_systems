@@ -1,0 +1,50 @@
+{
+  "subject": "Physical Education",
+  "subjectSlug": "physical-education",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "PHYSICAL-EDUCATION-AND-SPORT-TERM-2-MODULE.pdf",
+  "md5": "c365a013711120f2eb6252f41a63bfdc",
+  "detectedShift": 0,
+  "pageCount": 49,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "1-7-recreational-games-and-activities",
+  "lesson": {
+    "lesson": 7,
+    "title": "1.7 RECREATIONAL GAMES AND ACTIVITIES",
+    "topics": [
+      "INTRODUCTION",
+      "Recreational games are a structured form of play, usually undertaken for enjoyment, relaxation,",
+      "and sometimes competition. They can be physical, mental, or a combination of both, and are"
+    ],
+    "activities": [
+      "INTRODUCTION",
+      "Recreational games are a structured form of play, usually undertaken for enjoyment, relaxation,",
+      "and sometimes competition. They can be physical, mental, or a combination of both, and are",
+      "primarily for fun, fitness, relaxation, and social interaction rather than for serious competition.",
+      "They are an important part of physical education and holistic development, providing opportunities",
+      "for learners to engage in enjoyable movement-based experiences.",
+      "development. They serve as a stress reliever and create an engaging way for individuals to stay",
+      "active and healthy. Recreational games also help foster essential life skills such as teamwork,"
+    ],
+    "resources": [
+      "Step Platforms, Workout Mats, Proper Footwear, Music System, Fitness Tracker,",
+      "hoops, ropes, resistance bands, dumb bells, cones markers… (locally improvised mate­",
+      "rials; fiber, bottles, self-made balls bean balls…)",
+      " Learning activity:",
+      " Demonstrating step and rhythmic patterns of aerobics.",
+      "(Rhythmic patterns and steps, legs and arms stretch, sidekicks, neck, roll…)."
+    ],
+    "assessment": [
+      "Multiple-choice quizzes",
+      "z Accuracy (correct selection of answers).",
+      "z time management (complete tasks within the given time)",
+      "z understanding of concepts (reflecting knowledge of concepts)",
+      "Short-answer questions",
+      "z Relevance (answers directly addressing the question"
+    ],
+    "notes": ""
+  }
+}

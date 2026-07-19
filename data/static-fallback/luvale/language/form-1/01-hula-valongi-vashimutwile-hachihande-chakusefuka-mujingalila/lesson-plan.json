@@ -1,0 +1,24 @@
+{
+  "subject": "Luvale",
+  "subjectSlug": "luvale",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "LUVALE-TEACHING-MODULE-FORM-1-TERM-3 (1).pdf",
+  "md5": "29ad092b9734bb89d25044f40ea2b62a",
+  "detectedShift": 0,
+  "pageCount": 104,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "topicSlug": "hula-valongi-vashimutwile-hachihande-chakusefuka-mujingalila",
+  "lesson": {
+    "week": 1,
+    "lesson": 1,
+    "title": "Hula valongi vashimutwile hachihande chakusefuka mujingalila (vihande",
+    "topics": ["vyavilemu mulifuchi)."],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

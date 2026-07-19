@@ -1,0 +1,25 @@
+{
+  "subject": "History",
+  "subjectSlug": "history",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 2,
+  "sourceFile": "HISTORY-TERM-2-MODULE.pdf",
+  "md5": "aecd14100df28c99f62dbd56d3f8efa2",
+  "detectedShift": 0,
+  "pageCount": 32,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "5-the-beginning-and-spread-of-iron-working-and-farming",
+  "lesson": {
+    "lesson": 1,
+    "title": "5: THE BEGINNING AND SPREAD OF IRON WORKING AND FARMING",
+    "topics": [
+      "Sub-Topic 1.5.1: Development of Iron-Technology and Farming.............................................1"
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

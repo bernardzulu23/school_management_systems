@@ -1,22 +1,253 @@
 {
   "subject": "Computer Studies",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": ["History of Computer", "Basic Concepts of ICT"],
+      "learningOutcomes": [
+        "Demonstrate understanding of evolution of Computers",
+        "Identify various ICT tools and their purposes. De¿ning ICT Distinguishing di൵erent types of ICT Tools (hardware and software tools). Explaining the essential hardware and software components of a computer system. Match ICT tools to their respective functions in a worksheet. Creating a chart categorizing ICT tools into hardware and software.",
+        "Apply ICT concepts to everyday activities Demonstrate the use of basic tools (e.g., email). Visit an ICT store or website to explore modern tools. Role-play scenarios using di൵erent ICT tools. Discussing real-life examples of ICT use in group activities. Creating a poster showing ICT applications. Watching videos demonstrating ICT in various industries."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "ICT tools and their purposes identi¿ed appropriately.",
+        "ICT concepts to everyday activities applied correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": ["Hardware", "Software"],
+      "learningOutcomes": [
+        "Identify different computer hardware Identifying hardware components of a computer (Input and Output devices) Assembling a computer or virtual simulations of its components. Labelling hardware component, ( CPU, RAM, ROM, and input/output devices«)",
+        "Demonstrate understanding of computer hardware functions Discussing the purpose and function of each component. Scavenger hunting where learners search for hardware components (or images) placed around the room. Cleaning computer hardware (using industrial blower) Using visual aids to identify and label hardware components.",
+        "Classify di൵erent types of computer software De¿ning computer software Discussing di൵erent types of computer software (System, application, utility)",
+        "Use di൵erent types of application software Creating a word document and format it. Entering data into a spreadsheet and apply basic formatting. Creating a table to track daily activities in a spreadsheet. Using pre-de¿ned functions (sum, average) Exploring templets available in presentation software for speci¿c tasks. Creating publications Sharing di൵erent documents formats using emails or cloud platforms. Exploring various OS VSHFLDWLRQV (windows, mobile OS«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Di൵erent computer hardware identi¿ed correctly.",
+        "Understanding of computer hardware functions demonstrated correctly",
+        "Di൵erent types of computer software classi¿ed accordingly",
+        "Di൵erent types of application software used appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["Basics of File"],
+      "learningOutcomes": [
+        "8VH di൵erent ¿le naming conventions. Creating Folders and Subfolders &UHDWLQJ a main folder and organize ¿les into subfolders based on topics, subjects, or ¿le types.",
+        "Demonstrate safe ¿le handling practices Copying, Moving, and Deleting Files: Demonstrate how to copy",
+        "Organize and manage ¿les and folders. Backing up: back up their ¿les using di൵erent VWRUDJH GHYLFHV (Àash disk«) or cloud storage services (Google Drive«). Discussing the importance of saving ¿les regularly to prevent data loss."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "appropriately.",
+        "Safe ¿le handling practices demonstrated correctly.",
+        "Files and folders organized and managed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": ["Introduction to the"],
+      "learningOutcomes": [
+        "Demonstrate understanding of how internet works De¿ning the Internet Discussing the uses of the internet in daily lives Identifying and using networking devices (modem, router, Wi-Fi «)",
+        "Use online tools to search and navigate the internet De¿ning web browser and search engine Using a web browser to access educational websites",
+        "Apply basic online safety SUDFWLFHV Discussing the importance of using strong passwords and browsing safely. Demonstrating basic online safety practices online safety practices correctly applied"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "works demonstrated accordingly",
+        "Online tools to search and navigate the internet used correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Introduction to Digital Literacy"],
+      "learningOutcomes": [
+        "8VH di൵erent types of digital GHYLFHV De¿ning Digital literacy ,QWHUDFWLQJ with various digital devices like computers, tablets, and smartphones 'LVFXVVLQJ digital devices¶",
+        "Practice ethical use of technology Discussing the importance of online safety and responsible behaviour."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Di൵erent types of digital devices used appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["Introduction to ICT in Business"],
+      "learningOutcomes": ["Appreciate ICT WRROV in"],
       "suggestedActivities": [],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 2: Topic 2.1",
+      "topics": ["File Compression and Encryption"],
+      "learningOutcomes": [
+        "Compress ¿les and folders De¿ning ¿le compression Identifying ¿le compression tools (WinRAR, 7-zip, power ISO«) Demonstrating ¿le Compression and extraction Practicing transferring ¿les via email or cloud storage. Files and folders compressed e൵iciently",
+        "Encrypt files and folders. De¿ning ¿le encryption Identifying ¿le Encryption tools (BitLocker, 7-zip, power ISO«) Discussing and demonstrate file encryption methods. Transferring encrypted ¿les via email or cloud storage. Files and folders encrypted e൵iciently"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["Word Processing", "Spreadsheets", "Presentations", "Publishing"],
+      "learningOutcomes": [
+        "Create and customize word documents Creating a document with customized margins, columns, and page orientation. Add headers, footers, and page numbers to the document. Using tables to organize data e൵ectively in the document. Inserting multimedia files (images, word Art, tables, charts«) Creating hyperlinks Mail-merging Importing and exporting data and styles",
+        "Manage data using spreadsheets Using the MIN, MAX, COUNT, COUNTA, SUM-IF functions. Creating a budget using spreadsheet. Inserting data and Practicing sorting. Add borders, colours, and bold text to format the spreadsheet for clarity. Hiding and Un-Hiding rows/ columns Data managed using spreadsheets",
+        "Create presentations Creating a presentation Organizing and Editing slides Using di൵erent animations and transitions. Inserting multi-media elements (pictures, animations, videos, charts«)",
+        "Design publications"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Word document created and customized correctly",
+        "Presentations created appropriately.",
+        "Publications designed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Email and Instant Messaging"],
+      "learningOutcomes": [
+        "Create and manage email accounts Identifying di൵erent types of mailing services (Gmail, Yahoo, Outlook «)."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Email accounts appropriately created and managed correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Electronic Business Tools"],
+      "learningOutcomes": [
+        "Use electronic business tools. Exploring trends in ¿nance (barter system, cash system, online bank transfer, paperless transactions «). Exploring digital business tools and applications (mobile money services, online banking transactions, online checking of",
+        "DESIGN"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Electronic business tools used appropriately."],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Website Design Using Templates"],
+      "learningOutcomes": [
+        "Design web pages using templates De¿ning website designing. Identifying web designing tools (canva, wordpress, publisher, google sites «) Organizing content using templates Customizing the template suitably (images, videos, audio). Publishing the website"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Web pages designed using templates accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Introduction to Cloud Computing"],
+      "learningOutcomes": [
+        "Use cloud computing De¿ning cloud computing Identifying various types of cloud computing services (Google Drive, OneDrive Dropbox, iCloud «). Upload and organize ¿les on a cloud platform (Google Drive, OneDrive, Dropbox, iCloud «). Exploring collaborative features of online Docs. Sharing a ¿le with a peer and practice collaborative editing."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["Intermediate Spreadsheets"],
+      "learningOutcomes": ["Use functions for data analysis"],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Functions for data analysis used correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Topic 3.4",
+      "topics": ["Introduction to cybersecurity"],
+      "learningOutcomes": [
+        "Demonstrate understanding of cybersecurity De¿ning cybersecurity Discussing types of cybersecurity threats (phishing, pharming, identity theft, spamming«)",
+        "Apply best cybersecurity practices Exploring various approaches of preventing cyber threats Using antivirus software to scan a computer for malware. Creating strong passwords using password managers. Practicing identifying phishing emails and suspicious links."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Understanding of cybersecurity demonstrated accordingly",
+        "Best cybersecurity practices applied accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Introduction to Computer Networks"],
+      "learningOutcomes": [
+        "Demonstrate understanding of computer networks Discussing computer networks Investigating di൵erent types of networks ( WAN, LAN, PAN«) Exploring di൵erent types of connections (wired, wireless, optic«) Connecting di൵erent networking devices (hot- spotting, Bluetooth/USB tethering, screen casting«) Learners demonstrate understanding of key network protocols."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Cloud Computing Services"],
+      "learningOutcomes": [
+        "Analyse cloud-based systems Comparing cloud services (e.g., Google Drive vs. OneDrive). Creating a personal account on a cloud platform and upload ¿les. Discussing bene¿ts and challenges of cloud ± based system."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Cloud-based systems analysed accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["Malware Analysis"],
+      "learningOutcomes": [
+        "Implement strategies to mitigate malware attacks Discussing Malware Analysing various types of malwares (spyware, worms, virus, trojan «) Watching videos about famous malware cases and discuss them. Writing an assay on the importance of cybersecurity in daily life. Creating computer lab policy for preventing malware attacks."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Strategies to mitigate malware attacks implemented correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["Digital Ethics"],
+      "learningOutcomes": [
+        "Demonstrate ethical behavior in a digital environment Discussing digital citizenship. Exploring features of Digital Identity (Ip address, location « Demonstrating online communication responsibly Distinguishing between fact, opinion, and bias in digital content",
+        "Demonstrate understanding of evolution of Computers",
+        "Apply basic online safety practices"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Ethical behaviour in digital environment demonstrated appropriately"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.pdf",
-    "extractedAt": "2026-07-11T06:20:40.784Z",
-    "fileSize": 1205223
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 1205223,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true,
+    "recordCount": 36
   }
 }

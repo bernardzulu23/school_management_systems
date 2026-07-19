@@ -38,12 +38,21 @@ function asStringArray(value: unknown): string[] {
   return value.map((v) => String(v || '').trim()).filter(Boolean)
 }
 
-function slugify(subject: string): string {
+/**
+ * Canonical subject → filename slug used to locate built-in curriculum JSON.
+ * Exported so other grounding paths (e.g. AI RAG corpus resolution) reuse the
+ * exact same slug logic that resolveCurriculum()/loadJsonCurriculum() rely on.
+ */
+export function slugifySubject(subject: string): string {
   return String(subject || '')
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '')
+}
+
+function slugify(subject: string): string {
+  return slugifySubject(subject)
 }
 
 function curriculumDirs(): string[] {
@@ -180,7 +189,30 @@ export function listAvailableCurriculumSubjects(): string[] {
     for (const entry of fs.readdirSync(dir)) {
       if (!entry.toLowerCase().endsWith('.json')) continue
       if (entry.includes('cdc-2024')) {
-        subjects.add('Chemistry')
+        try {
+          const raw = JSON.parse(fs.readFileSync(path.join(dir, entry), 'utf8')) as {
+            meta?: { subject?: string; title?: string }
+          }
+          if (raw.meta?.subject) {
+            subjects.add(
+              normalizeKnownSubject(raw.meta.subject) ||
+                String(raw.meta.subject).replace(/\b\w/g, (c) => c.toUpperCase())
+            )
+            continue
+          }
+          const fromTitle = String(raw.meta?.title || '').match(/CDC\s+\d{4}\s+(.+?)\s+Syllabus/i)
+          if (fromTitle?.[1]) {
+            subjects.add(
+              normalizeKnownSubject(fromTitle[1]) ||
+                fromTitle[1].replace(/\b\w/g, (c) => c.toUpperCase())
+            )
+            continue
+          }
+        } catch {
+          // fall through to filename-derived label
+        }
+        const base = entry.replace(/\.json$/i, '').replace(/-cdc-2024$/i, '')
+        subjects.add(base.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()))
         continue
       }
       try {

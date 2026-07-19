@@ -1,0 +1,45 @@
+{
+  "subject": "Design and Technology",
+  "subjectSlug": "design-and-technology",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "Design-and-Technology-Module-Final-1.pdf",
+  "md5": "15247711bafc47759854efd40befe752",
+  "detectedShift": 0,
+  "pageCount": 96,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "graphics",
+  "lesson": {
+    "lesson": 9,
+    "title": "GRAPHICS",
+    "topics": [
+      "Introduction",
+      "Think of this; you have been given assorted parts for a chair or table to assemble and each part",
+      "is unique. How easier would that be? Would you need something to use as a guide? Is it a",
+      "worded or pictorial guide? It is clear that a pictorial guide with annotations would be",
+      "appropriate in this case. It would help to communicate the steps needed when assembling the"
+    ],
+    "activities": [
+      "squares, stencils, fillet, flex curves…)",
+      "Learning environment setup",
+      "Natural: Well ventilated and lit area/space to avoid eye strain",
+      "Artificial: Drawing room/classroom",
+      "Technology – Computer",
+      "Inquiry based: Allow learners to explore the questions and problems through",
+      "investigation and research.",
+      "Project based: Assign learners real world drafting projects that require application of"
+    ],
+    "resources": [],
+    "assessment": [
+      "Formative: Observation, checklist/worksheet, Q&A, Group discussion",
+      "Summary: Drafting aids can be used to come-up with various designs in a real-",
+      "world situation. Learners need to acquire relevant skills on how to use drafting aids.",
+      "This is achieved through a continuous manipulation of these drafting aids. When good skills",
+      "are gained, leaners will easily design the needed objects.",
+      "Learning activity 2: Applying varied effects to lettering work"
+    ],
+    "notes": ""
+  }
+}

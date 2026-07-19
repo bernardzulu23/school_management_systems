@@ -1,0 +1,14 @@
+{
+  "subject": "Silozi",
+  "subjectSlug": "silozi",
+  "form": 1,
+  "formFromFilename": null,
+  "term": 3,
+  "sourceFile": "LIT-IN-SILOZI-TEACHING-MODULE-TERM-3.pdf",
+  "md5": "b4a07f3335247df00ccf7141c5c49cd8",
+  "detectedShift": 0,
+  "pageCount": 62,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "lessonCount": 1
+}

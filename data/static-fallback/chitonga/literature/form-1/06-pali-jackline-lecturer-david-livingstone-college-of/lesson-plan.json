@@ -1,0 +1,24 @@
+{
+  "subject": "Chitonga",
+  "subjectSlug": "chitonga",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-CHITONGA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "e7af4f77e275c129891b2d9c40e1dd33",
+  "detectedShift": 0,
+  "pageCount": 57,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "pali-jackline-lecturer-david-livingstone-college-of",
+  "lesson": {
+    "week": 6,
+    "lesson": 6,
+    "title": "Pali Jackline – Lecturer - David Livingstone College Of",
+    "topics": ["Education – Livingstone."],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

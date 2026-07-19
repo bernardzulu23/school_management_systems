@@ -1,14 +1,733 @@
 {
   "subject": "Art and Design",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": [
+        "Art Awareness and Appreciation",
+        "Careers in Art and Design",
+        "Visual Arts",
+        "Pioneers of Zambian Visual Arts",
+        "Elements of Art",
+        "Principles of Art",
+        "Basic Shapes",
+        "Types of Shading",
+        "Di൵erent Textures"
+      ],
+      "learningOutcomes": [
+        "Categorise branches of Art Defining Art (performing, literary and visual) Categorising branches of Art (Visual Art, performing Arts, Digital Art« Visiting di൵erent places where the named branches of Art are found. (Museum, cultural centres«) Critiquing various artworks",
+        "Classify careers in Art and Design Identifying careers in Art and Design Classifying careers in Art and design (Art Teacher, fabric designer, curator«) Matching the artworks to the speci¿c categories of art. (Graphic designer,",
+        "Identify forms of Visual Arts. Identifying forms of Visual arts (Fine Arts, Crafts, Design) Discussing the functions of Visual arts (income generation, identity, cultural heritage«) Analysing forms of visual arts.",
+        "Identify pioneers of Zambian Visual Arts Identifying pioneers of Zambian Visual Arts",
+        "Apply Art elements in practical activities Identifying elements of Art (Line, shape, space, value, texture, tone and colour). Experimenting with lines to express and communicate ideas Using lines to create contour, gesture drawings and calligraphy writing Analysing the use of shape, form and space Creating Artworks with the use of shape, form and space",
+        "Create Artworks using principles of art. Defining Art principles (balance, contrast, unity, proportion, emphasis, Rhythm, pattern. visual movement«) Discussing use of Art principles as applied in Art works. Creating an Art work showing prominent use of one or more of the Art principles",
+        "Apply knowledge of basic shapes in drawing Identifying basic shapes ( cuboid, pyramid, cone, rectangular box« Using basic shapes to draw",
+        "Apply shading techniques Discussing various shading techniques ( pointillism/stippling, hatching, cross hatching, smudging, scribbling, smash",
+        "Compose pictures using a variety of textures and values Defining the Art elements (texture and value) Identifying di൵erent textures actual and visual texture) Exploring a variety of textures, value and shading Composing pictures using a variety of textures and values"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Branches of Art categorised accordingly",
+        "Careers in Art and design classi¿ed accordingly",
+        "Forms of visual arts identi¿ed appropriately.",
+        "Pioneers of Zambian Visual Arts identified accordingly",
+        "Art elements applied in practical activities correctly",
+        "Artworks created using principles of art appropriately.",
+        "Knowledge of basic shapes applied in drawings correctly",
+        "Shading techniques applied appropriately",
+        "Pictures composed using a variety of textures and values appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": [
+        "Pre-historic Rock Art of Zambia",
+        "Traditional Crafts",
+        "Post-independence and Contemporary",
+        "Traditional",
+        "Traditional Artefacts"
+      ],
+      "learningOutcomes": [
+        "Research the Pre-historic Rock Art of Zambia",
+        "Identify traditional crafts Identifying the traditional crafts (reed mats, stools, mortar and pestle«)",
+        "Explain Post-independence Explaining post-independence and Contemporary Art",
+        "Explain Contemporary Art Explaining Contemporary art",
+        "Make traditional decorations Making traditional decorations (Hand prints, jewellery«) Traditional decorations made skilfully. ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Create traditional Artefacts Creating traditional Artefacts (Basketry, weaving, pottery, beadwork«) Traditional Artefacts created skilfully"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Pre-historic Rock Art of Zambia researched correctly",
+        "Traditional crafts identi¿ed accordingly",
+        "Post-independence art explained correctly",
+        "Contemporary art explained correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["Types of Colours", "=Colour Schemes"],
+      "learningOutcomes": [
+        "Experiment colours of the spectrum Experimenting colours of the spectrum (primary, secondary and tertiary) Colours of the spectrum experimented skilfully",
+        "Use colour schemes in SDLQWLQJ"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Colour schemes used in the painting appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": ["Tools and Materials"],
+      "learningOutcomes": [
+        "Use variety of tools and materials for drawing and painting",
+        "Identify types of drawing and painting",
+        "Apply types of drawing and painting Identifying realistic and abstract drawings. (Realistic, abstract and non- objective) Applying the types of drawing and painting",
+        "Demonstrate forms of drawing Demonstrating forms of drawing (sketches, studies, complete work)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Variety of tools and materials for drawing used accordingly",
+        "Types of drawing / painting identified and applied correctly",
+        "Forms of drawing demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 1: Topic 1.5",
+      "topics": ["Lettering", "Poster making", "Computer Aided Design (CAD)"],
+      "learningOutcomes": [
+        "Design letters Identifying and de¿ning letters / related terms (lower case, upper case / types of letters, Letter spacing, word spacing, block and Roman lettering«) Defining calligraphy Discussing functions of lettering Identifying careers relating to lettering works Designing letters",
+        "Design posters. Identifying examples of posters",
+        "Design types of cards using a computer Defining Computer Aided Design Designing various types of cards using a computer ( E-cards, animated cards."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Letters designed correctly",
+        "Types of cards using a computer designed accurately."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 1: Topic 1.6",
+      "topics": ["Patterns"],
+      "learningOutcomes": [
+        "Make patterns Identifying examples of patterns (Arti¿cial and natural«) Identifying motif types Exploring with various motif designs Making patterns (Random, regular) Block (potato printing«), stencil, linocut and intaglio Patterns made creatively"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 1: Topic 1.7",
+      "topics": ["Imaginative Compositions"],
+      "learningOutcomes": [
+        "Compose pictures based on a given theme Composing pictures from the given themes (my family, market place, hunting«) Interpreting ideas and Crosscutting issues (environmental education, GBV, National values and principles«) Drawing and painting (Landscape, Village scenery, Townscape«)= Pictures based on a given theme composed creatively"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 1: Topic 1.8",
+      "topics": ["Drawing or Painting from Natural or Man±made objects"],
+      "learningOutcomes": ["Draw or paint pictures from observation"],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 1: Topic 1.9",
+      "topics": ["Still Life Drawing and or Painting"],
+      "learningOutcomes": [
+        "Compose pictures from Still life Composing pictures from Still Life (Household objects, fruits, still objects«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Pictures from Still life composed appropriately."],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 1: Topic 1.11",
+      "topics": ["Picture Making", "Weaving"],
+      "learningOutcomes": [
+        "Compose pictures using different techniques Defining picture making (collage, montage, mosaic and frieze«)",
+        "Create woven items Defining weaving ( warps, wefts, ORRP"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 1: Topic 1.12",
+      "topics": ["Book Crafts", "Papier-mkchp", "General Crafts"],
+      "learningOutcomes": [
+        "Apply book binding skills Applying binding skills in book making and repairing",
+        "Create items using Papier-mkchp Defining Papier-mkchp raft Identifying tools and materials to use in papier-mkchp. Creating items using Papier-mkchp toys, plates, animal shapes mask PRGHOV",
+        "Make items using found materials Making various items using found materials ( Egg decorations, bead ZRUN"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Binding skills in book making applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 1: Topic 1.13",
+      "topics": ["Introduction to Sculpture", "Construction and Assemblage", "Carving="],
+      "learningOutcomes": [
+        "Apply basic approaches in sculpture PDNLQJ Defining sculpture ( free standing, relief sculpture, Marquette",
+        "Construct and assemble sculptures Defining constructional and assemblage sculptures",
+        "Carve various items"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Basic approaches in sculpture making applied appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 1: Topic 1.14",
+      "topics": ["Entrepreneurship in Art"],
+      "learningOutcomes": [
+        "Use Art as a business De¿ning entrepreneurship Using Art as a business Appreciating Art (study tours, guided online tutorials, talk shows«) Hosting annual art exhibitions (Galleries, studio, schools, public spaces«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Art used as a business effectively"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 2: Topic 2.1",
+      "topics": [
+        "Art Organizations",
+        "Pioneer Zambian Visual Artists",
+        "Forms of Zambian Traditional Art",
+        "Secular, Religious and Functional Craft items",
+        "Pottery",
+        "Weaving"
+      ],
+      "learningOutcomes": [
+        "Identify art organisations Identifying Art Organizations (National Arts Council, Visual Arts Council«) Discussing art organisations. Listing the Founding members of VAC: (Martin Abasi Phiri, William Bwalya Miko, Agness Buya Yombwe«)",
+        "Critique works of the Zambian Visual Artists Stating the Art styles of prominent Zambian visual Artist (Henry Tayali,",
+        "Make Zambian traditional bodily ornamental features of identity Discussing forms of Zambian Traditional Art",
+        "Analyse secular, religious and functional craft items Analysing secular, religious and functional craft items (Traditional bodily / ornaments, traditional attires, sculpture, pottery«) Secular, religious and functional craft items analysed comparatively ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Create pottery works Explaining the historical development of pottery Discussing the importance of local traditional and modern pottery Discussing sources of clay from the locality ( types of clay- ball, china, UHG",
+        "Explore weaving using local materials Discussing tools and materials used for weaving (loom, knife, scissors, threading hook and sisal, reeds, WKUHDGV"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Art organisations identi¿ed accordingly",
+        "The works of the Zambian Visual Artist critiqued accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["Colour Properties", "Colour Pigments", "Colour Use"],
+      "learningOutcomes": [
+        "Use colour properties. Mixing colour to obtain a variety of colour properties. (hues, values, intensities«) Illustrating arrangement of colours on the colour wheel Identifying tertiary colours ( Blue- green, Red-violet, Yellow-green",
+        "Mix colour pigments and vehicles/binders Discussing pigment and paint vehicle/ binders Identifying examples of pigments and paint vehicles/binders Describing sources of pigments Mixing colour pigments and vehicles/binders Colour pigments and vehicles/binders mixed proportionately",
+        "Paint using a chosen colour scheme Analysing qualities of optical colours Analysing the use of colour by any famous Zambian Artist painter ( Henry Tayali, Godfrey Setti, Gabriel Ellison, Cynthia Zukas, Lawrence Yombwe, Martin Abasi Phiri«) Discussing the use of optical and arbitrary colours in Artworks Painting using a chosen colour scheme"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Colour properties used accordingly",
+        "Colour scheme used to paint appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Colour Use", "Painting"],
+      "learningOutcomes": [
+        "Create paintings= Analyse the techniques and processes (brush strokes, washing out, palette knife, resist, dry pigment, and mixed media.) Exploring painting techniques ( spraying, splattering, dubbing, dotting/pointillism",
+        "Compose paintings of aesthetic value Discussing a variety of themes in painting ( abstract and realistic ideas Identifying tools and materials for painting (brushes, pallet knife, sponges, paper, boards«) Utilizing tools and materials to compose paintings of aesthetic value Paintings of aesthetic value composed skilfully"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Paintings created appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Apply types of Perspectives Exploring types of perspectives (linear"],
       "learningOutcomes": [],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Types of Perspectives applied appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Imaginative composition"],
+      "learningOutcomes": [
+        "Compose pictures based on given themes Composing pictures based on given themes (climate change,"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Natural or man- made objects"],
+      "learningOutcomes": [
+        "Create pictures from natural objects / scenes Creating pictures from Nature (tree trunks, logs, twigs / landscape«) Pictures from Nature created creatively ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 2: Topic 2.7",
+      "topics": ["Natural, Man made and Traditional"],
+      "learningOutcomes": [
+        "Compose pictures from Still Life objects Composing pictures from Still Life objects (household objects, parts of simple machines, bottles, traditional utensils«) Pictures from Still life objects composed skilfully."
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 2: Topic 2.8",
+      "topics": ["Human Figure Drawing"],
+      "learningOutcomes": [
+        "Draw human body parts Drawing studies of human body parts (head, bust, torso, palm, limbs, facial features«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Studies of human body parts drawn correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 2: Topic 2.9",
+      "topics": [
+        "Picture Making",
+        "Appliqup and",
+        "Weaving, Plaiting and Knotting",
+        "Book Craft",
+        "Pottery and Ceramics",
+        "Papier-mkchp",
+        "General Crafts"
+      ],
+      "learningOutcomes": [
+        "Make frieze, montage, collage and mosaic Making frieze, montage, collage and mosaic Frieze, montage, collage and mosaic made creatively",
+        "Create works of applique and stitchery Discussing applique and stitchery Creating works of applique and stitchery (table cloth, bags, wall decoration«) Works of applique and stitchery created skilfully",
+        "Create works of weaving, plaiting and knotting Discussing weaving, plaiting and knotting",
+        "Bind books Binding various books single section (stapling«) Books bound skilfully",
+        "Create works of pottery and ceramics Discussing pottery and ceramics (bisque, glaze, decorating) Discussing materials and tools Testing types of ¿ring kilns (traditional, modern «) Works of pottery and ceramics created skilfully ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Create crafts using papier-mkchp Analysing papier-mkchp craft works Making crafts using papier- mkchp toys, ¿gurines, decorative models«) Decorating crafts made out of papier-mkchp Works of Art using papier- mkchp created skilfully",
+        "Make different crafts Making different crafts (twig decorations, necklace and bungles«) Di൵erent crafts made creatively"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Works of weaving by plaiting and knotting created correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Form 2: Topic 2.10",
+      "topics": [
+        "Computer Aided Design ± CAD",
+        "Lettering",
+        "Poster Design",
+        "Illustrations",
+        "Cover Designing"
+      ],
+      "learningOutcomes": [
+        "Design Art works using a computer Analysing qualities of computer aided designs Designing artworks using a computer (lettering, logo, emblem, cards, letterhead«)",
+        "Design di൵erent font W\\SHV Designing different font types ( Calligraphy writing, signage, ODEHOOLQJ",
+        "Design various posters based on given themes Discussing careers related to poster designing (Graphic designer, Creative Designer, Muralist«) Designing various SRVWHUV EDVHG on given themes (drug abuse,",
+        "Develop illustrations based on related themes",
+        "Apply Art elements and principles in cover GHVLJQLQJ Comparing cover designs Identifying the functions of cover designs Exploring with designing of (book cover, record covers«) Using Art elements and principles in cover designing Describing the different qualities and purpose of cover designs Applying Art elements and principles in cover designing"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Artworks designed using a computer appropriately",
+        "given themes designed correctly",
+        "Art elements and principles applied in cover designing correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Form 2: Topic 2.11",
+      "topics": ["Modelling", "Relief Sculpture", "Construction", "Carving"],
+      "learningOutcomes": [
+        "Model free standing VFXOSWXUHV",
+        "Create relief sculptures Creating relief sculptures (wall plaque, metal coins«) Relief sculptures created skilfully ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Construct different objects Organising assorted materials",
+        "Create objects by carving wood Demonstrating wood carving techniques (subtractive method) Creating objects by woodcarving (stools, toys, spoons, cooking sticks«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Free standing sculptures modelled appropriately",
+        "Carved wooden objects created appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Form 2: Topic 2.12",
+      "topics": ["Art Appreciation"],
+      "learningOutcomes": [
+        "Appreciate Art Appreciating Art (¿eld project, study tours, guided online tutorials«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Art appreciated appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Form 3: Topic 3.1",
+      "topics": [
+        "Types of African",
+        "Sculpture materials",
+        "Crafts",
+        "= Traditional Sculptures from Africa"
+      ],
+      "learningOutcomes": [
+        "Demonstrate knowledge of types of African Art",
+        "Analyse sculpture PDWHULDOV Analysing Sculpture materials (Stone, wood, metal«)",
+        "Create African crafts Discussing African art crafts Identifying African art crafts Creating African art crafts (bungles, ingots«)",
+        "Constr uct sculptures based on African traditional styles"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Knowledge of the types of African Art demonstrated accordingly",
+        "Sculpture materials analysed correctly",
+        "African art Crafts created appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Composition in colour"],
+      "learningOutcomes": [
+        "Compose pictures based on given themes Composing pictures based on given themes (festivals, traditional dances, cross cutting issues«) Pictures based on given themes composed creatively ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Form 3: Topic 3.3",
+      "topics": [
+        "Drawing or painting natural objects",
+        "Drawing or painting man ± made objects",
+        "Drawing or painting Rural / Urban setting"
+      ],
+      "learningOutcomes": [
+        "Create pictures to depict the structure of natural objects Creating pictures to depict the structure of natural objects (leaf, bark, branch, twig, bone, foliage, stone, tree, trunk«) Pictures depicting the structure of natural objects created skillfully",
+        "Generate pictures to depict man-made objects Generating pictures to depict man-made-objects (shoe, bottle, boxes, tins«)",
+        "Compose pictures to depict an urban or rural setting Composing pictures to depict a given setting (Rural or Urban)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Pictures depicting man-made objects generated appropriately",
+        "Pictures to depict given settings composed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Form 3: Topic 3.4",
+      "topics": [
+        "Drawing or painting natural objects",
+        "Drawing or painting Man ± Made objects",
+        "Drawing /painting Traditional objects"
+      ],
+      "learningOutcomes": [
+        "Compose pictures to depict natural objects Composing pictures to depict natural objects (bones, skull plank, log«) Pictures to depict natural objects composed skillfully",
+        "Compose pictures to depict Man ± made objects Composing pictures to depict Man ± made objects (parts of simple machines, bottles«)",
+        "Compose pictures to depict traditional objects Composing pictures to depict traditional objects (baskets, traditional stools, gourds, wooden plate, walking sticks«) Pictures to depict tradition objects composed skillfully"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Pictures to depict man-made objects composed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Human Figure"],
+      "learningOutcomes": [
+        "Compose human ¿gure drawings or paintings Composing human ¿gure drawings or paintings (Persons in action"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Form 3: Topic 3.6",
+      "topics": [
+        "Textile Design",
+        "Picture making",
+        "Papier-mkchp",
+        "Fabric work",
+        "Weaving",
+        "Book Craft",
+        "Ornaments",
+        "Leather work",
+        "Basketry"
+      ],
+      "learningOutcomes": [
+        "Create a print for textile production Discussing fabric print making Experimenting with printing techniques (block, stencil, intaglio«) Creating fabric printing motifs for textile production (geometric, organic«) Prints for textile production creatively designed ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Create collage Discussing examples of modern and local forms RI FROODJH Creating collage Collage created skillfully",
+        "Create montage Discussing examples RI montage Creating montage Montage created skillfully",
+        "Make objects using papier-mkchp Discussing examples of papier-mkchp artefacts Making objects using papier-mkchp (puppets, masks«) Objects using papier-mkchp made skillfully",
+        "Create a batik work Discussing batik Exploring batik making methods Creating batik works suitable for different situations ( wall hanging, waist or head wrapper, decorative artefact",
+        "Create tie and dye items Discussing tie and dye Exploring materials for tie and dye (traditional/natural and convectional«) Fabric tying techniques (gathering, stitching, capping, crumpling, folding«) Analysing tie and dye works Creating tie and dye art works (curtain fabric, dress material«) Tie and dye items created creatively",
+        "Produce woven items Analysing traditional and modern weaving art works (baskets, mats, lampshade, handbag«) Producing woven art works (mat, curtain, carpet, dress«) Woven art works produced skilfully ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Bind books Binding books using multi-section methods (stitching, spiral, stapling«)",
+        "Make types of jewellery Identifying types of Jewellery (Bone, Metal, paper«) Exploring various materials and techniques used to make jewellery Making various types of jewellery Decorating by painting, texturing and vanishing Types of jewellery made creatively",
+        "Create Artefacts from leather Identifying traditional and modern uses of leather Analysing leather work techniques Discussing tools, materials and equipment used for leatherwork",
+        "Create basketry works Discussing basketry Describing traditional and modern forms of basketry Identifying local materials for basketry Experimenting with techniques of basketry (wickerwork, coiled, plaiting, twinning«) Creating basketry works (baskets, winnows«) Basketry works crafted skillfully ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Batik works suitable for different situations created appropriately",
+        "Books bound appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Form 3: Topic 3.7",
+      "topics": [
+        "Logo Design",
+        "Emblem",
+        "Cards",
+        "Posters",
+        "Mural GHVLJQV",
+        "Package design",
+        "Product model design"
+      ],
+      "learningOutcomes": [
+        "Design various logos Identifying various kinds of logos Discussing the purpose and functions of logo designs Demonstrating the process of making various logos Designing various logos (Company identity«) Various logos designed creatively",
+        "Design various emblems Identifying various kinds of emblems Discussing the purpose and functions of emblems Demonstrating process of making emblems Designing various emblems (school badge, football team badge« Various emblems designed creatively",
+        "Design cards for various occasions Identifying di൵erent types of cards Designing cards for various occasions (Birthday, valentine, Christmas«)",
+        "Design posters based on different themes Discussing various posters Analysing the design process Designing posters based on different themes (Advertise products, future events«)",
+        "Compose mural designs Discussing mural designs Identifying career opportunities in mural designing (interior/ exterior designer) Developing the designing process Composing mural designs Mural designs composed aesthetically ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Make various packaging designs Analysing package design Discussing the process of package design Discussing the functions of packaging designs Making various packaging designs Various package designs made creatively",
+        "Design various product models Analysing product model designs Identifying examples of model designs problem"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Various occasional cards designed appropriately",
+        "Posters based on different themes designed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Form 3: Topic 3.8",
+      "topics": ["Photography", "Filming"],
+      "learningOutcomes": [
+        "Produce pictures using photography Discussing photography Identifying various kinds of photography (portrait, landscape, still life, street «) Categorising pictures (lifestyle, documentary, traditional, posed artistic«) Analysing picture compositions Producing pictures based on different themes (photomontage, frieze, props«)",
+        "Produce motion pictures Discussing filming Exploring development of motion pictures Identifying kinds of ¿lming (social sceneries, nature, creative ¿lming«) Producing motion pictures"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Pictures using photography produced appropriately",
+        "Motion pictures produced accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Form 3: Topic 3.9",
+      "topics": ["Sculptures"],
+      "learningOutcomes": [
+        "Make sculptures using different materials Identifying various sculpture techniques Analysing African sculpture working styles (north, east, west, south, central«) Making sculptures using different materials (wood, metal, plaster of Paris, cement«) Sculptures made using different materials skilfully"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Form 3: Topic 3.10",
+      "topics": ["Creative Art projects"],
+      "learningOutcomes": [
+        "Develop Creative Art projects Developing Creative Art projects (reuse, reduce, recycle«) Applying Marketing skills (negotiation, advertising«) Organising annual exhibitions (galleries, studios, schools, public and private spaces«) Creative Art projects developed creatively ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Form 4: Topic 4.1",
+      "topics": ["Careers in Art", "Importance of Visual Arts"],
+      "learningOutcomes": [
+        "Develop Art portfolios Identifying careers in Art",
+        "Produce Visual Arts Discussing the importance of Visual Arts in the economy Exhibiting Artworks (in Schools, Galleries, Exhibition hallways, Public, private residences«) Producing different Visual Art works"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Art Portfolios developed accordingly",
+        "Visual Arts Produced accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Form 4: Topic 4.2",
+      "topics": ["Famous movements", "Conceptual Art"],
+      "learningOutcomes": [
+        "Explore famous movements in Art Discussing the characteristics of Gothic Art Stating the masters of Gothic Art (Giotto, Botticelli, Simone Martini«) Describing the significance of Renaissance Art (working styles, exhibition spaces«)",
+        "Explore Conceptual Art Describing conceptual Art Exploring Conceptual Art (Marcel Duchamp, Yoko Ono, Hans Haacke«) Conceptual Art explored comprehensively ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Famous movements in Art explored appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["Imaginative Composition"],
+      "learningOutcomes": [
+        "Compose imaginative pictures based on different themes Composing imaginative pictures based on different themes: text given, stories"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Imaginative pictures based on different themes composed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["Natural Objects", "Urban Settings", "Rural Settings"],
+      "learningOutcomes": [
+        "Compose pictures to depict natural objects Composing pictures to depict natural objects (Àowers, snails, shells, animals, skulls, seed pods, root«) Pictures to depict natural objects composed skillfully",
+        "Compose pictures to depict urban settings Composing pictures to depict urban settings (buildings, Ày-over bridges«)",
+        "Compose pictures to depict rural settings"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Pictures to depict urban settings composed correctly",
+        "Pictures to depict rural settings composed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Form 4: Topic 4.5",
+      "topics": ["Natural Objects", "Man ± Made Objects", "Traditional Objects"],
+      "learningOutcomes": [
+        "Compose pictures to depict natural objects Composing pictures to depict natural objects (vegetables, fruits, stone, wood«)",
+        "Compose pictures to depict man-made objects Composing pictures to depict man-made objects (utensils, clothing drapery «) Pictures to depict man-made objects composed creatively",
+        "Compose pictures to depict traditional objects"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Pictures to depict natural objects composed appropriately",
+        "Pictures to depict traditional objects composed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Form 4: Topic 4.6",
+      "topics": ["Human"],
+      "learningOutcomes": [
+        "Draw human ¿gures in action using different techniques Demonstrating various techniques to depict human ¿gures in action (traditional ceremonies, contemporary life, religious festivals«)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Human ¿gures in action drawn using di൵erent techniques appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Form 4: Topic 4.7",
+      "topics": ["Print making", "Masks=", "Mobiles and stabiles=", "Ceramics"],
+      "learningOutcomes": [
+        "Make prints using various techniques Identifying techniques used in print making (relief printing, intaglio, lithography, serigraphy«) Making prints using various techniques",
+        "Create various masks Exploring possibilities and limitations of using tools and materials (adze, file, wraps, chisel«) Creating various masks using (wood, paper, plastics«)",
+        "Make mobiles and stabiles Discussing mobiles and stabiles Identifying functions of mobiles and stabiles Making mobiles and stabiles Mobiles and stabiles made creatively",
+        "Apply techniques used in ceramics Identifying job opportunities related to pottery and ceramics"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "Prints using various techniques made correctly",
+        "Various masks created accordingly",
+        "Ceramic techniques applied appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 43,
+      "title": "Form 4: Topic 4.8",
+      "topics": ["Calligraphy", "Logo Designing", "Emblem", "Badges", "Cards", "Posters"],
+      "learningOutcomes": [
+        "Use various calligraphic fonts",
+        "Design various logos Designing various logos (Associations, companies«)",
+        "Design various emblem Designing various emblem (Universities, Colleges, Schools«)",
+        "Design various badges Designing various badges (school badge, association badge«)",
+        "Design various cards Designing various cards (post cards, business cards, occasional cards«)",
+        "Design different types of posters Designing different types of posters (Informative poster - substance abuse, Educative Poster-child labour, Advertisement Poster- advertisement«)"
+      ],
+      "suggestedActivities": ["shaped"],
+      "assessmentMethods": [
+        "Various calligraphic fonts used appropriately",
+        "Various logos designed correctly",
+        "Various emblems designed correctly",
+        "Various badges designed correctly",
+        "Various cards designed correctly",
+        "Different types of posters designed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 44,
+      "title": "Form 4: Topic 4.9",
+      "topics": ["Introduction to"],
+      "learningOutcomes": [
+        "3URGXFH Art works using animation Discussing animation (Traditional scenes, computer aided animation«) Exploring animation (2D and 3D) Producing Art works using animation"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 45,
+      "title": "Form 4: Topic 4.10",
+      "topics": ["Sculpture in the round", "Installation and Casting"],
+      "learningOutcomes": [
+        "Create sculptures in the round",
+        "Mount installation art pieces Discussing installation and casting Explaining casting materials (metal,"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Installation of Art pieces mounted correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 46,
+      "title": "Form 4: Topic 4.11",
+      "topics": ["Value Addition"],
+      "learningOutcomes": [
+        "Add value to Art works Costing Artworks Applying Marketing skills Adding value to Art works Organizing annual exhibitions (galleries, studios, schools, public spaces«) Value to Art works added creatively ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4 SCOPE SEQUENCE CHART ART AND DESIGN SYLLABUS Ordinary Level Secondary Education: FORMS 1 - 4",
+        "Use of colour in daily life. The colour wheel"
+      ],
       "suggestedActivities": [],
       "assessmentMethods": [],
       "resources": []
@@ -16,7 +735,13 @@
   ],
   "metadata": {
     "source": "ART-AND-DESIGN-SYLLABUS-FINAL.pdf",
-    "extractedAt": "2026-07-11T06:20:37.621Z",
-    "fileSize": 1610614
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/ART-AND-DESIGN-SYLLABUS-FINAL.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "sourceFileBytes": 1610614,
+    "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
+    "curated": true,
+    "recordCount": 131
   }
 }

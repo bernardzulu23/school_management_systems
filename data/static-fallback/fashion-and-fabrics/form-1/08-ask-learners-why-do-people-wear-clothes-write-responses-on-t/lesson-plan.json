@@ -1,0 +1,29 @@
+{
+  "subject": "Fashion and Fabrics",
+  "subjectSlug": "fashion-and-fabrics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FF-FORM-1-TERM-1-FINAL-MODULE-2025.pdf",
+  "md5": "36fd2c8aa7e348b706d1a8224dc6600f",
+  "detectedShift": 0,
+  "pageCount": 108,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "ask-learners-why-do-people-wear-clothes-write-responses-on-t",
+  "lesson": {
+    "week": 1,
+    "lesson": 8,
+    "title": "Ask learners: “Why do people wear clothes?” Write responses on the board.",
+    "topics": [
+      "Divide learners into small groups. Each group lists reasons why people wear different types",
+      "of clothing.",
+      "Show pictures of people in various outfits from different cultures and weather conditions.",
+      "Ask learners to explain why they are dressed that way."
+    ],
+    "activities": [],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

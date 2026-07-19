@@ -1,0 +1,33 @@
+{
+  "subject": "Fashion and Fabrics",
+  "subjectSlug": "fashion-and-fabrics",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "FF-FORM-1-TERM-1-FINAL-MODULE-2025.pdf",
+  "md5": "36fd2c8aa7e348b706d1a8224dc6600f",
+  "detectedShift": 0,
+  "pageCount": 108,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "psychological-and-emotional-reasons",
+  "lesson": {
+    "week": 7,
+    "lesson": 15,
+    "title": "Psychological and Emotional Reasons",
+    "topics": [],
+    "activities": [
+      "breathability, good conductor of heat, water proof, adornment)",
+      "Learning and Teaching Materials:",
+      "Fabric samples of cotton, wool, silk, polyester, and nylon.",
+      "Charts or posters displaying fabric properties.",
+      "Small water spray bottles for testing water absorption.",
+      "Fashion show on a red carpet",
+      "Learners' clothing items for analysis and discussion.",
+      "Engage learners in a discussion about what makes clothing “healthy.” Ask them to share"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

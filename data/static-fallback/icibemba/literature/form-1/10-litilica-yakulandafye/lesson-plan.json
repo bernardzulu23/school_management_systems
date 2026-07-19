@@ -1,0 +1,39 @@
+{
+  "subject": "Icibemba",
+  "subjectSlug": "icibemba",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 1,
+  "sourceFile": "LITERATURE-IN-BEMBA-TEACHING-MODULE-FORM-1-TERM-1.pdf",
+  "md5": "ef382ed6b56f920d214fcd97ed1431ff",
+  "detectedShift": 0,
+  "pageCount": 69,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "literature",
+  "topicSlug": "litilica-yakulandafye",
+  "lesson": {
+    "week": 10,
+    "lesson": 10,
+    "title": "Litilica Yakulandafye",
+    "topics": [
+      "AMASHIWI YAMO-YAMO AYABOMFIWA MUCITABO",
+      "Amabumba – fintu ifyalingana ifibikilwe pamo",
+      "Iciunda – icongo ico icifuma mukulanda, mukulisha ing’oma nangu",
+      "icintu icapala akapyelele",
+      "Ifisolobelo – ifintu ifyo babomfya pakubomba umulimo umo"
+    ],
+    "activities": [
+      "Ukufwailisha ifishinka pamilandu iyalekana-lekana (Research)",
+      "Ukusambilila ukupitila mukulanshanya (discussions)",
+      "Ukusambilila ukupitila mukufwaya nokusanga ifishinka pamilandu",
+      "iyalekana-lekana (discovery)",
+      "Ukulemba utumalyashi utwiipi (short stories",
+      "Ukubomfya kompyuta mukupanga amalyashi, utusela nama",
+      "Ukulundapo,",
+      "notumisango"
+    ],
+    "resources": [],
+    "assessment": [],
+    "notes": ""
+  }
+}

@@ -1,22 +1,466 @@
 {
   "subject": "Food and Nutrition",
   "level": "Form 1-4",
-  "gradesCovered": [7, 8, 9, 10],
-  "totalDuration": "12 weeks",
+  "gradesCovered": [8, 9, 10, 11],
+  "totalDuration": "4 years (Forms 1-4)",
   "units": [
     {
       "unitNumber": 1,
-      "title": "General syllabus content",
-      "topics": [],
-      "learningOutcomes": [],
+      "title": "Form 1: Topic 1.1",
+      "topics": [
+        "Types of Kitchens",
+        "Kitchen Utensils and Equipment",
+        "Improvisation of Kitchen Utensils",
+        "Food Laboratory",
+        "Safety",
+        "First Aid"
+      ],
+      "learningOutcomes": [
+        "=Design diඒerent types of kitchens",
+        "=Use utensils and equipment in the kitchen",
+        "=Make kitchen utensils",
+        "=Use food Laboratory tools and equipment",
+        "=Practice safety precautions",
+        "=Apply Ürst aid on Common accidents"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "designed correctly",
+        "appropriately",
+        "appropriately.",
+        "accidents appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Form 1: Topic 1.2",
+      "topics": ["Nutritional Terms", "Food Groups", "Food Nutrients", "Nutritional Disorders"],
+      "learningOutcomes": [
+        "Apply nutritional terms",
+        "= Develop health food choices.",
+        "=Prepare healthy nutrient dense meals",
+        "=Apply healthy nutritional eating habits"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["developed appropriately", "habits applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Form 1: Topic 1.3",
+      "topics": ["Digestion", "Absorption", "Metabolism"],
+      "learningOutcomes": [
+        "=Trace the path way of food through digestion",
+        "=Make dietary and lifestyle choices to optimize nutrient absorption and overall health.",
+        "=Design a Personalised nutritional plan"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["made correctly.", "designed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Form 1: Topic 1.4",
+      "topics": ["Cookery Terms", "Fuel", "Methods of Cooking"],
+      "learningOutcomes": [
+        "=Apply cookery Terms in meal preparation",
+        "=Make use of diඒerent types of fuel",
+        "=Prepare dishes using various methods of cooking"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["preparation applied correctly", "appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Form 2: Topic 2.1",
+      "topics": ["=Time Planning", "Food Budgeting", "Food Purchasing"],
+      "learningOutcomes": [
+        "=Formulate a time plan Designing a time plan: (Dishes chosen, Order of work, Shopping list È) Time plan formulated",
+        "Plan food budgets Explaining reasons for budgeting:Prevent over spending, Save moneyÈ) Outlining factors inÝuencing Food budgeting: overall income, Food needs of those being catered forÈ) Planning food budgets:Long term -Annual, capital, strategicÈ, Short term- monthly, weekly, dailyÈ) Food budgets planned",
+        "=Apply diඒerent modes of food purchasing Analysing the purchasing of foods:food choices, shopping habits, budgeting È) Explaining guidelines for purchasing food: Visiting diਙerent shopping outlets; Consider bulk purchasingÈ) Comparing methods of purchasing food:online, open market, instore, mobile purchasing, hire purchaseÈ) Making up a shopping plan:Make a list, Research and compare prices È) Practicing food purchasing using diඒerent modes: online, open market, instore, mobile purchasing, hire purchaseÈ) Diඒerent modes of food"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["appropriately", "purchasing applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Form 2: Topic 2.2",
+      "topics": ["Formulation"],
+      "learningOutcomes": [
+        "Develop diඒerent recipes Outlining key considerations in recipe formulation:Flavour balance, Texture contrastÈ) Developing diඒerent recipes:Ingredient selection, Measurement TechniquesÈ) Interpreting recipe instructions:Main sections of the recipe, arranging ingredients of the recipe in order of useÈ) Experimenting on the formulated recipes: Identifying Variables, Conducting Diඒerent recipes developed skillfully"
+      ],
       "suggestedActivities": [],
       "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Form 2: Topic 2.3",
+      "topics": ["Meal Patterns and Courses", "Meals for Special Groups", "Beverages"],
+      "learningOutcomes": [
+        "Plan meal Patterns and courses Explaining points to consider when planning meals:state of health, sex, Age È) Discussing meal course:one, two, three È) Developing diඒerent types of Meal Patterns: Three-Meal Pattern, Five- to Six-Meal PatternÈ). Preparing meals that Üts a speciÜc meal pattern high tea, breakfast, Brunch ). Meal patterns and courses",
+        "Prepare meals for special groups Discussing meals for special groups and special health conditions. Preparing meals for special groups:Pregnant women, LactatingÈ). Preparing meals for special health conditions: Obesity, Diabetes HIV and AIDS ) Meals for special groups",
+        "=Prepare diඒerent types of beverages Discussing the types and importance of beverages:Type- stimulating, Nourishing, refreshing, Importance- Contribute water to the diet, some are stimulants, medicinalÈ) Demonstrating methods used in the preparation of beverages:Infusion Filtration, blendedÈ) Preparing diඒerent types of beverages: Stimulating, Nourishing, Refreshing Medicinal ) Diඒerent types of beverages prepared skillfully"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["planned appropriately", "prepared correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Form 2: Topic 2.4",
+      "topics": ["Table Setting", "Table Etiquettes"],
+      "learningOutcomes": [
+        "=Practice table Settings for diඒerent occasions. Comparing types of table setting:Formal- table decorations, cloth or formal paper napkins, multiple courses, more dinner and glass wareÈ informal- place mats, no place cards, paper napkins, single course, less dinner and glass ware, traditional- reed mat, enamel, wooden plates ) Table Settings for diඒerent occasions Practiced methodically",
+        "Apply Table etiquettes Discussing table etiquettes. Applying Basic Table Etiquettes Guidelines: Set utensils and glasses correctly, do not talk with your mouth fullÈ) Role playing table Etiquettes:passing dishes, accidents, serving oneselfÈ) Table etiquettes applied"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Form 2: Topic 2.5",
+      "topics": ["Packaging Materials", "=Food Labeling"],
+      "learningOutcomes": [
+        "Package foods Discussing reasons for packaging food:To prevent dehydration and oxidation, to prevent contaminationÈ) Analysing qualities of packaging materials: Vapour-proof, greaseproof, water proofÈ) Selecting suitable packaging materials for various foods:Sheet wrapping material, Bags Rigid containersÈ) Packaging various foods:practical)",
+        "=Label food packages Discussing information found on food labels: The ingredients, Nutritional contentÈ) Explaining the Importance of food labels: Inform consumers about ingredients, allergens, and nutritional content. Comply with regulationsÈ) Designing food labels:using auto CAD-3D and 2D designsÈ) Labelling food packages (preserved dried fruits, roasted nuts È) Food packages labeled suitably"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Foods packed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Form 2: Topic 2.6",
+      "topics": ["Food Additives", "Condiments", "Seasonings"],
+      "learningOutcomes": [
+        "=Use food Additives in meal preparation Discussing food additives Analysing types of food additives: Preservatives, Antioxidants, EmulsiÜers È) Explaining the functions of food additives: Enhance nutrient content, Preserve foodÈ) Making use of food additives:Baked foods, beverages, snacksÈ) Food additives used in meal",
+        "Make= condiments =",
+        "Use condiments= in= meal preparation=",
+        "Use Seasonings in meal preparation="
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["preparation appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Form 2: Topic 2.7",
+      "topics": ["Stock", "Soups", "Sauces", "Gravy"],
+      "learningOutcomes": [
+        "Prepare stock=",
+        "Prepare and = serve soups=",
+        "=Prepare and serve Sauces Discussing sauces: deÜnition, Classes - Roux- Based Sauces, Emulsion-Based Sauces, Reduction-BasedÈ) Analysing the uses of sauces:moisturising food, Ýavour, adding colourÈ.) Exploring utensils for serving sauces:sauce boat, sauce bowl, ladle È) Preparing diඒerent types of sauces:BBQ, curry, sweet and sour sauce, hot, dipsÈ) Serving sauces with suitable accompaniments: grilled meat with BBQ sauce, pasta with tomato sauceÈ) Sauces prepared and served",
+        "=Prepare Gravy Discussing gravy:deÜnition, functions of Gravy-Moisture addition, Visual Appeal, Texture modiÜcationÈ) Classifying diඒerent types of gravy:Brown gravy, White gravy, Herb gravy, Red wine gravy, Vegetable gravyÈ) Exploring utensils for serving gravy:gravy boat, sauce boat, pouring jug È) Preparing gravy and suitable accompaniments: roasted meat, mashed potatoes, vegetablesÈ)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Gravy prepared appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Form 2: Topic 2.8",
+      "topics": ["=Convenience Foods"],
+      "learningOutcomes": [
+        "Prepare meals using convenience foods Discussing convenience foods:deÜnition Classes-Ready to use foods, Ready to serve, Frozen, Canned. Advantages and disadvantages Preparing meals using Convenience foods: one pot pasta, tacosÈ) Making convenience foods using locally available foods:project) Meals using convenience"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["foods prepared correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Form 2: Topic 2.9",
+      "topics": ["Food Storage", "Storage Equipment"],
+      "learningOutcomes": [
+        "Store diඒerent foods Explaining the importance of food storage:To cut down on food costs, to prevent spoilageÈ) Classifying types of foods to be Stored: perishable and non-Perishable foodsÈ) Demonstrating storage of foods in a home and industry :refrigerator, pantry È) Exploring food industries (food processing industries, institutions, hospitality industriesÈ) Diඒerent foods stored",
+        "=Store food using diඒerent Equipment Classifying food storage equipment: Refrigeration, humidity controlled, air-tight, temperature controlled, dry storageÈ) Storing food using diඒerent Equipment: Traditional- Clay pots, Food bans, Reed baskets, Leaves, Food Ladders Modern- Refrigerators, Deep Freezers, Shelves, Food racks, Meat safeÈ) Making storage equipment:Project) Food stored in diඒerent"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["Equipment appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Form 3: Topic 3.1",
+      "topics": ["Personal", "Kitchen"],
+      "learningOutcomes": [
+        "Apply personal",
+        "Food",
+        "Practice food hygiene Analysing safe food handling practices:food storage, food handling, food safetyÈ) Demonstrating ways of preventing food contamination:food preparation, cooking, serving, leftover foods ) Designing and developing a food hygiene training program for food handler. Food hygiene practiced DSSURSULDWHO\\",
+        "Practice kitchen hygiene Discussing kitchen hygiene:Food Handling Practices, Kitchen Cleaning and SanitizingÈ) Demonstrating waste disposal techniques: land Ülling, recycling, compostingÈ)"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["applied appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Form 3: Topic 3.2",
+      "topics": ["Food"],
+      "learningOutcomes": [
+        "=Apply techniques to reduce food =spoilage",
+        "=Apply techniques to prevent food =poisoning"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["poisoning applied correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Form 3: Topic 3.3",
+      "topics": ["Traditional", "Modern"],
+      "learningOutcomes": [
+        "Preserve foods using traditional methods.",
+        "Preserve foods using modern methods Demonstrating the understanding of advanced modern food preservation technologies: modiÜed atmosphere packaging (MAP), refrigeration, ultra-high temperatureÈ) Discussing alternative methods of food preservation due to emerging issues:natural disaster and power outages Preparing diඒerent types of preserves:jam, pickles, pepperÈ) Inventing and designing a high technique food preservation system:vacuum packaging, UV light treatment to kill bacteria ) Modern methods of preserving food used DSSURSULDWHO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Form 3: Topic 3.4",
+      "topics": [
+        "Animals and Animal",
+        "Fruits",
+        "Legumes and Oily Seeds",
+        "Alternative Proteins",
+        "Grains and"
+      ],
+      "learningOutcomes": [
+        "Make use of animals and animal Discussing the diඒerent animals and animal products:structure, composition, nutritive value, choice È) Animals and animal products in meal preparation used SURSHUO\\",
+        "Use fruits in PHDO preparation Discussing fruits:classiÜcation, nutritive value, choiceÈ.) Using scientiÜc principles underlying preparing, cooking and serving of fruits: oxidation, ripening È) Preparing fruit dishes and beverages. Researching on indigenous fruits to make interesting beverages and dishes. Fruits used in meal preparation methodically",
+        "Use vegetables in meal SUHSDUDWLRQ Discussing vegetables:classiÜcation, nutritive value, choiceÈ.) Using scientiÜc principles underlying preparing, cooking and serving of vegetables: oxidation, ripening È) Preparing vegetable dishes and beverages. Researching on indigenous vegetables to make interesting dishes:salads, juices, smoothiesÈ) Vegetables used in meal preparation methodically",
+        "=Use legumes and oily seeds in meal preparation",
+        "Make",
+        "Use grains and"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Form 3: Topic 3.5",
+      "topics": ["Ingredients in Flour Mixtures", "Batters", "Cakes and", "Cake", "Yeast PL[WXUHV"],
+      "learningOutcomes": [
+        "Apply =the =culinary =science behind using diඒerent in ingredients Ýour mixtures Explaining the uses and role of diඒerent ingredients in Ýour mixtures:Ýour, sugar, fat, raising agents, liquid ) Analysing and adjusting ingredient ratios to achieve desired outcomes in Ýour mixtures: ingredient ratios) Experimenting on ingredient substitution challenge:substituting sugar for honey, making an evaluationÈ)",
+        "$SSO\\ culinary science behind using diඒerent raising agents in Ýour PL[WXUHV Discussing raising agents:classes, types, uses, functionsÈ) Experimenting the chemical reactions",
+        "Use batteries in FRRNHU\\ Analysing batters:types, consistencies, uses, rules and faultsÈ) Composing diඒerent dishes from batter mixtures:pancakes, fritters, toad in a holeÈ) Batters used in cookery DSSURSULDWHO\\",
+        "=Make cakes and biscuits",
+        "Decorate = FDNHV",
+        "Make pastries Discussing pastries:types, uses, rules to follow, faults and remediesÈ) Making diඒerent dishes from pastries:pies,",
+        "Make wraps Discussing wraps:types, uses, accompanimentsÈ) Making wraps:tortilla, chapatti, pitta bread, naanÈ) Showing styles of serving wraps:classic, folded, rolled È) Wraps made skillfully",
+        "Prepare yeast PL[WXUHV Discussing yeast mixtures:types, uses, storageÈ) Demonstrating the basic method in bread making:the steps of making bread) Creating new yeast- based dishes:mealie bread, sweet potato yeast buns, ground nut yeast breadÈ) Researching on the eඒectiveness of yeast: PH, temperature, sugarÈ) Yeast mixtures prepared DFFRUGLQJO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Form 4: Topic 4.1",
+      "topics": [
+        "= =Understanding Research =",
+        "= =Areas of Research=",
+        "= =Research Format=",
+        "= =Carry Out a Research="
+      ],
+      "learningOutcomes": [
+        "= = Apply research techniques in Food= and Nutrition =",
+        "= Research in various areas of food and nutrition =",
+        "= Design a research format in food and nutrition=",
+        "= Conduct research in food and nutrition="
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": [
+        "and nutrition correctly",
+        "nutrition designed correctly",
+        "nutrition conducted correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Form 4: Topic 4.2",
+      "topics": [
+        "= =Food Presentation=",
+        "= =Meal Service=",
+        "= =The Art of Entertaining=",
+        "= =Festival Dishes="
+      ],
+      "learningOutcomes": [
+        "= Apply principles of food presentation=",
+        "= Apply diඒerent= meal service= techniques =",
+        "= Create= the art of entertainment during food service =",
+        "= Prepare= festival dishes= =¤= Preparing diඒerent festival dishes traditional festivals, wedding, Christmas, anniversaryÈ) Festival dishes prepared PHWKRGLFDOO\\"
+      ],
+      "suggestedActivities": [],
+      "assessmentMethods": ["techniques applied accurately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Form 4: Topic 4.3",
+      "topics": ["= =Consumer Education="],
+      "learningOutcomes": ["= Practice= Consumer Education= rights="],
+      "suggestedActivities": [],
+      "assessmentMethods": ["practiced correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Form 4: Topic 4.4",
+      "topics": ["= =Consumer Education=", "= =Business Plan="],
+      "learningOutcomes": [
+        "= Establish business ventures in= food and nutrition=",
+        "= Make a business plan in food and nutrition=",
+        "Research="
+      ],
+      "suggestedActivities": [
+        "Types of kitchen",
+        "=Design diඒerent",
+        "Time",
+        "=Formulate =a",
+        "Personal",
+        "= Apply personal =",
+        "Understanding",
+        "= Apply research",
+        "Kitchen utensils and",
+        "=Use utensils and",
+        "Food",
+        "Plan food",
+        "Food Hygiene= =-= Practice food hygiene=",
+        "Areas of",
+        "Research in",
+        "Improvisation of",
+        "=Make kitchen",
+        "Apply",
+        "Kitchen",
+        "= Practice kitchen hygiene= =-Research",
+        "= Design a",
+        "Food laboratory",
+        "=Use food",
+        "Formulation",
+        "Develop",
+        "= Apply techniques to",
+        "Carry Out a",
+        "= Conduct",
+        "Safety",
+        "=Practice safety",
+        "Meal",
+        "Plan meal",
+        "Apply techniques to",
+        "= Apply principles",
+        "First Aid",
+        "Apply Ürst aid on",
+        "Prepare meals",
+        "Traditional",
+        "= Preserve foods using",
+        "Meal Service=",
+        "= Apply diඒerent",
+        "Nutritional terms",
+        "Apply nutritional",
+        "Beverages",
+        "Prepare",
+        "Modern",
+        "The Art of",
+        "= Create the art of",
+        "Food groups",
+        "=Develop health",
+        "Table setting",
+        "Practice table",
+        "Animals and",
+        "= Make use of =",
+        "Festival Dishes= =-= Prepare festival",
+        "Food nutrients",
+        "=Prepare healthy",
+        "Table",
+        "Apply Table",
+        "Fruits",
+        "= Use fruits in =",
+        "Consumer",
+        "Practice",
+        "Nutritional",
+        "=Apply healthy",
+        "Packaging",
+        "Package",
+        "Vegetables",
+        "= Use vegetables =",
+        "Business",
+        "= Establish",
+        "Digestion",
+        "=Trace the path way",
+        "Label food",
+        "Legumes and",
+        "= Use legumes and oily",
+        "Business Plan=",
+        "= Make a business",
+        "Absorption",
+        "Make dietary and",
+        "Use food",
+        "Alternative",
+        "= Make alternative",
+        "Metabolism",
+        "Design a",
+        "Condiments",
+        "Make",
+        "Grains and",
+        "Use grains and cereals=",
+        "Cookery terms",
+        "Apply cookery",
+        "Terms in meal",
+        "Seasonings",
+        "Ingredients",
+        "= Apply the culinary",
+        "Fuel",
+        "=Make use of",
+        "Stock",
+        "Prepare stock",
+        "Raising",
+        "= Apply culinary science",
+        "Heat transfer",
+        "=Apply principles",
+        "Soups",
+        "Prepare and",
+        "Batters=",
+        "= Use batters in cookery=",
+        "Methods of cooking",
+        "=Prepare dishes",
+        "Sauces",
+        "Cakes and =",
+        "= Make cakes and",
+        "Gravy",
+        "Cake",
+        "= Decorate cakes=",
+        "Convenience",
+        "= Make pastries=",
+        "Food Storage",
+        "Store",
+        "Wraps=",
+        "= Make wraps=",
+        "Storage",
+        "Store food",
+        "Yeast",
+        "= Prepare yeast"
+      ],
+      "assessmentMethods": ["nutrition made correctly"],
       "resources": []
     }
   ],
   "metadata": {
     "source": "FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.pdf",
-    "extractedAt": "2026-07-11T06:20:39.717Z",
-    "fileSize": 649185
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceUrl": "https://www.edu.gov.zm/wp-content/uploads/2025/04/FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.pdf",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-19",
+    "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.979) + deterministic CDC table parse. No fabricated content.",
+    "curated": true,
+    "recordCount": 74
   }
 }

@@ -1,0 +1,46 @@
+{
+  "subject": "Agricultural Science",
+  "subjectSlug": "agricultural-science",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Agricultural-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "df6a8d3579bb6bd33da1fcd4a3dc5cec",
+  "detectedShift": 0,
+  "pageCount": 132,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "3-0-climate-smart-agriculture",
+  "lesson": {
+    "lesson": 9,
+    "title": "3.0. CLIMATE - SMART AGRICULTURE",
+    "topics": ["Introduction"],
+    "activities": [
+      "to climate change and discuss food security and its four dimensions.",
+      "General Competencies",
+      " Analytical thinking",
+      " Communication",
+      " Collaboration",
+      " Critical thinking",
+      " Environmental sustainability",
+      " Problem solving"
+    ],
+    "resources": [
+      "Discussing food security and its four dimensions (availability, accessibility, utilisation and stability)",
+      "Learning materials: Charts, diagrams",
+      "Activity 3: Discussing food security and its four dimensions (availability, accessibility, utilisation and stability)",
+      "Procedure",
+      "i. Put learners into small groups of 4-5",
+      "ii. Give learners different food samples"
+    ],
+    "assessment": [
+      "A small-scale farmer in a rural community has planted maize at the beginning of the growing season. However, the area has recently",
+      "experienced low and unreliable rainfall, causing the maize seedlings to begin drying up and showing signs of moisture stress. The",
+      "farmer is concerned that continued dry conditions may lead to poor crop growth and reduced yields. As a learner who has studied",
+      "climate-smart agricultural practices, you are asked to advise the farmer on possible solutions to reduce the negative impact of drought",
+      "conditions on the crop.",
+      " Suggest three climate-smart agricultural practices the farmer can adopt to reduce the impact of low rainfall on the maize crop"
+    ],
+    "notes": ""
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "subject": "Art and Design",
+  "subjectSlug": "art-and-design",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "ART-AN-DESIGN-MODULE-FORM-PDF.pdf",
+  "md5": "e53cca0b98fb871a44a3d7f5f434004c",
+  "detectedShift": 0,
+  "pageCount": 45,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "guide-learners-in-the-process-of-identifying-and-critiquing-",
+  "lesson": {
+    "week": 5,
+    "lesson": 7,
+    "title": "Guide learners in the process of identifying and critiquing various artworks.",
+    "topics": ["Page 6 of 45", "Expected Standard: Branches of Art categorised accordingly"],
+    "activities": [
+      "Learning Environment set up: in-door and out-door (natural / artificial and technological)",
+      "Suggested Learning & Teaching Materials:",
+      "Charts and diagrams on art careers",
+      "Videos/documentaries about professionals in different art fields",
+      "Printed career profiles with job descriptions and educational requirements",
+      "Art and Design textbooks and literature",
+      "Matching Artworks to Specific Artists",
+      "Brainstorming Session"
+    ],
+    "resources": [],
+    "assessment": [
+      "valuing of the arts.",
+      "Prepare learning tasks during (learning sessions) and after (carry-home tasks) the",
+      "determine competences of the learner.",
+      "This subtopic looked at Art Awareness and Appreciation, it covered categories of art which",
+      "included:",
+      "Visual arts (painting, drawing, sculpture, photography and print making)"
+    ],
+    "notes": ""
+  }
+}

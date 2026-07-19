@@ -1,0 +1,52 @@
+{
+  "subject": "Physics",
+  "subjectSlug": "physics",
+  "form": 2,
+  "formFromFilename": 2,
+  "term": 1,
+  "sourceFile": "Physics-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "md5": "062c004a347f40168ba953627812f83e",
+  "detectedShift": 0,
+  "pageCount": 168,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "topicSlug": "2-thermal-physics",
+  "lesson": {
+    "lesson": 4,
+    "title": "2: THERMAL PHYSICS",
+    "topics": [
+      "INTRODUCTION",
+      "Thermal Physics is the branch of Physics that studies the thermal properties of matter, including",
+      "temperature, heat, and the behaviour of systems in relation to thermal energy. This topic introduces",
+      "learners to important concepts that explain how heat affects matter and how thermal energy is",
+      "transferred and utilised in everyday life. Knowledge of Thermal Physics is important in many"
+    ],
+    "activities": [
+      "HOOK: You notice that when boiling water for nshima, steam rises from the pot and",
+      "spreads around the kitchen and you wonder what is happening to the particles in the",
+      "water as it heats up.",
+      "a) Using the kinetic theory of matter, explain what happens to the particles of water",
+      "when it is heated.",
+      "b) Why do the particles move faster as the temperature increases?",
+      "Suggested Teaching and Learning Materials",
+      " Natural Materials: Stones, water, leaves,"
+    ],
+    "resources": [
+      "Learning Activity 2.2.4.1.4 Comparing efficiency of diesel and petrol engine",
+      "In this learning activity, learners will be able to compare efficiency of diesel and petrol engine.",
+      "Suggested Teaching and Learning Materials",
+      " Natural Materials: Air for demonstrating combustion concepts, Water for demonstrating",
+      "cooling systems,",
+      " Artificial Materials: Charts comparing diesel and petrol engines, Videos showing engine"
+    ],
+    "assessment": [
+      " Observe learner’s participation during the discussion",
+      " Review written explanations",
+      " Evaluate understanding through feedback",
+      " Check application of kinetic theory",
+      "Skills Developed",
+      " Critical Thinking: Explaining particle’s behavior using the kinetic theory of matter"
+    ],
+    "notes": ""
+  }
+}

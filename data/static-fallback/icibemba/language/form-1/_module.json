@@ -1,0 +1,14 @@
+{
+  "subject": "Icibemba",
+  "subjectSlug": "icibemba",
+  "form": 1,
+  "formFromFilename": 1,
+  "term": 3,
+  "sourceFile": "ICIBEMBA-TEACHING-MODULE-FORM-1-TERM-3-1.pdf",
+  "md5": "179c64c85fbbe80adda353482a70504c",
+  "detectedShift": 0,
+  "pageCount": 113,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "language",
+  "lessonCount": 2
+}

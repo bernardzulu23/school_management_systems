@@ -1,0 +1,14 @@
+{
+  "subject": "Travel and Tourism",
+  "subjectSlug": "travel-and-tourism",
+  "form": 1,
+  "formFromFilename": null,
+  "term": null,
+  "sourceFile": "TRAVEL_AND_TOURISM_MODULE_Final-2025.pdf",
+  "md5": "eddbd2b53114fbbd521b933e4807a63a",
+  "detectedShift": 0,
+  "pageCount": 70,
+  "coverageNote": "Form directories exist only where teaching-module source PDFs were ingested. Missing forms must resolve as known-gap, not empty objects.",
+  "kind": "subject",
+  "lessonCount": 4
+}
