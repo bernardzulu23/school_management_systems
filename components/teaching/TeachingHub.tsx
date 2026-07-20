@@ -311,6 +311,12 @@ export function TeachingHub({ teacherId }: Props) {
                 >
                   AI Quiz Maker
                 </Link>
+                <Link
+                  href="/dashboard/teacher/chat"
+                  className="inline-flex items-center rounded-md border px-4 py-2 text-sm font-semibold"
+                >
+                  AI Assistant
+                </Link>
               </CardContent>
             </Card>
           </div>

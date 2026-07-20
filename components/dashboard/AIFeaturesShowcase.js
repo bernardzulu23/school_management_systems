@@ -9,12 +9,23 @@ import {
   Target,
   ChevronRight,
   Upload,
+  MessageSquare,
 } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
+import { resolveAiChatHref, resolveAiChatLabel } from '@/lib/ai/chat/ui-entry'
 
 const AI_FEATURES = [
+  {
+    id: 'ai-assistant',
+    // name/description/href resolved per role in the component
+    icon: MessageSquare,
+    color: 'text-orange-500',
+    bgColor: 'bg-orange-500/10',
+    roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+    chatEntry: true,
+  },
   {
     id: 'ai-reference-materials',
     name: 'AI Reference Materials',
@@ -81,13 +92,24 @@ const AI_FEATURES = [
 export default function AIFeaturesShowcase() {
   const { user } = useAuth()
   const userRole = String(user?.role || '').toLowerCase()
+  const chatLabel = resolveAiChatLabel(userRole)
 
-  const accessibleFeatures = AI_FEATURES.filter((f) => f.roles.includes(userRole))
+  const accessibleFeatures = AI_FEATURES.filter((f) => f.roles.includes(userRole)).map((f) => {
+    if (f.chatEntry) {
+      return {
+        ...f,
+        name: chatLabel.name,
+        description: chatLabel.description,
+        href: resolveAiChatHref(userRole),
+      }
+    }
+    return f
+  })
 
   if (accessibleFeatures.length === 0) return null
 
   return (
-    <section className="mt-8">
+    <section className="mt-8" data-testid="ai-features-showcase">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-xl font-bold text-royalPurple-text1 flex items-center gap-2">
           <Sparkles className="h-6 w-6 text-royalPurple-accent" />

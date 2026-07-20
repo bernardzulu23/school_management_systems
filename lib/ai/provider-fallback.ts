@@ -234,6 +234,11 @@ export class AIProviderChain {
             const { sanitizePlainText } = await import('@/lib/ai/plain-text')
             const finalText = options.plainText ? sanitizePlainText(responseText) : responseText
 
+            // Empty provider output is a soft failure — try streaming fallback.
+            if (!String(finalText || '').trim()) {
+              throw new Error('empty_provider_text')
+            }
+
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ text: finalText, replace: true })}\n\n`)
             )
@@ -254,7 +259,8 @@ export class AIProviderChain {
             controller.close()
             return
           } catch {
-            // Full chain failed — try Groq/Gemini streaming before giving up.
+            // Full chain failed or empty — try Groq/Gemini streaming before giving up.
+            responseText = ''
           }
 
           const { streamAITextWithFallback } = await import('@/lib/ai/client')
@@ -287,6 +293,13 @@ export class AIProviderChain {
 
           const finalText = options.plainText ? sanitizePlainText(responseText) : responseText
 
+          if (!String(finalText || '').trim()) {
+            throw new Error(
+              options.onErrorMessage ||
+                'The AI assistant returned an empty reply. Please try again.'
+            )
+          }
+
           if (options.onComplete) {
             await options.onComplete(finalText, {
               provider,
@@ -305,6 +318,7 @@ export class AIProviderChain {
           const message =
             options.onErrorMessage || (error instanceof Error ? error.message : 'AI request failed')
           controller.enqueue(encoder.encode(`data: ${JSON.stringify({ error: message })}\n\n`))
+          controller.enqueue(encoder.encode('data: [DONE]\n\n'))
           controller.close()
         }
       },

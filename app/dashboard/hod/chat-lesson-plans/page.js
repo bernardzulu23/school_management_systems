@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Button } from '@/components/ui/Button'
 import HodTeacherCoveragePanel from '@/components/chat/HodTeacherCoveragePanel'
+import { FeatureGate } from '@/components/FeatureGate'
 import { ArrowLeft, CheckCircle, XCircle, Download, Loader2 } from 'lucide-react'
 
 export default function HodChatLessonPlansPage() {
@@ -96,71 +97,74 @@ export default function HodChatLessonPlansPage() {
           </Button>
         </Link>
 
-        <p className="text-sm text-muted">
-          Pending .docx lesson plans generated from teacher chat. Approve or reject here (Phase 3).
-          Coverage drilldown is department-scoped (Phase 4).
-        </p>
+        {/* Plan gate: reuse ai-tools (Standard/Premium) */}
+        <FeatureGate featureId="ai-tools">
+          <p className="text-sm text-muted">
+            Pending .docx lesson plans generated from teacher chat. Approve or reject here (Phase
+            3). Coverage drilldown is department-scoped (Phase 4).
+          </p>
 
-        <HodTeacherCoveragePanel />
+          <HodTeacherCoveragePanel />
 
-        {error && <div className="text-sm text-red-700 bg-red-50 px-3 py-2 rounded">{error}</div>}
+          {error && <div className="text-sm text-red-700 bg-red-50 px-3 py-2 rounded">{error}</div>}
 
-        {loading ? (
-          <div className="flex items-center gap-2 text-sm text-muted">
-            <Loader2 className="h-4 w-4 animate-spin" /> Loading…
-          </div>
-        ) : rows.length === 0 ? (
-          <p className="text-sm text-muted">No pending chat lesson-plan submissions.</p>
-        ) : (
-          <ul className="space-y-3">
-            {rows.map((r) => (
-              <li
-                key={r.id}
-                className="border border-ink/10 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
-              >
-                <div>
-                  <div className="font-medium text-sm">
-                    {r.subject} • {r.grade} • {r.topic}
+          {loading ? (
+            <div className="flex items-center gap-2 text-sm text-muted">
+              <Loader2 className="h-4 w-4 animate-spin" /> Loading…
+            </div>
+          ) : rows.length === 0 ? (
+            <p className="text-sm text-muted">No pending chat lesson-plan submissions.</p>
+          ) : (
+            <ul className="space-y-3">
+              {rows.map((r) => (
+                <li
+                  key={r.id}
+                  className="border border-ink/10 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center gap-3 justify-between"
+                >
+                  <div>
+                    <div className="font-medium text-sm">
+                      {r.subject} • {r.grade} • {r.topic}
+                    </div>
+                    <div className="text-xs text-muted mt-0.5">
+                      {r.teacher?.name || 'Teacher'}
+                      {r.submittedAt ? ` · ${new Date(r.submittedAt).toLocaleString()}` : ''}
+                    </div>
                   </div>
-                  <div className="text-xs text-muted mt-0.5">
-                    {r.teacher?.name || 'Teacher'}
-                    {r.submittedAt ? ` · ${new Date(r.submittedAt).toLocaleString()}` : ''}
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      onClick={() => void download(r.id)}
+                    >
+                      <Download className="h-3.5 w-3.5 mr-1" />
+                      Download
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      disabled={busyId === r.id}
+                      onClick={() => void review(r.id, 'approve')}
+                    >
+                      <CheckCircle className="h-3.5 w-3.5 mr-1" />
+                      Approve
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="outline"
+                      disabled={busyId === r.id}
+                      onClick={() => void review(r.id, 'reject')}
+                    >
+                      <XCircle className="h-3.5 w-3.5 mr-1" />
+                      Reject
+                    </Button>
                   </div>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    onClick={() => void download(r.id)}
-                  >
-                    <Download className="h-3.5 w-3.5 mr-1" />
-                    Download
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    disabled={busyId === r.id}
-                    onClick={() => void review(r.id, 'approve')}
-                  >
-                    <CheckCircle className="h-3.5 w-3.5 mr-1" />
-                    Approve
-                  </Button>
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="outline"
-                    disabled={busyId === r.id}
-                    onClick={() => void review(r.id, 'reject')}
-                  >
-                    <XCircle className="h-3.5 w-3.5 mr-1" />
-                    Reject
-                  </Button>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </FeatureGate>
       </div>
     </DashboardLayout>
   )

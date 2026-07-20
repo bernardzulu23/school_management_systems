@@ -39,6 +39,7 @@ import {
   PenTool,
   FlaskConical,
   Box,
+  MessageSquare,
 } from 'lucide-react'
 
 // Import feature components
@@ -84,10 +85,16 @@ const iconMap = {
   PenTool,
   FlaskConical,
   Box,
+  MessageSquare,
 }
 
 /** Production-ready — no Beta badge */
-const PRODUCTION_FEATURE_IDS = new Set(['ai_lesson_planner', 'ai_quiz_maker', 'ecz_practice'])
+const PRODUCTION_FEATURE_IDS = new Set([
+  'ai_lesson_planner',
+  'ai_quiz_maker',
+  'ecz_practice',
+  'ai_assistant',
+])
 
 function FeatureBetaBadge({ featureId }) {
   if (PRODUCTION_FEATURE_IDS.has(featureId)) return null

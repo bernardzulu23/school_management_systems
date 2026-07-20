@@ -45,6 +45,7 @@ import {
   Globe,
   Code,
   FileCheck,
+  Compass,
 } from 'lucide-react'
 import Link from 'next/link'
 import LearningPathPage from './learning-path/page'
@@ -1111,6 +1112,19 @@ export default function StudentDashboard() {
                           </div>
                         </Link>
                       )}
+                      <Link href="/dashboard/student/help">
+                        <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                          <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                            <Compass className="h-8 w-8 text-royalPurple-text1" />
+                          </div>
+                          <h3 className="text-royalPurple-text1 font-semibold text-center">
+                            ZSMS Help
+                          </h3>
+                          <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                            Find your way around
+                          </p>
+                        </div>
+                      </Link>
                     </div>
                   </div>
                 </CardContent>

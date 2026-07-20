@@ -1,7 +1,6 @@
 import { z } from 'zod'
-import { aiChain } from '@/lib/ai/provider-fallback'
-import { createGroqTextEventStream, GROQ_SSE_HEADERS } from '@/lib/ai/groq-client'
-import { AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
+import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
+import { GROQ_SSE_HEADERS } from '@/lib/ai/groq-client'
 
 export const HeadteacherSummarySchema = z.object({
   summary: z.string().min(1).max(4000),
@@ -10,7 +9,9 @@ export const HeadteacherSummarySchema = z.object({
 export { GROQ_SSE_HEADERS, AI_SSE_HEADERS }
 
 /**
- * Stream generative chat via existing Groq→Gemini→OpenRouter chain helpers.
+ * Stream generative chat via the full provider chain (generate → SSE, with
+ * Groq/Gemini streaming fallback). Emits the staff-chat SSE contract:
+ * meta → text chunks → optional generatedBy → [DONE], or { error }.
  */
 export function createChatSseStream(options: {
   system: string
@@ -20,13 +21,14 @@ export function createChatSseStream(options: {
   meta?: Record<string, unknown>
   onComplete?: (fullText: string) => Promise<void>
 }): ReadableStream<Uint8Array> {
-  return createGroqTextEventStream({
+  return aiChain.createTextEventStream({
     system: options.system,
     prompt: options.prompt,
     maxTokens: options.maxTokens ?? 2048,
     temperature: options.temperature ?? 0.4,
     plainText: false,
     meta: options.meta,
+    onErrorMessage: 'The AI assistant could not generate a reply. Please try again.',
     onComplete: async (fullText) => {
       if (options.onComplete) await options.onComplete(fullText)
     },

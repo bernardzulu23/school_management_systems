@@ -3,36 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Loader2, Send, FileText, Download, SendHorizontal, Headphones } from 'lucide-react'
-
-async function readSseStream(res, onChunk, onMeta) {
-  const reader = res.body?.getReader()
-  if (!reader) throw new Error('No response body')
-  const decoder = new TextDecoder()
-  let buffer = ''
-
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
-    buffer += decoder.decode(value, { stream: true })
-    const parts = buffer.split('\n\n')
-    buffer = parts.pop() || ''
-    for (const part of parts) {
-      const line = part.trim()
-      if (!line.startsWith('data:')) continue
-      const payload = line.slice(5).trim()
-      if (payload === '[DONE]') return
-      try {
-        const json = JSON.parse(payload)
-        if (json.meta && onMeta) onMeta(json)
-        if (typeof json.text === 'string') {
-          onChunk(json.text, Boolean(json.replace))
-        }
-      } catch {
-        // ignore non-JSON meta
-      }
-    }
-  }
-}
+import { EMPTY_CHAT_REPLY_MESSAGE, readChatSseStream } from '@/lib/ai/chat/sse-client'
 
 const DEFAULT_RESUBMIT_PROMPT = "Rewrite the evaluation section based on the HOD's comment"
 
@@ -218,17 +189,19 @@ export default function ChatPanel({
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data.error || 'Could not request human help')
       setSessionStatus(data.status || 'PENDING_HUMAN')
-      if (data.reply) {
-        setMessages((m) => [
-          ...m,
-          {
-            id: `u-human-${Date.now()}`,
-            role: 'user',
-            content: 'Requesting a human administrator.',
-          },
-          { id: `a-human-${Date.now()}`, role: 'assistant', content: data.reply },
-        ])
-      }
+      const reply =
+        typeof data.reply === 'string' && data.reply.trim()
+          ? data.reply.trim()
+          : 'I am looping in an administrator to assist you further. Please hold on.'
+      setMessages((m) => [
+        ...m,
+        {
+          id: `u-human-${Date.now()}`,
+          role: 'user',
+          content: 'Requesting a human administrator.',
+        },
+        { id: `a-human-${Date.now()}`, role: 'assistant', content: reply },
+      ])
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
     } finally {
@@ -284,10 +257,9 @@ export default function ChatPanel({
         }
         if (data.sessionId) setSessionId(data.sessionId)
         const reply = data.refused ? data.message : data.summary
-        setMessages((m) => [
-          ...m,
-          { id: `a-${Date.now()}`, role: 'assistant', content: String(reply || '') },
-        ])
+        const content = String(reply || '').trim()
+        if (!content) throw new Error('No answer returned. Please try a different question.')
+        setMessages((m) => [...m, { id: `a-${Date.now()}`, role: 'assistant', content }])
         return
       }
 
@@ -315,29 +287,53 @@ export default function ChatPanel({
         const data = await res.json()
         if (data.sessionId) setSessionId(data.sessionId)
         const reply = data.refused ? data.message : data.summary || data.message
-        setMessages((m) => [
-          ...m,
-          { id: `a-${Date.now()}`, role: 'assistant', content: String(reply || '') },
-        ])
+        const content = String(reply || '').trim()
+        if (!content) throw new Error(EMPTY_CHAT_REPLY_MESSAGE)
+        setMessages((m) => [...m, { id: `a-${Date.now()}`, role: 'assistant', content }])
         return
       }
 
       const assistantId = `a-${Date.now()}`
       setMessages((m) => [...m, { id: assistantId, role: 'assistant', content: '' }])
       let acc = ''
-      await readSseStream(
-        res,
-        (chunk, replace) => {
-          acc = replace ? chunk : acc + chunk
-          setMessages((m) =>
-            m.map((msg) => (msg.id === assistantId ? { ...msg, content: acc } : msg))
-          )
-        },
-        (meta) => {
-          if (meta.sessionId) setSessionId(meta.sessionId)
-          if (meta.status) setSessionStatus(meta.status)
+      try {
+        const { text: streamedText, error: streamError } = await readChatSseStream(res, {
+          onChunk: (chunk, replace) => {
+            acc = replace ? chunk : acc + chunk
+            setMessages((m) =>
+              m.map((msg) => (msg.id === assistantId ? { ...msg, content: acc } : msg))
+            )
+          },
+          onMeta: (meta) => {
+            if (meta.sessionId) setSessionId(String(meta.sessionId))
+            if (meta.status) setSessionStatus(String(meta.status))
+          },
+        })
+        const finalText = String(streamedText || acc || '').trim()
+        if (streamError) {
+          throw new Error(streamError)
         }
-      )
+        if (!finalText) {
+          throw new Error(EMPTY_CHAT_REPLY_MESSAGE)
+        }
+        setMessages((m) =>
+          m.map((msg) => (msg.id === assistantId ? { ...msg, content: finalText } : msg))
+        )
+      } catch (streamErr) {
+        // Never leave a blank assistant bubble: keep partial text or surface the error inline.
+        const errMsg =
+          streamErr instanceof Error
+            ? streamErr.message
+            : String(streamErr || EMPTY_CHAT_REPLY_MESSAGE)
+        setMessages((m) =>
+          m.map((msg) => {
+            if (msg.id !== assistantId) return msg
+            const existing = String(msg.content || '').trim()
+            return { ...msg, content: existing || errMsg }
+          })
+        )
+        throw streamErr
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
     } finally {
@@ -485,7 +481,7 @@ export default function ChatPanel({
           <p className="text-xs text-muted mt-0.5">
             {mode === 'headteacher'
               ? 'Retrieval-only — answers from verified dashboard figures.'
-              : 'Grounded on your school and role. Student chat is not enabled.'}
+              : 'Teachers and HODs can chat here; students use ZSMS Help.'}
             {wsLabel ? ` · ${wsLabel}` : ''}
           </p>
         </div>

@@ -3,6 +3,7 @@
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Button } from '@/components/ui/Button'
 import ChatPanel from '@/components/chat/ChatPanel'
+import { FeatureGate } from '@/components/FeatureGate'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -18,7 +19,10 @@ export default function HodChatPage() {
             </Button>
           </Link>
         </div>
-        <ChatPanel mode="generative" />
+        {/* Plan gate: reuse ai-tools (Standard/Premium), same bucket as other staff AI tools */}
+        <FeatureGate featureId="ai-tools">
+          <ChatPanel mode="generative" />
+        </FeatureGate>
       </div>
     </DashboardLayout>
   )

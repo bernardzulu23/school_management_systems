@@ -103,9 +103,11 @@ import {
   Zap,
   Rocket,
   Globe,
+  MessageSquare,
 } from 'lucide-react'
 import Link from 'next/link'
 import CreativeTeachingHub from '@/components/creative-teaching/CreativeTeachingHub'
+import AIFeaturesShowcase from '@/components/dashboard/AIFeaturesShowcase'
 import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalyticsPanel'
 
 function defaultClassrooms(count) {
@@ -375,6 +377,20 @@ export default function HodDashboard() {
   ]
 
   const academicManagementDuties = [
+    {
+      id: 'ai-assistant',
+      title: 'AI Assistant',
+      description: 'School-grounded chat for teaching help and lesson planning',
+      icon: MessageSquare,
+      route: '/dashboard/hod/chat',
+    },
+    {
+      id: 'chat-lesson-plans',
+      title: 'Chat Lesson Plans',
+      description: 'Approve AI-generated lesson plans from teachers',
+      icon: FileText,
+      route: '/dashboard/hod/chat-lesson-plans',
+    },
     {
       id: 'cpd',
       title: 'CPD File',
@@ -1884,6 +1900,9 @@ export default function HodDashboard() {
               </div>
             </CardContent>
           </Card>
+
+          {/* AI tools (includes AI Assistant chat entry) */}
+          <AIFeaturesShowcase />
 
           {/* Creative Teaching & STEM Hub */}
           <Card variant="glass">

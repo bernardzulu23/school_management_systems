@@ -74,6 +74,17 @@ const CREATIVE_FEATURES = [
     estimatedTime: '5 mins',
     roles: ['teacher', 'hod', 'headteacher', 'administrator'],
   },
+  {
+    featureId: 'ai_assistant',
+    name: 'AI Assistant',
+    description:
+      'School-grounded chatbot for teaching help, lesson planning, and human support handoff.',
+    category: 'creative',
+    iconName: 'MessageSquare',
+    difficulty: 'Beginner',
+    estimatedTime: 'Instant',
+    roles: ['teacher', 'hod', 'headteacher', 'administrator'],
+  },
 
   {
     featureId: 'virtual_lab',

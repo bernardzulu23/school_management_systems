@@ -6,6 +6,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Button } from '@/components/ui/Button'
 import ChatPanel from '@/components/chat/ChatPanel'
 import TeacherLessonPlanDashboard from '@/components/chat/TeacherLessonPlanDashboard'
+import { FeatureGate } from '@/components/FeatureGate'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 
@@ -78,9 +79,12 @@ export default function TeacherChatPage() {
             </Button>
           </Link>
         </div>
-        <Suspense fallback={<p className="text-sm text-muted">Loading assistant?</p>}>
-          <TeacherChatInner />
-        </Suspense>
+        {/* Plan gate: reuse ai-tools (Standard/Premium), same bucket as other staff AI tools */}
+        <FeatureGate featureId="ai-tools">
+          <Suspense fallback={<p className="text-sm text-muted">Loading assistant…</p>}>
+            <TeacherChatInner />
+          </Suspense>
+        </FeatureGate>
       </div>
     </DashboardLayout>
   )

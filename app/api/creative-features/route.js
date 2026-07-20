@@ -17,6 +17,7 @@ const ROUTE_BY_FEATURE_ID = {
   ai_lesson_planner: '/dashboard/teacher/lesson-planner',
   ai_quiz_maker: '/dashboard/teacher/quiz-maker',
   ai_report_comments: '/dashboard/teacher/report-comments',
+  ai_assistant: '/dashboard/teacher/chat',
   ecz_practice: '/dashboard/student/ecz-practice',
 }
 
