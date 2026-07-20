@@ -163,6 +163,7 @@ model School {
   smsSettings          SchoolSmsSettings?
   smsBroadcasts        SmsBroadcast[]
   smsLogs              SmsLog[]
+  smsGateways          SMSGateway[]
   careerClusters       CareerCluster[]
   guidanceAssignments  GuidanceAssignment[]
   guidanceCases        GuidanceCase[]
@@ -3626,8 +3627,36 @@ model SchoolSmsSettings {
   parentSmsLate         Boolean  @default(true)
   parentSmsPresent      Boolean  @default(false)
   parentSmsExcused      Boolean  @default(false)
+  /// Pilot bridge: route outbound SMS via physical Android SIM gateway instead of Africala/Mocean.
+  customGatewayEnabled  Boolean  @default(false)
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
+}
+
+/// Physical Android phone fleet for custom SIM SMS (bridge while Africala sender-ID pending).
+model SMSGateway {
+  id                String    @id @default(uuid())
+  schoolId          String
+  school            School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  deviceName        String
+  /// SHA-256 hex of the pairing token (lookup key). Raw token is never stored plaintext.
+  deviceToken       String    @unique
+  /// AES-256-GCM ciphertext of the raw pairing token (for admin re-display / rotation).
+  apiTokenEncrypted String    @db.Text
+
+  isActive          Boolean   @default(true)
+  lastSeenAt        DateTime?
+  lastHealthCheck   DateTime?
+  totalSent         Int       @default(0)
+  totalFailed       Int       @default(0)
+
+  logs              SmsLog[]
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([schoolId])
+  @@index([isActive])
 }
 
 model SmsBroadcast {
@@ -3679,16 +3708,23 @@ model SmsLog {
   recipient      String?
   fromNumber     String?
   body           String?  @db.Text
-  status         String   @default("SENT") // SENT | FAILED | QUEUED
+  status         String   @default("SENT") // PENDING | DISPATCHED | SENT | FAILED | QUEUED
   provider       String   @default("africastalking")
+  /// "AFRICALA" | "CUSTOM_GATEWAY" — one history regardless of delivery channel
+  channel        String   @default("AFRICALA")
+  gatewayId      String?
+  gateway        SMSGateway? @relation(fields: [gatewayId], references: [id], onDelete: SetNull)
   providerRef    String?
   broadcastId    String?
   idempotencyKey String?  @unique
+  failureReason  String?
   createdAt      DateTime @default(now())
 
   @@index([schoolId])
   @@index([createdAt])
   @@index([broadcastId])
+  @@index([gatewayId])
+  @@index([channel, status, gatewayId])
 }
 
 enum InnovationProjectStatus {

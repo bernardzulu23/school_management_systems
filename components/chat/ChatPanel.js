@@ -35,6 +35,7 @@ export default function ChatPanel({
   const [lpBusy, setLpBusy] = useState(false)
   const [sessionHydrated, setSessionHydrated] = useState(!initialSessionId)
   const [requestingHuman, setRequestingHuman] = useState(false)
+  const [telegramSent, setTelegramSent] = useState(null)
   const [wsLabel, setWsLabel] = useState('')
   const bottomRef = useRef(null)
   const resubmitBootstrapped = useRef(false)
@@ -189,10 +190,22 @@ export default function ChatPanel({
       const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data.error || 'Could not request human help')
       setSessionStatus(data.status || 'PENDING_HUMAN')
+      if (typeof data.telegramSent === 'boolean') setTelegramSent(data.telegramSent)
       const reply =
         typeof data.reply === 'string' && data.reply.trim()
           ? data.reply.trim()
           : 'I am looping in an administrator to assist you further. Please hold on.'
+      const claimerHint =
+        typeof data.claimerHint === 'string' && data.claimerHint.trim()
+          ? data.claimerHint.trim()
+          : 'An administrator has been notified. Platform admins claim sessions at Platform → Chat support. You will not receive a personal invite on your school dashboard — keep this window open.'
+      const telegramNote =
+        data.telegramSent === false
+          ? typeof data.telegramSkippedHint === 'string' && data.telegramSkippedHint.trim()
+            ? data.telegramSkippedHint.trim()
+            : 'Telegram alert was not sent on this server. A platform admin must open Platform → Chat support to claim this session.'
+          : null
+      const assistantContent = [reply, claimerHint, telegramNote].filter(Boolean).join('\n\n')
       setMessages((m) => [
         ...m,
         {
@@ -200,7 +213,7 @@ export default function ChatPanel({
           role: 'user',
           content: 'Requesting a human administrator.',
         },
-        { id: `a-human-${Date.now()}`, role: 'assistant', content: reply },
+        { id: `a-human-${Date.now()}`, role: 'assistant', content: assistantContent },
       ])
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
@@ -307,6 +320,7 @@ export default function ChatPanel({
           onMeta: (meta) => {
             if (meta.sessionId) setSessionId(String(meta.sessionId))
             if (meta.status) setSessionStatus(String(meta.status))
+            if (typeof meta.telegramSent === 'boolean') setTelegramSent(meta.telegramSent)
           },
         })
         const finalText = String(streamedText || acc || '').trim()
@@ -464,7 +478,9 @@ export default function ChatPanel({
 
   const handoffBanner =
     sessionStatus === 'PENDING_HUMAN'
-      ? 'Waiting for an administrator to join. You can keep this window open.'
+      ? telegramSent === false
+        ? 'Waiting for a platform administrator. Telegram was not configured — an admin must claim this at Platform → Chat support. Keep this window open.'
+        : 'Waiting for a platform administrator to join (Platform → Chat support). You will not get a personal invite — keep this window open.'
       : sessionStatus === 'HUMAN_ACTIVE'
         ? 'An administrator is in this conversation.'
         : null

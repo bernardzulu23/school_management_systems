@@ -7,7 +7,12 @@ import {
 import { signChatWsTicket, verifyChatWsTicket } from '@/lib/ai/chat/ws-ticket'
 import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { isPlatformSession } from '@/lib/middleware/auth'
-import { isHandoffStatus } from '@/lib/ai/chat/handoff'
+import {
+  isHandoffStatus,
+  buildHandoffClientPayload,
+  HANDOFF_ADMIN_CLAIM_PATH,
+  HANDOFF_CLAIMER_HINT,
+} from '@/lib/ai/chat/handoff'
 import { wantsHumanHandoff } from '@/lib/ai/chat/system-prompt'
 
 describe('Telegram handoff payload (metadata-only)', () => {
@@ -98,6 +103,36 @@ describe('claim gate — non-admin cannot claim', () => {
     }
     expect(isPlatformSession(user)).toBe(false)
     expect(requirePlatformAdmin(user).ok).toBe(false)
+  })
+})
+
+describe('handoff client payload (request-human response shape)', () => {
+  it('includes claimer path and omits telegram skip fields when sent', () => {
+    const payload = buildHandoffClientPayload({
+      sessionId: 'sess-1',
+      status: 'PENDING_HUMAN',
+      telegramSent: true,
+    })
+    expect(payload.success).toBe(true)
+    expect(payload.telegramSent).toBe(true)
+    expect(payload.adminClaimPath).toBe(HANDOFF_ADMIN_CLAIM_PATH)
+    expect(payload.claimerHint).toBe(HANDOFF_CLAIMER_HINT)
+    expect(payload.telegramReason).toBeUndefined()
+    expect(payload.telegramSkippedHint).toBeUndefined()
+    expect(payload.claimerHint).toMatch(/Platform → Chat support/)
+  })
+
+  it('exposes telegramSent false + reason when alert was skipped', () => {
+    const payload = buildHandoffClientPayload({
+      sessionId: 'sess-2',
+      status: 'PENDING_HUMAN',
+      telegramSent: false,
+      telegramReason: 'not_configured',
+    })
+    expect(payload.telegramSent).toBe(false)
+    expect(payload.telegramReason).toBe('not_configured')
+    expect(payload.telegramSkippedHint).toMatch(/Telegram alert was not sent/)
+    expect(payload.adminClaimPath).toBe('/platform/support')
   })
 })
 

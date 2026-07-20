@@ -245,8 +245,15 @@ function SupportQueueContent() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 min-h-[70vh]">
       <div className="lg:col-span-1 border-2 border-ink/10 rounded-xl bg-white overflow-hidden flex flex-col">
-        <div className="px-3 py-2 border-b border-ink/10 flex items-center justify-between">
-          <h2 className="text-sm font-semibold">Pending handoffs</h2>
+        <div className="px-3 py-2 border-b border-ink/10 flex items-center justify-between gap-2">
+          <h2 className="text-sm font-semibold">
+            Pending handoffs
+            {!loading && queue.length > 0 ? (
+              <span className="ml-2 inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded bg-amber-400 text-ink text-[10px] font-bold">
+                {queue.length}
+              </span>
+            ) : null}
+          </h2>
           <Button type="button" size="sm" variant="outline" onClick={() => void loadQueue()}>
             Refresh
           </Button>
@@ -406,8 +413,10 @@ export default function PlatformSupportPage() {
   return (
     <PlatformShell title="Chat support queue">
       <p className="text-sm text-muted mb-4 max-w-2xl">
-        Pilot handoffs land here for platform admins. Telegram alerts are metadata-only; open a row
-        to read the full transcript, then claim to chat live.
+        Pilot handoffs land here for <strong>platform admins only</strong> (not headteachers or
+        teachers). Telegram pings are metadata-only (school, role, deep link) — never message
+        content. Open a pending row, read the transcript, then <strong>Claim</strong> to join live.
+        Deep links look like <code className="text-xs">/platform/support?sessionId=…</code>.
       </p>
       <Suspense fallback={<p className="text-sm text-muted">Loading support queue…</p>}>
         <SupportQueueContent />

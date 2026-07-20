@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { requireChatAuth, loadChatSession, assertSessionRole } from '@/lib/ai/chat/session'
-import { requestHumanHandoff, HUMAN_HANDOFF_REPLY } from '@/lib/ai/chat/handoff'
+import { requestHumanHandoff, buildHandoffClientPayload } from '@/lib/ai/chat/handoff'
 import { secureJson } from '@/lib/security/api'
 
 export const dynamic = 'force-dynamic'
@@ -75,11 +75,12 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     persistSystemReply: true,
   })
 
-  return NextResponse.json({
-    success: true,
-    sessionId: result.session.id,
-    status: result.session.status,
-    reply: HUMAN_HANDOFF_REPLY,
-    telegramSent: result.telegramSent,
-  })
+  return NextResponse.json(
+    buildHandoffClientPayload({
+      sessionId: result.session.id,
+      status: result.session.status,
+      telegramSent: result.telegramSent,
+      telegramReason: result.telegramReason,
+    })
+  )
 })

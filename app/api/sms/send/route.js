@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { sendAfricasTalkingSms, normalizePhoneNumbers } from '@/lib/sms'
+import { normalizePhoneNumbers } from '@/lib/sms'
 import { createSmsLog } from '@/lib/sms/persistLog'
 import { reserveSmsCredits } from '@/lib/sms/balance'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
@@ -37,7 +37,13 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError(reserve.reason || 'Insufficient SMS credits', 402)
   }
 
-  const result = await sendAfricasTalkingSms({ to: normalized, message, from })
+  const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
+  const result = await sendOutboundSms({
+    to: normalized,
+    message,
+    from,
+    schoolId,
+  })
 
   if (!result.ok) {
     const { refundSmsCredit } = await import('@/lib/sms/balance')
@@ -45,15 +51,19 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError('SMS delivery failed', 502)
   }
 
-  for (const phone of result.recipients) {
-    await createSmsLog({
-      schoolId,
-      direction: 'out',
-      recipient: phone,
-      body: String(message || ''),
-      status: 'SENT',
-      provider: result.provider,
-    })
+  // Gateway path already wrote PENDING SmsLog rows inside queueForGatewayIfEnabled.
+  if (!result.queuedForGateway) {
+    for (const phone of result.recipients) {
+      await createSmsLog({
+        schoolId,
+        direction: 'out',
+        recipient: phone,
+        body: String(message || ''),
+        status: 'SENT',
+        provider: result.provider,
+        channel: 'AFRICALA',
+      })
+    }
   }
 
   return NextResponse.json({ success: true, data: result })

@@ -6,12 +6,14 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { requireChatAuth, getOrCreateSession, assertSessionRole } from '@/lib/ai/chat/session'
 import { enforceChatRateLimit } from '@/lib/ai/chat/enforce-rate-limit'
 import { buildScopedContext } from '@/lib/ai/chat/scoped-context'
+import { buildChatSystemPrompt, wantsHumanHandoff } from '@/lib/ai/chat/system-prompt'
 import {
-  buildChatSystemPrompt,
+  requestHumanHandoff,
+  buildHandoffClientPayload,
   HUMAN_HANDOFF_REPLY,
-  wantsHumanHandoff,
-} from '@/lib/ai/chat/system-prompt'
-import { requestHumanHandoff } from '@/lib/ai/chat/handoff'
+  HANDOFF_CLAIMER_HINT,
+  HANDOFF_TELEGRAM_SKIPPED_HINT,
+} from '@/lib/ai/chat/handoff'
 import { createChatSseStream, AI_SSE_HEADERS } from '@/lib/ai/chat/llm'
 import { handleHeadteacherQuery } from '@/lib/ai/chat/headteacher-handler'
 import { secureJson } from '@/lib/security/api'
@@ -147,21 +149,32 @@ export const POST = withAILimits(
         persistSystemReply: false,
       })
 
+      const handoffMeta = buildHandoffClientPayload({
+        sessionId: handoff.session.id,
+        status: 'PENDING_HUMAN',
+        telegramSent: handoff.telegramSent,
+        telegramReason: handoff.telegramReason,
+      })
+      const teacherFacingReply = [
+        HUMAN_HANDOFF_REPLY,
+        HANDOFF_CLAIMER_HINT,
+        handoff.telegramSent ? null : HANDOFF_TELEGRAM_SKIPPED_HINT,
+      ]
+        .filter(Boolean)
+        .join('\n\n')
       const encoder = new TextEncoder()
       const stream = new ReadableStream<Uint8Array>({
         start(controller) {
           controller.enqueue(
             encoder.encode(
               `data: ${JSON.stringify({
-                sessionId: handoff.session.id,
-                status: 'PENDING_HUMAN',
-                telegramSent: handoff.telegramSent,
+                ...handoffMeta,
                 meta: true,
               })}\n\n`
             )
           )
           controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify({ text: HUMAN_HANDOFF_REPLY })}\n\n`)
+            encoder.encode(`data: ${JSON.stringify({ text: teacherFacingReply })}\n\n`)
           )
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
           controller.close()

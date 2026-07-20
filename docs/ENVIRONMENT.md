@@ -137,7 +137,7 @@ Payment provider logos: place files in `public/payments/` (`mtn.jpg`, `airtel.jp
 | `NEXT_PUBLIC_CHAT_DO_WSS_URL` | Browser WebSocket base, e.g. `wss://zsms-chat-realtime….workers.dev` |
 | `CHAT_DO_WSS_URL`             | Optional server alias (HTTP base derived for `/internal/*` notify)   |
 
-If Telegram is unset, handoff still sets `PENDING_HUMAN` (logged skip). If the Durable Object URL is unset, claim/message APIs still work; live WS relay is skipped. See `chat-realtime/README.md`.
+If Telegram is unset, handoff still sets `PENDING_HUMAN`. The API returns `telegramSent: false` and the teacher UI shows that no Telegram invite was sent; server logs a warning. Platform admins claim at `/platform/support`. If the Durable Object URL is unset, claim/message APIs still work; live WS relay is skipped. See `chat-realtime/README.md` and `docs/CHAT_HANDOFF_PHASE2.md`.
 
 ---
 

@@ -66,6 +66,8 @@ export const POST = withAILimits(async function POST(request) {
   const studentName = String(body?.studentName || '').trim()
   const grade = String(body?.grade || '').trim()
   const subject = String(body?.subject || '').trim()
+  const studentId = String(body?.studentId || '').trim() || undefined
+  const subjectId = String(body?.subjectId || '').trim() || undefined
   const marks = body?.marks
   const maxMarks = body?.maxMarks
   const behavior = String(body?.behavior || 'Good').trim()
@@ -93,6 +95,8 @@ export const POST = withAILimits(async function POST(request) {
     studentName,
     grade,
     subject,
+    ...(studentId ? { studentId } : {}),
+    ...(subjectId ? { subjectId } : {}),
     marks,
     maxMarks,
     behavior,

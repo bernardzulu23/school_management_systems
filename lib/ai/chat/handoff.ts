@@ -18,10 +18,45 @@ import { HUMAN_HANDOFF_REPLY } from '@/lib/ai/chat/system-prompt'
 
 export { HUMAN_HANDOFF_REPLY }
 
+/** Where platform admins claim pilot handoffs (never school teacher/HOD dashboard). */
+export const HANDOFF_ADMIN_CLAIM_PATH = '/platform/support'
+
+/**
+ * Teacher-facing discoverability after Request human.
+ * Pilot claimers are platform admins only — school staff do not get a personal invite.
+ */
+export const HANDOFF_CLAIMER_HINT =
+  'An administrator has been notified. Platform admins claim sessions at Platform → Chat support. You will not receive a personal invite on your school dashboard — keep this window open.'
+
+/** Shown when Telegram env is missing or send failed (handoff still PENDING_HUMAN). */
+export const HANDOFF_TELEGRAM_SKIPPED_HINT =
+  'Telegram alert was not sent on this server. A platform admin must open Platform → Chat support to claim this session.'
+
 export const HANDOFF_STATUSES: SessionStatus[] = ['PENDING_HUMAN', 'HUMAN_ACTIVE']
 
 export function isHandoffStatus(status: SessionStatus | string): boolean {
   return status === 'PENDING_HUMAN' || status === 'HUMAN_ACTIVE'
+}
+
+/** JSON fields returned to the chat UI after request-human / RULE 5 handoff. */
+export function buildHandoffClientPayload(opts: {
+  sessionId: string
+  status: SessionStatus | string
+  telegramSent: boolean
+  telegramReason?: string
+  reply?: string
+}) {
+  return {
+    success: true as const,
+    sessionId: opts.sessionId,
+    status: opts.status,
+    reply: opts.reply ?? HUMAN_HANDOFF_REPLY,
+    telegramSent: opts.telegramSent,
+    ...(opts.telegramSent ? {} : { telegramReason: opts.telegramReason || 'not_configured' }),
+    claimerHint: HANDOFF_CLAIMER_HINT,
+    adminClaimPath: HANDOFF_ADMIN_CLAIM_PATH,
+    ...(opts.telegramSent ? {} : { telegramSkippedHint: HANDOFF_TELEGRAM_SKIPPED_HINT }),
+  }
 }
 
 async function notifyDurableObject(path: string, body: Record<string, unknown>): Promise<void> {
@@ -59,15 +94,19 @@ export async function requestHumanHandoff(params: {
   tenantName: string
   userId: string
   persistSystemReply?: boolean
-}): Promise<{ session: ChatSession; telegramSent: boolean }> {
+}): Promise<{
+  session: ChatSession
+  telegramSent: boolean
+  telegramReason?: string
+}> {
   const db = getTenantClient(params.schoolId)
 
   if (params.session.status === 'CLOSED') {
-    return { session: params.session, telegramSent: false }
+    return { session: params.session, telegramSent: false, telegramReason: 'session_closed' }
   }
 
   if (params.session.status === 'HUMAN_ACTIVE') {
-    return { session: params.session, telegramSent: false }
+    return { session: params.session, telegramSent: false, telegramReason: 'already_active' }
   }
 
   const alreadyPending = params.session.status === 'PENDING_HUMAN'
@@ -106,7 +145,11 @@ export async function requestHumanHandoff(params: {
     status: 'PENDING_HUMAN',
   })
 
-  return { session, telegramSent: tg.sent }
+  return {
+    session,
+    telegramSent: tg.sent,
+    ...(tg.sent ? {} : { telegramReason: tg.reason || 'not_configured' }),
+  }
 }
 
 /**

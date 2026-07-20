@@ -75,8 +75,9 @@ export async function sendTelegramHandoffAlert(
   const token = String(process.env.TELEGRAM_BOT_TOKEN || '').trim()
   const chatId = String(process.env.TELEGRAM_CHAT_ID || '').trim()
   if (!token || !chatId) {
-    console.info(
-      '[chat-handoff] Telegram not configured — skipping alert (PENDING_HUMAN still set)'
+    console.warn(
+      '[chat-handoff] Telegram not configured (TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID) — skipping alert. ' +
+        'PENDING_HUMAN is still set; platform admins must claim at /platform/support.'
     )
     return { sent: false, reason: 'not_configured' }
   }
