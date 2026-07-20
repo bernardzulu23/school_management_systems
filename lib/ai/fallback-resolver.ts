@@ -16,7 +16,7 @@ import fs from 'fs'
 import path from 'path'
 import { slugifySubject } from '@/lib/curriculum/jsonCurriculumLoader'
 import { normalizeForm } from '@/lib/curriculum/chemistry-cdc-2024'
-import { captureWarning } from '@/lib/utils/logger'
+import { captureInfo, captureWarning } from '@/lib/utils/logger'
 
 const FALLBACK_ROOT = path.join(process.cwd(), 'data', 'static-fallback')
 
@@ -160,7 +160,8 @@ export type FallbackMiss = {
 
 /**
  * Resolve a static teaching-module fallback for subject/form/topic.
- * Returns a hit or null. Emits Sentry/known-gap telemetry on misses.
+ * Returns a hit or null. On misses: known-gap → non-alerting captureInfo;
+ * form1-miss / unavailable → captureWarning (actionable).
  */
 export function resolveStaticFallback(
   subject: string | null | undefined,
@@ -283,8 +284,10 @@ export function resolveStaticFallback(
 
 function emitMiss(miss: FallbackMiss, topic?: string | null) {
   if (miss.reason === 'known-gap') {
-    // Expected — requested form not in bank. Counter/tag only; not an anomaly alert.
-    captureWarning('ai.fallback.known_gap', {
+    // Expected until Form 3–4 (and some Form 2) teaching-module PDFs are ingested.
+    // Must NOT use captureWarning / Sentry warning — that pages recently-active members.
+    // Track via info log + breadcrumb only (see captureInfo).
+    captureInfo('ai.fallback.known_gap', {
       kind: 'known-gap',
       subject: miss.subjectSlug,
       form: miss.form,

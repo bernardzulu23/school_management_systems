@@ -6,6 +6,15 @@ import { logger, captureError } from '@/lib/utils/logger'
 import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
 
+/** Matches UUID / CUID id shape used across ZSMS (see lib/schemas idString). */
+const REGISTRATION_ID_SHAPE = /^[A-Za-z0-9_-]+$/
+
+function sanitizeRegistrationId(value) {
+  const id = safeStringId(value)
+  if (!id || !REGISTRATION_ID_SHAPE.test(id)) return null
+  return id
+}
+
 function getIdentifier(payload) {
   const p = payload || {}
   const raw =
@@ -16,7 +25,7 @@ function getIdentifier(payload) {
     p?.data?.internalId ||
     p?.data?.internal_id ||
     null
-  return safeStringId(raw)
+  return sanitizeRegistrationId(raw)
 }
 
 function getReferenceId(payload) {
@@ -99,8 +108,8 @@ export const GET = withSecureHandler(async function GET(request) {
 
   try {
     const { searchParams } = new URL(request.url)
-    const referenceId = safeQueryString(searchParams.get('referenceId'), { defaultValue: '' })
-    const identifier = safeQueryString(searchParams.get('identifier'), { defaultValue: '' })
+    const referenceId = safeStringId(searchParams.get('referenceId'), { maxLength: 256 })
+    const identifier = sanitizeRegistrationId(searchParams.get('identifier'))
     const status = safeQueryString(searchParams.get('status'), { defaultValue: '' })
 
     if (referenceId || identifier) {

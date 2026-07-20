@@ -159,12 +159,15 @@ export const POST = withAILimits(async function POST(request: Request) {
     })
 
     const promptBase = buildPrompt(input)
+    // CDC syllabus RAG first (via buildRagContextForQuery). TM static-fallback is
+    // optional enrichment only — Form 3–4 known-gaps must not imply story failure.
     const rag = await buildRagContextForQuery({
-      query: `${input.subject || 'English'} ${input.grade || 'Form 3'} ${input.topic} ${input.storyType}`,
+      query: `${input.subject || 'English'} ${input.topic}`,
       schoolId,
       schoolPlan: school.plan,
       subject: input.subject || 'English',
       gradeLevel: input.grade || 'Form 3',
+      topic: input.topic,
     })
     const prompt = rag.block ? appendRagToSystemPrompt(promptBase, rag.block) : promptBase
     const startTime = Date.now()

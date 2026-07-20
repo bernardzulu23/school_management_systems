@@ -41,6 +41,27 @@ describe('staff chat nav wiring (source)', () => {
     expect(src).toContain("href: '/platform/support'")
   })
 
+  it('PlatformShell includes SMS Gateway registration', async () => {
+    const fs = await import('node:fs/promises')
+    const path = await import('node:path')
+    const shell = await fs.readFile(
+      path.join(process.cwd(), 'components/platform/PlatformShell.js'),
+      'utf8'
+    )
+    const page = await fs.readFile(
+      path.join(process.cwd(), 'app/platform/sms-gateway/page.js'),
+      'utf8'
+    )
+    expect(shell).toContain("href: '/platform/sms-gateway'")
+    expect(page).toContain('/api/sms/gateway/register')
+    expect(page).toContain('/api/admin/sms-gateway-status')
+    expect(page).toContain('/api/platform/schools')
+    expect(page).not.toContain('localStorage.setItem')
+    expect(page).not.toContain('sessionStorage.setItem')
+    expect(page).not.toMatch(/\blocalStorage\b/)
+    expect(page).not.toMatch(/\bsessionStorage\b/)
+  })
+
   it('AIFeaturesShowcase lists the chatbot entry first', async () => {
     const fs = await import('node:fs/promises')
     const path = await import('node:path')

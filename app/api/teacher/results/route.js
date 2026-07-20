@@ -10,6 +10,7 @@ import { normalizeResultType, RESULT_TYPES } from '@/lib/results/resultTypes'
 import { assertSecondaryGradingForContext } from '@/lib/school/gradingAccess'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { onTestResultRecorded } from '@/lib/teaching/updateTopicMasteryHooks'
+import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
 
 async function gunzipAsync(data) {
   const ds = new DecompressionStream('gzip')
@@ -57,19 +58,19 @@ export const GET = withErrorHandler(async function GET(request) {
   if (featureBlock) return featureBlock
 
   const { searchParams } = new URL(request.url)
-  const studentId = searchParams.get('studentId')
-  const classId = searchParams.get('classId')
-  const subjectId = searchParams.get('subjectId')
-  const termRaw = searchParams.get('term')
-  const yearRaw = searchParams.get('year')
-  const resultTypeRaw = searchParams.get('resultType')
+  const studentId = safeStringId(searchParams.get('studentId'))
+  const classId = safeStringId(searchParams.get('classId'))
+  const subjectId = safeStringId(searchParams.get('subjectId'))
+  const termRaw = safeQueryString(searchParams.get('term'))
+  const yearRaw = safeQueryString(searchParams.get('year'), { maxLength: 16 })
+  const resultTypeRaw = safeQueryString(searchParams.get('resultType'), { maxLength: 64 })
   const resultTypeFilter = resultTypeRaw ? normalizeResultType(resultTypeRaw) : null
-  const scope = String(searchParams.get('scope') || '')
+  const scope = (safeQueryString(searchParams.get('scope'), { defaultValue: '' }) || '')
     .trim()
     .toLowerCase()
 
   await assertSecondaryGradingForContext(schoolId, {
-    classId: String(classId || '').trim(),
+    classId: classId || '',
     prismaClient: prisma,
   })
 
@@ -79,8 +80,8 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const isTeacher = roleCheck(auth.user, ['TEACHER', 'teacher'])
 
-  const resolvedClassId = String(classId || '').trim()
-  const resolvedSubjectId = String(subjectId || '').trim()
+  const resolvedClassId = classId || ''
+  const resolvedSubjectId = subjectId || ''
 
   if (resolvedClassId && !resolvedSubjectId) {
     throw new ApiError('subjectId is required when filtering by classId', 400)
@@ -323,7 +324,7 @@ export const POST = withErrorHandler(async function POST(request) {
   const subjectNameById = new Map()
   if (!isStaffEntry) {
     const subjectIdsInPayload = Array.from(
-      new Set(results.map((r) => String(r.subjectId || '').trim()).filter(Boolean))
+      new Set(results.map((r) => safeStringId(r.subjectId)).filter(Boolean))
     )
     const subjectsInPayload =
       subjectIdsInPayload.length > 0
@@ -343,14 +344,7 @@ export const POST = withErrorHandler(async function POST(request) {
   /** @type {Array<{ schoolId: string, classId: string, subjectName: string, score: number, teacherUserId: string, resultType: string }>} */
   const masteryUpdates = []
 
-  const classIds = Array.from(
-    new Set(
-      results
-        .map((r) => r.classId)
-        .filter(Boolean)
-        .map(String)
-    )
-  )
+  const classIds = Array.from(new Set(results.map((r) => safeStringId(r.classId)).filter(Boolean)))
   const classMap = new Map(
     (await prisma.class.findMany({ where: { schoolId, id: { in: classIds } } })).map((c) => [
       c.id,
@@ -372,10 +366,10 @@ export const POST = withErrorHandler(async function POST(request) {
   const classMembershipKeys = new Set()
   if (isStaffEntry) {
     const studentIds = Array.from(
-      new Set(results.map((r) => String(r.studentId || r.pupilId || '').trim()).filter(Boolean))
+      new Set(results.map((r) => safeStringId(r.studentId || r.pupilId)).filter(Boolean))
     )
     const subjectIds = Array.from(
-      new Set(results.map((r) => String(r.subjectId || '').trim()).filter(Boolean))
+      new Set(results.map((r) => safeStringId(r.subjectId)).filter(Boolean))
     )
 
     const enrollments =
@@ -444,9 +438,9 @@ export const POST = withErrorHandler(async function POST(request) {
 
   await prisma.$transaction(async (tx) => {
     for (const r of results) {
-      const studentId = String(r.studentId || r.pupilId || '').trim()
-      const subjectId = String(r.subjectId || '').trim()
-      const classId = String(r.classId || '').trim()
+      const studentId = safeStringId(r.studentId || r.pupilId)
+      const subjectId = safeStringId(r.subjectId)
+      const classId = safeStringId(r.classId)
       const score =
         r.score === '' || r.score === null || r.score === undefined ? null : Number(r.score)
       const resolution = r.resolution ? String(r.resolution) : null
@@ -489,7 +483,7 @@ export const POST = withErrorHandler(async function POST(request) {
         continue
       }
 
-      const termRaw = String(r.term || '').trim()
+      const termRaw = safeQueryString(r.term, { maxLength: 64 })
       if (!termRaw) {
         throw new ApiError('Select the term you are entering the results', 400)
       }
@@ -794,7 +788,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   if (!schoolId) throw new ApiError('School context required', 400)
 
   const { searchParams } = new URL(request.url)
-  const id = String(searchParams.get('id') || '').trim()
+  const id = safeStringId(searchParams.get('id'))
   if (!id) throw new ApiError('Result id is required', 400)
 
   if (isAdmin) {

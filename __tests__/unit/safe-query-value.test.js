@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import {
   isPlainScalar,
   safeCompositeKey,
+  safeQueryString,
+  safeRouteParam,
   safeStringId,
   safeStringIds,
 } from '@/lib/security/safeQueryValue'
@@ -37,5 +39,18 @@ describe('safeQueryValue', () => {
       year: '2026',
     })
     expect(safeCompositeKey({ schoolId: 's1', studentId: { $ne: 'x' } })).toBeNull()
+  })
+
+  it('safeQueryString rejects operators and supports defaults', () => {
+    expect(safeQueryString({ $gt: '' })).toBeNull()
+    expect(safeQueryString(undefined, { defaultValue: 'Term 1' })).toBe('Term 1')
+    expect(safeQueryString('Term 2', { defaultValue: 'Term 1' })).toBe('Term 2')
+  })
+
+  it('safeRouteParam coerces route ids and rejects objects', async () => {
+    expect(await safeRouteParam({ id: 'alloc_1' })).toBe('alloc_1')
+    expect(await safeRouteParam({ id: { $ne: null } })).toBeNull()
+    expect(await safeRouteParam(Promise.resolve({ id: 'x' }), 'id')).toBe('x')
+    expect(await safeRouteParam({ teacherId: 't1' }, 'teacherId')).toBe('t1')
   })
 })
