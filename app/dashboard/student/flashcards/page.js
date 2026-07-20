@@ -10,47 +10,62 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BookOpen, Sparkles } from 'lucide-react'
 import { deckDateKey } from '@/lib/flashcards/limits'
+import {
+  useStudentCurriculumTopics,
+  useStudentEnrolledSubjects,
+} from '@/hooks/useStudentCurriculumTopics'
 
 const MAX_CARDS = 10
 
 export default function StudentFlashcardsPage() {
-  const [subjects, setSubjects] = useState([])
+  const { subjects, loading: subjectsLoading, error: subjectsError } = useStudentEnrolledSubjects()
   const [todayDecks, setTodayDecks] = useState([])
   const [subjectName, setSubjectName] = useState('')
   const [topic, setTopic] = useState('')
   const [count, setCount] = useState(MAX_CARDS)
-  const [loading, setLoading] = useState(true)
+  const [decksLoading, setDecksLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
 
+  const { topics, loading: topicsLoading } = useStudentCurriculumTopics(subjectName)
   const today = deckDateKey()
   const usedSubjects = new Set(todayDecks.map((d) => d.subjectName.toLowerCase()))
   const availableSubjects = subjects.filter((s) => !usedSubjects.has(s.name.toLowerCase()))
+  const loading = subjectsLoading || decksLoading
 
-  const load = useCallback(async () => {
-    setLoading(true)
+  const loadDecks = useCallback(async () => {
+    setDecksLoading(true)
     try {
-      const [subRes, deckRes] = await Promise.all([
-        fetch('/api/student/subjects', { credentials: 'include' }),
-        fetch(`/api/student/flashcards?date=${today}`, { credentials: 'include' }),
-      ])
-      const subJson = await subRes.json().catch(() => ({}))
+      const deckRes = await fetch(`/api/student/flashcards?date=${today}`, {
+        credentials: 'include',
+      })
       const deckJson = await deckRes.json().catch(() => ({}))
-      setSubjects(Array.isArray(subJson?.data) ? subJson.data : [])
       setTodayDecks(Array.isArray(deckJson?.data?.decks) ? deckJson.data.decks : [])
     } catch {
       toast.error('Failed to load flashcards')
     } finally {
-      setLoading(false)
+      setDecksLoading(false)
     }
   }, [today])
 
   useEffect(() => {
-    load()
-  }, [load])
+    loadDecks()
+  }, [loadDecks])
+
+  useEffect(() => {
+    if (subjectsError) toast.error(subjectsError)
+  }, [subjectsError])
+
+  useEffect(() => {
+    setTopic('')
+  }, [subjectName])
 
   const generateDeck = async () => {
     if (!subjectName) {
       toast.error('Select a subject')
+      return
+    }
+    if (topics.length > 0 && !topic) {
+      toast.error('Select a curriculum topic')
       return
     }
     setGenerating(true)
@@ -69,7 +84,7 @@ export default function StudentFlashcardsPage() {
       setSubjectName('')
       setTopic('')
       setCount(MAX_CARDS)
-      await load()
+      await loadDecks()
     } catch (e) {
       toast.error(e.message || 'Generation failed')
     } finally {
@@ -86,8 +101,8 @@ export default function StudentFlashcardsPage() {
             AI Daily Flashcards
           </h1>
           <p className="text-royalPurple-text2 text-sm mt-1">
-            One AI deck per subject per day · up to {MAX_CARDS} questions · answers stay hidden
-            until you choose · {today}
+            One AI deck per enrolled subject per day · up to {MAX_CARDS} questions · answers stay
+            hidden until you choose · {today}
           </p>
         </div>
 
@@ -133,7 +148,8 @@ export default function StudentFlashcardsPage() {
           <CardContent className="space-y-4">
             {availableSubjects.length === 0 && !loading ? (
               <p className="text-sm text-royalPurple-text2">
-                You have generated a deck for every subject today, or you have no subjects enrolled.
+                You have generated a deck for every enrolled subject today, or you have no subjects
+                enrolled.
               </p>
             ) : (
               <>
@@ -145,7 +161,7 @@ export default function StudentFlashcardsPage() {
                       value={subjectName}
                       onChange={(e) => setSubjectName(e.target.value)}
                     >
-                      <option value="">Choose subject…</option>
+                      <option value="">Choose enrolled subject…</option>
                       {availableSubjects.map((s) => (
                         <option key={s.id || s.name} value={s.name}>
                           {s.name}
@@ -154,12 +170,37 @@ export default function StudentFlashcardsPage() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Topic (optional)</Label>
-                    <Input
-                      value={topic}
-                      onChange={(e) => setTopic(e.target.value)}
-                      placeholder="e.g. Photosynthesis"
-                    />
+                    <Label>{topics.length ? 'Curriculum topic' : 'Topic (optional)'}</Label>
+                    {topics.length > 0 ? (
+                      <select
+                        className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                        disabled={!subjectName || topicsLoading}
+                      >
+                        <option value="">
+                          {topicsLoading ? 'Loading topics…' : 'Choose topic…'}
+                        </option>
+                        {topics.map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <Input
+                        value={topic}
+                        onChange={(e) => setTopic(e.target.value)}
+                        placeholder={
+                          subjectName
+                            ? topicsLoading
+                              ? 'Loading curriculum topics…'
+                              : 'No syllabus topics found — optional free-form'
+                            : 'Select a subject first'
+                        }
+                        disabled={!subjectName || topicsLoading}
+                      />
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label>Number of questions (max {MAX_CARDS})</Label>
@@ -175,7 +216,7 @@ export default function StudentFlashcardsPage() {
                   </div>
                 </div>
 
-                <Button onClick={generateDeck} disabled={generating}>
+                <Button onClick={generateDeck} disabled={generating || !subjectName}>
                   <Sparkles className="h-4 w-4 mr-2" />
                   {generating ? 'Generating…' : 'Generate AI flashcards'}
                 </Button>

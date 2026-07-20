@@ -10,13 +10,20 @@ import { authorizeAiRoute } from '@/lib/ai/routeAuth'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
+import { roleCheck } from '@/lib/middleware/auth'
+import {
+  assertStudentSubjectAllowed,
+  resolveStudentGradeLabel,
+} from '@/lib/flashcards/studentSubjects'
 
-const SYSTEM = `You are a helpful study assistant for Zambian CBC students. Answer clearly using school materials when provided. Cite [Ref N] when using references.
+const SYSTEM = `You are a helpful study assistant for Zambian CBC students. Answer clearly using school materials and official CDC syllabus excerpts when provided. Cite [Ref N] / [CDC N] when using references.
 
 ${PLAIN_TEXT_OUTPUT_RULES}`
 
 /**
- * POST /api/ai/study-assistant — RAG-grounded Q&A scoped to school materials.
+ * POST /api/ai/study-assistant — RAG-grounded Q&A scoped to school materials + curriculum.
+ * Students must pick an enrolled subject; teachers may use any subject.
  */
 export const POST = withAILimits(async function POST(request) {
   const access = await authorizeAiRoute(request, {
@@ -26,10 +33,11 @@ export const POST = withAILimits(async function POST(request) {
   })
   if (!access.ok) return access.response
 
-  const { schoolId, school } = access
+  const { schoolId, school, user } = access
   const body = await request.json().catch(() => ({}))
   const question = safeQueryString(body.question, { maxLength: 2000 })
-  const subject = safeQueryString(body.subject, { maxLength: 128 })
+  let subject = safeQueryString(body.subject, { maxLength: 128 })
+  let gradeLevel = safeQueryString(body.gradeLevel || body.grade || '', { maxLength: 40 })
 
   if (!question) {
     return NextResponse.json(
@@ -37,10 +45,52 @@ export const POST = withAILimits(async function POST(request) {
       { status: 400 }
     )
   }
+
+  const isStudent = roleCheck(user, ['STUDENT', 'student'])
+  if (isStudent) {
+    if (!subject) {
+      return NextResponse.json(
+        { error: 'subject is required', code: 'MISSING_SUBJECT' },
+        { status: 400 }
+      )
+    }
+    const db = getTenantClient(schoolId)
+    const student = await db.student.findFirst({
+      where: { schoolId, userId: user.id },
+      select: {
+        id: true,
+        class: true,
+        classRef: { select: { year_group: true } },
+      },
+    })
+    if (!student) {
+      return NextResponse.json(
+        { error: 'Student profile not found', code: 'STUDENT_NOT_FOUND' },
+        { status: 404 }
+      )
+    }
+    try {
+      subject = await assertStudentSubjectAllowed(student.id, schoolId, subject, {
+        action: 'ask about',
+      })
+    } catch (e) {
+      return NextResponse.json(
+        { error: e?.message || 'Subject not enrolled', code: 'SUBJECT_FORBIDDEN' },
+        { status: e?.status || 403 }
+      )
+    }
+    gradeLevel = resolveStudentGradeLabel(student) || gradeLevel || 'Form 1'
+  }
+
   const guard = validateAIGuardrails({ text: `${subject || ''} ${question}` })
   if (!guard.ok) return guard.response
 
-  const cachePayload = { schoolId, subject: subject || null, question }
+  const cachePayload = {
+    schoolId,
+    subject: subject || null,
+    gradeLevel: gradeLevel || null,
+    question,
+  }
   const cached = await getCachedAIResponse('study-assistant', cachePayload)
   if (cached) {
     return NextResponse.json(cached)
@@ -50,7 +100,8 @@ export const POST = withAILimits(async function POST(request) {
     query: `${subject || ''} ${question}`,
     schoolId,
     schoolPlan: school?.plan,
-    subject,
+    subject: subject || null,
+    gradeLevel: gradeLevel || null,
   })
 
   const system = rag.block ? appendRagToSystemPrompt(SYSTEM, rag.block) : SYSTEM
@@ -63,11 +114,15 @@ export const POST = withAILimits(async function POST(request) {
 
   await trackAIUsage(schoolId, 'study-assistant')
 
+  const answer = sanitizePlainText(text)
+  const refs = rag.refs?.slice(0, 8) || []
   const responsePayload = {
     success: true,
+    answer,
+    refs,
     data: {
-      answer: sanitizePlainText(text),
-      refs: rag.refs?.slice(0, 8) || [],
+      answer,
+      refs,
     },
   }
   await setCachedAIResponse('study-assistant', cachePayload, responsePayload)

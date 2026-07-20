@@ -1,4 +1,4 @@
-/** Secondary school subject catalog (Forms / Grades 8–12). */
+/** Secondary school subject catalog (Forms 1–6 / Grades 10–12). */
 export const SECONDARY_SUBJECTS = [
   {
     id: 1,

@@ -10,8 +10,15 @@ import { FeatureGate } from '@/components/FeatureGate'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ECZ_PRACTICE_EXAM_LEVEL_GROUPS } from '@/lib/ecz/ecz-practice-levels'
+import {
+  ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
+  resolveSelectableEczExamLevel,
+} from '@/lib/ecz/ecz-practice-levels'
 import { api } from '@/lib/api'
+import {
+  useStudentCurriculumTopics,
+  useStudentEnrolledSubjects,
+} from '@/hooks/useStudentCurriculumTopics'
 
 function formatDuration(ms) {
   const totalSec = Math.max(0, Math.floor(ms / 1000))
@@ -23,11 +30,13 @@ function formatDuration(ms) {
 }
 
 export default function StudentMockExamPage() {
+  const { subjects, gradeOrForm, loading: subjectsLoading } = useStudentEnrolledSubjects()
   const [form, setForm] = useState({
-    subject: 'Mathematics',
-    examLevel: 'grade9',
+    subject: '',
+    examLevel: 'form1',
     topic: '',
   })
+  const { topics, loading: topicsLoading } = useStudentCurriculumTopics(form.subject)
   const [attempt, setAttempt] = useState(null)
   const [paper, setPaper] = useState(null)
   const [answers, setAnswers] = useState({})
@@ -38,6 +47,16 @@ export default function StudentMockExamPage() {
   const [error, setError] = useState(null)
   const [deadline, setDeadline] = useState(null)
   const [now, setNow] = useState(Date.now())
+
+  useEffect(() => {
+    if (gradeOrForm) {
+      setForm((p) => ({ ...p, examLevel: resolveSelectableEczExamLevel(gradeOrForm) }))
+    }
+  }, [gradeOrForm])
+
+  useEffect(() => {
+    setForm((p) => ({ ...p, topic: '' }))
+  }, [form.subject])
 
   const loadHistory = useCallback(async () => {
     try {
@@ -172,16 +191,28 @@ export default function StudentMockExamPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-royalPurple-text2">
-                  Timed ECZ-style exam (2 hours). Structured answers are auto-scored; extended
-                  responses may be flagged for teacher review.
+                  Timed ECZ-style exam (2 hours). Uses your enrolled subjects and CDC syllabus
+                  topics. Structured answers are auto-scored; extended responses may be flagged for
+                  teacher review.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Subject</Label>
-                    <Input
+                    <select
+                      className="w-full zsms-select"
                       value={form.subject}
                       onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
-                    />
+                      disabled={subjectsLoading}
+                    >
+                      <option value="">
+                        {subjectsLoading ? 'Loading subjects…' : 'Choose enrolled subject…'}
+                      </option>
+                      {subjects.map((s) => (
+                        <option key={s.id || s.name} value={s.name}>
+                          {s.name}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                   <div className="space-y-2">
                     <Label>Exam Level</Label>
@@ -202,16 +233,44 @@ export default function StudentMockExamPage() {
                     </select>
                   </div>
                   <div className="space-y-2 md:col-span-2">
-                    <Label>Topic</Label>
-                    <Input
-                      value={form.topic}
-                      onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
-                      placeholder="e.g. Algebra and equations"
-                    />
+                    <Label>Curriculum topic</Label>
+                    {topics.length > 0 ? (
+                      <select
+                        className="w-full zsms-select"
+                        value={form.topic}
+                        onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
+                        disabled={!form.subject || topicsLoading}
+                      >
+                        <option value="">
+                          {topicsLoading ? 'Loading topics…' : 'Choose syllabus topic…'}
+                        </option>
+                        {topics.map((t) => (
+                          <option key={t} value={t}>
+                            {t}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <Input
+                        value={form.topic}
+                        onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
+                        placeholder={
+                          form.subject
+                            ? topicsLoading
+                              ? 'Loading curriculum topics…'
+                              : 'No syllabus topics found — enter a topic'
+                            : 'Select a subject first'
+                        }
+                        disabled={!form.subject || topicsLoading}
+                      />
+                    )}
                   </div>
                 </div>
                 {error ? <UpgradePrompt error={error} /> : null}
-                <Button onClick={startExam} disabled={loading}>
+                <Button
+                  onClick={startExam}
+                  disabled={loading || !form.subject.trim() || !form.topic.trim()}
+                >
                   {loading ? 'Generating exam…' : 'Start mock exam'}
                 </Button>
               </CardContent>

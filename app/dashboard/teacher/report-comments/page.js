@@ -18,7 +18,7 @@ export default function TeacherReportCommentsPage() {
   })
   const [form, setForm] = useState({
     studentName: '',
-    grade: 'Grade 9',
+    grade: 'Form 1',
     subject: 'English',
     marks: 0,
     maxMarks: 100,

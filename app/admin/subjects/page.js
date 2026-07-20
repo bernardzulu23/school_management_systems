@@ -342,7 +342,7 @@ export default function SubjectsPage() {
 
                         <div className="flex items-center gap-2 text-sm text-royalPurple-text2 mb-3">
                           <Users className="w-4 h-4" aria-hidden="true" />
-                          <span>Available for Grades 8-12</span>
+                          <span>Available for Forms 1–6 / Grades 10–12</span>
                         </div>
 
                         <div className="flex justify-between items-center">

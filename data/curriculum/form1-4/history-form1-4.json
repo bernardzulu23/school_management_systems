@@ -450,6 +450,9 @@
     "sourceFileBytes": 1142375,
     "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
     "curated": true,
-    "recordCount": 66
+    "recordCount": 66,
+    "cleaned": true,
+    "cleanedAt": "2026-07-19T23:46:44.947Z",
+    "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

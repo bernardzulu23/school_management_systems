@@ -5,17 +5,17 @@ import { BrutalButton } from '@/components/BrutalButton'
 import { globalStyles } from '@/theme/styles'
 import { ZsmsTheme } from '@/theme/colors'
 import type { EczPaper } from '@/types'
+import {
+  ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
+  formatEczExamLevelLabel,
+} from '../../../lib/ecz/ecz-practice-levels.js'
 
-const LEVELS: Array<{ key: string; label: string }> = [
-  { key: 'grade7', label: 'Grade 7' },
-  { key: 'grade9', label: 'Grade 9' },
-  { key: 'grade12', label: 'Grade 12' },
-]
+const DEFAULT_EXAM_LEVEL = 'form1'
 
 export default function EczPracticeScreen() {
   const [subject, setSubject] = useState('')
   const [topic, setTopic] = useState('')
-  const [examLevel, setExamLevel] = useState('grade9')
+  const [examLevel, setExamLevel] = useState(DEFAULT_EXAM_LEVEL)
   const [paper, setPaper] = useState<EczPaper | null>(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -64,15 +64,22 @@ export default function EczPracticeScreen() {
       />
 
       <Text style={globalStyles.label}>Level</Text>
-      <View style={{ flexDirection: 'row', gap: 8, marginBottom: 16 }}>
-        {LEVELS.map((lvl) => (
-          <BrutalButton
-            key={lvl.key}
-            title={lvl.label}
-            variant={examLevel === lvl.key ? 'primary' : 'secondary'}
-            onPress={() => setExamLevel(lvl.key)}
-            style={{ flex: 1, paddingVertical: 8 }}
-          />
+      <View style={{ marginBottom: 16, gap: 10 }}>
+        {ECZ_PRACTICE_EXAM_LEVEL_GROUPS.map((group) => (
+          <View key={group.label} style={{ gap: 8 }}>
+            <Text style={{ color: ZsmsTheme.textSecondary, fontWeight: '700' }}>{group.label}</Text>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+              {group.levels.map((level) => (
+                <BrutalButton
+                  key={level.value}
+                  title={level.label}
+                  variant={examLevel === level.value ? 'primary' : 'secondary'}
+                  onPress={() => setExamLevel(level.value)}
+                  style={{ paddingVertical: 8 }}
+                />
+              ))}
+            </View>
+          </View>
         ))}
       </View>
 
@@ -87,7 +94,7 @@ export default function EczPracticeScreen() {
       {paper ? (
         <View style={{ marginTop: 16 }}>
           <Text style={{ fontWeight: '800', fontSize: 16, color: ZsmsTheme.ink }}>
-            {paper.examInfo.subject} — {paper.examInfo.level}
+            {paper.examInfo.subject} — {formatEczExamLevelLabel(paper.examInfo.level)}
           </Text>
           <Text style={globalStyles.subtitle}>
             {paper.examInfo.topic} • {paper.examInfo.totalMarks} marks •{' '}

@@ -112,7 +112,7 @@ const CREATIVE_FEATURES = [
     featureId: 'ecz_practice',
     name: 'ECZ Exam Practice',
     description:
-      'AI-generated past-paper style questions for Grade 9 and Grade 12 ECZ examinations.',
+      'AI-generated past-paper style questions for ECZ examinations (Forms and Grade 12).',
     category: 'stem',
     iconName: 'GraduationCap',
     difficulty: 'Intermediate',

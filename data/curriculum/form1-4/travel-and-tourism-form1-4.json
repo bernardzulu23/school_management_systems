@@ -492,7 +492,7 @@
     "extractedAt": "2026-07-19T18:48:23.558Z",
     "curated": true,
     "cleaned": true,
-    "cleanedAt": "2026-07-19T18:48:37.454Z",
+    "cleanedAt": "2026-07-19T23:46:44.957Z",
     "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

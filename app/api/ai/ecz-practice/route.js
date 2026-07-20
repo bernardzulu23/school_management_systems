@@ -26,6 +26,12 @@ import {
   normalizeQuestionsForMode,
   ASSESSMENT_MODES,
 } from '@/lib/ecz/assessment-engine'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
+import {
+  assertStudentSubjectAllowed,
+  resolveStudentGradeLabel,
+} from '@/lib/flashcards/studentSubjects'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
 
 const ECZ_PRACTICE_SYSTEM =
   'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context. Match the requested exam level exactly. Secondary levels: scenario-based only, no MCQ.'
@@ -87,10 +93,10 @@ export const POST = withAILimits(async function POST(request) {
   }
 
   const body = await request.json().catch(() => ({}))
-  const subject = String(body?.subject || '').trim()
-  const examLevelRaw = String(body?.examLevel || body?.level || '').trim() || 'grade9'
+  let subject = String(body?.subject || '').trim()
+  const examLevelRaw = String(body?.examLevel || body?.level || '').trim() || 'form1'
   const examLevel = normalizeEczExamLevel(examLevelRaw)
-  const topic = String(body?.topic || '').trim()
+  let topic = String(body?.topic || '').trim()
   const questionCount = Number(body?.questionCount ?? 5)
 
   if (!subject || !topic) {
@@ -100,6 +106,55 @@ export const POST = withAILimits(async function POST(request) {
   if (!isValidEczExamLevel(examLevel)) {
     return NextResponse.json({ error: 'Invalid exam level' }, { status: 400 })
   }
+
+  const isStudent = roleCheck(user, ['STUDENT', 'student'])
+  let gradeLevel = String(body?.gradeLevel || '').trim()
+  if (isStudent) {
+    const db = getTenantClient(schoolId)
+    const student = await db.student.findFirst({
+      where: { schoolId, userId: user.id },
+      select: {
+        id: true,
+        class: true,
+        classRef: { select: { year_group: true } },
+      },
+    })
+    if (!student) {
+      return NextResponse.json({ error: 'Student profile not found' }, { status: 404 })
+    }
+    try {
+      subject = await assertStudentSubjectAllowed(student.id, schoolId, subject, {
+        action: 'practice',
+      })
+    } catch (e) {
+      return NextResponse.json(
+        { error: e?.message || 'Subject not enrolled' },
+        { status: e?.status || 403 }
+      )
+    }
+    gradeLevel = resolveStudentGradeLabel(student) || gradeLevel || examLevel
+    try {
+      topic = await assertCurriculumTopicAllowed(subject, gradeLevel, topic, {
+        required: true,
+      })
+    } catch (e) {
+      return NextResponse.json({ error: e?.message || 'Invalid topic' }, { status: 400 })
+    }
+  } else {
+    gradeLevel = gradeLevel || examLevel
+    try {
+      topic = await assertCurriculumTopicAllowed(subject, gradeLevel, topic, {
+        required: true,
+      })
+    } catch (e) {
+      // Teachers may still generate when curriculum is missing (empty topics → free-form).
+      // Reject only when topics exist and the request does not match.
+      if (String(e?.message || '').includes('not in the curriculum')) {
+        return NextResponse.json({ error: e.message }, { status: 400 })
+      }
+    }
+  }
+
   const guard = validateAIGuardrails({ text: `${subject} ${examLevel} ${topic}` })
   if (!guard.ok) return guard.response
 
@@ -111,7 +166,7 @@ export const POST = withAILimits(async function POST(request) {
     resolveAssessmentMode({ schoolLevel: school.level }) === ASSESSMENT_MODES.SECONDARY_SCENARIO
       ? ASSESSMENT_MODES.SECONDARY_SCENARIO
       : ASSESSMENT_MODES.PRIMARY_MCQ
-  const cachePayload = { schoolId, subject, examLevel, topic, count, assessmentMode }
+  const cachePayload = { schoolId, subject, examLevel, topic, count, assessmentMode, gradeLevel }
   const cached = await getCachedAIResponse('ecz-practice', cachePayload)
   if (cached) return NextResponse.json(cached)
 
@@ -128,6 +183,7 @@ export const POST = withAILimits(async function POST(request) {
     schoolId,
     schoolPlan: school.plan,
     subject,
+    gradeLevel,
   })
   if (rag.block) {
     prompt = `${prompt}\n\n---\nSchool reference materials (cite textbook refs as [Ref N]):\n${rag.block}`

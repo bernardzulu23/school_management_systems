@@ -197,19 +197,19 @@ Solo workspaces (`SchoolType.INDIVIDUAL`) are blocked from school timetable APIs
 
 ### 9. Key APIs
 
-| Route                                         | Purpose                                                                        |
-| --------------------------------------------- | ------------------------------------------------------------------------------ |
-| **`GET /api/timetable/conflicts`**            | Server audit of draft entries; persists `TimetableDraftMeta`                   |
-| **`POST /api/timetable/conflicts/resolve`**   | `REASSIGN_TEACHER`, `MOVE_TO_SLOT`, `REMOVE_ENTRY`, `SWAP_SLOTS` on draft rows |
-| **`POST /api/timetable/conflicts/seed-test`** | Dev-only live audit of the caller's school draft (same as GET conflicts)       |
-| `GET/POST /api/timetable/generate`            | Hybrid generation + **`conflictSummary`** after save                           |
-| `POST /api/timetable/publish`                 | Publish draft after hard-conflict check (`PUBLISH_BLOCKED_BY_CONFLICTS`)       |
-| `GET /api/timetable/view`                     | Load assignments for store (role-scoped)                                       |
-| `GET/PATCH/DELETE /api/timetable/entries`     | CRUD on `TimetableAllocationEntry`                                             |
-| `POST /api/timetable/entries/sync-draft`      | Persist in-memory grid to draft rows                                           |
-| `POST /api/timetable/assignTeacherToPeriod`   | Manual cell assignment                                                         |
-| `GET/POST /api/timetable/allocations`         | HOD allocation management                                                      |
-| `POST /api/timetable/allocations/push`        | Push approved allocations for generation                                       |
+| Route                                         | Purpose                                                                                                                        |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **`GET /api/timetable/conflicts`**            | Server audit of draft entries; persists `TimetableDraftMeta`                                                                   |
+| **`POST /api/timetable/conflicts/resolve`**   | `REASSIGN_TEACHER`, `MOVE_TO_SLOT`, `REMOVE_ENTRY`, `SWAP_SLOTS` on draft rows                                                 |
+| **`POST /api/timetable/conflicts/seed-test`** | Dev-only live audit of the caller's school draft (same as GET conflicts)                                                       |
+| `GET/POST /api/timetable/generate`            | Hybrid generation + **`conflictSummary`** after save                                                                           |
+| `POST /api/timetable/publish`                 | Publish draft after hard-conflict check (`PUBLISH_BLOCKED_BY_CONFLICTS`)                                                       |
+| `GET /api/timetable/view`                     | Load assignments for store (role-scoped: student→class, teacher→User.id, HOD→department teachers; optional `scope=department`) |
+| `GET/PATCH/DELETE /api/timetable/entries`     | CRUD on `TimetableAllocationEntry`                                                                                             |
+| `POST /api/timetable/entries/sync-draft`      | Persist in-memory grid to draft rows                                                                                           |
+| `POST /api/timetable/assignTeacherToPeriod`   | Manual cell assignment                                                                                                         |
+| `GET/POST /api/timetable/allocations`         | HOD allocation management                                                                                                      |
+| `POST /api/timetable/allocations/push`        | Push approved allocations for generation                                                                                       |
 
 See [API_ROUTES.md](./API_ROUTES.md) for the full `/api/timetable` tree.
 

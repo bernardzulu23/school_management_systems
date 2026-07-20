@@ -461,6 +461,9 @@
     "accessedAt": "2026-07-19",
     "extractionNote": "Shift-corrected extract (detected_shift=29, confidence=0.979) + deterministic CDC table parse. No fabricated content.",
     "curated": true,
-    "recordCount": 74
+    "recordCount": 74,
+    "cleaned": true,
+    "cleanedAt": "2026-07-19T23:46:44.921Z",
+    "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

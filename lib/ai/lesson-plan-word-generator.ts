@@ -5,6 +5,7 @@
 import {
   AlignmentType,
   Document,
+  ImageRun,
   Packer,
   PageBreak,
   Paragraph,
@@ -17,6 +18,8 @@ import {
 } from 'docx'
 import type { FileChild } from 'docx'
 import { sanitizeText } from '@/lib/lesson-plans/text'
+import { structuredLessonPlanToPlainText } from '@/lib/ai/lesson-plan-formatter'
+import type { ChatLessonPlan } from '@/lib/ai/chat/lesson-plan-schema'
 
 export type LessonPlanDocParams = {
   schoolName: string
@@ -32,6 +35,21 @@ export type LessonPlanDocParams = {
   lessonContent: string
   approvalStatus?: 'DRAFT' | 'SUBMITTED' | 'APPROVED' | 'REJECTED' | 'REVISION_REQUESTED'
   approvalNotes?: string
+  /** Optional PNG of a Mermaid diagram (chat Phase 3). */
+  diagramPng?: Buffer | null
+}
+
+/** Chat-generated structured JSON → Word (extends existing docx layout; no separate template engine). */
+export type StructuredLessonPlanDocParams = Omit<
+  LessonPlanDocParams,
+  'lessonContent' | 'subject' | 'form' | 'topic' | 'subTopic' | 'duration'
+> & {
+  structured: ChatLessonPlan | Record<string, unknown>
+  subject?: string
+  form?: string
+  topic?: string
+  subTopic?: string
+  duration?: number
 }
 
 function headerCell(text: string) {
@@ -197,6 +215,26 @@ export async function generateLessonPlanWordDoc(params: LessonPlanDocParams): Pr
     })
   )
 
+  if (params.diagramPng && Buffer.isBuffer(params.diagramPng) && params.diagramPng.length > 0) {
+    try {
+      children.push(
+        sectionParagraph('DIAGRAM', { bold: true, color: '1F4788', size: 22 }),
+        new Paragraph({
+          spacing: { before: 120, after: 240 },
+          children: [
+            new ImageRun({
+              type: 'png',
+              data: params.diagramPng,
+              transformation: { width: 480, height: 280 },
+            }),
+          ],
+        })
+      )
+    } catch {
+      // Image embed failed — continue without diagram (optional visual).
+    }
+  }
+
   for (const line of clean.split('\n')) {
     const trimmed = line.trim()
     if (!trimmed) {
@@ -240,4 +278,33 @@ export function generateLessonPlanFilename(subject: string, form: string, topic:
     .substring(0, 50)
 
   return `LessonPlan_${sanitized}_${new Date().toISOString().split('T')[0]}.docx`
+}
+
+/**
+ * Accept chat-generated (Zod-validated) lesson-plan JSON and produce a .docx
+ * using the same official header/layout as generateLessonPlanWordDoc.
+ * Optional diagramPng is embedded as a fixed-size IMAGE when present.
+ */
+export async function generateLessonPlanWordDocFromStructured(
+  params: StructuredLessonPlanDocParams
+): Promise<Buffer> {
+  const structured = params.structured as ChatLessonPlan
+  const plain = structuredLessonPlanToPlainText(structured as any)
+
+  return generateLessonPlanWordDoc({
+    schoolName: params.schoolName,
+    teacherName: params.teacherName,
+    teacherGender: params.teacherGender,
+    departmentName: params.departmentName,
+    date: params.date,
+    subject: params.subject || structured.subject || '',
+    form: params.form || structured.gradeOrForm || '',
+    topic: params.topic || structured.topic || structured.title || '',
+    subTopic: params.subTopic || structured.subTopic || structured.title || '',
+    duration: Number(params.duration || structured.duration || 40),
+    lessonContent: plain,
+    approvalStatus: params.approvalStatus,
+    approvalNotes: params.approvalNotes,
+    diagramPng: params.diagramPng,
+  })
 }

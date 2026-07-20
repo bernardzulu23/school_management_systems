@@ -8,6 +8,7 @@ import type {
   TeachingModuleJSON,
   TeachingModuleLesson,
 } from '@/lib/curriculum/teachingModuleParser'
+import { similarity } from '@/lib/text/similarity'
 
 function slugify(subject: string): string {
   return String(subject || '')
@@ -74,25 +75,6 @@ export function loadTeachingModule(options: {
     }
   }
   return null
-}
-
-function tokenize(s: string): Set<string> {
-  return new Set(
-    String(s || '')
-      .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, ' ')
-      .split(/\s+/)
-      .filter((w) => w.length > 2)
-  )
-}
-
-function similarity(a: string, b: string): number {
-  const ta = tokenize(a)
-  const tb = tokenize(b)
-  if (!ta.size || !tb.size) return 0
-  let inter = 0
-  for (const w of ta) if (tb.has(w)) inter++
-  return inter / Math.max(ta.size, tb.size)
 }
 
 /**

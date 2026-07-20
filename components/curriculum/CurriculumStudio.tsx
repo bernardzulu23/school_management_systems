@@ -53,8 +53,6 @@ const GRADES = [
   'Form 5',
   'Form 6',
   'Grade 7',
-  'Grade 8',
-  'Grade 9',
   'Grade 10',
   'Grade 11',
   'Grade 12',

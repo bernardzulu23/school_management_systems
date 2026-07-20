@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-07-14T20:06:45.772Z
+Generated: 2026-07-20T09:06:20.865Z
 
-Total route files: **420**
+Total route files: **453**
 
 ## Quick index
 
@@ -16,8 +16,8 @@ Total route files: **420**
 | --------------------------- | ----: |
 | `/api/account`              |     2 |
 | `/api/activities`           |     4 |
-| `/api/admin`                |    20 |
-| `/api/ai`                   |    11 |
+| `/api/admin`                |    21 |
+| `/api/ai`                   |    12 |
 | `/api/aiml`                 |     5 |
 | `/api/allocations`          |     7 |
 | `/api/analytics`            |     1 |
@@ -25,12 +25,13 @@ Total route files: **420**
 | `/api/assessments`          |    13 |
 | `/api/assignments`          |     4 |
 | `/api/attendance`           |     9 |
-| `/api/auth`                 |     8 |
+| `/api/auth`                 |     9 |
 | `/api/billing`              |     2 |
 | `/api/career-clusters`      |     2 |
 | `/api/careers`              |     2 |
 | `/api/cbc`                  |     2 |
 | `/api/changelog`            |     1 |
+| `/api/chat`                 |    13 |
 | `/api/classes`              |     5 |
 | `/api/code-playground`      |     1 |
 | `/api/creative-features`    |     1 |
@@ -50,7 +51,7 @@ Total route files: **420**
 | `/api/grades`               |     1 |
 | `/api/guidance`             |    17 |
 | `/api/health`               |     1 |
-| `/api/hod`                  |    11 |
+| `/api/hod`                  |    12 |
 | `/api/hods`                 |     3 |
 | `/api/hostel`               |     2 |
 | `/api/houses`               |     2 |
@@ -62,10 +63,11 @@ Total route files: **420**
 | `/api/multimedia-lessons`   |     2 |
 | `/api/notifications`        |     8 |
 | `/api/onboarding`           |    10 |
-| `/api/parent`               |     1 |
+| `/api/parent`               |     4 |
 | `/api/payments`             |     2 |
 | `/api/ping`                 |     1 |
-| `/api/platform`             |    14 |
+| `/api/platform`             |    19 |
+| `/api/privacy`              |     3 |
 | `/api/profile`              |     4 |
 | `/api/proprietor`           |     1 |
 | `/api/public`               |     6 |
@@ -73,17 +75,18 @@ Total route files: **420**
 | `/api/recipes`              |     5 |
 | `/api/school`               |     1 |
 | `/api/schools`              |     3 |
+| `/api/security-static`      |     2 |
 | `/api/sentry-example-api`   |     1 |
 | `/api/sic`                  |     6 |
 | `/api/sms`                  |    11 |
 | `/api/solo`                 |     6 |
 | `/api/strategic-goals`      |     2 |
 | `/api/strategic-reviews`    |     1 |
-| `/api/student`              |    12 |
+| `/api/student`              |    13 |
 | `/api/student-works`        |     2 |
 | `/api/students`             |     6 |
 | `/api/subjects`             |     3 |
-| `/api/teacher`              |     6 |
+| `/api/teacher`              |     8 |
 | `/api/teacher-performance`  |     4 |
 | `/api/teachers`             |     5 |
 | `/api/teaching`             |     4 |
@@ -115,44 +118,46 @@ Total route files: **420**
 
 ## /api/admin
 
-| Method    | Route                                           | Summary |
-| --------- | ----------------------------------------------- | ------- |
-| GET       | `/api/admin/allocations`                        | —       |
-| DELETE    | `/api/admin/allocations/:allocationId`          | —       |
-| POST      | `/api/admin/allocations/:allocationId/approve`  | —       |
-| POST      | `/api/admin/allocations/:allocationId/reject`   | —       |
-| GET       | `/api/admin/allocations/:allocationId/review`   | —       |
-| PUT       | `/api/admin/allocations/:allocationId/update`   | —       |
-| DELETE    | `/api/admin/allocations/clear`                  | —       |
-| GET       | `/api/admin/allocations/pending`                | —       |
-| GET       | `/api/admin/diagnostics/students`               | —       |
-| GET       | `/api/admin/export/users`                       | —       |
-| GET       | `/api/admin/master-timetable`                   | —       |
-| GET       | `/api/admin/notifications`                      | —       |
-| POST      | `/api/admin/notifications/:notificationId/read` | —       |
-| POST      | `/api/admin/repair/backfill-class-ids`          | —       |
-| POST      | `/api/admin/repair/backfill-result-entered-by`  | —       |
-| POST      | `/api/admin/repair/clear-default-classes`       | —       |
-| POST      | `/api/admin/repair/enrollments`                 | —       |
-| POST      | `/api/admin/repair/normalize-classes`           | —       |
-| GET, POST | `/api/admin/schools`                            | —       |
-| GET       | `/api/admin/teacher-performance`                | —       |
+| Method            | Route                                           | Summary                                                                         |
+| ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------------- |
+| GET               | `/api/admin/allocations`                        | —                                                                               |
+| DELETE            | `/api/admin/allocations/:allocationId`          | —                                                                               |
+| POST              | `/api/admin/allocations/:allocationId/approve`  | —                                                                               |
+| POST              | `/api/admin/allocations/:allocationId/reject`   | —                                                                               |
+| GET               | `/api/admin/allocations/:allocationId/review`   | —                                                                               |
+| PUT               | `/api/admin/allocations/:allocationId/update`   | —                                                                               |
+| DELETE            | `/api/admin/allocations/clear`                  | —                                                                               |
+| GET               | `/api/admin/allocations/pending`                | —                                                                               |
+| GET               | `/api/admin/diagnostics/students`               | —                                                                               |
+| GET               | `/api/admin/export/users`                       | —                                                                               |
+| GET               | `/api/admin/master-timetable`                   | —                                                                               |
+| GET               | `/api/admin/notifications`                      | —                                                                               |
+| POST              | `/api/admin/notifications/:notificationId/read` | —                                                                               |
+| GET, POST, DELETE | `/api/admin/parent-links`                       | Admin: list parent links for a student or school. Query: ?studentId= (optional) |
+| POST              | `/api/admin/repair/backfill-class-ids`          | —                                                                               |
+| POST              | `/api/admin/repair/backfill-result-entered-by`  | —                                                                               |
+| POST              | `/api/admin/repair/clear-default-classes`       | —                                                                               |
+| POST              | `/api/admin/repair/enrollments`                 | —                                                                               |
+| POST              | `/api/admin/repair/normalize-classes`           | —                                                                               |
+| GET, POST         | `/api/admin/schools`                            | —                                                                               |
+| GET               | `/api/admin/teacher-performance`                | —                                                                               |
 
 ## /api/ai
 
-| Method    | Route                         | Summary                                                                                       |
-| --------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
-| POST      | `/api/ai/competency-analyzer` | —                                                                                             |
-| POST      | `/api/ai/ecz-exam-questions`  | —                                                                                             |
-| POST      | `/api/ai/ecz-practice`        | —                                                                                             |
-| POST      | `/api/ai/lesson-planner`      | —                                                                                             |
-| POST      | `/api/ai/phonics-trainer`     | —                                                                                             |
-| POST      | `/api/ai/quiz-maker`          | formative → MCQ; summative/exam/secondary → ECSEOL secondary_scenario when school/grade allow |
-| POST      | `/api/ai/report-comments`     | —                                                                                             |
-| POST      | `/api/ai/story-weaver`        | —                                                                                             |
-| POST      | `/api/ai/study-assistant`     | POST /api/ai/study-assistant — RAG-grounded Q&A scoped to school materials.                   |
-| GET, POST | `/api/ai/term-reports`        | —                                                                                             |
-| PATCH     | `/api/ai/term-reports/:id`    | PATCH /api/ai/term-reports/[id] — HOD approve / publish.                                      |
+| Method    | Route                             | Summary                                                                                                                                                        |
+| --------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST      | `/api/ai/competency-analyzer`     | —                                                                                                                                                              |
+| POST      | `/api/ai/ecz-exam-questions`      | —                                                                                                                                                              |
+| POST      | `/api/ai/ecz-practice`            | —                                                                                                                                                              |
+| POST      | `/api/ai/lesson-planner`          | —                                                                                                                                                              |
+| POST      | `/api/ai/phonics-trainer`         | —                                                                                                                                                              |
+| POST      | `/api/ai/quiz-maker`              | formative → MCQ; summative/exam/secondary → ECSEOL secondary_scenario when school/grade allow                                                                  |
+| POST      | `/api/ai/report-comments`         | —                                                                                                                                                              |
+| POST      | `/api/ai/story-weaver`            | —                                                                                                                                                              |
+| POST      | `/api/ai/study-assistant`         | POST /api/ai/study-assistant — RAG-grounded Q&A scoped to school materials + curriculum. Students must pick an enrolled subject; teachers may use any subject. |
+| GET, POST | `/api/ai/term-reports`            | —                                                                                                                                                              |
+| PATCH     | `/api/ai/term-reports/:id`        | PATCH /api/ai/term-reports/[id] — HOD approve / publish.                                                                                                       |
+| GET       | `/api/ai/term-reports/:id/export` | —                                                                                                                                                              |
 
 ## /api/aiml
 
@@ -232,16 +237,17 @@ Total route files: **420**
 
 ## /api/auth
 
-| Method        | Route                             | Summary                                                                                          |
-| ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------ |
-| POST          | `/api/auth/forgot-password`       | —                                                                                                |
-| POST          | `/api/auth/login`                 | —                                                                                                |
-| POST, OPTIONS | `/api/auth/logout`                | —                                                                                                |
-| GET           | `/api/auth/me`                    | —                                                                                                |
-| POST          | `/api/auth/refresh`               | Benign concurrent refresh: old token revoked within this window should not mass-revoke sessions. |
-| POST          | `/api/auth/register`              | —                                                                                                |
-| POST          | `/api/auth/reset-password`        | —                                                                                                |
-| POST          | `/api/auth/reset-password/:token` | —                                                                                                |
+| Method        | Route                             | Summary                                                                                                                         |
+| ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| POST          | `/api/auth/forgot-password`       | —                                                                                                                               |
+| POST          | `/api/auth/login`                 | —                                                                                                                               |
+| POST, OPTIONS | `/api/auth/logout`                | Host-only by default; only add COOKIE_DOMAIN when explicitly configured in env.                                                 |
+| GET           | `/api/auth/me`                    | —                                                                                                                               |
+| POST          | `/api/auth/refresh`               | Benign concurrent refresh: old token revoked within this window should not mass-revoke sessions.                                |
+| POST          | `/api/auth/register`              | —                                                                                                                               |
+| POST          | `/api/auth/reset-password`        | —                                                                                                                               |
+| POST          | `/api/auth/reset-password/:token` | —                                                                                                                               |
+| POST          | `/api/auth/touch`                 | Explicit "stay signed in" — stamps server-side last-activity for cookie sessions. Subject to CSRF; not a passive poll endpoint. |
 
 ## /api/billing
 
@@ -276,6 +282,24 @@ Total route files: **420**
 | Method | Route            | Summary                                                                                                     |
 | ------ | ---------------- | ----------------------------------------------------------------------------------------------------------- |
 | GET    | `/api/changelog` | GET /api/changelog — read-only system activity trail. No POST/PATCH/DELETE — ChangeLogEntry is append-only. |
+
+## /api/chat
+
+| Method    | Route                                       | Summary                                                                                                                                                                         |
+| --------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST      | `/api/chat/headteacher-query`               | POST /api/chat/headteacher-query Retrieval-only analytics — NOT generative free-form chat.                                                                                      |
+| POST      | `/api/chat/human-message`                   | POST /api/chat/human-message User message during HUMAN_ACTIVE (persisted + relayed via DO). No AI.                                                                              |
+| GET       | `/api/chat/lesson-plans/:id/download`       | GET /api/chat/lesson-plans/[id]/download Returns a signed/expiring R2 URL, or streams the local file (dev fallback). Never returns a permanent public URL.                      |
+| POST      | `/api/chat/lesson-plans/:id/review`         | POST /api/chat/lesson-plans/[id]/review HOD (assigned) or admin: approve / reject PENDING_APPROVAL submissions.                                                                 |
+| POST      | `/api/chat/lesson-plans/:id/submit-to-hod`  | POST /api/chat/lesson-plans/[id]/submit-to-hod Teacher owns submission → PENDING_APPROVAL + hodId via resolveReviewerUserId                                                     |
+| POST      | `/api/chat/lesson-plans/generate-from-chat` | POST /api/chat/lesson-plans/generate-from-chat Teacher/HOD: structured JSON → docx → R2/local → DRAFT LessonPlanSubmission                                                      |
+| GET       | `/api/chat/lesson-plans/pending`            | GET /api/chat/lesson-plans/pending HOD: pending chat lesson-plan submissions for their department (hodId = self). Admin/headteacher: all pending in school.                     |
+| POST      | `/api/chat/navbot`                          | —                                                                                                                                                                               |
+| POST      | `/api/chat/request-human`                   | POST /api/chat/request-human Sets session.status = PENDING_HUMAN and sends a metadata-only Telegram alert (tenant name, role, admin console deep link — never message content). |
+| POST      | `/api/chat/send-message`                    | POST /api/chat/send-message SSE contract (Teacher/HOD generative path): data: {"sessionId":"...","meta":true}                                                                   |
+| GET, POST | `/api/chat/sessions`                        | GET /api/chat/sessions — list current user's sessions for this school                                                                                                           |
+| GET       | `/api/chat/sessions/:id`                    | GET /api/chat/sessions/[id] Load own session + recent messages (used by Phase 4 resubmit reopen).                                                                               |
+| POST      | `/api/chat/ws-ticket`                       | When true, issue an admin ticket (platform_admin + claimed session only).                                                                                                       |
 
 ## /api/classes
 
@@ -470,19 +494,20 @@ Total route files: **420**
 
 ## /api/hod
 
-| Method        | Route                         | Summary |
-| ------------- | ----------------------------- | ------- |
-| GET, POST     | `/api/hod/budget`             | —       |
-| GET, POST     | `/api/hod/correspondence`     | —       |
-| PATCH, DELETE | `/api/hod/correspondence/:id` | —       |
-| GET, POST     | `/api/hod/daily-routine`      | —       |
-| PATCH         | `/api/hod/daily-routine/:id`  | —       |
-| GET, POST     | `/api/hod/files`              | —       |
-| DELETE        | `/api/hod/files/:id`          | —       |
-| GET           | `/api/hod/files/download/:id` | —       |
-| GET, POST     | `/api/hod/meetings`           | —       |
-| PATCH         | `/api/hod/meetings/:id`       | —       |
-| GET, POST     | `/api/hod/stock`              | —       |
+| Method        | Route                                    | Summary                                                                                                                                                                                                 |
+| ------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET, POST     | `/api/hod/budget`                        | —                                                                                                                                                                                                       |
+| GET, POST     | `/api/hod/correspondence`                | —                                                                                                                                                                                                       |
+| PATCH, DELETE | `/api/hod/correspondence/:id`            | —                                                                                                                                                                                                       |
+| GET, POST     | `/api/hod/daily-routine`                 | —                                                                                                                                                                                                       |
+| PATCH         | `/api/hod/daily-routine/:id`             | —                                                                                                                                                                                                       |
+| GET, POST     | `/api/hod/files`                         | —                                                                                                                                                                                                       |
+| DELETE        | `/api/hod/files/:id`                     | —                                                                                                                                                                                                       |
+| GET           | `/api/hod/files/download/:id`            | —                                                                                                                                                                                                       |
+| GET           | `/api/hod/lesson-plans/teacher-coverage` | GET /api/hod/lesson-plans/teacher-coverage Query: teacherId (required for drilldown) / omit for department teacher list. Counts scoped to schoolId AND HOD department. Cross-department teachers → 403. |
+| GET, POST     | `/api/hod/meetings`                      | —                                                                                                                                                                                                       |
+| PATCH         | `/api/hod/meetings/:id`                  | —                                                                                                                                                                                                       |
+| GET, POST     | `/api/hod/stock`                         | —                                                                                                                                                                                                       |
 
 ## /api/hods
 
@@ -550,20 +575,20 @@ Total route files: **420**
 
 ## /api/mobile
 
-| Method    | Route                                             | Summary                                               |
-| --------- | ------------------------------------------------- | ----------------------------------------------------- |
-| GET, POST | `/api/mobile/attendance/sessions`                 | —                                                     |
-| POST      | `/api/mobile/attendance/sessions/:id/close`       | —                                                     |
-| POST      | `/api/mobile/attendance/sessions/:id/marks`       | —                                                     |
-| POST      | `/api/mobile/attendance/sessions/:id/twin-verify` | —                                                     |
-| POST      | `/api/mobile/attendance/verify-face`              | —                                                     |
-| POST      | `/api/mobile/auth/login`                          | —                                                     |
-| POST      | `/api/mobile/auth/refresh`                        | —                                                     |
-| GET       | `/api/mobile/class-roster`                        | —                                                     |
-| POST      | `/api/mobile/push/register`                       | —                                                     |
-| GET       | `/api/mobile/school/lookup`                       | Public: validate school subdomain before mobile login |
-| GET       | `/api/mobile/session-context`                     | —                                                     |
-| POST      | `/api/mobile/sync`                                | —                                                     |
+| Method    | Route                                             | Summary                                                                                                                                                                                                           |
+| --------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET, POST | `/api/mobile/attendance/sessions`                 | —                                                                                                                                                                                                                 |
+| POST      | `/api/mobile/attendance/sessions/:id/close`       | —                                                                                                                                                                                                                 |
+| POST      | `/api/mobile/attendance/sessions/:id/marks`       | —                                                                                                                                                                                                                 |
+| POST      | `/api/mobile/attendance/sessions/:id/twin-verify` | Twin secondary auth — PIN only (server-side bcrypt). Prompt 23: a previous `biometricVerified: true` body flag was accepted with no server corroboration (any client could set it). Device LocalAuthentication is |
+| POST      | `/api/mobile/attendance/verify-face`              | Server-side face match. Only pupils with school feature ON + active consent contribute templates. No consent / no match → client must use manual marking.                                                         |
+| POST      | `/api/mobile/auth/login`                          | —                                                                                                                                                                                                                 |
+| POST      | `/api/mobile/auth/refresh`                        | —                                                                                                                                                                                                                 |
+| GET       | `/api/mobile/class-roster`                        | —                                                                                                                                                                                                                 |
+| POST      | `/api/mobile/push/register`                       | —                                                                                                                                                                                                                 |
+| GET       | `/api/mobile/school/lookup`                       | Public: validate school subdomain before mobile login                                                                                                                                                             |
+| GET       | `/api/mobile/session-context`                     | —                                                                                                                                                                                                                 |
+| POST      | `/api/mobile/sync`                                | —                                                                                                                                                                                                                 |
 
 ## /api/multimedia-lessons
 
@@ -602,9 +627,12 @@ Total route files: **420**
 
 ## /api/parent
 
-| Method | Route                | Summary |
-| ------ | -------------------- | ------- |
-| GET    | `/api/parent/portal` | —       |
+| Method    | Route                       | Summary                                                                 |
+| --------- | --------------------------- | ----------------------------------------------------------------------- |
+| GET, POST | `/api/parent/accept-invite` | Preview a pending parent invite (public — token is the secret).         |
+| GET       | `/api/parent/child`         | Parent-authenticated portal data for a linked child. Query: ?studentId= |
+| GET       | `/api/parent/children`      | List children linked to the authenticated parent.                       |
+| GET       | `/api/parent/portal`        | —                                                                       |
 
 ## /api/payments
 
@@ -621,22 +649,35 @@ Total route files: **420**
 
 ## /api/platform
 
-| Method        | Route                              | Summary                                                                                 |
-| ------------- | ---------------------------------- | --------------------------------------------------------------------------------------- |
-| POST          | `/api/platform/auth/login`         | —                                                                                       |
-| GET           | `/api/platform/auth/me`            | —                                                                                       |
-| GET, PATCH    | `/api/platform/auth/profile`       | —                                                                                       |
-| GET           | `/api/platform/billing/payments`   | —                                                                                       |
-| GET           | `/api/platform/billing/summary`    | —                                                                                       |
-| GET           | `/api/platform/health`             | —                                                                                       |
-| GET           | `/api/platform/health/rag`         | —                                                                                       |
-| GET           | `/api/platform/schools`            | List affiliated, paid schools — metadata only (no enrollment counts).                   |
-| PATCH, DELETE | `/api/platform/schools/:id`        | Patch tenant billing flags and location metadata only.                                  |
-| GET           | `/api/platform/stats/districts`    | GET /api/platform/stats/districts?province=Lusaka                                       |
-| GET           | `/api/platform/stats/overview`     | —                                                                                       |
-| GET           | `/api/platform/stats/provinces`    | —                                                                                       |
-| GET           | `/api/platform/stats/school-usage` | Per-school student + teacher counts only (no names, grades, or records).                |
-| GET           | `/api/platform/stats/streams`      | GET /api/platform/stats/streams — schools grouped by province+district reporting stream |
+| Method        | Route                                        | Summary                                                                                                                                                                                                    |
+| ------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST          | `/api/platform/auth/login`                   | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/auth/me`                      | —                                                                                                                                                                                                          |
+| GET, PATCH    | `/api/platform/auth/profile`                 | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/billing/payments`             | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/billing/summary`              | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/health`                       | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/health/rag`                   | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/schools`                      | List affiliated, paid schools — metadata only (no enrollment counts).                                                                                                                                      |
+| PATCH, DELETE | `/api/platform/schools/:id`                  | Patch tenant billing flags and location metadata only.                                                                                                                                                     |
+| GET           | `/api/platform/stats/districts`              | GET /api/platform/stats/districts?province=Lusaka                                                                                                                                                          |
+| GET           | `/api/platform/stats/overview`               | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/stats/provinces`              | —                                                                                                                                                                                                          |
+| GET           | `/api/platform/stats/school-usage`           | Per-school student + teacher counts only (no names, grades, or records).                                                                                                                                   |
+| GET           | `/api/platform/stats/streams`                | GET /api/platform/stats/streams — schools grouped by province+district reporting stream                                                                                                                    |
+| GET           | `/api/platform/support/queue`                | GET /api/platform/support/queue List ChatSession where status = PENDING_HUMAN, order by updatedAt. PILOT STAGE: escalations route to platform admin. Once past single-school                               |
+| GET           | `/api/platform/support/sessions/:id`         | GET /api/platform/support/sessions/[id] Full transcript for platform admin (content is read here — never in Telegram).                                                                                     |
+| POST          | `/api/platform/support/sessions/:id/claim`   | POST /api/platform/support/sessions/[id]/claim Sets assignedToId + HUMAN_ACTIVE only after server-side platform_admin verification. Then notifies the Durable Object so it accepts this admin's WebSocket. |
+| POST          | `/api/platform/support/sessions/:id/close`   | POST /api/platform/support/sessions/[id]/close HUMAN_ACTIVE (or PENDING_HUMAN) → CLOSED. Platform admin only (pilot).                                                                                      |
+| POST          | `/api/platform/support/sessions/:id/message` | POST /api/platform/support/sessions/[id]/message Claiming platform admin sends a HUMAN_STAFF message; DO relays to user.                                                                                   |
+
+## /api/privacy
+
+| Method     | Route                                           | Summary                                                            |
+| ---------- | ----------------------------------------------- | ------------------------------------------------------------------ |
+| GET, PATCH | `/api/privacy/facial-attendance-settings`       | —                                                                  |
+| GET, POST  | `/api/privacy/facial-consent`                   | Record consent grant or denial (paper form digitised).             |
+| POST       | `/api/privacy/facial-consent/:pupilId/withdraw` | Withdraw active facial consent for a pupil (clears face template). |
 
 ## /api/profile
 
@@ -694,6 +735,13 @@ Total route files: **420**
 | GET    | `/api/schools/check-subdomain` | —       |
 | POST   | `/api/schools/register`        | —       |
 | GET    | `/api/schools/verify/:token`   | —       |
+
+## /api/security-static
+
+| Method | Route                                    | Summary                                                                                |
+| ------ | ---------------------------------------- | -------------------------------------------------------------------------------------- |
+| GET    | `/api/security-static/assets/:[...path]` | Rewritten from /Assets/:path* (beforeFiles) — bypasses Vercel public/ ACAO:* defaults. |
+| GET    | `/api/security-static/icons/:[...path]`  | Rewritten from /icons/:path* (beforeFiles) — bypasses Vercel public/ ACAO:* defaults.  |
 
 ## /api/sentry-example-api
 
@@ -754,20 +802,21 @@ Total route files: **420**
 
 ## /api/student
 
-| Method                 | Route                                  | Summary |
-| ---------------------- | -------------------------------------- | ------- |
-| GET                    | `/api/student/assessments`             | —       |
-| GET, POST              | `/api/student/flashcards`              | —       |
-| POST                   | `/api/student/flashcards/:id/complete` | —       |
-| GET, POST, PUT, DELETE | `/api/student/goals`                   | —       |
-| GET, POST              | `/api/student/materials`               | —       |
-| GET                    | `/api/student/mock-exam`               | —       |
-| GET                    | `/api/student/mock-exam/:id`           | —       |
-| POST                   | `/api/student/mock-exam/:id/submit`    | —       |
-| POST                   | `/api/student/mock-exam/start`         | —       |
-| GET                    | `/api/student/notices`                 | —       |
-| GET                    | `/api/student/results`                 | —       |
-| GET                    | `/api/student/subjects`                | —       |
+| Method                 | Route                                  | Summary                                                                                                                              |
+| ---------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| GET                    | `/api/student/assessments`             | —                                                                                                                                    |
+| GET                    | `/api/student/curriculum-topics`       | GET /api/student/curriculum-topics?subject= Topics from ingested curriculum JSON for an enrolled subject + the student's grade/form. |
+| GET, POST              | `/api/student/flashcards`              | —                                                                                                                                    |
+| POST                   | `/api/student/flashcards/:id/complete` | —                                                                                                                                    |
+| GET, POST, PUT, DELETE | `/api/student/goals`                   | —                                                                                                                                    |
+| GET, POST              | `/api/student/materials`               | —                                                                                                                                    |
+| GET                    | `/api/student/mock-exam`               | —                                                                                                                                    |
+| GET                    | `/api/student/mock-exam/:id`           | —                                                                                                                                    |
+| POST                   | `/api/student/mock-exam/:id/submit`    | —                                                                                                                                    |
+| POST                   | `/api/student/mock-exam/start`         | —                                                                                                                                    |
+| GET                    | `/api/student/notices`                 | —                                                                                                                                    |
+| GET                    | `/api/student/results`                 | —                                                                                                                                    |
+| GET                    | `/api/student/subjects`                | —                                                                                                                                    |
 
 ## /api/student-works
 
@@ -778,14 +827,14 @@ Total route files: **420**
 
 ## /api/students
 
-| Method           | Route                                | Summary |
-| ---------------- | ------------------------------------ | ------- |
-| GET, POST        | `/api/students`                      | —       |
-| GET, PUT, DELETE | `/api/students/:id`                  | —       |
-| POST             | `/api/students/:id/face-enrollment`  | —       |
-| POST             | `/api/students/:id/twin-pin`         | —       |
-| POST             | `/api/students/bulk-upload`          | —       |
-| GET              | `/api/students/bulk-upload/template` | —       |
+| Method           | Route                                | Summary                                                                                                                                 |
+| ---------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| GET, POST        | `/api/students`                      | —                                                                                                                                       |
+| GET, PUT, DELETE | `/api/students/:id`                  | —                                                                                                                                       |
+| POST, DELETE     | `/api/students/:id/face-enrollment`  | POST — store derived face embedding only (never raw images). Requires: school facialAttendanceEnabled + active ConsentRecord for pupil. |
+| POST             | `/api/students/:id/twin-pin`         | —                                                                                                                                       |
+| POST             | `/api/students/bulk-upload`          | —                                                                                                                                       |
+| GET              | `/api/students/bulk-upload/template` | —                                                                                                                                       |
 
 ## /api/subjects
 
@@ -797,14 +846,16 @@ Total route files: **420**
 
 ## /api/teacher
 
-| Method            | Route                                | Summary |
-| ----------------- | ------------------------------------ | ------- |
-| GET               | `/api/teacher/department-activities` | —       |
-| GET, POST         | `/api/teacher/materials`             | —       |
-| PUT, DELETE       | `/api/teacher/materials/:id`         | —       |
-| GET               | `/api/teacher/pupils`                | —       |
-| GET, POST, DELETE | `/api/teacher/results`               | —       |
-| GET               | `/api/teacher/results/export`        | —       |
+| Method            | Route                                   | Summary                                                                                                                                                           |
+| ----------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET               | `/api/teacher/department-activities`    | —                                                                                                                                                                 |
+| GET               | `/api/teacher/lesson-plans/stats`       | GET /api/teacher/lesson-plans/stats Single Prisma groupBy on LessonPlanSubmission by SubmissionStatus for the authenticated teacher, scoped to schoolId (tenant). |
+| GET               | `/api/teacher/lesson-plans/submissions` | GET /api/teacher/lesson-plans/submissions List the teacher's chat LessonPlanSubmission rows (for stats drilldown / resubmit).                                     |
+| GET, POST         | `/api/teacher/materials`                | —                                                                                                                                                                 |
+| PUT, DELETE       | `/api/teacher/materials/:id`            | —                                                                                                                                                                 |
+| GET               | `/api/teacher/pupils`                   | —                                                                                                                                                                 |
+| GET, POST, DELETE | `/api/teacher/results`                  | —                                                                                                                                                                 |
+| GET               | `/api/teacher/results/export`           | —                                                                                                                                                                 |
 
 ## /api/teacher-performance
 
@@ -852,7 +903,7 @@ Total route files: **420**
 | POST               | `/api/timetable/allocations/push`                 | —                                                                                                                                                                                                                                                                                      |
 | POST               | `/api/timetable/assignTeacherToPeriod`            | —                                                                                                                                                                                                                                                                                      |
 | GET                | `/api/timetable/classes`                          | —                                                                                                                                                                                                                                                                                      |
-| GET, POST          | `/api/timetable/config`                           | GET/POST school timetable hours + schedulingRules (session rules A/B, teacher workload caps: maxPeriodsPerDay, maxConsecutivePeriods). Workload/audit config lands here — no separate workload endpoint.                                                                               |
+| GET, POST          | `/api/timetable/config`                           | GET/POST school timetable hours + schedulingRules (session rules A/B; optional teacher workload caps: maxPeriodsPerDay / maxConsecutivePeriods / break coverage — each opt-in via \*Enabled flags, default off).                                                                       |
 | GET                | `/api/timetable/conflicts`                        | GET /api/timetable/conflicts?term=Term+1&academicYear=2026 Server-side draft audit (conflictAudit / validateTimetable). Issue types include ROOM_DOUBLE_BOOKED, TEACHER_CLASS_SUBJECT_SPLIT, TEACHER_CLASS_RETURN_TOO_SOON, plus classic double-book / missing-period / workload hits. |
 | POST               | `/api/timetable/conflicts/resolve`                | POST /api/timetable/conflicts/resolve Apply a resolution action to draft timetable allocation entries.                                                                                                                                                                                 |
 | POST               | `/api/timetable/conflicts/seed-test`              | POST /api/timetable/conflicts/seed-test Dev/helper: runs the real draft conflict audit for the caller's school (same source of truth as GET /api/timetable/conflicts) and persists draft meta.                                                                                         |

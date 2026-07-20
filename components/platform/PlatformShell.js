@@ -15,12 +15,14 @@ import {
   User,
   Activity,
   Users,
+  Headset,
 } from 'lucide-react'
 
 const NAV = [
   { href: '/platform/overview', label: 'Overview', icon: LayoutDashboard },
   { href: '/platform/usage', label: 'School usage', icon: Users },
   { href: '/platform/dashboard', label: 'Schools', icon: Building2 },
+  { href: '/platform/support', label: 'Chat support', icon: Headset },
   { href: '/platform/provinces', label: 'Provinces', icon: MapPin },
   { href: '/platform/streams', label: 'Reporting streams', icon: MapPin },
   { href: '/platform/billing', label: 'Billing', icon: CreditCard },

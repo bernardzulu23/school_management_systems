@@ -1,0 +1,65 @@
+[
+  {
+    "id": "view-timetable",
+    "triggers": [
+      "see my timetable",
+      "class schedule",
+      "what class do i have",
+      "timetable not showing"
+    ],
+    "answer": "Your timetable is under My Timetable — it only shows once your headteacher has published it. If it looks empty, it likely hasn't been published yet; ask your teacher.",
+    "route": "/dashboard/timetable/student"
+  },
+  {
+    "id": "view-results",
+    "triggers": ["see my results", "check my grades", "where are my marks", "results not showing"],
+    "answer": "You can view your results under Results — end-of-term, midterm, and class-test scores for your own subjects only.",
+    "route": "/dashboard/student/results"
+  },
+  {
+    "id": "qr-attendance",
+    "triggers": [
+      "how do i mark attendance",
+      "qr code attendance",
+      "scan attendance",
+      "attendance not recorded"
+    ],
+    "answer": "Scan the QR code your teacher shows in class, or open the attendance link directly — no login needed. Select your name from the class list and it records automatically.",
+    "route": "/attend?t={token}"
+  },
+  {
+    "id": "career-guidance",
+    "triggers": ["career guidance", "career pathways", "bursaries", "what career should i choose"],
+    "answer": "Career Guidance has two parts: Career pathways for career clusters and details, and the Guidance board for tips, bursaries, and events posted by your guidance teacher.",
+    "route": "/dashboard/student/learning-path"
+  },
+  {
+    "id": "study-assistant-vs-navbot",
+    "triggers": [
+      "help with homework",
+      "explain this topic",
+      "solve this problem",
+      "write my essay"
+    ],
+    "answer": "I can only help you navigate ZSMS, not with subject content. For study help, try Study Assistant or Flashcards in your dashboard, or ask your teacher.",
+    "route": "/dashboard/student/study-assistant"
+  },
+  {
+    "id": "cannot-login",
+    "triggers": ["can't log in", "login not working", "wrong password", "forgot password"],
+    "answer": "Make sure you're on your school's own login page. If your password isn't accepted, use Forgot Password to reset it — a weak password will also block login until reset.",
+    "route": "/forgot-password"
+  },
+  {
+    "id": "materials-not-loading",
+    "triggers": ["materials not showing", "can't see study materials", "notes missing"],
+    "answer": "Study materials are posted by your teachers per subject — check Materials in your dashboard. If a specific subject's materials seem missing, that teacher may not have uploaded them yet.",
+    "route": "/dashboard/student/materials"
+  },
+  {
+    "id": "mock-exam",
+    "triggers": ["practice exam", "mock exam", "ecz practice"],
+    "answer": "ECZ Practice and Mock Exam are both under your dashboard for exam-style practice on your subjects.",
+    "route": "/dashboard/student/ecz-practice"
+  }
+]

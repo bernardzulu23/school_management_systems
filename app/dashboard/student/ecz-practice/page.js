@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
@@ -14,20 +14,41 @@ import { Label } from '@/components/ui/label'
 import {
   ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
   formatEczExamLevelLabel,
+  resolveSelectableEczExamLevel,
 } from '@/lib/ecz/ecz-practice-levels'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
+import {
+  useStudentCurriculumTopics,
+  useStudentEnrolledSubjects,
+} from '@/hooks/useStudentCurriculumTopics'
 
 export default function StudentECZPracticePage() {
   const { data, loading, error, fetch } = useAIFetch('/api/ai/ecz-practice')
   const paper = data?.paper || null
   const ragReferences = Array.isArray(data?.ragReferences) ? data.ragReferences : []
 
+  const { subjects, gradeOrForm, loading: subjectsLoading } = useStudentEnrolledSubjects()
   const [form, setForm] = useState({
-    subject: 'English Language',
-    examLevel: 'grade9',
+    subject: '',
+    examLevel: 'form1',
     topic: '',
     questionCount: 5,
   })
+
+  const { topics, loading: topicsLoading } = useStudentCurriculumTopics(form.subject)
+
+  useEffect(() => {
+    if (gradeOrForm) {
+      setForm((p) => ({
+        ...p,
+        examLevel: resolveSelectableEczExamLevel(gradeOrForm),
+      }))
+    }
+  }, [gradeOrForm])
+
+  useEffect(() => {
+    setForm((p) => ({ ...p, topic: '' }))
+  }, [form.subject])
 
   const canGenerate = useMemo(
     () => form.subject.trim() && form.topic.trim(),
@@ -53,13 +74,27 @@ export default function StudentECZPracticePage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              <p className="text-sm text-royalPurple-text2">
+                Practice papers use your enrolled subjects and CDC syllabus topics for your form.
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Subject</Label>
-                  <Input
+                  <select
+                    className="w-full zsms-select"
                     value={form.subject}
                     onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
-                  />
+                    disabled={subjectsLoading}
+                  >
+                    <option value="">
+                      {subjectsLoading ? 'Loading subjects…' : 'Choose enrolled subject…'}
+                    </option>
+                    {subjects.map((s) => (
+                      <option key={s.id || s.name} value={s.name}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="space-y-2">
                   <Label>Exam Level</Label>
@@ -80,11 +115,37 @@ export default function StudentECZPracticePage() {
                   </select>
                 </div>
                 <div className="space-y-2 md:col-span-2">
-                  <Label>Topic</Label>
-                  <Input
-                    value={form.topic}
-                    onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
-                  />
+                  <Label>Curriculum topic</Label>
+                  {topics.length > 0 ? (
+                    <select
+                      className="w-full zsms-select"
+                      value={form.topic}
+                      onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
+                      disabled={!form.subject || topicsLoading}
+                    >
+                      <option value="">
+                        {topicsLoading ? 'Loading topics…' : 'Choose syllabus topic…'}
+                      </option>
+                      {topics.map((t) => (
+                        <option key={t} value={t}>
+                          {t}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <Input
+                      value={form.topic}
+                      onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
+                      placeholder={
+                        form.subject
+                          ? topicsLoading
+                            ? 'Loading curriculum topics…'
+                            : 'No syllabus topics found — enter a topic'
+                          : 'Select a subject first'
+                      }
+                      disabled={!form.subject || topicsLoading}
+                    />
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label>Question Count</Label>

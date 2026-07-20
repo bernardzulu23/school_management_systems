@@ -27,7 +27,7 @@ Do **not** run scripts that overwrite `lib/curriculum/*` with placeholders — u
 1. Open **`/dashboard/teacher/schemes`** (requires plan feature `schemes-of-work`).
 2. Select:
    - **Subject** — Chemistry, Physics, Biology, Mathematics, English, History, Geography, Civic Education, Computer Studies, Agricultural Science
-   - **Grade / Form** — Form 1–6, Grade 8, Grade 9
+   - **Grade / Form** — Form 1–6, Grade 7, Grades 10–12
    - **Term** — Term 1, 2, or 3
    - **Weeks / term** — default 12 (1–16)
 3. Choose export: **Word**, **CSV**, or **JSON**

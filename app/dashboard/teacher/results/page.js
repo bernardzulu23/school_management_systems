@@ -502,7 +502,7 @@ export default function ResultEntryPage() {
         <div className="max-w-3xl mx-auto">
           <PrimarySchoolFeatureUnavailable title="Secondary grading unavailable">
             <p>
-              Term result entry uses secondary grading scales (Forms and Grades 8–12). Primary
+              Term result entry uses secondary grading scales (Forms 1–6 and Grades 10–12). Primary
               schools (ECE–Grade 7) should use CBC continuous assessment instead.
             </p>
           </PrimarySchoolFeatureUnavailable>

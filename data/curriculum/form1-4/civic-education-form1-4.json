@@ -7,7 +7,7 @@
     {
       "unitNumber": 1,
       "title": "Form 1: Topic 1.1",
-      "topics": ["Civic Education"],
+      "topics": [],
       "learningOutcomes": [
         "Demonstrate understanding of Civic (GXFDWLRQ Discussing the concept of Civic Education (in line with social, political, economic, cultural and environmental landscape)",
         "Engage in civic activities"
@@ -642,6 +642,9 @@
     "sourceFileBytes": 895123,
     "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
     "curated": true,
-    "recordCount": 97
+    "recordCount": 97,
+    "cleaned": true,
+    "cleanedAt": "2026-07-19T23:46:44.913Z",
+    "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

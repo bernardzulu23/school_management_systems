@@ -5,6 +5,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
+import { getStudentSubjectNames } from '@/lib/flashcards/studentSubjects'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -22,21 +23,22 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
-    select: { id: true, classId: true, class: true, selected_subjects: true },
+    select: { id: true, classId: true, class: true },
   })
 
   if (!student) {
     return NextResponse.json({ error: 'Student not found' }, { status: 404 })
   }
 
+  const enrolledSubjects = await getStudentSubjectNames(student.id, schoolId)
+  const subjectFilter = enrolledSubjects.length > 0 ? { subject: { in: enrolledSubjects } } : {}
+
   // Fetch Upcoming Assessments
   const upcoming = await db.assessment.findMany({
     where: {
       schoolId,
       ...(student.classId ? { classId: student.classId } : { class: student.class }),
-      ...(Array.isArray(student.selected_subjects) && student.selected_subjects.length > 0
-        ? { subject: { in: student.selected_subjects } }
-        : {}),
+      ...subjectFilter,
       date: { gte: new Date() },
     },
     orderBy: { date: 'asc' },
@@ -47,9 +49,7 @@ export const GET = withErrorHandler(async function GET(request) {
     where: {
       schoolId,
       ...(student.classId ? { classId: student.classId } : { class: student.class }),
-      ...(Array.isArray(student.selected_subjects) && student.selected_subjects.length > 0
-        ? { subject: { in: student.selected_subjects } }
-        : {}),
+      ...subjectFilter,
       OR: [{ assessmentId: null }, { assessment: { status: 'PUBLISHED' } }],
     },
     include: {

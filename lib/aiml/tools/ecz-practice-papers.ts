@@ -21,7 +21,7 @@ export async function generateECZPractice(request: PracticeRequest) {
       ? 'grade9'
       : request.examLevel === 'SC' || request.examLevel === 'GCE'
         ? 'grade12'
-        : normalizeEczExamLevel(String(request.examLevel || request.grade || 'grade9'))
+        : normalizeEczExamLevel(String(request.examLevel || request.grade || 'form1'))
 
   const prompt = buildEczPracticePrompt({
     subject: request.subject,

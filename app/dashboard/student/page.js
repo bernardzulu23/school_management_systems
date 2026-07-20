@@ -167,8 +167,11 @@ export default function StudentDashboard() {
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
   const studentProfile = currentUser?.studentProfile || null
-  const { assignments: publishedAssignments, timeSlots: publishedTimeSlots } =
-    usePublishedTimetableView({ enabled: Boolean(currentUser) })
+  const {
+    assignments: publishedAssignments,
+    timeSlots: publishedTimeSlots,
+    classId: scopedClassId,
+  } = usePublishedTimetableView({ enabled: Boolean(currentUser) })
   const timeSlots = publishedTimeSlots.length ? publishedTimeSlots : schoolTimeSlots
 
   const { data: stats } = useQuery({
@@ -401,7 +404,9 @@ export default function StudentDashboard() {
               <StudentTimetableView
                 assignments={publishedAssignments}
                 timeSlots={timeSlots}
-                classId={String(currentUser?.studentProfile?.classId || '') || undefined}
+                classId={
+                  String(currentUser?.studentProfile?.classId || scopedClassId || '') || undefined
+                }
                 classes={timetableClasses}
                 teachers={timetableTeachers}
                 classrooms={timetableClassrooms}

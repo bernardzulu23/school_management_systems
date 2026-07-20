@@ -1561,7 +1561,7 @@
     },
     {
       "unitNumber": 116,
-      "title": "Unit 118",
+      "title": "Unit 116",
       "topics": [
         "NTENDEKELO",
         "Uno buuku wa Fomu1 mu Kikaonde wanengezhiwa mujishinda ja kukumya,",
@@ -3156,7 +3156,7 @@
     "extractedAt": "2026-07-19T18:48:24.058Z",
     "curated": true,
     "cleaned": true,
-    "cleanedAt": "2026-07-19T18:48:37.479Z",
+    "cleanedAt": "2026-07-19T23:46:44.964Z",
     "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

@@ -37,8 +37,9 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
     props.teacherId || String(auth?.user?.id || auth?.user?.teacherProfile?.userId || '')
 
   const myAssignments = useMemo(() => {
-    if (!effectiveTeacherId) return []
-    return assignments.filter((a) => String(a.teacherId) === String(effectiveTeacherId))
+    // API already scopes teachers to their User.id; don't wipe when auth is slow.
+    if (!effectiveTeacherId) return assignments || []
+    return (assignments || []).filter((a) => String(a.teacherId) === String(effectiveTeacherId))
   }, [assignments, effectiveTeacherId])
 
   const className = useMemo(() => {

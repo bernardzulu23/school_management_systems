@@ -5,6 +5,13 @@ import {
   __clearCurriculumContextCache,
 } from '@/lib/ai/curriculum-context'
 import { buildChemistryCurriculumContext } from '@/lib/curriculum/chemistry-cdc-2024'
+import { loadJsonCurriculum } from '@/lib/curriculum/jsonCurriculumLoader'
+
+function unitHasContent(unit) {
+  if (!unit) return false
+  const buckets = [unit.topics, unit.outcomes, unit.activities, unit.assessment]
+  return buckets.some((b) => Array.isArray(b) && b.some((x) => String(x || '').trim()))
+}
 
 describe('generic two-tier curriculum context resolver', () => {
   beforeEach(() => {
@@ -65,6 +72,48 @@ describe('generic two-tier curriculum context resolver', () => {
     expect(corpus).not.toBeNull()
     expect(corpus.slug).toBe('music')
   })
+
+  // Teaching-module-derived form1-4 unit files (cleaned by scripts/clean-curriculum-noise.mjs).
+  // These subjects also have Tier-1 CDC corpora; this assertion covers the unit-format
+  // fallback path and confirms OCR cleanup left grounding-useful content.
+  const cleanedUnitSubjects = [
+    'Art and Design',
+    'Civic Education',
+    'Computer Studies',
+    'Design and Technology',
+    'Food and Nutrition',
+    'French',
+    'Geography',
+    'History',
+    'Mathematics',
+    'Religious Education',
+    'Travel and Tourism',
+    'Zambian Languages',
+  ]
+
+  for (const subject of cleanedUnitSubjects) {
+    it(`ships a cleaned form1-4 unit corpus for ${subject}`, () => {
+      const loaded = loadJsonCurriculum(subject, 'Form 1')
+      expect(loaded).not.toBeNull()
+      expect(loaded.units.some((u) => unitHasContent(u))).toBe(true)
+
+      const hay = JSON.stringify(loaded.units)
+      expect(hay).not.toMatch(/\.{5,}/)
+      expect(hay).not.toMatch(/MINISTRY\s*OF\s*EDUCATION/i)
+      expect(hay).not.toMatch(/permanent secretary/i)
+    })
+  }
+
+  // Official CDC Ordinary Level Form 1–4 syllabi transformed into unit JSON
+  // (scripts/populate-curriculum-from-syllabus-extracts.mjs).
+  for (const subject of ['Computer Science', 'Hospitality Management']) {
+    it(`ships an authoritative form1-4 unit corpus for ${subject}`, () => {
+      const loaded = loadJsonCurriculum(subject, 'Form 1')
+      expect(loaded).not.toBeNull()
+      expect(loaded.units.some((u) => unitHasContent(u))).toBe(true)
+      expect(loaded.units.length).toBeGreaterThan(5)
+    })
+  }
 
   it('returns null for a subject with no curriculum corpus', async () => {
     const corpus = await resolveCurriculumContext('Underwater Basket Weaving', 'Form 1')

@@ -13,10 +13,21 @@ export default function StudentTimetablePage() {
   const { user } = useAuth()
   const [classes, setClasses] = useState([])
   const [subjects, setSubjects] = useState([])
-  const classId = user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined
+  const {
+    term,
+    setTerm,
+    academicYear,
+    setAcademicYear,
+    assignments,
+    timeSlots,
+    classId: scopedClassId,
+    loading,
+    error,
+  } = usePublishedTimetableView({ enabled: Boolean(user) })
 
-  const { term, setTerm, academicYear, setAcademicYear, assignments, timeSlots, loading, error } =
-    usePublishedTimetableView({ enabled: Boolean(user) })
+  const classId =
+    (user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined) ||
+    (scopedClassId ? String(scopedClassId) : undefined)
 
   useEffect(() => {
     if (error) toast.error(error)

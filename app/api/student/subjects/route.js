@@ -4,7 +4,7 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { getStudentSubjectNames } from '@/lib/flashcards/studentSubjects'
+import { getStudentSubjectNames, resolveStudentGradeLabel } from '@/lib/flashcards/studentSubjects'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -22,12 +22,17 @@ export const GET = withErrorHandler(async function GET(request) {
 
   const student = await db.student.findFirst({
     where: { userId: auth.user.id, schoolId },
-    select: { id: true },
+    select: {
+      id: true,
+      class: true,
+      classRef: { select: { year_group: true } },
+    },
   })
 
   if (!student) throw new ApiError('Student profile not found', 404)
 
   const names = await getStudentSubjectNames(student.id, schoolId)
+  const gradeOrForm = resolveStudentGradeLabel(student)
   const subjects = await db.subject.findMany({
     where: { schoolId, name: { in: names, mode: 'insensitive' } },
     include: { teacher: { include: { user: true } } },
@@ -47,5 +52,9 @@ export const GET = withErrorHandler(async function GET(request) {
     }
   })
 
-  return NextResponse.json({ success: true, data })
+  return NextResponse.json({
+    success: true,
+    data,
+    meta: { gradeOrForm: gradeOrForm || null },
+  })
 })

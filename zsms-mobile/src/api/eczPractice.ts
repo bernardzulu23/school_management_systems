@@ -9,7 +9,7 @@ export async function generateEczPaper(input: EczGenerateInput): Promise<EczPape
       body: JSON.stringify({
         subject: input.subject,
         topic: input.topic,
-        examLevel: input.examLevel || 'grade9',
+        examLevel: input.examLevel || 'form1',
         questionCount: input.questionCount ?? 5,
       }),
     }

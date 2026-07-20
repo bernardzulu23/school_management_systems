@@ -180,6 +180,11 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
 
         let data
         let loadedStatus = 'published'
+        const resolvedRoleEarly = String(userRole || user?.role || '').toLowerCase()
+        const departmentScope =
+          resolvedRoleEarly === 'hod' || resolvedRoleEarly === 'head of department'
+            ? 'department'
+            : null
 
         if (isHeadteacher) {
           data = await loadFromApi({ term, academicYear, status: 'draft' })
@@ -198,13 +203,14 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
             loadedStatus = useTimetableStore.getState().isPublished ? 'published' : 'draft'
           }
         } else {
-          data = await loadFromApi({ term, academicYear, status: 'published' })
-          if (!data?.assignments?.length) {
-            data = await loadFromApi({ term, academicYear, status: 'draft' })
-            loadedStatus = data?.assignments?.length ? 'draft' : 'published'
-          } else {
-            loadedStatus = 'published'
-          }
+          // Teachers / students / HOD: published only (view API ignores draft for non-admins).
+          data = await loadFromApi({
+            term,
+            academicYear,
+            status: 'published',
+            ...(departmentScope ? { scope: departmentScope } : {}),
+          })
+          loadedStatus = 'published'
         }
         if (cancelled) return
         setViewStatus(loadedStatus)
@@ -268,14 +274,21 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
 
     if (resolvedRole === 'student') {
       const classId = String(user?.studentProfile?.classId || '').trim()
-      if (!classId) return []
+      // API already class-scopes; missing profile must not blank the summary.
+      if (!classId) return bySeason
       return bySeason.filter((a) => String(a?.classId) === classId)
     }
 
-    if (resolvedRole === 'teacher' || resolvedRole === 'hod') {
+    if (resolvedRole === 'teacher') {
       const teacherUserId = String(user?.id || userId || '').trim()
-      if (!teacherUserId) return []
+      if (!teacherUserId) return bySeason
       return bySeason.filter((a) => String(a?.teacherId) === teacherUserId)
+    }
+
+    // HOD: GET /api/timetable/view already scopes to department teachers —
+    // do not re-filter to the HOD's personal teaching load (often empty).
+    if (resolvedRole === 'hod' || resolvedRole === 'head of department') {
+      return bySeason
     }
 
     return bySeason

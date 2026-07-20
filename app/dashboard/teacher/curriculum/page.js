@@ -37,7 +37,17 @@ const FALLBACK_SUBJECTS = [
   'Agricultural Science',
 ]
 
-const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5', 'Form 6', 'Grade 8', 'Grade 9']
+const GRADES = [
+  'Form 1',
+  'Form 2',
+  'Form 3',
+  'Form 4',
+  'Form 5',
+  'Form 6',
+  'Grade 10',
+  'Grade 11',
+  'Grade 12',
+]
 
 export default function TeacherCurriculumStudioPage() {
   const [subjects, setSubjects] = useState(FALLBACK_SUBJECTS)

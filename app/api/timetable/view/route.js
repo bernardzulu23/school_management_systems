@@ -7,8 +7,9 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getCachedPublishedTimetableEntries } from '@/lib/cache/timetable'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
-import { getAuthUser } from '@/lib/middleware/auth'
+import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { resolveDepartmentScope } from '@/lib/utils/departmentResolver'
+import { getHodProfile } from '@/lib/utils/hodDepartmentScope'
 import {
   buildTimeSlotsFromConfig,
   ensureTimetableConfig,
@@ -28,59 +29,27 @@ import { safeQueryString } from '@/lib/security/safeQueryValue'
 
 const VIEW_ENTRY_LIMIT = 2000
 
-function roleKey(role) {
-  return String(role || '').toLowerCase()
+function isSchoolAdminRole(user) {
+  return roleCheck(user, ['ADMIN', 'headteacher', 'administrator', 'superadmin'])
 }
 
-function isSchoolAdmin(role) {
-  const r = roleKey(role)
-  return ['headteacher', 'admin', 'administrator', 'superadmin'].includes(r)
+function isTeacherRole(user) {
+  return roleCheck(user, ['TEACHER', 'teacher']) && !roleCheck(user, ['HOD', 'hod', 'ADMIN'])
 }
 
-async function resolveStudentSubjectIds(prisma, schoolId, student) {
-  const ids = new Set()
-
-  const enrollments = await prisma.pupilSubjectEnrollment.findMany({
-    where: { schoolId, pupilId: student.id },
-    select: { subjectId: true },
-  })
-  for (const e of enrollments) ids.add(e.subjectId)
-
-  const selected = Array.isArray(student.selected_subjects) ? student.selected_subjects : []
-  const nameCandidates = new Set(selected.map((n) => String(n).trim()).filter(Boolean))
-
-  if (student.classId) {
-    const cls = await prisma.class.findFirst({
-      where: { id: student.classId, schoolId },
-      include: { subjects: { select: { id: true, name: true } } },
-    })
-    for (const s of cls?.subjects || []) {
-      if (s?.id) ids.add(s.id)
-      if (s?.name) nameCandidates.add(String(s.name).trim())
-    }
-  }
-
-  if (nameCandidates.size) {
-    const subjects = await prisma.subject.findMany({
-      where: { schoolId },
-      select: { id: true, name: true },
-    })
-    for (const name of nameCandidates) {
-      const match = subjects.find(
-        (s) => String(s.name).toLowerCase() === String(name).toLowerCase()
-      )
-      if (match) ids.add(match.id)
-    }
-  }
-
-  return ids
+function isStudentRole(user) {
+  return roleCheck(user, ['STUDENT', 'student'])
 }
 
+function isHodRole(user) {
+  return roleCheck(user, ['HOD', 'hod'])
+}
+
+/**
+ * Department teachers for HOD wall view — same scoping as /api/users?scope=department.
+ */
 async function resolveDepartmentTeacherUserIds(prisma, schoolId, user) {
-  const hodProfile = await prisma.headOfDepartment.findFirst({
-    where: { userId: user.id, schoolId },
-    select: { departmentId: true, department: true },
-  })
+  const hodProfile = await getHodProfile(prisma, user.id, schoolId)
   if (!hodProfile) return []
 
   const resolved = await resolveDepartmentScope({
@@ -113,7 +82,10 @@ async function resolveDepartmentTeacherUserIds(prisma, schoolId, user) {
     take: 5000,
   })
 
-  return teachers.map((t) => t.userId).filter(Boolean)
+  const ids = new Set(teachers.map((t) => t.userId).filter(Boolean))
+  // HOD may also teach — include their own User.id so personal periods appear.
+  if (user?.id) ids.add(String(user.id))
+  return Array.from(ids)
 }
 
 function daySortKey(day) {
@@ -151,49 +123,29 @@ export const GET = withErrorHandler(async function GET(req) {
     defaultValue: String(new Date().getFullYear()),
   })
   const statusParam = safeQueryString(searchParams.get('status'))
-  const role = roleKey(user.role)
+  const schoolAdmin = isSchoolAdminRole(user)
+  const student = isStudentRole(user)
+  const hod = isHodRole(user)
+  const teacher = isTeacherRole(user)
+  const scopeParam = safeQueryString(searchParams.get('scope'), { defaultValue: '' }).toLowerCase()
+  const wantDepartmentScope =
+    hod ||
+    (teacher &&
+      scopeParam === 'department' &&
+      Boolean(await getHodProfile(prisma, user.id, schoolId)))
 
-  const status =
-    statusParam ||
-    (isSchoolAdmin(role)
-      ? safeQueryString(searchParams.get('prefer'), { defaultValue: 'published' })
-      : 'published')
+  // Non-editors always see published — ignore status=draft from clients.
+  const status = schoolAdmin
+    ? statusParam || safeQueryString(searchParams.get('prefer'), { defaultValue: 'published' })
+    : 'published'
 
   const config = await ensureTimetableConfig(prisma, schoolId)
 
   const where = { schoolId, term, academicYear, status }
+  /** Echoed to clients so student UI can render without waiting on auth.studentProfile.classId */
+  let scopedClassId = null
 
-  if (role === 'teacher') {
-    where.teacherId = user.id
-  } else if (role === 'student') {
-    const student = await prisma.student.findFirst({
-      where: { schoolId, userId: user.id },
-      select: {
-        id: true,
-        classId: true,
-        selected_subjects: true,
-      },
-    })
-    if (!student?.classId) {
-      return NextResponse.json({
-        entries: [],
-        assignments: [],
-        timeSlots: buildTimeSlotsFromConfig(config),
-        teacherSummaries: [],
-        config,
-        term,
-        academicYear,
-        status,
-        message: 'No class assigned to this student',
-      })
-    }
-    where.classId = student.classId
-
-    const subjectIds = await resolveStudentSubjectIds(prisma, schoolId, student)
-    if (subjectIds.size > 0) {
-      where.subjectId = { in: Array.from(subjectIds) }
-    }
-  } else if (role === 'hod') {
+  if (wantDepartmentScope) {
     const teacherUserIds = await resolveDepartmentTeacherUserIds(prisma, schoolId, user)
     if (!teacherUserIds.length) {
       return NextResponse.json({
@@ -205,9 +157,36 @@ export const GET = withErrorHandler(async function GET(req) {
         term,
         academicYear,
         status,
+        message: 'No department teachers found for this HOD profile',
       })
     }
     where.teacherId = { in: teacherUserIds }
+  } else if (teacher) {
+    // TimetableAllocationEntry.teacherId is User.id
+    where.teacherId = user.id
+  } else if (student) {
+    const studentRow = await prisma.student.findFirst({
+      where: { schoolId, userId: user.id },
+      select: { id: true, classId: true },
+    })
+    if (!studentRow?.classId) {
+      return NextResponse.json({
+        entries: [],
+        assignments: [],
+        timeSlots: buildTimeSlotsFromConfig(config),
+        teacherSummaries: [],
+        config,
+        term,
+        academicYear,
+        status,
+        classId: null,
+        message: 'No class assigned to this student',
+      })
+    }
+    // Class timetable only — do not also filter by enrollments/selected_subjects
+    // (incomplete elective lists were wiping most periods).
+    where.classId = studentRow.classId
+    scopedClassId = studentRow.classId
   }
 
   let entries
@@ -300,7 +279,7 @@ export const GET = withErrorHandler(async function GET(req) {
 
   assignments = alignAssignmentsToBellRows(assignments, timeSlots)
 
-  const hideTeacher = role === 'student'
+  const hideTeacher = student
   const safeAssignments = hideTeacher
     ? assignments.map((a) => ({
         ...a,
@@ -310,23 +289,23 @@ export const GET = withErrorHandler(async function GET(req) {
     : assignments
 
   const teacherSummaries =
-    role === 'teacher'
-      ? buildTeacherWorkloadSummary(assignments).filter(
-          (t) => String(t.teacherId) === String(user.id)
-        )
-      : role === 'hod' || isSchoolAdmin(role)
-        ? buildTeacherWorkloadSummary(assignments)
+    wantDepartmentScope || schoolAdmin
+      ? buildTeacherWorkloadSummary(assignments)
+      : teacher
+        ? buildTeacherWorkloadSummary(assignments).filter(
+            (t) => String(t.teacherId) === String(user.id)
+          )
         : []
 
   const teacherColorMap = await loadTeacherColorMap(prisma, schoolId)
 
   let draftMeta = null
-  if (isSchoolAdmin(role) || role === 'hod') {
+  if (schoolAdmin || hod || wantDepartmentScope) {
     const metaRow = await getDraftConflictMeta(prisma, { schoolId, term, academicYear })
     draftMeta = formatDraftMetaResponse(metaRow, {
       term,
       academicYear,
-      includeSummary: role !== 'hod',
+      includeSummary: schoolAdmin,
     })
   }
 
@@ -342,5 +321,6 @@ export const GET = withErrorHandler(async function GET(req) {
     status,
     total: entries.length,
     draftMeta,
+    ...(scopedClassId ? { classId: scopedClassId } : {}),
   })
 })

@@ -581,6 +581,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
             term = 'Term 1',
             academicYear = new Date().getFullYear().toString(),
             status = 'published',
+            scope = null,
           } = opts
           try {
             const qs = new URLSearchParams({
@@ -588,6 +589,7 @@ export const useTimetableStore = create<TimetableStoreState>()(
               academicYear,
               ...(status ? { status } : {}),
             })
+            if (scope === 'department') qs.set('scope', 'department')
             const res = await sessionFetch(`/api/timetable/view?${qs}`, { cache: 'no-store' })
             if (!res.ok) throw new Error('Failed to fetch timetable')
             const data = await res.json()

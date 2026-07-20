@@ -23,7 +23,7 @@ export default function HodDepartmentTimetablePage() {
     teacherSummaries: summaries,
     loading,
     error,
-  } = usePublishedTimetableView()
+  } = usePublishedTimetableView({ scope: 'department' })
 
   useEffect(() => {
     if (error) toast.error(error)

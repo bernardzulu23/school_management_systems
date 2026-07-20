@@ -102,6 +102,9 @@ export function createMockPrisma() {
       create: vi.fn(),
       update: vi.fn(),
     },
+    navBotQuery: {
+      create: vi.fn(),
+    },
     aIRequest: {
       create: vi.fn(),
     },

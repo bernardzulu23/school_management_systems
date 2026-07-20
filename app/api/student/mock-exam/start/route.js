@@ -14,6 +14,11 @@ import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { requireSchoolTypeAccess } from '@/lib/middleware/schoolTypeGate'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { getPerMinuteLimit, getSchoolPlanForUsage } from '@/lib/middleware/aiUsageTracker'
+import {
+  assertStudentSubjectAllowed,
+  resolveStudentGradeLabel,
+} from '@/lib/flashcards/studentSubjects'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -45,13 +50,30 @@ export const POST = withErrorHandler(async function POST(request) {
   if (rl.isLimited) return rl.response
 
   const body = await parseBodyOrThrow(request, StartMockExamSchema)
-  const examLevel = normalizeEczExamLevel(body.examLevel || 'grade9')
+  const examLevel = normalizeEczExamLevel(body.examLevel || 'form1')
 
   const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
-    select: { id: true },
+    select: {
+      id: true,
+      class: true,
+      classRef: { select: { year_group: true } },
+    },
   })
   if (!student) throw new ApiError('Student profile not found', 404)
+
+  const subject = await assertStudentSubjectAllowed(student.id, schoolId, body.subject, {
+    action: 'take a mock exam in',
+  })
+  const gradeLevel = resolveStudentGradeLabel(student) || examLevel
+  let topic
+  try {
+    topic = await assertCurriculumTopicAllowed(subject, gradeLevel, body.topic, {
+      required: true,
+    })
+  } catch (e) {
+    throw new ApiError(e?.message || 'Invalid topic for this subject', 400)
+  }
 
   const inProgress = await db.mockExamAttempt.findFirst({
     where: { schoolId, studentId: student.id, status: 'in_progress' },
@@ -64,11 +86,12 @@ export const POST = withErrorHandler(async function POST(request) {
   let paperResult
   try {
     paperResult = await generateMockExamPaper({
-      subject: body.subject,
-      topic: body.topic,
+      subject,
+      topic,
       examLevel,
       questionCount: body.questionCount ?? 8,
       schoolId,
+      gradeLevel,
     })
   } catch (err) {
     throw new ApiError(err?.message || 'Failed to generate mock exam', 502)
@@ -84,9 +107,9 @@ export const POST = withErrorHandler(async function POST(request) {
     data: {
       schoolId,
       studentId: student.id,
-      subject: body.subject,
+      subject,
       examLevel,
-      topic: body.topic,
+      topic,
       durationMinutes,
       paper: paperResult.paper,
       totalMarks,

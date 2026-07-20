@@ -112,11 +112,10 @@
       "title": "Form 1: NUMERACY ===1.7.1 Cardinal Numbers (0",
       "topics": ["Colours", "Ordinal Numbers (First to twentieth)", "Counting Money"],
       "learningOutcomes": [
-        "Count from 0",
         "Demonstrate knowledge of ordinal numbers from 1 - 20 in French Listening to a passage on ordinal numbers and identify them= (premiere, deuxiqme «) Discussing ordinal numbers and their ending (iqme) except 1 VW (masc Premier) or (fem. premiere ) Reading a passage on ordinal numbers and answer the questions Writing ordinal numbers 1 - 20",
         "Apply the four mathematical operationsonnumbers below 100 in French Adding, subtracting, dividing and multiplying small amounts Writing a small budget in French"
       ],
-      "suggestedActivities": ["1000)"],
+      "suggestedActivities": [],
       "assessmentMethods": [
         "Knowledge of Ordinal numbers 1-20 demonstrated correctly",
         "The four mathematical operations applied correctly"
@@ -775,6 +774,9 @@
     "sourceFileBytes": 1015461,
     "extractionNote": "Extracted from the official CDC PDF via selective +29 font-offset decode and table parsing (TOPIC / SUBTOPIC / SPECIFIC COMPETENCES / LEARNING ACTIVITIES / EXPECTED STANDARDS). Content is transcribed from the source, not paraphrased or generated.",
     "curated": true,
-    "recordCount": 132
+    "recordCount": 132,
+    "cleaned": true,
+    "cleanedAt": "2026-07-19T23:46:44.932Z",
+    "cleanupScript": "scripts/clean-curriculum-noise.mjs"
   }
 }

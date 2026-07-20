@@ -21,7 +21,17 @@ import {
 } from 'lucide-react'
 import { upload } from '@vercel/blob/client'
 
-const GRADE_OPTIONS = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5', 'Grade 7', 'Grade 9']
+const GRADE_OPTIONS = [
+  'Form 1',
+  'Form 2',
+  'Form 3',
+  'Form 4',
+  'Form 5',
+  'Grade 7',
+  'Grade 10',
+  'Grade 11',
+  'Grade 12',
+]
 
 // Direct multipart upload goes through the serverless function, whose request
 // body is capped (Vercel ~4.5 MB). When blob storage is configured the browser

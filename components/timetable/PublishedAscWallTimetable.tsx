@@ -47,7 +47,10 @@ export function PublishedAscWallTimetable({
 
   const wallClasses = useMemo(() => {
     if (classesProp?.length) {
-      return filterClassesForWallGrid(classesProp, assignments)
+      const filtered = filterClassesForWallGrid(classesProp, assignments)
+      // If the school class list doesn't match assignment ids (stale labels),
+      // fall back to deriving rows from assignments so the grid still renders.
+      if (filtered.length > 0 || !assignments?.length) return filtered
     }
     const map = new Map<string, Class>()
     for (const a of assignments || []) {

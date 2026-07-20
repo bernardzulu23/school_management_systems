@@ -847,7 +847,9 @@ function OnboardingPageContent() {
                     onChange={(e) => setLevel(e.target.value)}
                   >
                     <option value="primary">Primary School (ECE – Grade 7)</option>
-                    <option value="secondary">Secondary School Only (Grades 8-12)</option>
+                    <option value="secondary">
+                      Secondary School Only (Forms 1–6 / Grades 10–12)
+                    </option>
                     <option value="combined">Combined Primary & Secondary</option>
                   </select>
                 </div>

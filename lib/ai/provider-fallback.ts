@@ -154,6 +154,27 @@ export class AIProviderChain {
     )
   }
 
+  /**
+   * Call a single named provider (e.g. "Groq"). Used when Zod validation must
+   * advance to the next provider without accepting malformed JSON from a fast tier.
+   */
+  async generateForProvider(
+    providerName: string,
+    prompt: string,
+    options: AIChainGenerateOptions = {}
+  ): Promise<AIChainResponse> {
+    const provider = this.providers.find(
+      (p) => p.name.toLowerCase() === String(providerName || '').toLowerCase()
+    )
+    if (!provider) {
+      throw new Error(`Unknown AI provider: ${providerName}`)
+    }
+    if (!provider.isAvailable) {
+      throw new Error(`AI provider not configured: ${provider.name}`)
+    }
+    return this.callProvider(provider, prompt, options)
+  }
+
   textToEventStream(options: AIChainTextEventOptions): ReadableStream<Uint8Array> {
     return new ReadableStream({
       async start(controller) {

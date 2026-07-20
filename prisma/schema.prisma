@@ -177,6 +177,10 @@ model School {
   sicDepartmentStatuses SicDepartmentStatus[]
   notifications          Notification[]
   scheduledNotifications ScheduledNotification[]
+  chatSessions           ChatSession[]
+  chatMessages           ChatMessage[]
+  navBotQueries          NavBotQuery[]
+  lessonPlanSubmissions  LessonPlanSubmission[]
   webPushSubscriptions   WebPushSubscription[]
   hodBudgetCategories  HodBudgetCategory[]
   hodBudgetTransactions HodBudgetTransaction[]
@@ -313,6 +317,12 @@ model User {
 
   sharedMaterials         SharedMaterial[]
   materialRatings         MaterialRating[]
+
+  chatSessions            ChatSession[] @relation("ChatSessionOwner")
+  chatSessionsAssigned    ChatSession[] @relation("ChatSessionAssignee")
+  chatMessages            ChatMessage[]
+  lessonPlanSubmissionsCreated LessonPlanSubmission[] @relation("LessonPlanSubmissionsTeacher")
+  lessonPlanSubmissionsToReview LessonPlanSubmission[] @relation("LessonPlanSubmissionsHod")
 
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -650,6 +660,7 @@ model Student {
   specialAccommodations SpecialAccommodation[]
   termReports         TermReport[]
   mockExamAttempts    MockExamAttempt[]
+  navBotQueries       NavBotQuery[]
   activityParticipations ActivityParticipant[]
   busRouteAssignment  StudentBusRoute?
   hostelAssignments   StudentHostel[]
@@ -4121,4 +4132,132 @@ model WebPushSubscription {
 
   @@index([userId])
   @@index([schoolId, userId])
+}
+
+// ============================================
+// AI CHAT ENGINE (Phase 1)
+// tenantId in the product sense = schoolId (existing multi-tenancy)
+// User.role remains String — ChatUserRole is session openedAsRole only
+// ============================================
+
+enum ChatUserRole {
+  PLATFORM_ADMIN
+  HEADTEACHER
+  HOD
+  TEACHER
+  STUDENT
+  SOLO_TEACHER
+}
+
+enum SessionStatus {
+  AI_MANAGED
+  PENDING_HUMAN
+  HUMAN_ACTIVE
+  CLOSED
+}
+
+enum MessageSender {
+  USER
+  ASSISTANT
+  SYSTEM
+  HUMAN_STAFF
+}
+
+model ChatSession {
+  id           String        @id @default(uuid())
+  /// Tenant key — maps to School.id (product "tenantId")
+  schoolId     String
+  userId       String
+  openedAsRole ChatUserRole
+  status       SessionStatus @default(AI_MANAGED)
+  assignedToId String?
+  title        String?       @default("New Conversation")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  school     School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user       User          @relation("ChatSessionOwner", fields: [userId], references: [id], onDelete: Cascade)
+  assignedTo User?         @relation("ChatSessionAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  messages   ChatMessage[]
+  lessonPlanSubmissions LessonPlanSubmission[]
+
+  @@index([schoolId, userId])
+  @@index([schoolId, status])
+  @@index([userId])
+}
+
+model ChatMessage {
+  id             String        @id @default(uuid())
+  sessionId      String
+  /// Tenant key — maps to School.id (product "tenantId")
+  schoolId       String
+  userId         String?
+  sender         MessageSender
+  content        String        @db.Text
+  contextSources Json?
+  createdAt      DateTime      @default(now())
+
+  session ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  school  School      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user    User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([sessionId])
+  @@index([schoolId, createdAt])
+}
+
+model NavBotQuery {
+  id              String   @id @default(uuid())
+  schoolId        String
+  studentId       String
+  question        String   @db.Text
+  matchedIntentId String?
+  createdAt       DateTime @default(now())
+
+  school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  student         Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, matchedIntentId])
+  @@index([schoolId, createdAt])
+}
+
+enum SubmissionStatus {
+  DRAFT
+  PENDING_APPROVAL
+  APPROVED
+  REJECTED
+}
+
+/// Chat-generated lesson plan .docx awaiting HOD approval (Phase 3).
+/// Product tenantId maps to schoolId (same as ChatSession).
+model LessonPlanSubmission {
+  id                String           @id @default(uuid())
+  /// Tenant key — maps to School.id (product "tenantId")
+  schoolId          String
+  teacherId         String
+  hodId             String?
+  sessionId         String?
+  topic             String
+  subject           String?
+  grade             String?
+  /// Durable R2 object key (or local path). Download uses signed/expiring URLs — never expose this as a public URL.
+  fileUrl           String
+  structuredContent Json?
+  status            SubmissionStatus @default(DRAFT)
+  hodComments       String?          @db.Text
+  diagramFailed     Boolean          @default(false)
+  submittedAt       DateTime?
+  reviewedAt        DateTime?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  school  School       @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  teacher User         @relation("LessonPlanSubmissionsTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  hod     User?        @relation("LessonPlanSubmissionsHod", fields: [hodId], references: [id], onDelete: SetNull)
+  session ChatSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  @@index([schoolId, hodId])
+  @@index([schoolId, teacherId])
+  @@index([schoolId, status])
+  @@index([teacherId])
+  @@index([sessionId])
 }

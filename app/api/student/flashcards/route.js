@@ -10,7 +10,11 @@ import {
   validateFlashcards,
   MAX_CARDS_PER_DECK,
 } from '@/lib/flashcards/limits'
-import { assertStudentSubjectAllowed } from '@/lib/flashcards/studentSubjects'
+import {
+  assertStudentSubjectAllowed,
+  resolveStudentGradeLabel,
+} from '@/lib/flashcards/studentSubjects'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
 import { generateFlashcardDeck } from '@/lib/flashcards/generateDeck'
 import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-context'
 import { checkAILimit, getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
@@ -105,7 +109,11 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const student = await db.student.findFirst({
     where: { schoolId, userId: auth.user.id },
-    select: { id: true, grade: true },
+    select: {
+      id: true,
+      class: true,
+      classRef: { select: { year_group: true } },
+    },
   })
   if (!student) throw new ApiError('Student profile not found', 404)
 
@@ -113,9 +121,18 @@ export const POST = withErrorHandler(async function POST(request) {
   const subjectName = await assertStudentSubjectAllowed(
     student.id,
     schoolId,
-    body.subjectName || body.subject
+    body.subjectName || body.subject,
+    { action: 'create flashcards for' }
   )
-  const topic = String(body.topic || '').trim()
+  const gradeLevel = resolveStudentGradeLabel(student) || body.gradeLevel || 'Form 1'
+  let topic = ''
+  try {
+    topic = await assertCurriculumTopicAllowed(subjectName, gradeLevel, body.topic, {
+      required: false,
+    })
+  } catch (e) {
+    throw new ApiError(e?.message || 'Invalid topic for this subject', 400)
+  }
   const requestedCount = Number(body.count)
   const count = Math.min(
     MAX_CARDS_PER_DECK,
@@ -159,6 +176,7 @@ export const POST = withErrorHandler(async function POST(request) {
       schoolId,
       schoolPlan: school?.plan,
       subject: subjectName,
+      gradeLevel,
     })
     ragBlock = rag?.block || ''
   } catch (e) {
@@ -169,7 +187,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const assessmentMode = resolveAssessmentMode({
     schoolLevel: school?.level,
-    gradeLevel: student.grade || body.gradeLevel,
+    gradeLevel,
   })
 
   let generated
