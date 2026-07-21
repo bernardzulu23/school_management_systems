@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
+import { QRCodeSVG } from 'qrcode.react'
 import { PlatformShell } from '@/components/platform/PlatformShell'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 
@@ -325,16 +326,23 @@ export default function PlatformSmsGatewayPage() {
                 ? ' Custom gateway is enabled for this school.'
                 : ' Custom gateway flag left off — enable later when ready.'}
             </p>
-            <pre className="bg-white border-2 border-ink p-3 text-xs break-all whitespace-pre-wrap font-mono">
-              {issuedToken}
-            </pre>
-            <button
-              type="button"
-              onClick={copyToken}
-              className="border-2 border-ink bg-ink text-paper px-4 py-2 text-sm font-semibold"
-            >
-              Copy to clipboard
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+              <div className="bg-white border-2 border-ink p-3 shrink-0">
+                <QRCodeSVG value={issuedToken} size={220} level="M" includeMargin={true} />
+              </div>
+              <div className="flex-1 space-y-3 min-w-0 w-full">
+                <pre className="bg-white border-2 border-ink p-3 text-xs break-all whitespace-pre-wrap font-mono">
+                  {issuedToken}
+                </pre>
+                <button
+                  type="button"
+                  onClick={copyToken}
+                  className="border-2 border-ink bg-ink text-paper px-4 py-2 text-sm font-semibold"
+                >
+                  Copy to clipboard
+                </button>
+              </div>
+            </div>
           </div>
         ) : null}
 

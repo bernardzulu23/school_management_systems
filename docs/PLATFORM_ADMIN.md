@@ -8,7 +8,7 @@ The platform console is for **Bluepeak platform operators** only — not school 
 - **School usage** — per-school **student** and **teacher** counts only (which schools are using the program; no names or academic data)
 - **Schools** — name, subdomain, plan, subscription status, province/district (metadata)
 - **SMS Gateway** — full CRUD for Android SIM-bridge devices per school (`/platform/sms-gateway`):
-  - **Create** — `POST /api/sms/gateway/register` returns a one-time pairing token (copy immediately; never stored in browser storage). “Enable for this school now” defaults off for staged rollout.
+  - **Create** — `POST /api/sms/gateway/register` returns a one-time pairing token (copy or scan QR immediately; never stored in browser storage). The QR encodes the raw token string only. “Enable for this school now” defaults off for staged rollout.
   - **Read** — fleet list via `GET /api/admin/sms-gateway-status` (filter by selected school in the UI): device name, active flag, school routing enable, last seen, send/fail totals.
   - **Update** — `PATCH /api/sms/gateway/[id]` for device name, device active, and school-level `customGatewayEnabled`.
   - **Delete/Revoke** — `DELETE /api/sms/gateway/[id]?schoolId=` removes the device (confirm in UI). To rotate a token, revoke then register again.
