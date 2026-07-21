@@ -37,12 +37,12 @@ export const GET = withErrorHandler(async function GET(
       openedAsRole: true,
       status: true,
       assignedToId: true,
+      assignedToName: true,
       title: true,
       createdAt: true,
       updatedAt: true,
       school: { select: { id: true, name: true, subdomain: true } },
       user: { select: { id: true, name: true, email: true, role: true } },
-      assignedTo: { select: { id: true, name: true, email: true } },
     },
   })
 
@@ -74,7 +74,7 @@ export const GET = withErrorHandler(async function GET(
       openedAsRole: session.openedAsRole,
       status: session.status,
       assignedToId: session.assignedToId,
-      assignedToName: session.assignedTo?.name || null,
+      assignedToName: session.assignedToName || null,
       title: session.title,
       createdAt: session.createdAt,
       updatedAt: session.updatedAt,

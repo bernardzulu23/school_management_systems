@@ -33,6 +33,16 @@ There is no magic “join link” emailed to the teacher who clicked Request hum
 6. Reply in the console (optional **Connect live** if Durable Object WSS is configured).
 7. **Close** when done → `CLOSED`.
 
+### Assignee identity (pilot)
+
+`PlatformAdmin` is a separate table from tenant `User`. Claim stores:
+
+- `ChatSession.assignedToId` = platform JWT/`PlatformAdmin.id` (**no FK to User**)
+- `ChatSession.assignedToName` = denormalized name/email for the support UI
+- Claim / admin `ChatMessage` rows leave `userId` null (that column still FKs `User`)
+
+Migration: `20260721200000_chat_session_assignee_no_user_fk` — run `npx prisma migrate deploy` in production after deploy.
+
 ## Telegram (metadata-only)
 
 Deliberate pilot-stage choice: Telegram alerts include **tenant name, role, and admin console deep link only**. Message content is never sent. Full transcripts are read in `/platform/support`.

@@ -152,14 +152,34 @@ export async function requestHumanHandoff(params: {
   }
 }
 
+function isPrismaFkViolation(err: unknown): boolean {
+  return (
+    typeof err === 'object' &&
+    err !== null &&
+    'code' in err &&
+    (err as { code?: string }).code === 'P2003'
+  )
+}
+
 /**
  * Platform-admin claim: PENDING_HUMAN → HUMAN_ACTIVE + assignedToId.
  * Caller must have already verified platform_admin.
+ *
+ * assignedToId stores PlatformAdmin.id (not User.id). ChatMessage.userId stays null
+ * for platform-admin actors because ChatMessage.userId still FKs to User.
  */
 export async function claimHandoffSession(params: {
   sessionId: string
   adminUserId: string
+  /** Display name for queue/transcript UI (platform admin name/email). */
+  adminName?: string | null
 }): Promise<{ ok: true; session: ChatSession } | { ok: false; status: number; error: string }> {
+  const adminUserId = String(params.adminUserId || '').trim()
+  if (!adminUserId) {
+    return { ok: false, status: 400, error: 'Claimer id required' }
+  }
+  const adminName = String(params.adminName || '').trim() || 'Platform administrator'
+
   const session = await basePrisma.chatSession.findUnique({
     where: { id: params.sessionId },
   })
@@ -167,39 +187,58 @@ export async function claimHandoffSession(params: {
   if (session.status === 'CLOSED') {
     return { ok: false, status: 409, error: 'Session is closed' }
   }
-  if (session.status === 'HUMAN_ACTIVE' && session.assignedToId === params.adminUserId) {
+  if (session.status === 'HUMAN_ACTIVE' && session.assignedToId === adminUserId) {
     return { ok: true, session }
   }
-  if (session.status === 'HUMAN_ACTIVE' && session.assignedToId !== params.adminUserId) {
+  if (session.status === 'HUMAN_ACTIVE' && session.assignedToId !== adminUserId) {
     return { ok: false, status: 409, error: 'Session already claimed by another admin' }
   }
   if (session.status !== 'PENDING_HUMAN') {
     return { ok: false, status: 409, error: 'Session is not awaiting human handoff' }
   }
 
-  const updated = await basePrisma.chatSession.update({
-    where: { id: session.id },
-    data: {
-      status: 'HUMAN_ACTIVE',
-      assignedToId: params.adminUserId,
-    },
-  })
+  let updated: ChatSession
+  try {
+    updated = await basePrisma.chatSession.update({
+      where: { id: session.id },
+      data: {
+        status: 'HUMAN_ACTIVE',
+        assignedToId: adminUserId,
+        assignedToName: adminName,
+      },
+    })
+  } catch (err) {
+    if (isPrismaFkViolation(err)) {
+      return {
+        ok: false,
+        status: 409,
+        error:
+          'Cannot assign claimer: assignee id is not a valid chat assignee. Platform admin claimers do not use the tenant User table.',
+      }
+    }
+    throw err
+  }
 
   await basePrisma.chatMessage.create({
     data: {
       sessionId: updated.id,
       schoolId: updated.schoolId,
-      userId: params.adminUserId,
+      // PlatformAdmin ids are not User rows — leave null (sender + contextSources identify the claim).
+      userId: null,
       sender: 'SYSTEM',
       content: 'An administrator has joined this conversation.',
-      contextSources: { handoffClaim: true },
+      contextSources: {
+        handoffClaim: true,
+        claimedByPlatformAdminId: adminUserId,
+        claimedByName: adminName,
+      },
     },
   })
 
   // Server-side claim notification — DO accepts this admin's WS only after this call.
   await notifyDurableObject('/internal/claim', {
     sessionId: updated.id,
-    adminUserId: params.adminUserId,
+    adminUserId,
     status: 'HUMAN_ACTIVE',
   })
 
@@ -225,10 +264,11 @@ export async function closeHandoffSession(params: {
     data: {
       sessionId: updated.id,
       schoolId: updated.schoolId,
-      userId: params.actorUserId,
+      // Actor may be PlatformAdmin (no User FK) — store id in context only.
+      userId: null,
       sender: 'SYSTEM',
       content: 'This support conversation has been closed.',
-      contextSources: { handoffClose: true },
+      contextSources: { handoffClose: true, closedById: params.actorUserId },
     },
   })
 

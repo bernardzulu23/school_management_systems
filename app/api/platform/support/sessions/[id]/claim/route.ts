@@ -39,6 +39,10 @@ export const POST = withErrorHandler(async function POST(
   const result = await claimHandoffSession({
     sessionId,
     adminUserId: String(auth.user.id),
+    adminName:
+      String(auth.user.name || '').trim() ||
+      String(auth.user.email || '').trim() ||
+      'Platform administrator',
   })
   if (!result.ok) {
     return secureJson({ error: result.error }, { status: result.status }, request)
@@ -62,6 +66,7 @@ export const POST = withErrorHandler(async function POST(
       id: result.session.id,
       status: result.session.status,
       assignedToId: result.session.assignedToId,
+      assignedToName: result.session.assignedToName,
     },
     ticket,
     wsUrl,

@@ -58,13 +58,20 @@ export const POST = withErrorHandler(async function POST(
   }
 
   const content = parsed.data.message.trim()
+  const platformAdminId = String(auth.user.id)
+  // PlatformAdmin ids are not User rows — ChatMessage.userId FKs to User.
   const msg = await basePrisma.chatMessage.create({
     data: {
       sessionId: session.id,
       schoolId: session.schoolId,
-      userId: String(auth.user.id),
+      userId: null,
       sender: 'HUMAN_STAFF',
       content,
+      contextSources: {
+        platformAdminId,
+        platformAdminName:
+          String(auth.user.name || '').trim() || String(auth.user.email || '').trim() || null,
+      },
     },
   })
   await basePrisma.chatSession.update({
@@ -77,7 +84,7 @@ export const POST = withErrorHandler(async function POST(
     messageId: msg.id,
     sender: 'HUMAN_STAFF',
     content,
-    userId: String(auth.user.id),
+    userId: platformAdminId,
   })
 
   return NextResponse.json({

@@ -320,7 +320,6 @@ model User {
   materialRatings         MaterialRating[]
 
   chatSessions            ChatSession[] @relation("ChatSessionOwner")
-  chatSessionsAssigned    ChatSession[] @relation("ChatSessionAssignee")
   chatMessages            ChatMessage[]
   lessonPlanSubmissionsCreated LessonPlanSubmission[] @relation("LessonPlanSubmissionsTeacher")
   lessonPlanSubmissionsToReview LessonPlanSubmission[] @relation("LessonPlanSubmissionsHod")
@@ -4206,20 +4205,23 @@ model ChatSession {
   userId       String
   openedAsRole ChatUserRole
   status       SessionStatus @default(AI_MANAGED)
+  /// Pilot claimer = PlatformAdmin.id (not User.id) — no FK so claim does not require a tenant User row.
   assignedToId String?
+  /// Denormalized claimer display name (platform admin name/email at claim time).
+  assignedToName String?
   title        String?       @default("New Conversation")
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
   school     School        @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   user       User          @relation("ChatSessionOwner", fields: [userId], references: [id], onDelete: Cascade)
-  assignedTo User?         @relation("ChatSessionAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   messages   ChatMessage[]
   lessonPlanSubmissions LessonPlanSubmission[]
 
   @@index([schoolId, userId])
   @@index([schoolId, status])
   @@index([userId])
+  @@index([assignedToId])
 }
 
 model ChatMessage {

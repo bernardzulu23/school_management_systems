@@ -200,11 +200,13 @@ describe('claimHandoffSession status machine (mocked prisma)', () => {
       schoolId: 'school-1',
       status: 'PENDING_HUMAN',
       assignedToId: null,
+      assignedToName: null,
     }
     const update = vi.fn().mockResolvedValue({
       ...session,
       status: 'HUMAN_ACTIVE',
       assignedToId: 'admin-1',
+      assignedToName: 'Platform Dev',
     })
     const findUnique = vi.fn().mockResolvedValue(session)
     const create = vi.fn().mockResolvedValue({})
@@ -221,24 +223,51 @@ describe('claimHandoffSession status machine (mocked prisma)', () => {
 
     const { claimHandoffSession, closeHandoffSession } = await import('@/lib/ai/chat/handoff')
 
-    const claimed = await claimHandoffSession({ sessionId: 'sess-1', adminUserId: 'admin-1' })
+    const claimed = await claimHandoffSession({
+      sessionId: 'sess-1',
+      adminUserId: 'admin-1',
+      adminName: 'Platform Dev',
+    })
     expect(claimed.ok).toBe(true)
     if (claimed.ok) {
       expect(claimed.session.status).toBe('HUMAN_ACTIVE')
       expect(claimed.session.assignedToId).toBe('admin-1')
+      expect(claimed.session.assignedToName).toBe('Platform Dev')
     }
+    expect(update).toHaveBeenCalledWith({
+      where: { id: 'sess-1' },
+      data: {
+        status: 'HUMAN_ACTIVE',
+        assignedToId: 'admin-1',
+        assignedToName: 'Platform Dev',
+      },
+    })
+    expect(create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          userId: null,
+          sender: 'SYSTEM',
+          contextSources: expect.objectContaining({
+            handoffClaim: true,
+            claimedByPlatformAdminId: 'admin-1',
+          }),
+        }),
+      })
+    )
 
     findUnique.mockResolvedValue({
       id: 'sess-1',
       schoolId: 'school-1',
       status: 'HUMAN_ACTIVE',
       assignedToId: 'admin-1',
+      assignedToName: 'Platform Dev',
     })
     update.mockResolvedValue({
       id: 'sess-1',
       schoolId: 'school-1',
       status: 'CLOSED',
       assignedToId: 'admin-1',
+      assignedToName: 'Platform Dev',
     })
     const closed = await closeHandoffSession({ sessionId: 'sess-1', actorUserId: 'admin-1' })
     expect(closed.ok).toBe(true)
@@ -268,5 +297,102 @@ describe('claimHandoffSession status machine (mocked prisma)', () => {
     const result = await claimHandoffSession({ sessionId: 'sess-2', adminUserId: 'admin-1' })
     expect(result.ok).toBe(false)
     if (!result.ok) expect(result.status).toBe(409)
+  })
+
+  it('claims with PlatformAdmin id that is not a User row (no User FK required)', async () => {
+    const platformAdminId = 'plat-admin-uuid-not-in-user-table'
+    const session = {
+      id: 'sess-pa',
+      schoolId: 'school-1',
+      status: 'PENDING_HUMAN',
+      assignedToId: null,
+      assignedToName: null,
+    }
+    const update = vi.fn().mockResolvedValue({
+      ...session,
+      status: 'HUMAN_ACTIVE',
+      assignedToId: platformAdminId,
+      assignedToName: 'super-admin@bluepeacktechnologies.com',
+    })
+    const create = vi.fn().mockResolvedValue({})
+
+    vi.doMock('@/lib/prisma/client', () => ({
+      basePrisma: {
+        chatSession: {
+          findUnique: vi.fn().mockResolvedValue(session),
+          update,
+        },
+        chatMessage: { create },
+      },
+    }))
+    vi.doMock('@/lib/ai/chat/ws-ticket', () => ({
+      chatDoHttpBaseUrl: () => null,
+    }))
+
+    const { claimHandoffSession } = await import('@/lib/ai/chat/handoff')
+    const result = await claimHandoffSession({
+      sessionId: 'sess-pa',
+      adminUserId: platformAdminId,
+      adminName: 'super-admin@bluepeacktechnologies.com',
+    })
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(result.session.status).toBe('HUMAN_ACTIVE')
+      expect(result.session.assignedToId).toBe(platformAdminId)
+      expect(result.session.assignedToName).toBe('super-admin@bluepeacktechnologies.com')
+    }
+    // Must not write platform admin id into ChatMessage.userId (still FKs User).
+    expect(create.mock.calls[0][0].data.userId).toBeNull()
+  })
+
+  it('returns 409 when prisma reports FK violation on claim (legacy schema)', async () => {
+    const fkErr = Object.assign(new Error('FK'), { code: 'P2003' })
+    vi.doMock('@/lib/prisma/client', () => ({
+      basePrisma: {
+        chatSession: {
+          findUnique: vi.fn().mockResolvedValue({
+            id: 'sess-fk',
+            schoolId: 'school-1',
+            status: 'PENDING_HUMAN',
+            assignedToId: null,
+          }),
+          update: vi.fn().mockRejectedValue(fkErr),
+        },
+        chatMessage: { create: vi.fn() },
+      },
+    }))
+    vi.doMock('@/lib/ai/chat/ws-ticket', () => ({
+      chatDoHttpBaseUrl: () => null,
+    }))
+
+    const { claimHandoffSession } = await import('@/lib/ai/chat/handoff')
+    const result = await claimHandoffSession({
+      sessionId: 'sess-fk',
+      adminUserId: 'plat-admin-no-user',
+      adminName: 'Platform Admin',
+    })
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(result.status).toBe(409)
+      expect(result.error).toMatch(/Cannot assign claimer/i)
+    }
+  })
+
+  it('returns 400 when claimer id is missing', async () => {
+    vi.doMock('@/lib/prisma/client', () => ({
+      basePrisma: {
+        chatSession: { findUnique: vi.fn(), update: vi.fn() },
+        chatMessage: { create: vi.fn() },
+      },
+    }))
+    vi.doMock('@/lib/ai/chat/ws-ticket', () => ({
+      chatDoHttpBaseUrl: () => null,
+    }))
+
+    const { claimHandoffSession } = await import('@/lib/ai/chat/handoff')
+    const result = await claimHandoffSession({ sessionId: 'sess-x', adminUserId: '  ' })
+    expect(result.ok).toBe(false)
+    if (!result.ok) expect(result.status).toBe(400)
   })
 })

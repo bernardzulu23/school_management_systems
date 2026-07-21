@@ -177,6 +177,7 @@ function SupportQueueContent() {
               ...s,
               status: data.session?.status || 'HUMAN_ACTIVE',
               assignedToId: data.session?.assignedToId,
+              assignedToName: data.session?.assignedToName,
             }
           : s
       )
@@ -308,6 +309,7 @@ function SupportQueueContent() {
                 <p className="text-xs text-muted mt-0.5">
                   {session.openedAsRole} · {session.userName || session.userEmail} ·{' '}
                   <span className="font-medium">{session.status}</span>
+                  {session.assignedToName ? ` · Claimed by ${session.assignedToName}` : ''}
                   {wsStatus !== 'idle' ? ` · WS ${wsStatus}` : ''}
                 </p>
               </div>

@@ -260,6 +260,7 @@ Full token tables, RIASEC/cluster colors, and desktop companion wiring: [color.m
 - **`SchoolType`**: `SCHOOL` (default) or `INDIVIDUAL` (solo teacher workspace).
 - **`SchoolOwnership`**: `PRIVATE` (default) or `GOVERNMENT` — gates fee management and related billing APIs.
 - **`User`** belongs to exactly one school; email is unique per school (`@@unique([schoolId, email])`).
+- **`PlatformAdmin`** is a separate operator table (not a tenant `User`). Pilot chat handoff claim stores `PlatformAdmin.id` on `ChatSession.assignedToId` **without** a User FK, plus denormalized `assignedToName` — see [CHAT_HANDOFF_PHASE2.md](./CHAT_HANDOFF_PHASE2.md).
 - **`Student`**, **`Teacher`**, **`HeadOfDepartment`** extend users with role-specific profiles.
 
 ### Model scale
