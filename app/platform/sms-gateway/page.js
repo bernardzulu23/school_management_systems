@@ -327,8 +327,25 @@ export default function PlatformSmsGatewayPage() {
                 : ' Custom gateway flag left off — enable later when ready.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 items-start">
-              <div className="bg-white border-2 border-ink p-3 shrink-0">
-                <QRCodeSVG value={issuedToken} size={220} level="M" includeMargin={true} />
+              <div className="shrink-0 space-y-2">
+                <p className="text-xs font-medium text-amber-950">
+                  Scan with the Android gateway app
+                </p>
+                <div
+                  className="inline-flex items-center justify-center border-2 border-ink bg-white p-4"
+                  style={{ width: 252, height: 252, backgroundColor: '#ffffff' }}
+                >
+                  <QRCodeSVG
+                    value={issuedToken}
+                    size={220}
+                    level="M"
+                    marginSize={2}
+                    fgColor="#000000"
+                    bgColor="#ffffff"
+                    title="SMS gateway pairing token"
+                    style={{ width: 220, height: 220, display: 'block' }}
+                  />
+                </div>
               </div>
               <div className="flex-1 space-y-3 min-w-0 w-full">
                 <pre className="bg-white border-2 border-ink p-3 text-xs break-all whitespace-pre-wrap font-mono">
