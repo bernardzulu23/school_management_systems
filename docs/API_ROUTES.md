@@ -6,9 +6,9 @@
 > npm run docs:api-routes
 > ```
 
-Generated: 2026-07-20T09:06:20.865Z
+Generated: 2026-07-21T14:40:26.392Z
 
-Total route files: **453**
+Total route files: **458**
 
 ## Quick index
 
@@ -16,7 +16,7 @@ Total route files: **453**
 | --------------------------- | ----: |
 | `/api/account`              |     2 |
 | `/api/activities`           |     4 |
-| `/api/admin`                |    21 |
+| `/api/admin`                |    22 |
 | `/api/ai`                   |    12 |
 | `/api/aiml`                 |     5 |
 | `/api/allocations`          |     7 |
@@ -78,7 +78,7 @@ Total route files: **453**
 | `/api/security-static`      |     2 |
 | `/api/sentry-example-api`   |     1 |
 | `/api/sic`                  |     6 |
-| `/api/sms`                  |    11 |
+| `/api/sms`                  |    15 |
 | `/api/solo`                 |     6 |
 | `/api/strategic-goals`      |     2 |
 | `/api/strategic-reviews`    |     1 |
@@ -118,29 +118,30 @@ Total route files: **453**
 
 ## /api/admin
 
-| Method            | Route                                           | Summary                                                                         |
-| ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------------- |
-| GET               | `/api/admin/allocations`                        | —                                                                               |
-| DELETE            | `/api/admin/allocations/:allocationId`          | —                                                                               |
-| POST              | `/api/admin/allocations/:allocationId/approve`  | —                                                                               |
-| POST              | `/api/admin/allocations/:allocationId/reject`   | —                                                                               |
-| GET               | `/api/admin/allocations/:allocationId/review`   | —                                                                               |
-| PUT               | `/api/admin/allocations/:allocationId/update`   | —                                                                               |
-| DELETE            | `/api/admin/allocations/clear`                  | —                                                                               |
-| GET               | `/api/admin/allocations/pending`                | —                                                                               |
-| GET               | `/api/admin/diagnostics/students`               | —                                                                               |
-| GET               | `/api/admin/export/users`                       | —                                                                               |
-| GET               | `/api/admin/master-timetable`                   | —                                                                               |
-| GET               | `/api/admin/notifications`                      | —                                                                               |
-| POST              | `/api/admin/notifications/:notificationId/read` | —                                                                               |
-| GET, POST, DELETE | `/api/admin/parent-links`                       | Admin: list parent links for a student or school. Query: ?studentId= (optional) |
-| POST              | `/api/admin/repair/backfill-class-ids`          | —                                                                               |
-| POST              | `/api/admin/repair/backfill-result-entered-by`  | —                                                                               |
-| POST              | `/api/admin/repair/clear-default-classes`       | —                                                                               |
-| POST              | `/api/admin/repair/enrollments`                 | —                                                                               |
-| POST              | `/api/admin/repair/normalize-classes`           | —                                                                               |
-| GET, POST         | `/api/admin/schools`                            | —                                                                               |
-| GET               | `/api/admin/teacher-performance`                | —                                                                               |
+| Method            | Route                                           | Summary                                                                                              |
+| ----------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| GET               | `/api/admin/allocations`                        | —                                                                                                    |
+| DELETE            | `/api/admin/allocations/:allocationId`          | —                                                                                                    |
+| POST              | `/api/admin/allocations/:allocationId/approve`  | —                                                                                                    |
+| POST              | `/api/admin/allocations/:allocationId/reject`   | —                                                                                                    |
+| GET               | `/api/admin/allocations/:allocationId/review`   | —                                                                                                    |
+| PUT               | `/api/admin/allocations/:allocationId/update`   | —                                                                                                    |
+| DELETE            | `/api/admin/allocations/clear`                  | —                                                                                                    |
+| GET               | `/api/admin/allocations/pending`                | —                                                                                                    |
+| GET               | `/api/admin/diagnostics/students`               | —                                                                                                    |
+| GET               | `/api/admin/export/users`                       | —                                                                                                    |
+| GET               | `/api/admin/master-timetable`                   | —                                                                                                    |
+| GET               | `/api/admin/notifications`                      | —                                                                                                    |
+| POST              | `/api/admin/notifications/:notificationId/read` | —                                                                                                    |
+| GET, POST, DELETE | `/api/admin/parent-links`                       | Admin: list parent links for a student or school. Query: ?studentId= (optional)                      |
+| POST              | `/api/admin/repair/backfill-class-ids`          | —                                                                                                    |
+| POST              | `/api/admin/repair/backfill-result-entered-by`  | —                                                                                                    |
+| POST              | `/api/admin/repair/clear-default-classes`       | —                                                                                                    |
+| POST              | `/api/admin/repair/enrollments`                 | —                                                                                                    |
+| POST              | `/api/admin/repair/normalize-classes`           | —                                                                                                    |
+| GET, POST         | `/api/admin/schools`                            | —                                                                                                    |
+| GET               | `/api/admin/sms-gateway-status`                 | GET /api/admin/sms-gateway-status Platform admin: fleet health — offline if lastSeenAt > 10 minutes. |
+| GET               | `/api/admin/teacher-performance`                | —                                                                                                    |
 
 ## /api/ai
 
@@ -149,7 +150,7 @@ Total route files: **453**
 | POST      | `/api/ai/competency-analyzer`     | —                                                                                                                                                              |
 | POST      | `/api/ai/ecz-exam-questions`      | —                                                                                                                                                              |
 | POST      | `/api/ai/ecz-practice`            | —                                                                                                                                                              |
-| POST      | `/api/ai/lesson-planner`          | —                                                                                                                                                              |
+| POST      | `/api/ai/lesson-planner`          | Treat empty / zero / NaN as omitted so the UI does not fail Zod on blank MoGE headcounts.                                                                      |
 | POST      | `/api/ai/phonics-trainer`         | —                                                                                                                                                              |
 | POST      | `/api/ai/quiz-maker`              | formative → MCQ; summative/exam/secondary → ECSEOL secondary_scenario when school/grade allow                                                                  |
 | POST      | `/api/ai/report-comments`         | —                                                                                                                                                              |
@@ -285,21 +286,21 @@ Total route files: **453**
 
 ## /api/chat
 
-| Method    | Route                                       | Summary                                                                                                                                                                                                                                           |
-| --------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| POST      | `/api/chat/headteacher-query`               | POST /api/chat/headteacher-query Retrieval-only analytics — NOT generative free-form chat.                                                                                                                                                        |
-| POST      | `/api/chat/human-message`                   | POST /api/chat/human-message User message during HUMAN_ACTIVE (persisted + relayed via DO). No AI.                                                                                                                                                |
-| GET       | `/api/chat/lesson-plans/:id/download`       | GET /api/chat/lesson-plans/[id]/download Returns a signed/expiring R2 URL, or streams the local file (dev fallback). Never returns a permanent public URL.                                                                                        |
-| POST      | `/api/chat/lesson-plans/:id/review`         | POST /api/chat/lesson-plans/[id]/review HOD (assigned) or admin: approve / reject PENDING_APPROVAL submissions.                                                                                                                                   |
-| POST      | `/api/chat/lesson-plans/:id/submit-to-hod`  | POST /api/chat/lesson-plans/[id]/submit-to-hod Teacher owns submission → PENDING_APPROVAL + hodId via resolveReviewerUserId                                                                                                                       |
-| POST      | `/api/chat/lesson-plans/generate-from-chat` | POST /api/chat/lesson-plans/generate-from-chat Teacher/HOD: structured JSON → docx → R2/local → DRAFT LessonPlanSubmission                                                                                                                        |
-| GET       | `/api/chat/lesson-plans/pending`            | GET /api/chat/lesson-plans/pending HOD: pending chat lesson-plan submissions for their department (hodId = self). Admin/headteacher: all pending in school.                                                                                       |
-| POST      | `/api/chat/navbot`                          | —                                                                                                                                                                                                                                                 |
-| POST      | `/api/chat/request-human`                   | Sets `PENDING_HUMAN`, metadata-only Telegram (if configured). Returns `telegramSent`, `claimerHint`, `adminClaimPath`; when Telegram skipped also `telegramReason` + `telegramSkippedHint`. Pilot claimer: platform admin at `/platform/support`. |
-| POST      | `/api/chat/send-message`                    | POST /api/chat/send-message SSE contract (Teacher/HOD generative path): data: {"sessionId":"...","meta":true}                                                                                                                                     |
-| GET, POST | `/api/chat/sessions`                        | GET /api/chat/sessions — list current user's sessions for this school                                                                                                                                                                             |
-| GET       | `/api/chat/sessions/:id`                    | GET /api/chat/sessions/[id] Load own session + recent messages (used by Phase 4 resubmit reopen).                                                                                                                                                 |
-| POST      | `/api/chat/ws-ticket`                       | When true, issue an admin ticket (platform_admin + claimed session only).                                                                                                                                                                         |
+| Method    | Route                                       | Summary                                                                                                                                                                         |
+| --------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST      | `/api/chat/headteacher-query`               | POST /api/chat/headteacher-query Retrieval-only analytics — NOT generative free-form chat.                                                                                      |
+| POST      | `/api/chat/human-message`                   | POST /api/chat/human-message User message during HUMAN_ACTIVE (persisted + relayed via DO). No AI.                                                                              |
+| GET       | `/api/chat/lesson-plans/:id/download`       | GET /api/chat/lesson-plans/[id]/download Returns a signed/expiring R2 URL, or streams the local file (dev fallback). Never returns a permanent public URL.                      |
+| POST      | `/api/chat/lesson-plans/:id/review`         | POST /api/chat/lesson-plans/[id]/review HOD (assigned) or admin: approve / reject PENDING_APPROVAL submissions.                                                                 |
+| POST      | `/api/chat/lesson-plans/:id/submit-to-hod`  | POST /api/chat/lesson-plans/[id]/submit-to-hod Teacher owns submission → PENDING_APPROVAL + hodId via resolveReviewerUserId                                                     |
+| POST      | `/api/chat/lesson-plans/generate-from-chat` | POST /api/chat/lesson-plans/generate-from-chat Teacher/HOD: structured JSON → docx → R2/local → DRAFT LessonPlanSubmission                                                      |
+| GET       | `/api/chat/lesson-plans/pending`            | GET /api/chat/lesson-plans/pending HOD: pending chat lesson-plan submissions for their department (hodId = self). Admin/headteacher: all pending in school.                     |
+| POST      | `/api/chat/navbot`                          | —                                                                                                                                                                               |
+| POST      | `/api/chat/request-human`                   | POST /api/chat/request-human Sets session.status = PENDING_HUMAN and sends a metadata-only Telegram alert (tenant name, role, admin console deep link — never message content). |
+| POST      | `/api/chat/send-message`                    | POST /api/chat/send-message SSE contract (Teacher/HOD generative path): data: {"sessionId":"...","meta":true}                                                                   |
+| GET, POST | `/api/chat/sessions`                        | GET /api/chat/sessions — list current user's sessions for this school                                                                                                           |
+| GET       | `/api/chat/sessions/:id`                    | GET /api/chat/sessions/[id] Load own session + recent messages (used by Phase 4 resubmit reopen).                                                                               |
+| POST      | `/api/chat/ws-ticket`                       | When true, issue an admin ticket (platform_admin + claimed session only).                                                                                                       |
 
 ## /api/classes
 
@@ -616,7 +617,7 @@ Total route files: **453**
 | --------- | ------------------------------------- | ------------------------------------------------------------------------- |
 | POST      | `/api/onboarding/complete`            | —                                                                         |
 | PATCH     | `/api/onboarding/contact`             | Save admin phone during onboarding (after email verify / session cookie). |
-| GET, POST | `/api/onboarding/lipila/callback`     | —                                                                         |
+| GET, POST | `/api/onboarding/lipila/callback`     | Matches UUID / CUID id shape used across ZSMS (see lib/schemas idString). |
 | POST      | `/api/onboarding/pay`                 | —                                                                         |
 | POST      | `/api/onboarding/resend-verification` | —                                                                         |
 | POST      | `/api/onboarding/select-plan`         | —                                                                         |
@@ -762,19 +763,23 @@ Total route files: **453**
 
 ## /api/sms
 
-| Method     | Route                           | Summary                                                                      |
-| ---------- | ------------------------------- | ---------------------------------------------------------------------------- |
-| GET, PATCH | `/api/sms/balance`              | —                                                                            |
-| POST       | `/api/sms/broadcast`            | —                                                                            |
-| POST       | `/api/sms/broadcast-dispatcher` | —                                                                            |
-| POST       | `/api/sms/delivery`             | —                                                                            |
-| POST       | `/api/sms/inbound`              | —                                                                            |
-| GET        | `/api/sms/logs`                 | —                                                                            |
-| POST       | `/api/sms/queue-worker`         | —                                                                            |
-| GET        | `/api/sms/recipients`           | —                                                                            |
-| POST       | `/api/sms/send`                 | —                                                                            |
-| POST       | `/api/sms/test/onboarding`      | DEV ONLY — test onboarding welcome SMS.                                      |
-| POST       | `/api/sms/test/results-parent`  | DEV ONLY — test parent results-complete SMS (does not update ResultsStatus). |
+| Method        | Route                           | Summary                                                                                                                                                                                                                                              |
+| ------------- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET, PATCH    | `/api/sms/balance`              | —                                                                                                                                                                                                                                                    |
+| POST          | `/api/sms/broadcast`            | —                                                                                                                                                                                                                                                    |
+| POST          | `/api/sms/broadcast-dispatcher` | —                                                                                                                                                                                                                                                    |
+| POST          | `/api/sms/delivery`             | —                                                                                                                                                                                                                                                    |
+| PATCH, DELETE | `/api/sms/gateway/:id`          | PATCH /api/sms/gateway/[id] — update deviceName / isActive / school enable flag DELETE /api/sms/gateway/[id] — revoke (hard-delete) a registered gateway device Platform-admin only. Tenant scoped: optional body/query schoolId must match the row. |
+| GET           | `/api/sms/gateway/queue`        | GET /api/sms/gateway/queue Android poll: return PENDING CUSTOM_GATEWAY messages, mark DISPATCHED (idempotency).                                                                                                                                      |
+| POST          | `/api/sms/gateway/register`     | POST /api/sms/gateway/register Platform-admin only: create a gateway device and return the raw pairing token once.                                                                                                                                   |
+| POST          | `/api/sms/gateway/status`       | POST /api/sms/gateway/status Android reports per-message SENT / FAILED after SmsManager callback.                                                                                                                                                    |
+| POST          | `/api/sms/inbound`              | —                                                                                                                                                                                                                                                    |
+| GET           | `/api/sms/logs`                 | —                                                                                                                                                                                                                                                    |
+| POST          | `/api/sms/queue-worker`         | —                                                                                                                                                                                                                                                    |
+| GET           | `/api/sms/recipients`           | —                                                                                                                                                                                                                                                    |
+| POST          | `/api/sms/send`                 | —                                                                                                                                                                                                                                                    |
+| POST          | `/api/sms/test/onboarding`      | DEV ONLY — test onboarding welcome SMS.                                                                                                                                                                                                              |
+| POST          | `/api/sms/test/results-parent`  | DEV ONLY — test parent results-complete SMS (does not update ResultsStatus).                                                                                                                                                                         |
 
 ## /api/solo
 

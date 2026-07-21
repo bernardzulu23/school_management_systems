@@ -365,6 +365,48 @@ export default function AILessonPlanner() {
     [form.topic, activeSubject, form.coreCompetencies]
   )
 
+  // After a successful CBC stream, auto-save a draft so Download .docx is one click away.
+  useEffect(() => {
+    if (!done || loading || error || isProfessional || savedPlanId) return
+    const content = String(displayContent || '').trim()
+    if (!content) return
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/lesson-plans', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({
+            grade: form.grade,
+            subject: activeSubject,
+            topic: form.topic,
+            subTopic: form.subTopic || form.topic,
+            duration: Number(form.duration) || 40,
+            term: form.term,
+            templateType: form.templateType,
+            schemeId: schemeLink.schemeId || undefined,
+            weekNumber: schemeLink.weekNumber || undefined,
+            topicKey: schemeLink.topicKey || undefined,
+            sbaTaskType: form.sbaTaskType || undefined,
+            content,
+            submit: false,
+          }),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!cancelled && res.ok && json?.success && json?.data?.id) {
+          setSavedPlanId(json.data.id)
+        }
+      } catch {
+        // Non-blocking — user can still click Download .docx to save+export
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-run when stream completes
+  }, [done, loading, error, isProfessional, savedPlanId, displayContent])
+
   const generate = async () => {
     if (!canGenerate) return
     setSavedPlanId(null)
@@ -374,7 +416,7 @@ export default function AILessonPlanner() {
       subject: activeSubject,
       topic: form.topic,
       subtopic: form.subTopic || undefined,
-      duration: Number(form.duration),
+      duration: Number(form.duration) || 40,
       learningStyle: form.learningStyle,
       priorKnowledge: form.priorKnowledge || undefined,
       templateType: form.templateType,
@@ -382,6 +424,7 @@ export default function AILessonPlanner() {
       crossCuttingThemes: form.crossCuttingThemes,
       learningPathway: form.learningPathway,
       assessmentMethod: form.assessmentMethod,
+      sbaTaskType: form.sbaTaskType || undefined,
       languageOfInstruction: form.languageOfInstruction,
       resourceLevel: form.resourceLevel,
       realWorldContext: form.realWorldContext?.trim() || undefined,
@@ -398,10 +441,11 @@ export default function AILessonPlanner() {
       weekNumber: schemeLink.weekNumber || undefined,
       topicKey: schemeLink.topicKey || undefined,
       term: form.term,
-      learners:
-        form.numberOfBoys !== '' || form.numberOfGirls !== ''
-          ? Number(form.numberOfBoys || 0) + Number(form.numberOfGirls || 0)
-          : undefined,
+      learners: (() => {
+        if (form.numberOfBoys === '' && form.numberOfGirls === '') return undefined
+        const total = Number(form.numberOfBoys || 0) + Number(form.numberOfGirls || 0)
+        return total > 0 ? total : undefined
+      })(),
     })
   }
 
@@ -1117,13 +1161,23 @@ export default function AILessonPlanner() {
               value={form.sbaTaskType}
               onChange={(e) => setForm((p) => ({ ...p, sbaTaskType: e.target.value }))}
             >
-              {(eczReference?.sbaTaskTypes || ['Project', 'Practical task', 'Fieldwork']).map(
-                (t) => (
-                  <option key={typeof t === 'string' ? t : t} value={typeof t === 'string' ? t : t}>
-                    {typeof t === 'string' ? t : t}
-                  </option>
-                )
-              )}
+              {(
+                eczReference?.sbaTaskTypes || [
+                  'Project',
+                  'Practical task',
+                  'Assignment',
+                  'Presentation',
+                  'Fieldwork',
+                  'Portfolio',
+                  'Observation',
+                  'Exercises',
+                  'End of term test',
+                ]
+              ).map((t) => (
+                <option key={typeof t === 'string' ? t : t} value={typeof t === 'string' ? t : t}>
+                  {typeof t === 'string' ? t : t}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -1229,7 +1283,8 @@ export default function AILessonPlanner() {
               <>
                 <p className="font-semibold text-red-200">AI generation failed</p>
                 <p className="text-sm text-red-100/90 mt-1">
-                  The AI service could not complete your request. Try again in a moment.
+                  {error?.error ||
+                    'The AI service could not complete your request. Try again in a moment.'}
                 </p>
                 <Button variant="outline" className="mt-3" onClick={handleReset}>
                   Dismiss
@@ -1273,12 +1328,12 @@ export default function AILessonPlanner() {
                   subject={activeSubject}
                   form={form.grade}
                   topic={form.topic}
-                  label="Download Word"
+                  label="Download .docx"
                 />
               ) : (
                 <Button variant="outline" disabled={saving} onClick={downloadWordDoc}>
                   <Download className="h-4 w-4 mr-2" />
-                  Save &amp; Download Word
+                  Download .docx
                 </Button>
               )}
               <Button

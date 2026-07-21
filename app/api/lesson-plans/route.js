@@ -109,6 +109,7 @@ export const POST = withErrorHandler(async function POST(request) {
     body?.duration != null && Number.isFinite(Number(body.duration)) ? Number(body.duration) : null
   const templateType = normalize(body?.templateType) || 'professional'
   const submitNow = body?.submit === true || body?.status === 'SUBMITTED'
+  const sbaTaskType = normalize(body?.sbaTaskType) || null
 
   if (!grade || !subject || !topic || !content) {
     throw new ApiError('grade, subject, topic and content are required', 400)
@@ -157,6 +158,7 @@ export const POST = withErrorHandler(async function POST(request) {
       schemeId: schemeId || null,
       topicKey: topicKey || null,
       templateType,
+      sbaTaskType,
       content,
       submittedAt,
       approvedAt,

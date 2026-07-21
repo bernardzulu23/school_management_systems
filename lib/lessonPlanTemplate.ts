@@ -222,6 +222,51 @@ type LessonPlanPromptInput = LessonPlanFrameworkOptions & {
   numberOfBoys?: number | string
   numberOfGirls?: number | string
   planDate?: string
+  /** ECSEOL School-Based Assessment task type (Project, Exercises, etc.) */
+  sbaTaskType?: string
+}
+
+/** Guidance so the model shapes activities/assessment around the selected ECSEOL SBA type. */
+export function buildSbaTaskGuidance(sbaTaskType?: string | null): string {
+  const t = safe(sbaTaskType)
+  if (!t) return ''
+
+  const lower = t.toLowerCase()
+  let focus =
+    'Shape learner activities and Section 10 (SBA) around this task type with clear instructions, success criteria, and marks guidance.'
+
+  if (/exercise/.test(lower)) {
+    focus =
+      'Include a substantial HOMEWORK/CLASS EXERCISE section with graded practice items (basic → intermediate → challenging), expected answers or marking notes, and clear learner instructions.'
+  } else if (/project/.test(lower)) {
+    focus =
+      'Include an SBA Project brief: title, steps, timeline/checkpoints, deliverables, and a simple rubric aligned to the lesson outcomes.'
+  } else if (/practical|experiment|investigation/.test(lower)) {
+    focus =
+      'Include a hands-on practical/investigation: materials, safety, procedure steps, observation/results table, and practical skills assessment.'
+  } else if (/presentation/.test(lower)) {
+    focus =
+      'Include an oral/visual presentation task: preparation steps, presentation criteria, peer feedback prompts, and a short rubric.'
+  } else if (/field/.test(lower)) {
+    focus =
+      'Include fieldwork: site/context, data-collection method, recording sheet, safety/ethics notes, and how findings feed assessment.'
+  } else if (/portfolio/.test(lower)) {
+    focus =
+      'Include portfolio guidance: what artefacts to collect this lesson, how they are organised, and how they will be assessed over time.'
+  } else if (/observation/.test(lower)) {
+    focus =
+      'Include a teacher observation checklist linked to competences, with space for formative notes during lesson activities.'
+  } else if (/assignment|homework/.test(lower)) {
+    focus =
+      'Include a take-home assignment with clear instructions, due expectations, and marking guidance aligned to outcomes.'
+  } else if (/term test|end of term/.test(lower)) {
+    focus =
+      'Include end-of-term style practice items (short structured questions, no MCQ) aligned to this lesson’s outcomes and ECSEOL command terms.'
+  }
+
+  return `SBA TASK TYPE (ECSEOL): ${t}
+${focus}
+Ensure HOMEWORK/CLASS EXERCISE (or the main assessment activity) and Section 10 (SBA) explicitly reflect this task type.`
 }
 
 function normalizeStringList(items: unknown): string[] {
@@ -326,6 +371,8 @@ export function buildLessonPlanPrompt(input: LessonPlanPromptInput): string {
     coreCompetencies,
   })
 
+  const sbaGuidance = buildSbaTaskGuidance(input.sbaTaskType)
+
   const structure = buildLessonPlanStructure({
     subject: input.subject,
     grade: input.grade,
@@ -368,6 +415,7 @@ ${getSubjectGuidelines(canonicalSubject)}`
 
 ${frameworkBlock}
 
+${sbaGuidance ? `${sbaGuidance}\n` : ''}
 ${subjectBlock}
 
 ${mandatoryExamplesBlock}
@@ -381,5 +429,5 @@ Generate the complete, detailed, ready-to-use MoGE lesson plan now.
 - The "FRAMEWORK ELEMENTS (FROM TEACHER FORM — INTERNAL, DO NOT OUTPUT)" block above is guidance only; do NOT render it in the final output.
 - Then write all MoGE body sections starting at RATIONALE — embed worked examples and practice exercises from the CRITICAL REQUIREMENTS block in LESSON DEVELOPMENT.
 - Obey STRICT RULES: only selected competencies and themes; do not add unchecked CBC items.
-Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}. Output plain text only.`
+${sbaGuidance ? `- Honour the selected SBA task type (${safe(input.sbaTaskType)}) in activities and assessment sections.\n` : ''}Use Zambian local examples throughout. Tailor all content to ${canonicalSubject}. Output plain text only.`
 }

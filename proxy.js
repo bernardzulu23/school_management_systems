@@ -49,6 +49,9 @@ const PUBLIC_PATHS = [
   '/api/sms/delivery',
   '/api/sms/queue-worker',
   '/api/sms/broadcast-dispatcher',
+  // Android SIM gateway: authenticates via X-Gateway-Token (not cookie session)
+  '/api/sms/gateway/queue',
+  '/api/sms/gateway/status',
   '/api/public',
   '/api/public/features',
   '/api/public/platform-stats',
@@ -86,6 +89,7 @@ const CSRF_EXEMPT_PATHS = [
   '/api/sms/delivery',
   '/api/sms/queue-worker',
   '/api/sms/broadcast-dispatcher',
+  '/api/sms/gateway/status',
   '/api/health',
   '/api/ping',
 ]

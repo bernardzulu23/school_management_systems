@@ -22,13 +22,14 @@ export default function FacialConsentPage() {
   const [q, setQ] = useState('')
   const [selected, setSelected] = useState(null)
   const [form, setForm] = useState({
-    grantedByName: '',
-    grantedByRelationship: 'Parent',
-    grantedByContact: '',
+    guardianId: '',
     method: 'PAPER_FORM',
     notes: '',
   })
   const [saving, setSaving] = useState(false)
+
+  const selectedGuardians = selected?.guardians || []
+  const selectedGuardian = selectedGuardians.find((g) => g.id === form.guardianId) || null
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -81,6 +82,14 @@ export default function FacialConsentPage() {
 
   async function submitDecision(decision) {
     if (!selected) return
+    if (!selectedGuardians.length) {
+      toast.error('No parent/guardian linked to this student — link one in student records first')
+      return
+    }
+    if (!form.guardianId || !selectedGuardian) {
+      toast.error('Select the parent/guardian who signed')
+      return
+    }
     setSaving(true)
     try {
       const res = await sessionFetch('/api/privacy/facial-consent', {
@@ -89,13 +98,16 @@ export default function FacialConsentPage() {
         body: JSON.stringify({
           pupilId: selected.studentId,
           decision,
-          ...form,
+          guardianId: form.guardianId,
+          method: form.method,
+          notes: form.notes,
         }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Failed')
       toast.success(decision === 'deny' ? 'Refusal recorded' : 'Consent recorded')
       setSelected(null)
+      setForm({ guardianId: '', method: 'PAPER_FORM', notes: '' })
       await load()
     } catch (e) {
       toast.error(e?.message || 'Failed')
@@ -115,8 +127,8 @@ export default function FacialConsentPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           notes: 'Withdrawn via admin console',
-          withdrawnByName: form.grantedByName || 'Parent/guardian',
-          withdrawnByRelationship: form.grantedByRelationship || 'guardian',
+          withdrawnByName: 'Parent/guardian',
+          withdrawnByRelationship: 'guardian',
         }),
       })
       const json = await res.json().catch(() => ({}))
@@ -264,12 +276,13 @@ export default function FacialConsentPage() {
                               size="sm"
                               variant="outline"
                               onClick={() => {
+                                const guardians = row.guardians || []
                                 setSelected(row)
-                                setForm((f) => ({
-                                  ...f,
-                                  grantedByName: '',
-                                  grantedByRelationship: 'Parent',
-                                }))
+                                setForm({
+                                  guardianId: guardians.length === 1 ? guardians[0].id : '',
+                                  method: 'PAPER_FORM',
+                                  notes: '',
+                                })
                               }}
                             >
                               Record
@@ -303,31 +316,64 @@ export default function FacialConsentPage() {
             </CardHeader>
             <CardContent className="space-y-3 max-w-lg">
               <p className="text-xs text-royalPurple-text2">
-                Paper form digitised: enter the parent/guardian who signed, relationship, and
-                contact.
+                Paper form digitised: select the linked parent/guardian who signed. Relationship and
+                contact come from student records.
               </p>
-              <input
-                className="zsms-input w-full"
-                placeholder="Parent/guardian full name"
-                value={form.grantedByName}
-                onChange={(e) => setForm((f) => ({ ...f, grantedByName: e.target.value }))}
-              />
-              <input
-                className="zsms-input w-full"
-                placeholder="Relationship (e.g. Mother, Guardian)"
-                value={form.grantedByRelationship}
-                onChange={(e) => setForm((f) => ({ ...f, grantedByRelationship: e.target.value }))}
-              />
-              <input
-                className="zsms-input w-full"
-                placeholder="Contact phone/email"
-                value={form.grantedByContact}
-                onChange={(e) => setForm((f) => ({ ...f, grantedByContact: e.target.value }))}
-              />
+              {!selectedGuardians.length ? (
+                <div className="rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-3 text-sm text-royalPurple-text1">
+                  <p>
+                    No parent/guardian linked to this student — link one in student records first.
+                  </p>
+                  <Link
+                    href="/dashboard/headteacher/parent-links"
+                    className="text-xs underline mt-2 inline-block"
+                  >
+                    Open parent links
+                  </Link>
+                </div>
+              ) : (
+                <>
+                  <label className="block text-xs font-semibold uppercase text-royalPurple-text2">
+                    Parent/guardian
+                    <select
+                      className="zsms-select w-full mt-1"
+                      value={form.guardianId}
+                      onChange={(e) => setForm((f) => ({ ...f, guardianId: e.target.value }))}
+                    >
+                      <option value="">Select who signed…</option>
+                      {selectedGuardians.map((g) => (
+                        <option key={g.id} value={g.id}>
+                          {g.name}
+                          {g.relationship ? ` (${g.relationship})` : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="block text-xs font-semibold uppercase text-royalPurple-text2">
+                    Relationship
+                    <input
+                      className="zsms-input w-full mt-1 bg-royalPurple-card2"
+                      value={selectedGuardian?.relationship || ''}
+                      readOnly
+                      placeholder="—"
+                    />
+                  </label>
+                  <label className="block text-xs font-semibold uppercase text-royalPurple-text2">
+                    Contact / email
+                    <input
+                      className="zsms-input w-full mt-1 bg-royalPurple-card2"
+                      value={selectedGuardian?.contact || ''}
+                      readOnly
+                      placeholder="—"
+                    />
+                  </label>
+                </>
+              )}
               <select
                 className="zsms-select w-full"
                 value={form.method}
                 onChange={(e) => setForm((f) => ({ ...f, method: e.target.value }))}
+                disabled={!selectedGuardians.length}
               >
                 <option value="PAPER_FORM">Paper form</option>
                 <option value="DIGITIZED">Digitized scan of paper</option>
@@ -341,20 +387,32 @@ export default function FacialConsentPage() {
                 placeholder="Notes (optional)"
                 value={form.notes}
                 onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
+                disabled={!selectedGuardians.length}
               />
               <div className="flex flex-wrap gap-2">
-                <Button type="button" disabled={saving} onClick={() => submitDecision('grant')}>
+                <Button
+                  type="button"
+                  disabled={saving || !selectedGuardians.length || !form.guardianId}
+                  onClick={() => submitDecision('grant')}
+                >
                   Grant consent
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  disabled={saving}
+                  disabled={saving || !selectedGuardians.length || !form.guardianId}
                   onClick={() => submitDecision('deny')}
                 >
                   Record refusal
                 </Button>
-                <Button type="button" variant="outline" onClick={() => setSelected(null)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setSelected(null)
+                    setForm({ guardianId: '', method: 'PAPER_FORM', notes: '' })
+                  }}
+                >
                   Cancel
                 </Button>
               </div>

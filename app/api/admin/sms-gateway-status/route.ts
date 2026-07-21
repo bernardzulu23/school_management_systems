@@ -35,6 +35,18 @@ export const GET = withErrorHandler(async function GET(request: Request) {
     orderBy: { updatedAt: 'desc' },
   })
 
+  const schoolIds = [...new Set(gateways.map((g) => g.schoolId))]
+  const settingsRows =
+    schoolIds.length > 0
+      ? await basePrisma.schoolSmsSettings.findMany({
+          where: { schoolId: { in: schoolIds } },
+          select: { schoolId: true, customGatewayEnabled: true },
+        })
+      : []
+  const enabledBySchool = new Map(
+    settingsRows.map((s) => [s.schoolId, Boolean(s.customGatewayEnabled)])
+  )
+
   const now = Date.now()
   const payload = gateways.map((g) => {
     const lastSeenMs = g.lastSeenAt ? g.lastSeenAt.getTime() : 0
@@ -46,6 +58,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       subdomain: g.school.subdomain,
       deviceName: g.deviceName,
       isActive: g.isActive,
+      customGatewayEnabled: enabledBySchool.get(g.schoolId) ?? false,
       lastSeenAt: g.lastSeenAt,
       lastHealthCheck: g.lastHealthCheck,
       phoneStatus: offline ? 'offline' : 'online',

@@ -7,7 +7,11 @@ The platform console is for **Bluepeak platform operators** only — not school 
 - **Overview** — total onboarded schools, active/trial/expired counts, onboarding trend by month
 - **School usage** — per-school **student** and **teacher** counts only (which schools are using the program; no names or academic data)
 - **Schools** — name, subdomain, plan, subscription status, province/district (metadata)
-- **SMS Gateway** — register Android SIM-bridge devices per school (`/platform/sms-gateway`). Shows a one-time pairing token (copy immediately; not stored in browser storage). Optional “Enable for this school now” defaults off for staged rollout. Lists device name, active flag, last seen, and send/fail totals via `GET /api/admin/sms-gateway-status`.
+- **SMS Gateway** — full CRUD for Android SIM-bridge devices per school (`/platform/sms-gateway`):
+  - **Create** — `POST /api/sms/gateway/register` returns a one-time pairing token (copy immediately; never stored in browser storage). “Enable for this school now” defaults off for staged rollout.
+  - **Read** — fleet list via `GET /api/admin/sms-gateway-status` (filter by selected school in the UI): device name, active flag, school routing enable, last seen, send/fail totals.
+  - **Update** — `PATCH /api/sms/gateway/[id]` for device name, device active, and school-level `customGatewayEnabled`.
+  - **Delete/Revoke** — `DELETE /api/sms/gateway/[id]?schoolId=` removes the device (confirm in UI). To rotate a token, revoke then register again.
 - **Chat support** — pilot AI-chat human handoff queue (`/platform/support`). Teachers who click **Request human** land here as `PENDING_HUMAN`. Nav shows a pending count badge. Claim → reply → close. Telegram alerts (optional) are metadata-only — see [CHAT_HANDOFF_PHASE2.md](./CHAT_HANDOFF_PHASE2.md).
 - **Provinces** — aggregated school counts per Zambian province
 - **Districts** — drill-down per province (`/platform/districts?province=…`)

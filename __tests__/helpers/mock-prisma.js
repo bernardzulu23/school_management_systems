@@ -108,6 +108,20 @@ export function createMockPrisma() {
     aIRequest: {
       create: vi.fn(),
     },
+    sMSGateway: {
+      findUnique: vi.fn(),
+      findFirst: vi.fn(),
+      findMany: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+      delete: vi.fn(),
+    },
+    schoolSmsSettings: {
+      findUnique: vi.fn(),
+      findMany: vi.fn(),
+      upsert: vi.fn(),
+      update: vi.fn(),
+    },
     $queryRaw: vi.fn().mockResolvedValue([]),
     $transaction: vi.fn(async (fn) => fn(mock)),
   }

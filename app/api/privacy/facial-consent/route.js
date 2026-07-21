@@ -68,9 +68,12 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!pupilId) throw new ApiError('pupilId is required', 400)
 
   const decision = String(body.decision || 'grant').toLowerCase()
+  const guardianId = String(body.guardianId || '').trim() || null
   const payload = {
     schoolId,
     pupilId,
+    guardianId,
+    // Denormalized fields are filled server-side from guardianId; ignored when guardianId set.
     grantedByName: body.grantedByName,
     grantedByRelationship: body.grantedByRelationship,
     grantedByContact: body.grantedByContact,

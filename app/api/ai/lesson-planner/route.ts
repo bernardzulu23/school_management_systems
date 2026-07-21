@@ -23,14 +23,29 @@ import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 const LESSON_PLAN_SYSTEM =
   'You are an expert Zambian CBC lesson planner. Write complete, practical lesson plans aligned to MoGE guidelines and Zambian classroom context.'
 
+/** Treat empty / zero / NaN as omitted so the UI does not fail Zod on blank MoGE headcounts. */
+const optionalPositiveInt = z.preprocess((v) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  if (!Number.isFinite(n) || n <= 0) return undefined
+  return n
+}, z.number().int().min(1).max(200).optional())
+
+const optionalNonNegInt = z.preprocess((v) => {
+  if (v === '' || v === null || v === undefined) return undefined
+  const n = typeof v === 'number' ? v : Number(v)
+  if (!Number.isFinite(n) || n < 0) return undefined
+  return n
+}, z.number().int().min(0).max(500).optional())
+
 const LessonPlannerInputSchema = z.object({
-  grade: z.string().min(1).max(20),
+  grade: z.string().min(1).max(40),
   subject: z.string().min(1).max(100),
   topic: z.string().min(3).max(200),
   subtopic: z.string().max(200).optional(),
-  duration: z.number().int().min(1).max(240),
+  duration: z.coerce.number().int().min(1).max(240),
   term: z.string().max(20).optional(),
-  learners: z.number().int().min(1).max(200).optional(),
+  learners: optionalPositiveInt,
   learningStyle: z.enum(['mixed', 'visual', 'kinesthetic', 'auditory']).default('mixed'),
   priorKnowledge: z.string().max(300).optional(),
   templateType: z
@@ -52,6 +67,8 @@ const LessonPlannerInputSchema = z.object({
   crossCuttingThemes: z.array(z.string().max(120)).max(10).optional(),
   learningPathway: z.string().max(80).optional(),
   assessmentMethod: z.string().max(120).optional(),
+  /** ECSEOL SBA task type — shapes activities / assessment in the prompt */
+  sbaTaskType: z.string().max(80).optional(),
   realWorldContext: z.string().max(500).optional(),
   zambiContext: z.string().max(500).optional(),
   includePractical: z.boolean().optional(),
@@ -61,10 +78,10 @@ const LessonPlannerInputSchema = z.object({
   additionalInstructions: z.string().max(800).optional(),
   references: z.string().max(500).optional(),
   teachingAids: z.string().max(500).optional(),
-  lessonNumber: z.number().int().min(1).max(200).optional(),
-  totalLessonsInUnit: z.number().int().min(1).max(200).optional(),
-  numberOfBoys: z.number().int().min(0).max(500).optional(),
-  numberOfGirls: z.number().int().min(0).max(500).optional(),
+  lessonNumber: optionalPositiveInt,
+  totalLessonsInUnit: optionalPositiveInt,
+  numberOfBoys: optionalNonNegInt,
+  numberOfGirls: optionalNonNegInt,
   planDate: z.string().max(30).optional(),
   /** When false, returns JSON `{ lessonPlan, generatedBy }` instead of SSE. Default true for UI streaming. */
   stream: z.boolean().optional().default(true),
@@ -88,6 +105,7 @@ function buildPrompt(input: LessonPlannerInput, userId: string, schoolId: string
       crossCuttingThemes: input.crossCuttingThemes,
       learningPathway: input.learningPathway,
       assessmentMethod: input.assessmentMethod,
+      sbaTaskType: input.sbaTaskType,
       realWorldContext: input.realWorldContext || input.zambiContext,
       includePractical: input.includePractical,
       includeInclusive: input.includeInclusive,
@@ -313,7 +331,15 @@ export const POST = withAILimits(async function POST(request: Request) {
     return new Response(stream, { headers: AI_SSE_HEADERS })
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json({ error: 'Invalid input', issues: error.issues }, { status: 400 })
+      const firstIssue = error.issues?.[0]
+      const field = firstIssue?.path?.length ? firstIssue.path.join('.') : null
+      const hint = field
+        ? `Please check "${field}" and try again.`
+        : 'Please check your lesson plan details and try again.'
+      return NextResponse.json(
+        { error: hint, code: 'VALIDATION_ERROR', issues: error.issues },
+        { status: 400 }
+      )
     }
 
     logger.error('ai.lesson-planner.error', error, { requestId })
@@ -323,17 +349,25 @@ export const POST = withAILimits(async function POST(request: Request) {
       lower.includes('all ai providers failed') ||
       lower.includes('ai generation failed') ||
       lower.includes('fetch failed') ||
-      lower.includes('no ai provider')
+      lower.includes('no ai provider') ||
+      lower.includes('temporarily unreachable')
     if (providerOutage) {
+      // Keep message free of API-key / provider brand tokens so the client
+      // error scrubber does not replace it with a useless generic string.
       return NextResponse.json(
         {
           error:
-            'AI providers are temporarily unreachable. Check GROQ_API_KEY / GEMINI_API_KEY on the deployment, then retry. ' +
-            message,
+            'AI providers are temporarily unavailable. Please try again in a moment. If this keeps happening, ask your school admin to verify AI service configuration.',
+          code: 'AI_UNAVAILABLE',
         },
         { status: 503 }
       )
     }
-    return NextResponse.json({ error: message }, { status: 500 })
+    // Prefer a short, safe message (avoid leaking stacks / key names to the UI).
+    const safeMessage =
+      message.length > 160 || /api[_ ]?key|groq|gemini|openrouter|openai|huggingface/i.test(message)
+        ? 'The AI service could not complete your request. Try again in a moment.'
+        : message
+    return NextResponse.json({ error: safeMessage, code: 'AI_ERROR' }, { status: 500 })
   }
 })
