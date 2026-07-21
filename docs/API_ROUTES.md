@@ -851,16 +851,17 @@ Total route files: **458**
 
 ## /api/teacher
 
-| Method            | Route                                   | Summary                                                                                                                                                           |
-| ----------------- | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET               | `/api/teacher/department-activities`    | —                                                                                                                                                                 |
-| GET               | `/api/teacher/lesson-plans/stats`       | GET /api/teacher/lesson-plans/stats Single Prisma groupBy on LessonPlanSubmission by SubmissionStatus for the authenticated teacher, scoped to schoolId (tenant). |
-| GET               | `/api/teacher/lesson-plans/submissions` | GET /api/teacher/lesson-plans/submissions List the teacher's chat LessonPlanSubmission rows (for stats drilldown / resubmit).                                     |
-| GET, POST         | `/api/teacher/materials`                | —                                                                                                                                                                 |
-| PUT, DELETE       | `/api/teacher/materials/:id`            | —                                                                                                                                                                 |
-| GET               | `/api/teacher/pupils`                   | —                                                                                                                                                                 |
-| GET, POST, DELETE | `/api/teacher/results`                  | —                                                                                                                                                                 |
-| GET               | `/api/teacher/results/export`           | —                                                                                                                                                                 |
+| Method            | Route                                             | Summary                                                                                                                                                           |
+| ----------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET               | `/api/teacher/department-activities`              | —                                                                                                                                                                 |
+| GET               | `/api/teacher/lesson-plans/stats`                 | GET /api/teacher/lesson-plans/stats Single Prisma groupBy on LessonPlanSubmission by SubmissionStatus for the authenticated teacher, scoped to schoolId (tenant). |
+| GET               | `/api/teacher/lesson-plans/submissions`           | GET /api/teacher/lesson-plans/submissions List the teacher's chat LessonPlanSubmission rows (for stats drilldown / resubmit).                                     |
+| GET, POST         | `/api/teacher/materials`                          | List / create study materials (JSON or multipart with `file`)                                                                                                     |
+| GET               | `/api/teacher/materials/file/:schoolId/:filename` | Serve locally stored study files (auth + tenant scoped)                                                                                                           |
+| PUT, DELETE       | `/api/teacher/materials/:id`                      | Update / delete study material                                                                                                                                    |
+| GET               | `/api/teacher/pupils`                             | —                                                                                                                                                                 |
+| GET, POST, DELETE | `/api/teacher/results`                            | —                                                                                                                                                                 |
+| GET               | `/api/teacher/results/export`                     | —                                                                                                                                                                 |
 
 ## /api/teacher-performance
 
@@ -943,9 +944,9 @@ Total route files: **458**
 
 ## /api/upload
 
-| Method | Route         | Summary                                                                            |
-| ------ | ------------- | ---------------------------------------------------------------------------------- |
-| POST   | `/api/upload` | Legacy generic upload — use /api/materials/ingest or /api/profile/picture instead. |
+| Method | Route         | Summary                                                                                        |
+| ------ | ------------- | ---------------------------------------------------------------------------------------------- |
+| POST   | `/api/upload` | Multipart study/RAG material file upload. Returns `fileUrl` (Vercel Blob or local `.uploads`). |
 
 ## /api/users
 

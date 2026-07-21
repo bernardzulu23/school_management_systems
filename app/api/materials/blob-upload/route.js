@@ -6,12 +6,11 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
-const MAX_BLOB_BYTES = 50 * 1024 * 1024 // 50 MB ceiling for AI reference uploads
-const ALLOWED_CONTENT_TYPES = [
-  'application/pdf',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'text/plain',
-]
+import { RAG_BLOB_CONTENT_TYPES, MAX_BLOB_UPLOAD_BYTES } from '@/lib/uploads/materialFile'
+
+const MAX_BLOB_BYTES = MAX_BLOB_UPLOAD_BYTES
+// Include application/octet-stream — Windows browsers often send PDF/DOCX as that MIME.
+const ALLOWED_CONTENT_TYPES = RAG_BLOB_CONTENT_TYPES
 
 function blobEnabled() {
   return Boolean(String(process.env.BLOB_READ_WRITE_TOKEN || '').trim())

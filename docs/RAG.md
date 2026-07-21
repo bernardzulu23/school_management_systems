@@ -102,9 +102,9 @@ Every chunk stores `schoolId`. Retrieval always filters `WHERE schoolId = $tenan
 
 **Dashboard → AI Reference Materials** (`/dashboard/teacher/ai-materials`)
 
-Teachers upload PDF, DOCX, or TXT files with optional subject/grade metadata. The UI calls `POST /api/materials/ingest` (multipart) and lists indexed materials via `GET /api/materials`.
+Teachers upload PDF, DOCX, or TXT files with optional subject/grade metadata. Small files POST multipart to `POST /api/materials/ingest`; larger files use client upload via `POST /api/materials/blob-upload` (allows `application/octet-stream` for Windows MIME quirks) then ingest by URL. Lists indexed materials via `GET /api/materials`.
 
-Student-facing **Study Materials** (`StudyMaterial` model) is separate from RAG `SchoolMaterial`.
+Student-facing **Study Materials** (`StudyMaterial` model) is separate from RAG `SchoolMaterial`. Teachers upload local files from `/dashboard/teacher/materials` via multipart `POST /api/teacher/materials` (or `POST /api/upload` then JSON create). Local fallback files are served at `GET /api/teacher/materials/file/:schoolId/:filename`.
 
 ## Official CDC Chemistry syllabus (built-in)
 

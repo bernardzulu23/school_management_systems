@@ -41,7 +41,9 @@ export default function StudyMaterialsPage() {
     size: '',
     tags: '',
     description: '',
+    file: null,
   })
+  const [uploadProgress, setUploadProgress] = useState('')
 
   const getFileIcon = (type) => {
     switch (type.toLowerCase()) {
@@ -133,8 +135,10 @@ export default function StudyMaterialsPage() {
       size: '',
       tags: '',
       description: '',
+      file: null,
     })
     setEditing(null)
+    setUploadProgress('')
   }
 
   const openCreate = () => {
@@ -152,14 +156,104 @@ export default function StudyMaterialsPage() {
       size: String(material?.size || ''),
       tags: Array.isArray(material?.tags) ? material.tags.join(', ') : '',
       description: String(material?.description || ''),
+      file: null,
     })
     setShowForm(true)
+  }
+
+  const inferTypeFromName = (name) => {
+    const lower = String(name || '').toLowerCase()
+    if (lower.endsWith('.pdf')) return 'pdf'
+    if (/\.(mp4|webm|mov|avi|mkv)$/.test(lower)) return 'video'
+    if (/\.(ppt|pptx)$/.test(lower)) return 'powerpoint'
+    if (/\.(zip|rar|7z)$/.test(lower)) return 'zip'
+    if (/\.(jpg|jpeg|png|webp|gif)$/.test(lower)) return 'image'
+    return 'file'
+  }
+
+  const onLocalFileChange = (e) => {
+    const file = e.target.files?.[0] || null
+    if (!file) {
+      setForm((p) => ({ ...p, file: null }))
+      return
+    }
+    const maxBytes = 50 * 1024 * 1024
+    if (file.size > maxBytes) {
+      toast.error(`"${file.name}" is too large (max 50 MB)`)
+      e.target.value = ''
+      return
+    }
+    setForm((p) => ({
+      ...p,
+      file,
+      fileUrl: '',
+      type: inferTypeFromName(file.name),
+      title: p.title || file.name.replace(/\.[^.]+$/, ''),
+      size:
+        file.size < 1024 * 1024
+          ? `${(file.size / 1024).toFixed(1)} KB`
+          : `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+    }))
+  }
+
+  const getCsrfToken = async () => {
+    const fromCookie = document.cookie
+      .split(';')
+      .map((c) => c.trim())
+      .find((c) => c.startsWith('csrf_token='))
+    if (fromCookie) return decodeURIComponent(fromCookie.split('=').slice(1).join('='))
+    const res = await fetch('/api/csrf-token', { credentials: 'include' })
+    const json = await res.json().catch(() => ({}))
+    return json?.token || ''
   }
 
   const saveMaterial = async (e) => {
     e.preventDefault()
     setSaving(true)
+    setUploadProgress('')
     try {
+      if (!editing && form.file) {
+        setUploadProgress('Uploading file…')
+        const csrf = await getCsrfToken()
+        const body = new FormData()
+        body.append('file', form.file)
+        body.append('title', form.title.trim())
+        body.append('subject', form.subject.trim())
+        body.append('type', form.type)
+        if (form.size) body.append('size', form.size)
+        if (form.tags) body.append('tags', form.tags)
+        if (form.description) body.append('description', form.description)
+        body.append('purpose', 'study')
+
+        const res = await fetch('/api/teacher/materials', {
+          method: 'POST',
+          headers: csrf ? { 'x-csrf-token': csrf } : {},
+          body,
+          credentials: 'include',
+        })
+        if (res.status === 413) {
+          throw new Error(
+            'File too large for the server. Try a smaller file (under ~4 MB) or ask an admin to enable blob storage.'
+          )
+        }
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok) {
+          throw new Error(json?.message || json?.error || 'Failed to upload material')
+        }
+        toast.success('Material uploaded successfully')
+        setShowForm(false)
+        resetForm()
+        await loadMaterials()
+        return
+      }
+
+      if (!form.fileUrl.trim()) {
+        throw new Error(
+          editing ? 'File URL is required' : 'Choose a local file or paste a File URL'
+        )
+      }
+
+      setUploadProgress('Saving…')
       const payload = {
         title: form.title,
         subject: form.subject,
@@ -193,6 +287,7 @@ export default function StudyMaterialsPage() {
       toast.error(err.message || 'Something went wrong. Please try again.')
     } finally {
       setSaving(false)
+      setUploadProgress('')
     }
   }
 
@@ -472,13 +567,39 @@ export default function StudyMaterialsPage() {
                   </select>
                 </div>
 
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="localFile">Upload from device</Label>
+                  <Input
+                    id="localFile"
+                    type="file"
+                    accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.mp4,.webm,.mov,.jpg,.jpeg,.png,.webp,.gif,.txt"
+                    onChange={onLocalFileChange}
+                    disabled={Boolean(editing)}
+                  />
+                  {form.file ? (
+                    <p className="text-xs text-royalPurple-text3">
+                      Selected: {form.file.name} ({form.size || 'unknown size'})
+                    </p>
+                  ) : (
+                    <p className="text-xs text-royalPurple-text3">
+                      {editing
+                        ? 'To replace the file, paste a new File URL below.'
+                        : 'Choose a local file to upload, or paste an existing File URL below.'}
+                    </p>
+                  )}
+                </div>
+
                 <div className="space-y-2">
-                  <Label htmlFor="fileUrl">File URL</Label>
+                  <Label htmlFor="fileUrl">File URL {form.file ? '(optional)' : ''}</Label>
                   <Input
                     id="fileUrl"
                     value={form.fileUrl}
-                    onChange={(e) => setForm((p) => ({ ...p, fileUrl: e.target.value }))}
-                    required
+                    onChange={(e) =>
+                      setForm((p) => ({ ...p, fileUrl: e.target.value, file: null }))
+                    }
+                    required={!form.file && !editing}
+                    placeholder="https://… or leave blank when uploading a local file"
+                    disabled={Boolean(form.file)}
                   />
                 </div>
 
@@ -516,7 +637,7 @@ export default function StudyMaterialsPage() {
                 <div className="flex items-center gap-2 md:col-span-2">
                   <Button type="submit" disabled={saving}>
                     {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                    Save
+                    {uploadProgress || 'Save'}
                   </Button>
                   <Button
                     type="button"

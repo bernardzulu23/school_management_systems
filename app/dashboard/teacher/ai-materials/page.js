@@ -206,37 +206,18 @@ export default function AiMaterialsPage() {
     try {
       const csrf = await getCsrfToken()
       let json
+      const fileType = inferFileType(form.file.name)
+      if (!fileType) {
+        throw new Error('Only PDF, DOCX, or TXT files are supported')
+      }
 
-      if (blobEnabled) {
-        // Upload the file straight to blob storage (bypasses the request-body
-        // limit), then ask the server to ingest it by URL.
-        const blob = await upload(form.file.name, form.file, {
-          access: 'public',
-          handleUploadUrl: '/api/materials/blob-upload',
-        })
-        const res = await apiSessionFetch('/api/materials/ingest', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(csrf ? { 'x-csrf-token': csrf } : {}),
-          },
-          body: JSON.stringify({
-            fileUrl: blob.url,
-            fileType: inferFileType(form.file.name),
-            title: form.title.trim(),
-            subject: form.subject || undefined,
-            gradeLevel: form.gradeLevel || undefined,
-          }),
-        })
-        json = await res.json().catch(() => ({}))
-        if (!res.ok) throw new Error(json?.message || json?.error || 'Indexing failed')
-      } else {
-        // Small files: send directly through the serverless function.
+      const ingestMultipart = async () => {
         const body = new FormData()
         body.append('file', form.file)
         body.append('title', form.title.trim())
         if (form.subject) body.append('subject', form.subject)
         if (form.gradeLevel) body.append('gradeLevel', form.gradeLevel)
+        body.append('fileType', fileType)
         body.append('fileUrl', form.file.name)
 
         const res = await apiSessionFetch('/api/materials/ingest', {
@@ -246,11 +227,91 @@ export default function AiMaterialsPage() {
         })
         if (res.status === 413) {
           throw new Error(
-            `File too large for the server to accept (limit ~${MAX_DIRECT_MB} MB). Split the document into smaller files or paste its text.`
+            `File too large for the server to accept (limit ~${MAX_DIRECT_MB} MB). Split the document into smaller files or enable blob storage.`
           )
         }
-        json = await res.json().catch(() => ({}))
-        if (!res.ok) throw new Error(json?.message || json?.error || 'Upload failed')
+        const payload = await res.json().catch(() => ({}))
+        if (!res.ok) {
+          throw new Error(payload?.message || payload?.error || 'Upload failed')
+        }
+        return payload
+      }
+
+      if (blobEnabled && form.file.size > MAX_DIRECT_BYTES) {
+        // Large files: upload straight to blob storage (bypasses request-body limit).
+        try {
+          const blob = await upload(form.file.name, form.file, {
+            access: 'public',
+            handleUploadUrl: '/api/materials/blob-upload',
+            headers: csrf
+              ? {
+                  'x-csrf-token': csrf,
+                  'x-requested-with': 'XMLHttpRequest',
+                }
+              : { 'x-requested-with': 'XMLHttpRequest' },
+          })
+          const res = await apiSessionFetch('/api/materials/ingest', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(csrf ? { 'x-csrf-token': csrf } : {}),
+            },
+            body: JSON.stringify({
+              fileUrl: blob.url,
+              fileType,
+              title: form.title.trim(),
+              subject: form.subject || undefined,
+              gradeLevel: form.gradeLevel || undefined,
+            }),
+          })
+          json = await res.json().catch(() => ({}))
+          if (!res.ok) throw new Error(json?.message || json?.error || 'Indexing failed')
+        } catch (blobErr) {
+          // Fall back to server-side /api/upload + ingest-by-URL when client blob fails
+          // (e.g. unexpected MIME), as long as the file still fits the direct limit.
+          if (form.file.size > MAX_DIRECT_BYTES) {
+            throw new Error(
+              blobErr?.message ||
+                'Direct storage upload failed. Try a smaller file (under 4 MB) or contact support.'
+            )
+          }
+          toast.error('Cloud upload failed — retrying via server…')
+          json = await ingestMultipart()
+        }
+      } else if (blobEnabled) {
+        // Prefer blob for small files too, but fall back to multipart on failure.
+        try {
+          const blob = await upload(form.file.name, form.file, {
+            access: 'public',
+            handleUploadUrl: '/api/materials/blob-upload',
+            headers: csrf
+              ? {
+                  'x-csrf-token': csrf,
+                  'x-requested-with': 'XMLHttpRequest',
+                }
+              : { 'x-requested-with': 'XMLHttpRequest' },
+          })
+          const res = await apiSessionFetch('/api/materials/ingest', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(csrf ? { 'x-csrf-token': csrf } : {}),
+            },
+            body: JSON.stringify({
+              fileUrl: blob.url,
+              fileType,
+              title: form.title.trim(),
+              subject: form.subject || undefined,
+              gradeLevel: form.gradeLevel || undefined,
+            }),
+          })
+          json = await res.json().catch(() => ({}))
+          if (!res.ok) throw new Error(json?.message || json?.error || 'Indexing failed')
+        } catch {
+          json = await ingestMultipart()
+        }
+      } else {
+        json = await ingestMultipart()
       }
 
       toast.success(

@@ -1,7 +1,7 @@
 # ZSMS System Documentation
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-07-21  
+**Last updated:** 2026-07-22  
 **Application version:** 2.0.3 (`package.json`)  
 **Document version:** 1.0
 
