@@ -31,6 +31,10 @@ export type SideBySideItem =
       kind: 'practice_question'
       question: Parameters<typeof mapPracticeQuestionToGeneratedQuestion>[0]['question']
     }
+  | {
+      kind: 'quiz_question'
+      question: Parameters<typeof mapQuizQuestionToGeneratedQuestion>[0]['question']
+    }
 
 export type RunValidationSideBySideInput = {
   schoolId: string

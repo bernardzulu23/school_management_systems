@@ -20,6 +20,15 @@ export const BloomLevel = z.enum([
 
 export const ComponentType = z.enum(['SBA', 'FINAL_EXAM'])
 
+/**
+ * How an EoC is matched to a generated item:
+ * - topic: match syllabus topic names (default; Mathematics-style).
+ * - taskType: match investigation/analysis/project-style task labels
+ *   (Agricultural Science EoC1/4/6 style). Topics may still appear in
+ *   unverifiedTopicAliases as provisional content anchors.
+ */
+export const ResolutionMode = z.enum(['topic', 'taskType'])
+
 /** A single bullet under an Element of Construct. */
 export const SubSkill = z.object({
   id: z.string(),
@@ -31,12 +40,21 @@ export const SubSkill = z.object({
    * resolveTopicToEoc still resolves these with verified: false.
    */
   unverifiedTopicAliases: z.array(z.string()).default([]),
+  /**
+   * Task-type labels for skill-lens EoCs (investigation, analysis, project…).
+   * Used when ElementOfConstruct.resolutionMode === 'taskType'.
+   */
+  taskTypeAliases: z.array(z.string()).default([]),
+  /** Extraction / routing note for curriculum leads; not used at runtime. */
+  note: z.string().optional(),
 })
 
 export const ElementOfConstruct = z.object({
   id: z.string(),
   description: z.string(),
   subSkills: z.array(SubSkill),
+  /** Defaults to topic for Math-style specs that omit the field. */
+  resolutionMode: ResolutionMode.default('topic'),
 })
 
 export const KeyCompetence = z.enum([

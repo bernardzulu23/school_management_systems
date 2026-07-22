@@ -3274,6 +3274,7 @@ model EczCompetency {
 enum EczValidationSource {
   ecz_practice
   ecz_exam_questions
+  quiz_maker
 }
 
 /// Sidecar log for structural/semantic validator output on AI ECZ generation runs.

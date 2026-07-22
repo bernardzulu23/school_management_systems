@@ -1,0 +1,183 @@
+{
+  "subjectCode": "4012",
+  "subjectName": "Biology",
+  "syllabusYear": 2024,
+  "construct": "Applies biological principles to real world situations to understand and solve challenges affecting living organisms.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Analyses Systems of Classifying Organisms and Substances",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-classification",
+          "label": "Examines classification systems, identifies features used, evaluates importance of classifying organisms and substances",
+          "topicAliases": [
+            "Characteristics of Living Things",
+            "Levels of Biological Organisation",
+            "Basic Cell Structure",
+            "Types of Cells",
+            "Cell Specialisation",
+            "Nature of Biology"
+          ],
+          "unverifiedTopicAliases": ["Classification of Organisms", "Taxonomy"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Investigates and Explains Biological Functions",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-functions",
+          "label": "Investigates how living things function and interact; analyses causes and effects of biological events",
+          "topicAliases": [
+            "Nutrition in Man",
+            "Plant Nutrients",
+            "Nutritional Deficiency Diseases and Disorders",
+            "Reproduction in Living Organisms",
+            "Reproduction and Development in Human Beings",
+            "Coordination and Response in Plants",
+            "Coordination and Response in Animals",
+            "Transport in Plants",
+            "Autotrophic Nutrition",
+            "Heterotrophic Nutrition"
+          ],
+          "unverifiedTopicAliases": ["Photosynthesis", "Respiration", "Excretion", "Circulation"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Interprets and Explains Scientific Evidence",
+      "resolutionMode": "taskType",
+      "subSkills": [
+        {
+          "id": "eoc3-evidence",
+          "label": "Analyses data, interprets findings with scientific reasoning, evaluates evidence to support or reject ideas",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Experimental Design",
+            "Nature of Science Inquiry in Biology",
+            "Micrographs",
+            "Ecosystem"
+          ],
+          "note": "Skill-lens EoC on evidence interpretation; not a topic bucket.",
+          "taskTypeAliases": [
+            "data analysis",
+            "evidence evaluation",
+            "scientific reasoning",
+            "interpretation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Applies Scientific Skills to Real-life Situations",
+      "resolutionMode": "taskType",
+      "subSkills": [
+        {
+          "id": "eoc4-skills",
+          "label": "Uses scientific methods and practical skills to solve everyday problems and make informed decisions",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Experimental Design",
+            "Waste Management",
+            "The Soil - Composition and Fertility",
+            "Biotic and Abiotic Interactions"
+          ],
+          "note": "Skill-lens applied biology EoC.",
+          "taskTypeAliases": [
+            "investigation",
+            "practical skills",
+            "problem solving",
+            "scientific method"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Demonstrates biological principles in real life situations",
+      "resolutionMode": "taskType",
+      "subSkills": [
+        {
+          "id": "eoc5-real-life",
+          "label": "Applies biological knowledge to everyday experiences and practical daily-life problems",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Ecosystem",
+            "Waste Management",
+            "Nutritional Deficiency Diseases and Disorders"
+          ],
+          "note": "SBA-emphasis EoC; Final Exam covers EoC1-4 only (EoC5 excluded from Form 4 paper).",
+          "taskTypeAliases": ["everyday biology", "real-life application", "general practical"]
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "4012/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100 marks. All 5 EoC. Semi-structured and essay.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "4012/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 6 tasks/100 including compulsory research project (50 marks, Terms 1-2). All 5 EoC.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "4012/2",
+        "formLevel": "Form 4",
+        "numItems": 4,
+        "totalMarks": 70,
+        "structureNotes": "4 compulsory scenario items on EoC1-4 only (EoC5 excluded). Marks: 10,20,20,20. Duration 1h30. 70% weighting.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: teachers develop scoring guides/rubrics; include experimental skills (follow instructions, observe, record, draw, infer, apply principles).",
+      "Final Exam: ECZ scoring guides; semi-structured and essay items from scenarios.",
+      "Unfamiliar materials may appear; candidates must apply scientific principles.",
+      "Diagrams and observations scored for accuracy and labelling where required."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Classification of organisms/substances from scenario features; evaluate importance of classification systems",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "critical_thinking"]
+    }
+  ]
+}

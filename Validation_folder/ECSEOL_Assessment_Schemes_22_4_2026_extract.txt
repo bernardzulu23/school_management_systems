@@ -1,0 +1,2783 @@
+--- PAGE 1 ---
+i 
+ 
+ 
+ 
+EXAMINATIONS COUNCIL OF ZAMBIA 
+ASSESSMENT SCHEMES  
+for 
+Examination for Certificate of Secondary 
+Education Ordinary Level 
+2026 
+
+--- PAGE 2 ---
+ii 
+ 
+ 
+©ECZ 2026 
+All rights reserved. 
+No reproduction, photocopying or transmission of this publication may be made 
+without prior written permission of the Examinations Council of Zambia. 
+ 
+ISBN 
+Typeset and Designed by 
+Examinations Council of Zambia 
+
+--- PAGE 3 ---
+iii 
+ 
+ 
+ 
+ 
+ASSESSMENT SCHEMES  
+for 
+Examination for Certificate of Secondary Education  
+Ordinary Level  
+ 
+ 
+2026 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+--- PAGE 4 ---
+iv 
+ 
+Table of Contents 
+ 
+Foreword ................................................................................................................................................................. ix 
+Acknowledgments .................................................................................................................................................... x 
+Definitions of Key Concepts ................................................................................................................................... xiii 
+Summary of Test Items and Tasks ......................................................................................................................... xiv 
+Abbreviations and Acronyms ............................................................................................................................... - 1 - 
+Chapter 1: English Language – 1021 .................................................................................................................... - 2 - 
+1 
+Construct 
+- 2 - 
+2 
+Elements of Construct 
+- 2 - 
+3 
+Test Design 
+- 2 - 
+4.      Scoring Criteria 
+- 6 - 
+5. 
+Notes and Guidelines 
+- 7 - 
+6. 
+Exemplar Test Items 
+- 7 - 
+Chapter 2: Literature in English – 1025 ............................................................................................................. - 11 - 
+1. 
+Construct 
+- 11 - 
+2. 
+Elements of Construct 
+- 11 - 
+3. 
+Test Design 
+- 11 - 
+4. 
+Scoring Criteria 
+- 14 - 
+5. 
+Notes and Guidelines 
+- 14 - 
+6 
+Exemplar Test Items 
+- 15 - 
+Chapter 3: Civic Education – 3011 .................................................................................................................... - 20 - 
+1 
+Construct 
+- 20 - 
+2 
+Elements of Construct 
+- 20 - 
+3 
+Test Design 
+- 20 - 
+4 
+Scoring Criteria 
+- 23 - 
+5 
+Notes and Guidelines 
+- 23 - 
+6. 
+Exemplar Test Items 
+- 24 - 
+Chapter 4: Religious Education – 3012 .............................................................................................................. - 39 - 
+1. 
+Construct 
+- 39 - 
+2. 
+Elements of Construct (EoC) 
+- 39 - 
+3. 
+Test Design 
+- 39 - 
+4. 
+Scoring Criteria 
+- 41 - 
+5. 
+Notes and Guidelines 
+- 41 - 
+6. 
+Exemplar Test Items 
+- 42 - 
+Chapter 5: History – 3013 .................................................................................................................................. - 45 - 
+1. 
+Construct 
+- 45 - 
+2. 
+Elements of Construct 
+- 45 - 
+3.  
+Test Design 
+- 45 - 
+4. 
+Scoring Criteria 
+- 47 - 
+5. 
+Notes and Guidelines 
+- 48 - 
+6. 
+Exemplar Test items 
+- 48 - 
+Chapter 6: Geography – 3014 ............................................................................................................................ - 55 - 
+
+--- PAGE 5 ---
+v 
+ 
+1. 
+Construct 
+- 55 - 
+2. 
+Elements of Construct 
+- 55 - 
+3. 
+Test Design 
+- 55 - 
+4. 
+Scoring Criteria 
+- 58 - 
+5. 
+Notes and Guidelines 
+- 58 - 
+6. 
+Exemplar Test Items 
+- 59 - 
+Chapter 7: French Language – 1120 .................................................................................................................. - 67 - 
+1. 
+Construct 
+- 67 - 
+2. 
+Elements of Construct 
+- 67 - 
+3. 
+Test Design 
+- 67 - 
+4. 
+Scoring Criteria 
+- 70 - 
+5. 
+Notes and Guidelines 
+- 70 - 
+6. 
+Exemplar Test Items 
+- 71 - 
+Chapter 8: Chinese Language – 1125 ................................................................................................................ - 77 - 
+1 
+Construct 
+- 77 - 
+2 
+Elements of Construct 
+- 77 - 
+3 
+Test Design 
+- 77 - 
+4. 
+Scoring Criteria 
+- 80 - 
+5. 
+Notes and Guidelines 
+- 81 - 
+6. 
+Exemplar Test Items 
+- 81 - 
+Chapter 9: Zambian Languages – 1211 / 1212  / 1213 / 1214  / 1215 / 1216 /1217 ........................................ - 89 - 
+1. 
+Construct 
+- 89 - 
+2.  
+Elements of Construct 
+- 89 - 
+3.  
+Test Design 
+- 89 - 
+4. 
+Scoring Criteria 
+- 95 - 
+5. 
+Notes and Guidelines 
+- 95 - 
+6. 
+Exemplar Test Items 
+- 96 - 
+Chapter 10: Literature in Zambian Languages 1321 / 1322  / 1323 / 1324  / 1325 / 1326 / 1327 ................. - 107 - 
+1. 
+Construct 
+- 107 - 
+2. 
+Elements of Construct 
+- 107 - 
+3. 
+Test Design 
+- 107 - 
+4. 
+Scoring Criteria 
+- 111 - 
+5. 
+Notes and Guidelines 
+- 111 - 
+6. 
+Exemplar Test Items 
+- 112 - 
+Chapter 11: Mathematics I – 2021 .................................................................................................................. - 127 - 
+1. 
+Construct 
+- 127 - 
+2 
+Elements of Construct 
+- 127 - 
+3 
+Test Design 
+- 127 - 
+4. 
+Scoring Criteria 
+- 129 - 
+5. 
+Notes and Guidelines 
+- 131 - 
+6. 
+Exemplar Test Items 
+- 131 - 
+Chapter 12: Mathematics II – 2025 ................................................................................................................. - 139 - 
+1. 
+Construct 
+- 139 - 
+2.  
+Elements of construct 
+- 139 - 
+3. 
+Test Design 
+- 139 - 
+4. 
+Scoring Criteria 
+- 141 - 
+5. 
+Notes and Guidelines 
+- 142 - 
+
+--- PAGE 6 ---
+vi 
+ 
+6. 
+Exemplar Test items 
+- 142 - 
+Chapter 13: Agricultural Science – 4018 .......................................................................................................... - 151 - 
+1. 
+Construct 
+- 151 - 
+2. 
+Elements of Construct 
+- 151 - 
+3. 
+Test Design 
+- 151 - 
+4. 
+Scoring Criteria 
+- 154 - 
+5. 
+Notes and Guidelines 
+- 154 - 
+6. 
+Exemplar Test Items 
+- 155 - 
+Chapter 14: Physics – 4016 .............................................................................................................................. - 161 - 
+1. 
+Construct 
+- 161 - 
+2. 
+Elements of Construct 
+- 161 - 
+3. 
+Test Design 
+- 162 - 
+4. 
+Scoring Criteria 
+- 164 - 
+5 
+Notes and Guidelines 
+- 164 - 
+6. 
+Exemplar Test Items 
+- 165 - 
+Chapter 15: Chemistry – 4014 ......................................................................................................................... - 178 - 
+1. 
+Construct 
+- 178 - 
+2. 
+Elements of Construct 
+- 178 - 
+3. 
+Test Design 
+- 178 - 
+4. 
+Scoring Criteria 
+- 180 - 
+5. 
+Notes and Guidelines 
+- 181 - 
+6.  
+Exemplar Test Items 
+- 181 - 
+Chapter 16: Biology – 4012 .............................................................................................................................. - 186 - 
+1. 
+Construct 
+- 186 - 
+2. 
+Elements of Construct 
+- 186 - 
+3. 
+Test Design 
+- 186 - 
+4. 
+Scoring Criteria 
+- 189 - 
+5. 
+Notes and Guidelines 
+- 189 - 
+6. 
+Exemplar Test Items 
+- 190 - 
+Chapter 17: Art and Design – 5012 .................................................................................................................. - 196 - 
+1. 
+Construct 
+- 196 - 
+2. 
+Elements of Construct 
+- 196 - 
+3. 
+Test Design 
+- 196 - 
+4 
+Scoring Criteria 
+- 199 - 
+5. 
+Notes and Guidelines 
+- 199 - 
+6. 
+Exemplar Test Items 
+- 200 - 
+Chapter 18: Musical Arts – 5014 ..................................................................................................................... - 202 - 
+1. 
+Construct 
+- 202 - 
+2. 
+Elements of Construct 
+- 202 - 
+3. 
+Test Design 
+- 202 - 
+4 
+Scoring Criteria 
+- 205 - 
+5. 
+Notes and Guidelines 
+- 206 - 
+6. 
+Exemplar Test Items 
+- 207 - 
+Chapter 19: Design and Technology – 8015 .................................................................................................... - 212 - 
+1. 
+Construct 
+- 213 - 
+2. 
+Elements of Construct 
+- 213 - 
+
+--- PAGE 7 ---
+vii 
+ 
+3. 
+Test Design 
+- 213 - 
+4. 
+Scoring Criteria 
+- 216 - 
+5. 
+Notes and Guidance 
+- 216 - 
+6. 
+Exemplar Test Items 
+- 217 - 
+Chapter 20: Fashion and Fabrics – 6012 .......................................................................................................... - 221 - 
+1.      Construct 
+- 221 - 
+2. 
+Elements of Construct 
+- 221 - 
+3. 
+Test Design 
+- 221 - 
+4. 
+Scoring Criteria 
+- 224 - 
+5. 
+Notes and Guidelines for – Component 1 and 2 
+- 224 - 
+6. 
+Exemplar Test Items 
+- 225 - 
+Chapter 21: Food and Nutrition – 6014 ........................................................................................................... - 227 - 
+1. 
+Construct 
+- 227 - 
+2. 
+Elements of Construct 
+- 227 - 
+3. 
+Test Design 
+- 227 - 
+4 
+Scoring Criteria 
+- 229 - 
+5 
+Notes and Guidelines - Component 1 and 2 
+- 230 - 
+6. 
+Exemplar Test Items 
+- 230 - 
+Chapter 22: Hospitality Management – 6015 ................................................................................................. - 232 - 
+1. 
+Construct 
+- 232 - 
+2. 
+Elements of Construct 
+- 232 - 
+3. 
+Test Design 
+- 232 - 
+4. 
+Scoring Criteria 
+- 234 - 
+5. 
+Notes for SBA - Component 1 
+- 235 - 
+6. 
+Exemplar Test Items 
+- 236 - 
+Chapter 23: Travel and Tourism – 6016 .......................................................................................................... - 238 - 
+1. 
+Construct 
+- 238 - 
+2. 
+Elements of Construct 
+- 238 - 
+3. 
+Test Design 
+- 238 - 
+4. 
+Scoring Criteria 
+- 241 - 
+6. 
+Exemplar Test Items 
+- 242 - 
+Chapter 24: Physical Education and Sport – 9010 ........................................................................................... - 244 - 
+1. 
+Construct 
+- 244 - 
+2. 
+Elements of Construct (EoC) 
+- 244 - 
+3 
+Test Design 
+- 244 - 
+4 
+Scoring Criteria 
+- 245 - 
+5. 
+Notes and Guidance 
+- 246 - 
+6. 
+Exemplar Test Items 
+- 246 - 
+Chapter 25: Computer Science – 8010 ............................................................................................................ - 250 - 
+1. 
+Construct 
+- 250 - 
+2. 
+Elements of Construct 
+- 250 - 
+3. 
+Test Design 
+- 250 - 
+4. 
+Scoring Criteria 
+- 254 - 
+5. 
+Notes and Guidelines 
+- 254 - 
+6 
+Exemplar Test Items 
+- 255 - 
+Chapter 26: Information and Communications Technology  - 8011 ............................................................... - 263 - 
+
+--- PAGE 8 ---
+viii 
+ 
+1 
+Construct 
+- 263 - 
+2 
+Elements of Construct 
+- 263 - 
+3 
+Test Design 
+- 263 - 
+4 
+Scoring Criteria 
+- 267 - 
+5 
+Notes and Guidelines 
+- 268 - 
+6. 
+Exemplar Test Items 
+- 268 - 
+Chapter 27: Commerce – 7015 ........................................................................................................................ - 273 - 
+1 
+Construct 
+- 273 - 
+2 
+Elements of Construct 
+- 273 - 
+3 
+Test Design 
+- 274 - 
+4         Scoring Criteria 
+- 277 - 
+5 
+Notes and Guidelines 
+- 277 - 
+6  
+Exemplar Test Items 
+- 277 - 
+Chapter 28: Principles of Accounts – 7020 ...................................................................................................... - 287 - 
+1 
+Construct 
+- 287 - 
+2 
+Elements of Construct (EoC) 
+- 287 - 
+3 
+Test Design 
+- 287 - 
+4 
+Scoring Criteria 
+- 290 - 
+5 
+Notes and Guidelines 
+- 291 - 
+6 
+Exemplar Test Items 
+- 291 - 
+Chapter 29: Access Arrangements................................................................................................................... - 305 - 
+1 
+Background 
+- 305 - 
+2 
+Purpose 
+- 305 - 
+3 
+Access Arrangement Provisions 
+- 305 - 
+4 
+Assessment Objectivity 
+- 305 - 
+5 
+Pre-Examination Access Arrangements 
+- 305 - 
+6 
+Other Access Arrangements 
+- 306 - 
+7 
+Samples of Modified Examination items  for Learners With SEND 
+- 306 - 
+Exemplar Test Items for the Hearing Impaired and Visually Impaired 
+- 307 - 
+Chapter 30: Grading and Certification ............................................................................................................. - 311 - 
+1 
+Introduction 
+- 311 - 
+2.  
+Grading and Certification 
+- 311 - 
+2.1 Grading at Examination for Certificate of Secondary Education Ordinary Level 
+- 311 - 
+2.2. Certification at Examination for Certificate of  Secondary Education   Ordinary Level 
+- 311 - 
+Appendix : Subject and Certificate Competency Classification 
+- 313 - 
+References ....................................................................................................................................................... - 314 - 
+ 
+
+--- PAGE 9 ---
+ix 
+ 
+ 
+Foreword 
+ 
+The Assessment Schemes for Examination for Certificate of Secondary Education Ordinary Level are designed 
+to evaluate learners' competences in line with the national curriculum goals which emphasise Competence-Based 
+Assessment (CBA). These Assessment Schemes are grounded in the Construct of each subject, ensuring 
+assessments measure specific knowledge, skills, and attitudes relevant to each learning area. Each subject has a 
+construct which is broken down into sub themes called Elements of Construct. These are carefully considered to 
+ensure comprehensive assessment of competences. 
+ 
+The Test Design incorporates various assessment methods such as class work, written tests, homework, 
+practicals and projects to cater to different learning styles and abilities, promoting fairness and inclusivity in 
+measuring competences. The Test Content for each subject is aligned with the syllabus developed by Curriculum 
+Development Centre (CDC), focusing on general and specific competences and application of these competences 
+in real-world contexts. 
+ 
+To effectively assess learners‘ progress, the assessments are developed with consideration of the Level of 
+Difficulty, balancing remembering, understanding, applying, and higher-order thinking skills required for each 
+competence. Exemplar Test Items and Tasks are provided to guide teachers in interpreting standards and 
+expectations. This CBA approach ensures candidates are equipped with practical abilities needed for further 
+education, work and lifelong learning. 
+To support inclusivity, Access Arrangements have been included in Chapter 29 for Learners with Special 
+Educational Needs and Disabilities. These Access Arrangements will ensure fair assessment opportunities. These 
+Assessment Schemes have also included Grading and Certification in Chapter 30. Candidate performance is 
+evaluated through a criterion-reference grading system with performance descriptors outlining competency levels. 
+Successful candidates will be certified by the Examinations Council of Zambia by recognising their competences 
+and achievements. 
+ 
+By aligning assessments to the Teaching Syllabus and focusing on competences, ECZ emphasises application of 
+21st Century skills such as problem-solving, communication, collaboration, analytical thinking, critical thinking, 
+emotional intelligence, digital literacy and financial literacy supporting holistic development and future success. 
+These Assessment Schemes will guide teachers in effectively assessing learners. Furthermore, the ECZ Board, 
+Management and Staff trusts that teachers, educators, and stakeholders will find these Assessment Schemes 
+useful in enhancing teaching, learning and assessment practices, eventually contributing to the development of 
+competent learners and, ultimately, promote quality assessments and enhance the quality of education. 
+ 
+ 
+Michael M. Chilala (Dr) 
+Executive Director  
+Examinations Council of Zambia 
+
+--- PAGE 10 ---
+x 
+ 
+Acknowledgments 
+ 
+On behalf of the Board, Executive Director and Management of the Examinations Council of Zambia, I would 
+like to acknowledge, with appreciation, the contributions of the panel setters for each subject, other experts and 
+educators who played a pivotal role in the development of these Assessment Schemes for Examination for 
+Certificate of Secondary Education Ordinary Level (ECSEOL).  
+Gratitude is extended to the ECZ members of staff who participated and immensely contributed to the 
+transformation from the Outcome Based Assessment to the Competence Based Assessment. Their expertise and 
+input were valuable in shaping these Assessment Schemes to align them to Competence Based Curriculum and 
+in particular, Competence Based Assessment principles. 
+It is hoped that these Assessment Schemes will contribute to enhancing the quality of Competence Based 
+Assessments for the overall success of the Competence Based Curriculum. 
+The following participants developed this Assessment Schemes: 
+Editorial Team 
+1. Dr. Michael M. Chilala  
+ 
+– Executive Director 
+2. Mr Albert S. Siamunako   
+– Director Test Development 
+3. Mrs Njekwa S.M. Simwanza  
+– Principal Examinations Specialist – School Exams  
+4. Mrs Mrs Barbara Nawa Nkamu  
+– Principal Examinations Specialist – Tertiary Exams 
+5. Ms Chola S. Shamatutu 
+ 
+– Senior Typesetter 
+Technical Team 
+1. Mrs Teza N. Musakanya   
+– Board Secretary 
+2. Mr Albert S. Siamunako   
+– Director Test Development 
+3. Dr Shadreck Nkoya  
+ 
+– Director Research, Planning and Information 
+4. Dr Kunda Kuku   
+ 
+– Director Certification 
+5. Mr Ian Chirambo  
+ – Director Examinations Administration 
+6. Mrs Njekwa S.M. Simwanza  
+– Principal Examinations Specialist – School Exams  
+7. Mrs Ruth C. Msoni  
+ 
+– Principal Examinations Officer – Special Education 
+8. Mrs Mutinta Hanzala 
+ 
+– Acting Principal Examinations Specialist – Tertiary Exams  
+9. Mr Mutale A. Kaliminwa   
+– Principal Planning Officer 
+10. Mr Moonga Hakalyamba   
+– Principal Research Officer 
+11. Mrs Felidah M. Kiwala  
+ 
+– Senior Examinations Specialist - Mathematics 
+12. Mr Edward Songa  
+– Senior Examinations Specialist – Design & Technology and Art & Design 
+13. Ms Violet Mutono  
+ 
+– Senior Examinations Specialist – Home Economics 
+14. Mr Eric M. Mwale  
+ 
+– Senior Examinations Specialist – Geography and Religious Education 
+15. Mr Sitali Macwani  
+ 
+– Senior Examinations Specialist – Biological Sciences 
+16. Mr Fredrick S.K. Simasiku 
+  – Senior Examinations Specialist – English and Literature in English 
+17. Ms Bathsheba S.C. Sakala  
+ – Senior Examinations Specialist – Icibemba, Chitonga and Cinyanja 
+18. Mr Onesmus Kantooma  
+– Senior Examinations Specialist – Musical Arts and Physical Education 
+19. Mr Muhali Muhali  
+ 
+– Senior Examinations Specialist – Kiikaonde, Lunda, Luvale and Silozi 
+20. Mr Mudululu Siang‘andu  
+– Senior Examinations Specialist – Foreign Languages 
+21. Mrs Meldah M. Malungo  
+– Senior Examinations Specialist – History and Civic Education 
+22. Mr Collins Chinkalata 
+ 
+– Senior Examinations Specialist – Computer Studies 
+23. Mr Menny Nachibinga 
+ 
+– Senior Examinations Specialist – Physical Sciences 
+24. Mr Kraus Bbabbi  
+ 
+– Senior Examinations Specialist – Business Studies 
+
+--- PAGE 11 ---
+xi 
+ 
+25. Ms Chola S. Shamatutu 
+ 
+– Senior Typesetter 
+26. Ms Brenda Shimane  
+ 
+– Typesetter 
+ 
+Panel Moderators 
+1. Estella Chola Kasonde 
+– English Language  
+2. Lazarous Sinkala 
+– English Language  
+3. Mubuka Mushaukwa 
+– Literature in English  
+4. Namweene Simango 
+– Literature in English  
+5. Vernon Sitwala 
+– Civic Education 
+6. Brenda Hanangama Kaangwa 
+– Civic Education 
+7. Emmanuel Besa Mumba  
+– Religious Education  
+8. Chibe Chibizya  
+– Religious Education  
+9. Epheso Monze 
+– History  
+10. Pius Simukumbwa 
+– History  
+11. Oliver Manongo 
+– Geography  
+12. Bishop Siabwanta  
+– Geography  
+13. Mr. Edward Kalale Lubula 
+– French Language  
+14. Mr. Tundwa Minga 
+– French Language 
+15. Ms. Beene Mulomba 
+– Chinese Language 
+16. Ms. Biemba Lusindo 
+– Chinese Language 
+17. Monde Kawana 
+– Zambian Languages   
+18. Loyce Hara 
+– Zambian Languages   
+19. Sylvia Chigunta 
+– Zambian Languages   
+20. Muyatwa Kayando 
+– Zambian Languages   
+21. Charles Mutale  
+– Literature in Zambian Languages   
+22. Winston Haachisala 
+– Literature in Zambian Languages   
+23. Mirriam Nsonge 
+– Literature in Zambian Languages   
+24. Lifuna Mukumbi 
+– Literature in Zambian Languages   
+25. Maureen M. Tonga 
+– Mathematics I     
+26. Norah N. Simuchimba 
+– Mathematics I 
+27. Tione S. Phiri 
+– Mathematics II     
+28. Joseph Mwewa 
+– Mathematics II 
+29. Simon Bweupe Kyanguba 
+– Agricultural Science  
+30. Lottie Siatimba 
+– Agricultural Science 
+31. James Kabuye 
+– Physics  
+32. Claytone Habeenzu 
+– Physics  
+33. Jahn Mwale 
+– Chemistry  
+34. Masiliso M. Kabui 
+– Chemistry  
+35. Njoomona Miyoba 
+– Biology  
+36. Jimmy Hakasenke 
+– Biology  
+37. Cecilia Tapiwa Katongola 
+– Art and Design  
+38. Orbin Mutaka 
+– Art and Design  
+39. Mr. Richard Lungu 
+– Musical Arts 
+40. Ms. Mazuba Sulwe 
+– Musical Arts  
+41. Matimba Peter 
+– Design and Technology 
+42. Kelvin Hatimbula 
+– Design and Technology 
+43. Florence Lubeya 
+– Fashion and Fabrics  
+44. Rhodah Ngwenya  
+– Fashion and Fabrics 
+45. Given Chatepa  
+– Food & Nutrition  
+46. Getrude Chikonde  
+– Food & Nutrition 
+47. Jean Mbaza 
+– Hospitality Management 
+48. Racheal Chihame   
+– Hospitality Management 
+
+--- PAGE 12 ---
+xii 
+ 
+49. Racheal Mwale  
+– Travel and Tourism 
+50. Lynette Kunda  
+– Travel and Tourism 
+51. Christopher Phiri 
+– Physical Education 
+52. Rabecca Tito 
+– Physical Education 
+53. Brian Haalubanza 
+– Computer Science   
+54. Shephat Phiri 
+– Computer Science   
+55. Misheck Mutuzana 
+– Information Communication and Technology 
+56. Emmanuel Mwanakatwe 
+– Information Communication and Technology 
+57. Mildred Monde Kabinda 
+– Commerce  
+58. John Kaputula 
+– Commerce  
+59. Eddie Muchindu 
+– Principles of Accounts  
+60. James Gwenani 
+– Principles of Accounts 
+ 
+ 
+ 
+ 
+Albert S. Siamunako 
+Director – Test Development 
+Examinations Council of Zambia 
+
+--- PAGE 13 ---
+xiii 
+ 
+Definitions of Key Concepts  
+The following are the commonly used terminologies in all the subjects for Competence Based Assessment: 
+Competence 
+Competence encompasses knowledge, skills, values and attitudes. Competence, 
+in the context of Competence Based Assessment, refers to the ability of an 
+individual to apply knowledge, skills and attitudes to perform tasks or solve 
+problems in a specific context or situation.  
+Competence Based Assessment 
+Competence Based Assessment (CBA) is an approach to assessment that 
+focuses on evaluating learners‘ ability to demonstrate specific competences. 
+CBA is a process in which a learner will be confronted with a relevant learning 
+challenge and asked to put into practice what has been learned in order to 
+resolve or overcome this situation. 
+Construct 
+A construct is a theoretical concept, trait or attribute being measured or 
+assessed. It is an abstract idea or concept that is inferred through observable 
+behaviours, performances or products. A construct is often complex and multi-
+faceted, making it challenging to define and measure. Instead, it is inferred 
+through various assessment tasks, test items or performances that produce 
+evidence of the construct. In simple terms, a construct is like a broad theme of a 
+subject. 
+Element of Construct 
+Elements of Construct are specific aspects or components of a Construct being 
+measured. They are more detailed and specific descriptions of the Construct, 
+breaking it down into manageable and examinable/assessable parts. It allows 
+assessors and teachers to focus on specific aspects of the learner‘s performance. 
+In Competence Based Assessment, Elements of Construct are often used to 
+define the specific competences being assessed, making it easier to evaluate 
+learner performance and provide meaningful feedback. In simple terms, 
+Elements of Construct are like sub-themes of a broad theme which is referred to 
+as a Construct. 
+Formative Assessment 
+Formative assessment is on-going assessment to monitor the progress of 
+learners towards mastering of specific competences. It is an iterative process of 
+assessing learners during instruction which is used to inform and adjust the 
+teaching and learning processes. Feedback is used to inform and adjust the 
+teaching and learning process as well as adjust pedagogies. Formative 
+assessment is Assessment for Learning and typically aimed at improving learner 
+performance.  
+Summative Assessment 
+Summative assessment is a systematic process of assessing learners at a 
+specific end-point, typically after a defined period of instruction. It is used to 
+determine if learners have achieved the required competences against 
+predefined standards. Results often contribute to certification, progression or 
+grading decisions. 
+Test Framework 
+A Test Framework is an assessment tool that merges related areas of the 
+
+--- PAGE 14 ---
+xiv 
+ 
+subject to ensure adequate syllabus coverage and the levels of difficulty for 
+each examinable or assessable competence are plotted across the Revised 
+Bloom‘s Taxonomy into Elements of Construct. A Test Framework ensures 
+validity, reliability and comparability of the examination from year to year. 
+Test Item 
+A test item is a specific question or task in an examination designed to measure 
+a learner‘s ability to demonstrate a particular competence or skill in a specific 
+subject based on a real-life context.  
+The following are the features of the test items for the Final Examination – 
+Component 2: 
+(b) Authenticity: Test items should be designed to reflect real-life situations. 
+All test items should be based on scenarios. 
+(c) Competence-focused: Test items and tasks should be set to assess 
+learners‘ ability to apply knowledge, skills, values and attitudes to solve 
+real-life problems or challenges. 
+(d) Contextualised: Test items and tasks should be set in contexts that are 
+familiar and relevant to learners, making it easier for them to relate and 
+apply their knowledge, skills, values and attitudes in real life situations. 
+(e) Criterion-referenced: Test items and tasks should be assessed against 
+pre-defined criteria and standards, ensuring clarity and consistency. 
+Test Specification 
+A Test Specification is another assessment tool designed for each subject.  It is a 
+blueprint or a map of a test which shows the content areas and competences to 
+be assessed, the number of test items and skills to be tested which are plotted 
+across a taxonomy. A Test Specification ensures that a test is balanced, valid 
+and aligned to the Syllabus. 
+ 
+ 
+Summary of Test Items and Tasks 
+The transformation from Outcome Based Assessment to Competence Based Assessment has brought about a 
+number of changes such as  
+(i) 
+Phasing out of some subjects 
+(ii) 
+Introduction of new subjects 
+(iii) Introduction of School Based Assessment in all subjects 
+(iv) 
+Changes in the number of test items in the final examination and the number of tasks in SBA 
+The changes in the number of test items and SBA tasks is due to the change in focus from outcomes to 
+competences. The following table summarises the number of SBA tasks in OBA and CBA. It also shows 
+the number of test items for the Final Examination in OBA and CBA. The weighting for SBA and Final 
+Examination is also indicated in the table. 
+
+--- PAGE 15 ---
+xv 
+ 
+Examination for Certificate of Secondary Education Ordinary Level  
+Summary of Test Items and SBA Tasks 
+ 
+ 
+Subject 
+School Based 
+Assessment 
+Weighting % 
+FINAL Exam  
+Weighting % 
+Current 
+Number 
+of Tasks 
+for OBA 
+Proposed 
+Number 
+of Tasks 
+for CBA 
+Current 
+Number of 
+Test Items for 
+OBA 
+Proposed 
+Number of Test 
+Items for CBA 
+OBA 
+CBA 
+OBA 
+CBA 
+1 
+English Language (Paper 1 & 2) 
+- 
+12 
+- 
+30 
+15 
+4 
+100 
+70 
+2 
+Literature in English (Paper 1 & 2) 
+- 
+15 
+- 
+30 
+17 
+5 
+100 
+70 
+3 
+Zambian Languages (Paper 1 & 2) 
+- 
+12 
+- 
+30 
+41  
+5  
+100 
+70 
+4 
+Literature in Zambian Languages (New) 
+- 
+15 
+- 
+30 
+6 
+5 
+- 
+70 
+5 
+French Language (Paper 1 & 2) 
+84 
+11 
+40 
+40 
+43 
+7 
+60 
+60 
+6 
+Chinese Language  
+97 
+11 
+40 
+40 
+50 
+8 
+60 
+60 
+ 
+Mathematics (Paper 1 & 2) Phasing out 
+- 
+- 
+- 
+- 
+98 
+- 
+100 
+- 
+ 
+Additional Mathematics (Paper 1and 2) Phasing out 
+- 
+- 
+- 
+- 
+53 
+- 
+100 
+- 
+7 
+Mathematics I (New) 
+- 
+20 
+- 
+30 
+- 
+5 
+- 
+70 
+8 
+Mathematics II (New) 
+- 
+20 
+- 
+30 
+- 
+5 
+- 
+70 
+9 
+Chemistry (Paper 1 & 2) 
+15 
+12 
+20 
+30 
+51  
+6 
+80 
+70 
+10 
+Physics (Paper 1 & 2) 
+15 
+12 
+20 
+30 
+51 
+6 
+80 
+70 
+11 
+Biology (Paper 1 & 2) 
+10 
+11 
+20 
+30 
+50 
+4 
+80 
+70 
+12 
+Agricultural Science (Paper 1 & 2) 
+11 
+11 
+20 
+30 
+10 
+6 
+80 
+70 
+
+--- PAGE 16 ---
+xvi 
+ 
+ 
+Computer Studies [Phasing out] 
+4 
+- 
+30 
+- 
+15 
+- 
+30 
+70 
+13 
+Computer Science (New) 
+- 
+11 
+- 
+30 
+- 
+5 
+- 
+70 
+14 
+Information & Communication Technology (New) 
+- 
+17 
+- 
+30 
+- 
+6 
+- 
+70 
+15 
+Commerce  
+- 
+13 
+- 
+30 
+35 
+4 
+100 
+70 
+16 
+Principles of Accounts (Paper 1 & 2) 
+- 
+15 
+- 
+30 
+46  
+4 
+100 
+70 
+17 
+Geography (Paper 1 & 2) 
+20 
+20 
+30 
+30 
+10 
+8 
+30 
+70 
+18 
+Religious Education 
+- 
+10 
+30 
+30 
+12 
+10 
+30 
+70 
+19 
+Civic Education 
+- 
+10 
+- 
+30 
+33 
+6 
+100 
+70 
+20 
+History (Paper 1 & 2) 
+- 
+10 
+- 
+30 
+24 
+7 
+100 
+70 
+21 
+Design and Technology 
+110 
+16 
+50 
+30 
+110 
+5 
+30 
+70 
+22 
+Art and Design 
+100 
+20 
+50 
+30 
+50 
+5 
+30 
+70 
+23 
+Food and Nutrition 
+3 
+10 
+50 
+30 
+25 
+6 
+50 
+70 
+24 
+Fashion and Fabrics 
+3 
+8 
+50 
+30 
+16 
+5 
+50 
+70 
+26 
+Travel and Tourism (New) 
+- 
+10 
+- 
+30 
+- 
+5 
+- 
+70 
+ 
+Home Management [Phasing out] 
+3 
+- 
+50 
+30 
+26 
+- 
+50 
+- 
+25 
+Hospitality Management (New) 
+- 
+10 
+- 
+30 
+- 
+5 
+- 
+70 
+27 
+Musical Arts 
+40 
+20 
+30 
+30 
+12 
+5 
+70 
+70 
+28 
+Physical Education and Sports 
+35 
+14 
+30 
+40 
+35 
+5 
+70 
+60 
+ 
+ 
+
+--- PAGE 17 ---
+- 1 - 
+ 
+Abbreviations and Acronyms 
+ 
+CBA 
+Competence Based Assessment 
+CBC 
+Competence Based Curriculum 
+CBE 
+Competence Based Education 
+CDC 
+Curriculum Development Centre 
+ECZ 
+Examinations Council of Zambia 
+EoC 
+Element of Construct 
+ECSEOL 
+Examination for Certificate of Secondary Education Ordinary Level 
+FE 
+Final Examination 
+MoE 
+Ministry of Education 
+LoD 
+Level of Difficulty 
+SBA 
+School Based Assessment 
+LSEND 
+Learners with Special Educational Needs and Disabilities 
+ZECF  
+Zambia Education Curriculum Framework 
+ 
+
+--- PAGE 18 ---
+- 2 - 
+ 
+Chapter 1: English Language – 1021  
+ 
+1 
+Construct 
+Demonstrates proficient and competent use of the four language skills (speaking, listening, reading and 
+writing) in real life situations adapting to audience and purpose in order to communicate effectively and 
+support life-long learning.  
+2 
+Elements of Construct  
+The English Language examination will be based on the following four (4) Elements of Construct (EoC): 
+EoC 1   Interprets and understands spoken information 
+ Identifies main ideas and supporting details 
+ Analyses speaker‘s purpose, tone and intent 
+ Follows instructions, directions and questions and responds appropriately 
+EoC 2 
+Produces ideas, thoughts and opinions through spoken language 
+ Organises thoughts and ideas logically 
+ Speaks clearly and audibly 
+ Uses appropriate vocabulary, expressions and tone for various purposes and actions 
+EoC 3 
+Reads, Interprets and summarises continuous and non-continuous texts         
+ Reads and understands various types of texts 
+ Understands and uses words accurately and effectively, considering content, audience and 
+purpose 
+ Summarises main ideas and key points from a text 
+EoC 4  Demonstrates masterly of written language conventions 
+ Spells words correctly with orthographic accuracy 
+ Applies grammatical rules in sentence construction 
+ Punctuates different types of sentence to convey meaning and clarity 
+ Produces coherent, purposeful, and grammatically accurate written texts. 
+3 
+Test Design 
+The English Language Examination for Certificate of Secondary Education Ordinary Level (ECSEOL) 
+will consist of two components. School Based Assessment (SBA) will be Component 1 and the Final 
+Examination will be Component 2. Component 1 will be set and scored at school level in Form 2 and 3 
+while Component 2 will be centrally set and marked by the Examinations Council of Zambia at the end of 
+Form 4. The weighting for the School Based Assessment and Final Examination will be 30:70 
+respectively. 
+The following is the Test Design for the English Language examination: 
+ 
+ 
+Component Name 
+Code 
+Duration 
+Level 
+Number of Tests 
+Items/Tasks 
+Mark 
+Allocation 
+School Based 
+Assessment 
+1012/1 
+2 years 
+ 
+Form 2 
+6 
+100 
+Form 3 
+6 
+100 
+Final Examination  
+1012/2 
+2 hour 30 minutes 
+Form 4 
+4 
+100 
+Total 
+300 
+ 
+
+--- PAGE 19 ---
+- 3 - 
+ 
+3.1. 
+Structure 
+3.1.1. 
+School Based Assessment 
+School Based Assessment will be the based on all the four Elements of Construct which 
+focus on the four language skills. The structure of the SBA tasks will be determined by the 
+subject teacher with guidance from the details outlined in the School Based assessment 
+Guidelines for the Examination for Certificate of Secondary Education Ordinary Level 
+(2026) produced by the Examinations Council of Zambia. 
+Types of Tasks 
+All SBA tasks will be based on all the 4 Elements of Construct which incorporate the four 
+language skills. It will consist of the actual use of language in role plays, debates, what 
+would you say, group discussions, class tests and individual and group assignments 
+ 
+3.1.2. 
+Final Examination 
+The final examination will consist of three sections; A, B and C. These sections will be 
+based on three out of the four Elements of Construct namely EoC 3: Reads, interprets and 
+summarises continuous and non-continuous texts and EoC 4: Demonstrates masterly of 
+written language conventions. EoC 4 will be assessed in two parts under Section A and C. 
+Types of Items 
+The paper will consist of three (3) sections; A, B and C. 
+Section A: Structure - 20 marks 
+EoC 4: Demonstrates masterly of written language conventions (Structure - 20 marks) 
+Scenarios will be used to test the application of grammatical rules and concepts in context 
+to convey meaning and purpose.   
+Section B: Comprehension and Summary -50 marks 
+EoC 3: Reads, Interprets and summarises continuous and non-continuous texts  
+Item 1: Comprehension - 30 marks 
+Item 1 will contain a scenario presented in a passage and 10 tasks. The tasks will comprise 
+of open questions, sequencing and ordering, summarising tasks, application questions, true 
+or false with justification, error sporting etc. 
+Item 2: Summary - 20 marks  
+A passage will be selected to test Summary. This passage will act as a scenario and it will 
+be followed by a question on prose summary. 
+Section C: Composition - 30 marks 
+EoC 4: Demonstrates masterly of written language conventions Composition - 30 marks 
+This section will test any type of composition. Candidates will be given two items to 
+choose from. The composition will be either guided or unguided. The composition item 
+may be based on the comprehension passage or any other independent scenario. 
+3.2  
+Test Content 
+Component 1 - School Based Assessment (SBA) 
+SBA will be conducted at Forms 2 and 3 comprising a variety of assessment tasks. Each year, the 
+SBA will be conducted out of 100 and the scores submitted to the ECZ. For more details refer to 
+School Based Assessment Guidelines for Examination for Certificate of Secondary Education 
+Ordinary Level. 
+
+--- PAGE 20 ---
+- 4 - 
+ 
+Component 2 - Final Examination (FE) 
+The Final Examination will be conducted at the end of Form 4. It will consist of one paper with 
+three sections. The test items in the three sections will be based on the following two Elements of 
+Construct: 
+(i)  
+(EoC 3): Reads, Interprets and summarises continuous and non-continuous text; and 
+(ii) 
+(EoC 4): Demonstrates masterly of written language conventions 
+Section A will focus on EoC 4, Section B on EoC 3and Section C on EoC 4.  
+ 
+Section A: Demonstrates masterly of written language conventions (Structure - 20 marks) 
+Scenarios will be used to come up with items that will test language structures. A variety of 
+structures will be tested from year to year. 
+ 
+Section B: Reads, interprets and summarises continuous and non-continuous text (Reading 
+Comprehension and Summary – 50 marks) 
+Item 1:  Reading Comprehension – 30 marks 
+Candidates will be expected to read a given text with understanding and answer follow-up tasks. 
+There will be a variety of tasks such as open ended or semi-structured test items. 
+Item 2:  Summary - 20 marks  
+In this item, candidates will be expected to write a summary based on a selected passage. The 
+answer provided will be expected to be in prose or table form.  The prose summary should be 
+written within the word limit specified. Information presented in tables should be clear and easy to 
+follow. 
+The length of the passages for comprehension and summary will range from 450 to 700 words. 
+Section C: Demonstrates masterly of written language conventions (Composition-30 marks) 
+This section will test any type of composition. Candidates will be given two items to choose from. 
+Candidates will be expected to write a continuous piece of writing in accordance with the 
+instructions. Each year, the type of composition/essay to be assessed will be randomly selected. The 
+two compositions items will be guided and unguided selected from topics such as:  
+(i) 
+Narrative  
+(ii) 
+Descriptive 
+(iii) 
+Discursive  
+(iv) 
+Argumentative/Persuasive 
+(v) 
+Expository/Factual 
+(vi) 
+Report Writing  
+(vii) Article Writing  
+(viii) Writing of minutes for a meeting 
+(ix) 
+Writing of Curriculum Vitae 
+(x) 
+Letter Writing 
+(xi) 
+Profile Writing  
+(xii) Biography/Auto Biography 
+(xiii) Speech Writing  
+The word range for both compositions will be from 250 to 350. 
+
+--- PAGE 21 ---
+- 5 - 
+ 
+The following is the Content for the English Language Final Examination: 
+SECTION 
+ELEMENT OF CONSTRUCT  
+ITEM 
+MARKS 
+TOTAL 
+A 
+EoC 4 
+1 
+20 
+20 
+B 
+EoC 3 
+1 
+30 
+50 
+1 
+20 
+C 
+EoC 4 
+1 
+30 
+30 
+TOTAL 
+100 
+3.3 
+Level of Difficulty 
+The level of difficulty of the questions in the Final English Language assessment will range from 
+Remembering to Creating of the cognitive domain of the revised Bloom‘s Taxonomy.  
+The difficulty of the items will be determined by the following factors: 
+(i) Components of the Scenario: The real-life situation on given Element of Construct that a 
+candidate will be expected to respond to correctly. 
+(ii) Level of Competence: The subject knowledge and skills required to respond to real-life and 
+challenges correctly. 
+(iii) The Cognitive Level: The complexity and/or number of cognitive processes required to 
+generate responses to items and tasks. 
+(iv) The level of abstract and critical thinking involved to generate responses 
+(v)   The extent to which a candidate will have to strategise in order to respond to the items or tasks. 
+3.4 
+Syllabus Coverage 
+The examination will be based on the English Language Syllabus – Form 1 to 4. (CDC, 2024). in 
+the skills tested. The use of the Syllabus, Test Specification, Test Framework and SBA Framework 
+will ensure reliability, validity and comparability of the examination from year to year. 
+Listening and Speaking skills will be assessed as School Based Assessment (SBA)  
+Reading and Writing skills will be examined through Reading Comprehension, Summary and 
+Composition. 
+Syllabus Coverage English Language  
+Element of Construct 
+Component 1  
+Component 2 
+Syllabus Coverage 
+Cognitive 
+Levels 
+School 
+Based 
+Assessment 
+Final Paper 
+Structure 
+Reading 
+Comprehension and 
+Summary 
+Composition 
+Form 2 
+Form 3 
+Form 4 
+EoC1: Interprets and 
+understands 
+spoken 
+information  
+EoC2: Produces ideas, 
+thoughts and 
+opinions through 
+spoken language 
+Form 2 
+(100 marks) 
+ 
+ 
+Remembering, 
+Understanding 
+  Applying 
+Analysing 
+Form 3 
+(100 marks) 
+ 
+
+--- PAGE 22 ---
+- 6 - 
+ 
+EoC4: Demonstrates 
+masterly of 
+written language 
+conventions  
+ 
+20 Marks 
+ 
+Use scenarios or 
+passages to come up 
+with questions that 
+will test a variety of 
+language structures. 
+Remembering, 
+Understanding 
+Applying  
+EoC3: Reads, interprets 
+and summarises 
+continuous and 
+non-continuous 
+texts  
+ 
+ 
+50 Marks 
+ 
+Comprehension 
+questions will cover 
+all the competence 
+descriptors in the test 
+specification table,  
+ 
+The summary 
+question will test any 
+type from list of 
+competences to 
+produce a note, prose 
+or table summary 
+Remembering 
+Understanding 
+Applying 
+Analysing  
+Evaluating  
+EoC4: Demonstrates 
+masterly of 
+written language 
+conventions 
+ 
+30 Marks 
+ 
+Produce different 
+composition types 
+and styles of writing 
+Applying 
+Analysing 
+Evaluating  
+Creating 
+Total  
+300 marks 
+100 Marks  
+ 
+ 
+4.      Scoring Criteria 
+4.1 School Based Assessment – Component 1 
+(i) SBA will be scored locally at school by the subject teacher.  
+(ii) The teacher should use the Scoring Rubric and Guides stipulated in the School Based Assessment 
+Guidelines for the Examination for Certificate of Secondary Education Ordinary level – Literature and 
+Languages. 
+(iii) All learners scores should be recorded by the subject teacher in the score sheet 9See sample in the 
+SBA Guidelines. 
+Head Teachers must ensure that once scores have been captured online, a hardcopy is printed and 
+sent to the Provincial Education Officers (PEO) through the District Education Board Secretary 
+(DEBS) for onwards submission to ECZ. 
+ 
+4.2 Final Examination – Component 2 
+Before marking commences, a co-ordination meeting will be held to harmonise the scoring criteria 
+for that particular year. Furthermore, during marking, continuous checking of scoring will be done 
+to ensure that examiners maintain the standard of scoring by conforming to the scoring criteria.  
+The final examination will be marked centrally by the ECZ trained Examiners (Scorers) 
+Section A – Demonstrates masterly of written language conventions - Language Structure (20 marks) 
+Assessment in structure will focus on learner‘s ability to apply grammatical rules and concepts in context; 
+construct clear, effective sentences; demonstrate accuracy and precision in writing, and use language 
+structures to convey meaning and purpose. Marks will be allocated to each item. 
+Section B - Reads, Interprets and summarises continuous and non-continuous texts - Reading, 
+Comprehension and Summary (50 marks) 
+
+--- PAGE 23 ---
+- 7 - 
+ 
+All mark allocations will be indicated in brackets against each task. The mark which will be awarded will 
+represent the examiner‘s impression of its value as a whole. A summary may be better or worse than the 
+sum of its parts, depending on whether or not the candidate has obeyed the rubric of summary test item. 
+Section C Demonstrates masterly of written language conventions - Composition (30 marks) 
+Candidates‘ work will be scored using impression marking and error analysis. In judging a candidate‘s 
+linguistic ability, content and arrangement of work, the following shall be considered: 
+4.1 
+variety and quality of sentence structures. 
+4.2 
+range and effectiveness of vocabulary e.g. idioms, proverbs, etc. 
+4.3 
+control of expression by the use of punctuation. 
+4.4 
+appropriateness of paragraphing and the use of links between paragraphs. 
+4.5 
+frequency and type of errors. 
+5. 
+Notes and Guidelines 
+5.1 
+Candidates will be expected to take part in SBA as well as sit the final examination in order to be 
+graded in the subject. If a candidate absconds from one of the components, NO partial marks shall 
+be graded. 
+5.2 
+British English should be used in answering the examination questions. American English is 
+allowed as long as it is consistently used in the response and it is not mixed with British English. 
+5.3 
+Dictionaries, textbooks and any other reference books will not be allowed in the examination room. 
+5.4 
+Electronic devices such as mobile phones, tablets, iPods and laptops will not be allowed in the 
+examination room. 
+6. 
+Exemplar Test Items 
+English Language Component 1 and 2 
+The Elements of Construct EoC 1 and 2 will be assessed at school as School Based Assessment 
+EoC 4: Demonstrates masterly of written language conventions 
+ - Structure  
+ (20marks) 
+Example 1: (10 marks) 
+Last Saturday, I woke up at the crack of dawn because I had 
+to get ready for a family trip. Upon arrival at our destination, 
+we tried to check in at the nearest hotel but found the rooms 
+fully booked, It was like hitting a brick wall. We decided to 
+drive on to see if there was any alternative, hoping every 
+cloud has a silver lining. 
+On the way, our car suddenly broke down. We had to call for 
+help, and while waiting, we unexpectedly bumped into an old 
+friend who kindly offered to look after our luggage. That was 
+truly a blessing in disguise. 
+Finally, the mechanic sorted out the problem, and we were 
+able to carry on with our journey,  
+(a) 
+Identify and write down four phrasal verbs from the 
+scenario.  
+ [4 marks] 
+(b) 
+Pick out three (3) idioms and cite their  
+meaning. 
+ [6 marks] 
+Answers 
+Phrasal Verbs.  
+woke up 
+get ready 
+check in 
+pick me up 
+broke down 
+look after 
+carry on 
+(Any four) 
+Idiomatic Expressions 
+At the crack of dawn - very early in the morning 
+Hitting a brick wall - face an obstacle 
+Every cloud has a silver lining- something good comes 
+out of a bad situation 
+Bumped into- meet someone unexpectedly 
+Blessing in disguise - something that seems bad but 
+turns out good 
+[Any three] 
+This is a structure test item at remembering and understanding levels where a candidate is expected to recall already 
+
+--- PAGE 24 ---
+- 8 - 
+ 
+learnt material and demonstrate understanding. 
+Specific Competence: Use phrasal verbs in sentences. 
+Key Competence: Analytical Thinking / Critical Thinking 
+Example 2 (10 marks) 
+You are the editor of your school magazine. A writer submits 
+the following short paragraph for publication: 
+“Students in our school enjoys participating in club activities 
+because it help them to develop various skills. The debates 
+club often hold meeting after school, and the science club 
+usually do experiments during weekend. Many students says 
+that joining clubs have made them more confident.” 
+Edit the language structure and suggest improvements for the 
+following: 
+(a) 
+One tense mistake. 
+[1 mark] 
+(b) 
+Five subject-verb agreement.  
+[5 marks] 
+(c) 
+Rewrite the paragraph into two clear and well-
+structured sentences that show correct grammar.  [4 
+marks] 
+Answers: 
+(a) … joining clubs have made … 
+The correct tense is … joining clubs has made … 
+(b)  (Any five of these may be accepted) 
+1.  “Students … enjoys participating …” 
+Correct: “Students in our school enjoy 
+participating …” 
+2. “… because it help them …” 
+Correct: “… because it helps them …” 
+3. “The debates club often hold meeting …” 
+Correct: “The debates club often holds 
+meetings …” 
+4. “… usually do experiments …” Correct: “… 
+usually does experiments …” 
+5. “Many students says …” 
+Correct: “Many students say …” 
+6.   “… joining clubs have made …” Correct: 
+“… joining clubs has made …” 
+Students in our school enjoy participating in club 
+activities (1) because it helps them develop important 
+skills. (1) The Debate Club holds meetings after 
+school, while the Science Club conducts experiments 
+on weekends, (1) and many students say that joining 
+these clubs has made them more confident. (1) 
+This is a structure test item at remembering and applying levels where a candidate is expected to recall already learnt 
+material and demonstrate understanding and applying by constructing correct sentences. 
+specific Competence: Use present simple tense in sentences / Use subject-verb agreement in sentences … 
+Key Competence: Analytical Thinking / Critical Thinking 
+EoC 3: Reads, interprets and summarises continuous and non-continuous texts - Reading Comprehension and 
+Summary  
+                                                                                    (50 marks) 
+Read the following passage and do the tasks that follow: 
+GENDER BASED VIOLENCE 
+1. 
+Gender-based violence is one of the most pervasive human rights violations across the globe, disproportionately 
+affecting women and girls and undermining social, economic, and political progress. It encompasses a wide range 
+of harmful acts, including physical, sexual, psychological, and economic abuse, and its impact ripple across 
+generations. The United Nations defines gender-based violence as violence that results in, or is likely to result in, 
+physical, sexual, or psychological harm or suffering, including threats, coercion, or deprivation of liberty, whether 
+occurring in public or private life. While men and boys can also be victims, women and girls are disproportionately 
+affected due to entrenched gender inequalities and patriarchal norms that normalise male dominance and female 
+subordination. 
+2.  
+Globally, one in three women experiences physical or sexual violence in her lifetime, most often at the hands of an 
+intimate partner. In Zambia, the situation is particularly severe: nearly half of women aged fifteen to forty-nine 
+have experienced physical violence since the age of fifteen and almost one in five has faced sexual violence. Early 
+marriage compounds the problem, with close to forty percent of Zambian women married before the age of 
+
+--- PAGE 25 ---
+- 9 - 
+ 
+eighteen, exposing them to lifelong risks of abuse and exploitation. These statistics highlight that gender-based 
+violence is not isolated but systemic, rooted in cultural practices, economic inequalities and weak enforcement of 
+protective laws. It is a phenomenon that thrives in silence and secrecy, often hidden within households and 
+communities, yet its consequences are visible in the health, economic and social fabric of societies. 
+3.  
+Several factors drive the persistence of gender-based violence. Patriarchal norms remain deeply embedded in many 
+cultures, reinforcing unequal power dynamics and legitimising control over women‘s bodies and choices. 
+Economic dependence is another critical factor as women who lack financial autonomy are more vulnerable to 
+exploitation and abuse. Weak legal frameworks or poor enforcement of existing laws allow perpetrators to act with 
+impunity while cultural practices such as child marriage or the payment of bride price reinforce the idea that 
+women are possessions rather than individuals with rights. Conflict and displacement further exacerbate the 
+problem as instability increases the risks of sexual violence, exploitation and trafficking. 
+4.  
+The consequences of gender-based violence are profound and multidimensional. Survivors often suffer physical 
+injuries, unwanted pregnancies, sexually transmitted infection, and long-term psychological trauma. The economic 
+impacts are equally devastating, reducing productivity, increasing healthcare costs, and perpetuating cycles of 
+poverty. In Zambia, thousands of criminal cases and even murders have been linked to gender-based violence, 
+straining social services and the justice system. Socially, violence erodes trust within families and communities, 
+perpetuating cycles of inequality and marginalisation. Children exposed to violence are more likely to experience 
+trauma, poor educational outcomes and to perpetuate violence in adulthood, creating a generational cycle that is 
+difficult to break. 
+5.  
+Efforts to combat gender-based violence must be comprehensive and multi-sectoral. Strong laws against domestic 
+violence, sexual assault, and child marriage must not only be enacted but also enforced, with survivors given 
+access to justice systems that protect them from retaliation. Education and awareness campaigns are vital in 
+challenging harmful norms and promoting gender equality, while schools should integrate gender sensitivity and 
+rights education into their curricula. Economic empowerment is another crucial strategy as providing women with 
+access to education, employment, and financial independence reduces vulnerability and strengthens resilience. 
+Support services such as shelters, counselling, and healthcare are essential for survivors while hotlines and safe 
+reporting mechanisms encourage victims to seek help without fear. Importantly, engaging men and boys in the 
+fight against gender-based violence is critical. Transforming attitudes among men through programmes that 
+promote positive masculinity can reduce violence and foster healthier relationships. 
+ 
+6.  
+Gender-based violence is not only a violation of individual rights but also a barrier to national development and 
+social justice. It perpetuates cycles of poverty, inequality and trauma, undermining the well-being of entire 
+communities. Addressing it requires legal, social and cultural transformation, alongside strong political will and 
+grassroots activism. Ultimately, the fight against gender-based violence is a fight for human dignity, equality and 
+freedom. Every society that aspires to progress must confront this issue head-on, ensuring that women and girls 
+live free from fear and violence. Only then can communities unlock their full potential and build futures rooted in 
+justice and equality. 
+Comprehension (30 marks) 
+ 
+Example 1 
+ 
+Paragraph 1. ―…. its impact ripple across generations.‖ Explain what 
+is meant by ―ripple across generations” 
+A figurative expression: Affects not only the 
+present time but also the future of many 
+generations (2 marks) 
+This is a comprehension test item at applying acquired knowledge and facts to solve a problem. 
+Specific Competence: Read and comprehend information. 
+Key Competence: Analytical Thinking / Critical Thinking 
+Example 2 
+ 
+According to the passage, ―one in three women experiences physical 
+or sexual violence in her lifetime.‖ You are carrying out a survey and 
+discover that 305 women of your sample (research population) have 
+experienced physical or sexual violence in their life? Calculate the 
+total number of your sample. 
+The correct answer: 
+915 women (2 marks) 
+This is a comprehension test item at applying acquired knowledge and facts to solve a problem.  
+Specific Competence: Read and comprehend information. 
+
+--- PAGE 166 ---
+- 150 - 
+ 
+(b)   By analysing the proposed salary schemes, explain why the Management may not mind which scheme is 
+implemented.                                                                                                                                                       [3] 
+Solution 
+Tasks (b): 
+ The mean salary for both schemes is the same. 
+(c)   What is the probability that a worker chosen at random earns more under the scheme chosen in (a) above? 
+According to this probability, is your recommendation in (a) a better choice?                                                    [5] 
+Solution 
+Task(c):  
+Probability = 
+5
+3 . The probability is able to confirm that Salary Scheme B benefits most workers overall. 
+(a) is a competence from Statistics, (b) is a competence from probability, (c) is a competence from Probability  
+(a) is at evaluating level, (b) is at analysing level, (c) is at applying & evaluating levels 
+The Key Competences are Analytical Thinking, Critical Thinking and Problem Solving. 
+
+--- PAGE 167 ---
+- 151 - 
+ 
+Chapter 13: Agricultural Science – 4018  
+1. 
+Construct 
+Applies scientific skills for sustainable food production and entrepreneurship. 
+2. 
+Elements of Construct  
+The Agricultural Science examination will be based on the following six (6) Elements of Construct (EoC):  
+EoC 1 
+Investigates agricultural scientific problem through observations, measurement, 
+experimentation and recording. 
+ Identifies and defines agricultural problems and plans appropriate investigations. 
+ Provides recommendations and solutions to solve real life agricultural problems. 
+EoC 2 
+Demonstrates practical skills in managing crops for improved yields. 
+ Applies practical skills in crop management to solve real life problems and improve 
+productivity. 
+EoC 3 
+Applies practical skills in managing livestock for improved production. 
+ Applies practical skills in Livestock management to solve real life problems and improve 
+productivity. 
+EoC 4  Analyses data and applies sustainable scientific techniques for improved productivity. 
+ Analyses and interprets agricultural data to draw valid scientific conclusions, 
+ Applies sustainable agricultural techniques and uses findings to make informed decisions that 
+improve productivity. 
+EoC5 
+Applies agribusiness and entrepreneurship skills in managing farm enterprises. 
+ Develops and manages profitable agricultural enterprises through business planning, financial 
+management, marketing, risk management, value addition and proper record keeping. 
+ Demonstrate strong customer relations, communication, innovation and problem solving 
+skills to improve enterprise performance. 
+EoC 6 
+ Investigates agricultural problems and demonstrates practical skills in real life situations. 
+ Identifies agricultural problems and applies practical skills to solve them. 
+3. 
+Test Design 
+The Agricultural Science examination will comprise two components; Component 1 will be School Based 
+Assessment (SBA) and Component 2 will be the Final Examination. Component 1 will be set and 
+administered by the school in Form 2 and 3 and Component 2 will be centrally set by the Examinations 
+Council of Zambia (ECZ) at the end of Form 4. The weighting of School Based Assessment and Final 
+Examination will be in a proportion of 30 percent to 70 percent respectively. 
+Component Name  
+Code 
+Level 
+Term 
+Number of 
+tasks/items 
+Types of Tasks 
+Marks 
+Duration 
+School Based 
+Assessment – 
+Component1  
+4018/1 
+2 
+1, 2 & 3 
+6 
+Semi – structured 
+and Essay type 
+100 
+1 year 
+3 
+1, 2 & 3 
+6 
+Semi – structured 
+and Essay type 
+100 
+1 year 
+Final Examination – 
+Component 2  
+4018/2 
+4 
+- 
+5 
+Semi – structured 
+and Essay type 
+60 
+2 hours 
+ 
+
+--- PAGE 168 ---
+- 152 - 
+ 
+Note: Learners will be allowed to make a choice of either crop production or animal production. A 
+Field Project (Non comparative project) will be conducted in Form 2. This will involve learners 
+growing crops or rearing animals to maturity. A Comparative Research will be conducted in Form 3 
+which may involve learners conducting a research, such as comparing the growth rate of a crop 
+being exposed to different types of fertiliser or comparing the growth rate of animals being fed on 
+different types of feed.  
+3.1. 
+Structure 
+School Based Assessment 
+The School Based Assessment will consist of 12 tasks that should be completed across Form 2 and 
+3. These tasks include a comparative research, a non-comparative field project, laboratory 
+practicals, assignments and theory tests. All SBA tasks will be set and administered at school level. 
+The total SBA score will be 200 marks; 100 marks at Form 2 and 100 marks at Form 3. This will 
+include a comparative research to be conducted at form 3 level and a field project to be conducted at 
+form 2 level; each with a total mark of 20. The School Based Assessment tasks will assess all the 
+six (6) Elements of Construct. There will be six (6) tasks to be assessed at each level, that is Form 2 
+and 3.   
+Final Examination  
+The Final Examination will consist of five (5) compulsory items based on five (5) Elements of 
+Construct and will be set and administered by the Examinations Council of Zambia. Each item will 
+have a scenario. The following table shows the number of Elements of Construct, number of items 
+that will originate from the particular Element of Construct and the number of tasks based on the 
+scenario. 
+Elements of 
+Construct 
+Number of Items 
+Number of 
+Scenarios 
+Number of Tasks 
+Number of 
+Marks 
+1 
+1 
+1 
+2 
+15 
+2 
+1 
+1 
+2 
+10 
+3 
+1 
+1 
+2 
+10 
+4 
+1 
+1 
+2 
+15 
+5 
+1 
+1 
+2 
+10 
+Total 
+5 
+5 
+10 
+60 
+3.2 
+Test Content 
+The test content for the Agricultural Science assessments is specified per assessment component and 
+type of task considering syllabus coverage and level of difficulty of the tasks. 
+3.2.1. 
+Types of Tasks and Item   
+(i) School Based Assessment - Component 1 
+The School Based Assessment will be based on all the Elements of Construct. Tasks 
+under this component will be in form of class tests, end of term tests, end of year tests, 
+projects, laboratory practicals, research and assignments.  These tasks will be based on 
+all the six (6) Elements of Construct. 
+The tasks assessing experimental skills and investigations may be based on materials 
+and specimen which may not be familiar to the learners. In responding to such tasks, 
+learners will be required to follow instructions, make observations, record data, draw 
+diagrams, make inferences or conclusions and apply concepts and principles as 
+outlined in the syllabus. 
+
+--- PAGE 169 ---
+- 153 - 
+ 
+Learners will choose their projects and select topics for investigation from any topic 
+laid down in the Agricultural Science Syllabus Secondary Education Ordinary Level 
+Form 1 – 4 (CDC 2024).  
+The projects may involve the investigation of growth, management, innovations and 
+marketing of either a particular animal(s) or crop(s), machinery (s), or climate smart 
+agriculture as suggested in the syllabus. The assignments, laboratory tests and theory 
+tests will be conducted from all the Specific Competences across the syllabus.  
+(ii) Final Examination - Component 2 
+The Final Examination will be based on Elements of Construct 1, 2, 3, 4 and 5. This 
+component will consist of semi-structured and essay type items which will require 
+candidates to supply a written analysis or explanation to solve identified real life 
+problems in agriculture. 
+3.2.2 
+Syllabus Coverage 
+The Agricultural Science examination will be based on the subject content in the Form 1–4 
+Agricultural Science Syllabus Secondary Education Ordinary Level (CDC 2024) and the 
+key competences outlined in the Curriculum. Both assessment Components will ensure full 
+coverage of the syllabus by incorporating a cross representation of concepts, themes, and 
+sub-topics, while also assessing the Specific and Key Competences that learners are 
+expected to develop. The assessment of key competences is important as this will: 
+(i) help in aligning the curriculum with real life experiences and needs of learners, 
+ensuring that education is relevant and practical; 
+(ii) support the development of life long learning dispositions which are essential for 
+preparing learners for future challenges and opportunities. 
+In Component 2, a Test Specification has been developed to show the number of items that 
+will be required to be set on each Element of Construct.  
+Some items may introduce information that is unfamiliar to the candidates. In responding to 
+such tasks, learners are required to use the competences developed through the syllabus 
+such as reasoning, analysing, interpreting evidence and applying biological concepts to 
+solve problems in new or unfamiliar situations. This aligns fully with the competence based 
+approach, which emphasizes the use of knowledge and skills in practical real life contexts. 
+3.2.3 
+Level of Difficulty 
+The level of difficulty of tasks in the School Based Assessments and test items for the Final 
+Examination will be governed by the following factors:  
+(i) The subject knowledge and skills required to respond to the real life problem and 
+challenge correctly (level of competence); 
+(ii) Complexity and/or number of cognitive processes required to generate responses to 
+tasks and test items; 
+(iii) The level of abstract and critical thinking involved; 
+(iv) Extent to which the candidates have to strategise to respond to the tasks; 
+(v) The complexity of the real life situation on a given Element of Construct a candidate 
+will be expected to respond to correctly; 
+(iv)  the number of tasks a learner will be expected to respond to on a given real life 
+situation. 
+Some tasks and items maybe based on unfamiliar materials. The expectation is that 
+candidates should be able to apply scientific principles to generate responses to these types 
+of tasks. To be successful at these tasks, candidates will need to draw on higher order 
+
+--- PAGE 170 ---
+- 154 - 
+ 
+thinking skills, including abstract and critical thinking through reasoning, analysing, 
+creating and evaluating. Each of the two Agricultural Science assessment components will 
+include tasks that will cover lower and higher order thinking skills. 
+4. 
+Scoring Criteria 
+The following scoring criteria will govern the evaluation of the Examination for Certificate of Secondary 
+Education Ordinary Level Agricultural Science assessments for both School Based Assessment and Final 
+Examination. 
+4.1 
+School Based Assessment 
+Teachers will develop and use appropriate scoring guides and rubrics for each SBA task. These 
+scoring guides will ensure consistency, fairness and accuracy when evaluating learners‘ 
+performance in activities such as class tests, projects, practical work, field investigations, 
+presentations, assignments, and other structured tasks.  
+These scoring guides or rubrics will guide teachers in evaluating learners‘ performance in practical 
+work, research, projects, assignments, presentations, and other structured activities to ensure 
+consistency, fairness and accuracy when evaluating learner performance. The scoring guides will 
+measure not only the correctness of responses but also the application of scientific skills such as 
+observation, data interpretation, problem solving, communication, and use of scientific procedures. 
+This approach ensures accuracy, consistency and full alignment with the competence based learning 
+activities in the Agricultural Science syllabus. 
+Final Examination 
+The Final Examination will consist of specific scoring guides and rubrics. The scoring guides will 
+be developed by ECZ to support examiners in assessing candidates‘ responses based on the required 
+competences and Elements of Construct. These scoring guides will outline the key scientific skills, 
+reasoning processes and expected knowledge that demonstrate learner competence.  
+Before marking begins, examiners will participate in a coordination meeting where acceptable 
+alternative answers will be discussed to ensure that all valid responses are recognised. This process 
+promotes consistency, fairness and accuracy in scoring.  
+4.3 
+General Marking Guidelines 
+The following criteria govern the principles that are applied to marking the form 1-4 Agricultural 
+Science assessments: 
+(i) 
+for essay questions in the Final Examination, the marks available per test item will be shown 
+in brackets [ ] at the end of the item. 
+(ii) 
+the number of marks available per item will depend on the difficulty of the item i.e. the 
+number of cognitive processes and the amount of writing required to generate a correct 
+response.; 
+(iii) where the response needs units, candidates are expected to supply the correct unit. Failure to 
+do so will result in no mark being awarded even if the numerical value is correct; 
+(iv) where working is required to be shown, and a candidate supplies a correct numerical response 
+with wrong working or no working shown, no marks will be awarded 
+5. 
+Notes and Guidelines 
+5.1 
+Candidates must carry out an Agricultural Science Project and all the SBA tasks to completion in 
+order for them to be graded. A learner who does not do the SBA tasks and project will not be graded 
+even if that learner writes the theory paper. 
+5.2 
+The School Based Assessments (comparative research, field projects, none comparative, practical 
+laboratory tests, assignments and theory tests) will be supervised and assessed by subject teachers at 
+every level. 
+
+--- PAGE 326 ---
+- 310 - 
+ 
+                       I am a woman, not a slave…….. 
+Items 
+(i) 
+Just before the extract (story above), Lawino‘s husband is shown as having a certain understanding of traditional 
+African culture. How does he understand (view) it. [2 marks) understanding) 
+(ii) 
+ Identify the speaker‘s tone (emotions in the voice) in the extract and explain its importance                               [4 
+marks] ( Understanding and Analysis) 
+(iii) 
+Analyse (study carefully and explain) the use of metaphors: 
+(I am not a hen…. I am not a goat)                                        [4 marks] ( Analysis )       
+(iv) 
+Discuss the theme of oppression and resistance (fighting) in the extract   and relate it to what happens in your 
+culture. [4 marks] (Evaluation and Application)                                              
+(v) 
+Lawino is complaining about the treatment she receives from the husband. How does she feel about this 
+treatment? (4 marks) (Application) 
+(vi) 
+In the text, Lawino‘s concern is not only about losing her husband but about other problems. What are (indicate) 
+her other concerns? (2 marks)  
+[ Total: 20 Marks] 
+ 
+Sample items  for English Language 
+Example 1 
+Last Saturday, I woke up at the crack of dawn because I had to get ready for a family journey. When I arrived at our 
+destination (last stop), we tried to check in at the nearest hotel but found the rooms were full, It was like hitting a brick 
+wall. We decided to continue driving searching for hotel rooms, hoping every cloud has a silver lining. 
+On the way, our car quickly broke down. We had to call for help. While waiting, we surprisingly bumped into an old 
+friend who kindly offered (accepted) to look after our bags. That was truly a blessing in disguise. 
+Finally, the mechanic solved the problem, and we were able to carry on with our journey,  
+(a)  
+Identify and write down four phrasal verbs from the situation (story). (4 marks) 
+(b)  
+Find three (3) idioms and write (mention) their meaning (6 marks) 
+This is a structure test item at remembering and understanding levels where a candidate is expected to recall already 
+learnt material and demonstrate understanding. 
+ 
+Example 2 
+You are the editor of your school magazine. A writer gives you the following short paragraph to put in the magazine: 
+“Pupils in our school enjoys participating in club activities because it helps them to develop different skills. The debates 
+club often (many times) hold (have) meeting after school, and the science club usually (many times) do experiments 
+during weekend. Many students say that joining clubs have made them more confident.” 
+Edit the language structure and suggest improvements for the following: 
+a) One tense mistake – (1 mark) 
+b) Five Subject-Verb agreement – (5 marks) 
+c) Rewrite the paragraph into two clear and well-structured sentences that show correct grammar – (4 marks) 
+This is a structure test item at remembering and applying levels where a candidate is expected to recall already learnt 
+material and demonstrate understanding by constructing correct sentences. 
+ 
+
+--- PAGE 327 ---
+- 311 - 
+ 
+Chapter 30: Grading and Certification 
+1 
+Introduction  
+The Examination for Certificate of Secondary Education Ordinary Level (ECSEOL) syllabi cover the 
+secondary school ordinary level material, namely, Form I, Form II, Form III, and Form IV. The 
+assessments during and at the end of the course of study are aimed at evaluating the extent to which 
+learners can demonstrate the required competences and apply knowledge, understanding, and skills to 
+solve problems in real-life situations. The next section, therefore, describes the grading and certification 
+criteria at this level of education and assessment. 
+2.  
+Grading and Certification 
+2.1 
+Grading at Examination for Certificate of Secondary Education Ordinary Level 
+At this level of assessment, components from the school-based assessment and the centrally 
+set examination are combined to come up with the final score. By means of a procedure 
+called standards fixing and awards, cut scores are agreed on from one examination session 
+to another per subject.  
+There are five proficiency levels at this level of examination, namely, Outstanding, 
+Advanced, Basic, Satisfactory, and Unsatisfactory. Table 1 outlines the competency levels 
+and their respective score ranges and descriptors. 
+Subject Grading at Examination  for Certificate of Secondary Education Ordinary Level 
+SN 
+Competency 
+Level 
+Score 
+Range 
+Label 
+Descriptor 
+ 
+1 
+ 
+Outstanding 
+70 to 100 
+1 
+Demonstrates exceptional mastery of concepts, 
+outstanding application of knowledge, and excellent 
+analytical skills.  
+ 
+    2 
+ 
+Advanced 
+60 to 69 
+2 
+Displays very strong understanding and proficiency; work 
+is consistently of a high standard.  
+ 
+3 
+ 
+Basic 
+50 to 59 
+3 
+Demonstrates solid understanding and effective 
+application of concepts with above-average performance.  
+ 
+4 
+ 
+Satisfactory 
+40 to 49 
+4 
+Limited understanding with frequent errors; requires 
+additional support to possess the required knowledge and 
+application of skills.  
+ 
+5 
+ 
+Unsatisfactory 
+0 to 39 
+5 
+Fails to demonstrate the required knowledge and skills; 
+significant difficulties in understanding and applying 
+concepts; requires intensive support. 
+ 
+2.2. Certification at Examination for Certificate of  Secondary Education   Ordinary Level 
+Candidates shall follow any of the eight pathways offered at this level, namely, Social 
+Sciences, Natural Sciences, Business and Finance, Agriculture, Home Economics and 
+Hospitality, Technology, Performing and Creative Arts, and Physical Education. 
+
+--- PAGE 328 ---
+- 312 - 
+ 
+To be awarded a Certificate of Secondary Education, any of the following conditions has to 
+be fulfilled: 
+(a)   Obtain a competency level of Satisfactory in at least six subjects, including English 
+Language, with a level of Basic in at least one of them.  
+Or 
+(b)   Obtain a competency level of Satisfactory in five subjects, including English 
+Language, with at least a Basic level in at least two of them.  
+ 
+A candidate who does not fulfil any of these two conditions is unclassified. 
+
+--- PAGE 329 ---
+- 313 - 
+ 
+Appendix : Subject and Certificate Competency Classification 
+ MARKS
+%
+MARKS
+%
+SBA
+EXAM OUTSTAND. ADVANCED
+BASIC
+SATISFACT. UNSATISF.
+1 Chemistry
+200
+30%
+80
+70%
+280
+84
+196
+196 - 280
+168-195
+140-167
+112-139
+0-111
+2 Physics
+200
+30%
+80
+70%
+280
+84
+196
+196 - 280
+168-195
+140-167
+112-139
+0-111
+3 Fashion & Fabrics
+360
+30%
+90
+70%
+450
+135
+315
+315-450
+270-314
+225-269
+180-224
+0-179
+4 Food & Nutrition 
+360
+30%
+90
+70%
+450
+135
+315
+315-450
+270-314
+225-269
+180-224
+0-179
+5 Hospitality and Management
+360
+30%
+80
+70%
+440
+132
+308
+308-440
+264-307
+220-263
+176-219
+0-175
+6 Travel and Tourism
+300
+30%
+80
+70%
+380
+114
+266
+266-380
+228-265
+190-227
+152-189
+0-151
+7 English Language
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+8 Literature in English
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+9 Computer Science
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+10 ICT
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+11 Civic Education
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+12 History
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+13 Geography
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+14 Religious Education
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+15 Biology
+300
+30%
+70
+70%
+370
+111
+259
+259-370
+222-258
+185-221
+148-184
+0-147
+16 Agriculture Science
+280
+30%
+60
+70%
+340
+102
+238
+238-340
+204-237
+170-203
+136-169
+0-135
+17 Musical Arts
+200
+30%
+100
+70%
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+18 Physical Education
+200
+40%
+100
+60%
+300
+120
+180
+210-300
+180-209
+150-179
+120-149
+0-119
+19 Commerce
+200
+30%
+100
+70
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+20 Principals of Accounts
+200
+30%
+100
+70
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+21 French
+200
+40%
+60
+60%
+260
+104
+156
+182-260
+156-181
+130-155
+104-129
+0-103
+22 Chinese
+200
+40%
+60
+60%
+260
+104
+156
+182-260
+156-181
+130-155
+104-129
+0-103
+23 Literature in Zambian Languages
+200
+40%
+60
+60%
+260
+104
+156
+182-260
+156-181
+130-155
+104-129
+0-161
+24 Zambian Languages
+200
+30%
+100
+70
+300
+90
+210
+210-300
+180-209
+150-179
+120-149
+0-119
+COMPETENCY LEVEL SCORE RANGE
+SBA
+EXAMINATION
+SUBJECT
+SN
+TOTAL CONTRIBUTION
+ 
+ 
+
+--- PAGE 330 ---
+- 314 - 
+ 
+References 
+Curriculum Development Centre, (2013) Zambia Education Curriculum Framework, Ministry of Education, 
+Lusaka, Zambia 
+Ministry of Justice (2011) The Education Act, 2011, No. 23 of 2011 419, Government Printer, Lusaka, Zambia 
+Ministry of Education, (1996) Educating Our Future: Policy on Education, Government Printers, Lusaka Zambia 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

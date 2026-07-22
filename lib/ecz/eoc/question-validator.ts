@@ -26,8 +26,11 @@ export type ValidationResult = {
 }
 
 /**
- * Resolve a human-facing topic tag to its EoC.
- * Verified aliases first; unverifiedTopicAliases second (verified: false).
+ * Resolve a human-facing topic tag OR task-type label to its EoC.
+ * Order:
+ *  1. verified topicAliases
+ *  2. unverifiedTopicAliases (verified: false)
+ *  3. taskTypeAliases for skill-lens EoCs (verified: false — provisional)
  */
 export function resolveTopicToEoc(
   spec: EczSubjectSpecT,
@@ -52,6 +55,14 @@ export function resolveTopicToEoc(
     }
   }
 
+  for (const eoc of spec.elementsOfConstruct) {
+    for (const sub of eoc.subSkills) {
+      if ((sub.taskTypeAliases ?? []).some((a) => a.toLowerCase() === needle)) {
+        return { eoc, subSkillId: sub.id, verified: false }
+      }
+    }
+  }
+
   return null
 }
 
@@ -62,6 +73,9 @@ function findSubSkillForTopic(spec: EczSubjectSpecT, eocId: string, topicTag: st
   for (const sub of eoc.subSkills) {
     if (sub.topicAliases.some((a) => a.toLowerCase() === needle)) return { eoc, sub }
     if ((sub.unverifiedTopicAliases ?? []).some((a) => a.toLowerCase() === needle)) {
+      return { eoc, sub }
+    }
+    if ((sub.taskTypeAliases ?? []).some((a) => a.toLowerCase() === needle)) {
       return { eoc, sub }
     }
   }

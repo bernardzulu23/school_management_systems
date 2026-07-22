@@ -5,6 +5,7 @@
 export {
   BloomLevel,
   ComponentType,
+  ResolutionMode,
   EczSubjectSpec,
   GeneratedQuestion,
   type EczSubjectSpecT,
@@ -23,4 +24,5 @@ export { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 export {
   mapScenarioToGeneratedQuestion,
   mapPracticeQuestionToGeneratedQuestion,
+  mapQuizQuestionToGeneratedQuestion,
 } from '@/lib/ecz/eoc/mapExistingGeneration'

@@ -1,0 +1,296 @@
+{
+  "subjectCode": "4018",
+  "subjectName": "Agricultural Science",
+  "syllabusYear": 2024,
+  "construct": "Applies scientific skills for sustainable food production and entrepreneurship.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Investigates agricultural scientific problem through observations, measurement, experimentation and recording.",
+      "subSkills": [
+        {
+          "id": "eoc1-investigation",
+          "label": "Identifies and defines agricultural problems and plans appropriate investigations",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Climate-Smart Agriculture",
+            "Climate Change",
+            "CLIMATE-SMART AGRICULTURE"
+          ],
+          "note": "Skill-lens EoC, not a topic bucket. Exemplar was built on Climate-Smart Agriculture content but the EoC label describes investigation methodology, not a subject area. Provisional routing only.",
+          "taskTypeAliases": [
+            "investigation",
+            "research",
+            "field project",
+            "comparative research",
+            "project"
+          ]
+        }
+      ],
+      "resolutionMode": "taskType"
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates practical skills in managing crops for improved yields.",
+      "subSkills": [
+        {
+          "id": "eoc2-crops",
+          "label": "Applies practical skills in crop management to solve real life problems and improve productivity",
+          "topicAliases": [
+            "Crop Production",
+            "CROP PRODUCTION",
+            "Vegetable Production",
+            "External and Internal Morphology of Plants",
+            "Field Crop Production",
+            "Fruit and Tuber Crop Production",
+            "Legume Crop Production"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Applies practical skills in managing livestock for improved production.",
+      "subSkills": [
+        {
+          "id": "eoc3-livestock",
+          "label": "Applies practical skills in Livestock management to solve real life problems and improve productivity",
+          "topicAliases": [
+            "Livestock Production",
+            "LIVESTOCK PRODUCTION",
+            "Importance of Livestock",
+            "Nutrition",
+            "Poultry Production",
+            "Pig Production",
+            "Pasture Management",
+            "Ruminant Animal production",
+            "Apiculture (Bee farming)",
+            "Aquaculture (Fish Farming)"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Analyses data and applies sustainable scientific techniques for improved productivity.",
+      "subSkills": [
+        {
+          "id": "eoc4-analysis",
+          "label": "Analyses and interprets agricultural data to draw valid scientific conclusions; applies sustainable agricultural techniques",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Soil Science",
+            "SOIL SCIENCE",
+            "Composition of Soil",
+            "Properties of Soil",
+            "Soil Fertility",
+            "Soil and Water",
+            "Farm Structures and Machinery",
+            "FARM STRUCTURES AND MACHINERY",
+            "Farm Mechanisation",
+            "Structures for Water Supply",
+            "Animal and Tractor Drawn Implements",
+            "Farm Power",
+            "Brick Layering and Workshop Tools",
+            "Engines"
+          ],
+          "note": "Skill-lens EoC. Exemplar blended Farm Mechanisation AND Crop Production content in one scenario. Soil Science and Farm Structures/Machinery routed here provisionally as closest content fit -- not exemplar-confirmed for Soil Science specifically.",
+          "taskTypeAliases": ["analysis", "data analysis", "sustainability", "technique evaluation"]
+        }
+      ],
+      "resolutionMode": "taskType"
+    },
+    {
+      "id": "EoC5",
+      "description": "Applies agribusiness and entrepreneurship skills in managing farm enterprises.",
+      "subSkills": [
+        {
+          "id": "eoc5-agribusiness",
+          "label": "Develops and manages profitable agricultural enterprises through business planning, financial management, marketing, risk management, value addition and record keeping",
+          "topicAliases": [
+            "Farm Management",
+            "FARM MANAGEMENT",
+            "Farm as a Business Unit",
+            "Agricultural Economics",
+            "Budgeting",
+            "Costing and Accounting",
+            "Farm Valuation",
+            "Cooperatives"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC6",
+      "description": "Investigates agricultural problems and demonstrates practical skills in real life situations.",
+      "subSkills": [
+        {
+          "id": "eoc6-general",
+          "label": "Identifies agricultural problems and applies practical skills to solve them",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Agriculture in Zambia",
+            "AGRICULTURE IN ZAMBIA",
+            "Importance of Agriculture",
+            "Agricultural Activities in Zambia",
+            "Factors that Influence Agricultural Development",
+            "Types of Farmers",
+            "Land Tenure Systems and Land Use"
+          ],
+          "note": "SBA-only EoC (not in the 5-EoC Final Exam spec, no exemplar provided). Provisionally anchored to the foundational Agriculture in Zambia topic -- unconfirmed, no exemplar evidence either way.",
+          "taskTypeAliases": ["general", "general practical", "problem solving"]
+        }
+      ],
+      "resolutionMode": "taskType"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "4018/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "12 tasks total across Form 2+3 (6 each), all 6 EoC, includes a Field Project (non-comparative, Form 2) worth 20 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "4018/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "12 tasks total across Form 2+3 (6 each), all 6 EoC, includes a Comparative Research (Form 3) worth 20 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "4018/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 60,
+        "structureNotes": "5 compulsory items, one per EoC1-5 (EoC6 excluded from Final Exam). Each item = 1 scenario + 2 tasks. Marks: EoC1=15, EoC2=10, EoC3=10, EoC4=15, EoC5=10. Duration 2 hours.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: teachers develop scoring guides/rubrics per task; measures correctness plus scientific skills (observation, data interpretation, problem solving, communication, procedure use).",
+      "Final Exam: ECZ-developed scoring guides per EoC; examiner coordination meeting held before marking to agree acceptable alternative answers.",
+      "Marks available per item shown in brackets [ ] at the end of the item.",
+      "Number of marks per item depends on difficulty -- number of cognitive processes and amount of writing required.",
+      "Where a response needs units, failure to supply the correct unit forfeits the mark even if the numerical value is correct.",
+      "Where working is required and a candidate supplies a correct numerical answer with wrong or no working shown, no marks are awarded."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Rural district farmers using traditional burning/clearing/overgrazing practices causing climate change: explain causes, evaluate national agricultural impact",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 7,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Farm manager using agricultural drones to fix a wheat farm's planting, fertiliser, irrigation, monitoring and harvesting problems",
+      "parts": [
+        {
+          "label": "single task",
+          "marks": 10,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Mixed poultry farmer feeding broilers and layers the same feed causing slow broiler growth/leg weakness and thin layer eggshells: explain cause, formulate corrected feed, suggest corrective actions",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 4,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)(i)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)(ii)",
+          "marks": 2,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Commercial vegetable farmer relying on manual labour for land prep/irrigation/fertiliser facing declining cabbage/tomato yield and quality: analyse causes, explain other factors, recommend mechanisation",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Maize/soya farmer facing diminishing fertiliser returns and limited capital: apply law of diminishing returns, apply opportunity cost, suggest management strategies",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 2,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    }
+  ]
+}

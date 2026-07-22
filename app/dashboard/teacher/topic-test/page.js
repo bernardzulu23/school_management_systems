@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import { ArrowLeft, BookOpen, CheckCircle2, ClipboardList } from 'lucide-react'
 import { FeatureGate } from '@/components/FeatureGate'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
@@ -54,6 +55,10 @@ export default function TopicTestPage() {
       })
       .catch(() => setTeachingAssignments([]))
   }, [])
+
+  useEffect(() => {
+    setTopic('')
+  }, [subject, grade])
 
   useEffect(() => {
     if (!subject) {
@@ -232,15 +237,15 @@ export default function TopicTestPage() {
 
               {step === 1 && (
                 <div className="space-y-4">
-                  <div>
-                    <Label>Topic covered *</Label>
-                    <Input
-                      value={topic}
-                      onChange={(e) => setTopic(e.target.value)}
-                      placeholder="e.g. Computer hardware components"
-                      className="mt-1"
-                    />
-                  </div>
+                  <CurriculumTopicSelect
+                    subject={subject}
+                    gradeOrForm={grade}
+                    value={topic}
+                    onChange={setTopic}
+                    label="Topic covered"
+                    required
+                    id="topic-test-topic"
+                  />
                   <div>
                     <Label className="flex items-center gap-1">
                       <BookOpen className="h-4 w-4" />

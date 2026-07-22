@@ -160,3 +160,53 @@ export function mapPracticeQuestionToGeneratedQuestion(params: {
     clientItemId: String(q?.id || `practice:${text.slice(0, 24)}`),
   }
 }
+
+/**
+ * Map a quiz-maker question (MCQ / short / scenario-like) into GeneratedQuestion.
+ */
+export function mapQuizQuestionToGeneratedQuestion(params: {
+  spec: EczSubjectSpecT
+  topicTag: string
+  formLevel: string
+  question: {
+    id?: string
+    type?: string
+    question?: string
+    zambianScenario?: string
+    marks?: number
+    explanation?: string
+    bloomsLevel?: string
+    elementOfConstruct?: string
+    subQuestions?: Array<{
+      number?: string
+      commandTerm?: string
+      question?: string
+      marks?: number
+      bloomsLevel?: string
+    }>
+  }
+  assessmentMode?: string | null
+}): { question: GeneratedQuestionT; clientItemId: string } | null {
+  const q = params.question
+  if (q?.zambianScenario || (Array.isArray(q?.subQuestions) && q.subQuestions.length)) {
+    return mapScenarioToGeneratedQuestion({
+      spec: params.spec,
+      topicTag: params.topicTag,
+      formLevel: params.formLevel,
+      scenario: {
+        zambianScenario: q.zambianScenario || q.question,
+        elementOfConstruct: q.elementOfConstruct,
+        subQuestions: q.subQuestions,
+        totalMarks: q.marks,
+      },
+      assessmentMode: params.assessmentMode,
+    })
+  }
+  return mapPracticeQuestionToGeneratedQuestion({
+    spec: params.spec,
+    topicTag: params.topicTag,
+    formLevel: params.formLevel,
+    question: q,
+    assessmentMode: params.assessmentMode,
+  })
+}

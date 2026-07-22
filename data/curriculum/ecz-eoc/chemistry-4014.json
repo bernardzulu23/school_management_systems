@@ -1,0 +1,186 @@
+{
+  "subjectCode": "4014",
+  "subjectName": "Chemistry",
+  "syllabusYear": 2024,
+  "construct": "Applies chemistry concepts and scientific skills in solving real life problems.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Classifies substances and interprets the physical and chemical changes of the substances for suitable application in life",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-classify",
+          "label": "Classifies substances by nature/properties and interprets physical and chemical changes",
+          "topicAliases": [
+            "Atomic Structure",
+            "Bonding and Structure",
+            "States of Matter",
+            "Acids, Bases, and Salts",
+            "Periodic table organization",
+            "Ionic bonding and ionic compounds",
+            "Covalent bonding and molecular compounds",
+            "Changes of state (melting, boiling, sublimation)"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Analyses and identifies chemical composition of substances for scientific decision making.",
+      "resolutionMode": "taskType",
+      "subSkills": [
+        {
+          "id": "eoc2-analysis",
+          "label": "Uses analytical procedures to identify chemical composition of solids, liquids or gases",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Titration and standardization",
+            "Oxidation and reduction concepts",
+            "pH scale and pH calculations"
+          ],
+          "note": "Skill-lens EoC focused on analytical identification methods; topic anchors provisional.",
+          "taskTypeAliases": ["analysis", "identification", "qualitative analysis", "titration"]
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Evaluates industrial chemical processes and suggests alternative methods of production that are sustainable and environmentally safe",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-industrial",
+          "label": "Evaluates industrial process conditions and proposes sustainable alternatives",
+          "topicAliases": ["Industrial Chemistry", "Chemical Industry"],
+          "unverifiedTopicAliases": [
+            "Haber process",
+            "Contact process",
+            "Extraction of metals",
+            "Environmental chemistry"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Applies Chemistry principles and mathematical operations to determine quantities of either reactants or products from quantitative (balanced) chemical equations in real-life situations or for solving problems",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-stoichiometry",
+          "label": "Applies stoichiometric ratios and mole calculations from balanced equations",
+          "topicAliases": [
+            "Stoichiometry and Calculations",
+            "Molar mass and mole concept",
+            "Balancing chemical equations",
+            "Mole calculations in chemical reactions",
+            "Limiting reagents",
+            "Percentage composition and empirical formulas",
+            "Yield calculations"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Investigates quantities involving industrial processes",
+      "resolutionMode": "taskType",
+      "subSkills": [
+        {
+          "id": "eoc5-yields",
+          "label": "Determines theoretical yields and develops more efficient ways of increasing yields",
+          "topicAliases": [],
+          "unverifiedTopicAliases": ["Yield calculations", "Industrial Chemistry"],
+          "note": "Skill-lens EoC on industrial yield investigation; content often overlaps EoC3/4.",
+          "taskTypeAliases": ["yield investigation", "industrial yield", "process efficiency"]
+        }
+      ]
+    },
+    {
+      "id": "EoC6",
+      "description": "Applies Chemistry principles in everyday life",
+      "resolutionMode": "taskType",
+      "subSkills": [
+        {
+          "id": "eoc6-everyday",
+          "label": "Designs solutions, products and services using chemistry knowledge for real-life situations",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Acids, Bases, and Salts",
+            "Buffers and buffer solutions",
+            "Oxidation and reduction concepts"
+          ],
+          "note": "Broad applied-chemistry EoC; provisional topic anchors.",
+          "taskTypeAliases": ["everyday application", "product design", "real-life chemistry"]
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "4014/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 6 tasks/100 marks. All 6 EoC. Tests, assignments, practical, research.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "4014/1",
+        "formLevel": "Form 3",
+        "numItems": 4,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 3 tasks/50 + 1 research project/50. All 6 EoC. Combined SBA 200 marks (30%).",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "4014/2",
+        "formLevel": "Form 4",
+        "numItems": 6,
+        "totalMarks": 80,
+        "structureNotes": "6 compulsory scenario items, one per EoC1-6. Marks: 13,13,13,14,13,14. Duration 2h30. 70%.",
+        "bloomRange": ["remembering", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: teachers develop scoring guides/rubrics per task aligned to syllabus competences.",
+      "Final Exam: ECZ-developed scoring guides for examiners.",
+      "Semi-structured items may require words, numbers, symbols, phrases, definitions, comparisons and calculations.",
+      "Open-ended responses must be complete sentences/paragraphs presented logically.",
+      "Where working is required, correct numerical answers without working earn no marks."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Classifying substances and interpreting physical/chemical changes for suitable real-life application (per ECZ Chemistry exemplar EoC1)",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    }
+  ]
+}

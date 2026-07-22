@@ -1,0 +1,218 @@
+{
+  "subjectCode": "4016",
+  "subjectName": "Physics",
+  "syllabusYear": 2024,
+  "construct": "Applies Physics concepts and scientific skills in solving real life problems.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Classifies and applies Physical quantities and their measurements in handling of materials and objects",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-quantities",
+          "label": "Distinguishes basic/derived quantities, applies equilibrium, scalars/vectors, elementary astronomy and precise measurement",
+          "topicAliases": [
+            "Physical Quantities",
+            "Precision and Accuracy",
+            "Scalar and Vector Quantities",
+            "Equilibrium",
+            "The Universe",
+            "Structure and Composition of the Earth",
+            "Safety Rules (Laboratory Safety)",
+            "Apparatus in Physics",
+            "Fundamental Concepts of Physics"
+          ],
+          "unverifiedTopicAliases": [
+            "Waste Management",
+            "Application of Physics",
+            "Basic Principles of Scientific Investigations"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Analyses and applies principles of mechanical systems to maximize the benefits of their performance of complex functions to enhance productivity",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-mechanics",
+          "label": "Applies mechanics concepts (motion, forces, energy, momentum, machines, pressure) to real-life problems",
+          "topicAliases": [
+            "Linear Motion",
+            "Forces",
+            "Circular Motion",
+            "Moment of a Force",
+            "Work, Energy, and Power",
+            "Linear Momentum",
+            "Simple Machines",
+            "Pressure"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Applies and interprets concepts of thermal properties of matter in order to predict material behaviour and design thermally efficient systems",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-thermal",
+          "label": "Applies kinetic theory, temperature, expansion, heat transfer and internal combustion concepts",
+          "topicAliases": [
+            "Simple Kinetic Theory of Matter",
+            "Measurement of Temperature",
+            "Expansion of Solids, Liquids and Gases",
+            "The Internal Combustion Engine",
+            "Heat Transfer",
+            "Measurement of Heat"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Interprets and applies properties of waves to predict natural phenomena and design appropriate technologies",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-waves",
+          "label": "Solves wave, sound, light, reflection/refraction and lens problems",
+          "topicAliases": [
+            "Longitudinal and Transverse Waves",
+            "Electromagnetic Spectrum",
+            "Sound",
+            "Light",
+            "Reflection of Light",
+            "Refraction of Light",
+            "Lenses"
+          ],
+          "unverifiedTopicAliases": ["Rectilinear Propagation", "Optical Instruments"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Analyses and manipulates electric and magnetic properties of materials in order to design more reliable and efficient devices and machinery",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc5-em",
+          "label": "Applies static electricity, circuits, Ohm's law, magnetism and electrical energy transmission",
+          "topicAliases": [
+            "Static Electricity",
+            "Electric Circuits",
+            "Ohm's Law",
+            "Electrical Energy and Power",
+            "Magnetism",
+            "Electromagnetic Induction",
+            "Transformers"
+          ],
+          "unverifiedTopicAliases": ["Electric Cells", "Transmission of Electrical Energy"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC6",
+      "description": "Applies electronic, communication, nuclear, and renewable energy principles to enhance connectivity, drive innovation, and support an environmentally safe and sustainable energy-efficient future",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc6-modern",
+          "label": "Applies electronics, nuclear physics, communication systems and renewable energy principles",
+          "topicAliases": [
+            "Electronics",
+            "Logic Gates",
+            "Capacitors",
+            "Nuclear Physics",
+            "Radioactivity",
+            "Renewable Energy",
+            "Communication Systems"
+          ],
+          "unverifiedTopicAliases": ["Thermionic Emission", "Electronic Waste"],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "4016/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 6 tasks/100 marks over 1 year. All 6 EoC. Theory, practical, research/project. 30% overall with Form 3.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "4016/1",
+        "formLevel": "Form 3",
+        "numItems": 4,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 3 tasks/50 + 1 research project/50. All 6 EoC. Combined Form 2+3 SBA = 200 marks (30%).",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "4016/2",
+        "formLevel": "Form 4",
+        "numItems": 6,
+        "totalMarks": 80,
+        "structureNotes": "6 compulsory scenario items, one per EoC1-6. Marks: 10,14,14,14,14,14. Duration 2h30. 70% weighting.",
+        "bloomRange": ["remembering", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: teachers develop scoring guides/rubrics per task; measure correctness plus scientific skills (observation, data interpretation, problem solving, communication, procedure use).",
+      "Final Exam: ECZ-developed scoring guides outlining scientific skills, reasoning and expected knowledge.",
+      "Show working steps, units and explanations on data-based questions.",
+      "Diagrams must be large, neat, correctly labelled, drawn with sharp pencil; no shading/colouring unless instructed.",
+      "Scientific terminology required; vague non-scientific statements do not earn full marks.",
+      "Non-programmable calculators allowed; programmable calculators and phones forbidden."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Chemical plant liquid transport: classify base/derived quantities (mass, volume, density, temperature, thermal expansion); advise safe packaging/storage; calculate density",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(d)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    }
+  ]
+}

@@ -1,0 +1,1154 @@
+
+--- PDF_PAGE 177 ---
+- 161 - 
+ 
+Chapter 14: Physics – 4016  
+ 
+1. 
+Construct 
+Applies Physics concepts and scientific skills in solving real life problems. 
+2. 
+Elements of Construct 
+The Physics examination will be based on six (6) Elements of Construct (EoC) on which candidates will 
+be assessed on: 
+EoC 1 
+Classifies and applies Physical quantities and their measurements in handling of materials 
+and objects 
+• Distinguishes between basic and derived physical quantities and performs unit conversions 
+across different measurement systems applied in real life. 
+• Applies equilibrium principles in the design and analysis of real-world systems. 
+• Uses scalar and vector quantities in solving physics problems effectively.  
+• Demonstrates understanding of the elementary astronomy, the earth and the earth‘s 
+atmosphere. 
+• Creates posters to communicate safety information. 
+•    measures with precision and accuracy. 
+EoC 2  Analyses and applies principles of mechanical systems to maximize the benefits of their 
+performance of complex functions to enhance productivity  
+• Applies fundamental mechanics concepts which include; scalars and vectors, linear motion, 
+forces, circular motion, moments, equilibrium, work, energy and power, momentum, simple 
+machines, and pressure to solve problems in real-life situations. 
+•    Performs experiments on centre of mass and mass of metre rules. 
+•    Develops a system that maximises mechanical energy. 
+  
+      •     Creates a model that use the principle of pressure.  
+EoC 3 
+Applies and interprets concepts of thermal properties of matter in order to predict 
+material behaviour and design thermally efficient systems 
+• Analyses how the simple kinetic theory of matter influences technological innovation. 
+• Measures temperature accurately using appropriate instruments. 
+• Demonstrates the expansion of solids, liquids, and gases.  
+•    Calibrates unmarked thermometers and develops innovations on simple kinetic theory of 
+matter. 
+• Demonstrates and explains the operation of internal combustion engines such as the four-
+stroke engine. 
+• Investigates and applies heat-transfer concepts and solves practical and numerical problems 
+related to heat measurements. 
+EoC 4 
+Interprets and applies properties of waves to predict natural phenomena and design 
+appropriate technologies 
+• Solves practical and numerical problems involving wave motion and interprets information 
+related to electromagnetic waves.  
+• Manipulates devices to demonstrate the fundamental properties of sound. 
+• Applies the concepts of rectilinear propagation, reflection, and refraction of light. 
+• Demonstrates an understanding of lenses and their applications. 
+
+--- PDF_PAGE 178 ---
+- 162 - 
+ 
+•    Creates a pin-hole camera, kaleidoscope and optical illusions.  
+EoC 5 
+Analyses and manipulates electric and magnetic properties of materials in order to design 
+more reliable and efficient devices and machinery 
+• Investigates and simulates static electricity, constructs and applies electric circuits and uses 
+electric cell technology.  
+• Solve problems on Ohm‘s law, electrical energy, power and builds a simple iron core 
+transformer.  
+• Demonstrates understanding of magnetism and creates a system that uses magnetic effect of 
+an electric current. 
+• Explores the transmission of electrical energy. 
+EoC 6  Applies electronic, communication, nuclear, and renewable energy principles to enhance 
+connectivity, drive innovation, and support an environmentally safe and sustainable 
+energy-efficient future 
+• Designs and construct electronic systems, applies thermionic emission, manages electronic 
+waste sustainably and develops communication systems.  
+• Understands the nuclear atom, radiation and its applications, nuclear waste management 
+solutions and renewable energy systems. 
+•  Investigates capacitors and makes circuits to demonstrate logic gates. 
+•  Creates a model of a nuclear atom, simulates nuclear reactions and researches on handling 
+radioactive substances. 
+3. 
+Test Design 
+3.1  
+Structure  
+The Physics examination will be made up of two components namely Component 1 and 2. The 
+School Based Assessment will be component 1 while the final examination will be component 2. 
+3.1.1 School Based Assessment: Component 1 
+The assessments in SBA will be administered during the course of teaching and learning at 
+school level from Form 2 Term 1 to Form 3 Term 3.  It shall account for 30% of the total 
+assessment. The structure of SBA tasks will be determined by the type of task and by the 
+teacher.  
+3.1.2 Final Examination: Component 2 
+The Final Examination will be written at the end of form 4 and will be centrally set by the 
+Examinations Council of Zambia. Component 2 shall be a theory paper consisting of six (6) 
+compulsory items of varying marks. The component will have a total of 80 marks. The 
+duration for the component will be 2 hours 30 minutes. It shall account for 70% of the total 
+assessment. 
+Summary of tasks and their distribution across Form 1 - 4. 
+Component 
+Name  
+Code 
+Level 
+Duration 
+Number of 
+tasks/items 
+Marks 
+Weighting 
+School Based  
+Assessment: 
+Component 1 
+4016/1 
+Form 2 
+1 year 
+6 
+100 
+ 
+ 
+30% 
+ 
+Form 3 
+ 
+1 Year 
+3 
+50 
+ 
+ 
+1 (Research 
+project) 
+50 
+Totals 
+ 
+ 
+ 
+10 
+200 
+Final 
+Examination: 
+4016/2 
+Form 4 
+2hrs 
+30 
+mins 
+6 
+80 
+70% 
+
+--- PDF_PAGE 179 ---
+- 163 - 
+ 
+Component 2 
+ 
+The Distribution of marks across Elements of Construct per test item in the Final Examination 
+Component 2 is as shown: 
+Elements of Construct 
+1 
+2 
+3 
+4 
+5 
+6 
+   TOTAL 
+80 
+Number of Marks 
+10 
+14 
+14 
+14 
+14 
+14 
+3.2 
+Test Content  
+ 
+The test content for both components 1 and 2 will be considered in terms of test items, level 
+of difficulty and syllabus coverage. 
+3.2.1 
+School Based Assessment: Component 1 
+The SBA tasks will be based on all the six Elements of Construct. These tasks shall be in 
+form of theory, practical work and research/project done during the teaching and learning 
+process in the school as formative and summative assessments. 
+Types of Tasks 
+Component 1 will comprise tests, assignments, practical and research/project work among 
+other tasks. All the tasks will consist of a scenario depicting a real-life situations containing 
+a problem or challenge. The SBA items and tasks will be based on all the six Elements of 
+Construct and will comprise semi-structured, essay or open ended items, investigative or 
+practical work and projects/research work. 
+3.2.2 
+Final Examination Component 2 
+This will consist of semi-structured and open ended type of items. There shall be six (6) 
+compulsory items based on scenarios depicting real life problems. 
+Semi-structured  items: These items shall include a scenario presented as a real-life 
+situation, in form of a diagram, graph, table, picture, or a short stem, followed by a number 
+of sub-items. Candidates shall be required to provide answers using words, numbers, 
+symbols, phrases, definitions, comparisons and calculations.  
+Open ended: These items will require candidates to answer in complete sentences and 
+paragraphs, presenting their responses in a logical and coherent manner in order to respond 
+to the competence being sought. 
+3.2.3 
+Level of Difficulty 
+The level of difficulty of tasks/items in the physics assessments for School Based 
+Assessment will range from remembering to creating level of the Revised Bloom‘s 
+Taxonomy while the level of difficulty for the Final Examination items will range from 
+remembering to Evaluating level. The level of difficulty will be determined by the 
+following factors:  
+(i) 
+the real-life situation on a given Element of Construct that the learner will be 
+exposed to; 
+(ii) 
+the amount and type of subject knowledge required to respond to the real-life 
+situation correctly; 
+(iii) 
+the complexity and/or number of cognitive processes required to generate responses 
+to tasks or items; 
+(iv) 
+the level of abstract thinking involved; 
+(v) 
+the level of scientific principles required to generate responses correctly; 
+
+--- PDF_PAGE 180 ---
+- 164 - 
+ 
+(vi) 
+extent to which the learner has to devise a strategy for responding to the tasks (as 
+contrasted with tasks and items where the stratagem is more explicit). 
+ 
+ 
+Distribution of Examination Items by Level of Difficulty and Cognitive Skills 
+Level of Difficulty 
+Understanding 
+Applying 
+Analysing 
+Evaluating 
+Marks 
+Marks  
+20 
+25 
+25 
+10 
+80 
+3.2.4 
+Syllabus Coverage 
+The Physics assessments will be based on the competences in the Form 1–4 Physics 
+syllabus (CDC 2024). Both assessment components will ensure full coverage of the 
+Elements of Construct by incorporating a cross-representation of the key competences in 
+Physics. 
+In Component  2,  a Test framework has been developed to show the number of items that 
+will be required to be set on each Element of Construct.  
+Some items may introduce information that is unfamiliar to the candidates. In responding 
+to such tasks, learners are required to use the competences developed through the syllabus 
+such as reasoning, analysing, interpreting evidence, and applying Physics concepts to solve 
+problems in new or unfamiliar situations. This aligns fully with the competency-based 
+approach, which emphasises on the use of acquired competences in solving practical, real-
+life challenges. 
+4. 
+Scoring Criteria 
+The following scoring criteria will govern the evaluation of the Examination for Certificate of  
+Secondary Education Ordinary Level and General Certificate of Education Physics assessments for both: 
+School Based Assessment (SBA) - Component 1 and Final Examination - Component 2. 
+4.1 
+School-Based Assessment (SBA) - Component 1 
+Teachers will develop and use appropriate scoring tools such as scoring guides and scoring rubrics 
+for each task e.g. end of year tests. These scoring tools will ensure consistency, fairness, and 
+accuracy when evaluating learners‘ performance in activities such as end of term and year tests, 
+practical work, assignments, and other structured items. The scoring criteria will reflect the 
+expected Physics competences as outlined in the syllabus. 
+The scoring criteria will measure not only the correctness of responses but also the application of 
+scientific skills such as observation, data interpretation, problem solving, communication, and use 
+of scientific procedures. This approach ensures accuracy, consistency, and full alignment with the 
+competency-based learning activities in the Physics syllabus. 
+4.2  
+Final Examination - Component 2 
+The Final Examination will consist of specific scoring procedures to maintain acceptable standards. 
+The scoring criteria will be provided by the Examinations Council of Zambia. 
+For component 2, scoring criteria will be developed by the Examinations Council of Zambia to 
+support examiners/scorers in assessing candidates. These scoring guides will outline the key 
+scientific skills, reasoning processes, expected knowledge that demonstrate a learner‘s competences. 
+5 
+Notes and Guidelines 
+
+--- PDF_PAGE 181 ---
+- 165 - 
+ 
+This section highlights important notes and subject-specific guidelines that candidates and teachers must 
+follow during the administration and scoring of the Physics assessments. These guidelines ensure fairness, 
+consistency, and alignment with the competence-based Physics syllabus. 
+5.1 
+General Examination Guidelines 
+(i) 
+Candidates must sit for both components to be graded. 
+(ii) 
+All responses for Component 2 must be written in the spaces provided within the question 
+paper. 
+(iii) 
+Programmable Calculators, cell phones, and unauthorised materials are not allowed in the 
+examination room. 
+(iv) 
+Non-programmable calculators are allowed in the examination room. 
+5.2 
+Physics-Specific Guidelines 
+(i) 
+Diagrams must be large, neat, correctly labelled, and drawn with a sharp pencil. Shading and 
+colouring are not allowed unless instructed. 
+(ii) 
+When answering data-based questions, candidates must show working steps, units, and 
+explanations where required. 
+(iii) 
+For tasks involving experiments or investigations, candidates must follow the scientific 
+method, showing observations, reasoning, and conclusions. 
+(iv) 
+Scientific terminology must be used accurately. Vague, non-scientific statements will not 
+earn full marks. 
+(v) 
+In items involving unfamiliar scenarios or materials, candidates must apply principles and 
+concepts from the syllabus to make logical conclusions. 
+(vi) 
+Structured-type of items must be written in clear, coherent paragraphs with ideas presented 
+logically to reflect higher-order competences. 
+6. 
+Exemplar Test Items 
+Exemplar questions are sample test items provided to illustrate the type, format, and level of difficulty of 
+questions that may appear in an assessment. They serve as a guide for both teachers and learners by 
+showing how knowledge, skills, and competences can be assessed in real practice. Exemplar questions 
+demonstrate the alignment of assessment test items with specific competences and the desired cognitive 
+levels based on the revised Bloom‘s taxonomy. This will assist in ensuring that teaching and evaluation 
+are consistent with the curriculum and the syllabus. In a competency-based framework, exemplar 
+questions equally show how learners are expected to involve themselves in the application of knowledge 
+and skills in most practical, real-life situations, and above all highlighting the specific competences 
+targeted by each item or task. 
+Example 1: 
+EoC 1: Classifies and applies Physical quantities and their measurements in handling of materials 
+and objects. 
+• 
+Distinguishes between basic and derived physical quantities and performs unit conversions 
+across different measurement systems applied in real life. 
+• 
+Applies equilibrium principles in the design and analysis of real-world systems. 
+• 
+Uses scalar and vector quantities in solving physics problems effectively. 
+ 
+Item 
+
+--- PDF_PAGE 182 ---
+- 166 - 
+ 
+A worker at a chemical plant needs to transport a particular liquid safely from the factory to a known destination (the 
+consumer). At the manufacturing plant (factory), the volume of the liquid is measured to be 150 liters and the mass is 
+120 kilograms. The liquid is packed in suitable containers. 
+As a physicist, considering volume, mass, temperature and thermal expansion, you have been contacted to analyze 
+the physical nature of the liquid and provide guidance on its safe handling during packaging, transportation, and 
+storage. 
+Now do the following tasks: 
+(a) 
+Classify the quantities involved about the liquid to be transported.  
+ [2 marks] 
+(b) 
+Describe how the physical nature or properties mentioned about the liquid can be used to ensure that the liquid 
+is safely transported. (Refer to safety protocols)  
+[4 marks] 
+(c) 
+A safety data sheet for the liquid specifies the material‘s properties, including Boiling temperature. As a 
+handler of the liquid, explain how this information helps in ensuring safety during handling and storage of the 
+liquid. 
+ [2 marks] 
+(d) 
+Calculate the density of the liquid in g/m³. 
+ [2 marks] 
+ 
+ [Total: 10 marks] 
+Suggested   answers: 
+(a) 
+Classify the quantities involved about the liquid to be transported.  
+ [2 marks] 
+Fundamental (Base) Quantities: 
+ Mass  
+ Temperature  
+ 
+Derived Quantities: 
+ Volume  
+ Density  
+ Thermal Expansion  
+  
+      Correct quantities (any four)                   → 1 mark 
+      Correct classification for all quantities      → 1 mark 
+(b)  Describe how the physical properties mentioned above can be used to ensure that the liquid is safely 
+transported.   
+ [4 marks] 
+ Volume: Determines the container size and ensures enough headspace for expansion.  
+ [1 mark] 
+ Mass: Helps calculate total load to select strong containers, appropriate lifting equipment and  
+vehicles.  
+ [1 mark] 
+ Temperature: Controls expansion and evaporation; temperature management prevents container rupture or 
+leaks. Knowledge about the vapor pressure of the liquid helps to ensure storing it at temperatures low enough 
+not to produce excessive evaporation and to select containers that can withstand high vapor pressure. 
+Additionally, Viscosity: Low-viscosity liquids need tight seals; high-viscosity liquids require proper pumps 
+for handling.  
+ [1 mark] 
+ Thermal Expansion: Guides how much extra space to leave in the container for safety.  
+[1 mark] 
+      Correct descriptions  → 4 marks 
+      Deduct 1 mark for any incorrect description 
+(c)  A safety data sheet for the liquid specifies the material properties, including flash point (temperature) and 
+vapour pressure. As a handler of the liquid, explain how this information helps in ensuring safety.  
+[2 marks] 
+ Flash Point: Shows the minimum temperature at which the liquid can ignite; low flash point liquids must be 
+kept away from heat, sparks, or flames.  
+ [1 mark] 
+ Vapour Pressure: Indicates the tendency to evaporate; high vapor pressure liquids require sealed containers, 
+ventilation, or pressure relief to prevent accidents.  
+ [1 mark] 
+      Correct explanations (deduct mark  for incorrect explanation) → 2 marks 
+(d) 
+Calculate the density () of the liquid in g/m3.  
+ [2 marks] 
+
+--- PDF_PAGE 183 ---
+- 167 - 
+ 
+v
+m
+
+
+ 
+l
+kg
+l
+kg
+/
+8
+.
+0
+150
+120
+
+
+
+  
+ [1 mark] 
+Convert to g/m3 
+3
+3
+/
+000
+800
+1
+000
+1
+8
+.
+0
+8
+.
+0
+m
+g
+m
+l
+l
+kg
+l
+kg
+
+
+
+
+
+  
+ [1 mark] 
+      Correct substitutions → 1 marks 
+      Correct answer         → 1 mark 
+This item has tasks on multiple skill levels requiring a good understanding of physical quantities and their 
+application to different situations. Key competences emplored to successfully respond to the tasks are;  
+(a) Analytical thinking,  
+(b) Environmental sustainability,  
+(c) Communication and critical thinking and  
+(d) Problem solving. 
+ 
+Example 2: 
+EoC 2: Analyses and applies principles of mechanical systems to maximize the benefits of their performance of complex 
+functions to enhance productivity.  
+• Applies fundamental mechanics concepts which include; scalars and vectors, linear motion, forces, circular motion, 
+moments, equilibrium, work, energy and power, momentum, simple machines, and pressure to solve problems in real-life 
+situations. 
+•    Performs experiments on centre of mass and mass of metre rules. 
+•    Develops a system that maximises mechanical energy. 
+Item  
+A science learner went with the school driver to a cement shop to collect 15 bags of cement each of mass 50kg for the school. He 
+needed to construct a ramp to make loading the pockets of cement onto the 1.2m high truck easier. He was given a piece of plank 
+5m long by the salesperson from which he had to make the ramp at a safe angle of inclination of 300. 
+The cement shop had only 10 bags of cement but a nearby construction company donated the other 5 bags which the 
+learner collected. At the construction company a simple pulley was used to load the cement bags onto the truck. The 
+construction company uses the simple pulley lifting system to raise cement bags from the ground to the roof of a building 
+6m above the ground. The learner noticed that the workers were fatigued due to the use of the pulley and asked the 
+engineers what solution would reduce the fatigue. To improve efficiency and reduce worker fatigue, the engineers decide 
+to analyse the performance of the pulley system and determine whether the mechanical system was operating efficiently. 
+Now do the following tasks: 
+ (a) 
+(i) Illustrate using a diagram how the science learner constructed and used the ramp to load the bags of cement.  
+ 
+[1 mark] 
+Answer 
+The learner placed the plank as shown in the diagram and applied a force to push the bag of cement at an incline 
+angle of 300. 
+                                
+ 
+ 
+1.2m 
+300N 
+200N 
+30 
+F 
+f 
+Bag of 
+cement 
+
+--- PDF_PAGE 184 ---
+- 168 - 
+ 
+ 
+ 
+ 
+ 
+ 
+Correct explanation and related diagram → 1 mark 
+(ii)  
+Use your illustration to calculate the: 
+- 
+required length of the plank to be used.  
+ [2 marks] 
+Answer 
+From Sin = Hyp
+Opp or Sin = 
+I
+h 
+Sin 3O = i
+2.1
+ 
+
+
+
+30
+Sin
+2.1
+30
+Sin
+30
+lSin
+
+ 
+l = 
+5.0
+2.1
+ 
+⸫l = 2.4m 
+ 
+- 
+acceleration of the bag of cement if the student applies a force  
+of 300N and the frictional force is 200N.  
+ [2 marks] 
+Answer 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+F-f = 300 – 200 
+F= 100N 
+From newtons second law of motion, 
+F = ma or a = m
+F 
+a = 
+kg
+kgm
+50
+100
+1
+
+ 
+⸫a = 2m/s2 
+(b) 
+The student then used a longer plank than the length determined and the same force  
+applied. How would this affect the rate of movement of the bag? Suggest  
+a reason for your answer.  
+ [2 marks] 
+Answer 
+− 
+The rate of movement of the bag will increase. 
+Explanation 
+Using a longer plank reduces the angle of inclination. The angle of inclination is related to the velocity ratio 
+through V.R = 
+
+Sin
+1
+.  
+This means that the distance moved by the bag of cement (load) increases per unit time. 
+− 
+Velocity ratio for the inclined plane:  
+300N 
+200N 
+
+--- PDF_PAGE 185 ---
+- 169 - 
+ 
+V.R = 
+
+Sin
+1
+ 
+V.R = 
+
+30
+Sin
+1
+ 
+       =    1 
+            0.5 
+       = 2 
+               (c) Take g = 10 ms⁻² 
+                 (i) Calculate the weight of one cement bag.                                                                    ( 1 mark) 
+                  Suggested Responses / Marking Guide 
+                  Weight of cement bag  
+ 
+ 
+ 
+Correct answer → 1 mark 
+                 (ii) Determine the work done in lifting the cement bag onto the truck at the construction site. 
+(1 mark) 
+Suggested Responses / Marking Guide 
+Work done  
+Work = Force  Distance 
+Work = 500  1.2 
+Work = 600J 
+Correct answer → 1 mark 
+(d)       If the worker lifts the bag to the roof in 12 seconds, calculate the power developed during the lifting process.                
+(1 mark) 
+Suggested Responses / Marking Guide 
+Power developed; 
+Power = 
+Time
+Work 
+Power = 
+s
+J
+12
+3000
+ 
+Power = 50W 
+Correct answer → 1 mark 
+(e) The pulley system has a mechanical advantage of 4. 
+Determine the effort force required to lift the cement bag.                                     (2 marks) 
+Suggested Responses / Marking Guide 
+Effort force  
+ 
+ 
+ 
+ 
+Correct method → 1 mark 
+
+--- PDF_PAGE 186 ---
+- 170 - 
+ 
+                     Correct answer → 1 mark 
+(f) During operation, the engineers observed that workers were fatigued due to reduced efficiency in the pulley system 
+brought about by friction between the moving parts of the pulley. 
+  Analyse two ways engineers can improve the performance and productivity of the mechanical system.                              
+(2 marks) 
+Suggested Responses / Marking Guide 
+Improving efficiency: 
+Any two well-explained suggestions: 
+Examples: 
+• Lubricating moving parts to reduce friction. 
+• Using ball bearings in pulleys. 
+• Using lighter but stronger ropes. 
+• Proper alignment of pulley system. 
+Two explanations (1 mark each) 
+Total: 14 Marks 
+This item has tasks on multiple skill levels requiring a good understanding of mechanical systems and their application to design of 
+machines and lifting operations in real-life situations. 
+Key competences required to respond to the tasks include: 
+(a) Analytical thinking, 
+(b),(c) and (d) Problem solving, application of mechanical principles, and 
+(e) Communication, collaboration and critical thinking. 
+ Example 3 
+EoC 3: Applies and interprets concepts of thermal properties of matter in order to predict material behaviour and 
+design thermally efficient systems 
+• 
+Analyses how the simple kinetic theory of matter influences technological innovation. 
+• 
+Measures temperature accurately using appropriate instruments. 
+• 
+Demonstrates the expansion of solids, liquids, and gases.  
+•       Calibrates unmarked thermometers and develops innovations on simple kinetic theory of matter. 
+• 
+Demonstrates and explains the operation of internal combustion engines such as the four-stroke engine. 
+• 
+Investigates and applies heat-transfer concepts and solves practical and numerical problems related to heat 
+measurements. 
+Item 
+A farming cooperative transports fresh milk from rural dairy farms to an urban processing plant using a refrigerated truck. 
+During long journeys under hot weather conditions, the truck engine becomes very hot and the cooling system must prevent 
+overheating. 
+The cooling system uses water circulating through the engine and radiator to absorb and transfer heat away from the engine. Duri
+operation, the temperature of the water in the cooling system increases from 28°C to 90°C. 
+The mechanic analysing the system explains that particle motion, heat transfer and thermal expansion of engine components all 
+influence how effectively the cooling system works. 
+The cooling system contains 3 kg of water. 
+Take the specific heat capacity of water = 4200 J kg⁻¹ °C⁻¹. 
+Now do the following tasks:   
+(a) Using the kinetic theory of matter, explain why the temperature of the engine and cooling water increases during 
+
+--- PDF_PAGE 187 ---
+- 171 - 
+ 
+operation.                                                                                                  (3 marks) 
+Suggested Responses / Marking Guide 
+(a) Kinetic theory explanation 
+Expected ideas: 
+• Fuel combustion releases heat energy. 
+• Friction between moving parts of the engine. 
+• Heat increases the kinetic energy of particles in the engine and water. 
+• Faster particle motion results in higher temperature. 
+Any three correct ideas → 3 marks 
+(b) The temperature of the water increases from 28°C to 90°C. 
+Calculate the heat energy absorbed by the water in the cooling system.         (4 marks) 
+Suggested Responses / Marking Guide 
+Heat energy absorbed  
+ 
+ 
+ 
+ 
+Correct formula → 1 mark 
+Correct substitution → 1 mark 
+Correct calculation → 2 marks 
+(c) Heat produced in the engine is removed through the radiator. 
+Analyse two modes of heat transfer that occur in this cooling process and explain how each contributes to 
+cooling the engine.                                                                                (4 marks) 
+Suggested Responses / Marking Guide 
+     Heat transfer processes (4 marks) 
+Examples: 
+Conduction 
+Heat moves from the hot engine block to the coolant. 
+Convection 
+Hot coolant circulates through the radiator carrying heat away. 
+Radiation 
+Heat is emitted from the radiator surface into the surrounding air. 
+Two correct explanations → 4 marks 
+(d) Engine parts are made of metal and expand when heated. 
+Explain why engineers must consider thermal expansion of metals when designing internal combustion 
+engines used for long-distance transport.                                               (2 marks) 
+Suggested Responses / Marking Guide 
+      Thermal expansion explanation (2 marks) 
+Expected ideas: 
+• Metals expand when heated. 
+• Without allowance for expansion, engine parts may jam or crack. 
+• Engineers design engines with cooling systems and expansion tolerances. 
+Any two correct ideas → 2 marks 
+(e) The mechanic uses an instrument to monitor the engine temperature during operation. 
+State one suitable instrument that can measure the engine temperature and explain why it is appropriate.            
+(1 mark) 
+
+--- PDF_PAGE 188 ---
+- 172 - 
+ 
+Suggested Responses / Marking Guide 
+Temperature measuring instrument  
+Example: 
+Thermocouple thermometer / temperature sensor 
+Reason: 
+• Measures high temperatures accurately in engines. 
+Correct response → 1 mark 
+                   Total: 14 Marks 
+This item has tasks on multiple skill levels requiring a good understanding of thermal properties of matter and their 
+application in technological systems used in transporting agricultural products from rural areas to urban processing plants. 
+Key competences required to successfully respond to the tasks include: 
+(a) Analytical thinking, 
+(b) Quantitative problem solving, 
+(c) Application of scientific principles to technological systems, 
+(d) Communication and critical thinking, and 
+(e) Scientific measurement and interpretation. 
+ 
+ 
+ 
+Example 4 
+EoC4: Interprets and applies properties of waves to predict natural phenomena and design appropriate technologies 
+ 
+solves practical and numerical problems involving wave motion and interprets information related to 
+electromagnetic waves.  
+ 
+applies the concepts of rectilinear propagation, reflection, and refraction of light,  
+ 
+demonstrates an understanding of lenses and their applications. 
+Item 
+The effects of waves on humans, their habitats and the environment in general, depend not only on types but also on their 
+source, intensity/frequency and the duration of exposure to them. A form 4 class spent one of their holidays with an assignment 
+to analyse effects of some waves. Wave type A may cause landslides for people that live near river banks among other effects. 
+Wave type B caused internal heating of body tissues potentially leading to damage to organs and development of cataracts after 
+excessive exposure despite being useful in warming foods in homes. Wave type C, despite providing an essential vitamin to 
+people, caused skin cancer and eye damage with excessive exposure. 
+Now do the following tasks: 
+(a) 
+(i) 
+Describe the wave type A by providing its identity and how it is generated. Discuss other probable effects of this 
+type of waves other than the one stated in the problem statement.  
+ [3 marks] 
+(ii) 
+The waves identified in part (a) (i) are suspected to have been generated 1 000km from the river banks and have a 
+frequency of 0.01Hz with a wavelength of 5m. Determine how long the waves will take to reach the river banks. 
+ 
+ [2 marks] 
+Answer 
+− 
+Wave type A is a ground movement triggered by various forces, an example is seismic wave. A seismic wave is an earth 
+generated kind of wave which can destabilise slope and cause them to fall. It is classified in three types: 
+1.  Primary waves which are longitudinal waves and can be transmitted both in solids and liquids by means of pull-
+push motion. 
+2. Secondary wave is a type of a seismic wave which is transverse in nature and only occurs in solid. 
+3. Surface waves have largest amplitude and have most destructive effect, causing significant ground sinking that 
+can initiate landslide. 
+Other factors include; 
+1. Heavy rainfall and snowmelt which saturate soil and rock, increasing weight and reducing. 
+
+--- PDF_PAGE 189 ---
+- 173 - 
+ 
+2. Volcanic eruption. 
+Answer 
+V = f 
+= 0.01 × 5 
+= 0.01 × 5 
+= 0.05m/s 
+V = t
+x 
+0.05m/s = 
+t
+m
+103
+ 
+t = 
+s/
+m
+05
+.0
+m
+103
+ = 
+s
+/
+m
+10
+5
+m
+10
+2
+3
+
+= 0.2 × 105s = 20 000s. 
+(b)  
+Suggest any two pieces of advice you could give to the community living near the river banks as to what they can do 
+before the waves arrive.  
+ [3 marks] 
+Answer 
+− 
+Evacuate to high ground upon hearing the row. 
+− 
+Prepare emergency kits and securing homes will in advance. 
+(c)  
+Describe and give the identity of wave type B and describe how they are generated.  
+[3 marks] 
+Answer 
+− 
+Microwave is a wave type B. It penetrates and is absorbed by water and fat within tissues, causing significant 
+internal heating. 
+Microwaves are generated by using a vacuum tube, e.g. magnetron which converts electric energy to microwave 
+radiation by controlling electron movement with electric and magnetic field, causing electrons to oscillate and 
+excite consonant cavities, producing waves that are then channelled into the oven. 
+(d)  
+For wave type C, two eye defects were noted: some group of people were unable to see distant objects while others were 
+unable to see nearby objects. Identify and discuss the two defects and use the idea of lenses to suggest how the defects 
+can be overcome.  
+ [3 marks] 
+Answer 
+− 
+People who were unable to see distant objects are said to be near sightedness or to have myopia condition. Those 
+who were unable to see nearby objects are said to be hypermetropia condition or far-sightedness. 
+In myopia, the person can see the objects nearby but cannot see distant objects clearly as they appear blurry and 
+the person will not be comfortable seeing them. This condition takes place when the shape of the eyes leads the 
+light rays to bend in a wrong way, focusing images in front of the retina rather than focusing light on the retina. 
+In hypermetropic, the person can see objects at a distance but cannot see or squints to see nearby objects. This 
+condition is caused when the light rays from a close by object are focused at a point behind the retina. 
+How these defects are corrected using lenses: - 
+− 
+Myopia; use spectacles with concave or minus lenses of suitable power to help focus light (or image) 
+correctly on the retina. 
+− 
+Use contact lenses to provide a wider field of vision. 
+− 
+Hypermetropic; use spectacles with a convex lens to impart additional focus power to help form the image 
+on the retina. 
+Another condition for people above the age of 40, having difficulties in seeing nearby objects is 
+presbyopia. This happens when the ciliary muscle weakens and diminish the elasticity of the eye lens. This 
+condition is corrected by use of appropriate eye glasses or contact lenses or minor surgery to restore vision 
+clarity. 
+This item has tasks on multiple skill levels requiring a good understanding of various types of waves and their behaviour and 
+ability to apply the knowledge to manipulate them for to solve problems in daily life.  
+Key competences being assessed are  
+(a) communication and problem solving  
+(b) Communication and collaboration  
+(c) Analytical thinking and  
+(d) Analytical thinking. 
+
+--- PDF_PAGE 190 ---
+- 174 - 
+ 
+Example 5 
+EoC 5: Analyses and manipulates electric and magnetic properties of materials in order to design more reliable and 
+efficient devices and machinery 
+ investigates static electricity, constructs and apply electric circuits and uses electric cell technology.  
+ solve problems on Ohm‘s law, electrical energy, power, and transformers, demonstrates understanding of 
+magnetism, explores the transmission of electrical energy. 
+Item 
+A rural secondary school located far from the national electricity grid wants to generate electricity to power classroom 
+lighting, charging stations and small communication devices used by teachers and learners. 
+During a science and engineering innovation project, a group of Form 4 learners are tasked to design a small electrical 
+generator capable of producing 2 500 W of electrical power. 
+The generator will convert mechanical energy from a small water turbine installed in a nearby stream into electrical energy 
+using the principle of electromagnetic induction. 
+To improve the efficiency of the generator, the learners investigate different materials for the generator core and the coil 
+windings. During testing they obtain the following information when the generator carries a current of 8 A: 
+ 
+Resistance of copper windings = 0.5 Ω 
+ 
+Resistance of aluminium windings = 1.0 Ω 
+They also observe that: 
+ 
+Soft iron cores experience higher hysteresis loss 
+ 
+Silicon steel cores experience lower hysteresis loss 
+During testing of the prototype generator, the learners measure an output voltage of 220 V and a current of 8 A supplied to 
+the electrical load. 
+Now do the following tasks: 
+(a) Using the information provided in the scenario, analyse which combination of core material and winding 
+material would reduce energy losses in the generator. 
+ Support your answer with appropriate calculations and explain how your chosen materials would help 
+improve the generator‘s performance for the school.                                       4 Marks                                              
+Suggested Solution / Marking Guide 
+Power loss in windings 
+ 
+ 
+Copper windings: 
+ 
+ 
+ 
+Aluminium windings: 
+ 
+ 
+ 
+So, copper windings lose less electrical power (32 W) than aluminium windings (64 W). Core material comparison 
+For the core: 
+ 
+Silicon steel has lower hysteresis loss, so less magnetic energy is wasted. 
+ 
+Soft iron has higher hysteresis loss, so it is less efficient for continuous operation. 
+Recommendation: The best combination is: 
+ 
+Silicon steel core 
+ 
+Copper windings 
+This combination reduces both electrical losses in the windings and magnetic losses in the core, improving 
+generator efficiency. 
+ 
+Marks: 
+Calculation of winding losses → 2 marks 
+
+--- PDF_PAGE 191 ---
+- 175 - 
+ 
+Analysis of core material → 1 mark 
+Justified recommendation → 1 mark 
+(b)  (i) With the aid of a well-labelled diagram, describe how Faraday’s law of electromagnetic induction is applied in 
+the generator described in the scenario. State the name of the device.                             [3 marks] 
+Suggested Solution / Marking Guide 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Device: A.C Generator 
+Explanation 
+Faraday‘s law states that the induced/produced e.m.f is directly proportional to the rate of change of magnetic flux. 
+Marks 
+Diagram → 1 mark 
+Explanation using Faraday‟s law → 1 mark 
+Correct device name → 1 mark 
+(ii) Explain how the rotation of the coil inside the magnetic field leads to the production of an electromotive force 
+(e.m.f). 
+ 
+When the coil rotates in the magnetic field, the magnetic flux through the coil changes. According to 
+Faraday’s law, a changing magnetic flux induces an electromotive force (e.m.f) in the coil.  
+ 
+This changing magnetic flux induces an electromotive force in the coil, converting mechanical energy into 
+electrical energy 
+ 
+The induced e.m.f drives an electric current in the circuit, converting mechanical energy from the turbine into 
+electrical energy. 
+            [3 marks] 
+(c) Using the values measured during testing (220 V and 8 A), analyse whether the prototype generator can supply the 2 
+500 W of electrical power required by the school. 
+Support your answer with appropriate calculations and a justified conclusion.              [4 marks] 
+Suggested Solution 
+Electrical power produced 
+ 
+ 
+ 
+Required output = 2 500 W 
+Since 1760 W is less than 2 500 W, the generator cannot meet the required electrical output for the school. 
+Conclusion 
+The generator design must be improved to increase electrical output. 
+Marks 
+Silicon steel core 
+Axis of rotation 
+Armature coil (copper 
+windings) 
+Axis of rotation 
+Silicon steel core 
+Lead 
+Lead 
+Permanent 
+magnet 
+Permanent 
+magnet 
+N 
+S 
+Soft iron 
+Soft 
+iron 
+Slip rings 
+S 
+S 
+
+--- PDF_PAGE 192 ---
+- 176 - 
+ 
+Substitution → 2 marks 
+Correct calculation → 1 mark 
+Evaluation and conclusion → 1 mark 
+Total 14 marks 
+This item has tasks on multiple skill levels requiring a good understanding of electric and magnetic properties of materials 
+and their application in designing electrical energy generation systems for rural electrification. 
+Key competences assessed include: 
+ 
+Analytical thinking 
+ 
+Engineering problem solving 
+ 
+Quantitative reasoning 
+ 
+Application of electromagnetic induction principles. 
+Example 6 
+EoC 6: Apply electronic, communication, nuclear, and renewable energy principles to enhance connectivity, drive 
+innovation, and support a sustainable, energy-efficient future. 
+ 
+designs and construct electronic systems, applies thermionic emission, manages electronic waste sustainably and 
+develops communication systems.  
+• 
+understands the nuclear atom, radiation and its applications, nuclear waste management solutions and renewable 
+energy systems. 
+Item  
+Zambia has discovered a number of mineral deposits scattered around its provinces. Uranium is one of the minerals being 
+mined in one of the districts in the southern part of the country. After 1 year of mining activities, the vegetation in the nearby 
+villages started drying and the nearby streams which feed into a nearby dam where there is a hydroelectric power station, 
+showed significant drop in the water quantity and also changes in both the taste and colour of water. Electric Power 
+generation for the area has also gone down due to reduced water levels. As a student on attachment at the mine, you have 
+been tasked to investigate the possible causes of the effects observed on the environment around the mining area and give 
+scientific suggestions to the mine environmental safety department to come up with scientific solutions to the problems. 
+ 
+ Now do the following tasks: 
+ 
+(a) 
+At the beginning of your investigations your suspicion points to the effects of radiation. A detector used shows some 
+reading even before exposing it to your mine rock samples. Explain the probable source of the readings.                 [3 
+marks] 
+Answer 
+− 
+The readings are as a result of background radiation. This type of radiation emanates from cosmic rays from the 
+sun, radioactive minerals found in the area within the earth‘s crest, bedrock and soil surface. 
+(b) 
+Describe how you would show that indeed different kinds of radiations may be coming out of the rocks being mined 
+and provide their identity.     
+            [3 marks] 
+Answer 
+− 
+By using three different materials such as sheet of paper, 3mm thick aluminium and 5cm lead. First place the 
+paper between the source and the detector, if there is reduction in the concentration, alpha particles are 
+produced. Next, place 3mm of aluminium between the source and detector, if a further reduction is observed, 
+beta particles are produced. Lastly if 5cm lead replaces the aluminium sheet and radiation is stopped, gamma is 
+produced. 
+(c) 
+From the levels of radiation detected, suggest two pieces of advice to people working in such an environment could do 
+to protect themselves against possible harmful radiations and give one effect of these radiations on the environment 
+and their health if advice is not adhered to.  
+ [2 marks] 
+Answer 
+− 
+Advice (i) They should avoid unnecessary exposure by keeping away from possible sources and storing 
+radioactive materials in designated secure places. 
+(ii) They need to wear protective clothing during work such as gloves, lead jackets, must also apply 
+dust suppression and use remote machinery in higher radiation concentration, use air masks. 
+
+--- PDF_PAGE 193 ---
+- 177 - 
+ 
+− 
+Effect on health: If not adhered to, radiations can lead to genetic changes and cause cancer. 
+(d) 
+Arising from the reduced electric power generation, activities that rely on electric power have been adversely affected. 
+You suggest a need for energy diversification to the local community but they do not understand the meaning. Explain 
+the meaning of energy diversification and its impact to the local community and provide 3 examples of eco-friendly 
+alternative sources of energy.  
+ [3 marks] 
+Answer 
+− 
+Energy diversification refers to using other sources of energy or multiple sources of energy other than relying 
+on electricity generated from water. The impact on the local community is that there is more energy available 
+even when hydroelectric power fails or is not adequate, some examples of eco-friendly alternative sources of 
+energy are wind, solar and biogas or fossil fuels. 
+(e) 
+The environmental effects observed around the mining area may also be caused by other climatic changes in relation 
+to human activity.  Identify any one human activity causing climate change in the area other than mining.  [1 mark] 
+Answer 
+− 
+Deforestation arising from agricultural activities, charcoal burning or clearing mining sites. 
+(f) 
+Suggest two possible remedies to the causes of climatic changes.  
+[2 mark] 
+Answer 
+− 
+Planting trees in deforested areas and reduce cutting down of trees for charcoal burning and  
+− 
+use natural/biogas as alternative source of energy. 
+ 
+[Total: 14 marks] 
+This is a task at multiple skill levels where candidates are required to demonstrate knowledge and understanding of the 
+nuclear atom, radiation and its applications, nuclear waste management solutions and renewable energy systems. Key 
+competences being assessed are (a) Analytical thinking, (b) Analytical and communication, (c) Problem solving and 
+communication (d) Communication, (e) Analysis and (f) Problem solving. 
+ 

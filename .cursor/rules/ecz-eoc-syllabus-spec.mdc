@@ -1,0 +1,45 @@
+---
+description: ECZ EoC assessment-scheme syllabus specs — required shape for every subject
+globs: data/curriculum/ecz-eoc/**/*,lib/ecz/eoc/**/*,Validation_folder/**/*
+alwaysApply: false
+---
+
+# ECZ EoC Syllabus Spec (every subject)
+
+Every ECZ subject assessment scheme must live as one JSON file under `data/curriculum/ecz-eoc/`, conforming to `EczSubjectSpec` in `lib/ecz/eoc/ecz-eoc-spec.schema.ts`.
+
+## Canonical examples
+
+- **Mathematics I (topic-mode):** `data/curriculum/ecz-eoc/mathematics-i-2021.json`
+- **Agricultural Science (topic + taskType):** `data/curriculum/ecz-eoc/agricultural-science-4018.json`
+- **Physics / Chemistry / Biology / Geography:** `physics-4016.json`, `chemistry-4014.json`, `biology-4012.json`, `geography-3014.json`
+- **Source of truth for extracts:** `Validation_folder/ECSEOL Assessment Schemes_22_4_2026.pdf` (+ chapter text under `Validation_folder/extracted_chapters/`)
+
+## Required top-level shape
+
+```json
+{
+  "subjectCode": "4018",
+  "subjectName": "Agricultural Science",
+  "syllabusYear": 2024,
+  "construct": "…",
+  "elementsOfConstruct": [ /* EoC1…EoCn */ ],
+  "testDesign": { "components": [], "scenarioRequired": true, "minPartsPerScenarioItem": 2 },
+  "scoringCriteria": { "rules": [] },
+  "exemplars": []
+}
+```
+
+## EoC rules
+
+- Each EoC has `id` (`EoC1`…), `description`, `subSkills[]`, and `resolutionMode` (`topic` | `taskType`).
+- Sub-skills carry `topicAliases` (verified CDC wording), `unverifiedTopicAliases` (provisional), optional `taskTypeAliases` + `note`.
+- `resolutionMode: "topic"` → match syllabus topic names (Maths style).
+- `resolutionMode: "taskType"` → skill-lens EoCs (investigation / analysis / project); topics only as unverified anchors.
+- Do **not** invent EoCs, marks, or Bloom ranges not present in the Assessment Schemes PDF.
+- Register new subjects in `SPEC_FILES` inside `lib/ecz/eoc/load-eoc-spec.ts`.
+- Validate generated items with `validateQuestion` / `validateStructure` from `lib/ecz/eoc/question-validator.ts` — never skip for AI quiz / ECZ practice.
+
+## Filename convention
+
+`{subject-slug}-{subjectCode|year}.json` e.g. `agricultural-science-4018.json`, `mathematics-i-2021.json`.

@@ -1,0 +1,179 @@
+{
+  "subjectCode": "3014",
+  "subjectName": "Geography",
+  "syllabusYear": 2024,
+  "construct": "Analyses spatial patterns, human-environmental interactions and applies geographical tools and techniques to interpret information and promote sustainable use of environmental resources.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Applies map reading skills to understand spatial relationships in real life",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-maps",
+          "label": "Interprets maps for geographical relations such as time and angle of elevation to navigate the physical world",
+          "topicAliases": [
+            "Maps and Diagrams",
+            "Map Symbols",
+            "Map Reading and Interpretation",
+            "Relief",
+            "Drainage Features",
+            "Land Use",
+            "Direction and Orientation",
+            "Measurement of Distance and Area"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates understanding of earth's natural processes and their effects",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-earth",
+          "label": "Understands earth's natural processes and effects; identifies mitigation and adaptation strategies",
+          "topicAliases": [
+            "The Earth in the Solar System",
+            "Shape and Size of the Earth",
+            "Weather and Climate",
+            "Climate Change",
+            "Mitigation and Adaptation to Climate Change",
+            "The Earth's Atmosphere"
+          ],
+          "unverifiedTopicAliases": ["Earth's Graticule", "Movements of the Earth"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Understands demographic dynamics and its relationship with the environment and humanity in order to identify strategies for sustainable development",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-population",
+          "label": "Understands population dynamics and connectivity to nature for sustainable development strategies",
+          "topicAliases": [
+            "Population Composition",
+            "Population Distribution in Zambia",
+            "Rapid Population Growth in Zambia",
+            "Migration",
+            "Settlements",
+            "Location of Settlements",
+            "Challenges in Settlements",
+            "Urbanisation"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Demonstrates understanding of resource utilisation and sustainability",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-resources",
+          "label": "Understands natural resource use and applies sustainable practices for economic and social benefit",
+          "topicAliases": [
+            "Natural Resources",
+            "Population and Natural Resources",
+            "Sustainable Management of Natural"
+          ],
+          "unverifiedTopicAliases": ["Resource Management", "Economic Geography"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Conducts geographical inquiry using appropriate research methods",
+      "resolutionMode": "taskType",
+      "subSkills": [
+        {
+          "id": "eoc5-inquiry",
+          "label": "Carries out geographical inquiry and investigates human impact on the environment",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Fieldwork",
+            "Planning and Preparing for Field Work",
+            "Data Collection/ Fieldwork",
+            "Data processing"
+          ],
+          "note": "SBA-emphasis inquiry EoC; Final Exam covers EoC1-4 (sections A-D), EoC5 mainly SBA fieldwork/projects.",
+          "taskTypeAliases": [
+            "fieldwork",
+            "field project",
+            "case study",
+            "geographical inquiry",
+            "research"
+          ]
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "3014/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100. All 5 EoC. Assignments, field trips/case study, quizzes, discussions, tests.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "3014/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100. All 5 EoC. Combined SBA 200 marks (30%).",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "3014/2",
+        "formLevel": "Form 4",
+        "numItems": 8,
+        "totalMarks": 100,
+        "structureNotes": "4 sections A-D (EoC1-4), 2 items each (8 total); candidates choose 1 per section (4 answered). Duration 2h. 70%. EoC5 SBA-focused.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: teacher-developed scoring tools for assignments, fieldwork, quizzes, presentations and tests.",
+      "Final Exam: ECZ scoring; each chosen item based on its section EoC scenario/stimulus.",
+      "Map-reading items require accurate use of scale, symbols, direction and measurement.",
+      "Fieldwork/report tasks scored on research procedure and report structure."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Map reading literacy and spatial relationships in a real-life navigation/land-use scenario",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 15,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    }
+  ]
+}

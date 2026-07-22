@@ -12,6 +12,7 @@ import { FeatureGate } from '@/components/FeatureGate'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import { toast } from 'react-hot-toast'
 
 export default function TeacherQuizMakerPage() {
@@ -329,7 +330,7 @@ export default function TeacherQuizMakerPage() {
 
   const handleCreateQuiz = async () => {
     if (!canGenerate) {
-      toast.error('Enter a subject and topic (at least 3 characters)')
+      toast.error('Select form, subject, and a syllabus topic')
       return
     }
     try {
@@ -465,13 +466,15 @@ export default function TeacherQuizMakerPage() {
                     onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
                   />
                 </div>
-                <div className="space-y-2 md:col-span-2">
-                  <Label>Topic</Label>
-                  <Input
-                    value={form.topic}
-                    onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
-                  />
-                </div>
+                <CurriculumTopicSelect
+                  className="md:col-span-2"
+                  subject={form.subject}
+                  gradeOrForm={form.grade}
+                  value={form.topic}
+                  onChange={(topic) => setForm((p) => ({ ...p, topic }))}
+                  required
+                  id="quiz-maker-topic"
+                />
                 <div className="space-y-2 md:col-span-2">
                   <Label>Assessment mode</Label>
                   <select
