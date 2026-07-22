@@ -1,0 +1,420 @@
+{
+  "subjectCode": "2021",
+  "subjectName": "Mathematics I",
+  "syllabusYear": 2021,
+  "construct": "Demonstrates spatial reasoning, logical, critical and analytical thinking in solving real life problems.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Performs operations on numbers to solve real life problems",
+      "subSkills": [
+        {
+          "id": "eoc1-calculations",
+          "label": "Performs calculations involving numbers and money",
+          "topicAliases": [
+            "Numbers",
+            "Classification of Numbers",
+            "Combined Operations on Real Numbers",
+            "Integers",
+            "The Four Operations on Integers",
+            "Approximations and Estimation",
+            "Approximation",
+            "Estimations",
+            "Financial Arithmetic",
+            "Financial Interest",
+            "Investment",
+            "Index Notation",
+            "Indices"
+          ],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc1-patterns",
+          "label": "Creates number patterns",
+          "topicAliases": [],
+          "unverifiedTopicAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Models real life situations to make informed decisions",
+      "subSkills": [
+        {
+          "id": "eoc2-algebra",
+          "label": "Uses algebra to express and solve real life situations",
+          "topicAliases": [
+            "Algebra",
+            "Algebraic Expressions",
+            "Basic Processes of Algebra",
+            "Systems of Equations",
+            "Simultaneous Equations",
+            "Quadratic Equations and Functions",
+            "Quadratic Equations",
+            "Quadratic Functions",
+            "Linear Programming",
+            "Inequations",
+            "Relations and Functions",
+            "Relations",
+            "Functions"
+          ],
+          "unverifiedTopicAliases": [
+            "Matrices",
+            "Operations on Matrices",
+            "Operations on 2x2 Matrices",
+            "Vectors",
+            "Vectors in 2 Dimensions"
+          ]
+        },
+        {
+          "id": "eoc2-sets",
+          "label": "Applies set theory to real life situations",
+          "topicAliases": ["Sets", "Operations on Sets"],
+          "unverifiedTopicAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Analyses and applies spatial relationships to solve real life problems",
+      "subSkills": [
+        {
+          "id": "eoc3-shapes",
+          "label": "Performs calculations involving two and three-dimensional shapes",
+          "topicAliases": [
+            "Shapes",
+            "Two Dimensional Shapes",
+            "Three Dimensional Shapes",
+            "Polygons",
+            "Regular and Irregular Polygons"
+          ],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc3-construction",
+          "label": "Applies geometric construction in real life",
+          "topicAliases": [
+            "Construction",
+            "Geometrical Constructions",
+            "Locus",
+            "Loci in Two Dimensions"
+          ],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc3-angles",
+          "label": "Uses angles to solve practical problems",
+          "topicAliases": [
+            "Angles",
+            "Angles associated with straight lines",
+            "Angle of Elevation and Depression",
+            "Trigonometry",
+            "Pythagoras Theorem",
+            "Introduction to Trigonometry",
+            "Bearings and Scale Drawing",
+            "Compass and Three Figure Bearings"
+          ],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc3-maps",
+          "label": "Creates and interprets reference maps",
+          "topicAliases": [],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc3-3dshapes",
+          "label": "Makes three-dimensional shapes",
+          "topicAliases": [],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc3-designs",
+          "label": "Creates designs/models using two and three-dimensional shapes",
+          "topicAliases": [],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc3-basicdesigns",
+          "label": "Constructs basic designs",
+          "topicAliases": [],
+          "unverifiedTopicAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Interprets and computes measures to solve real life problems",
+      "subSkills": [
+        {
+          "id": "eoc4-measures",
+          "label": "Performs calculations involving measures in real life",
+          "topicAliases": [
+            "Coordinate Geometry",
+            "Cartesian Plane",
+            "Straight lines on the Cartesian Plane",
+            "Travel Graphs",
+            "Distance-time Graphs",
+            "Velocity-time Graphs",
+            "Geometrical Transformations",
+            "Isometric Transformations",
+            "Non-Isometric Transformations"
+          ],
+          "unverifiedTopicAliases": []
+        },
+        {
+          "id": "eoc4-congruency",
+          "label": "Creates artifacts using the concept of congruency",
+          "topicAliases": [
+            "Similarity and Congruence",
+            "Similar Figures",
+            "Congruent Figures",
+            "Symmetry",
+            "Symmetry of 3-Dimensional Shapes",
+            "Symmetry in 2-Dimensional Shapes"
+          ],
+          "unverifiedTopicAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Presents and interprets data to make informed decisions",
+      "subSkills": [
+        {
+          "id": "eoc5-data",
+          "label": "Presents and interprets data in a variety of contexts",
+          "topicAliases": [
+            "Statistics",
+            "Statistical Presentations and Measures of central tendency",
+            "Cumulative Frequency and Measures of Dispersion",
+            "Probability",
+            "Introduction to Probability"
+          ],
+          "unverifiedTopicAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "2021/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "12 tasks total across Form 2 + Form 3 (6 each), based on all 5 EoC, prepared by teachers, 30% weighting overall.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "2021/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "12 tasks total across Form 2 + Form 3 (6 each), based on all 5 EoC, prepared by teachers, 30% weighting overall.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "2021/2",
+        "formLevel": "Form 4",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "Section A: 2 compulsory scenario items. Section B: 4 scenario items, answer 3. Each item = 20 marks. 6 scenarios drawn from the 5 EoC. 70% weighting overall. Duration 2h30.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 3
+  },
+  "scoringCriteria": {
+    "rules": [
+      "Calculation items/tasks are allocated method marks, determined by the appropriate stages in the solution.",
+      "The correct final answer in a calculation is allocated a separate accuracy mark.",
+      "Marks are allocated for correct diagrams/graphs drawn and accuracy of measurements within them.",
+      "Projects and practical activities are scored per the SBA Guidelines Scoring Rubrics, not this method/accuracy scheme.",
+      "Omission of essential working results in loss of marks; learners must show working.",
+      "Candidates may use silent non-programmable scientific calculators; premature approximation before the final step loses the accuracy mark.",
+      "Use 3.14, 3.142 or the calculator value of pi unless the item specifies otherwise."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Government textbook procurement: LCM of box sizes, batch count, scientific notation on total cost, compound interest on invested revenue",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 7,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": [
+        "analytical_thinking",
+        "critical_thinking",
+        "financial_literacy",
+        "problem_solving"
+      ]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Bakery production planning: linear inequalities as constraints, feasible region, maximising profit, minimum viable output, solving simultaneous equations for unit cost",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(e)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": [
+        "analytical_thinking",
+        "critical_thinking",
+        "financial_literacy",
+        "problem_solving"
+      ]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Triangular island mast placement: cosine rule for a missing side, circumcenter/circumradius for equidistant point, triangle area, shortest-distance altitude",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 6,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 7,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "critical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "School car park layout on a coordinate plane: plotting a shape, equation of a walkway line, translating to a second car park, describing translation and enlargement transformations",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(e)(i)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(e)(ii)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Ministry of Health obesity survey: grouped frequency distribution, cumulative frequency curve, percentage-based judgement call, conditional probability without replacement",
+      "parts": [
+        {
+          "label": "(a)(i)",
+          "marks": 9,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(a)(ii)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)(i)",
+          "marks": 3,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)(ii)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking", "problem_solving"]
+    }
+  ],
+  "_unmappedSyllabusTopics": {
+    "note": "RESOLVED as of this conversation: Matrices and Vectors provisionally routed to EoC2 (eoc2-algebra) via unverifiedTopicAliases per user decision. Every question generated for these carries a visible UNVERIFIED_EOC_MAPPING warning until a curriculum lead confirms the real EoC and these are promoted to topicAliases.",
+    "topics": [
+      {
+        "topic": "Matrices",
+        "subtopics": ["Operations on Matrices (Form 1)", "Operations on 2x2 Matrices (Form 3)"],
+        "status": "provisional -> eoc2-algebra"
+      },
+      {
+        "topic": "Vectors",
+        "subtopics": ["Vectors in 2 Dimensions (Form 4)"],
+        "status": "provisional -> eoc2-algebra"
+      }
+    ]
+  }
+}

@@ -155,6 +155,7 @@ model School {
   eczAssessments       EczAssessment[]
   eczAssessmentScores EczAssessmentScore[]
   eczSubmissions       EczSubmission[]
+  eczValidationLogs    EczValidationLog[]
   cbcCompetencyRatings CbcCompetencyRating[]
   specialAccommodations SpecialAccommodation[]
   questionBanks        QuestionBank[]
@@ -3267,6 +3268,45 @@ model EczCompetency {
   assessments EczAssessmentCompetency[]
   cbcRatings  CbcCompetencyRating[]
   createdAt   DateTime @default(now())
+}
+
+/// Sidecar source for EoC validator output on ephemeral AI ECZ generations.
+enum EczValidationSource {
+  ecz_practice
+  ecz_exam_questions
+}
+
+/// Sidecar log for structural/semantic validator output on AI ECZ generation runs.
+/// Items are ephemeral — no FK to a question table; use generationId + clientItemId.
+model EczValidationLog {
+  id               String               @id @default(uuid())
+  schoolId         String
+  school           School               @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  source           EczValidationSource
+  generationId     String
+  clientItemId     String
+  aiRequestId      String?
+  requestId        String?
+
+  subjectCode      String
+  topicTag         String
+  resolvedEocId    String?
+  examLevelOrForm  String?
+
+  valid            Boolean
+  issues           Json
+  meta             Json?
+
+  createdAt        DateTime             @default(now())
+
+  @@index([schoolId, createdAt])
+  @@index([schoolId, source, createdAt])
+  @@index([generationId])
+  @@index([schoolId, subjectCode, topicTag])
+  @@index([schoolId, valid, createdAt])
+  @@index([clientItemId])
+  @@index([aiRequestId])
 }
 
 /// ECSEOL exemplar SBA tasks and exam scenarios (global reference, seeded)
