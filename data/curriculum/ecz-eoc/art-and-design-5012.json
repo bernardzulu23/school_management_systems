@@ -1,0 +1,193 @@
+{
+  "subjectCode": "5012",
+  "subjectName": "Art and Design",
+  "syllabusYear": 2024,
+  "construct": "Creates crafts and visual art forms applicable to real-life situations using appropriate artistic skills.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrates cultural heritage and craftsmanship",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-heritage",
+          "label": "Illustrates history of Art and Design in human development; demonstrates contemporary craftsmanship and resources in entrepreneurship skills",
+          "topicAliases": [
+            "History of Zambian Art-I",
+            "History Of Zambian Art- II",
+            "Introduction to African Art",
+            "World Art History",
+            "Introduction To Art Careers",
+            "Entrepreneurship"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Illustrates technological and communicative art skills",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-graphic",
+          "label": "Demonstrates abilities in using digital tools and software to create and edit visual content; applies technology to produce high-quality, visually appealing illustrations",
+          "topicAliases": ["Graphic Design", "Photography And Filming", "Pattern and Design"],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": [],
+          "note": "ECZ Exemplar 2 (labeled EoC2) content is actually about identifying cultural significance of traditional crafts, not digital/graphic composition -- likely a documentation inconsistency in the source PDF. Flagged, not silently resolved."
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Develops pictorial art compositions",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-pictorial",
+          "label": "Draws or paints images from natural or man-made objects as a total composition, using various techniques and mediums for communication, aesthetics and entrepreneurship purposes",
+          "topicAliases": [
+            "Introduction to Colour",
+            "Colour",
+            "Studio Practice",
+            "Perspective",
+            "Drawing and or Painting From Imagination",
+            "Drawing or Painting From Imagination",
+            "Drawing Or Painting From Imagination",
+            "Drawing and or Painting From Observation",
+            "Drawing or Painting From Observation",
+            "Drawing Or Painting From Observation",
+            "Drawing and or Painting From Still Life",
+            "Drawing or Painting From Still Life",
+            "Drawing Or Painting From Still Life",
+            "Figure Drawing",
+            "Figure Drawing or Painting",
+            "Figure Drawing Or Painting"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Applies creative art skills in craftsmanship for innovation and entrepreneurship",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-crafts",
+          "label": "Creates functional decorative (aesthetics) crafts, using different working techniques and media for entrepreneurship",
+          "topicAliases": ["Crafts in 2D", "Crafts in 3D", "Crafts", "Sculpture"],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "5012/1",
+        "formLevel": "Form 2",
+        "numItems": 13,
+        "totalMarks": 150,
+        "structureNotes": "Continuous Assessment Tasks across Form 2-3 (19 tasks total, all 4 EoC) plus a Course work Project (1 task, 50 marks) spanning both forms. 2-year duration.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "5012/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 150,
+        "structureNotes": "Continuous Assessment Tasks across Form 2-3 (19 tasks total, all 4 EoC) plus a Course work Project (1 task, 50 marks) spanning both forms. 2-year duration.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "5012/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "Section A: Part I Short Answers/Phrases [20]; Part II Competence Practice (drawing/painting on a cross-cutting issue) [20]. Section B: Picture Study [20]. Section C: 2 essay tasks (1 compulsory + 1 chosen) x [10] = [20]. Marks by EoC: EoC1=32, EoC2=24, EoC3=27, EoC4=17 (out of 100, across all Bloom levels). Duration 2h45.",
+        "bloomRange": ["remembering", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 3
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA scored by teachers per the School Based Assessment Guidelines for Examination for Certificate of Secondary Education Ordinary Level - Practical Subjects.",
+      "Final Examination marked centrally by ECZ using ECZ-provided marking schemes.",
+      "Candidates must sit both components (SBA and Final Exam) to receive an overall grade -- absence from either forfeits the overall grade.",
+      "Group marks are not allowed for practical assessment tasks; each candidate assessed individually.",
+      "All artefacts treated as examination scripts -- not to be tampered with, retained at least six months after scoring before disposal.",
+      "Felt pens and markers must not be used in the examination room."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Local art museum facing vandalism/theft threatening cultural heritage: describe how a commissioned art piece raises awareness, analyse impact of art theft, discuss museum preservation, list craft pieces to address the issue",
+      "parts": [
+        {
+          "label": "Task 1",
+          "marks": 2,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "Task 2",
+          "marks": 3,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "Task 3",
+          "marks": 2,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "Task 4",
+          "marks": 3,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Zambian visual artists losing traditional functional-artefact craft skills to modern technology (wood/woven fabric artefacts shown in a figure): identify cultural significance, explain importance of preserving crafts, suggest promotion/sale ideas, discuss cultural impact of decline, recommend government preservation action",
+      "parts": [
+        {
+          "label": "Task 1",
+          "marks": 2,
+          "bloomLevel": "remembering"
+        },
+        {
+          "label": "Task 2",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "Task 3",
+          "marks": 2,
+          "bloomLevel": "creating"
+        },
+        {
+          "label": "Task 4",
+          "marks": 2,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "Task 5",
+          "marks": 2,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking"]
+    }
+  ]
+}

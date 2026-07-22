@@ -1,0 +1,179 @@
+{
+  "subjectCode": "1021",
+  "subjectName": "English Language",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates proficient and competent use of the four language skills (speaking, listening, reading and writing) in real life situations adapting to audience and purpose in order to communicate effectively and support life-long learning.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Interprets and understands spoken information",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-listening",
+          "label": "Identifies main ideas and supporting details; analyses speaker purpose, tone and intent; follows instructions and responds appropriately",
+          "topicAliases": [
+            "COMPREHENSION",
+            "Listening Comprehension",
+            "DIRECTIONS",
+            "INSTRUCTIONS",
+            "PHONE CONVERSATIONS",
+            "PUBLIC SPEAKING"
+          ],
+          "unverifiedTopicAliases": ["GREETINGS", "REQUESTS", "INTRODUCTIONS"],
+          "taskTypeAliases": [],
+          "note": "Primarily assessed in SBA (speaking/listening). Final Exam covers EoC3 and EoC4 only."
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Produces ideas, thoughts and opinions through spoken language",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-speaking",
+          "label": "Organises thoughts logically; speaks clearly; uses appropriate vocabulary, expressions and tone",
+          "topicAliases": [
+            "PUBLIC SPEAKING",
+            "DRAMA",
+            "LANGUAGE IN SOCIAL SETTINGS",
+            "MAKING AN OFFER",
+            "INVITATIONS",
+            "APOLOGIES AND COMPLIMENTS"
+          ],
+          "unverifiedTopicAliases": ["DEBATE", "ROLE PLAY"],
+          "taskTypeAliases": [],
+          "note": "SBA-focused (role plays, debates, discussions). Not in Final Exam paper."
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Reads, Interprets and summarises continuous and non-continuous texts",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-reading",
+          "label": "Reads and understands texts; uses words accurately for audience/purpose; summarises main ideas and key points",
+          "topicAliases": [
+            "COMPREHENSION",
+            "INTRODUCTION TO SUMMARY",
+            "NOTE SUMMARY",
+            "TABULATION",
+            "SHORT MESSAGES",
+            "ADVERTISEMENTS",
+            "ABBREVIATIONS",
+            "FIGURATIVE LANGUAGE",
+            "POETRY"
+          ],
+          "unverifiedTopicAliases": ["Reading Comprehension", "Summary"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Demonstrates masterly of written language conventions",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-writing",
+          "label": "Spells accurately; applies grammar and punctuation; produces coherent purposeful written texts",
+          "topicAliases": [
+            "BASIC WRITING SKILLS",
+            "NARRATIVE WRITING",
+            "DESCRIPTIVE WRITING",
+            "LETTER WRITING",
+            "EXPOSITORY WRITING",
+            "PERSUASIVE WRITING",
+            "DIARY WRITING",
+            "PARTS OF SPEECH",
+            "TENSES",
+            "NOUNS",
+            "ARTICLES",
+            "ADJECTIVES",
+            "VERBS",
+            "AGREEMENT",
+            "ADVERBS",
+            "PREPOSITIONS",
+            "PHRASAL VERBS",
+            "QUESTION TAGS",
+            "CONDITION",
+            "THE GERUND AND PRESENT PARTICIPLE"
+          ],
+          "unverifiedTopicAliases": [
+            "Composition",
+            "Report Writing",
+            "Speech Writing",
+            "Curriculum Vitae"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "1021/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 6 tasks/100. All 4 EoC (listening, speaking, reading, writing). Role plays, debates, discussions, assignments. PDF table shows paper code 1012/1 (likely typo; subject code is 1021).",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "1021/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 6 tasks/100. All 4 EoC. Combined SBA 200 marks (30%).",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "1021/2",
+        "formLevel": "Form 4",
+        "numItems": 4,
+        "totalMarks": 100,
+        "structureNotes": "3 sections: A Structure EoC4 (20); B Comprehension(30)+Summary(20) EoC3; C Composition EoC4 (30, choose 1 of 2). EoC1-2 SBA only. Duration 2h30. 70%.",
+        "bloomRange": ["remembering", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA scored at school using Scoring Rubric/Guides in SBA Guidelines for Literature and Languages.",
+      "Final Exam marked centrally by ECZ after examiner coordination meeting.",
+      "Section A (Structure): marks for applying grammatical rules in context.",
+      "Section B: marks in brackets per task; summary judged as a whole against rubric.",
+      "Section C (Composition): impression marking and error analysis (sentence variety, vocabulary, punctuation, paragraphing, error frequency).",
+      "British English expected; American English allowed only if used consistently.",
+      "Candidates must sit both components to be graded."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Weekend narrative stem testing structure/grammar in context (crack of dawn scenario) for Section A language conventions",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
+    }
+  ]
+}

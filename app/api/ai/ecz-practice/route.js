@@ -32,6 +32,7 @@ import {
   resolveStudentGradeLabel,
 } from '@/lib/flashcards/studentSubjects'
 import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
+import { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 
 const ECZ_PRACTICE_SYSTEM =
   'You are an ECZ examination specialist for Zambian schools. Create valid practice papers with Zambian context. Match the requested exam level exactly. Secondary levels: scenario-based only, no MCQ.'
@@ -231,6 +232,28 @@ export const POST = withAILimits(async function POST(request) {
       ragReferences: rag.refs?.length ? rag.refs : undefined,
     }
     await setCachedAIResponse('ecz-practice', cachePayload, responsePayload)
+
+    const sideBySideItems = []
+    if (Array.isArray(paper?.scenarios)) {
+      for (const scenario of paper.scenarios) {
+        sideBySideItems.push({ kind: 'scenario', scenario })
+      }
+    }
+    if (Array.isArray(paper?.questions)) {
+      for (const question of paper.questions) {
+        sideBySideItems.push({ kind: 'practice_question', question })
+      }
+    }
+    void runValidationSideBySide({
+      schoolId,
+      source: 'ecz_practice',
+      subject,
+      topicTag: topic,
+      formLevel: gradeLevel || examLevel,
+      assessmentMode,
+      items: sideBySideItems,
+    }).catch(() => {})
+
     return NextResponse.json(responsePayload)
   } catch (err) {
     return NextResponse.json(

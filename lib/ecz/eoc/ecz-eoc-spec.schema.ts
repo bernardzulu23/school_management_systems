@@ -1,11 +1,10 @@
 /**
  * ECZ Assessment Scheme spec — subject-agnostic schema.
  *
- * One JSON file per subject, extracted from
- * "ECSEOL_Assessment_Schemes_22_4_2026.pdf", conforms to this shape.
- * This is the single source of truth the generator prompts against
- * and the validator checks against. If it's not in this file, the
- * AI has no business inventing it.
+ * One JSON file per subject under data/curriculum/ecz-eoc/, extracted from
+ * Validation_folder/ECSEOL_Assessment_Schemes_22_4_2026.pdf. This is the single
+ * source of truth the generator prompts against and the validator checks against.
+ * If it's not in the spec file, the AI has no business inventing it.
  */
 import { z } from 'zod'
 
@@ -21,11 +20,10 @@ export const BloomLevel = z.enum([
 export const ComponentType = z.enum(['SBA', 'FINAL_EXAM'])
 
 /**
- * How an EoC is matched to a generated item:
- * - topic: match syllabus topic names (default; Mathematics-style).
- * - taskType: match investigation/analysis/project-style task labels
- *   (Agricultural Science EoC1/4/6 style). Topics may still appear in
- *   unverifiedTopicAliases as provisional content anchors.
+ * How an EoC is matched:
+ * - topic: resolves from topic tag alone (Math, most content-bucket EoCs)
+ * - taskType: topic alone is insufficient — taskType is authoritative
+ *   (Agri EoC1/4/6). Topic still supplies content.
  */
 export const ResolutionMode = z.enum(['topic', 'taskType'])
 
@@ -37,15 +35,15 @@ export const SubSkill = z.object({
   topicAliases: z.array(z.string()),
   /**
    * Topics with no official EoC bullet (e.g. Matrices, Vectors).
-   * resolveTopicToEoc still resolves these with verified: false.
+   * resolveEoc still resolves these with verified: false.
    */
   unverifiedTopicAliases: z.array(z.string()).default([]),
   /**
-   * Task-type labels for skill-lens EoCs (investigation, analysis, project…).
-   * Used when ElementOfConstruct.resolutionMode === 'taskType'.
+   * For skill-lens EoCs where no topic string can disambiguate the EoC.
+   * Teacher/student picks a taskType alongside the topic; THAT resolves the EoC.
    */
   taskTypeAliases: z.array(z.string()).default([]),
-  /** Extraction / routing note for curriculum leads; not used at runtime. */
+  /** Extraction / routing note for curriculum leads. */
   note: z.string().optional(),
 })
 
@@ -53,7 +51,6 @@ export const ElementOfConstruct = z.object({
   id: z.string(),
   description: z.string(),
   subSkills: z.array(SubSkill),
-  /** Defaults to topic for Math-style specs that omit the field. */
   resolutionMode: ResolutionMode.default('topic'),
 })
 
@@ -116,10 +113,11 @@ export const EczSubjectSpec = z.object({
 export type EczSubjectSpecT = z.infer<typeof EczSubjectSpec>
 export type ElementOfConstructT = z.infer<typeof ElementOfConstruct>
 export type SubSkillT = z.infer<typeof SubSkill>
+export type ResolutionModeT = z.infer<typeof ResolutionMode>
 
 /**
- * Shape passed as the schema argument to generateAIObject for EoC-anchored
- * generation. Forces multi-part scenario items instead of bare one-liners.
+ * Shape passed to generateAIObject for EoC-anchored generation.
+ * Forces multi-part scenario items instead of bare one-liners.
  */
 export const GeneratedQuestionPart = z.object({
   label: z.string(),
@@ -130,8 +128,14 @@ export const GeneratedQuestionPart = z.object({
 
 export const GeneratedQuestion = z.object({
   subjectCode: z.string(),
+  /** Must be resolved from topic (+ taskType) BEFORE calling the model. */
   eocId: z.string(),
   topicTag: z.string(),
+  /**
+   * Required when the resolved EoC's resolutionMode is "taskType".
+   * Omitted for ordinary topic-bucket EoCs.
+   */
+  taskType: z.string().optional(),
   formLevel: z.string(),
   componentType: ComponentType,
   scenarioContext: z

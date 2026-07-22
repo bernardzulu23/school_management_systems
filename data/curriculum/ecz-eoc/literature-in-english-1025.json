@@ -1,0 +1,146 @@
+{
+  "subjectCode": "1025",
+  "subjectName": "Literature in English",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates literary skills and creativity, communicates effectively through competent use of language in real life situations and appreciates diverse cultures.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Acquires literary skills and uses them in everyday life",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-literary-skills",
+          "label": "Acquires theoretical and practical literary skills; analyses and produces literary works; uses literary skills in daily interactions and entrepreneurship",
+          "topicAliases": [
+            "Literary Devices",
+            "Literary Terminologies",
+            "History of Zambian Literature",
+            "Zambian Literature"
+          ],
+          "unverifiedTopicAliases": ["Figurative Language", "Creative Writing"],
+          "taskTypeAliases": [],
+          "note": "Section A of Final Exam focuses on literary terminologies/devices and/or history of Zambian literature."
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Analyses and applies the elements of the literary genre of poetry",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-poetry",
+          "label": "Analyses poetry elements in prescribed texts; appreciates poetry's role in society; explores critical thinking and self-awareness",
+          "topicAliases": ["Poetry", "POETRY", "Prescribed Poetry"],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Analyses and applies the elements of the literary genre of drama",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-drama",
+          "label": "Analyses drama elements in prescribed texts; appreciates drama in everyday life; explores traditions, heritage and cultures",
+          "topicAliases": ["Drama", "DRAMA", "Prescribed Drama", "Play"],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Analyses and applies elements of the literary genre of prose",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-prose",
+          "label": "Analyses prose elements in prescribed texts; appreciates prose's national role; encourages creation of literary works",
+          "topicAliases": ["Prose", "Novel", "Short Story", "Prescribed Prose"],
+          "unverifiedTopicAliases": ["Fiction", "Non-fiction"],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "1025/1",
+        "formLevel": "Form 2",
+        "numItems": 8,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 8 tasks/100 over 1 year. All 4 EoC. Semi-structured subjective tasks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "1025/1",
+        "formLevel": "Form 3",
+        "numItems": 7,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 7 tasks/100. Combined SBA 200 (30%).",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "1025/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "Section A literary terms/history (20); Section B 4 extracts poetry+drama (40); Section C essays on 5 prescribed prose texts, answer 2×20 (40). Duration 2h45. 70%.",
+        "bloomRange": ["remembering", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA marked at school; Form 2+3 raw marks submitted to ECZ (30% of final).",
+      "Section A: marks per task in brackets.",
+      "Section B contextual items: concise responses; section total 40.",
+      "Section C essays: 20 marks each; at least one Zambian-authored text among prescribed set.",
+      "Candidates must complete SBA and Final Exam to be graded."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Contextual poetry extract analysis: devices, meaning, societal role (Section B style)",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 4,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 4,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "(d)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(e)",
+          "marks": 4,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking", "creativity_and_innovation"]
+    }
+  ]
+}

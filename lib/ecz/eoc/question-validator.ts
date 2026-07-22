@@ -1,9 +1,13 @@
 /**
- * ECZ question validator.
+ * ECZ question validator — subject-agnostic.
  *
  * Two layers, run in order:
- *  1. STRUCTURAL — deterministic, free, catches "shape" problems.
+ *  1. STRUCTURAL — deterministic, free, catches shape problems.
  *  2. SEMANTIC — one generateAIObject call, catches content drift.
+ *
+ * Call validateQuestion() before persisting a generated item. On failure,
+ * feed `issues` back into the generation prompt as a repair instruction
+ * and regenerate once before falling back to human review.
  */
 import { z } from 'zod'
 import { generateAIObject } from '@/lib/ai/client'
@@ -25,40 +29,62 @@ export type ValidationResult = {
   issues: ValidationIssue[]
 }
 
+export type ResolveEocResult = {
+  eoc: ElementOfConstructT
+  subSkillId: string
+  verified: boolean
+  resolvedVia: 'topic' | 'taskType' | 'topic-unverified'
+}
+
 /**
- * Resolve a human-facing topic tag OR task-type label to its EoC.
- * Order:
+ * Resolve a topic tag (and, for skill-lens EoCs, a taskType) to an EoC.
+ * MUST run before building a generation prompt.
+ *
+ * Passes (priority order):
  *  1. verified topicAliases
- *  2. unverifiedTopicAliases (verified: false)
- *  3. taskTypeAliases for skill-lens EoCs (verified: false — provisional)
+ *  2. taskTypeAliases on resolutionMode:"taskType" EoCs (authoritative when taskType given)
+ *  3. unverifiedTopicAliases (always verified: false)
  */
-export function resolveTopicToEoc(
+export function resolveEoc(
   spec: EczSubjectSpecT,
-  topicTag: string
-): { eoc: ElementOfConstructT; subSkillId: string; verified: boolean } | null {
+  topicTag: string,
+  taskType?: string
+): ResolveEocResult | null {
   const needle = topicTag.trim().toLowerCase()
-  if (!needle) return null
+  const taskNeedle = taskType?.trim().toLowerCase()
 
-  for (const eoc of spec.elementsOfConstruct) {
-    for (const sub of eoc.subSkills) {
-      if (sub.topicAliases.some((a) => a.toLowerCase() === needle)) {
-        return { eoc, subSkillId: sub.id, verified: true }
+  if (needle) {
+    for (const eoc of spec.elementsOfConstruct) {
+      for (const sub of eoc.subSkills) {
+        if (sub.topicAliases.some((a) => a.toLowerCase() === needle)) {
+          return { eoc, subSkillId: sub.id, verified: true, resolvedVia: 'topic' }
+        }
       }
     }
   }
 
-  for (const eoc of spec.elementsOfConstruct) {
-    for (const sub of eoc.subSkills) {
-      if ((sub.unverifiedTopicAliases ?? []).some((a) => a.toLowerCase() === needle)) {
-        return { eoc, subSkillId: sub.id, verified: false }
+  if (taskNeedle) {
+    for (const eoc of spec.elementsOfConstruct) {
+      if (eoc.resolutionMode !== 'taskType') continue
+      for (const sub of eoc.subSkills) {
+        if ((sub.taskTypeAliases ?? []).some((a) => a.toLowerCase() === taskNeedle)) {
+          return { eoc, subSkillId: sub.id, verified: true, resolvedVia: 'taskType' }
+        }
       }
     }
   }
 
-  for (const eoc of spec.elementsOfConstruct) {
-    for (const sub of eoc.subSkills) {
-      if ((sub.taskTypeAliases ?? []).some((a) => a.toLowerCase() === needle)) {
-        return { eoc, subSkillId: sub.id, verified: false }
+  if (needle) {
+    for (const eoc of spec.elementsOfConstruct) {
+      for (const sub of eoc.subSkills) {
+        if ((sub.unverifiedTopicAliases ?? []).some((a) => a.toLowerCase() === needle)) {
+          return {
+            eoc,
+            subSkillId: sub.id,
+            verified: false,
+            resolvedVia: 'topic-unverified',
+          }
+        }
       }
     }
   }
@@ -66,19 +92,65 @@ export function resolveTopicToEoc(
   return null
 }
 
-function findSubSkillForTopic(spec: EczSubjectSpecT, eocId: string, topicTag: string) {
+/** @deprecated use resolveEoc — kept so existing callers don't break during rollout. */
+export function resolveTopicToEoc(spec: EczSubjectSpecT, topicTag: string) {
+  const hit = resolveEoc(spec, topicTag)
+  if (!hit) return null
+  return { eoc: hit.eoc, subSkillId: hit.subSkillId, verified: hit.verified }
+}
+
+/**
+ * Whether a topic alone needs a taskType picker before generation.
+ * Returns available taskType options, or null if topic resolves without one.
+ */
+export function requiresTaskType(spec: EczSubjectSpecT, topicTag: string): string[] | null {
+  const resolved = resolveEoc(spec, topicTag)
+  if (resolved) return null
+
+  const needle = topicTag.trim().toLowerCase()
+  let needsTaskType = false
+  for (const eoc of spec.elementsOfConstruct) {
+    if (eoc.resolutionMode !== 'taskType') continue
+    for (const sub of eoc.subSkills) {
+      if ((sub.unverifiedTopicAliases ?? []).some((a) => a.toLowerCase() === needle)) {
+        needsTaskType = true
+        break
+      }
+    }
+    if (needsTaskType) break
+  }
+  if (!needsTaskType) return null
+
+  return spec.elementsOfConstruct
+    .filter((e) => e.resolutionMode === 'taskType')
+    .flatMap((e) => e.subSkills.flatMap((s) => s.taskTypeAliases ?? []))
+}
+
+function findSubSkill(spec: EczSubjectSpecT, eocId: string, topicTag: string, taskType?: string) {
   const eoc = spec.elementsOfConstruct.find((e) => e.id === eocId)
   if (!eoc) return null
   const needle = topicTag.trim().toLowerCase()
+  const taskNeedle = taskType?.trim().toLowerCase()
+
   for (const sub of eoc.subSkills) {
-    if (sub.topicAliases.some((a) => a.toLowerCase() === needle)) return { eoc, sub }
-    if ((sub.unverifiedTopicAliases ?? []).some((a) => a.toLowerCase() === needle)) {
-      return { eoc, sub }
-    }
-    if ((sub.taskTypeAliases ?? []).some((a) => a.toLowerCase() === needle)) {
+    if (needle && sub.topicAliases.some((a) => a.toLowerCase() === needle)) {
       return { eoc, sub }
     }
   }
+  if (taskNeedle) {
+    for (const sub of eoc.subSkills) {
+      if ((sub.taskTypeAliases ?? []).some((a) => a.toLowerCase() === taskNeedle)) {
+        return { eoc, sub }
+      }
+    }
+  }
+  for (const sub of eoc.subSkills) {
+    if (needle && (sub.unverifiedTopicAliases ?? []).some((a) => a.toLowerCase() === needle)) {
+      return { eoc, sub }
+    }
+  }
+  // Fallback: first sub-skill under the EoC (for semantic check when stamped eocId is known)
+  if (eoc.subSkills[0]) return { eoc, sub: eoc.subSkills[0] }
   return null
 }
 
@@ -94,18 +166,22 @@ export function validateStructure(spec: EczSubjectSpecT, q: GeneratedQuestionT):
     })
   }
 
-  const resolved = resolveTopicToEoc(spec, q.topicTag)
+  const resolved = resolveEoc(spec, q.topicTag, q.taskType)
   if (!resolved) {
+    const taskTypeModeExists = spec.elementsOfConstruct.some((e) => e.resolutionMode === 'taskType')
     issues.push({
       severity: 'error',
       code: 'UNKNOWN_TOPIC',
-      message: `Topic tag "${q.topicTag}" does not resolve to any EoC sub-skill in ${spec.subjectName}. Likely a syllabus ingestion artifact — check topicAliases or re-ingest.`,
+      message:
+        taskTypeModeExists && !q.taskType
+          ? `Topic tag "${q.topicTag}" did not resolve, and no taskType was supplied. ${spec.subjectName} has skill-lens EoCs that require a taskType (e.g. investigation/analysis/general) alongside the topic — check whether this topic belongs to one of those before assuming it's a bad topic string.`
+          : `Topic tag "${q.topicTag}" does not resolve to any EoC sub-skill in ${spec.subjectName}. Likely a syllabus ingestion artifact — check topicAliases or re-ingest.`,
     })
   } else if (resolved.eoc.id !== q.eocId) {
     issues.push({
       severity: 'error',
       code: 'EOC_MISMATCH',
-      message: `Topic "${q.topicTag}" resolves to ${resolved.eoc.id} ("${resolved.eoc.description}") but question is tagged ${q.eocId}.`,
+      message: `Topic "${q.topicTag}" resolves to ${resolved.eoc.id} ("${resolved.eoc.description}") but question is tagged ${q.eocId}. This is exactly the "topic says Sets, content is something else" failure mode.`,
     })
   } else if (!resolved.verified) {
     issues.push({
@@ -197,10 +273,9 @@ export async function validateSemantics(
   spec: EczSubjectSpecT,
   q: GeneratedQuestionT
 ): Promise<ValidationIssue[]> {
-  const found = findSubSkillForTopic(spec, q.eocId, q.topicTag)
-  if (!found) {
-    return []
-  }
+  const found = findSubSkill(spec, q.eocId, q.topicTag, q.taskType)
+  if (!found) return []
+
   const { sub } = found
   const fullText = [q.scenarioContext, ...q.parts.map((p) => `${p.label} ${p.text}`)].join('\n')
 

@@ -25,6 +25,8 @@ import {
   validateBloomDistribution,
   ASSESSMENT_MODES,
 } from '@/lib/ecz/assessment-engine'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
+import { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 
 const EXAM_SYSTEM =
   'You are an ECZ ECSEOL examination specialist for Zambian secondary schools. Create scenario-based exam items only — never multiple choice. Return valid JSON matching the schema.'
@@ -81,6 +83,13 @@ export const POST = withAILimits(async function POST(request) {
   if (!subject || !topic) {
     return NextResponse.json({ error: 'subject and topic required' }, { status: 400 })
   }
+
+  try {
+    topic = await assertCurriculumTopicAllowed(subject, form, topic, { required: true })
+  } catch (e) {
+    return NextResponse.json({ error: e?.message || 'Invalid topic' }, { status: 400 })
+  }
+
   const guard = validateAIGuardrails({ text: `${subject} ${form} ${topic}` })
   if (!guard.ok) return guard.response
 
@@ -165,6 +174,16 @@ export const POST = withAILimits(async function POST(request) {
     ragReferences: rag.refs?.length ? rag.refs : undefined,
   }
   await setCachedAIResponse('ecz-exam-questions', cachePayload, responsePayload)
+
+  void runValidationSideBySide({
+    schoolId,
+    source: 'ecz_exam_questions',
+    subject,
+    topicTag: topic,
+    formLevel: form,
+    assessmentMode: ASSESSMENT_MODES.SECONDARY_SCENARIO,
+    items: scenarios.map((scenario) => ({ kind: 'scenario', scenario })),
+  }).catch(() => {})
 
   return NextResponse.json(responsePayload)
 })

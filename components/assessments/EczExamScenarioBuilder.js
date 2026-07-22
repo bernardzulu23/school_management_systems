@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import { toast } from 'react-hot-toast'
 import { Loader2, Download } from 'lucide-react'
 
@@ -24,9 +25,13 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
   const [scenarios, setScenarios] = useState([])
   const [validation, setValidation] = useState(null)
 
+  useEffect(() => {
+    setTopic('')
+  }, [subject, form])
+
   const handleGenerate = async () => {
     if (!subject.trim() || !topic.trim()) {
-      toast.error('Subject and topic are required')
+      toast.error('Select form, subject, and a syllabus topic')
       return
     }
     setLoading(true)
@@ -80,13 +85,20 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
         Generate ECSEOL-compliant scenario-based exam items (no MCQ). Each scenario includes Zambian
-        context, command terms, and element of construct mapping.
+        context, command terms, and element of construct mapping. Topics come from the syllabus for
+        the selected form and subject.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <Label>Subject</Label>
-          <Select value={subject} onValueChange={setSubject}>
+          <Select
+            value={subject}
+            onValueChange={(v) => {
+              setSubject(v)
+              setTopic('')
+            }}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select subject" />
             </SelectTrigger>
@@ -104,7 +116,13 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
         </div>
         <div>
           <Label>Form</Label>
-          <Select value={form} onValueChange={setForm}>
+          <Select
+            value={form}
+            onValueChange={(v) => {
+              setForm(v)
+              setTopic('')
+            }}
+          >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
@@ -118,11 +136,14 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
           </Select>
         </div>
         <div className="sm:col-span-2">
-          <Label>Topic</Label>
-          <Input
+          <CurriculumTopicSelect
+            subject={subject}
+            gradeOrForm={form}
             value={topic}
-            onChange={(e) => setTopic(e.target.value)}
-            placeholder="e.g. Photosynthesis"
+            onChange={setTopic}
+            label="Curriculum topic"
+            required
+            id="ecz-exam-topic"
           />
         </div>
         <div>
@@ -151,7 +172,7 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
       </div>
 
       <div className="flex gap-2">
-        <Button onClick={handleGenerate} disabled={loading}>
+        <Button onClick={handleGenerate} disabled={loading || !subject.trim() || !topic.trim()}>
           {loading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : null}
           Generate scenarios
         </Button>

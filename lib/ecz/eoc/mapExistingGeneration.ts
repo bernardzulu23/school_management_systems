@@ -7,7 +7,7 @@ import {
   type GeneratedQuestionT,
   type EczSubjectSpecT,
 } from '@/lib/ecz/eoc/ecz-eoc-spec.schema'
-import { resolveTopicToEoc } from '@/lib/ecz/eoc/question-validator'
+import { resolveEoc } from '@/lib/ecz/eoc/question-validator'
 
 const BLOOM_MAP: Record<string, string> = {
   remembering: 'remembering',
@@ -74,7 +74,7 @@ export function mapScenarioToGeneratedQuestion(params: {
   const subs = Array.isArray(scenario?.subQuestions) ? scenario.subQuestions : []
   if (!scenarioText && !subs.length) return null
 
-  const resolved = resolveTopicToEoc(spec, topicTag)
+  const resolved = resolveEoc(spec, topicTag)
   const eocId =
     resolved?.eoc.id ||
     (String(scenario?.elementOfConstruct || '').match(/EoC\d+/i)?.[0] ?? null) ||
@@ -134,7 +134,7 @@ export function mapPracticeQuestionToGeneratedQuestion(params: {
   const text = String(q?.question || '').trim()
   if (!text) return null
 
-  const resolved = resolveTopicToEoc(spec, topicTag)
+  const resolved = resolveEoc(spec, topicTag)
   const eocId = resolved?.eoc.id || spec.elementsOfConstruct[0]?.id || 'EoC1'
 
   const question: GeneratedQuestionT = {

@@ -1,0 +1,169 @@
+{
+  "subjectCode": "3013",
+  "subjectName": "History",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates understanding of how historical(past) events and current trends shape the future.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrates understanding of ideologies of Evolution and early civilisation",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-evolution",
+          "label": "Evaluates understanding of Evolution and early civilisation; demonstrates society's core values, beliefs, morals and principles",
+          "topicAliases": [
+            "Views on the Origins of Man",
+            "The Way of Life in Stone Age",
+            "Stone Age Sites in Zambia",
+            "Development of Iron Technology and Farming",
+            "Early Bantu Settlement in Africa",
+            "Bantu Migrations into Zambia"
+          ],
+          "unverifiedTopicAliases": ["Evolution", "Early Civilisation", "Periods of Time"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Appreciates historical sites and traditional practices",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-heritage",
+          "label": "Assesses knowledge of Zambia's historical sites and cultural roots",
+          "topicAliases": [
+            "Importance of Heritage Sites",
+            "Local History",
+            "Sources of History",
+            "Traditional"
+          ],
+          "unverifiedTopicAliases": ["Historical Sites", "Cultural Practices", "Heritage"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Exhibits good morals, principles and national values",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-values",
+          "label": "Demonstrates core values, beliefs, morals and customs",
+          "topicAliases": [
+            "DecentralisedSocieties in PreColonial Zambia",
+            "Centralised Societies in Pre-Colonial Zambia"
+          ],
+          "unverifiedTopicAliases": ["National Values", "Customs", "Morals"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Promotes national patriotism and citizenship through historical events while fostering collaboration with local, regional and international communities",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-patriotism",
+          "label": "Engages communities in historical and patriotic activities to enhance good citizenry and collaborative understanding of national issues",
+          "topicAliases": [
+            "Development of Slavery and Slave Trade",
+            "Europe and the benefits from Slave trade",
+            "Slave Trade and Black Friday"
+          ],
+          "unverifiedTopicAliases": ["Colonialism", "Independence", "Nationalism", "Patriotism"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Analyses emerging global issues and their sustainability",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc5-global",
+          "label": "Demonstrates understanding of contemporary issues and their effects to the environment",
+          "topicAliases": [],
+          "unverifiedTopicAliases": [
+            "Globalisation",
+            "Climate Change",
+            "Contemporary Issues",
+            "Sustainability",
+            "International Relations"
+          ],
+          "taskTypeAliases": [],
+          "note": "Limited structured form1-4 topic coverage; provisional aliases pending syllabus cross-check."
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "3013/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100. All 5 EoC. Tests, debates, projects, presentations, role play.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "3013/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100. Combined SBA 200 (30%).",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "3013/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "Section A: 3 compulsory items from EoC1-3 (20 each). Section B: 4 items from EoC4-5, answer 2 (20 each). Duration 2h30. 70%.",
+        "bloomRange": ["remembering", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: 100 marks per form; raw marks to ECZ.",
+      "Final Exam items typically 20 marks each based on real-life historical scenarios.",
+      "Accept any other correct response where indicated in marking schemes.",
+      "Both components required for grading."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Community conflict resolution as city mayor linking historical citizenship/patriotism competences",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 10,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    }
+  ]
+}

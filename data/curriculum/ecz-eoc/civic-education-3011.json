@@ -1,0 +1,165 @@
+{
+  "subjectCode": "3011",
+  "subjectName": "Civic Education",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates understanding of social, economic and political development in fostering national development and upholding human dignity",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrates patriotism and good citizenry",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-citizenship",
+          "label": "Demonstrates principles of patriotism, promotes social justice and good governance in real life situations",
+          "topicAliases": [
+            "Citizenship",
+            "Rights, Duties and Responsibilities",
+            "Characteristics of Good and Bad Governance",
+            "The Concept of Governance",
+            "Zambia's Symbols of National Identity",
+            "Political Party",
+            "Political Party Systems"
+          ],
+          "unverifiedTopicAliases": [
+            "Factors that hinder good citizenship",
+            "Special Groups",
+            "Patriotism"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Utilises resources to foster personal and national development",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-resources",
+          "label": "Exhibit good planning skills and manages resources to foster personal, community and national development",
+          "topicAliases": [
+            "The concept Economic and Social Development",
+            "Types of Business Units",
+            "Spending",
+            "The Concept of Risk Management",
+            "Local Government in Zambia",
+            "Central Government"
+          ],
+          "unverifiedTopicAliases": ["Entrepreneurship", "Budgeting", "National Development"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Resolves conflict and Collaborates with others in local, regional and international affairs to promote national development.",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-conflict",
+          "label": "Resolves real life conflicts for a peaceful society; collaborates with local, regional and international stakeholders",
+          "topicAliases": [
+            "House of Chiefs",
+            "Electoral Commission of Zambia (ECZ)",
+            "Electoral Systems",
+            "The Zambian Constitution",
+            "Importance of Constitution"
+          ],
+          "unverifiedTopicAliases": [
+            "Conflict Resolution",
+            "International Organisations",
+            "Peace Building",
+            "Elections"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Exhibits principles, good morals and values in day to day life",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-values",
+          "label": "Integrates cultural understanding and personal responsibility to promote integrity, combat corruption, foster self-control, strengthen family and legal relationships",
+          "topicAliases": ["Zambia's Political Development"],
+          "unverifiedTopicAliases": [
+            "Corruption",
+            "Integrity",
+            "Family",
+            "Human Rights",
+            "Morals and Values"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "3011/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100. All 4 EoC. Tests, debates, projects, presentations, role play. Project spans Form 2-3.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "3011/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100. Combined SBA 200 (30%).",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "3011/2",
+        "formLevel": "Form 4",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "Section A: EoC1+2 (2 items each, answer 1 per EoC). Section B: EoC3+4 (1 item each, all compulsory). Scenario-based. Duration 2h30. 70%.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA marked out of 100 per year; raw marks submitted to ECZ.",
+      "Final Exam: scenario-based items; more marks for analysis and evaluation.",
+      "Candidates must analyse presented scenarios appropriately to score.",
+      "Both SBA and Final Exam required for grading."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Patriotism and good citizenship scenario with multi-part tasks (~15 marks chosen task style)",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 6,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "subjectCode": "3012",
+  "subjectName": "Religious Education",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates understanding of the interconnections between God and spirituality, humanity and the environment by interpreting religious teachings and practices and applies them to real life situations",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrates understanding of growth, friendship and family as basis for human existence",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-growth-family",
+          "label": "Demonstrates personal development and self-improvement; appreciates supportive relationships and trust; demonstrates family bonds, love and belonging",
+          "topicAliases": [
+            "Friendship",
+            "Love",
+            "Religious teaching on friendship and love",
+            "Self-Esteem",
+            "Social and Emotional learning (SEL)",
+            "Trust",
+            "Courtship",
+            "Marriage",
+            "Religious teachings on courtship and marriage",
+            "Talents",
+            "Competition and Cooperation"
+          ],
+          "unverifiedTopicAliases": [
+            "Types of growth",
+            "Growing up in different religions",
+            "Family",
+            "Parent-children relationship"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates understanding of spirituality, faith and prayer as commitment to God",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-faith",
+          "label": "Appreciates spirituality, faith and prayer as sources of strength, guidance and comfort",
+          "topicAliases": [
+            "Faith",
+            "Prayer",
+            "Religious teachings on faith and prayer",
+            "The Idea of Religion",
+            "Four Religions in Zambia"
+          ],
+          "unverifiedTopicAliases": ["Spirituality", "Worship"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Applies national values and principles in the community",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-values",
+          "label": "Comprehends and applies values and principles for the benefit of oneself and the community",
+          "topicAliases": [
+            "National Values and Principles",
+            "Morality",
+            "Sources of moral codes",
+            "Making Choices",
+            "Justice and injustice",
+            "Religious teachings on Justice in society",
+            "Sin, Forgiveness and Reconciliation",
+            "Division and hatred",
+            "Overcoming division and hatred"
+          ],
+          "unverifiedTopicAliases": ["Ecumenism", "Religious teachings on Ecumenism"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Demonstrates understanding of man's attitude to Life and work",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-life-work",
+          "label": "Demonstrates positive attitudes to life and work",
+          "topicAliases": [
+            "Work",
+            "Ethics",
+            "Religious teachings on work",
+            "Leisure",
+            "Wealth",
+            "Happiness",
+            "Religious teachings on wealth and happiness",
+            "Ambitions",
+            "Death",
+            "Religious teachings about death"
+          ],
+          "unverifiedTopicAliases": [
+            "Types of Suffering",
+            "Religious teachings on suffering",
+            "Admission practices"
+          ],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Demonstrates understanding of order, leadership and freedom in society",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc5-leadership",
+          "label": "Appreciates and applies order, leadership, integrity and freedom in society",
+          "topicAliases": [
+            "Leadership",
+            "Religious teachings on leadership and integrity",
+            "Freedom and Community"
+          ],
+          "unverifiedTopicAliases": ["Integrity", "Order in Society", "Freedom"],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "3012/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100 (20 per EoC). All 5 EoC. Assignments, discussions, quizzes, projects.",
+        "bloomRange": ["applying", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "3012/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100. Combined SBA 200 (30%).",
+        "bloomRange": ["applying", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "3012/2",
+        "formLevel": "Form 4",
+        "numItems": 10,
+        "totalMarks": 100,
+        "structureNotes": "5 sections A-E (one per EoC), 2 items each (20 marks); answer 1 per section (5 answered = 100). Duration 2h30. 70%.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "Examiner coordination meeting before marking to harmonise scoring guide/rubric.",
+      "Continuous checking during scoring to maintain standards.",
+      "Final Exam items are scenario-based (20 marks each); candidates answer one item per EoC section.",
+      "SBA and Final Exam both required for grading."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Faith and prayer as sources of strength in a real-life Zambia community challenge (RE Final Exam style)",
+      "parts": [
+        { "label": "(a)", "marks": 8, "bloomLevel": "understanding" },
+        { "label": "(b)", "marks": 12, "bloomLevel": "applying" }
+      ],
+      "keyCompetences": ["critical_thinking", "communication", "problem_solving"]
+    }
+  ]
+}

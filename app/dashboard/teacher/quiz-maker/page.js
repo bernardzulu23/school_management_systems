@@ -483,6 +483,7 @@ export default function TeacherQuizMakerPage() {
                     onChange={(e) => setGenerationPurpose(e.target.value)}
                   >
                     <option value="formative">Formative quiz (MCQ / short / TF)</option>
+                    <option value="exercise">Practice exercises</option>
                     <option value="secondary_scenario">
                       Secondary ECSEOL / ECZ scenarios (from syllabus &amp; schemes)
                     </option>

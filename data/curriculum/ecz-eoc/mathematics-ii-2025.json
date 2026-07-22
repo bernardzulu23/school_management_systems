@@ -1,0 +1,190 @@
+{
+  "subjectCode": "2025",
+  "subjectName": "Mathematics II",
+  "syllabusYear": 2025,
+  "construct": "Demonstrates spatial reasoning, logical, critical and analytical thinking in solving real life problems.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Interprets and computes relationships of numbers within and across different number systems",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-numbers",
+          "label": "Manipulate numbers using different properties to solve real life problems; creates patterns and puzzles of different types of numbers",
+          "topicAliases": [
+            "Numbers",
+            "Real Numbers",
+            "Classification of Numbers",
+            "Combined Operations on Real Numbers",
+            "Integers",
+            "Indices",
+            "Index Notation",
+            "Approximations and Estimation"
+          ],
+          "unverifiedTopicAliases": ["Number Systems", "Number Patterns"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Models real life situations to solve problems and make informed decisions",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-algebra",
+          "label": "Use algebra to express and solve real life problems",
+          "topicAliases": [
+            "Algebra",
+            "Algebraic Expressions",
+            "Basic Processes of Algebra",
+            "Simultaneous Equations",
+            "Quadratic Equations",
+            "Quadratic Functions",
+            "Linear Programming",
+            "Relations",
+            "Functions"
+          ],
+          "unverifiedTopicAliases": ["Matrices", "Vectors"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Computes measures and applies spatial relationships to solve real life problems",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-geometry",
+          "label": "Applies measures and geometry in life contexts; derives theorems and formulae; obtains the value of pi practically",
+          "topicAliases": [
+            "Two Dimensional Shapes",
+            "Three Dimensional Shapes",
+            "Polygons",
+            "Pythagoras Theorem",
+            "Trigonometry",
+            "Geometrical Constructions",
+            "Loci in Two Dimensions",
+            "Similar Figures",
+            "Congruent Figures"
+          ],
+          "unverifiedTopicAliases": ["Mensuration", "Pi"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Interprets and computes functions to solve real life situations in order to make informed decisions",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-functions",
+          "label": "Interprets functions, rates of change and summation of quantities in life contexts",
+          "topicAliases": [
+            "Functions",
+            "Cartesian Plane",
+            "Straight lines on the Cartesian Plane",
+            "Distance-time Graphs",
+            "Velocity-time Graphs"
+          ],
+          "unverifiedTopicAliases": ["Rates of Change", "Calculus", "Summation"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC5",
+      "description": "Presents and analyses data to make informed decisions",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc5-data",
+          "label": "Presents and Interprets data in a variety of real-life contexts",
+          "topicAliases": [
+            "Statistics",
+            "Statistical Presentations and Measures of central tendency",
+            "Cumulative Frequency and Measures of Dispersion",
+            "Probability",
+            "Introduction to Probability"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "2025/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 6 tasks/100. All 5 EoC. 12 tasks across Form 2+3 total.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "2025/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 6 tasks/100. Combined SBA 200 (30%).",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "2025/2",
+        "formLevel": "Form 4",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "Section A: 2 compulsory; Section B: 4 items answer 3. Each item 20 marks (answer 5 of 6 = 100). All 5 EoC. Duration 2h30. 70%. (PDF summary table incorrectly shows 200 total marks; body text specifies 100.)",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 3
+  },
+  "scoringCriteria": {
+    "rules": [
+      "Calculation items: method marks for stages + accuracy mark for correct final answer.",
+      "Marks for correct diagrams/graphs and measurement accuracy.",
+      "Projects/practicals scored per SBA Guidelines rubrics.",
+      "Omission of essential working loses marks.",
+      "Silent non-programmable scientific calculators allowed."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Real-number relationships and patterns in a Zambian real-life numerical scenario (Maths II exemplar EoC1)",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving", "critical_thinking"]
+    }
+  ]
+}

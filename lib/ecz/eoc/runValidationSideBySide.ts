@@ -11,6 +11,7 @@ import crypto from 'crypto'
 import { loadEocSpec } from '@/lib/ecz/eoc/load-eoc-spec'
 import {
   mapPracticeQuestionToGeneratedQuestion,
+  mapQuizQuestionToGeneratedQuestion,
   mapScenarioToGeneratedQuestion,
 } from '@/lib/ecz/eoc/mapExistingGeneration'
 import { resolveTopicToEoc, validateQuestion } from '@/lib/ecz/eoc/question-validator'
@@ -101,6 +102,14 @@ export async function runValidationSideBySide(
       })
     } else if (item.kind === 'practice_question') {
       mapped = mapPracticeQuestionToGeneratedQuestion({
+        spec,
+        topicTag: input.topicTag,
+        formLevel: input.formLevel,
+        question: item.question,
+        assessmentMode: input.assessmentMode,
+      })
+    } else if (item.kind === 'quiz_question') {
+      mapped = mapQuizQuestionToGeneratedQuestion({
         spec,
         topicTag: input.topicTag,
         formLevel: input.formLevel,

@@ -26,6 +26,8 @@ import {
   validateBloomDistribution,
   ASSESSMENT_MODES,
 } from '@/lib/ecz/assessment-engine'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
+import { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 
 const QUIZ_SYSTEM =
   'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema. Use Zambian context where appropriate.'
@@ -39,7 +41,7 @@ const QuizMakerInputSchema = z.object({
   materialIds: z.array(z.string().min(1)).max(5).optional(),
   /** formative → MCQ; summative/exam/secondary → ECSEOL secondary_scenario when school/grade allow */
   purpose: z
-    .enum(['formative', 'quiz', 'summative', 'exam', 'secondary_scenario'])
+    .enum(['formative', 'quiz', 'exercise', 'summative', 'exam', 'secondary_scenario'])
     .optional()
     .default('formative'),
   assessmentMode: z.enum(['primary_mcq', 'secondary_scenario', 'sba_rubric']).optional(),
@@ -105,7 +107,24 @@ export const POST = withAILimits(async function POST(request: Request) {
     }
 
     const raw = await request.json().catch(() => null)
-    const input = QuizMakerInputSchema.parse(raw)
+    const parsedInput = QuizMakerInputSchema.parse(raw)
+
+    let topic = parsedInput.topic
+    try {
+      topic = await assertCurriculumTopicAllowed(
+        parsedInput.subject,
+        parsedInput.grade,
+        parsedInput.topic,
+        { required: true }
+      )
+    } catch (e) {
+      return NextResponse.json(
+        { error: e instanceof Error ? e.message : 'Invalid topic' },
+        { status: 400 }
+      )
+    }
+    const input = { ...parsedInput, topic }
+
     const guard = validateAIGuardrails({
       text: [input.subject, input.grade, input.topic, input.difficulty].join(' '),
     })
@@ -289,6 +308,21 @@ export const POST = withAILimits(async function POST(request: Request) {
       materialIds: rag.materialIds?.length ? rag.materialIds : input.materialIds,
     }
     await setCachedAIResponse('ai-quiz-maker', cachePayload, responsePayload)
+
+    // Validation_folder: EoC side-by-side logging (does not change response shape)
+    void runValidationSideBySide({
+      schoolId,
+      source: 'quiz_maker',
+      subject: input.subject,
+      topicTag: input.topic,
+      formLevel: input.grade,
+      assessmentMode,
+      requestId,
+      items: (quiz.questions || []).map((q: { id?: string; type?: string; question?: string }) => ({
+        kind: 'quiz_question' as const,
+        question: q,
+      })),
+    }).catch(() => {})
 
     return NextResponse.json(responsePayload)
   } catch (error) {

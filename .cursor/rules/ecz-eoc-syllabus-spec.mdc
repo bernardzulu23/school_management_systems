@@ -1,45 +1,33 @@
 ---
-description: ECZ EoC assessment-scheme syllabus specs — required shape for every subject
-globs: data/curriculum/ecz-eoc/**/*,lib/ecz/eoc/**/*,Validation_folder/**/*
+description: ECZ EoC assessment-scheme syllabus specs — reusable for every subject
+globs: data/curriculum/ecz-eoc/**/*,lib/ecz/eoc/**/*,Validation_folder/**/*,ingest/extracted/syllabus/**/*
 alwaysApply: false
 ---
 
 # ECZ EoC Syllabus Spec (every subject)
 
-Every ECZ subject assessment scheme must live as one JSON file under `data/curriculum/ecz-eoc/`, conforming to `EczSubjectSpec` in `lib/ecz/eoc/ecz-eoc-spec.schema.ts`.
+One JSON per subject under `data/curriculum/ecz-eoc/`, conforming to `EczSubjectSpec`. Shared code in `lib/ecz/eoc/` is **subject-agnostic** — never fork per syllabus.
+
+## Reusable API
+
+- `resolveEoc(spec, topicTag, taskType?)` — topic → taskType → unverified
+- `requiresTaskType(spec, topicTag)` — UI picker helper
+- `validateQuestion(spec, raw)` — structural then semantic
+- `generateEczQuestion({ spec, topicTag, taskType?, … })` — resolve → generate → repair once
+- `loadEocSpec` / `loadAllEocSpecs` — auto-discovers all JSON files
+- `ECZ_SUBJECT_REGISTRY` / `loadSyllabusTopics` — all Assessment Scheme subjects ↔ ingest syllabus topics
 
 ## Canonical examples
 
-- **Mathematics I (topic-mode):** `data/curriculum/ecz-eoc/mathematics-i-2021.json`
-- **Agricultural Science (topic + taskType):** `data/curriculum/ecz-eoc/agricultural-science-4018.json`
-- **Physics / Chemistry / Biology / Geography:** `physics-4016.json`, `chemistry-4014.json`, `biology-4012.json`, `geography-3014.json`
-- **Source of truth for extracts:** `Validation_folder/ECSEOL Assessment Schemes_22_4_2026.pdf` (+ chapter text under `Validation_folder/extracted_chapters/`)
+- Maths I `mathematics-i-2021.json` (topic-mode)
+- Agri `agricultural-science-4018.json` (topic + taskType)
+- Art & Design `art-and-design-5012.json`
+- Physics / Chemistry / Biology / Geography also shipped
 
-## Required top-level shape
+Topic corpus: `ingest/extracted/syllabus/` (not the empty `Syllabus/` folder). Assessment source: `Validation_folder/`.
 
-```json
-{
-  "subjectCode": "4018",
-  "subjectName": "Agricultural Science",
-  "syllabusYear": 2024,
-  "construct": "…",
-  "elementsOfConstruct": [ /* EoC1…EoCn */ ],
-  "testDesign": { "components": [], "scenarioRequired": true, "minPartsPerScenarioItem": 2 },
-  "scoringCriteria": { "rules": [] },
-  "exemplars": []
-}
-```
+## Rules
 
-## EoC rules
-
-- Each EoC has `id` (`EoC1`…), `description`, `subSkills[]`, and `resolutionMode` (`topic` | `taskType`).
-- Sub-skills carry `topicAliases` (verified CDC wording), `unverifiedTopicAliases` (provisional), optional `taskTypeAliases` + `note`.
-- `resolutionMode: "topic"` → match syllabus topic names (Maths style).
-- `resolutionMode: "taskType"` → skill-lens EoCs (investigation / analysis / project); topics only as unverified anchors.
-- Do **not** invent EoCs, marks, or Bloom ranges not present in the Assessment Schemes PDF.
-- Register new subjects in `SPEC_FILES` inside `lib/ecz/eoc/load-eoc-spec.ts`.
-- Validate generated items with `validateQuestion` / `validateStructure` from `lib/ecz/eoc/question-validator.ts` — never skip for AI quiz / ECZ practice.
-
-## Filename convention
-
-`{subject-slug}-{subjectCode|year}.json` e.g. `agricultural-science-4018.json`, `mathematics-i-2021.json`.
+- Never invent EoCs/marks/Bloom ranges absent from the Assessment Schemes PDF.
+- Never prompt the model with a bare topic — resolve EoC first; stamp `taskType` when `resolutionMode` is `taskType`.
+- Register new subjects in `subjectRegistry.ts` and drop the JSON under `data/curriculum/ecz-eoc/`.

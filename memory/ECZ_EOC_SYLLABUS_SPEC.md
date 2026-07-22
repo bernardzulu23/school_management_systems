@@ -16,20 +16,33 @@ This is the durable contract for Zambia ECZ competence-based assessment schemes 
 
 ## Reference subjects already shipped
 
-1. **Mathematics I — code `2021`** (`mathematics-i-2021.json`)
-   - 5 EoCs, all `resolutionMode: topic` (default)
-   - Topic aliases aligned to CDC Maths syllabus wording
-   - Final exam: Form 4, 6 items / 100 marks, min 3 parts per scenario
-2. **Agricultural Science — code `4018`** (`agricultural-science-4018.json`)
-   - 6 EoCs; EoC1/4/6 are `taskType`, EoC2/3/5 are `topic`
-   - Final exam: Form 4, 5 items / 60 marks (EoC6 SBA-only), min 2 parts per scenario
-   - Skill-lens EoCs use `taskTypeAliases` + provisional `unverifiedTopicAliases`
-3. **Physics — code `4016`** (`physics-4016.json`) — 6 topic-mode EoCs; Final 6×80 marks / 2h30
-4. **Chemistry — code `4014`** (`chemistry-4014.json`) — 6 EoCs (topic + taskType mix); Final 6×80 / 2h30
-5. **Biology — code `4012`** (`biology-4012.json`) — 5 EoCs; Final EoC1–4 only (70 marks / 1h30)
-6. **Geography — code `3014`** (`geography-3014.json`) — 5 EoCs; Final sections A–D on EoC1–4 (choose 4 of 8)
+1. **Mathematics I — `2021`** — topic-mode
+2. **Mathematics II — `2025`** — topic-mode
+3. **English Language — `1021`**, **Literature in English — `1025`**
+4. **Civic Education — `3011`**, **Religious Education — `3012`**, **History — `3013`**, **Geography — `3014`**
+5. **Agricultural Science — `4018`** — topic + taskType skill-lens
+6. **Physics — `4016`**, **Chemistry — `4014`**, **Biology — `4012`**
+7. **Art and Design — `5012`**
 
-Chapter text extracts used for 3–6 live under `Validation_folder/extracted_chapters/`.
+Still missing (registry `eocSpecFile: null`): French, Zambian Languages, Music, Design & Technology, Fashion & Fabrics, Food & Nutrition, Hospitality, Travel & Tourism, PE, Computer Science, ICT, Commerce, Accounts, Chinese (if in PDF).
+
+## Reusable modules (use these for EVERY syllabus)
+
+| Module                                  | Responsibility                                                                           |
+| --------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `lib/ecz/eoc/ecz-eoc-spec.schema.ts`    | Subject-agnostic Zod shape (`EczSubjectSpec`, `GeneratedQuestion` + optional `taskType`) |
+| `lib/ecz/eoc/question-validator.ts`     | `resolveEoc` / `requiresTaskType` / `validateQuestion`                                   |
+| `lib/ecz/eoc/ecz-question-generator.ts` | EoC-anchored generate + one repair pass via `generateAIObject`                           |
+| `lib/ecz/eoc/load-eoc-spec.ts`          | Auto-discovers all `data/curriculum/ecz-eoc/*.json`                                      |
+| `lib/ecz/eoc/subjectRegistry.ts`        | Maps all Assessment Scheme subjects ↔ codes ↔ ingest syllabus files                      |
+| `lib/ecz/eoc/syllabusTopicIndex.ts`     | Loads topic lists from form1-4 + `ingest/extracted/syllabus`                             |
+
+**Resolution order (`resolveEoc`):** verified `topicAliases` → `taskTypeAliases` (when `taskType` supplied) → `unverifiedTopicAliases`.
+
+**Do not** call the model with a bare topic string. Always `resolveEoc` first, stamp `eocId` (+ `taskType` when needed), then generate, then `validateQuestion`.
+
+Chapter text extracts: `Validation_folder/extracted_chapters/`.
+Ingested CDC syllabi (topic source): `ingest/extracted/syllabus/` (25 subjects). The empty `Syllabus/` folder is a placeholder — use the ingest corpus.
 
 ## Required JSON shape (every new syllabus)
 
