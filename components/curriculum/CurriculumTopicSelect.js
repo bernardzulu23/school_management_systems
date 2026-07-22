@@ -34,7 +34,17 @@ export function CurriculumTopicSelect({
 }) {
   const { topics, loading, error } = useCurriculumTopics(subject, gradeOrForm)
   const hasTopics = topics.length > 0
-  const disabled = !String(subject || '').trim() || !String(gradeOrForm || '').trim() || loading
+  const subjectReady = Boolean(String(subject || '').trim())
+  const gradeReady = Boolean(String(gradeOrForm || '').trim())
+  const disabled = !subjectReady || !gradeReady || loading
+
+  // Clear topic when form/subject not ready.
+  useEffect(() => {
+    if (!subjectReady || !gradeReady) {
+      if (String(value || '').trim()) onChange('')
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subjectReady, gradeReady])
 
   // Keep value aligned with syllabus list (exact or fuzzy); clear if form/subject changed away.
   useEffect(() => {

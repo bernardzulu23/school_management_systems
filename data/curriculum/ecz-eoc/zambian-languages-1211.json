@@ -1,0 +1,132 @@
+{
+  "subjectCode": "1211",
+  "subjectName": "Zambian Languages",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates proficient use of listening, speaking, reading and writing skills in real-life situations, adapting to audience and purpose to communicate effectively and support life long learning.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrates masterly of written language conventions",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Uses words with orthographic accuracy; applies grammar/punctuation; figurative language; writes continuous/non-continuous texts",
+          "topicAliases": [
+            "Composition",
+            "Descriptive Writing",
+            "Figurative language",
+            "Grammar",
+            "Orthography",
+            "Writing"
+          ],
+          "unverifiedTopicAliases": ["Essay writing"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Interprets, summarises and translates continuous and non-continuous texts",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Reads and understands texts; accurate word use for audience; translates; summarises in writing",
+          "topicAliases": ["Comprehension", "Reading", "Summary", "Translation"],
+          "unverifiedTopicAliases": ["Non-continuous texts"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Interprets and understands spoken information",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Identifies main ideas; analyses purpose/tone; follows instructions; interprets spoken source→target",
+          "topicAliases": ["Listening", "Oral comprehension"],
+          "unverifiedTopicAliases": ["Spoken interpretation"],
+          "taskTypeAliases": [],
+          "note": "SBA-heavy oral/listening."
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Expresses ideas, thoughts and opinions through spoken language",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Presents ideas logically; speaks clearly; appropriate vocabulary/tone for purpose and audience",
+          "topicAliases": ["Oral presentation", "Speaking"],
+          "unverifiedTopicAliases": ["Discussion"],
+          "taskTypeAliases": [],
+          "note": "SBA-heavy speaking."
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "1211/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 6 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "1211/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 6 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "1211/2",
+        "formLevel": "Form 4",
+        "numItems": 4,
+        "totalMarks": 100,
+        "structureNotes": "Shared scheme across language codes 1211–1217 (Lunda, Luvale, Kiikaonde, Silozi, Chitonga, Icibemba, Cinyanja). SBA 30% / FE 70%. Use subjectCode for the specific language paper when generating.",
+        "bloomRange": ["understanding", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "One assessment scheme covers codes 1211–1217; load by language code when available.",
+      "SBA 30%, Final Exam 70%.",
+      "Both components required."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Reading, summary and translation scenario in a Zambian language community context",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
+    }
+  ]
+}

@@ -7,64 +7,65 @@
     {
       "id": "EoC1",
       "description": "Acquires literary skills and uses them in everyday life",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-literary-skills",
           "label": "Acquires theoretical and practical literary skills; analyses and produces literary works; uses literary skills in daily interactions and entrepreneurship",
           "topicAliases": [
+            "Figurative Language:",
+            "History of Zambian Literature",
             "Literary Devices",
             "Literary Terminologies",
-            "History of Zambian Literature",
             "Zambian Literature"
           ],
-          "unverifiedTopicAliases": ["Figurative Language", "Creative Writing"],
+          "unverifiedTopicAliases": ["Creative Writing"],
           "taskTypeAliases": [],
           "note": "Section A of Final Exam focuses on literary terminologies/devices and/or history of Zambian literature."
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Analyses and applies the elements of the literary genre of poetry",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-poetry",
           "label": "Analyses poetry elements in prescribed texts; appreciates poetry's role in society; explores critical thinking and self-awareness",
-          "topicAliases": ["Poetry", "POETRY", "Prescribed Poetry"],
+          "topicAliases": ["Poetry", "Prescribed Poetry"],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Analyses and applies the elements of the literary genre of drama",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-drama",
           "label": "Analyses drama elements in prescribed texts; appreciates drama in everyday life; explores traditions, heritage and cultures",
-          "topicAliases": ["Drama", "DRAMA", "Prescribed Drama", "Play"],
+          "topicAliases": ["Drama", "Play", "Prescribed Drama"],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Analyses and applies elements of the literary genre of prose",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-prose",
           "label": "Analyses prose elements in prescribed texts; appreciates prose's national role; encourages creation of literary works",
-          "topicAliases": ["Prose", "Novel", "Short Story", "Prescribed Prose"],
-          "unverifiedTopicAliases": ["Fiction", "Non-fiction"],
+          "topicAliases": ["Fiction:", "Novel", "Prescribed Prose", "Prose", "Short Story"],
+          "unverifiedTopicAliases": ["Non-fiction"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {

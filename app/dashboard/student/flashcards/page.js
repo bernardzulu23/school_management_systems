@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BookOpen, Sparkles } from 'lucide-react'
 import { deckDateKey } from '@/lib/flashcards/limits'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import {
   useStudentCurriculumTopics,
   useStudentEnrolledSubjects,
@@ -18,7 +19,12 @@ import {
 const MAX_CARDS = 10
 
 export default function StudentFlashcardsPage() {
-  const { subjects, loading: subjectsLoading, error: subjectsError } = useStudentEnrolledSubjects()
+  const {
+    subjects,
+    gradeOrForm,
+    loading: subjectsLoading,
+    error: subjectsError,
+  } = useStudentEnrolledSubjects()
   const [todayDecks, setTodayDecks] = useState([])
   const [subjectName, setSubjectName] = useState('')
   const [topic, setTopic] = useState('')
@@ -26,7 +32,7 @@ export default function StudentFlashcardsPage() {
   const [decksLoading, setDecksLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
 
-  const { topics, loading: topicsLoading } = useStudentCurriculumTopics(subjectName)
+  const { topics } = useStudentCurriculumTopics(subjectName)
   const today = deckDateKey()
   const usedSubjects = new Set(todayDecks.map((d) => d.subjectName.toLowerCase()))
   const availableSubjects = subjects.filter((s) => !usedSubjects.has(s.name.toLowerCase()))
@@ -169,39 +175,16 @@ export default function StudentFlashcardsPage() {
                       ))}
                     </select>
                   </div>
-                  <div className="space-y-2">
-                    <Label>{topics.length ? 'Curriculum topic' : 'Topic (optional)'}</Label>
-                    {topics.length > 0 ? (
-                      <select
-                        className="w-full p-2 border border-royalPurple-border rounded-md bg-royalPurple-card"
-                        value={topic}
-                        onChange={(e) => setTopic(e.target.value)}
-                        disabled={!subjectName || topicsLoading}
-                      >
-                        <option value="">
-                          {topicsLoading ? 'Loading topics…' : 'Choose topic…'}
-                        </option>
-                        {topics.map((t) => (
-                          <option key={t} value={t}>
-                            {t}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <Input
-                        value={topic}
-                        onChange={(e) => setTopic(e.target.value)}
-                        placeholder={
-                          subjectName
-                            ? topicsLoading
-                              ? 'Loading curriculum topics…'
-                              : 'No syllabus topics found — optional free-form'
-                            : 'Select a subject first'
-                        }
-                        disabled={!subjectName || topicsLoading}
-                      />
-                    )}
-                  </div>
+                  <CurriculumTopicSelect
+                    subject={subjectName}
+                    gradeOrForm={gradeOrForm || ''}
+                    value={topic}
+                    onChange={setTopic}
+                    label="Curriculum topic"
+                    required={topics.length > 0}
+                    allowFreeFormWhenEmpty={false}
+                    id="flashcards-topic"
+                  />
                   <div className="space-y-2">
                     <Label>Number of questions (max {MAX_CARDS})</Label>
                     <Input
@@ -216,7 +199,10 @@ export default function StudentFlashcardsPage() {
                   </div>
                 </div>
 
-                <Button onClick={generateDeck} disabled={generating || !subjectName}>
+                <Button
+                  onClick={generateDeck}
+                  disabled={generating || !subjectName || (topics.length > 0 && !topic.trim())}
+                >
                   <Sparkles className="h-4 w-4 mr-2" />
                   {generating ? 'Generating…' : 'Generate AI flashcards'}
                 </Button>

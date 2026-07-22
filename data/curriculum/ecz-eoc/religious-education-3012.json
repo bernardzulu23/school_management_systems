@@ -7,124 +7,131 @@
     {
       "id": "EoC1",
       "description": "Demonstrates understanding of growth, friendship and family as basis for human existence",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-growth-family",
           "label": "Demonstrates personal development and self-improvement; appreciates supportive relationships and trust; demonstrates family bonds, love and belonging",
           "topicAliases": [
+            "Competition and Cooperation",
+            "Courtship",
             "Friendship",
             "Love",
+            "Marriage",
+            "Parent- children UHODWLRQVKLS",
             "Religious teaching on friendship and love",
+            "Religious teachings on children- parent relationships",
+            "Religious teachings on competition, cooperation and trust",
+            "Religious teachings on courtship and marriage",
+            "Religious teachings on learning and truth",
+            "Religious teachings on self-esteem",
             "Self-Esteem",
             "Social and Emotional learning (SEL)",
-            "Trust",
-            "Courtship",
-            "Marriage",
-            "Religious teachings on courtship and marriage",
             "Talents",
-            "Competition and Cooperation"
+            "Trust"
           ],
           "unverifiedTopicAliases": [
-            "Types of growth",
-            "Growing up in different religions",
             "Family",
-            "Parent-children relationship"
+            "Growing up in different religions",
+            "Parent-children relationship",
+            "Types of growth"
           ],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Demonstrates understanding of spirituality, faith and prayer as commitment to God",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-faith",
           "label": "Appreciates spirituality, faith and prayer as sources of strength, guidance and comfort",
           "topicAliases": [
+            "Central teachings on making choices =in the four =religions =in Zambia.",
             "Faith",
+            "Four Religions in Zambia",
             "Prayer",
             "Religious teachings on faith and prayer",
-            "The Idea of Religion",
-            "Four Religions in Zambia"
+            "The Idea of Religion"
           ],
           "unverifiedTopicAliases": ["Spirituality", "Worship"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Applies national values and principles in the community",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-values",
           "label": "Comprehends and applies values and principles for the benefit of oneself and the community",
           "topicAliases": [
-            "National Values and Principles",
-            "Morality",
-            "Sources of moral codes",
-            "Making Choices",
-            "Justice and injustice",
-            "Religious teachings on Justice in society",
-            "Sin, Forgiveness and Reconciliation",
             "Division and hatred",
-            "Overcoming division and hatred"
+            "Justice and injustice",
+            "Making Choices",
+            "Morality",
+            "National Values and Principles",
+            "Overcoming division and hatred",
+            "Religious teachings on Ecumenism",
+            "Religious teachings on Justice in society",
+            "Religious teachings on Justice in VRFLHW\\",
+            "Sin, Forgiveness and Reconciliation",
+            "Sources of moral codes"
           ],
-          "unverifiedTopicAliases": ["Ecumenism", "Religious teachings on Ecumenism"],
+          "unverifiedTopicAliases": ["Ecumenism"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Demonstrates understanding of man's attitude to Life and work",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-life-work",
           "label": "Demonstrates positive attitudes to life and work",
           "topicAliases": [
-            "Work",
-            "Ethics",
-            "Religious teachings on work",
-            "Leisure",
-            "Wealth",
-            "Happiness",
-            "Religious teachings on wealth and happiness",
+            "Admission practices",
             "Ambitions",
             "Death",
-            "Religious teachings about death"
+            "Ethics",
+            "Happiness",
+            "Leisure",
+            "Religious teachings =on Leisure",
+            "Religious teachings about death",
+            "Religious teachings on admission practices",
+            "Religious teachings on wealth and happiness",
+            "Religious teachings on work",
+            "Wealth",
+            "Work"
           ],
-          "unverifiedTopicAliases": [
-            "Types of Suffering",
-            "Religious teachings on suffering",
-            "Admission practices"
-          ],
+          "unverifiedTopicAliases": ["Religious teachings on suffering", "Types of Suffering"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC5",
       "description": "Demonstrates understanding of order, leadership and freedom in society",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc5-leadership",
           "label": "Appreciates and applies order, leadership, integrity and freedom in society",
           "topicAliases": [
+            "Freedom and Community",
             "Leadership",
-            "Religious teachings on leadership and integrity",
-            "Freedom and Community"
+            "Religious teachings on leadership and integrity"
           ],
-          "unverifiedTopicAliases": ["Integrity", "Order in Society", "Freedom"],
+          "unverifiedTopicAliases": ["Freedom", "Integrity", "Order in Society"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {
@@ -173,8 +180,16 @@
       "eocId": "EoC2",
       "scenarioTheme": "Faith and prayer as sources of strength in a real-life Zambia community challenge (RE Final Exam style)",
       "parts": [
-        { "label": "(a)", "marks": 8, "bloomLevel": "understanding" },
-        { "label": "(b)", "marks": 12, "bloomLevel": "applying" }
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
       ],
       "keyCompetences": ["critical_thinking", "communication", "problem_solving"]
     }

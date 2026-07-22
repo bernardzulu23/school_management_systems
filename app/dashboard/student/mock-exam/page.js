@@ -8,17 +8,14 @@ import { ArrowLeft, Clock, FileCheck, Trophy } from 'lucide-react'
 import Link from 'next/link'
 import { FeatureGate } from '@/components/FeatureGate'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import {
   ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
   resolveSelectableEczExamLevel,
 } from '@/lib/ecz/ecz-practice-levels'
 import { api } from '@/lib/api'
-import {
-  useStudentCurriculumTopics,
-  useStudentEnrolledSubjects,
-} from '@/hooks/useStudentCurriculumTopics'
+import { useStudentEnrolledSubjects } from '@/hooks/useStudentCurriculumTopics'
 
 function formatDuration(ms) {
   const totalSec = Math.max(0, Math.floor(ms / 1000))
@@ -36,7 +33,6 @@ export default function StudentMockExamPage() {
     examLevel: 'form1',
     topic: '',
   })
-  const { topics, loading: topicsLoading } = useStudentCurriculumTopics(form.subject)
   const [attempt, setAttempt] = useState(null)
   const [paper, setPaper] = useState(null)
   const [answers, setAnswers] = useState({})
@@ -232,39 +228,17 @@ export default function StudentMockExamPage() {
                       ))}
                     </select>
                   </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <Label>Curriculum topic</Label>
-                    {topics.length > 0 ? (
-                      <select
-                        className="w-full zsms-select"
-                        value={form.topic}
-                        onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
-                        disabled={!form.subject || topicsLoading}
-                      >
-                        <option value="">
-                          {topicsLoading ? 'Loading topics…' : 'Choose syllabus topic…'}
-                        </option>
-                        {topics.map((t) => (
-                          <option key={t} value={t}>
-                            {t}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <Input
-                        value={form.topic}
-                        onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
-                        placeholder={
-                          form.subject
-                            ? topicsLoading
-                              ? 'Loading curriculum topics…'
-                              : 'No syllabus topics found — enter a topic'
-                            : 'Select a subject first'
-                        }
-                        disabled={!form.subject || topicsLoading}
-                      />
-                    )}
-                  </div>
+                  <CurriculumTopicSelect
+                    className="md:col-span-2"
+                    subject={form.subject}
+                    gradeOrForm={gradeOrForm || form.examLevel}
+                    value={form.topic}
+                    onChange={(topic) => setForm((p) => ({ ...p, topic }))}
+                    label="Curriculum topic"
+                    required
+                    allowFreeFormWhenEmpty={false}
+                    id="mock-exam-topic"
+                  />
                 </div>
                 {error ? <UpgradePrompt error={error} /> : null}
                 <Button

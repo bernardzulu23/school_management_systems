@@ -1,0 +1,145 @@
+{
+  "subjectCode": "6012",
+  "subjectName": "Fashion and Fabrics",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates understanding of fabrics, designs and constructs garments to suit market trends.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Makes informed choices and expresses innovative skills in the fashion industry",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Explores fashion/fabrics careers; practices work ethics; makes informed choices",
+          "topicAliases": [
+            "Career paths",
+            "Concepts in Fashion and Fabrics",
+            "Fashion industry",
+            "Textiles and clothing",
+            "Work Ethics"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates technical knowledge and skills while promoting workplace safety",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Drafts pattern pieces; designs styles; sustainable needlework tools and garment construction",
+          "topicAliases": ["Garment construction", "Needlework", "Pattern drafting"],
+          "unverifiedTopicAliases": ["Workplace safety"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Develops habits and sense of responsibility in managing personal and social development",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Personal hygiene/health habits; grooming and cosmetology techniques",
+          "topicAliases": ["Cosmetology", "Grooming", "Health Habits", "Personal hygiene"],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Demonstrates knowledge on the use, care and improvisation of tools and material in fashion industry for economic use of tools and materials",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Designs articles from local materials; utilises tools for crafts",
+          "topicAliases": ["Crafts", "Improvisation", "Tools and materials"],
+          "unverifiedTopicAliases": ["Needlework crafts"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC5",
+      "description": "Expresses awareness of create income generating opportunities for self-reliance and economic growth",
+      "subSkills": [
+        {
+          "id": "eoc5-main",
+          "label": "Entrepreneurial skills; manages textile enterprise; consumer rights and wise shopping",
+          "topicAliases": [
+            "Consumer rights",
+            "Consumer Rights and Responsibilities",
+            "Entrepreneurship",
+            "Textile enterprise",
+            "Textiles Enterprise"
+          ],
+          "unverifiedTopicAliases": ["Marketing"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "6012/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "6012/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "6012/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2-3 (30%); Final Exam Form 4 (70%). Codes 6012/1 and 6012/2.",
+        "bloomRange": ["understanding", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": ["SBA school-marked.", "Final Exam ECZ-marked.", "Both components required."]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Pattern drafting / garment construction scenario with workplace safety",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
+    }
+  ]
+}

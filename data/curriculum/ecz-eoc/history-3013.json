@@ -7,98 +7,102 @@
     {
       "id": "EoC1",
       "description": "Demonstrates understanding of ideologies of Evolution and early civilisation",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-evolution",
           "label": "Evaluates understanding of Evolution and early civilisation; demonstrates society's core values, beliefs, morals and principles",
           "topicAliases": [
-            "Views on the Origins of Man",
-            "The Way of Life in Stone Age",
-            "Stone Age Sites in Zambia",
+            "Bantu Migrations into Zambia",
             "Development of Iron Technology and Farming",
             "Early Bantu Settlement in Africa",
-            "Bantu Migrations into Zambia"
+            "Periods of Time",
+            "Stone Age Sites in Zambia",
+            "The Way of Life in Stone Age",
+            "Views on the Origins of Man"
           ],
-          "unverifiedTopicAliases": ["Evolution", "Early Civilisation", "Periods of Time"],
+          "unverifiedTopicAliases": ["Early Civilisation", "Evolution"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Appreciates historical sites and traditional practices",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-heritage",
           "label": "Assesses knowledge of Zambia's historical sites and cultural roots",
           "topicAliases": [
+            "Importance of Chronology in History",
             "Importance of Heritage Sites",
             "Local History",
             "Sources of History",
             "Traditional"
           ],
-          "unverifiedTopicAliases": ["Historical Sites", "Cultural Practices", "Heritage"],
+          "unverifiedTopicAliases": ["Cultural Practices", "Heritage", "Historical Sites"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Exhibits good morals, principles and national values",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-values",
           "label": "Demonstrates core values, beliefs, morals and customs",
           "topicAliases": [
+            "Centralised Societies in Pre-Colonial Zambia",
             "DecentralisedSocieties in PreColonial Zambia",
-            "Centralised Societies in Pre-Colonial Zambia"
+            "National Values and Principles"
           ],
-          "unverifiedTopicAliases": ["National Values", "Customs", "Morals"],
+          "unverifiedTopicAliases": ["Customs", "Morals", "National Values"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Promotes national patriotism and citizenship through historical events while fostering collaboration with local, regional and international communities",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-patriotism",
           "label": "Engages communities in historical and patriotic activities to enhance good citizenry and collaborative understanding of national issues",
           "topicAliases": [
             "Development of Slavery and Slave Trade",
+            "Europe and the bene¿ts from Slave trade",
             "Europe and the benefits from Slave trade",
             "Slave Trade and Black Friday"
           ],
           "unverifiedTopicAliases": ["Colonialism", "Independence", "Nationalism", "Patriotism"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC5",
       "description": "Analyses emerging global issues and their sustainability",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc5-global",
           "label": "Demonstrates understanding of contemporary issues and their effects to the environment",
           "topicAliases": [],
           "unverifiedTopicAliases": [
-            "Globalisation",
             "Climate Change",
             "Contemporary Issues",
-            "Sustainability",
-            "International Relations"
+            "Globalisation",
+            "International Relations",
+            "Sustainability"
           ],
           "taskTypeAliases": [],
           "note": "Limited structured form1-4 topic coverage; provisional aliases pending syllabus cross-check."
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {

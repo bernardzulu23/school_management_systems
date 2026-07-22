@@ -1,0 +1,123 @@
+{
+  "subjectCode": "8015",
+  "subjectName": "Design and Technology",
+  "syllabusYear": 2024,
+  "construct": "Applies engineering principles and uses a wide range of tools and techniques to design and make a product that addresses a real-life problem.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Utilises various materials and techniques to produce items while adhering to safety procedures",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Utilises materials, processes and safety measures to make products for real-life problems",
+          "topicAliases": ["Materials", "Workshop safety", "Production processes"],
+          "unverifiedTopicAliases": ["Tools"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Generates and develops graphical representations and models",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Interprets/generates ideas in drawing/sketch/graphic form; creativity in Design Process",
+          "topicAliases": ["Technical drawing", "Graphics", "Design Process", "Modelling"],
+          "unverifiedTopicAliases": ["CAD"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Designs and constructs innovative systems",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Analyses, designs and constructs innovative systems anchored on System Technology",
+          "topicAliases": ["Systems Technology", "Structures", "Mechanisms"],
+          "unverifiedTopicAliases": ["Electronics systems"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Develops and implements a business idea",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Entrepreneurship education and cross-cutting issues in design/make projects",
+          "topicAliases": ["Entrepreneurship", "Business idea"],
+          "unverifiedTopicAliases": ["Market research"],
+          "taskTypeAliases": []
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "8015/1",
+        "formLevel": "Form 2",
+        "numItems": 10,
+        "totalMarks": 45,
+        "structureNotes": "SBA Form 2 tests 10/45 + shared portfolio/artefact project across Form 2-3 (110 marks).",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "8015/1",
+        "formLevel": "Form 3",
+        "numItems": 13,
+        "totalMarks": 45,
+        "structureNotes": "SBA Form 3 tests 13/45 + project. Portfolio A3 + artefact realisation.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "8015/2",
+        "formLevel": "Form 4",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "Final Exam 6 items/100. Duration 2h45. Candidates must attempt SBA+FE.",
+        "bloomRange": ["understanding", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: portfolio + artefact project guided by ECZ theme.",
+      "Final Exam ECZ-marked.",
+      "Both components required for certification."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Real-life design brief requiring sketches/graphics and design-process creativity",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
+    }
+  ]
+}

@@ -7,103 +7,111 @@
     {
       "id": "EoC1",
       "description": "Analyses Systems of Classifying Organisms and Substances",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-classification",
           "label": "Examines classification systems, identifies features used, evaluates importance of classifying organisms and substances",
           "topicAliases": [
-            "Characteristics of Living Things",
-            "Levels of Biological Organisation",
             "Basic Cell Structure",
-            "Types of Cells",
             "Cell Specialisation",
-            "Nature of Biology"
+            "Characteristics of Living Things",
+            "Classification of Organisms",
+            "Detailed cell Structure",
+            "Levels of Biological Organisation",
+            "Levels of Classification",
+            "Nature of Biology",
+            "Types of Cells"
           ],
-          "unverifiedTopicAliases": ["Classification of Organisms", "Taxonomy"],
+          "unverifiedTopicAliases": ["Taxonomy"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Investigates and Explains Biological Functions",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-functions",
           "label": "Investigates how living things function and interact; analyses causes and effects of biological events",
           "topicAliases": [
-            "Nutrition in Man",
-            "Plant Nutrients",
-            "Nutritional Deficiency Diseases and Disorders",
-            "Reproduction in Living Organisms",
-            "Reproduction and Development in Human Beings",
-            "Coordination and Response in Plants",
-            "Coordination and Response in Animals",
-            "Transport in Plants",
             "Autotrophic Nutrition",
-            "Heterotrophic Nutrition"
+            "Coordination and Response",
+            "Coordination and Response in Animals",
+            "Coordination and Response in Plants",
+            "Excretion in Plants and Animals",
+            "Fertilisation and Development in Human Beings",
+            "Heterotrophic Nutrition",
+            "Homeostasis in Human Beings",
+            "Nutrition in Man",
+            "Nutritional Deficiency Diseases and Disorders",
+            "Plant Nutrients",
+            "Reproduction and Development in Human Beings",
+            "Reproduction in Living Organisms",
+            "Reproduction in plants",
+            "Transport in Animals",
+            "Transport in Plants"
           ],
-          "unverifiedTopicAliases": ["Photosynthesis", "Respiration", "Excretion", "Circulation"],
+          "unverifiedTopicAliases": ["Circulation", "Excretion", "Photosynthesis", "Respiration"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Interprets and Explains Scientific Evidence",
-      "resolutionMode": "taskType",
       "subSkills": [
         {
           "id": "eoc3-evidence",
           "label": "Analyses data, interprets findings with scientific reasoning, evaluates evidence to support or reject ideas",
           "topicAliases": [],
           "unverifiedTopicAliases": [
+            "Ecosystem",
             "Experimental Design",
-            "Nature of Science Inquiry in Biology",
             "Micrographs",
-            "Ecosystem"
+            "Nature of Science Inquiry in Biology"
           ],
-          "note": "Skill-lens EoC on evidence interpretation; not a topic bucket.",
           "taskTypeAliases": [
             "data analysis",
             "evidence evaluation",
             "scientific reasoning",
             "interpretation"
-          ]
+          ],
+          "note": "Skill-lens EoC on evidence interpretation; not a topic bucket."
         }
-      ]
+      ],
+      "resolutionMode": "taskType"
     },
     {
       "id": "EoC4",
       "description": "Applies Scientific Skills to Real-life Situations",
-      "resolutionMode": "taskType",
       "subSkills": [
         {
           "id": "eoc4-skills",
           "label": "Uses scientific methods and practical skills to solve everyday problems and make informed decisions",
           "topicAliases": [],
           "unverifiedTopicAliases": [
+            "Biotic and Abiotic Interactions",
             "Experimental Design",
-            "Waste Management",
             "The Soil - Composition and Fertility",
-            "Biotic and Abiotic Interactions"
+            "Waste Management"
           ],
-          "note": "Skill-lens applied biology EoC.",
           "taskTypeAliases": [
             "investigation",
             "practical skills",
             "problem solving",
             "scientific method"
-          ]
+          ],
+          "note": "Skill-lens applied biology EoC."
         }
-      ]
+      ],
+      "resolutionMode": "taskType"
     },
     {
       "id": "EoC5",
       "description": "Demonstrates biological principles in real life situations",
-      "resolutionMode": "taskType",
       "subSkills": [
         {
           "id": "eoc5-real-life",
@@ -111,13 +119,15 @@
           "topicAliases": [],
           "unverifiedTopicAliases": [
             "Ecosystem",
-            "Waste Management",
-            "Nutritional Deficiency Diseases and Disorders"
+            "Nutritional Deficiency Diseases and Disorders",
+            "Principles of Cellular Life",
+            "Waste Management"
           ],
-          "note": "SBA-emphasis EoC; Final Exam covers EoC1-4 only (EoC5 excluded from Form 4 paper).",
-          "taskTypeAliases": ["everyday biology", "real-life application", "general practical"]
+          "taskTypeAliases": ["everyday biology", "real-life application", "general practical"],
+          "note": "SBA-emphasis EoC; Final Exam covers EoC1-4 only (EoC5 excluded from Form 4 paper)."
         }
-      ]
+      ],
+      "resolutionMode": "taskType"
     }
   ],
   "testDesign": {

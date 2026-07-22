@@ -1,0 +1,138 @@
+{
+  "subjectCode": "6016",
+  "subjectName": "Travel and Tourism",
+  "syllabusYear": 2024,
+  "construct": "Applies travel and tourism knowledge to manage destinations, operations and sustainable visitor experiences.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Explores tourism dynamics, understand, travellers’ destinations and global challenges in",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Explores tourism dynamics, destinations and global challenges",
+          "topicAliases": ["Destinations", "Global tourism", "Tourism dynamics"],
+          "unverifiedTopicAliases": ["Sustainable tourism"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Manages tourism destinations and operations",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Manages tourism destinations and operations",
+          "topicAliases": ["attractions.", "Destination management", "Tourism operations"],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Applies key principles of the hospitality industry in travel and tourism",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Applies hospitality principles within travel and tourism",
+          "topicAliases": [
+            "Customer care",
+            "Examples of Tourism Services:",
+            "Hospitality in tourism",
+            "Hospitality Services – Restaurants, catering, and customer care."
+          ],
+          "unverifiedTopicAliases": ["Accommodation"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Operates tourism events and activities",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Operates tourism events and activities",
+          "topicAliases": ["Events", "Tourism activities"],
+          "unverifiedTopicAliases": ["Festivals"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC5",
+      "description": "Conducts tour operations",
+      "subSkills": [
+        {
+          "id": "eoc5-main",
+          "label": "Conducts tour operations",
+          "topicAliases": ["Tour guiding", "Tour operations"],
+          "unverifiedTopicAliases": ["Itinerary planning"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "6016/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "6016/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "6016/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2-3; Final Exam Form 4. Codes 6016/1 and 6016/2.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": ["SBA school-marked.", "Final Exam ECZ-marked.", "Both components required."]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Tour operations itinerary for a Zambian destination with visitor challenges",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "communication"]
+    }
+  ]
+}

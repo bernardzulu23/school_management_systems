@@ -7,74 +7,80 @@
     {
       "id": "EoC1",
       "description": "Applies map reading skills to understand spatial relationships in real life",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-maps",
           "label": "Interprets maps for geographical relations such as time and angle of elevation to navigate the physical world",
           "topicAliases": [
-            "Maps and Diagrams",
-            "Map Symbols",
-            "Map Reading and Interpretation",
-            "Relief",
+            "Direction and Orientation",
             "Drainage Features",
             "Land Use",
-            "Direction and Orientation",
-            "Measurement of Distance and Area"
+            "Map Reading and Interpretation",
+            "Map Symbols",
+            "Maps and Diagrams",
+            "Measurement of Distance and Area",
+            "Relief",
+            "Relief and Drainage"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Demonstrates understanding of earth's natural processes and their effects",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-earth",
           "label": "Understands earth's natural processes and effects; identifies mitigation and adaptation strategies",
           "topicAliases": [
-            "The Earth in the Solar System",
-            "Shape and Size of the Earth",
-            "Weather and Climate",
             "Climate Change",
+            "EarthÓs Graticule",
+            "Energy and Climate Change",
+            "Farming and Climate= Change",
             "Mitigation and Adaptation to Climate Change",
-            "The Earth's Atmosphere"
+            "Movements of the Earth",
+            "Shape and Size of the Earth",
+            "The Earth in the Solar System",
+            "The Earth's Atmosphere",
+            "Weather and Climate"
           ],
-          "unverifiedTopicAliases": ["Earth's Graticule", "Movements of the Earth"],
+          "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Understands demographic dynamics and its relationship with the environment and humanity in order to identify strategies for sustainable development",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-population",
           "label": "Understands population dynamics and connectivity to nature for sustainable development strategies",
           "topicAliases": [
+            "Challenges in Settlements",
+            "Location of Settlements",
+            "Location of Zambia",
+            "Migration",
             "Population Composition",
             "Population Distribution in Zambia",
             "Rapid Population Growth in Zambia",
-            "Migration",
             "Settlements",
-            "Location of Settlements",
-            "Challenges in Settlements",
+            "Sustainable Mobility in Zambia",
             "Urbanisation"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Demonstrates understanding of resource utilisation and sustainability",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-resources",
@@ -84,36 +90,38 @@
             "Population and Natural Resources",
             "Sustainable Management of Natural"
           ],
-          "unverifiedTopicAliases": ["Resource Management", "Economic Geography"],
+          "unverifiedTopicAliases": ["Economic Geography", "Resource Management"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC5",
       "description": "Conducts geographical inquiry using appropriate research methods",
-      "resolutionMode": "taskType",
       "subSkills": [
         {
           "id": "eoc5-inquiry",
           "label": "Carries out geographical inquiry and investigates human impact on the environment",
           "topicAliases": [],
           "unverifiedTopicAliases": [
-            "Fieldwork",
-            "Planning and Preparing for Field Work",
             "Data Collection/ Fieldwork",
-            "Data processing"
+            "Data processing",
+            "Fieldwork",
+            "Methods of Fishing and Processing",
+            "Planning and Preparing for Field Work"
           ],
-          "note": "SBA-emphasis inquiry EoC; Final Exam covers EoC1-4 (sections A-D), EoC5 mainly SBA fieldwork/projects.",
           "taskTypeAliases": [
             "fieldwork",
             "field project",
             "case study",
             "geographical inquiry",
             "research"
-          ]
+          ],
+          "note": "SBA-emphasis inquiry EoC; Final Exam covers EoC1-4 (sections A-D), EoC5 mainly SBA fieldwork/projects."
         }
-      ]
+      ],
+      "resolutionMode": "taskType"
     }
   ],
   "testDesign": {

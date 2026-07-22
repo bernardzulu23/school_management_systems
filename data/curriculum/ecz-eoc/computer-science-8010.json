@@ -1,0 +1,155 @@
+{
+  "subjectCode": "8010",
+  "subjectName": "Computer Science",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates proficiency in designing, developing, and applying computational solutions to real-world problems, guided by Computer Science principles and prioritising ethics and responsible digital citizenship.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Recognises computer system components to build and troubleshoot computer systems everyday life",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Identifies components, understands functions, assembles and troubleshoots systems",
+          "topicAliases": [
+            "Computer components",
+            "Computer Systems",
+            "Fundamentals of Computer Systems",
+            "Hardware",
+            "System assembly",
+            "Troubleshooting"
+          ],
+          "unverifiedTopicAliases": ["Input output devices"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Analyses, computer tools based on their roles in problem solving",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Analyses, classifies and distinguishes computer tools by problem-solving role",
+          "topicAliases": [
+            "Application Software",
+            "Applications",
+            "Problem solving tools",
+            "Software tools"
+          ],
+          "unverifiedTopicAliases": ["Utilities"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Analyses computing concepts by identifying relationships, principles and underlying structures",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Investigates core computing concepts and how they interconnect in digital systems",
+          "topicAliases": ["Algorithms", "Computing concepts", "Data structures"],
+          "unverifiedTopicAliases": ["Networks basics"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Applies computational knowledge to critically evaluate situations and make informed technological decisions",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Computational thinking to evaluate options on efficiency, ethics, safety and impact",
+          "topicAliases": [
+            "Computational thinking",
+            "Decision making",
+            "Digital Citizenship",
+            "Digital Ethics",
+            "Ethics"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC5",
+      "description": "Creates and designs systems that solve real life problems and improve way of life for citizens",
+      "subSkills": [
+        {
+          "id": "eoc5-main",
+          "label": "Designs/develops creative functional user-centred digital solutions for societal needs",
+          "topicAliases": ["Programming", "Software development", "System design"],
+          "unverifiedTopicAliases": ["Project work"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "8010/1",
+        "formLevel": "Form 2",
+        "numItems": 9,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 9 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "8010/1",
+        "formLevel": "Form 3",
+        "numItems": 7,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 7 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "8010/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 9 tasks; Form 3: 7 tasks (incl. project). Final Exam 5 items/100, 2h30. Weighting 30:70.",
+        "bloomRange": ["remembering", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA: exercises, practicals, assignments, project.",
+      "Final Exam ECZ-marked.",
+      "Both components required."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Design a digital solution for a Zambian community problem (user-centred)",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving", "digital_literacy"]
+    }
+  ]
+}

@@ -27,7 +27,7 @@ describe('ECZ EoC reusable modules', () => {
 
   it('loadAllEocSpecs validates every shipped JSON', () => {
     const all = loadAllEocSpecs()
-    expect(all.length).toBeGreaterThanOrEqual(13)
+    expect(all.length).toBeGreaterThanOrEqual(27)
     for (const spec of all) {
       expect(EczSubjectSpec.safeParse(spec).success).toBe(true)
       expect(spec.elementsOfConstruct.length).toBeGreaterThan(0)
@@ -37,13 +37,20 @@ describe('ECZ EoC reusable modules', () => {
   it('registry lists shipped vs missing EoC specs', () => {
     const shipped = listSubjectsWithEocSpec()
     const missing = listSubjectsMissingEocSpec()
+    expect(shipped.length).toBeGreaterThanOrEqual(27)
     expect(shipped.some((s) => s.subjectCodes.includes('5012'))).toBe(true)
     expect(shipped.some((s) => s.subjectCodes.includes('2021'))).toBe(true)
     expect(shipped.some((s) => s.subjectCodes.includes('1021'))).toBe(true)
     expect(shipped.some((s) => s.subjectCodes.includes('2025'))).toBe(true)
-    expect(missing.length).toBeGreaterThan(0)
+    expect(shipped.some((s) => s.subjectCodes.includes('1120'))).toBe(true)
+    expect(shipped.some((s) => s.subjectCodes.includes('1211'))).toBe(true)
+    expect(missing.length).toBe(0)
     expect(findSubjectRegistryEntry('Art and Design')?.eocSpecFile).toBe('art-and-design-5012')
     expect(findSubjectRegistryEntry('English Language')?.eocSpecFile).toBe('english-language-1021')
+    expect(findSubjectRegistryEntry('French Language')?.eocSpecFile).toBe('french-language-1120')
+    expect(findSubjectRegistryEntry('Zambian Languages')?.eocSpecFile).toBe(
+      'zambian-languages-1211'
+    )
   })
 
   it('parses mathematics-i-2021.json against EczSubjectSpec', () => {
@@ -96,6 +103,20 @@ describe('ECZ EoC reusable modules', () => {
     ['History', '3013', 5],
     ['Mathematics II', '2025', 5],
     ['Religious Education', '3012', 5],
+    ['French Language', '1120', 4],
+    ['Chinese Language', '1125', 4],
+    ['Zambian Languages', '1211', 4],
+    ['Musical Arts', '5014', 5],
+    ['Design and Technology', '8015', 4],
+    ['Fashion and Fabrics', '6012', 5],
+    ['Food and Nutrition', '6014', 6],
+    ['Hospitality Management', '6015', 4],
+    ['Travel and Tourism', '6016', 5],
+    ['Physical Education and Sport', '9010', 5],
+    ['Computer Science', '8010', 5],
+    ['Information and Communications Technology', '8011', 5],
+    ['Commerce', '7015', 4],
+    ['Principles of Accounts', '7020', 4],
   ])('parses and loads %s (%s)', (name, code, eocCount) => {
     const byName = loadEocSpec(name)
     const byCode = loadEocSpec(code)

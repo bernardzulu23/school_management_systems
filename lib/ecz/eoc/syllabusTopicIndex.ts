@@ -11,6 +11,11 @@ import {
   findSubjectRegistryEntry,
   type EczSubjectRegistryEntry,
 } from '@/lib/ecz/eoc/subjectRegistry'
+import {
+  cleanSyllabusTopic,
+  isUsableTopic,
+  topicsFromUnitTitle,
+} from '@/lib/ecz/eoc/crosswalkTopicAliases'
 
 const INGEST_DIR = path.join(process.cwd(), 'ingest', 'extracted', 'syllabus')
 const FORM14_DIR = path.join(process.cwd(), 'data', 'curriculum', 'form1-4')
@@ -20,19 +25,11 @@ function asStringArray(value: unknown): string[] {
   return value.map((v) => String(v || '').trim()).filter(Boolean)
 }
 
-function cleanTopic(raw: string): string {
-  return String(raw || '')
-    .replace(/^=+\s*/g, '')
-    .replace(/\s*=+$/g, '')
-    .replace(/\s+/g, ' ')
-    .trim()
-}
-
 function collectFromUnknown(node: unknown, out: Set<string>, depth = 0) {
   if (depth > 8 || node == null) return
   if (typeof node === 'string') {
-    const t = cleanTopic(node)
-    if (t.length >= 3 && t.length <= 120) out.add(t)
+    const t = cleanSyllabusTopic(node)
+    if (isUsableTopic(t)) out.add(t)
     return
   }
   if (Array.isArray(node)) {
@@ -59,8 +56,15 @@ function topicsFromForm14(slug: string): string[] {
     }
     const out = new Set<string>()
     for (const u of raw.units || []) {
-      if (u.title) out.add(cleanTopic(u.title))
-      for (const t of asStringArray(u.topics)) out.add(cleanTopic(t))
+      if (u.title) {
+        for (const extracted of topicsFromUnitTitle(u.title)) out.add(extracted)
+        const cleaned = cleanSyllabusTopic(u.title)
+        if (isUsableTopic(cleaned) && !/^Form\s+\d+\s*:/i.test(cleaned)) out.add(cleaned)
+      }
+      for (const t of asStringArray(u.topics)) {
+        const cleaned = cleanSyllabusTopic(t)
+        if (isUsableTopic(cleaned)) out.add(cleaned)
+      }
     }
     return Array.from(out).filter(Boolean)
   } catch {

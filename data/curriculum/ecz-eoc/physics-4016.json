@@ -7,140 +7,154 @@
     {
       "id": "EoC1",
       "description": "Classifies and applies Physical quantities and their measurements in handling of materials and objects",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-quantities",
           "label": "Distinguishes basic/derived quantities, applies equilibrium, scalars/vectors, elementary astronomy and precise measurement",
           "topicAliases": [
+            "Apparatus in Physics",
+            "Application of Physics",
+            "Basic Principles of Scientific Investigations",
+            "Equilibrium",
+            "Fundamental Concepts of Physics",
             "Physical Quantities",
             "Precision and Accuracy",
-            "Scalar and Vector Quantities",
-            "Equilibrium",
-            "The Universe",
-            "Structure and Composition of the Earth",
             "Safety Rules (Laboratory Safety)",
-            "Apparatus in Physics",
-            "Fundamental Concepts of Physics"
+            "Scalar and Vector Quantities",
+            "Structure and Composition of the Earth",
+            "Structure and Composition of the Earth’s Atmosphere",
+            "The Universe",
+            "Waste Management"
           ],
-          "unverifiedTopicAliases": [
-            "Waste Management",
-            "Application of Physics",
-            "Basic Principles of Scientific Investigations"
-          ],
+          "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Analyses and applies principles of mechanical systems to maximize the benefits of their performance of complex functions to enhance productivity",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-mechanics",
           "label": "Applies mechanics concepts (motion, forces, energy, momentum, machines, pressure) to real-life problems",
           "topicAliases": [
-            "Linear Motion",
-            "Forces",
+            "Apply circular motion concepts to solve problems and make predictions",
+            "Apply equilibrium concepts to design systems to solve real world problems",
+            "Apply force-body",
+            "Build simple machines to solve real life problems",
             "Circular Motion",
-            "Moment of a Force",
-            "Work, Energy, and Power",
+            "Forces",
             "Linear Momentum",
+            "Linear Motion",
+            "Moment of a Force",
+            "Pressure",
             "Simple Machines",
-            "Pressure"
+            "Work, Energy, and Power"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Applies and interprets concepts of thermal properties of matter in order to predict material behaviour and design thermally efficient systems",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-thermal",
           "label": "Applies kinetic theory, temperature, expansion, heat transfer and internal combustion concepts",
           "topicAliases": [
-            "Simple Kinetic Theory of Matter",
-            "Measurement of Temperature",
+            "Apply the concepts of heat transfer",
             "Expansion of Solids, Liquids and Gases",
-            "The Internal Combustion Engine",
             "Heat Transfer",
-            "Measurement of Heat"
+            "Measurement of Heat",
+            "Measurement of Temperature",
+            "Simple Kinetic Theory of Matter",
+            "The Internal Combustion Engine"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Interprets and applies properties of waves to predict natural phenomena and design appropriate technologies",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-waves",
           "label": "Solves wave, sound, light, reflection/refraction and lens problems",
           "topicAliases": [
-            "Longitudinal and Transverse Waves",
             "Electromagnetic Spectrum",
-            "Sound",
+            "Lenses",
             "Light",
+            "Longitudinal and Transverse Waves",
+            "Rectilinear Propagation of Light",
             "Reflection of Light",
             "Refraction of Light",
-            "Lenses"
+            "Sound"
           ],
-          "unverifiedTopicAliases": ["Rectilinear Propagation", "Optical Instruments"],
+          "unverifiedTopicAliases": ["Optical Instruments", "Rectilinear Propagation"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC5",
       "description": "Analyses and manipulates electric and magnetic properties of materials in order to design more reliable and efficient devices and machinery",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc5-em",
           "label": "Applies static electricity, circuits, Ohm's law, magnetism and electrical energy transmission",
           "topicAliases": [
-            "Static Electricity",
+            "Electric Cells",
             "Electric Circuits",
-            "Ohm's Law",
+            "Electric Energy and Power",
             "Electrical Energy and Power",
-            "Magnetism",
+            "Electrical Energy Transmission",
             "Electromagnetic Induction",
+            "Introduction to Electromagneti c Induction",
+            "Introduction to Static Electricity",
+            "Magnetism",
+            "Ohm's Law",
+            "Static Electricity",
             "Transformers"
           ],
-          "unverifiedTopicAliases": ["Electric Cells", "Transmission of Electrical Energy"],
+          "unverifiedTopicAliases": ["Transmission of Electrical Energy"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC6",
       "description": "Applies electronic, communication, nuclear, and renewable energy principles to enhance connectivity, drive innovation, and support an environmentally safe and sustainable energy-efficient future",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc6-modern",
           "label": "Applies electronics, nuclear physics, communication systems and renewable energy principles",
           "topicAliases": [
+            "Capacitors",
+            "Communication System",
+            "Communication Systems",
+            "Digital Electronic System",
             "Electronics",
             "Logic Gates",
-            "Capacitors",
             "Nuclear Physics",
             "Radioactivity",
             "Renewable Energy",
-            "Communication Systems"
+            "Renewable Energy Systems"
           ],
-          "unverifiedTopicAliases": ["Thermionic Emission", "Electronic Waste"],
+          "unverifiedTopicAliases": ["Electronic Waste", "Thermionic Emission"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {

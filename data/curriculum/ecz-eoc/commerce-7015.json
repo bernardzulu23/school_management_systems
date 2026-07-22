@@ -1,0 +1,147 @@
+{
+  "subjectCode": "7015",
+  "subjectName": "Commerce",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates strong commercial competences, entrepreneurial skills and ethical values for personal empowerment and effective participation in economic activities and national development.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrates the skills of clean production and trading within legal parameters",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Commerce concepts, production/services/specialisation, factors of production, sustainable trade, credit, contracts/trade law, domestic/international business documentation",
+          "topicAliases": [
+            "Business Contracts",
+            "Commerce",
+            "Concept of International Trade",
+            "Contracts",
+            "Domestic trade",
+            "Factors of production",
+            "International trade",
+            "Production",
+            "Specialisation",
+            "Trade"
+          ],
+          "unverifiedTopicAliases": ["Credit", "Trade restrictions"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates skills in entrepreneurship, Business formation and financing",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Entrepreneurial skills, financing/capital/liquidity, business formation and operational analysis",
+          "topicAliases": [
+            "Business finance",
+            "Business formation",
+            "Capital",
+            "Entrepreneurship",
+            "Financing Businesses"
+          ],
+          "unverifiedTopicAliases": ["Business ideas", "Liquidity"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Applies physical and Online Business practices free from exploitation",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "E-commerce, consumer protection, data privacy, online payment systems",
+          "topicAliases": [
+            "Consumer protection",
+            "E-Commerce",
+            "Online business",
+            "Online payments"
+          ],
+          "unverifiedTopicAliases": ["Cyber exploitation", "Data privacy"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Analyses and evaluates the significance of commercial services in production, commerce and direct service provision",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Evaluates commercial services' role in production, commerce and direct services",
+          "topicAliases": [
+            "Banking",
+            "Commercial services",
+            "Insurance",
+            "Transport",
+            "Warehousing"
+          ],
+          "unverifiedTopicAliases": ["Advertising"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "7015/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 6 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "7015/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 6 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "7015/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2-3 scenario/tasks. Final Exam Form 4. Codes 7015/1 and 7015/2. Weighting typically 30:70.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": ["SBA school-marked.", "Final Exam ECZ-marked.", "Both components required."]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Zambian SME formation and financing scenario (capital/liquidity challenges)",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "problem_solving", "analytical_thinking"]
+    }
+  ]
+}

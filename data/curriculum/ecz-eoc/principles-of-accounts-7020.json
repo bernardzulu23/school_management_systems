@@ -1,0 +1,157 @@
+{
+  "subjectCode": "7020",
+  "subjectName": "Principles of Accounts",
+  "syllabusYear": 2024,
+  "construct": "Applies accounting principles to record, verify and report financial information for sound business decisions.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrates sound accounting decisions based on key accounting principles or concepts,",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Applies key accounting principles/concepts for sound decisions",
+          "topicAliases": [
+            "Accounting concepts",
+            "Accounting equation",
+            "Accounting principles",
+            "Principle of Double Entry"
+          ],
+          "unverifiedTopicAliases": ["Double entry basics"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates proficiency in recording business transactions in ledger accounts",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Records business transactions in ledger accounts",
+          "topicAliases": [
+            "Books of original entry",
+            "Journal entries",
+            "Ledger accounts",
+            "Revised Cash book",
+            "Types of Books of Prime Entry",
+            "Types of Business Transactions",
+            "Types of Business Units",
+            "Types of Ledgers"
+          ],
+          "unverifiedTopicAliases": ["Cash book"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Analyses the effective implementation of reconciliation and verification tools in accounting",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Implements reconciliation and verification tools effectively",
+          "topicAliases": [
+            "Bank reconciliation",
+            "Bank Reconciliation Statement",
+            "Control accounts",
+            "Errors not revealed by the Trial Balance",
+            "Errors revealed by the Trial Balance",
+            "Extracting the Trial Balance",
+            "Trial balance",
+            "Verification"
+          ],
+          "unverifiedTopicAliases": ["Errors"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Prepares and analyses financial statements",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Prepares and analyses financial statements",
+          "topicAliases": [
+            "Financial statements",
+            "Financial Statements with Adjustments",
+            "Income statement",
+            "Introduction to adjustments to Financial Statements",
+            "Ratio analysis",
+            "Statement of financial position",
+            "Statement of Financial Position (Balance Sheet)",
+            "Statement of Profit or Loss (Income Statement)",
+            "Statement of Profit or Loss and Appropriation"
+          ],
+          "unverifiedTopicAliases": ["Gross profit margin", "Net profit margin"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "7020/1",
+        "formLevel": "Form 2",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 6 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "7020/1",
+        "formLevel": "Form 3",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 6 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "7020/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2-3: 6 tasks each (Form 3 includes subject project Terms 2-3). Final Exam Form 4, 100 marks. Codes 7020/1 and 7020/2.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA school-marked formative/summative tasks; evidence retained.",
+      "Final Exam ECZ-marked.",
+      "Candidates without SBA are not graded (no partial processing).",
+      "Both components contribute to final score."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Prepare and analyse financial statements for a Zambian trading business (ratios/margins)",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "analytical_thinking", "problem_solving"]
+    }
+  ]
+}

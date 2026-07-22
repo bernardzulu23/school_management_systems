@@ -1,0 +1,914 @@
+
+--- PDF_PAGE 266 ---
+- 250 - 
+ 
+Chapter 25: Computer Science – 8010 
+1. 
+Construct 
+Demonstrates proficiency in designing, developing, and applying computational solutions to real-world 
+problems, guided by Computer Science principles and prioritising ethics and responsible digital 
+citizenship. 
+2. 
+Elements of Construct 
+The Computer Science Examination for Certificate of Secondary Education Ordinary Level will be based 
+on five (5) Elements of Construct (EoC) as follows: 
+EoC1 Recognises computer system components to build and troubleshoot computer systems 
+everyday life 
+• 
+Identifies computer components, understands their functions, and uses this knowledge to 
+assemble and troubleshoot computer systems in everyday situations. 
+EoC2  Analyses, computer tools based on their roles in problem solving 
+• 
+Analyses, classifies, and distinguishes different computer tools based on how each one is 
+used to solve specific problems. 
+EoC3  Analyses computing concepts by identifying relationships, principles and underlying 
+structures 
+• 
+Investigates core computing concepts and understanding how they interconnect within digital 
+systems. 
+EoC4 Applies computational knowledge to critically evaluate situations and make informed 
+technological decisions 
+• 
+Applies computational thinking to analyse problems, evaluate technological     options, and 
+make responsible, well-reasoned decisions based on efficiency, ethics, safety, and long-term 
+impact. 
+EoC5 Creates and designs systems that solve real life problems and improve way of life for citizens  
+• 
+Designs, develops, and produces digital solutions that are creative, functional, user-centred, 
+and address real-world societal needs. 
+3. 
+Test Design 
+The Computer Science examination will consist of two components, Component 1 will be School Based 
+Assessment (SBA) which will be set and scored by teachers at school level in Form 2 and 3. Component 2 
+will be the Final Examination which will be centrally set by the Examinations Council of Zambia (ECZ) at 
+the end of Form 4.  
+ Test Design for Component 1 and 2 
+Component 
+Name 
+Code 
+Assessment 
+Level 
+Duration 
+No of Test 
+Items/Tasks 
+Marks 
+School 
+Based 
+Assessment 
+(SBA) 
+Component 
+1 
+8010/1 
+Form 2 
+1 year 
+9 
+100 
+ 
+Form 3 
+1 year 
+7 
+100 
+Final 
+Examination 
+Component 
+8010/2 
+Form 4 
+2 hours 30minutes 
+5 
+100 
+
+--- PDF_PAGE 267 ---
+- 251 - 
+ 
+2 
+ 
+3.1 
+Structure 
+The School Based Assessment will consist of sixteen (16) tasks designed to assess learners‘ 
+practical understanding and application of Computer Science competences. These tasks will be 
+based on the Computer Science Construct and will include class exercises, practical tests, 
+assignments, and a project completed either individually or in groups. 
+(i) 
+Problem Solving Exercises: These will involve problem solving tasks that require critical 
+computational thinking and problem-solving skills. These will be done through quizzes, 
+assignments and class collaboration tasks. 
+(ii) 
+Practical Tests:  Learners will take hands-on tasks such as, handling files, creating 
+algorithms, code writing, programs to solve real world problems. 
+(iii) Coding Assignment: Learners will apply problem solving skills and logic, write simple 
+programs, debug and test solutions.  It will involve real-world problems. 
+(iv) Portfolio Assessment: Learners will be required to maintain a portfolio showcasing their 
+coding projects, solutions, and reflections on their learning journey. This portfolio can be 
+stored offline on a hard drive or flash drive, or online using cloud services such as Google 
+Drive or Dropbox. 
+(v)     Peer Review: Learners will provide constructive feedback on each other‘s work to encourage 
+collaboration and teamwork. 
+(vi) Project: A multi-term project requiring: 
+ problem definition 
+ algorithm design 
+ coding / prototype creation 
+ testing 
+ documentation 
+Through these activities, learners will develop the competences outlined in the Computer Science 
+syllabus, while enhancing their analytical thinking, computational skills, creativity, digital problem-
+solving abilities, and real-life application of Computer Science knowledge. The tasks will enable 
+learners to design solutions, interpret and analyse data, apply Computer Science tools effectively, 
+and address authentic problems using appropriate digital technologies. 
+3.1.1 
+SBA Structure - Component 1 
+Form 2: Learners will complete nine (9) tasks. 
+Form 3: Learners will complete seven (7) tasks. 
+A major project will commence in Form 2 Term 3 and continue into Form 3 Term 1. 
+School Based Assessment marks will be submitted yearly to the Examinations Council of 
+Zambia via the ECZ Portal at each form level, with each year‘s assessment scored out of 
+100 i.e. Form 2: 100 marks; Form 3: 100 marks. 
+3.1.2 
+Final Examination Structure – Component 2 
+The final examination will consist of two sections: Section A and Section B. 
+Section A 
+(i) Will consist of three compulsory items which will be scenario-based. These will be 
+assessed according to the Elements of Construct 1, 2 and 3. 
+
+--- PDF_PAGE 268 ---
+- 252 - 
+ 
+(ii) Items will require candidates to demonstrate key competences such as Technical 
+Proficiency, Critical Thinking, Critical Thinking and Problem Solving, Algorithmic 
+Thinking, Networking Knowledge, Cybersecurity and Digital Citizenship. 
+(iii) This section will have 80 marks. 
+ 
+Section B 
+(i) 
+Will consist of three items, of which candidates must answer any two (2). 
+(ii) 
+Items will require deeper reasoning, data interpretation, and the practical application 
+of Computer Science skills.  
+(iii) Items will be assessed according to the Elements of Construct 4 and 5 (EoC4 and 
+EoC5) and will require key competences such as Programming Skills, Data Structure 
+skills, Database Management skills, Application Software skills and Web 
+Development 
+(iv) This section will have 20 marks. 
+The two components of Computer Science assessment will have the following distribution of marks: 
+Distribution of Marks across Assessment Components 
+Type of Assessment  
+Level 
+Duration 
+No. of Tasks 
+Total 
+Marks 
+School Based 
+Assessment - 
+Component 1 
+ 
+Form 2  
+Term 1 
+2 
+ 
+100 
+Term 2 
+4 
+Term 3 
+1 
+ 
+Form 3 
+Term 1 
+4 
+ 
+100 
+Term 2 
+4 
+Term 3 
+1 
+TOTAL 
+ 
+2 years 
+ 
+16 
+ 
+200 
+Type of Assessment  
+Element of 
+Construct 
+ 
+Number of Items 
+ 
+Total 
+Marks 
+ 
+Final Examination - Component 2 
+ 
+Section A 
+(Answer ALL) 
+EoC1 
+1 
+30 
+EoC2 
+2 
+25 
+EoC3 
+3 
+25 
+Section B 
+(Choose any two (2) 
+EoC4 
+EoC5 
+1 
+10 
+2 
+10 
+3 
+10 
+TOTAL 
+ 
+5 
+ 
+5 
+ 
+100 
+ 
+3.2 
+Test Content 
+           The test content for both component 1 and 2 will be considered in terms of item types,   
+            level of difficulty and syllabus coverage. 
+3.2.1 School-Based Assessment - Component 1 
+
+--- PDF_PAGE 269 ---
+- 253 - 
+ 
+The School-Based Assessment tasks at Form 2 and Form 3 will be drawn from topics relevant 
+to each form. These tasks will be based on the competences expected at each level, as 
+outlined in the assessment framework for Computer Science. 
+Types of Tasks 
+The SBA will comprise real-life scenarios and practical tasks requiring learners to: 
+(i) 
+Design and implement algorithms and programs. 
+(ii) 
+Develop and analyse flowcharts and pseudocode. 
+(iii) 
+Collect, organise and interpret data. 
+(iv) 
+Apply problem-solving strategies to practical computing challenges. 
+(v) 
+Evaluate and propose solutions using appropriate digital tools and technologies. 
+(vi) 
+Create simple digital projects that demonstrate creativity and technical skills. 
+3.2.2 Final Examination  Component 2 
+The Final Examination will assess learners‘ ability to apply and demonstrate competences in 
+Computer Science through structured and scenario-based tasks from the five (5) Elements of 
+Construct. 
+Types of Items 
+The examination will include items drawn from real-life computing situations, requiring 
+learners to: 
+(i) 
+Analyse problems and propose suitable algorithmic or digital solutions. 
+(ii) 
+Apply programming and computational thinking skills. 
+(iii) 
+Interpret data, system diagrams, and program outputs. 
+(iv) 
+Evaluate digital solutions and justify decision-making processes. 
+(v) 
+Create simple programs, flowcharts, or system designs to address given problems. 
+3.3 
+Level of Difficulty 
+For the School-Based Assessment (SBA) tasks, the level of difficulty will range from Remembering 
+to Creating, in accordance with revised Bloom‘s Taxonomy. For the Final Examination, item 
+difficulty will range from Understanding to Analysing. 
+The difficulty level of each SBA task or examination question will be guided by the following 
+factors: 
+(i) 
+The real-life Computer Science situation presented, requiring an appropriate learner response. 
+(ii) 
+The depth of subject knowledge needed to address the scenario or task accurately. 
+(iii) 
+The complexity and number of cognitive processes involved in generating correct responses. 
+(iv) 
+The number of questions or subtasks a learner must complete within a given scenario. 
+(v) 
+The level of abstract thinking and technical reasoning required to solve the problem. 
+(vi) 
+The degree of strategy, independence, and decision-making expected, especially when 
+learners must devise their own approach rather than follow explicitly provided steps. 
+These factors ensure that both SBA and Final Examination tasks effectively develop and assess 
+learners‘ problem-solving, critical thinking, creativity, digital literacy, and practical Computer 
+Science competences. 
+3.4  
+Syllabus Coverage 
+The School-Based Assessment (SBA) tasks will draw content from the Computer Science Syllabus 
+Secondary Education Ordinary Level Form 1 – 4, 2024 based on the Elements of Construct and 
+
+--- PDF_PAGE 270 ---
+- 254 - 
+ 
+Specific competences prescribed for each level. The SBA Framework, Test Framework and Test 
+Specification will guide the development of the test items and tasks. The test items and tasks will be 
+based on the related competences grouped into Elements of Construct. The use of assessment tools 
+developed by ECZ such as Test Specifications, Test Frameworks and SBA Framework will ensure 
+adequate syllabus coverage, validity, reliability, comparability and standardisation of the 
+assessments from year to year.  
+The SBA tasks will emphasise the development of problem-solving, critical thinking, creativity, 
+digital literacy, and practical Computer Science skills, enabling learners to demonstrate both 
+understanding and application of key concepts. 
+The Final Examination will assess competences from the Form 1 to Form 4 of Computer Science 
+syllabus, ensuring comprehensive coverage of foundational knowledge, applied skills, and higher-
+order thinking abilities required for effective performance in real-world digital environments These 
+tasks and test items will help to prepare candidates for real world challenges, foster informed 
+decision-making and enhances employability as they transition into the world of work. 
+4. 
+Scoring Criteria 
+4.1 
+School Based Assessment 
+          This assessment will be done in the schools. 
+4.1.1 This component will be internally set, assessed and moderated throughout the course under the   
+          supervision of the subject teacher at school level. 
+4.1.2 Marks scored in the SBA should not exceed the maximum allowed in the School Based 
+Assessment Guidelines for Examination for Certificate of Secondary Education Ordinary Level -
+Mathematics and Computer Studies 
+4.2 
+Final Examination 
+4.2.1 
+The Final Examination will be centrally set and scored by the ECZ. 
+4.2.2 
+A detailed official scoring criteria (containing scoring rubric and scoring guide) will be 
+provided by the Examinations Council of Zambia to ensure consistency and fairness. 
+4.2.3 
+The scoring criteria will include acceptable alternative answers and will be thoroughly 
+discussed and agreed upon by examiners during coordination meetings. 
+5. 
+Notes and Guidelines 
+The following requirements shall apply to all examination centres and candidates taking Computer 
+Science: 
+5.1  
+The weighting for SBA and Final Examination will be 30% and 70% respectively. The overall   
+                   test design of each component, is summarised in the table as follows. 
+5.2 
+Candidates will be expected to do both components in order to be graded and certified. Candidates 
+who only sit one component will be deemed absent from the examination. 
+5.3 
+Instructions and rules regarding the conduct and management of the examination will be provided 
+on the front cover of the question paper as well as in the examination timetable for the particular 
+year. 
+5.4 
+All submissions, including projects or practical assessments shall follow the specified size or format 
+requirements, where applicable. 
+5.5 
+The ECZ will develop guidance for GCE candidates. 
+5.6 
+Candidates shall NOT be allowed to enter the examination room with a phone or calculator of any 
+kind or Personal Digital Assistant (PDA). 
+
+--- PDF_PAGE 271 ---
+- 255 - 
+ 
+6 
+Exemplar Test Items 
+This section contains sample items that illustrate the skills and knowledge learners are expected to 
+demonstrate. They guide both teaching and assessment by showing the format, difficulty, and focus areas  
+of actual assessments. 
+   Example 1:  
+EoC 1: Recognize computer system components to build and troubleshoot computer systems everyday life 
+You are a technician at a local community centre in your 
+district in Zambia, where computers are used for online 
+learning and administrative tasks. One of the centre‘s 
+desktop computers has suddenly stopped booting up 
+properly during a busy afternoon class. The signs include 
+a blank screen, unusual beeping sounds, and failure to 
+load the operating system. 
+(a)(I) Identify and classify two primary internal hardware 
+components of a desktop computer that caused the boot 
+failure, explaining their roles in the system's operation. 
+[4] 
+Expected Answers 
+(a)(i) Internal hardware components causing boot failure 
+1. Power Supply Unit (PSU) – Provides power to all 
+components; faults cause no display, or failure to start.  
+2. RAM (Memory) – Holds temporary data for booting; 
+loose or faulty RAM causes beep codes and prevents OS 
+loading.  
+3. Motherboard (with BIOS/UEFI) – Connects all 
+components and runs POST; faults stop the system from 
+starting or producing display.  
+4. Hard Drive / SSD – Stores the operating system; if 
+damaged or disconnected the system cannot load the OS.  
+Level of Difficulty: Applying 
+Key Competence: Problem Solving 
+Specific Competence: Deploy AI models  
+(ii) Explain how AI-based diagnostic tools could 
+help you identify the cause of the unusual 
+beeping sounds and blank screen faster. [2] 
+(ii) AI diagnostic tools can analyse error codes, beep patterns, 
+and hardware symptoms to quickly suggest likely causes, 
+such as RAM failure or loose connections.  
+Level of Difficulty: Analyse 
+Key Competence: Problem Solving 
+Specific Competence: Deploy AI models  
+(b) Outline the troubleshooting process step-by-step 
+for the boot failure of the desktop computer. [6] 
+ 
+(b) Troubleshooting process  
+• Check power and external connections (power cable, 
+monitor). 
+• Observe POST/beep codes and try to enter BIOS.  
+• Open case and reset components (RAM, GPU, cables to 
+HDD/SSD). 
+• Test PSU and components using a multimeter or known-good 
+part. 
+• Repair software/OS issues or replace faulty hardware based 
+on results.  
+Level of Difficulty: Application 
+Specific Competence: Different Computer hardware identified correctly  
+Key Competence: Problem Solving 
+ (c) After discovering that the computer fails to load 
+the operating system, outline the actions you 
+would take next to decide whether the problem 
+is hardware-related or software-related.   [6] 
+ 
+(c) To decide whether the problem is hardware or software 
+related, check if the computer shows anything before the 
+operating system loads. If the blank screen and beeping 
+occur before it reaches the OS, the fault is hardware-based. 
+If the system reaches the loading screen but fails to start 
+Windows, the issue may be software-related, such as 
+corrupted system files or a virus. 
+
+--- PDF_PAGE 272 ---
+- 256 - 
+ 
+Level of difficulty:  Applying 
+Key Competence: Problem Solving  
+Specific Competence: Different Computer hardware identified correctly  
+ 
+(d) What recovery action can you take when a 
+computer fails to boot due to corrupted system 
+files at the community centre? [5] 
+ 
+ 
+(d) When a computer fails to boot due to corrupted system files, 
+you can take the following recovery actions: 
+Use System Repair/Recovery Tools: 
+Boot the computer using a Windows Recovery Environment 
+(Windows RE) or a bootable USB/CD. 
+Select options like Start-up Repair to automatically fix corrupted 
+system files. 
+Use System Restore; Restore the computer to a previous point in 
+time when it was working correctly.; Reinstall or Repair the 
+Operating System: If repairs fail, perform a repair installation or 
+reinstall the operating system to restore all system files. 
+Backup Important Data First: Before reinstalling, connect the 
+hard drive to another computer or use a live boot USB to copy 
+important files to prevent data loss. 
+Level of Difficulty: Applying 
+Key Competence: Problem Solving 
+Specific Competence: Demonstrate understanding of essential computer software and hardware 
+(e) How would you reduce the chances of future 
+boot failure give three ways. [3] 
+ 
+(e) Three preventive measures to reduce future boot failures: 
+Regular maintenance of hardware: Clean dust from inside the 
+computer, check connections, and ensure components like RAM, 
+hard drive, and cables are securely fitted. 
+Install and update antivirus software: Protect the system from 
+malware that can corrupt the operating system or critical files. 
+Regular software updates and backups: Keep the operating 
+system and drivers up to date, and back up important files to an 
+external drive or cloud storage to prevent data loss in case of 
+failure. 
+Level of Difficulty: Evaluating 
+Key Competence: Problem Solving 
+Specific Competence: Demonstrate understanding of essential computer software and hardware 
+  Example 2:  
+Eoc2: Analyse, classify and differentiate computer tools based on their roles in problem solving Items  
+A teacher wants to prepare digital learning materials 
+and track pupil assignments. The school has access 
+to Microsoft Word, Excel, Google Forms, and a web 
+browser. However, the teacher notices that some 
+pupils are not submitting their assignments on time, 
+and tracking their marks manually is taking too long. 
+The teacher needs a solution to efficiently create 
+materials, collect assignments, and monitor student 
+performance 
+(a) Classify the tools in the school as productivity, 
+data, or communication tools. 
+Productivity [1] 
+Data [1] 
+Communication [1] 
+ 
+Expected Answers 
+ 
+ 
+ 
+ 
+ 
+(a)  
+    Productivity: Microsoft Word  
+ 
+Data: Microsoft Excel  
+ 
+Communication: Google Forms, Web Browser 
+ 
+
+--- PDF_PAGE 273 ---
+- 257 - 
+ 
+Level of Difficulty: Understanding 
+Key Competence: Digital Literacy 
+Specific Competence: Create documents using Word Processing Software 
+(b) Describe how Excel can help the teacher track 
+pupils‘ marks. [2] 
+ 
+(b)   Excel allows the teacher to enter pupils‘ marks in organized 
+tables, automatically calculate totals and averages using 
+formulas, and create charts or graphs to visualize 
+performance trends. It can also sort or filter students based 
+on scores to quickly identify high achievers or pupils 
+needing extra support. 
+Level of Difficulty: Understanding 
+Key Competence: Application Software Skills 
+Specific Competence: Use spreadsheet for data entry and analysis 
+(c) Suggest how a teacher can use Google Forms to 
+collect learners‘ assignments and explain two 
+benefits [4] 
+ 
+(c) The teacher can create a Google Form with fields for pupil 
+names, student IDs, and a file upload option for assignments. 
+Pupils can submit their work online, and responses are 
+automatically collected in a spreadsheet. 
+Benefits: 
+1. Automatic collection and organisation of assignments, 
+reducing manual tracking. 
+2. Easy to review and provide feedback digitally, saving 
+time and effort. 
+Level of Difficulty: Applying 
+Key Competence: Application Software Skills 
+Specific Competence: Deploy Cloud Computing models 
+ 
+ (d) (i) How can you help the teacher to solve the 
+problem of late assignment submissions. [2] 
+(d)(i) Advise the teacher to make use of Mobile apps like Google 
+Classroom or Microsoft Teams to collect assignments 
+digitally/Learners can submit assignments from their 
+devices anytime, reducing late submissions/The app can 
+send 
+notifications/reminders 
+to 
+pupils 
+about 
+deadlines/Teachers can automatically track submissions 
+and mark assignments using the app 
+Level of Difficulty: Applying 
+Key Competence: Critical thinking and problem solving 
+Specific Competence: Design Digital Circuits 
+(ii) Create a simple logic gate concept show how a 
+system could notify the teacher only if a pupil has 
+submitted an assignment on time. [5] 
+ 
+(ii) Logic Concept: 
+ 
+Let A = Assignment submitted, B = Submitted on 
+time 
+ 
+Output Y = Notify teacher 
+ 
+Y = A AND B 
+Only if both conditions are true (assignment submitted AND 
+submitted on time) will the teacher be notified. 
+Level of Difficulty: Creating 
+Key Competence: Critical thinking and problem solving 
+Specific Competence: Design Digital Circuits 
+(e) Recommend two strategies the teacher can use to 
+reduce errors when recording or calculating student 
+marks. [4] 
+(e)  
+1. Use Excel formulas (e.g., SUM, AVERAGE) instead of 
+manual calculations to reduce arithmetic errors.  
+2. Double-check data entry or use data validation rules in 
+Excel to ensure marks are entered within a correct 
+range.  
+ 
+Level of Difficulty: Analysing 
+Key Competence: Application Software Skills 
+Specific Competence: Use Spreadsheet for data entry and analysis 
+ 
+  
+
+--- PDF_PAGE 274 ---
+- 258 - 
+ 
+Example 3  
+EoC3: Creates and designs systems that solve real life problems and improve way of life for citizens 
+Items 
+The local library has a simple website where 
+members can search for books stored in a database. 
+When a member types a title, such as “The Hobbit”, 
+into the search bar and clicks the search icon, the 
+website displays a list of matching books. For 
+example, the search results may show: 
+ 
+This allows members to quickly see all available 
+versions of the book. However, the librarian has 
+noticed that sometimes the system takes too long to 
+return results or may not show all the correct titles 
+from the database. The library wants to ensure that 
+searches are fast, accurate, and always display the 
+correct book information to improve the user 
+experience. 
+(a) Explain the main relationship between the user 
+clicking the "Search" button and the website 
+checking the database [2] 
+Expected Answers 
+(a) The user's click is an input event that directly 
+triggers the next step in the process. The website 
+is programmed so that the button click sends a 
+specific command (the search query) to the 
+database to begin checking for matches. 
+ 
+Level of Difficulty: Comprehension 
+Key Competence: Application Software Skills 
+Specific Competence: Manage Databases 
+(b) (i) Identify the principle that allows the website 
+to find all books containing the words "The Hobbit," 
+not just an exact match.  [1] 
+ 
+(ii) Explain why the search for ―The Hobbit‖ returns 
+two results. [2] 
+(b)(i) The principle is pattern matching or string 
+searching. Specifically, it likely uses a principle called 
+(ii) The system compares the typed text (―The 
+Hobbit‖) with all stored titles. Since there are two 
+versions—a standard edition and an illustrated 
+edition—both titles contain the search words and 
+therefore appear in the results. 
+ a "LIKE" query or a text search algorithm 
+Level of Difficulty: Application 
+Key Competence: Web Development Skills 
+Specific Competence: Develop dynamic interactive web pages 
+ (c) Write an SQL query to select all books with the 
+title "The Hobbit" from the table books [3] 
+(c) SELECT * FROM Books WHERE title = 'The 
+Hobbit'; 
+Level of Difficulty: Application 
+Key Competence: Database Management Skills 
+Specific Competence: Design and create databases using SQL 
+ (d) Suggest one way to improve the speed of the 
+search system. [2] 
+ 
+ (d) Implement database indexing – This allows the 
+system to quickly locate book records without 
+scanning the entire database. Or Optimize search 
+
+--- PDF_PAGE 275 ---
+- 259 - 
+ 
+queries or use caching – Efficient queries and 
+storing frequently searched results in memory 
+can reduce response time. 
+Level of Difficulty: Evaluating 
+Key Competence: Database Management Skills 
+Specific Competence: Design and create databases using SQL 
+(e) Write a simple HTML snippet to display search 
+results in a list. [2] 
+ 
+(e) <ul id="results"></ul>                               [2] 
+ 
+Level of Difficulty: Creating 
+Key Competence: Web Development Skills 
+Specific Competence: Develop dynamic Interactive Websites 
+(f) Write a for loop in C++ that iterates through an 
+array of Book and prints the titles of all books.             
+[2]                                 
+(f) for(int i = 0; i < size; i++) { 
+    std::cout << books[i].title << std::endl; 
+}                                         
+                                                                         [2] 
+Level of Difficulty:  Creating 
+Key Competence: Programming Skills 
+Specific Competence: Develop C++ Programs 
+Example 4:  
+EoC4: Applies computational knowledge to critically evaluate situations and make informed 
+technological decisions Items 
+Scenario: A student notices that their mobile 
+banking app sometimes lets strangers log in using 
+stolen passwords, yet it often locks out the actual 
+owner by mistake. The system is failing to tell the 
+difference between a real user and a hacker. 
+(a) Identify the main security flaw in using only a 
+password for logins. 
+Expected Answers 
+(a) Main Security Flaw 
+The flaw is relying only on passwords for 
+authentication. 
+Passwords can be stolen, guessed, or shared, and the 
+system has no way to confirm whether the person 
+entering the password is truly the account owner. 
+Sends a temporary code to the user‘s phone or 
+generates it in an authenticator app, ensuring that only 
+the real owner with access to the device can log in. 
+Level of Difficulty: Analysis 
+Key Competence: Application Software Skills 
+Specific Competence: Create mobile applications 
+(b) Suggest two specific features that can improve 
+security. 
+b) Two Features to Improve Security 
+1. Fingerprint or facial recognition (biometric 
+authentication)  
+Uses unique biological traits that are extremely 
+difficult to copy. 
+2. One-time SMS or app-generated verification codes 
+(two-factor authentication)  
+Level of Difficulty: Application 
+Key Competence: Application Software Skills 
+Specific Competence: Create mobile applications 
+(c) Explain how these changes would help the 
+system verify the student's identity correctly. 
+ 
+(c) Biometrics: Prevents strangers with stolen 
+passwords from logging in, because they cannot 
+replicate the student‘s fingerprint or face. 
+Verification codes: Adds a second layer of proof. 
+Even if a hacker knows the password, they cannot log 
+in without the student‘s phone or authenticator app. 
+
+--- PDF_PAGE 276 ---
+- 260 - 
+ 
+Level of Difficulty: Application 
+Key Competence: Application Software Skills 
+Specific Competence: Create mobile applications 
+Example 5:  
+EoC5: Creates and designs systems that solve real life problems and improve way of life for citizens Items 
+In your neighbourhood, residents grow vegetables in 
+small spaces. However, many face problems with 
+watering their plants correctly, leading to wasted 
+water or plants dying. You and your team have been 
+asked to design a simple, affordable automated 
+system to help. 
+ 
+(a) Name one input devices and one output 
+device your system would need to work. 
+Input device.  [1] 
+Output device [1] 
+Expected Answers 
+(a) Any one from 
+Input device – moisture sensor/water sensors/rain sensor 
+Output device – screen/buzzer/light/sprinkler/alarm 
+ 
+ 
+ 
+ 
+Cognitive Level: Applying 
+Key Competence: Critical Thinking and Problem Solving Skills 
+Specific Competence: Create mobile applications 
+b) Draw a simple flowchart for your system 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                                                                                        
+[6] 
+ 
+(b) 
+ 
+Level of Difficulty: Creating 
+Key Competence: Algorithmic Thinking 
+Specific Competence: Design Algorithms 
+ (c) To make it affordable, you decide the system 
+should use an SMS alert instead of a screen. 
+Describe one innovative way this SMS feature 
+could help a resident who is away from home. [2] 
+c) If the water tank is empty, the system could send an SMS to 
+the resident's phone, so they can ask a neighbour to refill 
+it, preventing the plants from dying. 
+Level of Difficulty: Understanding 
+Key Competence: Critical Thinking and Problem-Solving Skills 
+Specific Competence: Create mobile applications 
+   
+ 
+ 
+ 
+ 
+ 
+
+--- PDF_PAGE 277 ---
+- 261 - 
+ 
+ 
+Example 6:  
+EoC5: Creates and designs systems that solve real life problems and improve way of life for citizens Items 
+Items 
+Your school wants to create a Smart Classroom Helper Program that: 
+ 
+records learners ‗attendance, 
+ 
+randomly selects a pupil to answer questions, 
+ 
+shows a daily motivational message, 
+ 
+and stores the data in an organised way. 
+You have been asked to design and test a prototype using your 
+programming knowledge from Form 1–4. 
+(a) Write two variables you would need for this program and state 
+their appropriate data types. [4] 
+ 
+ 
+ 
+ 
+(b) Convert the above pseudocode algorithm into a python program. 
+ 
+                                                                                               [6] 
+Expected Answers 
+Great scenario! Let‘s break it down step by step 
+so it feels like a real exam-style solution. 
+(a) Variables and Data Types 
+For the Smart Classroom Helper Program, here 
+are two suitable variables: 
+ 
+attendance_list → Data type: 
+List  
+Stores the names of pupils 
+present each day. 
+ 
+motivational_message → 
+Data type: String  
+Holds the daily motivational 
+message to be displayed. 
+(Other possible answers: pupil_name as 
+String, question_number as Integer, 
+etc.) 
+(b) Python Program Prototype 
+Here‘s a simple Python version of the 
+pseudocode algorithm: 
+import random 
+import datetime 
+ 
+# (a) Variables 
+attendance_list = ["Alice", 
+"Brian", "Cathy", "David", 
+"Emily"] 
+motivational_messages = [ 
+    "Believe in yourself!", 
+    "Every day is a chance to 
+learn.", 
+    "Stay positive and work 
+hard.", 
+    "Success comes to those who 
+persevere.", 
+    "Your effort today builds 
+your tomorrow." 
+] 
+ 
+# Record attendance (for 
+simplicity, assume all present) 
+print("Today's Attendance:", 
+attendance_list) 
+ 
+# Randomly select a pupil to 
+
+--- PDF_PAGE 278 ---
+- 262 - 
+ 
+answer a question 
+selected_pupil = 
+random.choice(attendance_list) 
+print("Selected pupil to 
+answer:", selected_pupil) 
+ 
+# Show a daily motivational 
+message 
+today_message = 
+random.choice(motivational_messa
+ges) 
+print("Motivational Message:", 
+today_message) 
+ 
+# Store data in an organised way 
+(dictionary) 
+classroom_data = { 
+    "date": 
+datetime.date.today().strftime("
+%d-%m-%Y"), 
+    "attendance": 
+attendance_list, 
+    "selected_pupil": 
+selected_pupil, 
+    "motivational_message": 
+today_message 
+} 
+ 
+print ("\n--- Classroom Data 
+Record ---") 
+for key, value in 
+classroom_data. items (): 
+    print(f"{key}: {value}") 
+ 
+ 
+Cognitive Level: Creating 
+Key Competence: Programming Skills 
+Specific Competence: Use Python to code programs 

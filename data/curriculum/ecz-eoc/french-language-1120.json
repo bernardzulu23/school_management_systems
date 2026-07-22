@@ -1,0 +1,151 @@
+{
+  "subjectCode": "1120",
+  "subjectName": "French Language",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates proficient use of listening, speaking, reading and writing skills in real-life situations, adapting to audience and purpose to communicate effectively and support life-long learning.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Reads, interprets, summarises and translates continuous and non-continuous texts",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Reads/comprehends texts; interprets vocabulary; summarises; translates preserving meaning/tone",
+          "topicAliases": [
+            "Non-continuous texts",
+            "Reading Comprehension",
+            "Summary",
+            "Translation"
+          ],
+          "unverifiedTopicAliases": ["Continuous texts", "French reading"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates mastery of written language conventions and transformations",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Spells accurately; applies grammar/syntax/punctuation; transforms written structures",
+          "topicAliases": [
+            "Composition",
+            "Descriptive writing",
+            "Formal and Informal Greetings",
+            "Formal Letter",
+            "Grammar",
+            "Informal Letter",
+            "Language Structure",
+            "Letter Writing",
+            "Narrative writing",
+            "Semi - Formal Letter"
+          ],
+          "unverifiedTopicAliases": [
+            "Curriculum vitae",
+            "Guided composition",
+            "Unguided composition"
+          ],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Understands and interprets spoken information",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Identifies main ideas in spoken texts; analyses purpose/tone; follows instructions; interprets spoken source→target",
+          "topicAliases": ["Directions", "French Alphabet", "Listening", "Oral comprehension"],
+          "unverifiedTopicAliases": ["Spoken French"],
+          "taskTypeAliases": [],
+          "note": "Primarily SBA; Final Exam focuses on EoC1-2."
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Produces ideas, thoughts and opinions through spoken language",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Organises ideas; speaks clearly/fluently; appropriate vocabulary/tone; accurate pronunciation/grammar",
+          "topicAliases": ["Oral presentation", "Pronunciation", "Speaking"],
+          "unverifiedTopicAliases": ["Conversation"],
+          "taskTypeAliases": [],
+          "note": "Primarily SBA; Final Exam focuses on EoC1-2."
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "1120/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 90,
+        "structureNotes": "SBA Form 2: 5 tasks/90. All 4 EoC. Classwork, homework, oral presentations, projects. Plus shared project 20 marks across Form 2-3.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "1120/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 90,
+        "structureNotes": "SBA Form 3: 5 tasks/90 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "1120/2",
+        "formLevel": "Form 4",
+        "numItems": 10,
+        "totalMarks": 60,
+        "structureNotes": "Final Exam EoC1+2 only: Section A Reading (2 items); Section B Structure+Translation; Section C Writing. SBA also includes Form2-3 project (20 marks). Weighting SBA:FE 40:60. Duration 2h.",
+        "bloomRange": ["remembering", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA marked at school (40% with project); Final Exam centrally marked (60%).",
+      "Reading passages 250-300 words; semi-structured tasks typically 15 marks each.",
+      "Composition: guided and unguided (10 marks each part).",
+      "Both components required for grading."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "French continuous/non-continuous reading scenarios with semi-structured comprehension tasks",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
+    }
+  ]
+}

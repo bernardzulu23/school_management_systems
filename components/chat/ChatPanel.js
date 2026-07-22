@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Loader2, Send, FileText, Download, SendHorizontal, Headphones } from 'lucide-react'
 import { EMPTY_CHAT_REPLY_MESSAGE, readChatSseStream } from '@/lib/ai/chat/sse-client'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 
 const DEFAULT_RESUBMIT_PROMPT = "Rewrite the evaluation section based on the HOD's comment"
 
@@ -596,27 +597,38 @@ export default function ChatPanel({
       )}
 
       {mode === 'generative' && sessionStatus === 'AI_MANAGED' && (
-        <div className="px-3 pt-2 border-t border-ink/10 grid grid-cols-1 sm:grid-cols-4 gap-2">
-          <input
-            className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs"
-            placeholder="Subject"
-            value={lpSubject}
-            onChange={(e) => setLpSubject(e.target.value)}
-            disabled={lpBusy}
-          />
-          <input
-            className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs"
-            placeholder="Form / Grade"
-            value={lpGrade}
-            onChange={(e) => setLpGrade(e.target.value)}
-            disabled={lpBusy}
-          />
-          <input
-            className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs sm:col-span-1"
-            placeholder="Topic"
+        <div className="px-3 pt-2 border-t border-ink/10 space-y-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input
+              className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs"
+              placeholder="Subject"
+              value={lpSubject}
+              onChange={(e) => {
+                setLpSubject(e.target.value)
+                setLpTopic('')
+              }}
+              disabled={lpBusy}
+            />
+            <input
+              className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs"
+              placeholder="Form / Grade (e.g. Form 2)"
+              value={lpGrade}
+              onChange={(e) => {
+                setLpGrade(e.target.value)
+                setLpTopic('')
+              }}
+              disabled={lpBusy}
+            />
+          </div>
+          <CurriculumTopicSelect
+            subject={lpSubject}
+            gradeOrForm={lpGrade}
             value={lpTopic}
-            onChange={(e) => setLpTopic(e.target.value)}
-            disabled={lpBusy}
+            onChange={setLpTopic}
+            label="Curriculum topic"
+            required
+            allowFreeFormWhenEmpty={false}
+            id="chat-lp-topic"
           />
           <Button
             type="button"

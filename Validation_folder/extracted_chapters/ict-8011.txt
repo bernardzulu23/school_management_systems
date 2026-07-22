@@ -1,0 +1,685 @@
+
+--- PDF_PAGE 279 ---
+- 263 - 
+ 
+Chapter 26: Information and Communications Technology  - 8011  
+ 
+1 
+Construct 
+Applies digital literacy and computational understanding to interpret problems, create solution-driven 
+approaches, and use Information and Communications Technology (ICT) responsibly and effectively in 
+real-life applications. 
+2 
+Elements of Construct 
+The Information and Communications Technology (ICT) Examination candidates will be assessed using 
+the following five (5) Elements of Construct (EoC):  
+EoC1 
+Demonstrate the ability to identify and describe ICT components, systems and their 
+functions 
+ Recognises computer components and explain how input, processing, storage, and output 
+devices work together to perform tasks.  
+EoC2 
+Classify and distinguish ICT tools, file types, network structures, and technologies 
+ Categorises ICT tools, differentiates file formats, and compares network topologies and 
+technologies 
+EoC3 
+Develops analytical skills and evaluating ICT systems and problems 
+ Assesses system behaviour processes, resolve operational issues, and recommend 
+configuration and reliable improvements 
+EoC4 
+Evaluate ICT systems, networks and technologies 
+ Examines ICT systems and technologies by assessing operational performance, comparing 
+alternatives, and considering sustainability, security, and user impact. 
+EoC5 
+Applies ethical reasoning in the responsible use of ICT 
+ Evaluates a candidate‘s knowledge of digital rights, privacy, and security, and their ability to 
+use technology responsibly and safely. 
+3 
+Test Design 
+The ICT examination will consist of two components; Component 1 will be School Based Assessment 
+which will be set and scored by teachers at school level.; Component 2 will be the final examination which 
+will be centrally set by the Examinations Council of Zambia at the end of Form 4. The following is a 
+summary of the test design for School Based Assessment and Final Examination.  
+Summary of Test Design for SBA and Final Examination 
+Component Name 
+Code 
+Duration 
+No. of Tasks/ 
+Test Items 
+Marks 
+School Based 
+Assessment (SBA) 
+Component 1 
+8011/1 
+Form 2 
+9 
+100 
+Form 3 
+7 
+100 
+Final Examination  
+Component 2 
+8011/2 
+2 hours 30 
+minutes 
+5 
+100 
+ 
+ 
+       
+ 
+          
+
+--- PDF_PAGE 280 ---
+- 264 - 
+ 
+ 
+  SBA Test Design Details 
+Component 
+and Paper 
+Code 
+ 
+Test Item Type 
+No. of Items 
+Total Marks 
+Duration 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ School Based 
+Assessment - 
+Component 1 
+ 
+ 
+SBA 
+Formative 
+and 
+Summative 
+Practical 
+ and 
+Theory 
+Part 1 
+EoC1 –EoC5 
+ 
+Project 
+Assessments 
+Class participation and 
+collaboration tasks 
+ 
+Peer Review and 
+Group work 
+ 
+Paper-Based 
+practical tasks 
+ 
+Oral examinations 
+ 
+Problem solving 
+exercise 
+ 
+Portfolio 
+assessment 
+ 
+4 
+ 
+100 
+ 
+2 years 
+(Form 2-3) 
+ 
+Part 2 
+EoC1 –EoC5 
+Project Presentation  
+ 
+ 
+Practical demonstration 
+ 
+Portfolio evidence 
+ 
+100 
+ 
+2 years 
+(Form 2-3) 
+Total 
+100 
+   3.1 
+Structure 
+The ICT assessment will comprise two components: School Based Assessment (SBA) – 
+Component 1 and the Final Examination – Component 2. Each component evaluates specific 
+competences and contributes differently to the candidates‘ overall performance. 
+3.1.1 
+School Based Assessment (SBA) – Component 1 
+The SBA will include both formative and summative assessment tasks administered by the 
+teacher at school level during teaching and learning sessions from Form 2 to Form 3. It will 
+involve a combination of practical and theoretical activities. 
+The SBA is divided into two parts: Part 1 and Part 2. 
+(a) Part 1: Continuous Assessment Tasks 
+Part 1 will assess learners through a variety of practical and theoretical tasks, including: 
+(i) 
+Project assessments 
+(ii) 
+Class participation and collaboration tasks 
+(iii) 
+Peer review and group work 
+(iv) 
+Software Simulation tasks 
+(v) 
+Paper-based practical activities 
+(vi) 
+Oral examinations 
+
+--- PDF_PAGE 281 ---
+- 265 - 
+ 
+(vii) Problem-solving exercises 
+(viii) Portfolio assessment 
+These tasks will address all Elements of Competence (EoC1 to EoC5) and will consist 
+of fifteen (15) tasks, amounting to a total of 200 marks. This section will be completed 
+over two years, allowing for continuous evaluation as learners progressively build their 
+ICT skills. 
+(b) Part 2: Final Project Presentation 
+Part 2 of the SBA will consist of one major taskthe Final Project Presentation. 
+Learners will be assessed on: 
+(i) 
+Their ability to demonstrate applied ICT skills 
+(ii) 
+The clarity and rationale behind their project choices 
+(iii) 
+Their ability to respond effectively to questions 
+The final project presentation will cover all five Elements of Construct (Eo1–Eo5) and 
+will carry 100 marks. This project will be undertaken over two years, from Form 2 
+Term 1 to Form 3 Term 1, enabling learners to integrate and apply knowledge 
+independently. 
+3.1.2 
+Final Examination – Component 2 
+Component 2 will include structured open-ended items, essays, and scenario-based items 
+which will be based on the ICT Construct. 
+The paper will consist of two sections: Section A and Section B as follows: 
+(a) Section A (Compulsory) 
+Section A will be compulsory and will be divided into Part A and Part B: 
+Part A: 
+This part will contain three (03) items based on EoC1, EoC2, and EoC3 using key 
+competences such as Digital Literacy, Environmental Sustainability, Communication 
+and Entrepreneurship. 
+The items will be structured and open-ended scenario-based, carrying a total of 50 
+marks. 
+Part B: 
+This part will contain one (01) item based on EoC4 from Competences such as Critical 
+Thinking, Financial Education and Problem Solving. 
+The item will include scenario-based and essay-type tasks and will carry 30 marks.  
+All items in Section A will be compulsory, contributing a total of 80 marks. 
+(b) Section B (Optional) 
+Section B will consist of three (03) optional items based on EoC5 from competences 
+such Emotional Intelligence and Citizenship 
+Candidates will be required to answer two (02) items only by choosing from the three 
+items. Each will carry 20 marks. 
+3.2 
+Test Content 
+ The SBA is designed to assess a learner‘s practical skills, knowledge, and application of concepts 
+over a period of time. 
+3.2.1 School-Based Assessment (SBA) – Component 1 
+The School-Based Assessment at Form 2, and Form 3, 4 will consist of tasks aligned to the 
+competences required at each level, as outlined in the Information and Communications 
+
+--- PDF_PAGE 282 ---
+- 266 - 
+ 
+Technology Assessment framework. SBA will assess both theoretical understanding and 
+practical ICT skills, using a variety of continuous assessment activities. These tasks should be 
+administered in all schools except those with limited facilities where an Alternative-to-
+Practical approach will be used. 
+ (a) 
+Types of SBA Tasks 
+SBA in ICT will draw from a diverse range of activities designed to develop and 
+measure learners‘ practical competence, problem-solving ability, and theoretical 
+knowledge. 
+(i) Project Assessments: Evaluate learner‘s ability to apply ICT concepts and 
+practical skills in completing real or simulated tasks. 
+(ii) Problem-Solving Exercises: Assess learners‘ critical thinking, analytical skills, 
+and ability to propose logical solutions to ICT-related problems. 
+(iii) Class Participation and Collaboration: Measure learner engagement, 
+teamwork, communication, and contribution during practical and theoretical 
+lessons. 
+(iv) Portfolio Assessment: Involves reviewing a curated collection of student work 
+demonstrating progress in skills development and understanding over time. 
+(v) Final Project Presentation: Provides an opportunity for learners to present 
+and justify their project work, demonstrating clarity, confidence, and 
+comprehension. 
+(b) 
+Alternative-to-Practical Examinations 
+In schools with limited access to functional computer labs, learners will be assessed 
+using equivalent tasks that measure the same competences expected in practical 
+settings. These include: 
+(i) Simulation Software: Enables learners to practise data management, networks, 
+and system operations in a virtual environment. 
+(ii) Paper-Based Practical Tasks: Require students to outline procedural steps, 
+design network diagrams, create flowcharts, and plan data-handling strategies. 
+(iii) Project-Based Assessments: Focus on designing theoretical ICT solutions that 
+demonstrate understanding of concepts and processes. 
+(iv) Oral Examinations: Allow students to verbally explain procedures for 
+practical tasks, such as troubleshooting, and network security processes. 
+(v) Peer Review and Group Work: Encourage collaborative learning where 
+learners present tasks to peers for structured feedback. 
+(vi) Shift-Based Use of ICT Labs: Rotational schedules ensure equitable access to 
+computers where resources are limited. 
+(vii) Portfolio Assessments: Include written assignments, design plans, reports, and 
+reflections compiled throughout the learning period. 
+3.2.2 Final Examination – Component 2 
+The Final Examination evaluates candidates‘ ability to apply ICT knowledge and demonstrate 
+key competences through structured questions, case studies, scenario-based tasks, and essay-
+style responses.  
+(a)Types of Test Items 
+
+--- PDF_PAGE 283 ---
+- 267 - 
+ 
+             The final Examination will comprise two sections, A and B 
+(i) Section A – Compulsory 
+All candidates must attempt this section. It is divided into Part A and Part B: 
+Part A: Contains three items, each structured, open-ended, and based on real 
+or contextual scenarios. Candidates must interpret the situations and provide 
+appropriate responses. 
+Part B: Contains one (1) item that combines scenario-based questioning with 
+an extended essay. This item requires learners to solve contextual ICT 
+problems by applying their understanding and demonstrating creativity. 
+(ii) Section B – Optional  
+This section consists of three (03) items, presented as structured, open-ended 
+tasks, either scenario-based or in case-study format. Candidates will select only 
+two items to answer. 
+3.4 
+Level of Difficulty 
+SBA task difficulty will span from lower-order skills (Remembering) to higher-order skills 
+(Creating) in line with Bloom‘s Taxonomy. 
+For the Final Examination, the difficulty range will focus on Understanding through Analysing. 
+The level of difficulty for both SBA and examination items will be determined by: 
+(i)   
+The nature of the real-life ICT situation presented and the type of response required. 
+(ii) 
+The depth of content knowledge necessary to respond accurately. 
+(iii) 
+The complexity and number of cognitive processes needed to complete the task. 
+(iv)    The number and structure of subtasks embedded within the scenario. 
+(v) 
+The degree of abstract reasoning and technical interpretation involved. 
+(vi)  The level of independence, decision-making, and strategic thinking expected, especially when 
+learners must develop their own solutions rather than follow a prescribed process. 
+These considerations will ensure that all tasks both SBA and the Final Examination—appropriately 
+measure and promote learners‘ specific competences in ICT, including critical thinking, problem-
+solving, creativity, digital skills, and practical understanding. 
+3.5 
+Syllabus Coverage 
+The content for School-Based Assessment (SBA) will be selected from the ICT syllabus for Form 2 
+through Form 4 in accordance with the competence requirements outlined for each grade. SBA will 
+emphasise practical engagement and the development of key abilities such as analytical thinking, 
+creativity, digital competence, and effective problem-solving. 
+The Final Examination will be based on content from the material from the entire Information and 
+Communications Technology Secondary Education Ordinary Level Form 1–Form 4 Syllabus, to 
+ensure that learners are assessed on a full spectrum of knowledge and skills, from basic principles to 
+applied and analytical ICT competences. 
+4 
+Scoring Criteria 
+4.1 
+School Based Assessment 
+SBA tasks will be set, assessed and scored internally by the subject teacher and moderated 
+periodically throughout the course. This ensures learners‘ performance is measured accurately and 
+consistently over time.  
+
+--- PDF_PAGE 284 ---
+- 268 - 
+ 
+4.2 
+Final Examination 
+The Final Examination will be externally prepared and centrally evaluated. 
+4.2.1 
+All candidate scripts will be collected for central marking by assigned examiners.  
+4.2.2 
+The Examinations Council of Zambia will provide an official marking scheme to ensure 
+uniformity and fairness in grading. 
+4.2.3 
+Acceptable alternative responses will be included in the marking scheme and finalised 
+during an examiners‘ coordination meeting. 
+5 
+Notes and Guidelines 
+The following guidelines apply to all candidates and centres undertaking the ICT examination: 
+5.1 The weighting for Component 1 will be 30% while component 2 , the Final Examination will    
+        be 70%.   
+5.2 
+Candidates are required to complete both the SBA and Final Examinations components to be graded. 
+5.3  
+Eligibility is limited to candidates registered with the Examinations Council of Zambia (ECZ) via 
+their respective centres. 
+5.4 
+Examination rules and instructions will be provided on the cover page of the question paper and in 
+the annual examination timetable. 
+5.5 
+All projects, practical tasks, and other submissions must comply with the prescribed format and 
+submission requirements. 
+5.6 
+Guidelines for GCE candidates will be developed by ECZ. 
+5.7  
+Candidates shall NOT be allowed to enter the examination room with a phone or calculator of any 
+kind or Personal Digital Assistant (PDA). 
+6. 
+Exemplar Test Items 
+This section contains sample items that illustrate the skills and knowledge learners are expected to 
+demonstrate. They guide the assessment by showing the format, difficulty, and focus areas of actual 
+assessments. 
+Example 1:  
+EoC 1: Demonstrates the ability to identify and describe ICT components, systems and their functions. 
+Item   
+A new secondary school plans to expand two 
+computer laboratories—one for O-Level learners and 
+another for A-Level learners. However, the school 
+has limited funds for the project. 
+(a)  You have been asked to provide advice on the 
+best options the school can use to buy additional 
+computer. You have two options. Outline them. 
+Expected Response 
+(a)   Any one from  
+- purchase parts and assemble locally at school. 
+-Buy fewer new computers each year over a period of 
+3years instead of buying all at once. 
+- implement a thin client or computer sharing setup 
+where a small number of machines support multiple 
+terminals or virtual desktops 
+Level of Difficulty:  Analysing 
+Key Competence: Entrepreneurship  
+Specific Competence: Demonstrate understanding of computer hardware functions 
+(b) Some learners have suggested that the school 
+should buy only one or two printers instead of 
+several. Give one reason, other than cost, why the 
+school may consider limiting the number of 
+printers. ……………………………………… [2] 
+(b)Printers require ongoing maintenance and 
+supervision (e.g., paper jams, ink replacement, 
+servicing). Fewer printers reduce management 
+complexity and minimize disruptions in the labs. 
+
+--- PDF_PAGE 285 ---
+- 269 - 
+ 
+Level of Difficulty:  Evaluating 
+Key Competence: Analytical / Problem Solving 
+Specific Competence: Demonstrate understanding of  
+  (c) Some learners have reported that currently, 
+certain computers lack applications for creating 
+documents and presentations. Give one reason why 
+this happened and one way to resolve this. 
+Reason:[1] 
+Solution: [1] 
+ (c) Reason: The computers may not have had 
+productivity software installed, or licenses 
+expired/weren‘t purchased. 
+Solution: Install free/open-source alternatives (e.g., 
+LibreOffice, Google Docs) or ensure proper licensing 
+and installation of required applications. 
+Level of Difficulty:  Analysing 
+Key Competence: Analytical / Problem Solving 
+Specific Competence: Demonstrate understanding of computer hardware functions 
+ 
+Example 2:  
+EoC2: Classify and distinguish ICT tools, file types, network structures, and technologies. 
+A tourism agency in Livingstone, Zambia, manages 
+digital content for promoting Victoria Falls tours. 
+They use various file types for brochures, photos, 
+videos, and notes shown in the picture, shared with 
+field agents over a network. It has been noticed that 
+the agents have recently being receiving wrong files 
+and different file formats from what they use. 
+                               
+ 
+(a) Classify brochures, photos, and notes by file type 
+to ensure proper distribution to field agents. Use the 
+table to indicate the file types identified 
+Category 
+File Type 
+Document 
+ 
+Image 
+ 
+Video 
+ 
+Text 
+ 
+(a) 
+          
+ 
+Level of Difficulty:  Applying 
+Key Competence: Digital Literacy 
+Specific Competence: Use different file naming conventions 
+b) Explain one key feature of each of the following 
+file types that makes it suitable to be used by the 
+agency: 
+PDF. [1] 
+ZIP. [1]  
+                                                                                        
+ 
+(b)(i) PDF: Portable Document Format will preserve 
+the original layout, fonts, and graphics, making 
+brochures and notes easy to share and view 
+consistently across different devices without altering 
+formatting. 
+   (ii) ZIP: A compressed file format that reduces 
+storage size and bundles multiple files together, 
+making it efficient for the agency to package and 
+transfer large sets of photos or documents quickly 
+Level of Difficulty:  Understanding 
+Key Competence: Digital Literacy 
+Specific Competence: Compress Files and folders 
+c) Give one reason why brochure files need to be 
+(c) Brochure files need to be secured before 
+
+--- PDF_PAGE 286 ---
+- 270 - 
+ 
+secured before the agency distributes them over the 
+network. [2] 
+distribution to prevent unauthorized access or 
+tampering, ensuring that the information shared 
+with field agents remains authentic, accurate, and 
+free from malicious alterations. 
+ 
+Level of Difficulty:  Evaluating 
+Key Competence: Citizenship 
+Specific Competence: Encrypt Files and folders  
+ 
+Example 3  
+EoC3: Develops analytical skills and evaluating ICT systems and problems 
+Items 
+Mitondo Secondary School recently adopted a cloud-
+based learning management system (LMS) to store 
+students‘ coursework, assignments, and personal data. 
+Teachers and students can access this LMS from 
+anywhere using their devices. However, some 
+students have reported issues: 
+ 
+Slow access. 
+ 
+Concerns about privacy and the security of 
+personal data stored on the cloud. 
+ 
+Some students share login credentials with 
+others despite the school‘s policy against 
+sharing accounts. 
+(a) You have been asked to give a brief explanation 
+on why computers and the internet are slow. Write 
+your explanation. [4] 
+ 
+Expected Answers 
+(a) -The server may be overloaded, 
+- internet bandwidth may be insufficient,  
+- too many users may be accessing the LMS 
+simultaneously. 
+ 
+ 
+Level of Difficulty:  Understanding 
+Key Competence: Problem solving 
+Specific Competence: Use Cloud Computing 
+(b) Propose two strategies to improve the 
+performance of the LMS during peak usage times. [2] 
+ 
+ 
+(b): (i) Increase Bandwidth: Upgrade the school‘s 
+internet connection to handle more 
+simultaneous users. 
+      (ii) Load Balancing: Use server load    balancing 
+or cloud services that automatically scale resources 
+based on demand. 
+Schedule Access: Encourage students to access non-
+urgent resources during off-peak hours to reduce 
+congestion 
+Level of Difficulty: Analysis 
+Key Competence: Problem solving 
+Specific Competence: Use Cloud Computing 
+ 
+(c) Explain two possible dangers to the privacy and 
+security when you store personal information on a 
+cloud-based system. [2] 
+ 
+(c)-Unauthorized access could lead to personal data 
+breaches, including student grades and contact 
+information. 
+-Weak passwords or lack of encryption can make 
+data vulnerable to hackers. 
+Using shared devices or public networks increases 
+the risk of exposure 
+Level of Difficulty: Analysis 
+Key Competence: Problem solving 
+Specific Competence: Use Cloud Computing 
+(d) Suggest three measures the school can implement 
+to protect students‘ personal data in the cloud. [3] 
+(d) Use Strong Authentication: Implement strong 
+passwords and two-factor authentication (2FA) for 
+all accounts. 
+
+--- PDF_PAGE 287 ---
+- 271 - 
+ 
+Data Encryption: Encrypt data in transit and at 
+rest to prevent unauthorized access. 
+Access Control and Monitoring: Ensure only 
+authorized users can access sensitive data and 
+monitor activity for suspicious behaviour. 
+ 
+Level of Difficulty: Creating 
+Key Competence: Problem solving 
+Specific Competence: Use Cloud Computing 
+ 
+ 
+Example 4 :  
+EoC4: Critically evaluate ICT systems, networks and technologies. 
+A small retail store in Lusaka has been struggling 
+with slow customer service and errors in stock 
+management. The owner wants to implement ICT 
+solutions to improve efficiency, manage inventory, 
+and track sales. You have been hired as an ICT 
+consultant to analyse the business needs and suggest 
+appropriate solutions. 
+Part Questions: 
+(a) Identify and explain four ICT tools or systems 
+that can be used in this business to improve 
+operations. [10 marks] 
+ 
+Expected Answers 
+a) Point of Sale (POS) System: Automates billing, 
+tracks sales, manages inventory. 
+Inventory Management Software: Monitors stock 
+levels, alerts when stock is low. 
+Customer Relationship Management (CRM) System: 
+Tracks customer preferences, purchase history. 
+Accounting Software: Automates financial records, 
+generates reports, reduces errors. 
+Explanation: Each tool improves efficiency, reduces 
+manual errors, and supports decision-making. 
+ 
+Level of Difficulty: Applying 
+Key Competence: Digital Literacy 
+Specific Competence: Appreciate ICT tools in business 
+(b) Evaluate the benefits and challenges of 
+integrating ICT in this business. [10] 
+ 
+(b)Benefits: Faster operations, accurate record-keeping, 
+better customer service, real-time stock monitoring. 
+Challenges: High initial cost, staff training 
+requirements, possible system downtime, security risks. 
+Conclusion: ICT integration can greatly improve 
+business efficiency but requires careful planning, 
+investment, and staff readiness 
+ 
+Level of Difficulty: Evaluating 
+Key Competence: Digital Literacy 
+Specific Competence: Appreciate ICT tools in business 
+Example 5:  
+EoC5: Apply ethical reasoning in the responsible use of ICT.          
+A secondary school in Kaoma has recently 
+introduced a cloud-based Learning Management 
+System (LMS) to store student records, assignments, 
+and examination results. Teachers and students 
+access the system using personal devices connected 
+to the school‘s Wi-Fi network. 
+Last week, the school experienced a cyber incident 
+in which an unauthorised person attempted to access 
+student records. 
+(a) (i) State one immediate action the school should 
+take to deal with this incident. 
+Expected Answers 
+(a) (i) Immediate action to deal with the incident: 
+ 
+Temporarily suspend access to the LMS and 
+investigate the attempted breach. 
+ 
+Reset passwords for all accounts to prevent 
+further unauthorized access. (Any one valid 
+action earns  a mark.) 
+ 
+
+--- PDF_PAGE 288 ---
+- 272 - 
+ 
+Level of Difficulty: Analysis 
+Key Competence: Citizenship 
+Specific Competence: Apply best cybersecurity practices 
+(ii) Discuss the ethical responsibilities of students 
+and teachers when using the LMS. 
+(ii) Ethical responsibilities of students and teachers(i) 
+Students: Must respect the privacy of others by not 
+attempting to access or share confidential records, 
+and should use strong passwords responsibly. Report 
+Suspicious activities;(ii)Teachers: Must safeguard 
+student data, avoid sharing login credentials, and act 
+as role models in promoting responsible ICT use. 
+Report suspicious activities 
+Level of Difficulty: Applying 
+Key Competence: Citizenship 
+Specific Competence: Applying best cybersecurity practices 
+(b) Propose two measures the school can implement 
+to protect its network from cyber threats. 
+(b) Two measures to protect the school‘s network:(i) 
+Install and regularly update firewalls and antivirus 
+software; 
+(ii) Implement user authentication policies such as 
+strong passwords, two-factor authentication 
+Level of Difficulty: Analysing 
+Key Competence: Citizenship 
+Specific Competence: Applying best cybersecurity practices 
+(c) Draft one rule that addresses the responsible use 
+of ICT within the school. 
+ 
+ (c) Rule addressing responsible ICT use: 
+ 
+“All users must log in with their own 
+credentials and must not share passwords or 
+attempt to access information they are not 
+authorized to view.” 
+ 
+Level of Difficulty: Applying 
+Key Competence: Citizenship 
+Specific Competence: Applying best cybersecurity practices 
+ 
+ 

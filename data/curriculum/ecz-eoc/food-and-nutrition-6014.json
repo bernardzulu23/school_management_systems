@@ -1,0 +1,157 @@
+{
+  "subjectCode": "6014",
+  "subjectName": "Food and Nutrition",
+  "syllabusYear": 2024,
+  "construct": "Applies food and nutrition knowledge and practical skills for healthy living, food security and entrepreneurship.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Explores the Kitchen, equipment, utensils and materials",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Uses kitchen equipment/utensils/materials safely and effectively",
+          "topicAliases": [
+            "Improvisation of Kitchen Utensils",
+            "Kitchen equipment",
+            "Kitchen safety",
+            "Kitchen Utensils and Equipment",
+            "Utensils"
+          ],
+          "unverifiedTopicAliases": ["Materials"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Understands Fundamentals of Food and Nutrition",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Applies fundamentals of food and nutrition science",
+          "topicAliases": ["Balanced diet", "Food Nutrients", "Nutrients", "Nutrition"],
+          "unverifiedTopicAliases": ["Food science"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Prepares and Serves Meals and Dishes",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Prepares and serves meals/dishes to appropriate standards",
+          "topicAliases": ["Cookery", "Food service", "Meal preparation", "Meal Service"],
+          "unverifiedTopicAliases": ["Menu planning"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Innovates Food Packaging and Storage Solutions",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Innovates packaging and storage solutions for food products",
+          "topicAliases": ["Food packaging", "Food storage", "Preservation"],
+          "unverifiedTopicAliases": ["Labelling"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC5",
+      "description": "Demonstrates Knowledge and Practices that Promote Sustainable Food Security",
+      "subSkills": [
+        {
+          "id": "eoc5-main",
+          "label": "Promotes sustainable food security practices",
+          "topicAliases": ["Food security", "Sustainability"],
+          "unverifiedTopicAliases": ["Food waste"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC6",
+      "description": "Develops Skills in Consumers and Entrepreneurs through Research",
+      "subSkills": [
+        {
+          "id": "eoc6-main",
+          "label": "Consumer and entrepreneurship skills through research",
+          "topicAliases": ["Consumer education", "Entrepreneurship", "Research"],
+          "unverifiedTopicAliases": ["Food business"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "6014/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "6014/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "6014/2",
+        "formLevel": "Form 4",
+        "numItems": 6,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2-3; Final Exam Form 4. Codes 6014/1 and 6014/2. All 6 EoC.",
+        "bloomRange": ["understanding", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA school-marked practical/theory tasks.",
+      "Final Exam ECZ-marked.",
+      "Both components required."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Meal preparation and service scenario for a Zambian community event",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "creativity_and_innovation"]
+    }
+  ]
+}

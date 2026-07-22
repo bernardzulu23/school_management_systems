@@ -12,29 +12,32 @@
           "id": "eoc1-calculations",
           "label": "Performs calculations involving numbers and money",
           "topicAliases": [
-            "Numbers",
+            "Approximation",
+            "Approximations and Estimation",
             "Classification of Numbers",
             "Combined Operations on Real Numbers",
-            "Integers",
-            "The Four Operations on Integers",
-            "Approximations and Estimation",
-            "Approximation",
             "Estimations",
             "Financial Arithmetic",
             "Financial Interest",
-            "Investment",
             "Index Notation",
-            "Indices"
+            "Indices",
+            "Integers",
+            "Investment",
+            "Numbers",
+            "The Four Operations on Integers"
           ],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc1-patterns",
           "label": "Creates number patterns",
           "topicAliases": [],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
@@ -47,32 +50,35 @@
             "Algebra",
             "Algebraic Expressions",
             "Basic Processes of Algebra",
-            "Systems of Equations",
-            "Simultaneous Equations",
-            "Quadratic Equations and Functions",
-            "Quadratic Equations",
-            "Quadratic Functions",
-            "Linear Programming",
+            "Functions",
             "Inequations",
-            "Relations and Functions",
+            "Linear Programming",
+            "Operations on 2x2 Matrices",
+            "Quadratic Equations",
+            "Quadratic Equations and Functions",
+            "Quadratic Functions",
             "Relations",
-            "Functions"
+            "Relations and Functions",
+            "Simultaneous Equations",
+            "Systems of Equations"
           ],
           "unverifiedTopicAliases": [
             "Matrices",
             "Operations on Matrices",
-            "Operations on 2x2 Matrices",
             "Vectors",
             "Vectors in 2 Dimensions"
-          ]
+          ],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc2-sets",
           "label": "Applies set theory to real life situations",
-          "topicAliases": ["Sets", "Operations on Sets"],
-          "unverifiedTopicAliases": []
+          "topicAliases": ["Operations on Sets", "Sets"],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
@@ -82,13 +88,14 @@
           "id": "eoc3-shapes",
           "label": "Performs calculations involving two and three-dimensional shapes",
           "topicAliases": [
-            "Shapes",
-            "Two Dimensional Shapes",
-            "Three Dimensional Shapes",
             "Polygons",
-            "Regular and Irregular Polygons"
+            "Regular and Irregular Polygons",
+            "Shapes",
+            "Three Dimensional Shapes",
+            "Two Dimensional Shapes"
           ],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc3-construction",
@@ -96,51 +103,58 @@
           "topicAliases": [
             "Construction",
             "Geometrical Constructions",
-            "Locus",
-            "Loci in Two Dimensions"
+            "Loci in Two Dimensions",
+            "Locus"
           ],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc3-angles",
           "label": "Uses angles to solve practical problems",
           "topicAliases": [
+            "Angle of Elevation and Depression",
             "Angles",
             "Angles associated with straight lines",
-            "Angle of Elevation and Depression",
-            "Trigonometry",
-            "Pythagoras Theorem",
-            "Introduction to Trigonometry",
             "Bearings and Scale Drawing",
-            "Compass and Three Figure Bearings"
+            "Compass and Three Figure Bearings",
+            "Introduction to Trigonometry",
+            "Pythagoras Theorem",
+            "Trigonometry"
           ],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc3-maps",
           "label": "Creates and interprets reference maps",
           "topicAliases": [],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc3-3dshapes",
           "label": "Makes three-dimensional shapes",
           "topicAliases": [],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc3-designs",
           "label": "Creates designs/models using two and three-dimensional shapes",
           "topicAliases": [],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc3-basicdesigns",
           "label": "Constructs basic designs",
           "topicAliases": [],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
@@ -150,32 +164,38 @@
           "id": "eoc4-measures",
           "label": "Performs calculations involving measures in real life",
           "topicAliases": [
-            "Coordinate Geometry",
+            "Apply Isometric Transformations to problem solving",
             "Cartesian Plane",
-            "Straight lines on the Cartesian Plane",
-            "Travel Graphs",
+            "Coordinate Geometry",
             "Distance-time Graphs",
-            "Velocity-time Graphs",
             "Geometrical Transformations",
             "Isometric Transformations",
-            "Non-Isometric Transformations"
+            "Non-Isometric Transformations",
+            "Straight lines on the Cartesian Plane",
+            "Travel Graphs",
+            "Velocity-time Graphs"
           ],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         },
         {
           "id": "eoc4-congruency",
           "label": "Creates artifacts using the concept of congruency",
           "topicAliases": [
-            "Similarity and Congruence",
-            "Similar Figures",
             "Congruent Figures",
+            "Similar and Congruent Figures",
+            "Similar Figures",
+            "Similarity and Congruence",
             "Symmetry",
-            "Symmetry of 3-Dimensional Shapes",
-            "Symmetry in 2-Dimensional Shapes"
+            "Symmetry in 2-Dimensional Shapes",
+            "Symmetry in 3 Dimensional Shapes",
+            "Symmetry of 3-Dimensional Shapes"
           ],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC5",
@@ -185,15 +205,18 @@
           "id": "eoc5-data",
           "label": "Presents and interprets data in a variety of contexts",
           "topicAliases": [
-            "Statistics",
-            "Statistical Presentations and Measures of central tendency",
             "Cumulative Frequency and Measures of Dispersion",
+            "Introduction to Probability",
             "Probability",
-            "Introduction to Probability"
+            "Statistical Presentations and Measures of central tendency",
+            "Statistical Presentations and Measures of Dispersion",
+            "Statistics"
           ],
-          "unverifiedTopicAliases": []
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {
@@ -401,20 +424,5 @@
       ],
       "keyCompetences": ["critical_thinking", "analytical_thinking", "problem_solving"]
     }
-  ],
-  "_unmappedSyllabusTopics": {
-    "note": "RESOLVED as of this conversation: Matrices and Vectors provisionally routed to EoC2 (eoc2-algebra) via unverifiedTopicAliases per user decision. Every question generated for these carries a visible UNVERIFIED_EOC_MAPPING warning until a curriculum lead confirms the real EoC and these are promoted to topicAliases.",
-    "topics": [
-      {
-        "topic": "Matrices",
-        "subtopics": ["Operations on Matrices (Form 1)", "Operations on 2x2 Matrices (Form 3)"],
-        "status": "provisional -> eoc2-algebra"
-      },
-      {
-        "topic": "Vectors",
-        "subtopics": ["Vectors in 2 Dimensions (Form 4)"],
-        "status": "provisional -> eoc2-algebra"
-      }
-    ]
-  }
+  ]
 }

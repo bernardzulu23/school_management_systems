@@ -50,6 +50,20 @@ describe('listCurriculumTopics / assertCurriculumTopicAllowed', () => {
     )
     expect(allowed).toBe('Any free topic')
   })
+
+  it('requireIfListed rejects empty topic when syllabus topics exist', async () => {
+    const topics = await listCurriculumTopics('Chemistry', 'Form 1')
+    expect(topics.length).toBeGreaterThan(0)
+
+    await expect(
+      assertCurriculumTopicAllowed('Chemistry', 'Form 1', '', { requireIfListed: true })
+    ).rejects.toThrow(/curriculum topics/i)
+
+    const allowed = await assertCurriculumTopicAllowed('Chemistry', 'Form 1', topics[0], {
+      requireIfListed: true,
+    })
+    expect(allowed).toBe(topics[0])
+  })
 })
 
 describe('resolveStudentGradeLabel', () => {

@@ -77,6 +77,8 @@
     "ingest:extract": "python ingest/01_extract_and_fix.py",
     "ingest:structure-syllabus": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" ingest/02_structure_syllabus.ts",
     "ingest:structure-modules": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" ingest/03_structure_teaching_modules.ts",
+    "crosswalk:eoc-aliases": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" scripts/crosswalk-eoc-aliases.ts",
+    "crosswalk:eoc-aliases:dry": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" scripts/crosswalk-eoc-aliases.ts --dry-run",
     "ingest:pipeline": "npm run ingest:extract && npm run ingest:structure-syllabus && npm run ingest:structure-modules",
     "setup:curriculum-studio": "node -e \"const {spawnSync}=require('child_process');const isWin=process.platform==='win32';const cmd=isWin?'powershell': 'bash';const args=isWin?['-NoProfile','-ExecutionPolicy','Bypass','-File','scripts/setup-curriculum-studio.ps1']:['scripts/setup-curriculum-studio.sh'];const r=spawnSync(cmd,args,{stdio:'inherit'});process.exit(r.status==null?1:r.status)\"",
     "seed:schools:docker": "docker compose exec -T web npm run seed:schools",

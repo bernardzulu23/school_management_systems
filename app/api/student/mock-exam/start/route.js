@@ -19,6 +19,7 @@ import {
   resolveStudentGradeLabel,
 } from '@/lib/flashcards/studentSubjects'
 import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
+import { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -116,6 +117,27 @@ export const POST = withErrorHandler(async function POST(request) {
       status: 'in_progress',
     },
   })
+
+  const paper = paperResult.paper || {}
+  const sideBySideItems = []
+  if (Array.isArray(paper.scenarios)) {
+    for (const scenario of paper.scenarios) {
+      sideBySideItems.push({ kind: 'scenario', scenario })
+    }
+  }
+  if (Array.isArray(paper.questions)) {
+    for (const question of paper.questions) {
+      sideBySideItems.push({ kind: 'practice_question', question })
+    }
+  }
+  void runValidationSideBySide({
+    schoolId,
+    source: 'mock_exam',
+    subject,
+    topicTag: topic,
+    formLevel: gradeLevel || examLevel,
+    items: sideBySideItems,
+  }).catch(() => {})
 
   return NextResponse.json({
     success: true,

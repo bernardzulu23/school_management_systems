@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { BookOpen, Download, Layers, Loader2, Upload } from 'lucide-react'
 import { buildTopicKey } from '@/lib/curriculum/topicKey'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 
 function downloadBase64Docx(base64, filename) {
   const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
@@ -56,7 +57,6 @@ export default function TeacherCurriculumStudioPage() {
   const [topic, setTopic] = useState('')
   const [unit, setUnit] = useState('')
   const [duration, setDuration] = useState(40)
-  const [topics, setTopics] = useState([])
   const [units, setUnits] = useState([])
   const [loadingCurriculum, setLoadingCurriculum] = useState(false)
   const [generating, setGenerating] = useState(false)
@@ -106,11 +106,9 @@ export default function TeacherCurriculumStudioPage() {
         const json = await res.json().catch(() => ({}))
         if (!res.ok) throw new Error(json.error || 'Failed to load curriculum')
         if (cancelled) return
-        setTopics(Array.isArray(json?.data?.topics) ? json.data.topics : [])
         setUnits(Array.isArray(json?.data?.units) ? json.data.units : [])
       } catch (e) {
         if (!cancelled) {
-          setTopics([])
           setUnits([])
         }
       } finally {
@@ -123,10 +121,14 @@ export default function TeacherCurriculumStudioPage() {
     }
   }, [subject, grade])
 
+  useEffect(() => {
+    setTopic('')
+  }, [subject, grade])
+
   const handleGenerate = async (e) => {
     e.preventDefault()
     if (!topic.trim()) {
-      toast.error('Enter a topic')
+      toast.error('Select a syllabus topic')
       return
     }
     setGenerating(true)
@@ -327,21 +329,16 @@ export default function TeacherCurriculumStudioPage() {
                   <p className="text-sm text-royalPurple-text3">Loading curriculum topics…</p>
                 )}
               </div>
-              <div className="space-y-2">
-                <Label>Topic</Label>
-                <Input
-                  list="curriculum-topics"
-                  value={topic}
-                  onChange={(e) => setTopic(e.target.value)}
-                  placeholder="e.g. Atomic Structure"
-                  required
-                />
-                <datalist id="curriculum-topics">
-                  {topics.map((t) => (
-                    <option key={t} value={t} />
-                  ))}
-                </datalist>
-              </div>
+              <CurriculumTopicSelect
+                subject={subject}
+                gradeOrForm={grade}
+                value={topic}
+                onChange={setTopic}
+                label="Topic"
+                required
+                allowFreeFormWhenEmpty={false}
+                id="curriculum-studio-topic"
+              />
               <div className="space-y-2">
                 <Label>Duration (minutes)</Label>
                 <Input

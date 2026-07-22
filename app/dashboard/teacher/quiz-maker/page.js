@@ -145,7 +145,11 @@ export default function TeacherQuizMakerPage() {
 
   useEffect(() => {
     if (selectedTeachingAssignment?.subjectName) {
-      setForm((p) => ({ ...p, subject: selectedTeachingAssignment.subjectName }))
+      setForm((p) => {
+        const nextSubject = selectedTeachingAssignment.subjectName
+        if (p.subject === nextSubject) return p
+        return { ...p, subject: nextSubject, topic: '' }
+      })
     }
   }, [selectedTeachingAssignment?.subjectName])
 
@@ -450,7 +454,7 @@ export default function TeacherQuizMakerPage() {
                   <select
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                     value={form.grade}
-                    onChange={(e) => setForm((p) => ({ ...p, grade: e.target.value }))}
+                    onChange={(e) => setForm((p) => ({ ...p, grade: e.target.value, topic: '' }))}
                   >
                     {FORM_LEVELS.map((g) => (
                       <option key={g} value={g}>
@@ -463,7 +467,7 @@ export default function TeacherQuizMakerPage() {
                   <Label>Subject</Label>
                   <Input
                     value={form.subject}
-                    onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
+                    onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value, topic: '' }))}
                   />
                 </div>
                 <CurriculumTopicSelect
@@ -473,6 +477,7 @@ export default function TeacherQuizMakerPage() {
                   value={form.topic}
                   onChange={(topic) => setForm((p) => ({ ...p, topic }))}
                   required
+                  allowFreeFormWhenEmpty={false}
                   id="quiz-maker-topic"
                 />
                 <div className="space-y-2 md:col-span-2">

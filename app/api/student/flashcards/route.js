@@ -15,6 +15,7 @@ import {
   resolveStudentGradeLabel,
 } from '@/lib/flashcards/studentSubjects'
 import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
+import { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 import { generateFlashcardDeck } from '@/lib/flashcards/generateDeck'
 import { buildRagContextForQuery, appendRagToSystemPrompt } from '@/lib/ai/rag-context'
 import { checkAILimit, getSchoolPlanForUsage, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
@@ -128,7 +129,7 @@ export const POST = withErrorHandler(async function POST(request) {
   let topic = ''
   try {
     topic = await assertCurriculumTopicAllowed(subjectName, gradeLevel, body.topic, {
-      required: false,
+      requireIfListed: true,
     })
   } catch (e) {
     throw new ApiError(e?.message || 'Invalid topic for this subject', 400)
@@ -237,6 +238,25 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   await trackAIUsage(schoolId, 'student-flashcards').catch(() => {})
+
+  void runValidationSideBySide({
+    schoolId,
+    source: 'flashcards',
+    subject: subjectName,
+    topicTag: topic || subjectName,
+    formLevel: gradeLevel,
+    assessmentMode,
+    items: cards.map((card, i) => ({
+      kind: 'practice_question',
+      question: {
+        id: `flashcard-${i + 1}`,
+        type: 'mcq',
+        question: String(card?.front || card?.question || ''),
+        marks: 1,
+        explanation: String(card?.explanation || ''),
+      },
+    })),
+  }).catch(() => {})
 
   return NextResponse.json(
     {

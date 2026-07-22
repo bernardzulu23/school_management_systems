@@ -1,0 +1,142 @@
+{
+  "subjectCode": "6015",
+  "subjectName": "Hospitality Management",
+  "syllabusYear": 2024,
+  "construct": "Applies hospitality knowledge and skills to deliver quality guest experiences and entrepreneurial solutions.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Understands the history of hospitality",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Demonstrates understanding of hospitality history and industry context",
+          "topicAliases": [
+            "Benefits of the hospitality industry",
+            "Components of Hospitality Industry",
+            "History of hospitality",
+            "Hospitality industry"
+          ],
+          "unverifiedTopicAliases": ["Tourism links"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Delivers quality guest experience and coordinates effectively with other departments in",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Delivers quality guest experience; coordinates across hospitality departments",
+          "topicAliases": [
+            "Customers in Hospitality",
+            "Departments of the Hospitality Facility",
+            "Front office",
+            "Front Office (Equipment",
+            "Front Office Operations",
+            "Guest relations",
+            "Housekeeping",
+            "Housekeeping Operations",
+            "Laundry in hospitality Facilit"
+          ],
+          "unverifiedTopicAliases": ["Customer service"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Demonstrates skills in food technology and preparation",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Food technology and preparation skills for hospitality settings",
+          "topicAliases": [
+            "Catering",
+            "Food and Beverage",
+            "Food and Beverage Services",
+            "Food and Beverages Operations",
+            "Food preparation",
+            "Food technology",
+            "Principles of Food Preparation"
+          ],
+          "unverifiedTopicAliases": ["Kitchen operations"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Applies entrepreneurial skills in hospitality business",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Entrepreneurial skills for hospitality business ventures",
+          "topicAliases": ["Entrepreneurship", "Hospitality business"],
+          "unverifiedTopicAliases": ["Event management"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "6015/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 5 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "6015/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 5 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "6015/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2-3; Final Exam Form 4. Codes 6015/1 and 6015/2.",
+        "bloomRange": ["understanding", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": ["SBA school-marked.", "Final Exam ECZ-marked.", "Both components required."]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Hotel guest-experience coordination scenario across departments",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["communication", "problem_solving"]
+    }
+  ]
+}

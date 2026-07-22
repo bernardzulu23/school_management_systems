@@ -13,18 +13,20 @@
           "label": "Identifies and defines agricultural problems and plans appropriate investigations",
           "topicAliases": [],
           "unverifiedTopicAliases": [
-            "Climate-Smart Agriculture",
             "Climate Change",
-            "CLIMATE-SMART AGRICULTURE"
+            "CLIMATE- SMART AGRICUTURE",
+            "Climate-Smart Agriculture",
+            "Climate-Smart Agriculture Practices",
+            "Research on Climate-Smart Agriculture"
           ],
-          "note": "Skill-lens EoC, not a topic bucket. Exemplar was built on Climate-Smart Agriculture content but the EoC label describes investigation methodology, not a subject area. Provisional routing only.",
           "taskTypeAliases": [
             "investigation",
             "research",
             "field project",
             "comparative research",
             "project"
-          ]
+          ],
+          "note": "Skill-lens EoC, not a topic bucket. Exemplar was built on Climate-Smart Agriculture content but the EoC label describes investigation methodology, not a subject area. Provisional routing only."
         }
       ],
       "resolutionMode": "taskType"
@@ -38,12 +40,11 @@
           "label": "Applies practical skills in crop management to solve real life problems and improve productivity",
           "topicAliases": [
             "Crop Production",
-            "CROP PRODUCTION",
-            "Vegetable Production",
             "External and Internal Morphology of Plants",
             "Field Crop Production",
             "Fruit and Tuber Crop Production",
-            "Legume Crop Production"
+            "Legume Crop Production",
+            "Vegetable Production"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
@@ -59,16 +60,16 @@
           "id": "eoc3-livestock",
           "label": "Applies practical skills in Livestock management to solve real life problems and improve productivity",
           "topicAliases": [
-            "Livestock Production",
-            "LIVESTOCK PRODUCTION",
-            "Importance of Livestock",
-            "Nutrition",
-            "Poultry Production",
-            "Pig Production",
-            "Pasture Management",
-            "Ruminant Animal production",
             "Apiculture (Bee farming)",
-            "Aquaculture (Fish Farming)"
+            "Aquaculture (Fish Farming)",
+            "Importance of Livestock",
+            "Livestock Production",
+            "Nutrition",
+            "Pasture Management",
+            "Pig Production",
+            "Poultry Production",
+            "Poultry Production in Zambia",
+            "Ruminant Animal production"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
@@ -85,23 +86,29 @@
           "label": "Analyses and interprets agricultural data to draw valid scientific conclusions; applies sustainable agricultural techniques",
           "topicAliases": [],
           "unverifiedTopicAliases": [
-            "Soil Science",
-            "SOIL SCIENCE",
-            "Composition of Soil",
-            "Properties of Soil",
-            "Soil Fertility",
-            "Soil and Water",
-            "Farm Structures and Machinery",
-            "FARM STRUCTURES AND MACHINERY",
-            "Farm Mechanisation",
-            "Structures for Water Supply",
             "Animal and Tractor Drawn Implements",
-            "Farm Power",
             "Brick Layering and Workshop Tools",
-            "Engines"
+            "Brick Laying and Workshop Tools",
+            "Composition of Soil",
+            "Engines",
+            "Farm Mechanisation",
+            "Farm Power",
+            "Farm Structures",
+            "Farm Structures and Machinery",
+            "Properties of Soil",
+            "Soil and Water",
+            "Soil Fertility",
+            "Soil Science",
+            "Soil Water",
+            "Structures for Water Supply"
           ],
-          "note": "Skill-lens EoC. Exemplar blended Farm Mechanisation AND Crop Production content in one scenario. Soil Science and Farm Structures/Machinery routed here provisionally as closest content fit -- not exemplar-confirmed for Soil Science specifically.",
-          "taskTypeAliases": ["analysis", "data analysis", "sustainability", "technique evaluation"]
+          "taskTypeAliases": [
+            "analysis",
+            "data analysis",
+            "sustainability",
+            "technique evaluation"
+          ],
+          "note": "Skill-lens EoC. Exemplar blended Farm Mechanisation AND Crop Production content in one scenario. Soil Science and Farm Structures/Machinery routed here provisionally as closest content fit -- not exemplar-confirmed for Soil Science specifically."
         }
       ],
       "resolutionMode": "taskType"
@@ -114,14 +121,13 @@
           "id": "eoc5-agribusiness",
           "label": "Develops and manages profitable agricultural enterprises through business planning, financial management, marketing, risk management, value addition and record keeping",
           "topicAliases": [
-            "Farm Management",
-            "FARM MANAGEMENT",
-            "Farm as a Business Unit",
             "Agricultural Economics",
             "Budgeting",
+            "Cooperatives",
             "Costing and Accounting",
-            "Farm Valuation",
-            "Cooperatives"
+            "Farm as a Business Unit",
+            "Farm Management",
+            "Farm Valuation"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
@@ -138,16 +144,16 @@
           "label": "Identifies agricultural problems and applies practical skills to solve them",
           "topicAliases": [],
           "unverifiedTopicAliases": [
-            "Agriculture in Zambia",
-            "AGRICULTURE IN ZAMBIA",
-            "Importance of Agriculture",
             "Agricultural Activities in Zambia",
+            "Agriculture in Zambia",
             "Factors that Influence Agricultural Development",
-            "Types of Farmers",
-            "Land Tenure Systems and Land Use"
+            "Factors that Influence Agricultural Development in Zambia",
+            "Importance of Agriculture",
+            "Land Tenure Systems and Land Use",
+            "Types of Farmers"
           ],
-          "note": "SBA-only EoC (not in the 5-EoC Final Exam spec, no exemplar provided). Provisionally anchored to the foundational Agriculture in Zambia topic -- unconfirmed, no exemplar evidence either way.",
-          "taskTypeAliases": ["general", "general practical", "problem solving"]
+          "taskTypeAliases": ["general", "general practical", "problem solving"],
+          "note": "SBA-only EoC (not in the 5-EoC Final Exam spec, no exemplar provided). Provisionally anchored to the foundational Agriculture in Zambia topic -- unconfirmed, no exemplar evidence either way."
         }
       ],
       "resolutionMode": "taskType"

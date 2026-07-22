@@ -24,6 +24,7 @@ import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
 
 const StoryWeaverInputSchema = z.object({
   grade: z.enum(['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']).optional(),
@@ -122,7 +123,22 @@ export const POST = withAILimits(async function POST(request: Request) {
     }
 
     const raw = await request.json().catch(() => null)
-    const input = StoryWeaverInputSchema.parse(raw)
+    const parsed = StoryWeaverInputSchema.parse(raw)
+    let topic = parsed.topic
+    try {
+      topic = await assertCurriculumTopicAllowed(
+        parsed.subject || 'English',
+        parsed.grade || 'Form 3',
+        parsed.topic,
+        { required: true }
+      )
+    } catch (e) {
+      return NextResponse.json(
+        { error: e instanceof Error ? e.message : 'Invalid topic' },
+        { status: 400 }
+      )
+    }
+    const input = { ...parsed, topic }
     const guard = validateAIGuardrails({
       text: [
         input.subject || 'English',
@@ -131,7 +147,7 @@ export const POST = withAILimits(async function POST(request: Request) {
         input.storyType,
       ].join(' '),
     })
-    if (!guard.ok) return guard.response
+    if (guard.ok === false) return guard.response
 
     const cachePayload = { schoolId, input }
     const cached = await getCachedAIResponse<{

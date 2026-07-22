@@ -7,94 +7,99 @@
     {
       "id": "EoC1",
       "description": "Demonstrates patriotism and good citizenry",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-citizenship",
           "label": "Demonstrates principles of patriotism, promotes social justice and good governance in real life situations",
           "topicAliases": [
-            "Citizenship",
-            "Rights, Duties and Responsibilities",
             "Characteristics of Good and Bad Governance",
+            "Citizenship",
+            "Concept of Legal System",
+            "Factors that hinder good citizenship",
+            "Legal Institutions and Organisations that promote justice",
+            "Political Party",
+            "Political Party Systems",
+            "Rights, Duties and Responsibilities",
+            "Special Groups",
             "The Concept of Governance",
             "Zambia's Symbols of National Identity",
-            "Political Party",
-            "Political Party Systems"
+            "Zambian Legal System"
           ],
-          "unverifiedTopicAliases": [
-            "Factors that hinder good citizenship",
-            "Special Groups",
-            "Patriotism"
-          ],
+          "unverifiedTopicAliases": ["Patriotism"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Utilises resources to foster personal and national development",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-resources",
           "label": "Exhibit good planning skills and manages resources to foster personal, community and national development",
           "topicAliases": [
-            "The concept Economic and Social Development",
-            "Types of Business Units",
-            "Spending",
-            "The Concept of Risk Management",
+            "Central Government",
+            "Development Planning",
             "Local Government in Zambia",
-            "Central Government"
+            "Spending",
+            "The concept Economic and Social Development",
+            "The Concept of Risk Management",
+            "Types of Business Units"
           ],
-          "unverifiedTopicAliases": ["Entrepreneurship", "Budgeting", "National Development"],
+          "unverifiedTopicAliases": ["Budgeting", "Entrepreneurship", "National Development"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Resolves conflict and Collaborates with others in local, regional and international affairs to promote national development.",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-conflict",
           "label": "Resolves real life conflicts for a peaceful society; collaborates with local, regional and international stakeholders",
           "topicAliases": [
-            "House of Chiefs",
             "Electoral Commission of Zambia (ECZ)",
             "Electoral Systems",
-            "The Zambian Constitution",
-            "Importance of Constitution"
-          ],
-          "unverifiedTopicAliases": [
-            "Conflict Resolution",
+            "House of Chiefs",
+            "Importance of Constitution",
             "International Organisations",
-            "Peace Building",
-            "Elections"
+            "Local and International Trade",
+            "Regional Organisations",
+            "The Zambian Constitution"
           ],
+          "unverifiedTopicAliases": ["Conflict Resolution", "Elections", "Peace Building"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Exhibits principles, good morals and values in day to day life",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-values",
           "label": "Integrates cultural understanding and personal responsibility to promote integrity, combat corruption, foster self-control, strengthen family and legal relationships",
-          "topicAliases": ["Zambia's Political Development"],
+          "topicAliases": [
+            "Categories of Human Rights",
+            "Family",
+            "History of Human Rights",
+            "Zambia's Political Development",
+            "Zambia¶s Political Development i"
+          ],
           "unverifiedTopicAliases": [
             "Corruption",
-            "Integrity",
-            "Family",
             "Human Rights",
+            "Integrity",
             "Morals and Values"
           ],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {

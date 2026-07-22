@@ -7,110 +7,116 @@
     {
       "id": "EoC1",
       "description": "Interprets and understands spoken information",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-listening",
           "label": "Identifies main ideas and supporting details; analyses speaker purpose, tone and intent; follows instructions and responds appropriately",
           "topicAliases": [
             "COMPREHENSION",
-            "Listening Comprehension",
             "DIRECTIONS",
+            "GREETINGS",
             "INSTRUCTIONS",
+            "INTRODUCTIONS",
+            "Listening Comprehension",
             "PHONE CONVERSATIONS",
-            "PUBLIC SPEAKING"
+            "PUBLIC SPEAKING",
+            "REQUESTS"
           ],
-          "unverifiedTopicAliases": ["GREETINGS", "REQUESTS", "INTRODUCTIONS"],
+          "unverifiedTopicAliases": [],
           "taskTypeAliases": [],
           "note": "Primarily assessed in SBA (speaking/listening). Final Exam covers EoC3 and EoC4 only."
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Produces ideas, thoughts and opinions through spoken language",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-speaking",
           "label": "Organises thoughts logically; speaks clearly; uses appropriate vocabulary, expressions and tone",
           "topicAliases": [
-            "PUBLIC SPEAKING",
+            "APOLOGIES AND COMPLIMENTS",
             "DRAMA",
+            "INVITATIONS",
             "LANGUAGE IN SOCIAL SETTINGS",
             "MAKING AN OFFER",
-            "INVITATIONS",
-            "APOLOGIES AND COMPLIMENTS"
+            "PUBLIC SPEAKING"
           ],
           "unverifiedTopicAliases": ["DEBATE", "ROLE PLAY"],
           "taskTypeAliases": [],
           "note": "SBA-focused (role plays, debates, discussions). Not in Final Exam paper."
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Reads, Interprets and summarises continuous and non-continuous texts",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-reading",
           "label": "Reads and understands texts; uses words accurately for audience/purpose; summarises main ideas and key points",
           "topicAliases": [
+            "ABBREVIATIONS",
+            "ADVERTISEMENTS",
             "COMPREHENSION",
+            "FIGURATIVE LANGUAGE",
             "INTRODUCTION TO SUMMARY",
             "NOTE SUMMARY",
-            "TABULATION",
+            "POETRY",
             "SHORT MESSAGES",
-            "ADVERTISEMENTS",
-            "ABBREVIATIONS",
-            "FIGURATIVE LANGUAGE",
-            "POETRY"
+            "TABULATION"
           ],
           "unverifiedTopicAliases": ["Reading Comprehension", "Summary"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Demonstrates masterly of written language conventions",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-writing",
           "label": "Spells accurately; applies grammar and punctuation; produces coherent purposeful written texts",
           "topicAliases": [
-            "BASIC WRITING SKILLS",
-            "NARRATIVE WRITING",
-            "DESCRIPTIVE WRITING",
-            "LETTER WRITING",
-            "EXPOSITORY WRITING",
-            "PERSUASIVE WRITING",
-            "DIARY WRITING",
-            "PARTS OF SPEECH",
-            "TENSES",
-            "NOUNS",
-            "ARTICLES",
             "ADJECTIVES",
-            "VERBS",
-            "AGREEMENT",
             "ADVERBS",
-            "PREPOSITIONS",
-            "PHRASAL VERBS",
-            "QUESTION TAGS",
+            "AGREEMENT",
+            "ARTICLE WRITING",
+            "ARTICLES",
+            "BASIC WRITING SKILLS",
+            "BIOGRAPHY WRITING",
             "CONDITION",
-            "THE GERUND AND PRESENT PARTICIPLE"
+            "CURRICULUM VITAE",
+            "DESCRIPTIVE WRITING",
+            "DIARY WRITING",
+            "EXPOSITORY WRITING",
+            "Informal Letter",
+            "LETTER WRITING",
+            "MINUTES WRITING",
+            "NARRATIVE WRITING",
+            "NOUNS",
+            "PARTS OF SPEECH",
+            "PERSUASIVE WRITING",
+            "PHRASAL VERBS",
+            "PREPOSITIONS",
+            "QUESTION TAGS",
+            "REPORT WRITING",
+            "SPEECH WRITING",
+            "SUMMARY WRITING",
+            "TENSES",
+            "THE GERUND AND PRESENT PARTICIPLE",
+            "VERBS"
           ],
-          "unverifiedTopicAliases": [
-            "Composition",
-            "Report Writing",
-            "Speech Writing",
-            "Curriculum Vitae"
-          ],
+          "unverifiedTopicAliases": ["Composition"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {

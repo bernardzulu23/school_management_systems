@@ -7,105 +7,112 @@
     {
       "id": "EoC1",
       "description": "Classifies substances and interprets the physical and chemical changes of the substances for suitable application in life",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-classify",
           "label": "Classifies substances by nature/properties and interprets physical and chemical changes",
           "topicAliases": [
+            "Acids, Bases, and Salts",
+            "Alkanes (structure, naming, properties)",
+            "Alkenes (structure, naming, reactions)",
+            "Alkynes (structure, naming, properties)",
             "Atomic Structure",
             "Bonding and Structure",
-            "States of Matter",
-            "Acids, Bases, and Salts",
-            "Periodic table organization",
-            "Ionic bonding and ionic compounds",
+            "Changes of state (melting, boiling, sublimation)",
             "Covalent bonding and molecular compounds",
-            "Changes of state (melting, boiling, sublimation)"
+            "Definition and properties of acids and bases",
+            "Ionic bonding and ionic compounds",
+            "Metallic bonding",
+            "Periodic table organization",
+            "Properties of ionic, covalent, and metallic compounds",
+            "States of Matter"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Analyses and identifies chemical composition of substances for scientific decision making.",
-      "resolutionMode": "taskType",
       "subSkills": [
         {
           "id": "eoc2-analysis",
           "label": "Uses analytical procedures to identify chemical composition of solids, liquids or gases",
           "topicAliases": [],
           "unverifiedTopicAliases": [
-            "Titration and standardization",
             "Oxidation and reduction concepts",
-            "pH scale and pH calculations"
+            "pH scale and pH calculations",
+            "Properties of solids, liquids, and gases",
+            "Titration and standardization"
           ],
-          "note": "Skill-lens EoC focused on analytical identification methods; topic anchors provisional.",
-          "taskTypeAliases": ["analysis", "identification", "qualitative analysis", "titration"]
+          "taskTypeAliases": ["analysis", "identification", "qualitative analysis", "titration"],
+          "note": "Skill-lens EoC focused on analytical identification methods; topic anchors provisional."
         }
-      ]
+      ],
+      "resolutionMode": "taskType"
     },
     {
       "id": "EoC3",
       "description": "Evaluates industrial chemical processes and suggests alternative methods of production that are sustainable and environmentally safe",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-industrial",
           "label": "Evaluates industrial process conditions and proposes sustainable alternatives",
-          "topicAliases": ["Industrial Chemistry", "Chemical Industry"],
+          "topicAliases": ["Chemical Industry", "Industrial Chemistry"],
           "unverifiedTopicAliases": [
-            "Haber process",
             "Contact process",
+            "Environmental chemistry",
             "Extraction of metals",
-            "Environmental chemistry"
+            "Haber process"
           ],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Applies Chemistry principles and mathematical operations to determine quantities of either reactants or products from quantitative (balanced) chemical equations in real-life situations or for solving problems",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-stoichiometry",
           "label": "Applies stoichiometric ratios and mole calculations from balanced equations",
           "topicAliases": [
-            "Stoichiometry and Calculations",
-            "Molar mass and mole concept",
             "Balancing chemical equations",
-            "Mole calculations in chemical reactions",
+            "Balancing redox equations",
             "Limiting reagents",
+            "Molar mass and mole concept",
+            "Mole calculations in chemical reactions",
             "Percentage composition and empirical formulas",
+            "Stoichiometry and Calculations",
             "Yield calculations"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC5",
       "description": "Investigates quantities involving industrial processes",
-      "resolutionMode": "taskType",
       "subSkills": [
         {
           "id": "eoc5-yields",
           "label": "Determines theoretical yields and develops more efficient ways of increasing yields",
           "topicAliases": [],
-          "unverifiedTopicAliases": ["Yield calculations", "Industrial Chemistry"],
-          "note": "Skill-lens EoC on industrial yield investigation; content often overlaps EoC3/4.",
-          "taskTypeAliases": ["yield investigation", "industrial yield", "process efficiency"]
+          "unverifiedTopicAliases": ["Industrial Chemistry", "Yield calculations"],
+          "taskTypeAliases": ["yield investigation", "industrial yield", "process efficiency"],
+          "note": "Skill-lens EoC on industrial yield investigation; content often overlaps EoC3/4."
         }
-      ]
+      ],
+      "resolutionMode": "taskType"
     },
     {
       "id": "EoC6",
       "description": "Applies Chemistry principles in everyday life",
-      "resolutionMode": "taskType",
       "subSkills": [
         {
           "id": "eoc6-everyday",
@@ -116,10 +123,11 @@
             "Buffers and buffer solutions",
             "Oxidation and reduction concepts"
           ],
-          "note": "Broad applied-chemistry EoC; provisional topic anchors.",
-          "taskTypeAliases": ["everyday application", "product design", "real-life chemistry"]
+          "taskTypeAliases": ["everyday application", "product design", "real-life chemistry"],
+          "note": "Broad applied-chemistry EoC; provisional topic anchors."
         }
-      ]
+      ],
+      "resolutionMode": "taskType"
     }
   ],
   "testDesign": {

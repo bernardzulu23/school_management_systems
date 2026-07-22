@@ -1,0 +1,121 @@
+==== french-1120.txt ====
+Chapter 7: French Language – 1120  
+  EoC1: Reads, interprets, summarises and translates continuous and non-continuous texts
+  EoC2: Demonstrates mastery of written language conventions and transformations
+  EoC3: Understands and interprets spoken information
+  EoC4: Produces ideas, thoughts and opinions through spoken language
+codes: 1120/1,1120/2
+bloom hits: understanding,Remembering,Understanding,Applying,Analysing,Evaluating,Creating,Remembering
+==== chinese-1125.txt ====
+Chapter 8: Chinese Language – 1125  
+  EoC1: Reads, interprets, summarises and translates continuous and non-continuous texts
+  EoC2: Demonstrates mastery of written language conventions and transformations
+  EoC3: Understands and interprets spoken information
+  EoC4: Produces ideas, thoughts and opinions through spoken language
+codes: 1125/1,1125/2
+bloom hits: understanding,applying,Remembering,understanding,applying,analysing,evaluating,creating
+==== zambian-languages-1211.txt ====
+Chapter 9: Zambian Languages – 1211 / 1212  / 1213 / 1214  / 1215 / 
+  EoC1: Demonstrates masterly of written language conventions
+  EoC2: Interprets, summarises and translates continuous and non-continuous texts
+  EoC3: Interprets and understands spoken information
+  EoC4: Expresses ideas, thoughts and opinions through spoken language
+codes: 
+bloom hits: understanding,remembering,creating
+==== musical-arts-5014.txt ====
+Chapter 18: Musical Arts – 5014  
+  EoC1: Analyses pitch
+  EoC2: Creates Melodies
+  EoC3: Arranges Musical Scores
+  EoC4: Applies Musical Knowledge and Skills to Generate Income
+  EoC5: Analyses World Music
+codes: 5014/1,5014/2
+bloom hits: analysing,analysing,Analysing,analysing,creating,analysing,understanding,analysing
+==== design-and-technology-8015.txt ====
+Chapter 19: Design and Technology – 8015  
+  EoC1: Utilises various materials and techniques to produce items while adhering to safety
+  EoC2: Generates and develops graphical representations and models
+  EoC3: Designs and constructs innovative systems
+  EoC4: Develops and implements a business idea
+  EoC5: Analyses world music
+codes: 8015/1,8015/2
+bloom hits: creating,Understanding,applying,remembering,creating
+==== fashion-and-fabrics-6012.txt ====
+Chapter 20: Fashion and Fabrics – 6012  
+  EoC1: Makes informed choices and expresses innovative skills in the fashion industry
+  EoC2: Demonstrates technical knowledge and skills while promoting workplace safety
+  EoC3: Develops habits and sense of responsibility in managing personal and social development
+  EoC4: Demonstrates knowledge on the use, care and improvisation of tools and material in
+  EoC5: Expresses awareness of create income generating opportunities for self-reliance and
+codes: 6012/1,6012/2
+bloom hits: understanding,remembering,understanding,applying,analysing,evaluating,creating,Remembering
+==== food-and-nutrition-6014.txt ====
+Chapter 21: Food and Nutrition – 6014  
+  EoC1: Explores the Kitchen, equipment, utensils and materials
+  EoC2: Understands Fundamentals of Food and Nutrition
+  EoC3: Prepares and Serves Meals and Dishes
+  EoC4: Innovates Food Packaging and Storage Solutions
+  EoC5: Demonstrates Knowledge and Practices that Promote Sustainable Food Security
+  EoC6: Develops Skills in Consumers and Entrepreneurs through Research
+codes: 6014/1,6014/2
+bloom hits: understanding,remembering,understanding,applying,analysing,evaluating,creating,understanding
+==== hospitality-management-6015.txt ====
+Chapter 22: Hospitality Management – 6015  
+  EoC1: Understands the history of hospitality
+  EoC2: Delivers quality guest experience and coordinates effectively with other departments in
+  EoC3: Demonstrates skills in food technology and preparation
+  EoC4: Applies entrepreneurial skills in hospitality business
+codes: 6015/1,6015/2
+bloom hits: understanding,applying,analysing,evaluating,creating,remembering,understanding,applying
+==== travel-and-tourism-6016.txt ====
+Chapter 23: Travel and Tourism – 6016  
+  EoC1: Explores tourism dynamics, understand, travellers’ destinations and global challenges in
+  EoC2: Manages tourism destinations and operations
+  EoC3: Applies key principles of the hospitality industry in travel and tourism
+  EoC4: Operates tourism events and activities
+  EoC5: Conducts tour operations
+codes: 6016/1,6016/2
+bloom hits: applying,analysing,evaluating,creating,understanding,Remembering,Understanding,Applying
+==== physical-education-9010.txt ====
+Chapter 24: Physical Education and Sport – 9010  
+  EoC1: Understands health related activities in physical education
+  EoC2: Demonstrates motor activities in sports
+  EoC3: Understands human body and its movements
+  EoC4: Applies entreprenuerial skills
+  EoC5: Applies athletics skills management of sports events and facilities
+codes: 9010/1,9010/2
+bloom hits: understanding,understanding,remembering,creating,Remembering,Understanding,Applying,Analysing
+==== computer-science-8010.txt ====
+Chapter 25: Computer Science – 8010 
+  EoC1: Recognises computer system components to build and troubleshoot computer systems
+  EoC2: Analyses, computer tools based on their roles in problem solving
+  EoC3: Analyses computing concepts by identifying relationships, principles and underlying
+  EoC4: Applies computational knowledge to critically evaluate situations and make informed
+  EoC5: Creates and designs systems that solve real life problems and improve way of life for citizens
+codes: 8010/1,8010/2
+bloom hits: applying,understanding,understanding,creating,Remembering,Creating,Understanding,Analysing
+==== ict-8011.txt ====
+Chapter 26: Information and Communications Technology  - 8011  
+  EoC1: Demonstrate the ability to identify and describe ICT components, systems and their
+  EoC2: Classify and distinguish ICT tools, file types, network structures, and technologies
+  EoC3: Develops analytical skills and evaluating ICT systems and problems
+  EoC4: Evaluate ICT systems, networks and technologies
+  EoC5: Applies ethical reasoning in the responsible use of ICT
+codes: 8011/1,8011/2
+bloom hits: understanding,evaluating,understanding,understanding,understanding,applying,understanding,Remembering
+==== commerce-7015.txt ====
+Chapter 27: Commerce – 7015  
+  EoC1: Demonstrates the skills of clean production and trading within legal parameters
+  EoC2: Demonstrates skills in entrepreneurship, Business formation and financing
+  EoC3: Applies physical and Online Business practices free from exploitation
+  EoC4: Analyses and evaluates the significance of commercial services in production, commerce
+codes: 7015/1,7015/2
+bloom hits: understanding,understanding,understanding,understanding,understanding,understanding,understanding
+==== principles-of-accounts-7020.txt ====
+Chapter 28: Principles of Accounts – 7020  
+  EoC1: Demonstrates sound accounting decisions based on key accounting principles or concepts,
+  EoC2: Demonstrates proficiency in recording business transactions in ledger accounts
+  EoC3: Analyses the effective implementation of reconciliation and verification tools in accounting
+  EoC4: Prepares and analyses financial statements
+codes: 7020/1,7020/2
+bloom hits: understanding,understanding,understanding

@@ -21,6 +21,7 @@ From the Assessment Schemes definitions and Component 2 test-item features:
 ## Code path
 
 - Topic lists: `listCurriculumTopics` / `GET /api/curriculum-topics` / `CurriculumTopicSelect`
-- Topic enforcement: `assertCurriculumTopicAllowed` on quiz-maker, ecz-practice, ecz-exam-questions, flashcards, mock-exam
+- Topic enforcement: `assertCurriculumTopicAllowed` (+ `requireIfListed`) on quiz-maker, topic-test, ecz-practice, ecz-exam-questions, flashcards, mock-exam
+- UI: form + subject → syllabus topic **dropdown** (`CurriculumTopicSelect`) for quizzes, tests, exercises, flashcards, assessments, lesson plans
 - Structural + semantic EoC checks: `lib/ecz/eoc/question-validator.ts`
-- Side-by-side logging after generation: `runValidationSideBySide` → `EczValidationLog` (wired on quiz-maker, ecz-practice, ecz-exam-questions)
+- Side-by-side logging after generation: `runValidationSideBySide` → `EczValidationLog` (quiz-maker, ecz-practice, ecz-exam-questions, flashcards, mock-exam)

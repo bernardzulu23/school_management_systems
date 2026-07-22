@@ -22,7 +22,7 @@ One JSON per subject under `data/curriculum/ecz-eoc/`, conforming to `EczSubject
 - Maths I `mathematics-i-2021.json` (topic-mode)
 - Agri `agricultural-science-4018.json` (topic + taskType)
 - Art & Design `art-and-design-5012.json`
-- Physics / Chemistry / Biology / Geography also shipped
+- **27 subjects shipped** under `data/curriculum/ecz-eoc/` (full ECSEOL Assessment Scheme set; registry has no nulls)
 
 Topic corpus: `ingest/extracted/syllabus/` (not the empty `Syllabus/` folder). Assessment source: `Validation_folder/`.
 
@@ -31,3 +31,4 @@ Topic corpus: `ingest/extracted/syllabus/` (not the empty `Syllabus/` folder). A
 - Never invent EoCs/marks/Bloom ranges absent from the Assessment Schemes PDF.
 - Never prompt the model with a bare topic — resolve EoC first; stamp `taskType` when `resolutionMode` is `taskType`.
 - Register new subjects in `subjectRegistry.ts` and drop the JSON under `data/curriculum/ecz-eoc/`.
+- After adding or refreshing form1-4 topics, run `npm run crosswalk:eoc-aliases` to promote/assign aliases (topic-mode only for verified promotions).

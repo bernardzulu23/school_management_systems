@@ -1,0 +1,121 @@
+{
+  "subjectCode": "1125",
+  "subjectName": "Chinese Language",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates proficient use of listening, speaking, reading and writing skills in real-life situations, adapting to audience and purpose to communicate effectively and support life-long learning.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Reads, interprets, summarises and translates continuous and non-continuous texts",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Reads/comprehends Chinese texts; interprets vocabulary; summarises; translates preserving meaning",
+          "topicAliases": ["Reading Comprehension", "Translation", "Summary"],
+          "unverifiedTopicAliases": ["Chinese characters", "Pinyin"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates mastery of written language conventions and transformations",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Applies orthography, grammar, punctuation and written transformations accurately",
+          "topicAliases": ["Language Structure", "Composition", "Writing"],
+          "unverifiedTopicAliases": ["Characters", "Stroke order"],
+          "taskTypeAliases": []
+        }
+      ]
+    },
+    {
+      "id": "EoC3",
+      "description": "Understands and interprets spoken information",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Identifies main ideas in spoken Chinese; analyses tone/intent; responds appropriately",
+          "topicAliases": ["Listening", "Oral comprehension"],
+          "unverifiedTopicAliases": ["HSK listening"],
+          "taskTypeAliases": [],
+          "note": "Primarily SBA-focused oral/listening."
+        }
+      ]
+    },
+    {
+      "id": "EoC4",
+      "description": "Produces ideas, thoughts and opinions through spoken language",
+      "resolutionMode": "topic",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Organises ideas; speaks clearly; appropriate vocabulary/tone for audience",
+          "topicAliases": ["Speaking", "Oral presentation"],
+          "unverifiedTopicAliases": ["Conversation"],
+          "taskTypeAliases": [],
+          "note": "Primarily SBA-focused speaking."
+        }
+      ]
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "1125/1",
+        "formLevel": "Form 2",
+        "numItems": 5,
+        "totalMarks": 90,
+        "structureNotes": "SBA Form 2: 5 tasks/90 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "1125/1",
+        "formLevel": "Form 3",
+        "numItems": 5,
+        "totalMarks": 90,
+        "structureNotes": "SBA Form 3: 5 tasks/90 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "1125/2",
+        "formLevel": "Form 4",
+        "numItems": 10,
+        "totalMarks": 60,
+        "structureNotes": "Parallel language scheme to French: SBA all 4 EoC; Final Exam reading/writing-focused. Codes 1125/1 and 1125/2.",
+        "bloomRange": ["remembering", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": ["SBA school-marked; Final Exam ECZ-marked.", "Both components required for grading."]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Chinese reading/translation scenario for continuous and non-continuous texts",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
+    }
+  ]
+}

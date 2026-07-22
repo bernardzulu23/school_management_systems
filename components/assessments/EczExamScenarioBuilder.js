@@ -143,6 +143,7 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
             onChange={setTopic}
             label="Curriculum topic"
             required
+            allowFreeFormWhenEmpty={false}
             id="ecz-exam-topic"
           />
         </div>

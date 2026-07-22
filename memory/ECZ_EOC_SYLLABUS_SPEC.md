@@ -14,17 +14,27 @@ This is the durable contract for Zambia ECZ competence-based assessment schemes 
 | Text extract             | `Validation_folder/ECSEOL_Assessment_Schemes_22_4_2026_extract.txt`                                  |
 | Blueprint PDF            | `Validation_folder/ECZ ASSESSMENT GUIDELINES AND BLUEPRINT…pdf`                                      |
 
-## Reference subjects already shipped
+## Reference subjects already shipped (27)
 
-1. **Mathematics I — `2021`** — topic-mode
-2. **Mathematics II — `2025`** — topic-mode
-3. **English Language — `1021`**, **Literature in English — `1025`**
-4. **Civic Education — `3011`**, **Religious Education — `3012`**, **History — `3013`**, **Geography — `3014`**
-5. **Agricultural Science — `4018`** — topic + taskType skill-lens
-6. **Physics — `4016`**, **Chemistry — `4014`**, **Biology — `4012`**
-7. **Art and Design — `5012`**
+All ECSEOL Assessment Scheme subjects are registered (`listSubjectsMissingEocSpec()` → `[]`).
 
-Still missing (registry `eocSpecFile: null`): French, Zambian Languages, Music, Design & Technology, Fashion & Fabrics, Food & Nutrition, Hospitality, Travel & Tourism, PE, Computer Science, ICT, Commerce, Accounts, Chinese (if in PDF).
+| Group                | Codes                                                                                                                   |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Languages            | English `1021`, Literature `1025`, French `1120`, Chinese `1125`, Zambian Languages `1211`–`1217` (one scheme file)     |
+| Maths                | Mathematics I `2021`, Mathematics II `2025`                                                                             |
+| Sciences             | Agri `4018` (topic + taskType), Physics `4016`, Chemistry `4014`, Biology `4012`                                        |
+| Humanities           | Civic `3011`, RE `3012`, History `3013`, Geography `3014`                                                               |
+| Creative / practical | Art `5012`, Musical Arts `5014`, D&T `8015`, Fashion `6012`, Food `6014`, Hospitality `6015`, Tourism `6016`, PE `9010` |
+| Tech / business      | Computer Science `8010`, ICT `8011`, Commerce `7015`, Accounts `7020`                                                   |
+
+Provisional notes: some topic aliases remain unverified where form1-4 OCR is sparse/noisy (esp. Zambian Languages, Chinese has no form1-4 yet); Maths II final marks use body text **100** (not TOC 200); English paper codes use chapter **1021** (vs TOC 1012); French SBA:FE weighting **40:60**.
+
+## Topic alias cross-walk
+
+- Module: `lib/ecz/eoc/crosswalkTopicAliases.ts` (`crosswalkSpec`)
+- Corpus: `loadSyllabusTopics()` — form1-4 preferred; ingest `pages` dumps are not structured topics
+- Script: `npm run crosswalk:eoc-aliases` (or `:dry` for report-only)
+- Rules: exact unverified→verified promote on **topic-mode** EoCs only; skill-lens (`taskType`) keeps syllabus topics provisional; unmapped corpus topics scored onto best subSkill with quality filters (rejects truncated/OCR stubs)
 
 ## Reusable modules (use these for EVERY syllabus)
 

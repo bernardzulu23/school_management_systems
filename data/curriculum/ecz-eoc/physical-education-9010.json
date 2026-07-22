@@ -1,0 +1,166 @@
+{
+  "subjectCode": "9010",
+  "subjectName": "Physical Education and Sport",
+  "syllabusYear": 2024,
+  "construct": "Applies Perceptual motor movement, problem solving, Interpersonal and intrapersonal skills to enhance Physical Fitness, mental wellbeing and lifelong health habits in creativity and Entrepreneurship.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Understands health related activities in physical education",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Assesses health-related activities and sports nutrition",
+          "topicAliases": [
+            "Career opportunit ies in Physical Education and Sport.",
+            "Health related componen ts",
+            "Health-related fitness",
+            "Nutrition and sports",
+            "Physical Education and Sport.",
+            "Physical fitness",
+            "Sports nutrition"
+          ],
+          "unverifiedTopicAliases": ["Wellness"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Demonstrates motor activities in sports",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Assesses movements, perceptual learning and fitness activities",
+          "topicAliases": [
+            "Demonstrate skills in Squash.",
+            "Fitness activities",
+            "Motor skills",
+            "Perceptual learning",
+            "Perceptual motor learning activities."
+          ],
+          "unverifiedTopicAliases": ["Sports skills"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Understands human body and its movements",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Understands body systems, forces and biomechanics in sports",
+          "topicAliases": [
+            "Biomechanics",
+            "Body systems",
+            "Human body",
+            "Human Circulatory System.",
+            "Human muscular system.",
+            "Human respiratory system.",
+            "Human skeletal system",
+            "Sports Body Types"
+          ],
+          "unverifiedTopicAliases": ["Forces in sport"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Applies entreprenuerial skills",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Entrepreneurship and legal/ethical issues in sports",
+          "topicAliases": [
+            "Ethics in sport",
+            "Legal and ethical issues in sports entrepreneurship.",
+            "Sports entrepreneurship"
+          ],
+          "unverifiedTopicAliases": ["Sports law"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC5",
+      "description": "Applies athletics skills management of sports events and facilities",
+      "subSkills": [
+        {
+          "id": "eoc5-main",
+          "label": "Sports management, organisation and skills development",
+          "topicAliases": [
+            "Athletics",
+            "Facilities",
+            "Managem ent and Maintenan ce of sports facilities and equipment",
+            "Sports facilities and equipment.",
+            "Sports management"
+          ],
+          "unverifiedTopicAliases": ["Event organisation"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "9010/1",
+        "formLevel": "Form 2",
+        "numItems": 7,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 7 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "9010/1",
+        "formLevel": "Form 3",
+        "numItems": 7,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 7 tasks/100 marks.",
+        "bloomRange": ["remembering", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "9010/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2-3 (7 tasks each/100). Final Exam 5 items/100, 2h30. Weighting SBA:FE 40:60.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": ["SBA 40%, Final Exam 60%.", "Both components required."]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Health-related PE and sports nutrition scenario for school athletes",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "critical_thinking"]
+    }
+  ]
+}

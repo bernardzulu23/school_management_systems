@@ -1,0 +1,144 @@
+{
+  "subjectCode": "8011",
+  "subjectName": "Information and Communications Technology",
+  "syllabusYear": 2024,
+  "construct": "Applies digital literacy and computational understanding to interpret problems, create solution-driven approaches, and use Information and Communications Technology (ICT) responsibly and effectively in real-life applications.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Demonstrate the ability to identify and describe ICT components, systems and their functions",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Recognises components and explains input/processing/storage/output working together",
+          "topicAliases": [
+            "Computer systems",
+            "Hardware",
+            "ICT components",
+            "Input output storage"
+          ],
+          "unverifiedTopicAliases": [],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Classify and distinguish ICT tools, file types, network structures, and technologies",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Categorises tools, differentiates file formats, compares network topologies/technologies",
+          "topicAliases": ["File types", "ICT tools", "Networks", "Topologies"],
+          "unverifiedTopicAliases": ["Software types"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Develops analytical skills and evaluating ICT systems and problems",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Assesses system behaviour, resolves operational issues, recommends improvements",
+          "topicAliases": ["Configuration", "System analysis", "Troubleshooting"],
+          "unverifiedTopicAliases": ["Operational issues"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Evaluate ICT systems, networks and technologies",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Examines performance, compares alternatives, considers sustainability/security/user impact",
+          "topicAliases": ["Network evaluation", "Security", "System evaluation"],
+          "unverifiedTopicAliases": ["Sustainability"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC5",
+      "description": "Applies ethical reasoning in the responsible use of ICT",
+      "subSkills": [
+        {
+          "id": "eoc5-main",
+          "label": "Digital rights, privacy, security; responsible and safe technology use",
+          "topicAliases": [
+            "Cyber safety",
+            "Digital Ethics",
+            "Digital rights",
+            "ICT ethics",
+            "Privacy"
+          ],
+          "unverifiedTopicAliases": ["Responsible use"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "8011/1",
+        "formLevel": "Form 2",
+        "numItems": 9,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 9 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "8011/1",
+        "formLevel": "Form 3",
+        "numItems": 7,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 7 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "8011/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 9 tasks; Form 3: 7 tasks. Final Exam 5 items/100, 2h30.",
+        "bloomRange": ["understanding", "evaluating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": ["SBA school-marked.", "Final Exam ECZ-marked.", "Both components required."]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "School ICT policy scenario on privacy, cyber safety and responsible use",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["digital_literacy", "critical_thinking"]
+    }
+  ]
+}

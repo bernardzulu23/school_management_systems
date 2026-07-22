@@ -1,11 +1,9 @@
 /**
- * Side-by-side helper ready for ecz-practice / ecz-exam-questions routes.
+ * Side-by-side helper for AI generation routes (quiz / practice / exam / flashcards / mock).
  *
  * Call AFTER existing generation succeeds. Does not change response shape.
- * Routes are NOT wired yet — import and call when ready:
  *
  *   void runValidationSideBySide({ ... }).catch(() => {})
- *   // or await if you prefer in-request logging
  */
 import crypto from 'crypto'
 import { loadEocSpec } from '@/lib/ecz/eoc/load-eoc-spec'

@@ -1,0 +1,159 @@
+{
+  "subjectCode": "5014",
+  "subjectName": "Musical Arts",
+  "syllabusYear": 2024,
+  "construct": "Demonstrates musical proficiency through analysing, composing and performing across diverse contexts.",
+  "elementsOfConstruct": [
+    {
+      "id": "EoC1",
+      "description": "Analyses pitch",
+      "subSkills": [
+        {
+          "id": "eoc1-main",
+          "label": "Analyses pitch in melodies and harmony",
+          "topicAliases": ["Harmony", "Melody", "Pitch"],
+          "unverifiedTopicAliases": ["Intervals"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC2",
+      "description": "Creates Melodies",
+      "subSkills": [
+        {
+          "id": "eoc2-main",
+          "label": "Creates and analyzes melodies using the elements of music",
+          "topicAliases": [
+            "Composition",
+            "Elements of music",
+            "Melody writing",
+            "Simple Melody Writing",
+            "Writing Music"
+          ],
+          "unverifiedTopicAliases": ["Sight reading"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC3",
+      "description": "Arranges Musical Scores",
+      "subSkills": [
+        {
+          "id": "eoc3-main",
+          "label": "Arranges music scores for musical instruments",
+          "topicAliases": [
+            "Arrangement",
+            "Classification of Musical Instruments",
+            "Handling and Playing Musical Instrument",
+            "Instrument Playing",
+            "Instrumentation",
+            "Musical arrangements",
+            "Musical scores",
+            "Orchestrate music for various instruments",
+            "Playing Musical Instrument"
+          ],
+          "unverifiedTopicAliases": ["Orchestration"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC4",
+      "description": "Applies Musical Knowledge and Skills to Generate Income",
+      "subSkills": [
+        {
+          "id": "eoc4-main",
+          "label": "Earns a living through musical skills",
+          "topicAliases": ["Entrepreneurship", "Music business"],
+          "unverifiedTopicAliases": ["Performance career"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    },
+    {
+      "id": "EoC5",
+      "description": "Analyses World Music",
+      "subSkills": [
+        {
+          "id": "eoc5-main",
+          "label": "Characteristics of world music and how to use technology to produce it",
+          "topicAliases": [
+            "Introduction to Music Technology",
+            "Traditional music",
+            "World music",
+            "Zambian music.",
+            "Zambian musical styles"
+          ],
+          "unverifiedTopicAliases": ["Kalindula", "Music technology", "Zamrock"],
+          "taskTypeAliases": []
+        }
+      ],
+      "resolutionMode": "topic"
+    }
+  ],
+  "testDesign": {
+    "components": [
+      {
+        "type": "SBA",
+        "code": "5014/1",
+        "formLevel": "Form 2",
+        "numItems": 3,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 2: 3 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "SBA",
+        "code": "5014/1",
+        "formLevel": "Form 3",
+        "numItems": 4,
+        "totalMarks": 100,
+        "structureNotes": "SBA Form 3: 4 tasks/100 marks.",
+        "bloomRange": ["understanding", "creating"]
+      },
+      {
+        "type": "FINAL_EXAM",
+        "code": "5014/2",
+        "formLevel": "Form 4",
+        "numItems": 5,
+        "totalMarks": 100,
+        "structureNotes": "SBA: listening, performing, composing project (Form 2-3). Final: composing/arranging/analysing, ~1h30. Weighting 30:70.",
+        "bloomRange": ["understanding", "creating"]
+      }
+    ],
+    "scenarioRequired": true,
+    "minPartsPerScenarioItem": 2
+  },
+  "scoringCriteria": {
+    "rules": [
+      "SBA school-marked listening/performance/composition.",
+      "Final Exam ECZ-marked.",
+      "Both components required."
+    ]
+  },
+  "exemplars": [
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Zambian musical styles and foreign influences; roles of music in traditional ceremony",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "analytical_thinking"]
+    }
+  ]
+}

@@ -7,113 +7,122 @@
     {
       "id": "EoC1",
       "description": "Interprets and computes relationships of numbers within and across different number systems",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-numbers",
           "label": "Manipulate numbers using different properties to solve real life problems; creates patterns and puzzles of different types of numbers",
           "topicAliases": [
-            "Numbers",
-            "Real Numbers",
+            "Approximations and Estimation",
             "Classification of Numbers",
             "Combined Operations on Real Numbers",
-            "Integers",
-            "Indices",
             "Index Notation",
-            "Approximations and Estimation"
+            "Indices",
+            "Integers",
+            "Numbers",
+            "Real Numbers",
+            "The Four Operations on Integers",
+            "Types of Numbers"
           ],
-          "unverifiedTopicAliases": ["Number Systems", "Number Patterns"],
+          "unverifiedTopicAliases": ["Number Patterns", "Number Systems"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Models real life situations to solve problems and make informed decisions",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-algebra",
           "label": "Use algebra to express and solve real life problems",
           "topicAliases": [
+            "1Apply functions to model and solve problems",
+            "1Apply quadratic functions to model and solve problems",
+            "1Apply vectors in problem solving",
             "Algebra",
             "Algebraic Expressions",
             "Basic Processes of Algebra",
-            "Simultaneous Equations",
+            "Functions",
+            "Linear Programming",
             "Quadratic Equations",
             "Quadratic Functions",
-            "Linear Programming",
             "Relations",
-            "Functions"
+            "Simultaneous Equations"
           ],
           "unverifiedTopicAliases": ["Matrices", "Vectors"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Computes measures and applies spatial relationships to solve real life problems",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-geometry",
           "label": "Applies measures and geometry in life contexts; derives theorems and formulae; obtains the value of pi practically",
           "topicAliases": [
-            "Two Dimensional Shapes",
-            "Three Dimensional Shapes",
-            "Polygons",
-            "Pythagoras Theorem",
-            "Trigonometry",
+            "Congruent Figures",
             "Geometrical Constructions",
             "Loci in Two Dimensions",
+            "Polygons",
+            "Pythagoras Theorem",
+            "Similar and Congruent Figures",
             "Similar Figures",
-            "Congruent Figures"
+            "Symmetry in 3 Dimensional Shapes",
+            "Three Dimensional Shapes",
+            "Trigonometry",
+            "Two Dimensional Shapes",
+            "Two Dimensional Shapes circle)"
           ],
           "unverifiedTopicAliases": ["Mensuration", "Pi"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Interprets and computes functions to solve real life situations in order to make informed decisions",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-functions",
           "label": "Interprets functions, rates of change and summation of quantities in life contexts",
           "topicAliases": [
-            "Functions",
             "Cartesian Plane",
-            "Straight lines on the Cartesian Plane",
             "Distance-time Graphs",
+            "Functions",
+            "Straight lines on the Cartesian Plane",
             "Velocity-time Graphs"
           ],
-          "unverifiedTopicAliases": ["Rates of Change", "Calculus", "Summation"],
+          "unverifiedTopicAliases": ["Calculus", "Rates of Change", "Summation"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC5",
       "description": "Presents and analyses data to make informed decisions",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc5-data",
           "label": "Presents and Interprets data in a variety of real-life contexts",
           "topicAliases": [
-            "Statistics",
-            "Statistical Presentations and Measures of central tendency",
             "Cumulative Frequency and Measures of Dispersion",
+            "Introduction to Probability",
             "Probability",
-            "Introduction to Probability"
+            "Statistical Presentations and Measures of central tendency",
+            "Statistical Presentations and Measures of Dispersion",
+            "Statistics"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {

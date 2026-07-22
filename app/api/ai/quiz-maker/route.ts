@@ -128,7 +128,7 @@ export const POST = withAILimits(async function POST(request: Request) {
     const guard = validateAIGuardrails({
       text: [input.subject, input.grade, input.topic, input.difficulty].join(' '),
     })
-    if (!guard.ok) return guard.response
+    if (guard.ok === false) return guard.response
 
     logger.info('ai.quiz-maker.started', {
       requestId,

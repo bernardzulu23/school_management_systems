@@ -45,6 +45,19 @@ export {
   getSyllabusIngestDir,
   type SyllabusTopicIndex,
 } from '@/lib/ecz/eoc/syllabusTopicIndex'
+export {
+  crosswalkSpec,
+  buildCorpusIndex,
+  matchAliasToCorpus,
+  scoreTopicAgainstSubSkill,
+  normalizeTopicKey,
+  cleanSyllabusTopic,
+  canonicalizeCorpusTopic,
+  isUsableTopic,
+  topicsFromUnitTitle,
+  type CrosswalkChange,
+  type CrosswalkResult,
+} from '@/lib/ecz/eoc/crosswalkTopicAliases'
 export { writeEczValidationLog } from '@/lib/ecz/eoc/writeValidationLog'
 export { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 export {

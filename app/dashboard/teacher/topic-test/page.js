@@ -244,6 +244,7 @@ export default function TopicTestPage() {
                     onChange={setTopic}
                     label="Topic covered"
                     required
+                    allowFreeFormWhenEmpty={false}
                     id="topic-test-topic"
                   />
                   <div>

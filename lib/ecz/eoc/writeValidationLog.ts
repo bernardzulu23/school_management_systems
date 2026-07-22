@@ -5,7 +5,12 @@ import { prisma } from '@/lib/prisma'
 import { logger, captureError } from '@/lib/utils/logger'
 import type { ValidationIssue } from '@/lib/ecz/eoc/question-validator'
 
-export type EczValidationSourceValue = 'ecz_practice' | 'ecz_exam_questions' | 'quiz_maker'
+export type EczValidationSourceValue =
+  | 'ecz_practice'
+  | 'ecz_exam_questions'
+  | 'quiz_maker'
+  | 'flashcards'
+  | 'mock_exam'
 
 export type WriteEczValidationLogInput = {
   schoolId: string

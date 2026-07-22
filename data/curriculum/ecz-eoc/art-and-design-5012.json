@@ -7,83 +7,100 @@
     {
       "id": "EoC1",
       "description": "Demonstrates cultural heritage and craftsmanship",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-heritage",
           "label": "Illustrates history of Art and Design in human development; demonstrates contemporary craftsmanship and resources in entrepreneurship skills",
           "topicAliases": [
-            "History of Zambian Art-I",
+            "Careers in Art",
+            "Careers in Art and Design",
+            "Entrepreneurship",
             "History Of Zambian Art- II",
+            "History of Zambian Art-I",
             "Introduction to African Art",
-            "World Art History",
             "Introduction To Art Careers",
-            "Entrepreneurship"
+            "World Art History"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Illustrates technological and communicative art skills",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-graphic",
           "label": "Demonstrates abilities in using digital tools and software to create and edit visual content; applies technology to produce high-quality, visually appealing illustrations",
-          "topicAliases": ["Graphic Design", "Photography And Filming", "Pattern and Design"],
+          "topicAliases": ["Graphic Design", "Pattern and Design", "Photography And Filming"],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": [],
           "note": "ECZ Exemplar 2 (labeled EoC2) content is actually about identifying cultural significance of traditional crafts, not digital/graphic composition -- likely a documentation inconsistency in the source PDF. Flagged, not silently resolved."
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Develops pictorial art compositions",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-pictorial",
           "label": "Draws or paints images from natural or man-made objects as a total composition, using various techniques and mediums for communication, aesthetics and entrepreneurship purposes",
           "topicAliases": [
-            "Introduction to Colour",
             "Colour",
-            "Studio Practice",
-            "Perspective",
+            "Composition in colour",
+            "Drawing /painting Traditional objects",
             "Drawing and or Painting From Imagination",
-            "Drawing or Painting From Imagination",
-            "Drawing Or Painting From Imagination",
             "Drawing and or Painting From Observation",
-            "Drawing or Painting From Observation",
-            "Drawing Or Painting From Observation",
             "Drawing and or Painting From Still Life",
+            "Drawing or Painting From Imagination",
+            "Drawing or Painting from Natural or Man±made objects",
+            "Drawing or Painting From Observation",
             "Drawing or Painting From Still Life",
-            "Drawing Or Painting From Still Life",
+            "Drawing or painting man ± made objects",
+            "Drawing or painting natural objects",
             "Figure Drawing",
             "Figure Drawing or Painting",
-            "Figure Drawing Or Painting"
+            "Human Figure",
+            "Human Figure Drawing",
+            "Introduction to Colour",
+            "Man ± Made Objects",
+            "Natural Objects",
+            "Natural or man- made objects",
+            "Natural, Man made and Traditional",
+            "Perspective",
+            "Still Life Drawing and or Painting",
+            "Studio Practice",
+            "Traditional Objects"
           ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Applies creative art skills in craftsmanship for innovation and entrepreneurship",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-crafts",
           "label": "Creates functional decorative (aesthetics) crafts, using different working techniques and media for entrepreneurship",
-          "topicAliases": ["Crafts in 2D", "Crafts in 3D", "Crafts", "Sculpture"],
+          "topicAliases": [
+            "Crafts",
+            "Crafts in 2D",
+            "Crafts in 3D",
+            "Creative Art projects",
+            "Sculpture"
+          ],
           "unverifiedTopicAliases": [],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {
