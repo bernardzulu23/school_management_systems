@@ -6,8 +6,13 @@ import { Input } from '@/components/ui/input'
 import { useCurriculumTopics } from '@/hooks/useCurriculumTopics'
 
 /**
- * Topic control: dropdown when curriculum topics exist for form+subject; otherwise free-text.
- * Per Validation_folder: when syllabus topics exist, selection must come from the dropdown.
+ * Curriculum topic control — ENFORCED dropdown when form/grade + subject are selected.
+ *
+ * Contract (all formulation UIs: quizzes, tests, flashcards, story weaver, lesson plans, etc.):
+ * 1. Topic is disabled until both subject and form/grade are set.
+ * 2. When syllabus topics exist, selection MUST come from the dropdown (no free-text).
+ * 3. Free-text is only allowed when `allowFreeFormWhenEmpty` is explicitly true AND the
+ *    syllabus list is empty (legacy / subjects without corpus).
  *
  * @param {{
  *   subject: string
@@ -19,6 +24,7 @@ import { useCurriculumTopics } from '@/hooks/useCurriculumTopics'
  *   className?: string
  *   id?: string
  *   allowFreeFormWhenEmpty?: boolean
+ *   selectClassName?: string
  * }} props
  */
 export function CurriculumTopicSelect({
@@ -27,29 +33,34 @@ export function CurriculumTopicSelect({
   value,
   onChange,
   label = 'Curriculum topic',
-  required = false,
+  required = true,
   className = '',
   id = 'curriculum-topic',
-  allowFreeFormWhenEmpty = true,
+  allowFreeFormWhenEmpty = false,
+  selectClassName = 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm',
 }) {
   const { topics, loading, error } = useCurriculumTopics(subject, gradeOrForm)
   const hasTopics = topics.length > 0
   const subjectReady = Boolean(String(subject || '').trim())
   const gradeReady = Boolean(String(gradeOrForm || '').trim())
-  const disabled = !subjectReady || !gradeReady || loading
+  const ready = subjectReady && gradeReady
+  const disabled = !ready || loading
+  const useDropdown = ready && (hasTopics || !allowFreeFormWhenEmpty)
 
   // Clear topic when form/subject not ready.
   useEffect(() => {
-    if (!subjectReady || !gradeReady) {
-      if (String(value || '').trim()) onChange('')
-    }
+    if (!ready && String(value || '').trim()) onChange('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subjectReady, gradeReady])
+  }, [ready])
 
-  // Keep value aligned with syllabus list (exact or fuzzy); clear if form/subject changed away.
+  // Keep value aligned with syllabus list; clear invalid free-text when dropdown is required.
   useEffect(() => {
-    if (loading || !hasTopics) return
+    if (loading || !ready) return
     const current = String(value || '').trim()
+    if (!hasTopics) {
+      if (!allowFreeFormWhenEmpty && current) onChange('')
+      return
+    }
     if (!current) return
     const lower = current.toLowerCase()
     const exact = topics.find((t) => t.toLowerCase() === lower)
@@ -66,26 +77,33 @@ export function CurriculumTopicSelect({
       return
     }
     onChange('')
-    // onChange identity may change each render — only re-sync when topics/value change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [topics, hasTopics, loading, value])
+  }, [topics, hasTopics, loading, value, ready, allowFreeFormWhenEmpty])
 
   return (
     <div className={`space-y-2 ${className}`.trim()}>
       <Label htmlFor={id}>
-        {hasTopics ? label : allowFreeFormWhenEmpty ? 'Topic' : label}
+        {label}
         {required ? ' *' : ''}
       </Label>
-      {hasTopics ? (
+      {useDropdown ? (
         <select
           id={id}
-          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+          className={selectClassName}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          disabled={disabled}
+          disabled={disabled || (!hasTopics && !loading)}
           required={required}
         >
-          <option value="">{loading ? 'Loading topics…' : 'Choose syllabus topic…'}</option>
+          <option value="">
+            {!ready
+              ? 'Select form and subject first'
+              : loading
+                ? 'Loading syllabus topics…'
+                : hasTopics
+                  ? 'Choose syllabus topic…'
+                  : 'No syllabus topics for this form/subject'}
+          </option>
           {topics.map((t) => (
             <option key={t} value={t}>
               {t}
@@ -97,23 +115,28 @@ export function CurriculumTopicSelect({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          disabled={disabled && !allowFreeFormWhenEmpty}
-          required={required && allowFreeFormWhenEmpty}
+          disabled={!ready || loading}
+          required={required}
           placeholder={
             loading
               ? 'Loading curriculum topics…'
-              : !String(subject || '').trim() || !String(gradeOrForm || '').trim()
+              : !ready
                 ? 'Select form and subject first'
-                : allowFreeFormWhenEmpty
-                  ? 'No syllabus topics found — enter a topic'
-                  : 'No syllabus topics for this form/subject'
+                : 'No syllabus topics found — enter a topic'
           }
         />
       )}
       {error ? <p className="text-xs text-amber-700">{error}</p> : null}
-      {hasTopics ? (
+      {ready && hasTopics ? (
         <p className="text-xs text-muted-foreground">
-          Topics come from the CDC / ECZ syllabus for {gradeOrForm}.
+          Topics come from the CDC / ECZ syllabus for {gradeOrForm}. Free-text topics are not
+          allowed.
+        </p>
+      ) : null}
+      {ready && !loading && !hasTopics && !allowFreeFormWhenEmpty ? (
+        <p className="text-xs text-amber-700">
+          No syllabus topics are available for this subject and form. Add curriculum data or pick
+          another subject/form.
         </p>
       ) : null}
     </div>

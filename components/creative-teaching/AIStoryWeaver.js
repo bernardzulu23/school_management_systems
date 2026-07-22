@@ -25,6 +25,7 @@ import {
   downloadAsWordDoc,
 } from '@/lib/ai/contentFormatters'
 import { getSubjectPromptTemplate } from '@/lib/ai/subjectPromptTemplates'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 
 const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
 const SUBJECTS = CANONICAL_SUBJECTS
@@ -260,14 +261,14 @@ export default function AIStoryWeaver() {
         <Label>Grade</Label>
         <Select
           value={form.grade}
-          onChange={(v) => setForm((f) => ({ ...f, grade: v }))}
+          onChange={(v) => setForm((f) => ({ ...f, grade: v, topic: '' }))}
           options={GRADES}
         />
 
         <Label>Subject</Label>
         <Select
           value={form.subject}
-          onChange={(v) => setForm((f) => ({ ...f, subject: v }))}
+          onChange={(v) => setForm((f) => ({ ...f, subject: v, topic: '' }))}
           options={SUBJECTS}
         />
         <p className="mb-2 mt-1 text-[11px] text-[var(--text-secondary)]">
@@ -275,13 +276,18 @@ export default function AIStoryWeaver() {
           <span className="text-[var(--text-secondary)]"> ({contentTemplate.type})</span>
         </p>
 
-        <Label>Topic</Label>
-        <input
-          placeholder="e.g. Atomic Structure, Algebra, Colonial Period..."
-          value={form.topic}
-          onChange={(e) => setForm((f) => ({ ...f, topic: e.target.value }))}
-          className={inputClass}
-        />
+        <div className="mb-3">
+          <CurriculumTopicSelect
+            subject={form.subject}
+            gradeOrForm={form.grade}
+            value={form.topic}
+            onChange={(topic) => setForm((f) => ({ ...f, topic }))}
+            label="Topic"
+            required
+            allowFreeFormWhenEmpty={false}
+            selectClassName={inputClass}
+          />
+        </div>
 
         {showStoryControls ? (
           <>

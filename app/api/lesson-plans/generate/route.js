@@ -14,6 +14,7 @@ import { composeLessonPlanDisplay } from '@/lib/lesson-plans/text'
 import { logger, captureError } from '@/lib/utils/logger'
 import { buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { getSchoolPlanForUsage } from '@/lib/middleware/aiUsageTracker'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
 
 export const dynamic = 'force-dynamic'
 
@@ -58,8 +59,8 @@ export const POST = withErrorHandler(async function POST(request) {
   const body = await request.json().catch(() => ({}))
   const grade = normalize(body?.grade || body?.form)
   const subject = normalize(body?.subject)
-  const topic = normalize(body?.topic)
-  const subTopic = normalize(body?.subTopic || body?.subtopic) || topic
+  let topic = normalize(body?.topic)
+  let subTopic = normalize(body?.subTopic || body?.subtopic) || topic
   const duration = Math.max(20, Math.min(120, Number(body?.duration) || 40))
   const term = normalize(body?.term) || 'Term 1'
   const templateType = normalize(body?.templateType) || 'professional'
@@ -81,6 +82,15 @@ export const POST = withErrorHandler(async function POST(request) {
 
   if (!grade || !subject || !topic) {
     throw new ApiError('grade, subject, and topic are required', 400)
+  }
+
+  try {
+    topic = await assertCurriculumTopicAllowed(subject, grade, topic, { required: true })
+    if (subTopic) {
+      subTopic = await assertCurriculumTopicAllowed(subject, grade, subTopic, { required: false })
+    }
+  } catch (e) {
+    throw new ApiError(e instanceof Error ? e.message : 'Invalid topic', 400)
   }
 
   const school = await getSchoolPlanForUsage(schoolId)

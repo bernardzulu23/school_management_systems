@@ -19,6 +19,7 @@ import { buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
+import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
 
 const LESSON_PLAN_SYSTEM =
   'You are an expert Zambian CBC lesson planner. Write complete, practical lesson plans aligned to MoGE guidelines and Zambian classroom context.'
@@ -177,7 +178,25 @@ export const POST = withAILimits(async function POST(request: Request) {
     }
 
     const raw = await request.json().catch(() => null)
-    const input = LessonPlannerInputSchema.parse(raw)
+    const parsed = LessonPlannerInputSchema.parse(raw)
+    let topic = parsed.topic
+    let subtopic = parsed.subtopic
+    try {
+      topic = await assertCurriculumTopicAllowed(parsed.subject, parsed.grade, parsed.topic, {
+        required: true,
+      })
+      if (subtopic) {
+        subtopic = await assertCurriculumTopicAllowed(parsed.subject, parsed.grade, subtopic, {
+          required: false,
+        })
+      }
+    } catch (e) {
+      return NextResponse.json(
+        { error: e instanceof Error ? e.message : 'Invalid topic' },
+        { status: 400 }
+      )
+    }
+    const input = { ...parsed, topic, subtopic }
     const guard = validateAIGuardrails({
       text: [
         input.subject,

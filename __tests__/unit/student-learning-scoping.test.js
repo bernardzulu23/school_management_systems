@@ -57,7 +57,7 @@ describe('listCurriculumTopics / assertCurriculumTopicAllowed', () => {
 
     await expect(
       assertCurriculumTopicAllowed('Chemistry', 'Form 1', '', { requireIfListed: true })
-    ).rejects.toThrow(/curriculum topics/i)
+    ).rejects.toThrow(/curriculum topic/i)
 
     const allowed = await assertCurriculumTopicAllowed('Chemistry', 'Form 1', topics[0], {
       requireIfListed: true,

@@ -16,6 +16,7 @@ import { LessonPlanDownloadButton } from '@/components/lesson-plans/LessonPlanVi
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Download, FileText, Printer } from 'lucide-react'
 import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 
 const GRADE_GROUPS = [
   {
@@ -848,7 +849,9 @@ export default function AILessonPlanner() {
             <select
               className={selectClass}
               value={form.grade}
-              onChange={(e) => setForm((p) => ({ ...p, grade: e.target.value }))}
+              onChange={(e) =>
+                setForm((p) => ({ ...p, grade: e.target.value, topic: '', subTopic: '' }))
+              }
             >
               {GRADE_GROUPS.map((group) => (
                 <optgroup key={group.label} label={group.label}>
@@ -898,14 +901,18 @@ export default function AILessonPlanner() {
             {useCustomSubject ? (
               <Input
                 value={form.customSubject}
-                onChange={(e) => setForm((p) => ({ ...p, customSubject: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, customSubject: e.target.value, topic: '', subTopic: '' }))
+                }
                 placeholder="e.g., Entrepreneurship, Local Craft Studies…"
               />
             ) : (
               <select
                 className={selectClass}
                 value={form.subject}
-                onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value }))}
+                onChange={(e) =>
+                  setForm((p) => ({ ...p, subject: e.target.value, topic: '', subTopic: '' }))
+                }
               >
                 {SUBJECT_GROUPS.map((group) => (
                   <optgroup key={group.label} label={group.label}>
@@ -921,22 +928,29 @@ export default function AILessonPlanner() {
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label>Topic / Lesson Title</Label>
-            <Input
+            <CurriculumTopicSelect
+              subject={activeSubject}
+              gradeOrForm={form.grade}
               value={form.topic}
-              onChange={(e) => setForm((p) => ({ ...p, topic: e.target.value }))}
-              placeholder="e.g., Water Resources Management, Budgeting for Household Needs"
+              onChange={(topic) => setForm((p) => ({ ...p, topic }))}
+              label="Topic / Lesson Title"
+              required
+              allowFreeFormWhenEmpty={false}
+              selectClassName={selectClass}
             />
           </div>
 
           <div className="space-y-2 md:col-span-2">
-            <Label>
-              Sub-Topic <span className="font-normal opacity-60">(Ministry format — optional)</span>
-            </Label>
-            <Input
+            <CurriculumTopicSelect
+              id="lesson-subtopic"
+              subject={activeSubject}
+              gradeOrForm={form.grade}
               value={form.subTopic}
-              onChange={(e) => setForm((p) => ({ ...p, subTopic: e.target.value }))}
-              placeholder="e.g., 1.5.1 Algebraic Expressions"
+              onChange={(subTopic) => setForm((p) => ({ ...p, subTopic }))}
+              label="Sub-Topic (optional)"
+              required={false}
+              allowFreeFormWhenEmpty={false}
+              selectClassName={selectClass}
             />
           </div>
 

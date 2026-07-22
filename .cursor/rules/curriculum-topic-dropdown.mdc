@@ -1,0 +1,28 @@
+---
+description: Enforce syllabus topic dropdown when form + subject are selected
+globs: "{app/dashboard/**/*,components/**/*,app/api/ai/**/*,app/api/lesson-plans/**/*,app/api/student/**/*,lib/ai/curriculum-context.js}"
+alwaysApply: false
+---
+
+# Curriculum topic dropdown (enforced)
+
+When a user selects **form/grade + subject** for any formulation flow (quizzes, topic tests, flashcards, mock exams, ECZ practice/scenarios, Story Weaver, lesson plans, chat curriculum tools, assessments), **topic MUST be chosen from the syllabus dropdown** — never free-typed when curriculum topics exist.
+
+## Shared contract
+
+- UI: `CurriculumTopicSelect` (`components/curriculum/CurriculumTopicSelect.js`)
+- Hook: `useCurriculumTopics` → `GET /api/curriculum-topics?subject=&grade=`
+- Server: `assertCurriculumTopicAllowed(subject, grade, topic, { required: true })` from `lib/ai/curriculum-context.js`
+
+## Rules
+
+1. Disable topic until both subject and form/grade are set; clear topic when either changes.
+2. Default `allowFreeFormWhenEmpty={false}` — no free-text fallback on formulation screens.
+3. Every generation/save API that accepts `topic` must call `assertCurriculumTopicAllowed` (quiz-maker, story-weaver, lesson-planner, lesson-plans, flashcards, mock-exam, ecz-practice, ecz-exam-questions, …).
+4. Schemes / records of work pull weekly topics from curriculum for the selected subject+grade — do not invent free-form weekly topics in the generator.
+5. Do not reintroduce `<Input>` / free-text for topic on formulation pages.
+
+## Adding a new formulation surface
+
+1. Render `<CurriculumTopicSelect subject={…} gradeOrForm={…} value={topic} onChange={…} required allowFreeFormWhenEmpty={false} />`
+2. In the API route, `await assertCurriculumTopicAllowed(subject, grade, topic, { required: true })` before generation.
