@@ -180,6 +180,57 @@
         }
       ],
       "keyCompetences": ["communication", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Weekend narrative stem testing structure/grammar in context (crack of dawn scenario) for Section A language conventions — Interprets and understands spoken information",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Weekend narrative stem testing structure/grammar in context (crack of dawn scenario) for Section A language conventions — Produces ideas, thoughts and opinions through spoken language",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Weekend narrative stem testing structure/grammar in context (crack of dawn scenario) for Section A language conventions — Reads, Interprets and summarises continuous and non-continuous texts",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
     }
   ]
 }

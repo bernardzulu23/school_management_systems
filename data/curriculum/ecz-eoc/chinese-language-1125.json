@@ -7,7 +7,6 @@
     {
       "id": "EoC1",
       "description": "Reads, interprets, summarises and translates continuous and non-continuous texts",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-main",
@@ -16,12 +15,12 @@
           "unverifiedTopicAliases": ["Chinese characters", "Pinyin"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Demonstrates mastery of written language conventions and transformations",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-main",
@@ -30,12 +29,12 @@
           "unverifiedTopicAliases": ["Characters", "Stroke order"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Understands and interprets spoken information",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-main",
@@ -45,12 +44,12 @@
           "taskTypeAliases": [],
           "note": "Primarily SBA-focused oral/listening."
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Produces ideas, thoughts and opinions through spoken language",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-main",
@@ -60,7 +59,8 @@
           "taskTypeAliases": [],
           "note": "Primarily SBA-focused speaking."
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {
@@ -103,6 +103,57 @@
     {
       "eocId": "EoC1",
       "scenarioTheme": "Chinese reading/translation scenario for continuous and non-continuous texts",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Chinese reading/translation scenario for continuous and non-continuous texts — Demonstrates mastery of written language conventions and transformations",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Chinese reading/translation scenario for continuous and non-continuous texts — Understands and interprets spoken information",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Chinese reading/translation scenario for continuous and non-continuous texts — Produces ideas, thoughts and opinions through spoken language",
       "parts": [
         {
           "label": "(a)",

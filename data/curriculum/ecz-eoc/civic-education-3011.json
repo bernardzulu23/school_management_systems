@@ -165,6 +165,72 @@
         }
       ],
       "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Patriotism and good citizenship scenario with multi-part tasks (~15 marks chosen task style) — Utilises resources to foster personal and national development",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 6,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Patriotism and good citizenship scenario with multi-part tasks (~15 marks chosen task style) — Resolves conflict and Collaborates with others in local, regional and internatio",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 6,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Patriotism and good citizenship scenario with multi-part tasks (~15 marks chosen task style) — Exhibits principles, good morals and values in day to day life",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 6,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
     }
   ]
 }

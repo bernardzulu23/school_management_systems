@@ -188,6 +188,74 @@
         }
       ],
       "keyCompetences": ["analytical_thinking", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Classification of organisms/substances from scenario features; evaluate importance of classification systems — Investigates and Explains Biological Functions",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Classification of organisms/substances from scenario features; evaluate importance of classification systems — Interprets and Explains Scientific Evidence",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Classification of organisms/substances from scenario features; evaluate importance of classification systems — Applies Scientific Skills to Real-life Situations",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Classification of organisms/substances from scenario features; evaluate importance of classification systems — Demonstrates biological principles in real life situations",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "critical_thinking"]
     }
   ]
 }

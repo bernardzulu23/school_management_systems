@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 /**
  * Load enrolled subjects + curriculum topics for the authenticated student.
@@ -15,7 +16,10 @@ export function useStudentEnrolledSubjects() {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch('/api/student/subjects', { credentials: 'include' })
+      const res = await sessionFetch('/api/student/subjects', {
+        method: 'GET',
+        cache: 'no-store',
+      })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.message || json.error || 'Failed to load subjects')
       setSubjects(Array.isArray(json?.data) ? json.data : [])
@@ -60,9 +64,9 @@ export function useStudentCurriculumTopics(subjectName) {
     setError(null)
     ;(async () => {
       try {
-        const res = await fetch(
+        const res = await sessionFetch(
           `/api/student/curriculum-topics?subject=${encodeURIComponent(subject)}`,
-          { credentials: 'include' }
+          { method: 'GET', cache: 'no-store' }
         )
         const json = await res.json().catch(() => ({}))
         if (!res.ok) throw new Error(json.message || json.error || 'Failed to load topics')

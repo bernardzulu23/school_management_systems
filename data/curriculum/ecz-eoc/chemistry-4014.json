@@ -189,6 +189,91 @@
         }
       ],
       "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Classifying substances and interpreting physical/chemical changes for suitable real-life application (per ECZ Chemistry exemplar EoC1) — Analyses and identifies chemical composition of substances for scientific decisi",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Classifying substances and interpreting physical/chemical changes for suitable real-life application (per ECZ Chemistry exemplar EoC1) — Evaluates industrial chemical processes and suggests alternative methods of prod",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Classifying substances and interpreting physical/chemical changes for suitable real-life application (per ECZ Chemistry exemplar EoC1) — Applies Chemistry principles and mathematical operations to determine quantities",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Classifying substances and interpreting physical/chemical changes for suitable real-life application (per ECZ Chemistry exemplar EoC1) — Investigates quantities involving industrial processes",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC6",
+      "scenarioTheme": "Classifying substances and interpreting physical/chemical changes for suitable real-life application (per ECZ Chemistry exemplar EoC1) — Applies Chemistry principles in everyday life",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
     }
   ]
 }

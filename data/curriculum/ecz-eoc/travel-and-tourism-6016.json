@@ -133,6 +133,74 @@
         }
       ],
       "keyCompetences": ["problem_solving", "communication"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Tour operations itinerary for a Zambian destination with visitor challenges — Explores tourism dynamics, understand, travellers’ destinations and global chall",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "communication"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Tour operations itinerary for a Zambian destination with visitor challenges — Manages tourism destinations and operations",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "communication"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Tour operations itinerary for a Zambian destination with visitor challenges — Applies key principles of the hospitality industry in travel and tourism",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "communication"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Tour operations itinerary for a Zambian destination with visitor challenges — Operates tourism events and activities",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "communication"]
     }
   ]
 }

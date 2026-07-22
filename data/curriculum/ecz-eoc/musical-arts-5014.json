@@ -154,6 +154,74 @@
         }
       ],
       "keyCompetences": ["creativity_and_innovation", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Zambian musical styles and foreign influences; roles of music in traditional ceremony — Analyses pitch",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Zambian musical styles and foreign influences; roles of music in traditional ceremony — Creates Melodies",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Zambian musical styles and foreign influences; roles of music in traditional ceremony — Arranges Musical Scores",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Zambian musical styles and foreign influences; roles of music in traditional ceremony — Applies Musical Knowledge and Skills to Generate Income",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "analytical_thinking"]
     }
   ]
 }

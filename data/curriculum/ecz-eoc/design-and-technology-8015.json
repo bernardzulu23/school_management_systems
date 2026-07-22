@@ -7,7 +7,6 @@
     {
       "id": "EoC1",
       "description": "Utilises various materials and techniques to produce items while adhering to safety procedures",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc1-main",
@@ -16,12 +15,12 @@
           "unverifiedTopicAliases": ["Tools"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC2",
       "description": "Generates and develops graphical representations and models",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc2-main",
@@ -30,12 +29,12 @@
           "unverifiedTopicAliases": ["CAD"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC3",
       "description": "Designs and constructs innovative systems",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc3-main",
@@ -44,12 +43,12 @@
           "unverifiedTopicAliases": ["Electronics systems"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     },
     {
       "id": "EoC4",
       "description": "Develops and implements a business idea",
-      "resolutionMode": "topic",
       "subSkills": [
         {
           "id": "eoc4-main",
@@ -58,7 +57,8 @@
           "unverifiedTopicAliases": ["Market research"],
           "taskTypeAliases": []
         }
-      ]
+      ],
+      "resolutionMode": "topic"
     }
   ],
   "testDesign": {
@@ -105,6 +105,57 @@
     {
       "eocId": "EoC2",
       "scenarioTheme": "Real-life design brief requiring sketches/graphics and design-process creativity",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Real-life design brief requiring sketches/graphics and design-process creativity — Utilises various materials and techniques to produce items while adhering to saf",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Real-life design brief requiring sketches/graphics and design-process creativity — Designs and constructs innovative systems",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Real-life design brief requiring sketches/graphics and design-process creativity — Develops and implements a business idea",
       "parts": [
         {
           "label": "(a)",

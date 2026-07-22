@@ -137,6 +137,57 @@
         }
       ],
       "keyCompetences": ["communication", "problem_solving"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Hotel guest-experience coordination scenario across departments — Understands the history of hospitality",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["communication", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Hotel guest-experience coordination scenario across departments — Demonstrates skills in food technology and preparation",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["communication", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Hotel guest-experience coordination scenario across departments — Applies entrepreneurial skills in hospitality business",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["communication", "problem_solving"]
     }
   ]
 }

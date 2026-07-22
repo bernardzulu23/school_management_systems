@@ -127,6 +127,57 @@
         }
       ],
       "keyCompetences": ["communication", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Reading, summary and translation scenario in a Zambian language community context — Demonstrates masterly of written language conventions",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Reading, summary and translation scenario in a Zambian language community context — Interprets and understands spoken information",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Reading, summary and translation scenario in a Zambian language community context — Expresses ideas, thoughts and opinions through spoken language",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["communication", "critical_thinking"]
     }
   ]
 }

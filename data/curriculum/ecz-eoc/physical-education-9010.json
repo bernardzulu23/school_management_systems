@@ -161,6 +161,74 @@
         }
       ],
       "keyCompetences": ["problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Health-related PE and sports nutrition scenario for school athletes — Demonstrates motor activities in sports",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Health-related PE and sports nutrition scenario for school athletes — Understands human body and its movements",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Health-related PE and sports nutrition scenario for school athletes — Applies entreprenuerial skills",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Health-related PE and sports nutrition scenario for school athletes — Applies athletics skills management of sports events and facilities",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "critical_thinking"]
     }
   ]
 }

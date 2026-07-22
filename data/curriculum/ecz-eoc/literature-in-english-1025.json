@@ -142,6 +142,102 @@
         }
       ],
       "keyCompetences": ["critical_thinking", "analytical_thinking", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Contextual poetry extract analysis: devices, meaning, societal role (Section B style) — Acquires literary skills and uses them in everyday life",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 4,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 4,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "(d)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(e)",
+          "marks": 4,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Contextual poetry extract analysis: devices, meaning, societal role (Section B style) — Analyses and applies the elements of the literary genre of drama",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 4,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 4,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "(d)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(e)",
+          "marks": 4,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Contextual poetry extract analysis: devices, meaning, societal role (Section B style) — Analyses and applies elements of the literary genre of prose",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 4,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 4,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "(d)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(e)",
+          "marks": 4,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking", "creativity_and_innovation"]
     }
   ]
 }

@@ -24,4 +24,15 @@ From the Assessment Schemes definitions and Component 2 test-item features:
 - Topic enforcement: `assertCurriculumTopicAllowed` (+ `requireIfListed`) on quiz-maker, topic-test, ecz-practice, ecz-exam-questions, flashcards, mock-exam
 - UI: form + subject → syllabus topic **dropdown** (`CurriculumTopicSelect`) for quizzes, tests, exercises, flashcards, assessments, lesson plans
 - Structural + semantic EoC checks: `lib/ecz/eoc/question-validator.ts`
-- Side-by-side logging after generation: `runValidationSideBySide` → `EczValidationLog` (quiz-maker, ecz-practice, ecz-exam-questions, flashcards, mock-exam)
+
+## Full syllabus validation
+
+Run:
+
+```bash
+npm run validate:curriculum
+```
+
+Report: `Validation_folder/FULL_SYLLABUS_VALIDATION_REPORT.json`
+
+Checks per subject (registry): EoC JSON + schema, Assessment Scheme chapter extract, Syllabus PDF, ingest JSON, form1-4 JSON, usable topic dropdown corpus, topic assert accept/reject, construct, SBA+FE, scenarioRequired, Bloom ranges, scoring rules, exemplars, verified-alias↔corpus grounding.

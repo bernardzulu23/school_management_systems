@@ -152,6 +152,57 @@
         }
       ],
       "keyCompetences": ["financial_literacy", "analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Prepare and analyse financial statements for a Zambian trading business (ratios/margins) — Demonstrates sound accounting decisions based on key accounting principles or co",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Prepare and analyse financial statements for a Zambian trading business (ratios/margins) — Demonstrates proficiency in recording business transactions in ledger accounts",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Prepare and analyse financial statements for a Zambian trading business (ratios/margins) — Analyses the effective implementation of reconciliation and verification tools i",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 10,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "analytical_thinking", "problem_solving"]
     }
   ]
 }

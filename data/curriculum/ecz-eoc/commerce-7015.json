@@ -142,6 +142,57 @@
         }
       ],
       "keyCompetences": ["financial_literacy", "problem_solving", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Zambian SME formation and financing scenario (capital/liquidity challenges) — Demonstrates the skills of clean production and trading within legal parameters",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "problem_solving", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Zambian SME formation and financing scenario (capital/liquidity challenges) — Applies physical and Online Business practices free from exploitation",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "problem_solving", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Zambian SME formation and financing scenario (capital/liquidity challenges) — Analyses and evaluates the significance of commercial services in production, co",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["financial_literacy", "problem_solving", "analytical_thinking"]
     }
   ]
 }

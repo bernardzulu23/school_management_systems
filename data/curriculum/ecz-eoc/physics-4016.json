@@ -227,6 +227,141 @@
         }
       ],
       "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Chemical plant liquid transport: classify base/derived quantities (mass, volume, density, temperature, thermal expansion); advise safe packaging/storage; calculate density — Analyses and applies principles of mechanical systems to maximize the benefits o",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(d)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Chemical plant liquid transport: classify base/derived quantities (mass, volume, density, temperature, thermal expansion); advise safe packaging/storage; calculate density — Applies and interprets concepts of thermal properties of matter in order to pred",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(d)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Chemical plant liquid transport: classify base/derived quantities (mass, volume, density, temperature, thermal expansion); advise safe packaging/storage; calculate density — Interprets and applies properties of waves to predict natural phenomena and desi",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(d)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Chemical plant liquid transport: classify base/derived quantities (mass, volume, density, temperature, thermal expansion); advise safe packaging/storage; calculate density — Analyses and manipulates electric and magnetic properties of materials in order ",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(d)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC6",
+      "scenarioTheme": "Chemical plant liquid transport: classify base/derived quantities (mass, volume, density, temperature, thermal expansion); advise safe packaging/storage; calculate density — Applies electronic, communication, nuclear, and renewable energy principles to e",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 4,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 2,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(d)",
+          "marks": 2,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
     }
   ]
 }

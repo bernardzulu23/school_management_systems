@@ -182,6 +182,74 @@
         }
       ],
       "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Map reading literacy and spatial relationships in a real-life navigation/land-use scenario — Demonstrates understanding of earth's natural processes and their effects",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 15,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Map reading literacy and spatial relationships in a real-life navigation/land-use scenario — Understands demographic dynamics and its relationship with the environment and h",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 15,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Map reading literacy and spatial relationships in a real-life navigation/land-use scenario — Demonstrates understanding of resource utilisation and sustainability",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 15,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Map reading literacy and spatial relationships in a real-life navigation/land-use scenario — Conducts geographical inquiry using appropriate research methods",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 10,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 15,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving"]
     }
   ]
 }

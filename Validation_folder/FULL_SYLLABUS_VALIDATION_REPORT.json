@@ -1,0 +1,3261 @@
+{
+  "generatedAt": "2026-07-22T22:29:39.481Z",
+  "source": "Validation_folder README + ECSEOL Assessment Schemes + CDC Syllabus/",
+  "totals": {
+    "subjects": 27,
+    "pass": 4,
+    "warn": 22,
+    "fail": 1
+  },
+  "checklist": [
+    "Topic from syllabus (dropdown corpus)",
+    "EoC Assessment Scheme JSON (construct/components/exemplars)",
+    "Authenticity scaffold (scenarioRequired)",
+    "Criterion-referenced (Bloom + scoring rules)",
+    "Syllabus PDF + ingest + form1-4 present",
+    "Topic assert accepts syllabus / rejects invented",
+    "Verified aliases grounded in corpus"
+  ],
+  "subjects": [
+    {
+      "subjectName": "Agricultural Science",
+      "codes": ["4018"],
+      "overall": "WARN",
+      "score": 15.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "agricultural-science-4018.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "6 EoCs, 3 components, 6 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "warn",
+          "detail": "No chapter extract matched — re-run chapter extractor if needed"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "AGRICULTURAL-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "agricultural-science-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 8 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Land Tenure Systems and Land Use\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "6 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "6 exemplars for 6 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "4/23 verified aliases match corpus (17%) — cross-walk incomplete"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "27 unverified / 23 verified (54% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 6,
+        "verifiedAliases": 23,
+        "unverifiedAliases": 27,
+        "curriculumTopics": 8,
+        "verifiedInCorpus": 4,
+        "components": 3,
+        "exemplars": 6
+      }
+    },
+    {
+      "subjectName": "Art and Design",
+      "codes": ["5012"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "art-and-design-5012.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "warn",
+          "detail": "No chapter extract matched — re-run chapter extractor if needed"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "ART-AND-DESIGN-SYLLABUS-FINAL.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "ART-AND-DESIGN-SYLLABUS-FINAL.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "art-and-design-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "29 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Art Organizations\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "6 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "3/41 verified aliases match corpus (7%) — cross-walk incomplete"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "0 unverified / 41 verified (0% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 41,
+        "unverifiedAliases": 0,
+        "curriculumTopics": 29,
+        "verifiedInCorpus": 3,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Biology",
+      "codes": ["4012"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "biology-4012.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "BIOLOGY-SYLABUS-O-LEVEL-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "biology-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "18 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Experimental Design\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "4 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "5/25 verified aliases match corpus (20%) — cross-walk incomplete"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "17 unverified / 25 verified (40% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 25,
+        "unverifiedAliases": 17,
+        "curriculumTopics": 18,
+        "verifiedInCorpus": 5,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Chemistry",
+      "codes": ["4014"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "chemistry-4014.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "6 EoCs, 3 components, 6 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "CHEMISTRY-SYLLABUS.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "CHEMISTRY-SYLLABUS.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "chemistry-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "17 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Chemical Bonding\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "5 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "6 exemplars for 6 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "1/24 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "13 unverified / 24 verified (35% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 6,
+        "verifiedAliases": 24,
+        "unverifiedAliases": 13,
+        "curriculumTopics": 17,
+        "verifiedInCorpus": 1,
+        "components": 3,
+        "exemplars": 6
+      }
+    },
+    {
+      "subjectName": "Chinese Language",
+      "codes": ["1125"],
+      "overall": "FAIL",
+      "score": 12.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "chinese-language-1125.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "fail",
+          "detail": "No syllabusIngestFile mapped (e.g. Chinese)"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "fail",
+          "detail": "No syllabusIngestFile"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "fail",
+          "detail": "form14Slug is null"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "fail",
+          "detail": "Zero usable topics — free-form would be blocked; formulation broken"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "na",
+          "detail": "Skipped — no topics"
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "na",
+          "detail": "Skipped — no topics"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "2 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "0/10 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "6 unverified / 10 verified (38% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 10,
+        "unverifiedAliases": 6,
+        "curriculumTopics": 0,
+        "verifiedInCorpus": 0,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Civic Education",
+      "codes": ["3011"],
+      "overall": "PASS",
+      "score": 17,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "civic-education-3011.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "CIVIC-EDUCATION-SYLLABUS-SCIENCE-O-LEVEL-SYLLABUS-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "civic-education-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "25 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Constitution\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "4 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "pass",
+          "detail": "10/32 verified aliases match form1-4/corpus (31%)"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "11 unverified / 32 verified (26% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 32,
+        "unverifiedAliases": 11,
+        "curriculumTopics": 25,
+        "verifiedInCorpus": 10,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Commerce",
+      "codes": ["7015"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "commerce-7015.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "commerce-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "16 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Entrepreneurial Activities\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "2/24 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "7 unverified / 24 verified (23% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 24,
+        "unverifiedAliases": 7,
+        "curriculumTopics": 16,
+        "verifiedInCorpus": 2,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Computer Science",
+      "codes": ["8010"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "computer-science-8010.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "COMPUTER_-SCIENCE-ORDINARY-SYLLABI-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "computer-science-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 11 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Spreadsheets\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "0/21 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "4 unverified / 21 verified (16% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 21,
+        "unverifiedAliases": 4,
+        "curriculumTopics": 11,
+        "verifiedInCorpus": 0,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Design and Technology",
+      "codes": ["8015"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "design-and-technology-8015.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "DESIGN-AND-TECHNOLOGY-STUDIES.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "DESIGN-AND-TECHNOLOGY-STUDIES.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "design-and-technology-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "17 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Manufacturing\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "1/12 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "4 unverified / 12 verified (25% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 12,
+        "unverifiedAliases": 4,
+        "curriculumTopics": 17,
+        "verifiedInCorpus": 1,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "English Language",
+      "codes": ["1021"],
+      "overall": "PASS",
+      "score": 17,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "english-language-1021.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "ENGLISH-SYLABUS-FORM-1-4-O-LEVELCAMERA-READY.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "ENGLISH-SYLABUS-FORM-1-4-O-LEVELCAMERA-READY.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "english-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "35 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"INSTRUCTIONS\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "7 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "pass",
+          "detail": "21/52 verified aliases match form1-4/corpus (40%)"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "5 unverified / 52 verified (9% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 52,
+        "unverifiedAliases": 5,
+        "curriculumTopics": 35,
+        "verifiedInCorpus": 21,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Fashion and Fabrics",
+      "codes": ["6012"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "fashion-and-fabrics-6012.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "FASHION-AND-FABRICS-SYLABUS-O-LEVEL-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "fashion-and-fabrics-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "18 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Environmental Impact of Textile Production\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "1/20 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "3 unverified / 20 verified (13% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 20,
+        "unverifiedAliases": 3,
+        "curriculumTopics": 18,
+        "verifiedInCorpus": 1,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Food and Nutrition",
+      "codes": ["6014"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "food-and-nutrition-6014.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "6 EoCs, 3 components, 6 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "FOOD-AND-NUTRITION-SYLLABUS-FINAL-07-02-2024.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "food-and-nutrition-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "21 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Time Planning\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "6 exemplars for 6 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "1/21 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "6 unverified / 21 verified (22% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 6,
+        "verifiedAliases": 21,
+        "unverifiedAliases": 6,
+        "curriculumTopics": 21,
+        "verifiedInCorpus": 1,
+        "components": 3,
+        "exemplars": 6
+      }
+    },
+    {
+      "subjectName": "French Language",
+      "codes": ["1120"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "french-language-1120.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "FRENCH-LANGUAGE.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "FRENCH-LANGUAGE.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "french-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "17 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Permission\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "4 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "2/21 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "7 unverified / 21 verified (25% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 21,
+        "unverifiedAliases": 7,
+        "curriculumTopics": 17,
+        "verifiedInCorpus": 2,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Geography",
+      "codes": ["3014"],
+      "overall": "PASS",
+      "score": 17,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "geography-3014.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "GEOGRAPHY-SYLLABUS.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "GEOGRAPHY-SYLLABUS.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "geography-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "19 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Maps and Diagrams\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "4 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "pass",
+          "detail": "8/32 verified aliases match form1-4/corpus (25%)"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "7 unverified / 32 verified (18% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 32,
+        "unverifiedAliases": 7,
+        "curriculumTopics": 19,
+        "verifiedInCorpus": 8,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "History",
+      "codes": ["3013"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "history-3013.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "HISTORY-SYLLABUS-FORMS-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "HISTORY-SYLLABUS-FORMS-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "history-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 10 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Development of Slavery and Slave Trade\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "4 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "1/19 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "17 unverified / 19 verified (47% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 19,
+        "unverifiedAliases": 17,
+        "curriculumTopics": 10,
+        "verifiedInCorpus": 1,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Hospitality Management",
+      "codes": ["6015"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "hospitality-management-6015.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "HOSPITALITY-MANAGEMENT.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "HOSPITALITY-MANAGEMENT.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "hospitality-management-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 9 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Economic Eඒect in Hospitality\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "1/22 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "4 unverified / 22 verified (15% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 22,
+        "unverifiedAliases": 4,
+        "curriculumTopics": 9,
+        "verifiedInCorpus": 1,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Information and Communications Technology",
+      "codes": ["8011"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "ict-8011.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "ICT_ORDINARY-LEVEL-SYLLABUS-FORMS-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "computer-studies-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 7 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"File Compression and Encryption\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "0/19 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "4 unverified / 19 verified (17% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 19,
+        "unverifiedAliases": 4,
+        "curriculumTopics": 7,
+        "verifiedInCorpus": 0,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Literature in English",
+      "codes": ["1025"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "literature-in-english-1025.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "LITERATURE-IN-ENGLISH-SYLABUS-O-LEVEL-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "literature-in-english-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 4 topics — insufficient for reliable formulation"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"INTRODUCTION TO ZAMBIAN LITERATURE\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "5 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "3/15 verified aliases match corpus (20%) — cross-walk incomplete"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "2 unverified / 15 verified (12% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 15,
+        "unverifiedAliases": 2,
+        "curriculumTopics": 4,
+        "verifiedInCorpus": 3,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Mathematics I",
+      "codes": ["2021"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "mathematics-i-2021.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "warn",
+          "detail": "No chapter extract matched — re-run chapter extractor if needed"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "MATHEMATICS-O-LEVEL-FORMS-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "MATHEMATICS-O-LEVEL-FORMS-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "mathematics-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 13 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Cartesian Plane\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "7 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "pass",
+          "detail": "10/70 verified aliases match form1-4/corpus (14%)"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "4 unverified / 70 verified (5% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 70,
+        "unverifiedAliases": 4,
+        "curriculumTopics": 13,
+        "verifiedInCorpus": 10,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Mathematics II",
+      "codes": ["2025"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "mathematics-ii-2025.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "MATHEMATICS-II-SYLLABUS.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "MATHEMATICS-II-SYLLABUS.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "mathematics-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 13 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Cartesian Plane\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "5 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "pass",
+          "detail": "8/45 verified aliases match form1-4/corpus (18%)"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "9 unverified / 45 verified (17% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 45,
+        "unverifiedAliases": 9,
+        "curriculumTopics": 13,
+        "verifiedInCorpus": 8,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Musical Arts",
+      "codes": ["5014"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "musical-arts-5014.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "MUSIC-ARTS-O-LEVEL-SYLLABUS-FORM-1-4-CAMERA-READY-1.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "music-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "20 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Zambian music.\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "4/24 verified aliases match corpus (17%) — cross-walk incomplete"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "7 unverified / 24 verified (23% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 24,
+        "unverifiedAliases": 7,
+        "curriculumTopics": 20,
+        "verifiedInCorpus": 4,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Physical Education and Sport",
+      "codes": ["9010"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "physical-education-9010.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "PHYSICAL-EDUCATION-SYLLABUS-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "physical-education-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "20 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"History of Physical Education in ancient Greece.\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "2 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "1/28 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "5 unverified / 28 verified (15% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 28,
+        "unverifiedAliases": 5,
+        "curriculumTopics": 20,
+        "verifiedInCorpus": 1,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Physics",
+      "codes": ["4016"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "physics-4016.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "6 EoCs, 3 components, 6 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "PHYSICS-SYLLABUS-O-LEVEL-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "physics-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 12 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Work, Energy, and Power\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "6 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "6 exemplars for 6 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "pass",
+          "detail": "12/62 verified aliases match form1-4/corpus (19%)"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "5 unverified / 62 verified (7% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 6,
+        "verifiedAliases": 62,
+        "unverifiedAliases": 5,
+        "curriculumTopics": 12,
+        "verifiedInCorpus": 12,
+        "components": 3,
+        "exemplars": 6
+      }
+    },
+    {
+      "subjectName": "Principles of Accounts",
+      "codes": ["7020"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "principles-of-accounts-7020.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "COMMERCE-AND-PRINCIPLES-OF-ACCOUNTS-SYLABUS-CAMERA-READY-O-LEVEL-FORM-1-4.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "commerce-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "16 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Entrepreneurial Activities\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "4 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "4/29 verified aliases match corpus (14%) — cross-walk incomplete"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "5 unverified / 29 verified (15% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 29,
+        "unverifiedAliases": 5,
+        "curriculumTopics": 16,
+        "verifiedInCorpus": 4,
+        "components": 3,
+        "exemplars": 4
+      }
+    },
+    {
+      "subjectName": "Religious Education",
+      "codes": ["3012"],
+      "overall": "PASS",
+      "score": 17,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "religious-education-3012.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "RELIGIOUS-EDUCATION-SYLLABUS.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "RELIGIOUS-EDUCATION-SYLLABUS.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "religious-education-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "15 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Division and hatred\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "4 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "pass",
+          "detail": "13/49 verified aliases match form1-4/corpus (27%)"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "12 unverified / 49 verified (20% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 49,
+        "unverifiedAliases": 12,
+        "curriculumTopics": 15,
+        "verifiedInCorpus": 13,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Travel and Tourism",
+      "codes": ["6016"],
+      "overall": "WARN",
+      "score": 16,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "travel-and-tourism-6016.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "5 EoCs, 3 components, 5 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "TRAVEL-AND-TOURISM-SYLLABUS.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "TRAVEL-AND-TOURISM-SYLLABUS.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "travel-and-tourism-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "warn",
+          "detail": "Only 6 topics — dropdown works but coverage is thin"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"Tourism destination and attractions in Zambia\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "5 exemplars for 5 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "0/14 verified aliases match corpus — mostly skill-lens or provisional"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "4 unverified / 14 verified (22% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 5,
+        "verifiedAliases": 14,
+        "unverifiedAliases": 4,
+        "curriculumTopics": 6,
+        "verifiedInCorpus": 0,
+        "components": 3,
+        "exemplars": 5
+      }
+    },
+    {
+      "subjectName": "Zambian Languages",
+      "codes": ["1211", "1212", "1213", "1214", "1215", "1216", "1217"],
+      "overall": "WARN",
+      "score": 16.5,
+      "maxScore": 17,
+      "checks": [
+        {
+          "id": "eoc-file",
+          "label": "EoC Assessment Scheme JSON present",
+          "status": "pass",
+          "detail": "zambian-languages-1211.json"
+        },
+        {
+          "id": "eoc-schema",
+          "label": "EoC JSON validates against EczSubjectSpec",
+          "status": "pass",
+          "detail": "4 EoCs, 3 components, 4 exemplars"
+        },
+        {
+          "id": "eoc-chapter",
+          "label": "Assessment Scheme chapter extract present",
+          "status": "pass",
+          "detail": "Found under Validation_folder/extracted_chapters"
+        },
+        {
+          "id": "syllabus-pdf",
+          "label": "CDC syllabus PDF in Syllabus/",
+          "status": "pass",
+          "detail": "ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.pdf"
+        },
+        {
+          "id": "ingest-json",
+          "label": "Ingest extracted syllabus JSON",
+          "status": "pass",
+          "detail": "ZAMBIAN-LANGUAGES-ORDINARY-LEVEL-SYLLABUS-FORM-1-4-FINAL.json"
+        },
+        {
+          "id": "form14",
+          "label": "Structured form1-4 curriculum JSON",
+          "status": "pass",
+          "detail": "zambian-languages-form1-4.json"
+        },
+        {
+          "id": "topic-dropdown",
+          "label": "Syllabus topic dropdown has usable topics",
+          "status": "pass",
+          "detail": "17 topics resolvable for Form 1–4 probe"
+        },
+        {
+          "id": "topic-assert",
+          "label": "assertCurriculumTopicAllowed accepts syllabus topic",
+          "status": "pass",
+          "detail": "Sample: \"CONVERSATIONS\""
+        },
+        {
+          "id": "topic-reject",
+          "label": "assertCurriculumTopicAllowed rejects invented topics",
+          "status": "pass",
+          "detail": "Invented topic correctly rejected"
+        },
+        {
+          "id": "construct",
+          "label": "Subject construct statement present",
+          "status": "pass",
+          "detail": "Construct defined"
+        },
+        {
+          "id": "components",
+          "label": "SBA + Final Exam components defined",
+          "status": "pass",
+          "detail": "SBA=true FE=true"
+        },
+        {
+          "id": "scenario",
+          "label": "Scenario-based items required (authenticity)",
+          "status": "pass",
+          "detail": "testDesign.scenarioRequired=true"
+        },
+        {
+          "id": "bloom",
+          "label": "Bloom ranges on components (criterion-referenced)",
+          "status": "pass",
+          "detail": "All components have bloomRange"
+        },
+        {
+          "id": "scoring",
+          "label": "Scoring criteria rules present",
+          "status": "pass",
+          "detail": "3 rules"
+        },
+        {
+          "id": "exemplars",
+          "label": "EoC exemplars present",
+          "status": "pass",
+          "detail": "4 exemplars for 4 EoCs"
+        },
+        {
+          "id": "alias-corpus",
+          "label": "Verified topic aliases grounded in syllabus corpus",
+          "status": "warn",
+          "detail": "3/14 verified aliases match corpus (21%) — cross-walk incomplete"
+        },
+        {
+          "id": "alias-provisional",
+          "label": "Provisional (unverified) alias share acceptable",
+          "status": "pass",
+          "detail": "4 unverified / 14 verified (22% provisional)"
+        }
+      ],
+      "stats": {
+        "eocCount": 4,
+        "verifiedAliases": 14,
+        "unverifiedAliases": 4,
+        "curriculumTopics": 17,
+        "verifiedInCorpus": 3,
+        "components": 3,
+        "exemplars": 4
+      }
+    }
+  ]
+}

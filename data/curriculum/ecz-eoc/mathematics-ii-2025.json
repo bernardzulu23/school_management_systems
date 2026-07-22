@@ -194,6 +194,114 @@
         }
       ],
       "keyCompetences": ["analytical_thinking", "problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Real-number relationships and patterns in a Zambian real-life numerical scenario (Maths II exemplar EoC1) — Models real life situations to solve problems and make informed decisions",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Real-number relationships and patterns in a Zambian real-life numerical scenario (Maths II exemplar EoC1) — Computes measures and applies spatial relationships to solve real life problems",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Real-number relationships and patterns in a Zambian real-life numerical scenario (Maths II exemplar EoC1) — Interprets and computes functions to solve real life situations in order to make",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Real-number relationships and patterns in a Zambian real-life numerical scenario (Maths II exemplar EoC1) — Presents and analyses data to make informed decisions",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(d)",
+          "marks": 5,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["analytical_thinking", "problem_solving", "critical_thinking"]
     }
   ]
 }

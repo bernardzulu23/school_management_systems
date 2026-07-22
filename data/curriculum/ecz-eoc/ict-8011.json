@@ -139,6 +139,74 @@
         }
       ],
       "keyCompetences": ["digital_literacy", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "School ICT policy scenario on privacy, cyber safety and responsible use — Demonstrate the ability to identify and describe ICT components, systems and the",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["digital_literacy", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "School ICT policy scenario on privacy, cyber safety and responsible use — Classify and distinguish ICT tools, file types, network structures, and technolo",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["digital_literacy", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "School ICT policy scenario on privacy, cyber safety and responsible use — Develops analytical skills and evaluating ICT systems and problems",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["digital_literacy", "critical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "School ICT policy scenario on privacy, cyber safety and responsible use — Evaluate ICT systems, networks and technologies",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["digital_literacy", "critical_thinking"]
     }
   ]
 }

@@ -133,7 +133,7 @@ export function CurriculumTopicSelect({
           allowed.
         </p>
       ) : null}
-      {ready && !loading && !hasTopics && !allowFreeFormWhenEmpty ? (
+      {ready && !loading && !hasTopics && !error && !allowFreeFormWhenEmpty ? (
         <p className="text-xs text-amber-700">
           No syllabus topics are available for this subject and form. Add curriculum data or pick
           another subject/form.

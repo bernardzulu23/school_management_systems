@@ -205,6 +205,60 @@
         }
       ],
       "keyCompetences": ["analytical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Local art museum facing vandalism/theft threatening cultural heritage: describe how a commissioned art piece raises awareness, analyse impact of art theft, discuss museum preservation, list craft pieces to address the issue — Develops pictorial art compositions",
+      "parts": [
+        {
+          "label": "Task 1",
+          "marks": 2,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "Task 2",
+          "marks": 3,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "Task 3",
+          "marks": 2,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "Task 4",
+          "marks": 3,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Local art museum facing vandalism/theft threatening cultural heritage: describe how a commissioned art piece raises awareness, analyse impact of art theft, discuss museum preservation, list craft pieces to address the issue — Applies creative art skills in craftsmanship for innovation and entrepreneurship",
+      "parts": [
+        {
+          "label": "Task 1",
+          "marks": 2,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "Task 2",
+          "marks": 3,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "Task 3",
+          "marks": 2,
+          "bloomLevel": "evaluating"
+        },
+        {
+          "label": "Task 4",
+          "marks": 3,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving"]
     }
   ]
 }

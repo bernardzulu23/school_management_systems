@@ -1,6 +1,6 @@
 {
   "dryRun": false,
-  "generatedAt": "2026-07-22T21:55:14.184Z",
+  "generatedAt": "2026-07-22T22:29:35.871Z",
   "report": [
     {
       "subject": "English Language",
@@ -24,10 +24,10 @@
       "subject": "Civic Education",
       "file": "civic-education-3011",
       "corpus": 66,
-      "promote": 2,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 2
+      "totalChanges": 0
     },
     {
       "subject": "Religious Education",
@@ -60,10 +60,10 @@
       "subject": "French Language",
       "file": "french-language-1120",
       "corpus": 112,
-      "promote": 1,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 1
+      "totalChanges": 0
     },
     {
       "subject": "Chinese Language",
@@ -87,19 +87,19 @@
       "subject": "Mathematics I",
       "file": "mathematics-i-2021",
       "corpus": 44,
-      "promote": 1,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 1
+      "totalChanges": 0
     },
     {
       "subject": "Mathematics II",
       "file": "mathematics-ii-2025",
       "corpus": 44,
-      "promote": 1,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 1
+      "totalChanges": 0
     },
     {
       "subject": "Agricultural Science",
@@ -114,19 +114,19 @@
       "subject": "Physics",
       "file": "physics-4016",
       "corpus": 52,
-      "promote": 4,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 4
+      "totalChanges": 0
     },
     {
       "subject": "Chemistry",
       "file": "chemistry-4014",
       "corpus": 73,
-      "promote": 1,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 1
+      "totalChanges": 0
     },
     {
       "subject": "Biology",
@@ -150,10 +150,10 @@
       "subject": "Musical Arts",
       "file": "musical-arts-5014",
       "corpus": 61,
-      "promote": 2,
-      "addVerified": 1,
-      "addUnverified": 1,
-      "totalChanges": 4
+      "promote": 0,
+      "addVerified": 0,
+      "addUnverified": 0,
+      "totalChanges": 0
     },
     {
       "subject": "Design and Technology",
@@ -186,28 +186,28 @@
       "subject": "Hospitality Management",
       "file": "hospitality-management-6015",
       "corpus": 65,
-      "promote": 2,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 2
+      "totalChanges": 0
     },
     {
       "subject": "Travel and Tourism",
       "file": "travel-and-tourism-6016",
       "corpus": 113,
-      "promote": 1,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 1
+      "totalChanges": 0
     },
     {
       "subject": "Physical Education and Sport",
       "file": "physical-education-9010",
       "corpus": 78,
-      "promote": 7,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 7
+      "totalChanges": 0
     },
     {
       "subject": "Computer Science",
@@ -240,212 +240,11 @@
       "subject": "Principles of Accounts",
       "file": "principles-of-accounts-7020",
       "corpus": 89,
-      "promote": 1,
+      "promote": 0,
       "addVerified": 0,
       "addUnverified": 0,
-      "totalChanges": 1
+      "totalChanges": 0
     }
   ],
-  "changes": [
-    {
-      "subjectCode": "3011",
-      "eocId": "EoC1",
-      "subSkillId": "eoc1-citizenship",
-      "action": "promote",
-      "alias": "Concept of Legal System",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "3011",
-      "eocId": "EoC1",
-      "subSkillId": "eoc1-citizenship",
-      "action": "promote",
-      "alias": "Legal Institutions and Organisations that promote justice",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "1120",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-main",
-      "action": "promote",
-      "alias": "Formal and Informal Greetings",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "2021",
-      "eocId": "EoC4",
-      "subSkillId": "eoc4-measures",
-      "action": "promote",
-      "alias": "Apply Isometric Transformations to problem solving",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "2025",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-algebra",
-      "action": "promote",
-      "alias": "1Apply vectors in problem solving",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "4016",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-mechanics",
-      "action": "promote",
-      "alias": "Apply circular motion concepts to solve problems and make predictions",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "4016",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-mechanics",
-      "action": "promote",
-      "alias": "Apply equilibrium concepts to design systems to solve real world problems",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "4016",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-mechanics",
-      "action": "promote",
-      "alias": "Apply force-body",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "4016",
-      "eocId": "EoC6",
-      "subSkillId": "eoc6-modern",
-      "action": "promote",
-      "alias": "Digital Electronic System",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "4014",
-      "eocId": "EoC1",
-      "subSkillId": "eoc1-classify",
-      "action": "promote",
-      "alias": "Metallic bonding",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "5014",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Playing Musical Instrument",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "5014",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "add-unverified",
-      "alias": "Handling and Playing Musical Instrument",
-      "reason": "corpus assign score=0.45 (weak)"
-    },
-    {
-      "subjectCode": "5014",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "add-verified",
-      "alias": "Instrument Playing",
-      "reason": "corpus assign score=0.52"
-    },
-    {
-      "subjectCode": "5014",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Handling and Playing Musical Instrument",
-      "reason": "exact match after corpus assign"
-    },
-    {
-      "subjectCode": "6015",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-main",
-      "action": "promote",
-      "alias": "Laundry in hospitality Facilit",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "6015",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Food and Beverage Services",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "6016",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Examples of Tourism Services:",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "9010",
-      "eocId": "EoC1",
-      "subSkillId": "eoc1-main",
-      "action": "promote",
-      "alias": "Career opportunit ies in Physical Education and Sport.",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "9010",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-main",
-      "action": "promote",
-      "alias": "Demonstrate skills in Squash.",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "9010",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Human Circulatory System.",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "9010",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Human muscular system.",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "9010",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Human respiratory system.",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "9010",
-      "eocId": "EoC3",
-      "subSkillId": "eoc3-main",
-      "action": "promote",
-      "alias": "Human skeletal system",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "9010",
-      "eocId": "EoC5",
-      "subSkillId": "eoc5-main",
-      "action": "promote",
-      "alias": "Managem ent and Maintenan ce of sports facilities and equipment",
-      "reason": "exact match in form1-4/ingest corpus"
-    },
-    {
-      "subjectCode": "7020",
-      "eocId": "EoC2",
-      "subSkillId": "eoc2-main",
-      "action": "promote",
-      "alias": "Types of Books of Prime Entry",
-      "reason": "exact match in form1-4/ingest corpus"
-    }
-  ]
+  "changes": []
 }

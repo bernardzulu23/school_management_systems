@@ -297,6 +297,23 @@
         }
       ],
       "keyCompetences": ["analytical_thinking", "problem_solving"]
+    },
+    {
+      "eocId": "EoC6",
+      "scenarioTheme": "Rural district farmers using traditional burning/clearing/overgrazing practices causing climate change: explain causes, evaluate national agricultural impact — Investigates agricultural problems and demonstrates practical skills in real lif",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 7,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 8,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "analytical_thinking"]
     }
   ]
 }

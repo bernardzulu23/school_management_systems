@@ -152,6 +152,91 @@
         }
       ],
       "keyCompetences": ["problem_solving", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Meal preparation and service scenario for a Zambian community event — Explores the Kitchen, equipment, utensils and materials",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Meal preparation and service scenario for a Zambian community event — Understands Fundamentals of Food and Nutrition",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Meal preparation and service scenario for a Zambian community event — Innovates Food Packaging and Storage Solutions",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Meal preparation and service scenario for a Zambian community event — Demonstrates Knowledge and Practices that Promote Sustainable Food Security",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "creativity_and_innovation"]
+    },
+    {
+      "eocId": "EoC6",
+      "scenarioTheme": "Meal preparation and service scenario for a Zambian community event — Develops Skills in Consumers and Entrepreneurs through Research",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["problem_solving", "creativity_and_innovation"]
     }
   ]
 }

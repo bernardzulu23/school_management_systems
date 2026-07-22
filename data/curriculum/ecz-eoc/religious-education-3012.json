@@ -192,6 +192,74 @@
         }
       ],
       "keyCompetences": ["critical_thinking", "communication", "problem_solving"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Faith and prayer as sources of strength in a real-life Zambia community challenge (RE Final Exam style) — Demonstrates understanding of growth, friendship and family as basis for human e",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "communication", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Faith and prayer as sources of strength in a real-life Zambia community challenge (RE Final Exam style) — Applies national values and principles in the community",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "communication", "problem_solving"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Faith and prayer as sources of strength in a real-life Zambia community challenge (RE Final Exam style) — Demonstrates understanding of man's attitude to Life and work",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "communication", "problem_solving"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Faith and prayer as sources of strength in a real-life Zambia community challenge (RE Final Exam style) — Demonstrates understanding of order, leadership and freedom in society",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "applying"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "communication", "problem_solving"]
     }
   ]
 }

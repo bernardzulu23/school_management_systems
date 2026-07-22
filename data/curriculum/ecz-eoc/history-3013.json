@@ -168,6 +168,94 @@
         }
       ],
       "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Community conflict resolution as city mayor linking historical citizenship/patriotism competences — Demonstrates understanding of ideologies of Evolution and early civilisation",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 10,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Community conflict resolution as city mayor linking historical citizenship/patriotism competences — Appreciates historical sites and traditional practices",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 10,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Community conflict resolution as city mayor linking historical citizenship/patriotism competences — Exhibits good morals, principles and national values",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 10,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
+    },
+    {
+      "eocId": "EoC5",
+      "scenarioTheme": "Community conflict resolution as city mayor linking historical citizenship/patriotism competences — Analyses emerging global issues and their sustainability",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(c)",
+          "marks": 10,
+          "bloomLevel": "evaluating"
+        }
+      ],
+      "keyCompetences": ["critical_thinking", "collaboration", "problem_solving"]
     }
   ]
 }

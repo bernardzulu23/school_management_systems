@@ -146,6 +146,72 @@
         }
       ],
       "keyCompetences": ["communication", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "French continuous/non-continuous reading scenarios with semi-structured comprehension tasks — Demonstrates mastery of written language conventions and transformations",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "French continuous/non-continuous reading scenarios with semi-structured comprehension tasks — Understands and interprets spoken information",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "French continuous/non-continuous reading scenarios with semi-structured comprehension tasks — Produces ideas, thoughts and opinions through spoken language",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 5,
+          "bloomLevel": "understanding"
+        },
+        {
+          "label": "(b)",
+          "marks": 5,
+          "bloomLevel": "applying"
+        },
+        {
+          "label": "(c)",
+          "marks": 5,
+          "bloomLevel": "analysing"
+        }
+      ],
+      "keyCompetences": ["communication", "analytical_thinking"]
     }
   ]
 }

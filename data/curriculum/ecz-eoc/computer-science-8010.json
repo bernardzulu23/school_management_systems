@@ -150,6 +150,74 @@
         }
       ],
       "keyCompetences": ["creativity_and_innovation", "problem_solving", "digital_literacy"]
+    },
+    {
+      "eocId": "EoC1",
+      "scenarioTheme": "Design a digital solution for a Zambian community problem (user-centred) — Recognises computer system components to build and troubleshoot computer systems",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving", "digital_literacy"]
+    },
+    {
+      "eocId": "EoC2",
+      "scenarioTheme": "Design a digital solution for a Zambian community problem (user-centred) — Analyses, computer tools based on their roles in problem solving",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving", "digital_literacy"]
+    },
+    {
+      "eocId": "EoC3",
+      "scenarioTheme": "Design a digital solution for a Zambian community problem (user-centred) — Analyses computing concepts by identifying relationships, principles and underly",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving", "digital_literacy"]
+    },
+    {
+      "eocId": "EoC4",
+      "scenarioTheme": "Design a digital solution for a Zambian community problem (user-centred) — Applies computational knowledge to critically evaluate situations and make infor",
+      "parts": [
+        {
+          "label": "(a)",
+          "marks": 8,
+          "bloomLevel": "analysing"
+        },
+        {
+          "label": "(b)",
+          "marks": 12,
+          "bloomLevel": "creating"
+        }
+      ],
+      "keyCompetences": ["creativity_and_innovation", "problem_solving", "digital_literacy"]
     }
   ]
 }
