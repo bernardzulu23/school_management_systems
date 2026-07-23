@@ -19,7 +19,6 @@ import { QuizGenerationSchema, parseQuizObject } from '@/lib/ai/schemas'
 import { buildQuizPrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
-import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import {
   resolveAssessmentMode,
   salvageQuestionsForMode,
@@ -31,6 +30,9 @@ import { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
 
 const QUIZ_SYSTEM =
   'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema. Use Zambian context where appropriate.'
+
+/** Creative assessment generation — do not reuse prior wording across regenerations. */
+const QUIZ_TEMPERATURE = 0.7
 
 const QuizMakerInputSchema = z.object({
   grade: z.string().min(1).max(40),
@@ -45,12 +47,15 @@ const QuizMakerInputSchema = z.object({
     .optional()
     .default('formative'),
   assessmentMode: z.enum(['primary_mcq', 'secondary_scenario', 'sba_rubric']).optional(),
+  /** Client nonce so each Create/Regenerate produces a fresh set (server falls back to UUID). */
+  variationSeed: z.string().min(1).max(80).optional(),
+  forceRefresh: z.boolean().optional(),
 })
 
 type QuizMakerInput = z.infer<typeof QuizMakerInputSchema>
 
-function buildPrompt(input: QuizMakerInput, assessmentMode: string): string {
-  return buildQuizPrompt({
+function buildPrompt(input: QuizMakerInput, assessmentMode: string, variationSeed: string): string {
+  const base = buildQuizPrompt({
     subject: input.subject,
     grade: input.grade,
     topic: input.topic,
@@ -58,6 +63,7 @@ function buildPrompt(input: QuizMakerInput, assessmentMode: string): string {
     difficulty: input.difficulty,
     assessmentMode: assessmentMode as 'primary_mcq' | 'secondary_scenario' | 'sba_rubric',
   })
+  return `${base}\n\nProduce a fresh unique set of questions (variation: ${variationSeed}). Do not reuse prior wording.`
 }
 
 export const POST = withAILimits(async function POST(request: Request) {
@@ -153,28 +159,11 @@ export const POST = withAILimits(async function POST(request: Request) {
         gradeLevel: input.grade,
         purpose,
       })
-    const cachePayload = {
-      schoolId,
-      grade: input.grade,
-      subject: input.subject,
-      topic: input.topic,
-      questionCount: input.questionCount,
-      difficulty: input.difficulty,
-      materialIds: input.materialIds || [],
-      assessmentMode,
-      purpose,
-    }
-    const cached = await getCachedAIResponse<{
-      success: boolean
-      quiz: unknown
-      assessmentMode: string
-      bloomWarnings?: string[]
-      ragReferences?: unknown[]
-      materialIds?: string[]
-    }>('ai-quiz-maker', cachePayload)
-    if (cached) return NextResponse.json(cached)
 
-    let prompt = buildPrompt(input, assessmentMode)
+    // Never serve AiCache for quiz generation — teachers expect a new set every click.
+    const variationSeed = String(input.variationSeed || '').trim() || crypto.randomUUID()
+
+    let prompt = buildPrompt(input, assessmentMode, variationSeed)
     const rag = await buildRagContextForQuery({
       query: `${input.subject} ${input.grade} ${input.topic} quiz assessment`,
       schoolId,
@@ -201,7 +190,7 @@ export const POST = withAILimits(async function POST(request: Request) {
     try {
       const generated = await generateAIObject(QuizGenerationSchema, quizSystem, prompt, {
         maxTokens: 3500,
-        temperature: 0.4,
+        temperature: QUIZ_TEMPERATURE,
         models: quizModels,
       })
       rawQuiz = generated.object as Record<string, unknown>
@@ -216,7 +205,7 @@ export const POST = withAILimits(async function POST(request: Request) {
       const { extractJSONObject } = await import('@/lib/ai/groq-client')
       const textResult = await generateAIText(
         `${prompt}\n\nRespond with ONLY valid JSON for a quiz with title, grade, subject, topic, and questions[]. Each question needs id, type (mcq|short|true_false), question, options (for mcq), answer.`,
-        { system: quizSystem, maxTokens: 3500, temperature: 0.4, models: quizModels }
+        { system: quizSystem, maxTokens: 3500, temperature: QUIZ_TEMPERATURE, models: quizModels }
       )
       rawQuiz = extractJSONObject(textResult.text)
       usage = textResult.usage || usage
@@ -306,8 +295,8 @@ export const POST = withAILimits(async function POST(request: Request) {
       bloomWarnings: bloomCheck.warnings,
       ragReferences: rag.refs?.length ? rag.refs : undefined,
       materialIds: rag.materialIds?.length ? rag.materialIds : input.materialIds,
+      variationSeed,
     }
-    await setCachedAIResponse('ai-quiz-maker', cachePayload, responsePayload)
 
     // Validation_folder: EoC side-by-side logging (does not change response shape)
     void runValidationSideBySide({

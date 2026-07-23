@@ -22,6 +22,7 @@ type ConnMeta = {
 type SessionState = {
   status: 'AI_MANAGED' | 'PENDING_HUMAN' | 'HUMAN_ACTIVE' | 'CLOSED'
   claimedAdminId: string | null
+  assignedToName: string | null
 }
 
 export class ChatSessionDO extends DurableObject<Env> {
@@ -33,6 +34,7 @@ export class ChatSessionDO extends DurableObject<Env> {
       stored || {
         status: 'AI_MANAGED',
         claimedAdminId: null,
+        assignedToName: null,
       }
     )
   }
@@ -88,11 +90,18 @@ export class ChatSessionDO extends DurableObject<Env> {
     if (path === '/internal/claim') {
       const adminUserId = String(body.adminUserId || '')
       if (!adminUserId) return new Response('adminUserId required', { status: 400 })
+      const assignedToName = String(body.assignedToName || '').trim() || null
       const state = await this.loadState()
       state.status = 'HUMAN_ACTIVE'
       state.claimedAdminId = adminUserId
+      state.assignedToName = assignedToName
       await this.saveState(state)
-      this.broadcast({ type: 'status', status: 'HUMAN_ACTIVE', claimedAdminId: adminUserId })
+      this.broadcast({
+        type: 'status',
+        status: 'HUMAN_ACTIVE',
+        claimedAdminId: adminUserId,
+        assignedToName,
+      })
       return Response.json({ ok: true, status: state.status })
     }
 
@@ -103,10 +112,14 @@ export class ChatSessionDO extends DurableObject<Env> {
       }
       const state = await this.loadState()
       state.status = status
-      if (status === 'CLOSED') state.claimedAdminId = null
+      if (status === 'CLOSED') {
+        state.claimedAdminId = null
+        state.assignedToName = null
+      }
       if (status === 'PENDING_HUMAN') {
         // waiting — keep any prior claim cleared
         state.claimedAdminId = null
+        state.assignedToName = null
       }
       await this.saveState(state)
       this.broadcast({ type: 'status', status })
@@ -182,6 +195,7 @@ export class ChatSessionDO extends DurableObject<Env> {
           type: 'hello',
           status: state.status,
           claimedAdminId: state.claimedAdminId,
+          assignedToName: state.assignedToName,
           role: meta.role,
         })
       )

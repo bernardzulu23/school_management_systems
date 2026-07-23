@@ -93,6 +93,7 @@ export const POST = withErrorHandler(async function POST(request) {
       questionCount: body.questionCount ?? 8,
       schoolId,
       gradeLevel,
+      variationSeed: body.variationSeed,
     })
   } catch (err) {
     throw new ApiError(err?.message || 'Failed to generate mock exam', 502)

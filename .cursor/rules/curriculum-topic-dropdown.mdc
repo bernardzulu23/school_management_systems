@@ -18,7 +18,7 @@ When a user selects **form/grade + subject** for any formulation flow (quizzes, 
 
 1. Disable topic until both subject and form/grade are set; clear topic when either changes.
 2. Default `allowFreeFormWhenEmpty={false}` — no free-text fallback on formulation screens.
-3. Every generation/save API that accepts `topic` must call `assertCurriculumTopicAllowed` (quiz-maker, story-weaver, lesson-planner, lesson-plans, flashcards, mock-exam, ecz-practice, ecz-exam-questions, …).
+3. Every generation/save API that accepts `topic` must call `assertCurriculumTopicAllowed` (quiz-maker, project-maker, story-weaver, lesson-planner, lesson-plans, flashcards, mock-exam, ecz-practice, ecz-exam-questions, …).
 4. Schemes / records of work pull weekly topics from curriculum for the selected subject+grade — do not invent free-form weekly topics in the generator.
 5. Do not reintroduce `<Input>` / free-text for topic on formulation pages.
 

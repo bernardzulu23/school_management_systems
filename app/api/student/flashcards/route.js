@@ -1,5 +1,6 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
+import crypto from 'crypto'
 import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
@@ -28,8 +29,9 @@ import { resolveAssessmentMode } from '@/lib/ecz/assessment-engine'
 const FLASHCARD_SYSTEM =
   'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer, and a one-line explanation. The answer field must be the full text of the correct option (not a letter like A or B). Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
 
-function buildFlashcardPrompt({ subjectName, topic, count, assessmentMode }) {
+function buildFlashcardPrompt({ subjectName, topic, count, assessmentMode, variationSeed }) {
   const isSecondary = assessmentMode === 'secondary_scenario'
+  const freshness = `\n\nProduce a fresh unique set of flashcards (variation: ${variationSeed}). Do not reuse prior wording.`
   if (isSecondary) {
     return `Create ${count} ECZ-style recall flashcards for "${subjectName}"${
       topic ? ` on "${topic}"` : ''
@@ -38,7 +40,7 @@ Rules:
 - NO multiple choice options — use front/back recall cards (State, Define, Describe command terms).
 - Front: question with optional short Zambian context.
 - Back (answer field): model answer. Set options to a single-element array matching answer.
-- Age-appropriate for Zambian secondary learners.`
+- Age-appropriate for Zambian secondary learners.${freshness}`
   }
   return `Create ${count} multiple-choice study flashcards for the subject "${subjectName}"${
     topic ? ` focused on the topic "${topic}"` : ''
@@ -46,7 +48,7 @@ Rules:
 Rules:
 - Exactly ${count} cards (never more than ${MAX_CARDS_PER_DECK}).
 - Each card: a question (front), 3-4 options, one correct answer as the full option text (not A/B/C/D), and a short explanation.
-- Age-appropriate for Zambian primary/EPSC learners. Use local context where helpful.`
+- Age-appropriate for Zambian primary/EPSC learners. Use local context where helpful.${freshness}`
 }
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -140,6 +142,8 @@ export const POST = withErrorHandler(async function POST(request) {
     Math.max(1, Number.isFinite(requestedCount) ? requestedCount : MAX_CARDS_PER_DECK)
   )
   const day = deckDateUtc(new Date(body.date || deckDateKey()))
+  const forceRefresh = Boolean(body.forceRefresh)
+  const variationSeed = String(body.variationSeed || '').trim() || crypto.randomUUID()
 
   const existing = await db.studentFlashcardDeck.findFirst({
     where: {
@@ -148,11 +152,14 @@ export const POST = withErrorHandler(async function POST(request) {
       deckDate: day,
     },
   })
-  if (existing) {
+  if (existing && !forceRefresh) {
     throw new ApiError(
-      `You already have a flashcard deck for ${subjectName} today. One AI deck per subject per day.`,
+      `You already have a flashcard deck for ${subjectName} today. Generate again with forceRefresh to replace it.`,
       409
     )
+  }
+  if (existing && forceRefresh) {
+    await db.studentFlashcardDeck.delete({ where: { id: existing.id } })
   }
 
   // Fail fast with a clear message if the AI provider is not configured.
@@ -200,6 +207,7 @@ export const POST = withErrorHandler(async function POST(request) {
         topic,
         count,
         assessmentMode,
+        variationSeed,
       }),
       count,
     })

@@ -1040,3 +1040,38 @@ Return JSON matching the scenarios array schema with questionNumber, zambianScen
 
 No markdown or code fences.`
 }
+
+export function buildProjectPrompt(params: {
+  subject: string
+  grade: string
+  topic: string
+  taskType?: string
+  resourceLevel?: string
+}): string {
+  const canonical = resolveCanonicalSubject(params.subject)
+  const subjectGuidelines = getSubjectGuidelines(canonical)
+  const taskType = params.taskType || 'Project'
+  const resourceLevel = params.resourceLevel || 'moderate'
+
+  return `Create an ECZ School-Based Assessment (SBA) ${taskType} brief for Zambian secondary learners.
+
+Subject: ${params.subject}
+Form / grade: ${params.grade}
+Syllabus topic: ${params.topic}
+Resource level: ${resourceLevel}
+
+${subjectGuidelines}
+
+MANDATORY RULES:
+- Authentic Zambian context (named towns/provinces, occupations, community settings — not generic Africa)
+- Age-appropriate for ${params.grade}
+- Extended investigation style: clear aim, steps, timeline/checkpoints, deliverables
+- Rubric: 4-level ECZ descriptors (Excellent / Good / Fair / Needs Improvement) with competence-based language
+- Prefer criteria such as Planning & process, Application, Creativity, Presentation (adapt to subject)
+- Materials must be realistic for a ${resourceLevel}-resourced Zambian school
+- Align to Zambia CBC / ECSEOL competencies for this topic
+
+Return JSON matching the project brief schema (title, context, instructions, steps, deliverables, timeline, materials, demonstration, competencies, criteria).
+
+No markdown or code fences.`
+}

@@ -46,6 +46,11 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
           topic,
           elementOfConstruct: elementOfConstruct || undefined,
           scenarioCount,
+          forceRefresh: true,
+          variationSeed:
+            typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+              ? crypto.randomUUID()
+              : `exam-${Date.now()}`,
         }),
       })
       const json = await res.json()
@@ -79,6 +84,31 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
     a.download = `ecz-exam-${topic.slice(0, 30).replace(/\s+/g, '-')}.txt`
     a.click()
     URL.revokeObjectURL(url)
+  }
+
+  const exportPaper = async (format) => {
+    if (!scenarios.length) {
+      toast.error('Generate scenarios first')
+      return
+    }
+    try {
+      const { downloadAssessmentPaper } = await import('@/lib/exports/downloadAssessmentPaper')
+      await downloadAssessmentPaper(
+        {
+          kind: 'ecz_scenarios',
+          title: `${subject} — ${topic} exam scenarios`,
+          subject,
+          grade: form,
+          topic,
+          includeAnswers: true,
+          scenarios,
+        },
+        format
+      )
+      toast.success(format === 'word' ? 'Word document downloaded' : 'PDF downloaded')
+    } catch (e) {
+      toast.error(e.message || 'Export failed')
+    }
   }
 
   return (
@@ -178,10 +208,20 @@ export function EczExamScenarioBuilder({ subjects = [] }) {
           Generate scenarios
         </Button>
         {scenarios.length > 0 && (
-          <Button variant="outline" onClick={downloadText}>
-            <Download className="h-4 w-4 mr-1" />
-            Export text
-          </Button>
+          <>
+            <Button variant="outline" onClick={downloadText}>
+              <Download className="h-4 w-4 mr-1" />
+              Export text
+            </Button>
+            <Button variant="outline" onClick={() => void exportPaper('pdf')}>
+              <Download className="h-4 w-4 mr-1" />
+              PDF
+            </Button>
+            <Button variant="outline" onClick={() => void exportPaper('word')}>
+              <Download className="h-4 w-4 mr-1" />
+              Word
+            </Button>
+          </>
         )}
       </div>
 

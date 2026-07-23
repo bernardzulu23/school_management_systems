@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Label } from '@/components/ui/label'
 import {
@@ -31,11 +31,19 @@ export function EczRubricBuilderPanel({
   description = '',
   onDescriptionChange,
   onCriteriaChange,
+  /** When AI project-maker fills criteria, push them into the panel. */
+  seedCriteria = null,
   embedded = false,
 }) {
   const [numCriteria, setNumCriteria] = useState('4')
   const [criteria, setCriteria] = useState([])
   const [generating, setGenerating] = useState(false)
+
+  useEffect(() => {
+    if (!Array.isArray(seedCriteria) || seedCriteria.length === 0) return
+    setCriteria(seedCriteria)
+    setNumCriteria(String(seedCriteria.length || 4))
+  }, [seedCriteria])
 
   const selectedSubject = subjects.find((s) => String(s.id) === String(subjectId))
 

@@ -90,12 +90,18 @@ export default function StudentMockExamPage() {
     setResult(null)
     setPercentile(null)
     try {
+      const variationSeed =
+        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `mock-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
       const res = await api.startMockExam({
         subject: form.subject.trim(),
         topic: form.topic.trim(),
         examLevel: form.examLevel,
         questionCount: 8,
         durationMinutes: 120,
+        forceRefresh: true,
+        variationSeed,
       })
       const data = res?.data
       setAttempt(data)
@@ -272,6 +278,66 @@ export default function StudentMockExamPage() {
                       {paper.examInfo.timeAllowed}
                     </p>
                   ) : null}
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const { downloadAssessmentPaper } =
+                            await import('@/lib/exports/downloadAssessmentPaper')
+                          await downloadAssessmentPaper(
+                            {
+                              kind: 'mock_exam',
+                              title: `${attempt.subject} mock exam`,
+                              subject: attempt.subject,
+                              grade: attempt.examLevel,
+                              topic: attempt.topic,
+                              totalMarks: paper?.examInfo?.totalMarks || attempt.totalMarks,
+                              includeAnswers: Boolean(result),
+                              questions: paper?.questions || [],
+                              scenarios: paper?.scenarios || [],
+                            },
+                            'pdf'
+                          )
+                        } catch (e) {
+                          setError(e?.message || 'PDF export failed')
+                        }
+                      }}
+                    >
+                      Save PDF
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      type="button"
+                      onClick={async () => {
+                        try {
+                          const { downloadAssessmentPaper } =
+                            await import('@/lib/exports/downloadAssessmentPaper')
+                          await downloadAssessmentPaper(
+                            {
+                              kind: 'mock_exam',
+                              title: `${attempt.subject} mock exam`,
+                              subject: attempt.subject,
+                              grade: attempt.examLevel,
+                              topic: attempt.topic,
+                              totalMarks: paper?.examInfo?.totalMarks || attempt.totalMarks,
+                              includeAnswers: Boolean(result),
+                              questions: paper?.questions || [],
+                              scenarios: paper?.scenarios || [],
+                            },
+                            'word'
+                          )
+                        } catch (e) {
+                          setError(e?.message || 'Word export failed')
+                        }
+                      }}
+                    >
+                      Save Word
+                    </Button>
+                  </div>
 
                   {questions.map((q, idx) => (
                     <div key={q.id} className="border border-royalPurple-border rounded-lg p-4">

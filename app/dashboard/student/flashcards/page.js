@@ -35,7 +35,7 @@ export default function StudentFlashcardsPage() {
   const { topics } = useStudentCurriculumTopics(subjectName)
   const today = deckDateKey()
   const usedSubjects = new Set(todayDecks.map((d) => d.subjectName.toLowerCase()))
-  const availableSubjects = subjects.filter((s) => !usedSubjects.has(s.name.toLowerCase()))
+  const replacingExisting = Boolean(subjectName && usedSubjects.has(subjectName.toLowerCase()))
   const loading = subjectsLoading || decksLoading
 
   const loadDecks = useCallback(async () => {
@@ -76,17 +76,30 @@ export default function StudentFlashcardsPage() {
     }
     setGenerating(true)
     try {
+      const variationSeed =
+        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `flash-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
       const res = await fetch('/api/student/flashcards', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ subjectName, topic, count, date: today }),
+        body: JSON.stringify({
+          subjectName,
+          topic,
+          count,
+          date: today,
+          forceRefresh: true,
+          variationSeed,
+        }),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) {
         throw new Error(json.message || json.error || 'Could not generate deck')
       }
-      toast.success('AI flashcards generated!')
+      toast.success(
+        replacingExisting ? 'Flashcards regenerated with new cards!' : 'AI flashcards generated!'
+      )
       setSubjectName('')
       setTopic('')
       setCount(MAX_CARDS)
@@ -107,8 +120,8 @@ export default function StudentFlashcardsPage() {
             AI Daily Flashcards
           </h1>
           <p className="text-royalPurple-text2 text-sm mt-1">
-            One AI deck per enrolled subject per day · up to {MAX_CARDS} questions · answers stay
-            hidden until you choose · {today}
+            Fresh cards every generate · up to {MAX_CARDS} questions · answers stay hidden until you
+            choose · {today}
           </p>
         </div>
 
@@ -152,11 +165,8 @@ export default function StudentFlashcardsPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {availableSubjects.length === 0 && !loading ? (
-              <p className="text-sm text-royalPurple-text2">
-                You have generated a deck for every enrolled subject today, or you have no subjects
-                enrolled.
-              </p>
+            {subjects.length === 0 && !loading ? (
+              <p className="text-sm text-royalPurple-text2">You have no subjects enrolled.</p>
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -168,9 +178,10 @@ export default function StudentFlashcardsPage() {
                       onChange={(e) => setSubjectName(e.target.value)}
                     >
                       <option value="">Choose enrolled subject…</option>
-                      {availableSubjects.map((s) => (
+                      {subjects.map((s) => (
                         <option key={s.id || s.name} value={s.name}>
                           {s.name}
+                          {usedSubjects.has(s.name.toLowerCase()) ? ' (replace today)' : ''}
                         </option>
                       ))}
                     </select>
@@ -204,7 +215,11 @@ export default function StudentFlashcardsPage() {
                   disabled={generating || !subjectName || (topics.length > 0 && !topic.trim())}
                 >
                   <Sparkles className="h-4 w-4 mr-2" />
-                  {generating ? 'Generating…' : 'Generate AI flashcards'}
+                  {generating
+                    ? 'Generating…'
+                    : replacingExisting
+                      ? 'Regenerate with new cards'
+                      : 'Generate AI flashcards'}
                 </Button>
               </>
             )}

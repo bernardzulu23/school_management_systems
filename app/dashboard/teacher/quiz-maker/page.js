@@ -338,6 +338,10 @@ export default function TeacherQuizMakerPage() {
       return
     }
     try {
+      const variationSeed =
+        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `quiz-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
       await fetchQuiz({
         ...form,
         subject: activeSubject,
@@ -345,6 +349,8 @@ export default function TeacherQuizMakerPage() {
         purpose: generationPurpose,
         assessmentMode:
           generationPurpose === 'secondary_scenario' ? 'secondary_scenario' : undefined,
+        forceRefresh: true,
+        variationSeed,
       })
     } catch (e) {
       toast.error(e?.message || 'Quiz generation failed')
@@ -358,39 +364,48 @@ export default function TeacherQuizMakerPage() {
       return
     }
     try {
-      const { buildPdfDocument } = await import('@/lib/ai/pdf-generator')
-      const blocks = []
-      questions.forEach((q, idx) => {
-        blocks.push({ type: 'subheading', text: `Q${idx + 1}. ${q.question || ''}` })
-        if (Array.isArray(q.options)) {
-          q.options.forEach((o, i) => {
-            blocks.push({ type: 'paragraph', text: `${String.fromCharCode(65 + i)}. ${o}` })
-          })
-        }
-        if (q.answer) blocks.push({ type: 'paragraph', text: `Answer: ${q.answer}` })
-        if (q.explanation) blocks.push({ type: 'paragraph', text: `Explanation: ${q.explanation}` })
-        blocks.push({ type: 'spacer' })
-      })
-
-      const doc = buildPdfDocument({
-        title: quiz.title || 'Quiz',
-        subtitle: [quiz.grade, quiz.subject, quiz.topic].filter(Boolean).join(' • '),
-        infoRows:
-          quiz.totalMarks != null
-            ? [{ label: 'Total marks:', value: String(quiz.totalMarks) }]
-            : [],
-        blocks,
-        footer: `Generated on ${new Date().toLocaleDateString('en-GB')}`,
-      })
-
-      const filename =
-        `Quiz_${quiz.subject || form.subject}_${quiz.topic || form.topic}`
-          .replace(/[^a-zA-Z0-9]+/g, '_')
-          .replace(/^_+|_+$/g, '')
-          .substring(0, 50) + '.pdf'
-      doc.save(filename)
+      const { downloadAssessmentPaper } = await import('@/lib/exports/downloadAssessmentPaper')
+      await downloadAssessmentPaper(
+        {
+          kind: 'quiz',
+          title: quiz.title || 'Quiz',
+          subject: quiz.subject || form.subject,
+          grade: quiz.grade || form.grade,
+          topic: quiz.topic || form.topic,
+          totalMarks: quiz.totalMarks,
+          includeAnswers: true,
+          questions,
+        },
+        'pdf'
+      )
     } catch (e) {
       toast.error(e?.message || 'Failed to generate PDF')
+    }
+  }
+
+  const handleExportDocx = async () => {
+    const questions = Array.isArray(quiz?.questions) ? quiz.questions : []
+    if (!questions.length) {
+      toast.error('Generate a quiz before exporting')
+      return
+    }
+    try {
+      const { downloadAssessmentPaper } = await import('@/lib/exports/downloadAssessmentPaper')
+      await downloadAssessmentPaper(
+        {
+          kind: 'quiz',
+          title: quiz.title || 'Quiz',
+          subject: quiz.subject || form.subject,
+          grade: quiz.grade || form.grade,
+          topic: quiz.topic || form.topic,
+          totalMarks: quiz.totalMarks,
+          includeAnswers: true,
+          questions,
+        },
+        'word'
+      )
+    } catch (e) {
+      toast.error(e?.message || 'Failed to generate Word document')
     }
   }
 
@@ -665,6 +680,9 @@ export default function TeacherQuizMakerPage() {
                   </Button>
                   <Button variant="outline" onClick={handleExportPdf}>
                     Save PDF
+                  </Button>
+                  <Button variant="outline" onClick={handleExportDocx}>
+                    Save Word
                   </Button>
                 </div>
                 {publishedAssignmentId ? (

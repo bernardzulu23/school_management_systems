@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { ArrowLeft, BookOpen, CheckCircle2, FileText, Loader2, Star, XCircle } from 'lucide-react'
 import { isFlashcardAnswerCorrect, resolveFlashcardAnswer } from '@/lib/flashcards/resolveAnswer'
+import toast from 'react-hot-toast'
 
 function StarRating({ count = 0, max = 5 }) {
   return (
@@ -230,6 +231,56 @@ export default function StudentFlashcardStudyPage() {
             All decks
           </Button>
         </Link>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              try {
+                const { downloadAssessmentPaper } =
+                  await import('@/lib/exports/downloadAssessmentPaper')
+                await downloadAssessmentPaper(
+                  {
+                    kind: 'flashcards',
+                    title: deck.title || `${deck.subjectName} flashcards`,
+                    subject: deck.subjectName,
+                    includeAnswers: true,
+                    cards,
+                  },
+                  'pdf'
+                )
+              } catch (e) {
+                toast.error(e?.message || 'PDF export failed')
+              }
+            }}
+          >
+            Save PDF
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={async () => {
+              try {
+                const { downloadAssessmentPaper } =
+                  await import('@/lib/exports/downloadAssessmentPaper')
+                await downloadAssessmentPaper(
+                  {
+                    kind: 'flashcards',
+                    title: deck.title || `${deck.subjectName} flashcards`,
+                    subject: deck.subjectName,
+                    includeAnswers: true,
+                    cards,
+                  },
+                  'word'
+                )
+              } catch (e) {
+                toast.error(e?.message || 'Word export failed')
+              }
+            }}
+          >
+            Save Word
+          </Button>
+        </div>
 
         <Card>
           <CardHeader>

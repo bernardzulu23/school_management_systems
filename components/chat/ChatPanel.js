@@ -38,6 +38,7 @@ export default function ChatPanel({
   const [requestingHuman, setRequestingHuman] = useState(false)
   const [telegramSent, setTelegramSent] = useState(null)
   const [wsLabel, setWsLabel] = useState('')
+  const [assignedAdminName, setAssignedAdminName] = useState(null)
   const bottomRef = useRef(null)
   const resubmitBootstrapped = useRef(false)
   const wsRef = useRef(null)
@@ -75,16 +76,28 @@ export default function ChatPanel({
           const payload = JSON.parse(ev.data)
           if (payload.type === 'status' && payload.status) {
             setSessionStatus(payload.status)
+            if (payload.assignedToName) {
+              setAssignedAdminName(String(payload.assignedToName))
+            }
           }
           if (payload.type === 'hello' && payload.status) {
             setSessionStatus(payload.status)
+            if (payload.assignedToName) {
+              setAssignedAdminName(String(payload.assignedToName))
+            }
           }
           if (payload.type === 'message' && payload.message) {
             const m = payload.message
             setMessages((prev) => {
               if (m.id && prev.some((x) => x.id === m.id)) return prev
               const role =
-                m.sender === 'USER' ? 'user' : m.sender === 'HUMAN_STAFF' ? 'admin' : 'assistant'
+                m.sender === 'USER'
+                  ? 'user'
+                  : m.sender === 'HUMAN_STAFF'
+                    ? 'admin'
+                    : m.sender === 'SYSTEM'
+                      ? 'system'
+                      : 'assistant'
               return [
                 ...prev,
                 {
@@ -124,6 +137,37 @@ export default function ChatPanel({
     }
   }, [mode, sessionId, sessionStatus, connectHandoffWs])
 
+  // Fallback when live relay is unavailable: poll until an admin claims.
+  useEffect(() => {
+    if (mode !== 'generative' || !sessionId || sessionStatus !== 'PENDING_HUMAN') return
+    let cancelled = false
+    const tick = async () => {
+      try {
+        const res = await fetch(`/api/chat/sessions/${encodeURIComponent(sessionId)}`, {
+          credentials: 'include',
+        })
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok || cancelled) return
+        if (data.session?.status === 'HUMAN_ACTIVE') {
+          setSessionStatus('HUMAN_ACTIVE')
+          if (data.session?.assignedToName) {
+            setAssignedAdminName(String(data.session.assignedToName))
+          }
+          const loaded = Array.isArray(data.messages) ? data.messages : []
+          if (loaded.length) setMessages(loaded)
+        }
+      } catch {
+        // ignore poll errors
+      }
+    }
+    const id = setInterval(tick, 4000)
+    void tick()
+    return () => {
+      cancelled = true
+      clearInterval(id)
+    }
+  }, [mode, sessionId, sessionStatus])
+
   // Phase 4 resubmit: reopen originating session; pin HOD comment; pre-fill prompt (do not auto-send).
   useEffect(() => {
     if (!initialSessionId || resubmitBootstrapped.current) return
@@ -139,6 +183,9 @@ export default function ChatPanel({
         if (cancelled) return
         setSessionId(data.session?.id || initialSessionId)
         if (data.session?.status) setSessionStatus(data.session.status)
+        if (data.session?.assignedToName) {
+          setAssignedAdminName(String(data.session.assignedToName))
+        }
         const loaded = Array.isArray(data.messages) ? data.messages : []
         setMessages(loaded)
         const prompt = suggestedPrompt || DEFAULT_RESUBMIT_PROMPT
@@ -483,7 +530,9 @@ export default function ChatPanel({
         ? 'Waiting for a platform administrator. Telegram was not configured — an admin must claim this at Platform → Chat support. Keep this window open.'
         : 'Waiting for a platform administrator to join (Platform → Chat support). You will not get a personal invite — keep this window open.'
       : sessionStatus === 'HUMAN_ACTIVE'
-        ? 'An administrator is in this conversation.'
+        ? assignedAdminName
+          ? `${assignedAdminName} is in this conversation.`
+          : 'An administrator is in this conversation.'
         : null
 
   const inputDisabled = busy || sessionStatus === 'PENDING_HUMAN' || sessionStatus === 'CLOSED'
@@ -555,11 +604,18 @@ export default function ChatPanel({
                 ? 'ml-auto bg-accent text-white'
                 : m.role === 'admin'
                   ? 'mr-auto bg-emerald-700 text-white'
-                  : 'mr-auto bg-paper border border-ink/10 text-ink'
+                  : m.role === 'system'
+                    ? 'mx-auto max-w-[95%] bg-amber-50 border border-amber-200 text-amber-950 text-center'
+                    : 'mr-auto bg-paper border border-ink/10 text-ink'
             }`}
           >
             {m.role === 'admin' && (
-              <div className="text-[10px] uppercase tracking-wide opacity-80 mb-0.5">Admin</div>
+              <div className="text-[10px] uppercase tracking-wide opacity-80 mb-0.5">
+                {assignedAdminName || 'Admin'}
+              </div>
+            )}
+            {m.role === 'system' && (
+              <div className="text-[10px] uppercase tracking-wide opacity-80 mb-0.5">System</div>
             )}
             {m.content || (busy ? '…' : '')}
             {m.submissionId && m.role === 'assistant' && (

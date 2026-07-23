@@ -219,14 +219,15 @@ export async function claimHandoffSession(params: {
     throw err
   }
 
-  await basePrisma.chatMessage.create({
+  const joinContent = `${adminName} has joined this conversation.`
+  const joinMessage = await basePrisma.chatMessage.create({
     data: {
       sessionId: updated.id,
       schoolId: updated.schoolId,
       // PlatformAdmin ids are not User rows — leave null (sender + contextSources identify the claim).
       userId: null,
       sender: 'SYSTEM',
-      content: 'An administrator has joined this conversation.',
+      content: joinContent,
       contextSources: {
         handoffClaim: true,
         claimedByPlatformAdminId: adminUserId,
@@ -239,7 +240,17 @@ export async function claimHandoffSession(params: {
   await notifyDurableObject('/internal/claim', {
     sessionId: updated.id,
     adminUserId,
+    assignedToName: adminName,
     status: 'HUMAN_ACTIVE',
+  })
+
+  // Push the join line (with agent name) to the initiator's open chat tab.
+  await broadcastHandoffMessage({
+    sessionId: updated.id,
+    messageId: joinMessage.id,
+    sender: 'SYSTEM',
+    content: joinContent,
+    userId: null,
   })
 
   return { ok: true, session: updated }

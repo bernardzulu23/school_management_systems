@@ -20,7 +20,6 @@ import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-c
 import { isValidEczExamLevel, normalizeEczExamLevel } from '@/lib/ecz/ecz-practice-levels'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
-import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import {
   resolveAssessmentMode,
   normalizeQuestionsForMode,
@@ -167,9 +166,9 @@ export const POST = withAILimits(async function POST(request) {
     resolveAssessmentMode({ schoolLevel: school.level }) === ASSESSMENT_MODES.SECONDARY_SCENARIO
       ? ASSESSMENT_MODES.SECONDARY_SCENARIO
       : ASSESSMENT_MODES.PRIMARY_MCQ
-  const cachePayload = { schoolId, subject, examLevel, topic, count, assessmentMode, gradeLevel }
-  const cached = await getCachedAIResponse('ecz-practice', cachePayload)
-  if (cached) return NextResponse.json(cached)
+
+  // Never serve AiCache — regenerating practice must produce a new paper.
+  const variationSeed = String(body?.variationSeed || '').trim() || crypto.randomUUID()
 
   let prompt = buildEczPracticePrompt({
     subject,
@@ -178,6 +177,7 @@ export const POST = withAILimits(async function POST(request) {
     questionCount: count,
     assessmentMode,
   })
+  prompt = `${prompt}\n\nProduce a fresh unique practice set (variation: ${variationSeed}). Do not reuse prior wording.`
 
   const rag = await buildRagContextForQuery({
     query: `${subject} ${examLevel} ${topic} ECZ examination practice`,
@@ -195,7 +195,7 @@ export const POST = withAILimits(async function POST(request) {
       ECZPracticePaperSchema,
       rag.block ? appendRagToSystemPrompt(ECZ_PRACTICE_SYSTEM, rag.block) : ECZ_PRACTICE_SYSTEM,
       prompt,
-      { maxTokens: 3000, temperature: 0.4 }
+      { maxTokens: 3000, temperature: 0.7 }
     )
 
     const paper = parsed?.paper
@@ -230,8 +230,8 @@ export const POST = withAILimits(async function POST(request) {
       paper,
       assessmentMode,
       ragReferences: rag.refs?.length ? rag.refs : undefined,
+      variationSeed,
     }
-    await setCachedAIResponse('ecz-practice', cachePayload, responsePayload)
 
     const sideBySideItems = []
     if (Array.isArray(paper?.scenarios)) {

@@ -19,6 +19,7 @@ import {
 } from '@/lib/ecz/ecz-practice-levels'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { useStudentEnrolledSubjects } from '@/hooks/useStudentCurriculumTopics'
+import { toast } from 'react-hot-toast'
 
 export default function StudentECZPracticePage() {
   const { data, loading, error, fetch } = useAIFetch('/api/ai/ecz-practice')
@@ -137,7 +138,19 @@ export default function StudentECZPracticePage() {
 
               {error ? <UpgradePrompt error={error} /> : null}
 
-              <Button onClick={() => fetch(form)} disabled={loading || !canGenerate}>
+              <Button
+                onClick={() =>
+                  fetch({
+                    ...form,
+                    forceRefresh: true,
+                    variationSeed:
+                      typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+                        ? crypto.randomUUID()
+                        : `ecz-${Date.now()}`,
+                  })
+                }
+                disabled={loading || !canGenerate}
+              >
                 {loading ? 'Generating...' : 'Create Practice Paper'}
               </Button>
             </CardContent>
@@ -154,6 +167,64 @@ export default function StudentECZPracticePage() {
                 <div className="text-sm text-royalPurple-text2">
                   {formatEczExamLevelLabel(paper?.examInfo?.level)} • {paper?.examInfo?.topic} •
                   Total marks: {paper?.examInfo?.totalMarks} • Time: {paper?.examInfo?.timeAllowed}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      try {
+                        const { downloadAssessmentPaper } =
+                          await import('@/lib/exports/downloadAssessmentPaper')
+                        await downloadAssessmentPaper(
+                          {
+                            kind: 'ecz_practice',
+                            title: `${paper?.examInfo?.subject || form.subject} practice paper`,
+                            subject: paper?.examInfo?.subject || form.subject,
+                            grade: paper?.examInfo?.level || form.examLevel,
+                            topic: paper?.examInfo?.topic || form.topic,
+                            totalMarks: paper?.examInfo?.totalMarks,
+                            includeAnswers: true,
+                            questions: paper.questions || [],
+                            scenarios: paper.scenarios || [],
+                          },
+                          'pdf'
+                        )
+                      } catch (e) {
+                        toast.error(e?.message || 'PDF export failed')
+                      }
+                    }}
+                  >
+                    Save PDF
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={async () => {
+                      try {
+                        const { downloadAssessmentPaper } =
+                          await import('@/lib/exports/downloadAssessmentPaper')
+                        await downloadAssessmentPaper(
+                          {
+                            kind: 'ecz_practice',
+                            title: `${paper?.examInfo?.subject || form.subject} practice paper`,
+                            subject: paper?.examInfo?.subject || form.subject,
+                            grade: paper?.examInfo?.level || form.examLevel,
+                            topic: paper?.examInfo?.topic || form.topic,
+                            totalMarks: paper?.examInfo?.totalMarks,
+                            includeAnswers: true,
+                            questions: paper.questions || [],
+                            scenarios: paper.scenarios || [],
+                          },
+                          'word'
+                        )
+                      } catch (e) {
+                        toast.error(e?.message || 'Word export failed')
+                      }
+                    }}
+                  >
+                    Save Word
+                  </Button>
                 </div>
                 <RagReferencesPanel references={ragReferences} />
                 <div className="space-y-3">

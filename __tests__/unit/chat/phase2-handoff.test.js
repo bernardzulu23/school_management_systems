@@ -209,7 +209,7 @@ describe('claimHandoffSession status machine (mocked prisma)', () => {
       assignedToName: 'Platform Dev',
     })
     const findUnique = vi.fn().mockResolvedValue(session)
-    const create = vi.fn().mockResolvedValue({})
+    const create = vi.fn().mockResolvedValue({ id: 'msg-join-1' })
 
     vi.doMock('@/lib/prisma/client', () => ({
       basePrisma: {
@@ -247,9 +247,11 @@ describe('claimHandoffSession status machine (mocked prisma)', () => {
         data: expect.objectContaining({
           userId: null,
           sender: 'SYSTEM',
+          content: 'Platform Dev has joined this conversation.',
           contextSources: expect.objectContaining({
             handoffClaim: true,
             claimedByPlatformAdminId: 'admin-1',
+            claimedByName: 'Platform Dev',
           }),
         }),
       })
@@ -314,7 +316,7 @@ describe('claimHandoffSession status machine (mocked prisma)', () => {
       assignedToId: platformAdminId,
       assignedToName: 'super-admin@bluepeacktechnologies.com',
     })
-    const create = vi.fn().mockResolvedValue({})
+    const create = vi.fn().mockResolvedValue({ id: 'msg-pa-join' })
 
     vi.doMock('@/lib/prisma/client', () => ({
       basePrisma: {
@@ -344,6 +346,9 @@ describe('claimHandoffSession status machine (mocked prisma)', () => {
     }
     // Must not write platform admin id into ChatMessage.userId (still FKs User).
     expect(create.mock.calls[0][0].data.userId).toBeNull()
+    expect(create.mock.calls[0][0].data.content).toContain(
+      'super-admin@bluepeacktechnologies.com has joined'
+    )
   })
 
   it('returns 409 when prisma reports FK violation on claim (legacy schema)', async () => {

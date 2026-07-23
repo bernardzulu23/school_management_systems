@@ -31,6 +31,8 @@ export const GET = withErrorHandler(async function GET(
       id: true,
       title: true,
       status: true,
+      assignedToName: true,
+      assignedToId: true,
       openedAsRole: true,
       createdAt: true,
       updatedAt: true,

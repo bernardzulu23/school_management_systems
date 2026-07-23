@@ -18,7 +18,6 @@ import { ECZExamQuestionsResponseSchema } from '@/lib/ai/schemas'
 import { buildEczExamPrompt } from '@/lib/ai/subject-adaptive-prompts'
 import { appendRagToSystemPrompt, buildRagContextForQuery } from '@/lib/ai/rag-context'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
-import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import {
   validateExamItem,
@@ -74,11 +73,12 @@ export const POST = withAILimits(async function POST(request) {
   const body = await request.json().catch(() => ({}))
   const subject = String(body?.subject || '').trim()
   const form = String(body?.form || 'Form 2').trim()
-  const topic = String(body?.topic || '').trim()
+  let topic = String(body?.topic || '').trim()
   const elementOfConstruct = body?.elementOfConstruct
     ? String(body.elementOfConstruct).trim()
     : undefined
   const scenarioCount = Number(body?.scenarioCount ?? 1)
+  const variationSeed = String(body?.variationSeed || '').trim() || crypto.randomUUID()
 
   if (!subject || !topic) {
     return NextResponse.json({ error: 'subject and topic required' }, { status: 400 })
@@ -93,10 +93,7 @@ export const POST = withAILimits(async function POST(request) {
   const guard = validateAIGuardrails({ text: `${subject} ${form} ${topic}` })
   if (!guard.ok) return guard.response
 
-  const cachePayload = { schoolId, subject, form, topic, elementOfConstruct, scenarioCount }
-  const cached = await getCachedAIResponse('ecz-exam-questions', cachePayload)
-  if (cached) return NextResponse.json(cached)
-
+  // Never serve AiCache — regenerating exam items must produce new scenarios.
   let prompt = buildEczExamPrompt({
     subject,
     form,
@@ -104,6 +101,7 @@ export const POST = withAILimits(async function POST(request) {
     elementOfConstruct,
     scenarioCount,
   })
+  prompt = `${prompt}\n\nProduce a fresh unique set of scenarios (variation: ${variationSeed}). Do not reuse prior wording.`
 
   const rag = await buildRagContextForQuery({
     query: `${subject} ${form} ${topic} ECSEOL exam scenario`,
@@ -119,7 +117,7 @@ export const POST = withAILimits(async function POST(request) {
     ECZExamQuestionsResponseSchema,
     rag.block ? appendRagToSystemPrompt(EXAM_SYSTEM, rag.block) : EXAM_SYSTEM,
     prompt,
-    { maxTokens: 3500, temperature: 0.35 }
+    { maxTokens: 3500, temperature: 0.7 }
   )
 
   const scenarios = Array.isArray(parsed?.scenarios) ? parsed.scenarios : []
@@ -172,8 +170,8 @@ export const POST = withAILimits(async function POST(request) {
       bloomDistribution: bloomCheck.distribution,
     },
     ragReferences: rag.refs?.length ? rag.refs : undefined,
+    variationSeed,
   }
-  await setCachedAIResponse('ecz-exam-questions', cachePayload, responsePayload)
 
   void runValidationSideBySide({
     schoolId,

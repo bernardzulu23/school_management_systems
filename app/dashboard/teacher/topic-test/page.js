@@ -115,6 +115,10 @@ export default function TopicTestPage() {
 
   const handleGenerate = () => {
     if (!selectedAssignment || topic.trim().length < 3) return
+    const variationSeed =
+      typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+        ? crypto.randomUUID()
+        : `topic-test-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
     fetchQuiz({
       grade,
       subject,
@@ -122,6 +126,8 @@ export default function TopicTestPage() {
       questionCount,
       difficulty,
       materialIds: selectedMaterialIds.length ? selectedMaterialIds : undefined,
+      forceRefresh: true,
+      variationSeed,
     })
     setStep(2)
   }
@@ -334,6 +340,56 @@ export default function TopicTestPage() {
                       <div className="flex flex-wrap gap-2">
                         <Button onClick={handleSubmitToHod} disabled={publishing}>
                           {publishing ? 'Submitting…' : 'Submit to HOD for class'}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={async () => {
+                            try {
+                              const { downloadAssessmentPaper } =
+                                await import('@/lib/exports/downloadAssessmentPaper')
+                              await downloadAssessmentPaper(
+                                {
+                                  kind: 'topic_test',
+                                  title: quiz.title || `${subject} — ${topic} Topic Test`,
+                                  subject,
+                                  grade,
+                                  topic,
+                                  includeAnswers: true,
+                                  questions: quiz.questions || [],
+                                },
+                                'pdf'
+                              )
+                            } catch (e) {
+                              toast.error(e?.message || 'PDF export failed')
+                            }
+                          }}
+                        >
+                          Save PDF
+                        </Button>
+                        <Button
+                          variant="outline"
+                          onClick={async () => {
+                            try {
+                              const { downloadAssessmentPaper } =
+                                await import('@/lib/exports/downloadAssessmentPaper')
+                              await downloadAssessmentPaper(
+                                {
+                                  kind: 'topic_test',
+                                  title: quiz.title || `${subject} — ${topic} Topic Test`,
+                                  subject,
+                                  grade,
+                                  topic,
+                                  includeAnswers: true,
+                                  questions: quiz.questions || [],
+                                },
+                                'word'
+                              )
+                            } catch (e) {
+                              toast.error(e?.message || 'Word export failed')
+                            }
+                          }}
+                        >
+                          Save Word
                         </Button>
                         <Link href="/dashboard/teacher/quiz-maker">
                           <Button variant="outline">Open in Quiz Maker</Button>

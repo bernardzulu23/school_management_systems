@@ -11,9 +11,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Sparkles } from 'lucide-react'
 import { ECZ_SBA_TASK_TYPES } from '@/lib/ecz/ecz-rubric-builder'
 import { EczRubricBuilderPanel } from '@/components/assessments/EczRubricBuilderPanel'
+import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import { toast } from 'react-hot-toast'
 
 const textareaClassName =
@@ -30,9 +31,12 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
   const [classId, setClassId] = useState('')
   const [title, setTitle] = useState('')
   const [type, setType] = useState('Project')
+  const [topic, setTopic] = useState('')
   const [context, setContext] = useState('')
   const [errors, setErrors] = useState([])
   const [submitting, setSubmitting] = useState(false)
+  const [generatingAi, setGeneratingAi] = useState(false)
+  const [lastAiProject, setLastAiProject] = useState(null)
   const [rubricCriteria, setRubricCriteria] = useState([])
   const [numCriteria, setNumCriteria] = useState(4)
   const [exemplars, setExemplars] = useState([])
@@ -110,7 +114,17 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
       .catch(() => {})
   }, [])
 
+  useEffect(() => {
+    setTopic('')
+  }, [subjectId, formLevel])
+
   const selectedSubject = subjects.find((s) => String(s.id) === String(subjectId))
+  const gradeOrForm = formLevel === '4' ? 'Form 4' : `Form ${formLevel}`
+  const canGenerateAi =
+    component === 'SBA_TASK' &&
+    formLevel !== '4' &&
+    Boolean(selectedSubject?.name) &&
+    Boolean(topic.trim())
 
   const handleFormLevelChange = (value) => {
     if (value === '4' && component === 'SBA_TASK') {
@@ -128,6 +142,55 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
     }
     setComponent(value)
     setErrors([])
+  }
+
+  const handleGenerateAi = async () => {
+    if (!canGenerateAi) {
+      toast.error('Select form, subject, and a syllabus topic first')
+      return
+    }
+    setGeneratingAi(true)
+    setErrors([])
+    try {
+      const variationSeed =
+        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+          ? crypto.randomUUID()
+          : `project-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`
+      const res = await fetch('/api/ai/project-maker', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({
+          grade: gradeOrForm,
+          subject: selectedSubject.name,
+          topic: topic.trim(),
+          taskType: type || 'Project',
+          forceRefresh: true,
+          variationSeed,
+        }),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'AI project generation failed')
+
+      const project = json.project || {}
+      if (project.title) setTitle(project.title)
+      if (project.taskType) setType(project.taskType)
+      if (json.context) setContext(json.context)
+      else if (project.context) setContext(project.context)
+
+      const criteria = Array.isArray(json.rubricCriteria) ? json.rubricCriteria : []
+      if (criteria.length) {
+        setRubricCriteria(criteria)
+        setNumCriteria(criteria.length)
+      }
+      setLastAiProject(project)
+      toast.success('AI project brief generated — review and create when ready')
+    } catch (e) {
+      toast.error(e.message || 'Could not generate project')
+      setErrors([e.message || 'AI project generation failed'])
+    } finally {
+      setGeneratingAi(false)
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -165,6 +228,7 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
           rubricCriteria: rubricCriteria.length > 0 ? rubricCriteria : undefined,
           createDefaultRubric: component === 'SBA_TASK' && rubricCriteria.length === 0,
           exemplarId: selectedExemplarId || undefined,
+          generatedByAI: Boolean(rubricCriteria.length && topic.trim()),
         }),
       })
       const json = await res.json().catch(() => ({}))
@@ -288,6 +352,19 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
         ) : null}
       </div>
 
+      {component === 'SBA_TASK' && formLevel !== '4' ? (
+        <CurriculumTopicSelect
+          subject={selectedSubject?.name || ''}
+          gradeOrForm={gradeOrForm}
+          value={topic}
+          onChange={setTopic}
+          label="Curriculum topic"
+          required
+          allowFreeFormWhenEmpty={false}
+          id="ecz-project-topic"
+        />
+      ) : null}
+
       {component === 'SBA_TASK' && formLevel !== '4' && exemplars.length > 0 && (
         <div className="rounded-lg border border-royalPurple-border/50 bg-royalPurple-deep/30 p-4 space-y-3">
           <p className="text-sm font-medium text-royalPurple-text1">Clone from ECSEOL exemplar</p>
@@ -350,6 +427,107 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
         </Select>
       </div>
 
+      {component === 'SBA_TASK' && formLevel !== '4' ? (
+        <div className="flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={handleGenerateAi}
+            disabled={generatingAi || !canGenerateAi}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            {generatingAi
+              ? 'Generating…'
+              : type === 'Project'
+                ? 'Generate AI project brief'
+                : 'Generate AI SBA brief'}
+          </Button>
+          {lastAiProject ? (
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    const { downloadAssessmentPaper } =
+                      await import('@/lib/exports/downloadAssessmentPaper')
+                    await downloadAssessmentPaper(
+                      {
+                        kind: 'project',
+                        title: lastAiProject.title || title || 'SBA Project',
+                        subject: selectedSubject?.name,
+                        grade: gradeOrForm,
+                        topic,
+                        includeAnswers: true,
+                        project: {
+                          ...lastAiProject,
+                          criteria: rubricCriteria.length
+                            ? rubricCriteria.map((c) => ({
+                                name: c.name,
+                                excellent: c.excellent,
+                                good: c.good,
+                                fair: c.fair,
+                                needsImprovement:
+                                  c.needsImprovement || c.needs_improvement || c.needsImpr,
+                              }))
+                            : lastAiProject.criteria,
+                        },
+                      },
+                      'pdf'
+                    )
+                  } catch (e) {
+                    toast.error(e.message || 'PDF export failed')
+                  }
+                }}
+              >
+                Save PDF
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={async () => {
+                  try {
+                    const { downloadAssessmentPaper } =
+                      await import('@/lib/exports/downloadAssessmentPaper')
+                    await downloadAssessmentPaper(
+                      {
+                        kind: 'project',
+                        title: lastAiProject.title || title || 'SBA Project',
+                        subject: selectedSubject?.name,
+                        grade: gradeOrForm,
+                        topic,
+                        includeAnswers: true,
+                        project: {
+                          ...lastAiProject,
+                          criteria: rubricCriteria.length
+                            ? rubricCriteria.map((c) => ({
+                                name: c.name,
+                                excellent: c.excellent,
+                                good: c.good,
+                                fair: c.fair,
+                                needsImprovement:
+                                  c.needsImprovement || c.needs_improvement || c.needsImpr,
+                              }))
+                            : lastAiProject.criteria,
+                        },
+                      },
+                      'word'
+                    )
+                  } catch (e) {
+                    toast.error(e.message || 'Word export failed')
+                  }
+                }}
+              >
+                Save Word
+              </Button>
+            </>
+          ) : null}
+          <p className="text-xs text-royalPurple-text3">
+            Fresh brief every click (title, context, steps, deliverables, rubric).
+          </p>
+        </div>
+      ) : null}
+
       {component === 'SBA_TASK' && (
         <>
           <div>
@@ -358,7 +536,7 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
               value={context}
               onChange={(e) => setContext(e.target.value)}
               placeholder={ZAMBIA_HINTS}
-              rows={3}
+              rows={6}
               className={textareaClassName}
             />
             <p className="text-xs text-gray-500 mt-1">
@@ -387,6 +565,7 @@ export function CreateEczAssessmentForm({ onSuccess, onCancel }) {
                 onTaskTypeChange={setType}
                 description={context}
                 onDescriptionChange={setContext}
+                seedCriteria={rubricCriteria}
                 onCriteriaChange={(list) => {
                   setRubricCriteria(list)
                   setNumCriteria(list.length || 4)
