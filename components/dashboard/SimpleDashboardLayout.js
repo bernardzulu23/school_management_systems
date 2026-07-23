@@ -7,6 +7,7 @@ import { useSchool } from '@/lib/context/SchoolContext'
 import { Button } from '@/components/ui/Button'
 import { LogOut, MessageSquare, User as UserIcon, X, Menu } from 'lucide-react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { TimetableNotificationBell } from '@/components/timetable/TimetableNotificationBell'
 import { NotificationBadge } from '@/components/notifications/NotificationBadge'
@@ -26,6 +27,7 @@ import { hasSicAssignment } from '@/lib/sic/sicAccess'
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
   const { school } = useSchool()
+  const pathname = usePathname()
   const showHodLink = canAccessHodFeatures({ schoolLevel: school?.level })
   const showGuidanceLink =
     getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' }).careerGuidance &&
@@ -64,6 +66,11 @@ export function DashboardLayout({ children, title }) {
   const expiresAt = plan === 'trial' ? trialEndsAt : planExpiresAt
   const msLeft = expiresAt ? expiresAt.getTime() - now.getTime() : null
   const isExpired = typeof msLeft === 'number' ? msLeft < 0 : false
+  // Always allow billing (and payment return) so renew CTAs can render the upgrade UI.
+  const allowExpiredRoute =
+    typeof pathname === 'string' &&
+    (pathname.startsWith('/dashboard/billing') || pathname.startsWith('/dashboard/solo'))
+  const showChildren = !isExpired || allowExpiredRoute
 
   const submitFeedback = async () => {
     const message = String(feedbackForm.message || '').trim()
@@ -219,7 +226,7 @@ export function DashboardLayout({ children, title }) {
             <div className="px-4 py-6 sm:px-0 space-y-4">
               <SubscriptionBanner />
               <SubscriptionWarningBanner />
-              {!isExpired ? <ErrorBoundary>{children}</ErrorBoundary> : null}
+              {showChildren ? <ErrorBoundary>{children}</ErrorBoundary> : null}
             </div>
           </ServerSessionGuard>
         </main>

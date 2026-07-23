@@ -1,8 +1,8 @@
 'use client'
 
-import Link from 'next/link'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
+import { BillingUpgradeLink } from '@/components/billing/BillingUpgradeLink'
 
 function computeState(school) {
   const plan = String(school?.plan || 'trial')
@@ -52,12 +52,9 @@ export default function SubscriptionBanner() {
             : ' Renew your plan to restore access for everyone.'}
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link
-            href="/dashboard/billing"
-            className="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
-          >
+          <BillingUpgradeLink className="inline-flex items-center rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-400">
             Subscribe / Pay now
-          </Link>
+          </BillingUpgradeLink>
         </div>
       </div>
     )
@@ -85,12 +82,12 @@ export default function SubscriptionBanner() {
               access stops until you subscribe.
             </p>
           </div>
-          <Link
-            href="/dashboard/billing"
+          <BillingUpgradeLink
+            variant="link"
             className={`text-sm font-bold underline shrink-0 ${urgent ? 'text-amber-800' : 'text-blue-800'}`}
           >
             Subscribe early
-          </Link>
+          </BillingUpgradeLink>
         </div>
       </div>
     )

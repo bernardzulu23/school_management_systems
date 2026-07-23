@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 import { Sidebar } from './Sidebar'
 import { Menu, Bell, Search, User } from 'lucide-react'
 import { useAuth } from '@/lib/auth'
@@ -13,6 +14,7 @@ export default function ResponsiveDashboardLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { user } = useAuth()
   const { school } = useSchool()
+  const pathname = usePathname()
 
   const plan = String(school?.plan || '')
     .trim()
@@ -23,6 +25,10 @@ export default function ResponsiveDashboardLayout({ children }) {
   const expiresAt = plan === 'trial' ? trialEndsAt : planExpiresAt
   const msLeft = expiresAt ? expiresAt.getTime() - now.getTime() : null
   const isExpired = typeof msLeft === 'number' ? msLeft < 0 : false
+  const allowExpiredRoute =
+    typeof pathname === 'string' &&
+    (pathname.startsWith('/dashboard/billing') || pathname.startsWith('/dashboard/solo'))
+  const showChildren = !isExpired || allowExpiredRoute
 
   return (
     <div className="flex h-screen bg-paper text-ink overflow-hidden">
@@ -83,7 +89,7 @@ export default function ResponsiveDashboardLayout({ children }) {
           <ServerSessionGuard>
             <div className="max-w-7xl mx-auto space-y-4">
               <SubscriptionBanner />
-              {!isExpired ? children : null}
+              {showChildren ? children : null}
             </div>
           </ServerSessionGuard>
         </main>
