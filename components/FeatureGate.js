@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import {
   PLAN_FEATURES,
   PRIMARY_ONLY_FEATURES,
@@ -14,7 +14,6 @@ import { Check, Lock, School } from 'lucide-react'
 export function FeatureGate({ featureId, children, fallback = null }) {
   const [access, setAccess] = useState(null)
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
 
   useEffect(() => {
     let active = true
@@ -51,7 +50,7 @@ export function FeatureGate({ featureId, children, fallback = null }) {
           isPrimaryOnly={access?.isPrimaryOnly}
           isSecondaryOnly={access?.isSecondaryOnly}
           schoolLevel={access?.schoolLevel}
-          onUpgrade={() => router.push('/dashboard/billing')}
+          upgradeHref={access?.billingUrl || '/dashboard/billing'}
         />
       )
     )
@@ -67,6 +66,7 @@ export function FeatureLockedPrompt({
   isSecondaryOnly,
   schoolLevel,
   onUpgrade,
+  upgradeHref = '/dashboard/billing',
 }) {
   const featureMeta = isSecondaryOnly
     ? SECONDARY_ONLY_FEATURES[featureId] || {}
@@ -110,13 +110,22 @@ export function FeatureLockedPrompt({
             <p className="text-royalPurple-text2 mt-2">
               {reason || 'This feature requires a higher plan.'}
             </p>
-            <button
-              type="button"
-              onClick={onUpgrade}
-              className="mt-4 inline-flex items-center justify-center rounded-lg bg-amber-400 px-5 py-2 font-bold text-black hover:opacity-90"
-            >
-              Upgrade Plan
-            </button>
+            {typeof onUpgrade === 'function' ? (
+              <button
+                type="button"
+                onClick={onUpgrade}
+                className="mt-4 inline-flex items-center justify-center rounded-lg bg-amber-400 px-5 py-2 font-bold text-black hover:opacity-90"
+              >
+                Upgrade Plan
+              </button>
+            ) : (
+              <Link
+                href={upgradeHref}
+                className="mt-4 inline-flex items-center justify-center rounded-lg bg-amber-400 px-5 py-2 font-bold text-black hover:opacity-90"
+              >
+                Upgrade Plan
+              </Link>
+            )}
           </>
         )}
       </div>

@@ -102,6 +102,7 @@ export const POST = withErrorHandler(async function POST(request) {
         reason: 'Plan expired',
         code: 'PLAN_EXPIRED',
         requiresUpgrade: true,
+        billingUrl: '/dashboard/billing',
         expiryDate: school.planExpiresAt || school.trialEndsAt || null,
       },
       { status: 402 }
@@ -115,6 +116,7 @@ export const POST = withErrorHandler(async function POST(request) {
         reason: 'Feature requires higher plan',
         code: 'PLAN_UPGRADE_REQUIRED',
         requiresUpgrade: true,
+        billingUrl: '/dashboard/billing',
         currentPlan: plan,
         suggestedPlan: plan === 'basic' ? 'standard' : 'premium',
       },

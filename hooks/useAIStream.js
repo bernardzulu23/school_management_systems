@@ -170,6 +170,9 @@ export function useAIFetch(endpoint) {
             error: authErrorMessage(res.status, json),
             status: res.status,
             code: json?.code,
+            billingUrl: json?.billingUrl || '/dashboard/billing',
+            limit: json?.limit,
+            used: json?.used,
           })
           return
         }

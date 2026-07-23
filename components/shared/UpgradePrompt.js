@@ -48,12 +48,14 @@ export default function UpgradePrompt({ error, onDismiss }) {
       </div>
 
       <div className="flex flex-wrap gap-2 mt-4">
-        <Button
-          asChild
-          className="bg-royalPurple-accent hover:opacity-90 text-royalPurple-accentTx"
-        >
-          <Link href="/dashboard/billing">Upgrade Plan</Link>
-        </Button>
+        <Link href={error?.billingUrl || '/dashboard/billing'} className="inline-flex">
+          <Button
+            type="button"
+            className="bg-royalPurple-accent hover:opacity-90 text-royalPurple-accentTx"
+          >
+            Upgrade Plan
+          </Button>
+        </Link>
         {onDismiss ? (
           <Button variant="outline" onClick={onDismiss}>
             Dismiss

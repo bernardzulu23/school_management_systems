@@ -83,7 +83,10 @@ export function Pricing() {
   }
 
   return (
-    <section style={{ backgroundColor: colors.gray[50], padding: `${spacing.xxl} ${spacing.md}` }}>
+    <section
+      id="pricing"
+      style={{ backgroundColor: colors.gray[50], padding: `${spacing.xxl} ${spacing.md}` }}
+    >
       <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ textAlign: 'center', marginBottom: spacing.xxl }}>
           <div
