@@ -5,7 +5,8 @@ const nextConfig = {
   // Keep dev-only formatters out of the server bundle if a dependency imports them
   serverExternalPackages: ['prettier', 'resend'],
 
-  transpilePackages: ['monaco-editor', '@monaco-editor/react'],
+  // Keep monaco out of transpile — it's huge and already loaded dynamically client-side.
+  transpilePackages: ['@monaco-editor/react'],
 
   // Production source maps are expensive during webpack builds on Vercel.
   productionBrowserSourceMaps: false,
@@ -18,6 +19,10 @@ const nextConfig = {
     cpus: 1,
     workerThreads: false,
     staticGenerationMaxConcurrency: 1,
+    // Run webpack in a child process so the main Next process stays smaller.
+    webpackBuildWorker: true,
+    // More aggressive GC / smaller peak during webpack (Next 15+).
+    webpackMemoryOptimizations: true,
   },
 
   // Skip typecheck during Vercel builds; run `npm run lint` and `tsc` locally.
@@ -81,6 +86,11 @@ const nextConfig = {
       'utf-8-validate',
     ]
 
+    // Cap webpack parallelism on constrained Vercel builders (2 CPUs / 8GB).
+    if (!dev && process.env.VERCEL) {
+      config.parallelism = 1
+    }
+
     if (!dev && !isServer) {
       config.devtool = false
       // Strip license/TODO comments from production client bundles (ZAP informational).
@@ -90,6 +100,7 @@ const nextConfig = {
         config.optimization.minimizer = [
           ...existing.filter((plugin) => plugin?.constructor?.name !== 'TerserPlugin'),
           new TerserPlugin({
+            parallel: false,
             terserOptions: {
               format: { comments: false },
             },
@@ -228,9 +239,11 @@ module.exports = withSentryConfig(nextConfig, {
   },
   widenClientFileUpload: sentryUploadSourceMaps,
   hideSourceMaps: true,
+  disableLogger: true,
   tunnelRoute: '/monitoring',
   webpack: {
-    automaticVercelMonitors: true,
+    // Instrumentation monitors add webpack work; keep off unless uploading maps.
+    automaticVercelMonitors: sentryUploadSourceMaps,
     treeshake: {
       removeDebugLogging: true,
     },
