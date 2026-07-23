@@ -33,7 +33,15 @@ export const PATCH = withSecureHandler(async function PATCH(request, { params })
 
   const existing = await prisma.school.findUnique({
     where: { id },
-    select: { province: true, district: true },
+    select: {
+      province: true,
+      district: true,
+      plan: true,
+      trialEndsAt: true,
+      planExpiresAt: true,
+      createdAt: true,
+      active: true,
+    },
   })
   if (!existing) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
@@ -53,6 +61,28 @@ export const PATCH = withSecureHandler(async function PATCH(request, { params })
   }
   if (body.trialEndsAt !== undefined) {
     data.trialEndsAt = body.trialEndsAt ? new Date(body.trialEndsAt) : null
+  }
+
+  // Super-admin only: extend onboarding / pilot trial by 1–12 months.
+  if (body.extendPilotMonths != null) {
+    const months = Math.floor(Number(body.extendPilotMonths))
+    if (!Number.isFinite(months) || months < 1 || months > 12) {
+      return NextResponse.json(
+        { error: 'extendPilotMonths must be an integer from 1 to 12' },
+        { status: 400 }
+      )
+    }
+    const { computeExtendedPilotEndsAt } = await import('@/lib/billing/subscription')
+    const nextTrialEnd = computeExtendedPilotEndsAt(existing, months)
+    data.trialEndsAt = nextTrialEnd
+    // Keep access on the trial track while piloting (paid plan slug can stay for display).
+    const currentPlan = String(existing.plan || 'trial')
+      .trim()
+      .toLowerCase()
+    if (currentPlan === 'unpaid' || currentPlan === 'trial' || !currentPlan) {
+      data.plan = 'trial'
+    }
+    if (data.active === undefined) data.active = true
   }
 
   const nextProvince = body.province !== undefined ? body.province : existing.province

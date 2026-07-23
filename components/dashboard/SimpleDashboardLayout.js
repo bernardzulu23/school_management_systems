@@ -18,7 +18,7 @@ import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarn
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
-import { getAppVersion } from '@/lib/app-version'
+import { getAppVersionLabel } from '@/lib/app-version'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
@@ -336,7 +336,7 @@ export function DashboardLayout({ children, title }) {
               {new Date().getFullYear()} Zambian School Management System — Empowering Rural
               Education
               <span className="block text-xs text-royalPurple-text3 mt-1 tabular-nums">
-                Version {getAppVersion()}
+                Version {getAppVersionLabel()}
               </span>
             </div>
           </div>

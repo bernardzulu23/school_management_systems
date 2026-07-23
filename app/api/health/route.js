@@ -9,7 +9,7 @@ import { withSecureApi } from '@/lib/middleware/secureApi'
 
 export const dynamic = 'force-dynamic'
 
-const VERSION = process.env.npm_package_version || '2.0.3'
+const VERSION = process.env.npm_package_version || process.env.NEXT_PUBLIC_APP_VERSION || '2.1.0'
 
 const REQUIRED_ENV = ['DATABASE_URL', 'JWT_SECRET']
 

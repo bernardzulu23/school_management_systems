@@ -61,6 +61,11 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_APP_VERSION: process.env.NEXT_PUBLIC_APP_VERSION || appVersion,
     NEXT_PUBLIC_APP_NAME: process.env.NEXT_PUBLIC_APP_NAME || 'Zambian School Management System',
+    NEXT_PUBLIC_GIT_SHA:
+      process.env.NEXT_PUBLIC_GIT_SHA ||
+      process.env.VERCEL_GIT_COMMIT_SHA ||
+      process.env.GITHUB_SHA ||
+      '',
     NEXT_PUBLIC_APP_URL:
       process.env.NEXT_PUBLIC_APP_URL ||
       process.env.NEXT_PUBLIC_APP_ORIGIN ||

@@ -1,8 +1,8 @@
 # ZSMS System Documentation
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-07-22  
-**Application version:** 2.0.3 (`package.json`)  
+**Last updated:** 2026-07-23  
+**Application version:** 2.1.0 (`package.json`)  
 **Document version:** 1.0
 
 This is the **authoritative system overview** for the ZSMS monorepo. For step-by-step setup, feature deep-dives, and API catalogs, follow the links in [Related documentation](#related-documentation).

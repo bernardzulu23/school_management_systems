@@ -32,6 +32,8 @@ function PlatformDashboardContent() {
   const [editDistrict, setEditDistrict] = useState('')
   const [deletingId, setDeletingId] = useState(null)
   const [deleteConfirm, setDeleteConfirm] = useState('')
+  const [pilotMonthsById, setPilotMonthsById] = useState({})
+  const [extendingId, setExtendingId] = useState(null)
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -79,6 +81,45 @@ function PlatformDashboardContent() {
       load()
     } catch {
       toast.error('Update failed')
+    }
+  }
+
+  async function extendPilot(school) {
+    const months = Number(pilotMonthsById[school.id] || 2)
+    if (!Number.isFinite(months) || months < 1 || months > 12) {
+      toast.error('Choose 1–12 months')
+      return
+    }
+    setExtendingId(school.id)
+    try {
+      const res = await sessionFetch(`/api/platform/schools/${school.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ extendPilotMonths: months }),
+      })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        toast.error(data.error || 'Could not extend pilot')
+        return
+      }
+      const ends = data?.school?.trialEndsAt
+        ? new Date(data.school.trialEndsAt).toLocaleDateString('en-GB')
+        : 'updated'
+      toast.success(`Pilot extended by ${months} month${months === 1 ? '' : 's'} · ends ${ends}`)
+      load()
+    } catch {
+      toast.error('Could not extend pilot')
+    } finally {
+      setExtendingId(null)
+    }
+  }
+
+  function formatTrialEnd(school) {
+    if (!school?.trialEndsAt) return '—'
+    try {
+      return new Date(school.trialEndsAt).toLocaleDateString('en-GB')
+    } catch {
+      return '—'
     }
   }
 
@@ -172,6 +213,7 @@ function PlatformDashboardContent() {
                 <th className="px-4 py-3 font-medium">Location</th>
                 <th className="px-4 py-3 font-medium">Creator contact</th>
                 <th className="px-4 py-3 font-medium">Plan</th>
+                <th className="px-4 py-3 font-medium">Pilot / trial end</th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Actions</th>
               </tr>
@@ -271,6 +313,36 @@ function PlatformDashboardContent() {
                     ) : null}
                   </td>
                   <td className="px-4 py-3 text-muted capitalize">{s.plan}</td>
+                  <td className="px-4 py-3">
+                    <p className="text-xs text-ink font-medium">{formatTrialEnd(s)}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                      <select
+                        className="border border-ink/30 rounded px-2 py-1 text-xs"
+                        value={String(pilotMonthsById[s.id] || 2)}
+                        onChange={(e) =>
+                          setPilotMonthsById((prev) => ({
+                            ...prev,
+                            [s.id]: Number(e.target.value),
+                          }))
+                        }
+                        aria-label={`Extend pilot months for ${s.name}`}
+                      >
+                        {Array.from({ length: 12 }, (_, i) => i + 1).map((m) => (
+                          <option key={m} value={m}>
+                            +{m} month{m === 1 ? '' : 's'}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        type="button"
+                        onClick={() => extendPilot(s)}
+                        disabled={extendingId === s.id}
+                        className="text-xs font-semibold text-accent hover:underline disabled:opacity-50"
+                      >
+                        {extendingId === s.id ? 'Extending…' : 'Extend pilot'}
+                      </button>
+                    </div>
+                  </td>
                   <td className="px-4 py-3">
                     <span
                       className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${statusBadge(s.subscriptionStatus)}`}

@@ -3,6 +3,7 @@ import {
   getSubscriptionState,
   legacyTrialEndsAtBackfill,
   resolveTrialEndsAt,
+  computeExtendedPilotEndsAt,
   TRIAL_DAYS,
 } from '@/lib/billing/subscription'
 
@@ -39,5 +40,28 @@ describe('legacy school subscription access', () => {
       trialEndsAt: new Date('2027-01-01'),
     })
     expect(backfill).toBeNull()
+  })
+})
+
+describe('computeExtendedPilotEndsAt', () => {
+  it('extends from current future trial end by N months', () => {
+    const now = new Date(2026, 6, 23, 12, 0, 0) // 23 Jul 2026 local
+    const trialEndsAt = new Date(2026, 7, 1) // 1 Aug 2026
+    const next = computeExtendedPilotEndsAt({ plan: 'trial', trialEndsAt }, 3, now)
+    expect(next.getFullYear()).toBe(2026)
+    expect(next.getMonth()).toBe(10) // November (Aug + 3)
+  })
+
+  it('extends from now when trial already expired', () => {
+    const now = new Date(2026, 6, 23, 12, 0, 0)
+    const trialEndsAt = new Date(2026, 5, 1) // 1 Jun 2026 — expired
+    const next = computeExtendedPilotEndsAt({ plan: 'trial', trialEndsAt }, 2, now)
+    expect(next.getTime()).toBeGreaterThan(now.getTime())
+    expect(next.getMonth()).toBe(8) // September (Jul + 2)
+  })
+
+  it('rejects months outside 1–12', () => {
+    expect(() => computeExtendedPilotEndsAt({ plan: 'trial' }, 0)).toThrow(/1 to 12/)
+    expect(() => computeExtendedPilotEndsAt({ plan: 'trial' }, 13)).toThrow(/1 to 12/)
   })
 })
