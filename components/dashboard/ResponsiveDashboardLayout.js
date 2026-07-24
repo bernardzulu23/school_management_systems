@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { Sidebar } from './Sidebar'
 import { Menu, Bell, Search, User } from 'lucide-react'
@@ -9,6 +9,7 @@ import { useSchool } from '@/lib/context/SchoolContext'
 import { TimetableNotificationBell } from '@/components/timetable/TimetableNotificationBell'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
+import { getSubscriptionState } from '@/lib/billing/subscription'
 
 export default function ResponsiveDashboardLayout({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -16,15 +17,8 @@ export default function ResponsiveDashboardLayout({ children }) {
   const { school } = useSchool()
   const pathname = usePathname()
 
-  const plan = String(school?.plan || '')
-    .trim()
-    .toLowerCase()
-  const trialEndsAt = school?.trialEndsAt ? new Date(school.trialEndsAt) : null
-  const planExpiresAt = school?.planExpiresAt ? new Date(school.planExpiresAt) : null
-  const now = new Date()
-  const expiresAt = plan === 'trial' ? trialEndsAt : planExpiresAt
-  const msLeft = expiresAt ? expiresAt.getTime() - now.getTime() : null
-  const isExpired = typeof msLeft === 'number' ? msLeft < 0 : false
+  const sub = useMemo(() => getSubscriptionState(school), [school])
+  const isExpired = Boolean(school) && sub.expired
   const allowExpiredRoute =
     typeof pathname === 'string' &&
     (pathname.startsWith('/dashboard/billing') || pathname.startsWith('/dashboard/solo'))

@@ -75,14 +75,10 @@ export const PATCH = withSecureHandler(async function PATCH(request, { params })
     const { computeExtendedPilotEndsAt } = await import('@/lib/billing/subscription')
     const nextTrialEnd = computeExtendedPilotEndsAt(existing, months)
     data.trialEndsAt = nextTrialEnd
-    // Keep access on the trial track while piloting (paid plan slug can stay for display).
-    const currentPlan = String(existing.plan || 'trial')
-      .trim()
-      .toLowerCase()
-    if (currentPlan === 'unpaid' || currentPlan === 'trial' || !currentPlan) {
-      data.plan = 'trial'
-    }
-    if (data.active === undefined) data.active = true
+    // Pilot extensions always put the school back on an active trial track so
+    // feature gates and dashboard layouts unlock (not only trialEndsAt).
+    data.plan = 'trial'
+    data.active = true
   }
 
   const nextProvince = body.province !== undefined ? body.province : existing.province
@@ -122,8 +118,17 @@ export const PATCH = withSecureHandler(async function PATCH(request, { params })
       planExpiresAt: true,
       trialEndsAt: true,
       createdAt: true,
+      schoolType: true,
     },
   })
+
+  try {
+    const { revalidateTag } = await import('next/cache')
+    revalidateTag(`school-config-${id}`)
+    revalidateTag('school-config')
+  } catch {
+    /* cache tag optional outside Next request lifecycle */
+  }
 
   return NextResponse.json({
     school: toPlatformSchoolSummary(school),

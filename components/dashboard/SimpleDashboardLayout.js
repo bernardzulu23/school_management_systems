@@ -23,6 +23,7 @@ import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
 import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
 import { hasSicAssignment } from '@/lib/sic/sicAccess'
+import { getSubscriptionState } from '@/lib/billing/subscription'
 
 export function DashboardLayout({ children, title }) {
   const { user, logout } = useAuth()
@@ -57,15 +58,10 @@ export function DashboardLayout({ children, title }) {
     []
   )
 
-  const plan = String(school?.plan || '')
-    .trim()
-    .toLowerCase()
-  const trialEndsAt = school?.trialEndsAt ? new Date(school.trialEndsAt) : null
-  const planExpiresAt = school?.planExpiresAt ? new Date(school.planExpiresAt) : null
-  const now = new Date()
-  const expiresAt = plan === 'trial' ? trialEndsAt : planExpiresAt
-  const msLeft = expiresAt ? expiresAt.getTime() - now.getTime() : null
-  const isExpired = typeof msLeft === 'number' ? msLeft < 0 : false
+  const sub = useMemo(() => getSubscriptionState(school), [school])
+  // Pilot extensions update trialEndsAt — treat access as active whenever subscription says so
+  // (not only when plan === 'trial' and planExpiresAt is ignored).
+  const isExpired = Boolean(school) && sub.expired
   // Always allow billing (and payment return) so renew CTAs can render the upgrade UI.
   const allowExpiredRoute =
     typeof pathname === 'string' &&
