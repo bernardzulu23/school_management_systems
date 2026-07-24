@@ -23,7 +23,7 @@
     },
     {
       "path": "/api/cron/sms-gateway-health",
-      "schedule": "*/5 * * * *"
+      "schedule": "15 7 * * *"
     }
   ],
   "build": {

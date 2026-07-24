@@ -12,7 +12,7 @@ import {
 import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
 import { solidTeacherFill } from '@/lib/timetable/uniqueTeacherColors'
 import { abbreviateSubject } from '@/lib/timetable/subjectAbbrev'
-import { normalizeClassLabel } from '@/lib/timetable/activeClasses'
+import { inferClassGrade, normalizeClassLabel } from '@/lib/timetable/activeClasses'
 import {
   UnplacedLessonsTray,
   type UnplacedLesson,
@@ -135,7 +135,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
       if (lbl) byLabel.add(lbl)
     }
 
-    return [...classes]
+    const fromProp = [...classes]
       .filter((c) => {
         const id = String(c.id)
         if (byId.has(id)) return true
@@ -143,7 +143,7 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
           String(c.name || ''),
           (c as any).yearGroup || (c as any).year_group
         )
-        return lbl && byLabel.has(lbl)
+        return Boolean(lbl && byLabel.has(lbl) && byId.has(id))
       })
       .sort((a, b) =>
         String(a.name || '').localeCompare(String(b.name || ''), undefined, {
@@ -151,6 +151,29 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
           sensitivity: 'base',
         })
       )
+
+    if (fromProp.length > 0) return fromProp
+
+    // Fallback: build rows from assignment classIds so the wall never blanks
+    // when the school class catalog uses different ids than TimetableAllocationEntry.
+    const map = new Map<string, Class>()
+    for (const a of filteredAssignments) {
+      const id = String(a?.classId || '').trim()
+      if (!id || map.has(id)) continue
+      map.set(id, {
+        id,
+        name: String((a as any).className || id),
+        grade: inferClassGrade(String((a as any).className || '')),
+        students: 0,
+        subjects: [],
+      })
+    }
+    return Array.from(map.values()).sort((a, b) =>
+      String(a.name || '').localeCompare(String(b.name || ''), undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      })
+    )
   }, [classes, filteredAssignments])
 
   const days = useMemo(() => {

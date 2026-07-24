@@ -44,10 +44,13 @@ export function StudentTimetableView(props: StudentTimetableViewProps) {
     String(auth?.user?.studentProfile?.classId || auth?.user?.studentProfile?.class_id || '')
 
   const myAssignments = useMemo(() => {
+    const all = assignments || []
     // API already scopes students to their class; don't wipe the grid when
-    // auth.studentProfile.classId is missing (hydration / incomplete profile).
-    if (!effectiveClassId) return assignments || []
-    return (assignments || []).filter((a) => String(a.classId) === String(effectiveClassId))
+    // auth.studentProfile.classId is missing or stale vs DB classId.
+    if (!effectiveClassId) return all
+    const filtered = all.filter((a) => String(a.classId) === String(effectiveClassId))
+    if (filtered.length === 0 && all.length > 0) return all
+    return filtered
   }, [assignments, effectiveClassId])
 
   const teacherName = useMemo(() => {

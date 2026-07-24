@@ -406,7 +406,7 @@ export default function StudentDashboard() {
                 assignments={publishedAssignments}
                 timeSlots={timeSlots}
                 classId={
-                  String(currentUser?.studentProfile?.classId || scopedClassId || '') || undefined
+                  String(scopedClassId || currentUser?.studentProfile?.classId || '') || undefined
                 }
                 classes={timetableClasses}
                 teachers={timetableTeachers}

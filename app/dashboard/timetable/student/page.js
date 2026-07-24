@@ -25,9 +25,11 @@ export default function StudentTimetablePage() {
     error,
   } = usePublishedTimetableView({ enabled: Boolean(user) })
 
+  // Prefer API-scoped classId (authoritative Student.classId) over auth profile,
+  // which can be stale after class moves / Grade→Form rewrites.
   const classId =
-    (user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined) ||
-    (scopedClassId ? String(scopedClassId) : undefined)
+    (scopedClassId ? String(scopedClassId) : undefined) ||
+    (user?.studentProfile?.classId ? String(user.studentProfile.classId) : undefined)
 
   useEffect(() => {
     if (error) toast.error(error)

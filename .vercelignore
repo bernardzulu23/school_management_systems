@@ -1,0 +1,82 @@
+# Dependencies & package managers
+node_modules
+**/node_modules
+.pnpm-store
+.yarn
+.npm
+.venv
+venv
+
+# Build / cache
+.next
+.open-next
+.swc
+.wrangler
+out
+build
+dist
+.cache
+.parcel-cache
+.turbo
+coverage
+.nyc_output
+*.tsbuildinfo
+
+# VCS / local tooling
+.git
+.github
+.vscode
+.vs
+.idea
+.cursor
+.claude
+.husky
+.qodo
+.sixth
+*.log
+logs
+
+# Tests & local demos (not needed for prod build)
+__tests__
+**/__tests__
+/test
+/tests
+ai-text-demo
+chat-realtime
+e2e
+playwright-report
+test-results
+/memory
+/exports
+/ingest
+
+# Mobile / native / sibling services (not used by Next.js on Vercel)
+android
+ios
+/zsms-mobile
+/solver-service
+/sanity
+*.apk
+*.aab
+*.ipa
+
+# Large local / temp (root only — do NOT ignore lib/uploads)
+/tmp
+/temp
+/uploads
+.vercel
+*.tgz
+*.zip
+*.7z
+
+# Large curriculum PDFs (not required for Next.js build/runtime)
+/Teaching Module
+/Syllabus
+/Validation_folder
+/docs/doc
+*.pdf
+
+# Env / secrets
+.env
+.env.*
+!.env.example

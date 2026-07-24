@@ -21,7 +21,9 @@ Reassess: aggregators are ToS-safer and scale better; the gateway was meant as a
 
 ## Stale gateway alerts
 
-Cron `GET /api/cron/sms-gateway-health` (every 5 minutes, `CRON_SECRET`) checks active `SMSGateway` rows. If `lastSeenAt` is older than 15 minutes and no alert was sent for this outage episode (`lastStaleAlertSentAt`), it fans out to **Telegram** (`TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`) and **WhatsApp** via CallMeBot (`CALLMEBOT_PHONE` / `CALLMEBOT_APIKEY`) independently (`Promise.allSettled`). Successful polls clear `lastStaleAlertSentAt`. An episode is marked alerted if **at least one** channel delivers.
+Cron `GET /api/cron/sms-gateway-health` (`CRON_SECRET`) checks active `SMSGateway` rows. If `lastSeenAt` is older than 15 minutes and no alert was sent for this outage episode (`lastStaleAlertSentAt`), it fans out to **Telegram** (`TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`) and **WhatsApp** via CallMeBot (`CALLMEBOT_PHONE` / `CALLMEBOT_APIKEY`) independently (`Promise.allSettled`). Successful polls clear `lastStaleAlertSentAt`. An episode is marked alerted if **at least one** channel delivers.
+
+**Scheduling:** Vercel Hobby only allows **daily** crons, so `vercel.json` runs a daily backup check (`15 7 * * *`). For near-real-time detection (every 5 minutes), point an external scheduler (e.g. cron-job.org) at the same endpoint with header `Authorization: Bearer $CRON_SECRET` or `x-cron-secret: $CRON_SECRET`. Upgrade to Vercel Pro to restore an in-platform `*/5` schedule.
 
 ## Ops note
 
