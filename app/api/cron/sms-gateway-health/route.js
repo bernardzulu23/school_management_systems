@@ -5,8 +5,9 @@ import { runStaleGatewayHealthCron } from '@/lib/sms/staleGatewayAlert'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 
 /**
- * GET /api/cron/sms-gateway-health — stale custom-gateway Telegram alerts.
- * Requires CRON_SECRET. See docs/ZSMS_gateway_sole_channel.md.
+ * GET /api/cron/sms-gateway-health — stale custom-gateway ops alerts
+ * (Telegram + WhatsApp via CallMeBot). Requires CRON_SECRET.
+ * See docs/ZSMS_gateway_sole_channel.md.
  */
 export const GET = withErrorHandler(async function GET(request) {
   const secret = String(process.env.CRON_SECRET || '').trim()

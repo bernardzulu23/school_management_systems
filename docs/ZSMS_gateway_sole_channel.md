@@ -21,7 +21,7 @@ Reassess: aggregators are ToS-safer and scale better; the gateway was meant as a
 
 ## Stale gateway alerts
 
-Cron `GET /api/cron/sms-gateway-health` (every 5 minutes, `CRON_SECRET`) checks active `SMSGateway` rows. If `lastSeenAt` is older than 15 minutes and no alert was sent for this outage episode (`lastStaleAlertSentAt`), it pings Telegram via the same `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` as chat handoff. Successful polls clear `lastStaleAlertSentAt`.
+Cron `GET /api/cron/sms-gateway-health` (every 5 minutes, `CRON_SECRET`) checks active `SMSGateway` rows. If `lastSeenAt` is older than 15 minutes and no alert was sent for this outage episode (`lastStaleAlertSentAt`), it fans out to **Telegram** (`TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`) and **WhatsApp** via CallMeBot (`CALLMEBOT_PHONE` / `CALLMEBOT_APIKEY`) independently (`Promise.allSettled`). Successful polls clear `lastStaleAlertSentAt`. An episode is marked alerted if **at least one** channel delivers.
 
 ## Ops note
 

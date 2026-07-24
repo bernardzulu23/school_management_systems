@@ -129,13 +129,15 @@ Payment provider logos: place files in `public/payments/` (`mtn.jpg`, `airtel.jp
 
 ### AI chat human handoff (Phase 2 — optional)
 
-| Variable                      | Purpose                                                              |
-| ----------------------------- | -------------------------------------------------------------------- |
-| `TELEGRAM_BOT_TOKEN`          | Telegram Bot API token — **metadata-only** handoff alerts            |
-| `TELEGRAM_CHAT_ID`            | Destination chat id for handoff pings                                |
-| `CHAT_DO_SHARED_SECRET`       | Shared secret with `chat-realtime` Worker (tickets + internal relay) |
-| `NEXT_PUBLIC_CHAT_DO_WSS_URL` | Browser WebSocket base, e.g. `wss://zsms-chat-realtime….workers.dev` |
-| `CHAT_DO_WSS_URL`             | Optional server alias (HTTP base derived for `/internal/*` notify)   |
+| Variable                      | Purpose                                                                    |
+| ----------------------------- | -------------------------------------------------------------------------- |
+| `TELEGRAM_BOT_TOKEN`          | Telegram Bot API token — **metadata-only** handoff + gateway health alerts |
+| `TELEGRAM_CHAT_ID`            | Destination chat id for handoff / gateway pings                            |
+| `CALLMEBOT_PHONE`             | WhatsApp number (digits only, no `+`) for CallMeBot gateway alerts         |
+| `CALLMEBOT_APIKEY`            | CallMeBot API key (after WhatsApp opt-in)                                  |
+| `CHAT_DO_SHARED_SECRET`       | Shared secret with `chat-realtime` Worker (tickets + internal relay)       |
+| `NEXT_PUBLIC_CHAT_DO_WSS_URL` | Browser WebSocket base, e.g. `wss://zsms-chat-realtime….workers.dev`       |
+| `CHAT_DO_WSS_URL`             | Optional server alias (HTTP base derived for `/internal/*` notify)         |
 
 If Telegram is unset, handoff still sets `PENDING_HUMAN`. The API returns `telegramSent: false` and the teacher UI shows that no Telegram invite was sent; server logs a warning. Platform admins claim at `/platform/support`. If the Durable Object URL is unset, claim/message APIs still work; live WS relay is skipped. See `chat-realtime/README.md` and `docs/CHAT_HANDOFF_PHASE2.md`.
 
