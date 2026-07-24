@@ -22,7 +22,12 @@ export const GET = withErrorHandler(async function GET(request: Request) {
 
   await basePrisma.sMSGateway.update({
     where: { id: gateway.id },
-    data: { lastSeenAt: new Date(), lastHealthCheck: new Date() },
+    data: {
+      lastSeenAt: new Date(),
+      lastHealthCheck: new Date(),
+      // Clear so a future outage can alert again (one alert per episode).
+      lastStaleAlertSentAt: null,
+    },
   })
 
   const pending = await basePrisma.smsLog.findMany({

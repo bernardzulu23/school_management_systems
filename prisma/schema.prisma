@@ -3690,6 +3690,8 @@ model SMSGateway {
   isActive          Boolean   @default(true)
   lastSeenAt        DateTime?
   lastHealthCheck   DateTime?
+  /// Set when a stale-offline Telegram alert was sent for the current outage episode; cleared on successful poll.
+  lastStaleAlertSentAt DateTime?
   totalSent         Int       @default(0)
   totalFailed       Int       @default(0)
 
@@ -3750,7 +3752,7 @@ model SmsLog {
   recipient      String?
   fromNumber     String?
   body           String?  @db.Text
-  status         String   @default("SENT") // PENDING | DISPATCHED | SENT | FAILED | QUEUED
+  status         String   @default("SENT") // PENDING | DISPATCHED | SENT | FAILED | FAILED_NO_FALLBACK | QUEUED
   provider       String   @default("africastalking")
   /// "AFRICALA" | "CUSTOM_GATEWAY" — one history regardless of delivery channel
   channel        String   @default("AFRICALA")

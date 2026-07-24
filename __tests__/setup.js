@@ -51,7 +51,7 @@ vi.mock('@/lib/sms', () => ({
   buildWelcomeSmsMessage: vi.fn(() => 'welcome'),
   normalizePhoneNumbers: vi.fn(() => []),
   pushSmsLog: vi.fn(),
-  sendAfricasTalkingSms: vi.fn(),
+  sendSchoolSms: vi.fn(),
 }))
 
 vi.mock('@/lib/security/cookies', () => ({

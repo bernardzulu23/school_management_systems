@@ -66,7 +66,8 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       totalFailed: g.totalFailed,
       last24h: {
         sent: g.logs.filter((m) => m.status === 'SENT').length,
-        failed: g.logs.filter((m) => m.status === 'FAILED').length,
+        failed: g.logs.filter((m) => m.status === 'FAILED' || m.status === 'FAILED_NO_FALLBACK')
+          .length,
         pending: g.logs.filter((m) => m.status === 'PENDING').length,
         dispatched: g.logs.filter((m) => m.status === 'DISPATCHED').length,
       },

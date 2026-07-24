@@ -9,7 +9,7 @@ import {
   getBaseUrlFromRequest,
   normalizePhoneNumbers,
   pushSmsLog,
-  sendAfricasTalkingSms,
+  sendSchoolSms,
 } from '@/lib/sms'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 import { withSecureApi } from '@/lib/middleware/secureApi'
@@ -81,7 +81,11 @@ export const POST = withSecureApi(async function POST(request, { params }) {
         const appUrl = getBaseUrlFromRequest(request)
         const supportUrl = appUrl ? `${appUrl}/forgot-password` : ''
         const message = buildPasswordResetConfirmationSmsMessage({ appUrl, supportUrl })
-        const sent = await sendAfricasTalkingSms({ to: recipients, message })
+        const sent = await sendSchoolSms({
+          to: recipients,
+          message,
+          schoolId: user.schoolId || null,
+        })
         pushSmsLog({
           direction: 'out',
           schoolId: user.schoolId || null,

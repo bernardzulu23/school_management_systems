@@ -11,7 +11,7 @@ import {
   getOnboardingSmsFrom,
   normalizePhoneNumbers,
   pushSmsLog,
-  sendAfricasTalkingSms,
+  sendSchoolSms,
 } from '@/lib/sms'
 import { clearAuthSessionCookies } from '@/lib/security/cookies'
 import { logger, captureError } from '@/lib/utils/logger'
@@ -329,10 +329,11 @@ export const POST = withSecureHandler(async function POST(request) {
       const recipients = normalizePhoneNumbers(adminPhone)
       if (recipients.length > 0) {
         const message = buildWelcomeSmsMessage({ schoolName: created.name, loginUrl })
-        const sent = await sendAfricasTalkingSms({
+        const sent = await sendSchoolSms({
           to: recipients,
           message,
           from: getOnboardingSmsFrom(),
+          schoolId: created.id,
         })
         pushSmsLog({
           direction: 'out',

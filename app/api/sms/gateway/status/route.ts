@@ -56,8 +56,16 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     where: { id: gateway.id },
     data:
       status === 'SENT'
-        ? { totalSent: { increment: 1 }, lastSeenAt: new Date() }
-        : { totalFailed: { increment: 1 }, lastSeenAt: new Date() },
+        ? {
+            totalSent: { increment: 1 },
+            lastSeenAt: new Date(),
+            lastStaleAlertSentAt: null,
+          }
+        : {
+            totalFailed: { increment: 1 },
+            lastSeenAt: new Date(),
+            lastStaleAlertSentAt: null,
+          },
   })
 
   return NextResponse.json({ success: true, status })

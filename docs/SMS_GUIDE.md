@@ -1,11 +1,16 @@
-# ZSMS SMS Guide (Mocean + Africa's Talking)
+# ZSMS SMS Guide (Custom gateway + legacy Mocean / Africa's Talking)
 
-ZSMS routes outbound SMS through **`sendOutboundSms`** in `lib/sms/sendOutbound.js`:
+ZSMS routes outbound SMS through **`sendOutboundSms`** in `lib/sms/sendOutbound.js`.
 
-1. **Mocean** when `MOCEAN_API_TOKEN` is set (primary)
-2. **Africa's Talking** when Mocean is unset but `AFRICASTALKING_API_KEY` + `AFRICASTALKING_USERNAME` are set (fallback)
+**Current default (sole channel):** custom Android SIM gateway when `customGatewayEnabled` and an active `SMSGateway` exist. Mocean / Africa’s Talking are **disabled** unless `ENABLE_LEGACY_SMS_FALLBACK` is flipped to `true` in that file (emergency / post-Africala only). See [ZSMS_gateway_sole_channel.md](./ZSMS_gateway_sole_channel.md).
 
-Bulk broadcast (`/api/sms/broadcast`) still uses Africa's Talking + QStash only.
+**Legacy chain (when the flag is true):**
+
+1. **Custom gateway** (if enabled for the school)
+2. **Mocean** when `MOCEAN_API_TOKEN` is set
+3. **Africa's Talking** when Mocean is unset but AT credentials are set
+
+Bulk broadcast (`/api/sms/broadcast`) still uses Africa's Talking + QStash only (separate path — revisit when re-enabling aggregators).
 
 ## Environment variables
 
@@ -28,7 +33,7 @@ When neither Mocean nor AT credentials are set, `env.features.sms` is false and 
 ## Send from code
 
 ```javascript
-import { sendOutboundSms, sendAfricasTalkingSms, getOnboardingSmsFrom } from '@/lib/sms'
+import { sendOutboundSms, sendSchoolSms, getOnboardingSmsFrom } from '@/lib/sms'
 
 await sendOutboundSms({
   to: ['+260971234567'],
@@ -37,7 +42,7 @@ await sendOutboundSms({
 })
 
 // Backward-compatible alias (routes through sendOutboundSms)
-await sendAfricasTalkingSms({ to: ['+260971234567'], message: 'Hello', from: 'ZSMS' })
+await sendSchoolSms({ to: ['+260971234567'], message: 'Hello', schoolId, from: 'ZSMS' })
 ```
 
 ## Sender IDs
