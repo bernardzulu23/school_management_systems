@@ -32,7 +32,13 @@ export default function StudentFlashcardsPage() {
   const [decksLoading, setDecksLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
 
-  const { topics } = useStudentCurriculumTopics(subjectName)
+  const {
+    topics,
+    gradeOrForm: topicGrade,
+    loading: topicsLoading,
+    error: topicsError,
+  } = useStudentCurriculumTopics(subjectName)
+  const effectiveGrade = topicGrade || gradeOrForm || ''
   const today = deckDateKey()
   const usedSubjects = new Set(todayDecks.map((d) => d.subjectName.toLowerCase()))
   const replacingExisting = Boolean(subjectName && usedSubjects.has(subjectName.toLowerCase()))
@@ -188,13 +194,17 @@ export default function StudentFlashcardsPage() {
                   </div>
                   <CurriculumTopicSelect
                     subject={subjectName}
-                    gradeOrForm={gradeOrForm || ''}
+                    gradeOrForm={effectiveGrade}
                     value={topic}
                     onChange={setTopic}
                     label="Curriculum topic"
                     required={topics.length > 0}
                     allowFreeFormWhenEmpty={false}
                     id="flashcards-topic"
+                    topics={topics}
+                    topicsLoading={topicsLoading}
+                    topicsError={topicsError}
+                    requireGrade={false}
                   />
                   <div className="space-y-2">
                     <Label>Number of questions (max {MAX_CARDS})</Label>

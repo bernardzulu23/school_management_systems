@@ -50,6 +50,7 @@ export const POST = withErrorHandler(async function POST(request) {
     throw new ApiError('Unsupported language', 400)
   }
 
+  // Prefer server sandbox for JS; client also runs JS in-browser.
   if (body.language === 'javascript') {
     const result = runJavaScriptSandbox(body.code)
     if (result.error) {
@@ -64,8 +65,9 @@ export const POST = withErrorHandler(async function POST(request) {
     })
   }
 
+  // Python is primarily run via in-browser Pyodide; Piston is optional if configured.
   const result = await executeViaPiston({
-    languageId: langDef.id,
+    languageId: langDef.id === 'python' ? 'python' : langDef.id,
     version: langDef.version || body.version,
     code: body.code,
   })

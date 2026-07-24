@@ -43,10 +43,14 @@ describe('Content-Security-Policy', () => {
     expect(scriptSrc).not.toContain("'unsafe-inline'")
   })
 
-  it('keeps unsafe-inline in style-src with nonce (React style attributes need it)', () => {
+  it('allows React inline style attributes via style-src-attr (timetable grids)', () => {
+    expect(csp).toContain("style-src-attr 'unsafe-inline'")
+    expect(csp).toMatch(/style-src-elem [^;]*'nonce-test-nonce-value'/)
+    // Fallback style-src keeps unsafe-inline without relying on nonce+unsafe-inline
+    // (CSP3 ignores unsafe-inline when a nonce is present in the same directive).
     const styleSrc = styleSrcDirective(csp)
-    expect(styleSrc).toContain(`'nonce-${nonce}'`)
     expect(styleSrc).toContain("'unsafe-inline'")
+    expect(styleSrc).not.toContain("'nonce-")
   })
 
   it('allows wasm-unsafe-eval in production script-src (dev uses unsafe-eval for HMR)', () => {
@@ -174,6 +178,7 @@ describe('proxy applies security headers to responses', () => {
     expect(csp).toContain('https://challenges.cloudflare.com')
     expect(scriptSrcDirective(csp)).not.toContain("'unsafe-inline'")
     expect(styleSrcDirective(csp)).toContain("'unsafe-inline'")
+    expect(csp).toContain("style-src-attr 'unsafe-inline'")
   })
 
   it('static logo path carries asset CSP without ACAO wildcard', async () => {

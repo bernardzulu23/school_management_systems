@@ -12,10 +12,14 @@ import { Label } from '@/components/ui/label'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import {
   ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
+  formatEczExamLevelLabel,
   resolveSelectableEczExamLevel,
 } from '@/lib/ecz/ecz-practice-levels'
 import { api } from '@/lib/api'
-import { useStudentEnrolledSubjects } from '@/hooks/useStudentCurriculumTopics'
+import {
+  useStudentCurriculumTopics,
+  useStudentEnrolledSubjects,
+} from '@/hooks/useStudentCurriculumTopics'
 
 function formatDuration(ms) {
   const totalSec = Math.max(0, Math.floor(ms / 1000))
@@ -43,6 +47,15 @@ export default function StudentMockExamPage() {
   const [error, setError] = useState(null)
   const [deadline, setDeadline] = useState(null)
   const [now, setNow] = useState(Date.now())
+
+  const {
+    topics,
+    gradeOrForm: topicGrade,
+    loading: topicsLoading,
+    error: topicsError,
+  } = useStudentCurriculumTopics(form.subject)
+
+  const topicGradeLabel = topicGrade || gradeOrForm || formatEczExamLevelLabel(form.examLevel)
 
   useEffect(() => {
     if (gradeOrForm) {
@@ -237,13 +250,17 @@ export default function StudentMockExamPage() {
                   <CurriculumTopicSelect
                     className="md:col-span-2"
                     subject={form.subject}
-                    gradeOrForm={gradeOrForm || form.examLevel}
+                    gradeOrForm={topicGradeLabel}
                     value={form.topic}
                     onChange={(topic) => setForm((p) => ({ ...p, topic }))}
                     label="Curriculum topic"
                     required
                     allowFreeFormWhenEmpty={false}
                     id="mock-exam-topic"
+                    topics={topics}
+                    topicsLoading={topicsLoading}
+                    topicsError={topicsError}
+                    requireGrade={false}
                   />
                 </div>
                 {error ? <UpgradePrompt error={error} /> : null}

@@ -15,91 +15,6 @@ export type PublishedAscWallTimetableProps = {
   emptyMessage?: string
 }
 
-function clientAgentLog(payload: Record<string, unknown>) {
-  const body = JSON.stringify({
-    sessionId: 'a471db',
-    timestamp: Date.now(),
-    runId: 'pre-fix',
-    ...payload,
-  })
-  fetch('/api/debug/agent-log', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body,
-  }).catch(() => {})
-  fetch('http://127.0.0.1:7916/ingest/6dcdb48d-b049-4be9-ba0f-aa3c684df7ce', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Debug-Session-Id': 'a471db' },
-    body,
-  }).catch(() => {})
-}
-
-/** Detect CSP blocking React inline styles (hypothesis F). */
-function useTimetableCspProbe(assignmentCount: number) {
-  useEffect(() => {
-    const violations: Array<{ effectiveDirective?: string; blockedURI?: string }> = []
-    const onViolation = (e: SecurityPolicyViolationEvent) => {
-      violations.push({
-        effectiveDirective: e.effectiveDirective,
-        blockedURI: e.blockedURI,
-      })
-    }
-    document.addEventListener('securitypolicyviolation', onViolation)
-
-    const el = document.createElement('div')
-    el.setAttribute('data-tt-csp-probe', '1')
-    el.style.width = '123px'
-    el.style.backgroundColor = 'rgb(12, 34, 56)'
-    el.style.position = 'absolute'
-    el.style.left = '-9999px'
-    document.body.appendChild(el)
-    const cs = window.getComputedStyle(el)
-    const inlineApplied = cs.width === '123px' || el.style.width === '123px'
-    const bgApplied = cs.backgroundColor.includes('12') || el.style.backgroundColor.includes('12')
-
-    // #region agent log
-    clientAgentLog({
-      hypothesisId: 'F',
-      location: 'PublishedAscWallTimetable.tsx:cspProbe',
-      message: 'timetable CSP / inline-style probe',
-      data: {
-        assignmentCount,
-        inlineWidthApplied: inlineApplied,
-        inlineBgApplied: bgApplied,
-        computedWidth: cs.width,
-        computedBg: cs.backgroundColor,
-      },
-    })
-    // #endregion
-
-    const t = window.setTimeout(() => {
-      // #region agent log
-      clientAgentLog({
-        hypothesisId: 'F',
-        location: 'PublishedAscWallTimetable.tsx:cspViolations',
-        message: 'CSP violations after timetable mount',
-        data: {
-          violationCount: violations.length,
-          styleViolations: violations.filter((v) =>
-            String(v.effectiveDirective || '').includes('style')
-          ).length,
-          sample: violations.slice(0, 8),
-        },
-      })
-      // #endregion
-      el.remove()
-      document.removeEventListener('securitypolicyviolation', onViolation)
-    }, 800)
-
-    return () => {
-      window.clearTimeout(t)
-      el.remove()
-      document.removeEventListener('securitypolicyviolation', onViolation)
-    }
-  }, [assignmentCount])
-}
-
 export function PublishedAscWallTimetable({
   assignments,
   timeSlots,
@@ -109,8 +24,6 @@ export function PublishedAscWallTimetable({
 }: PublishedAscWallTimetableProps) {
   const teacherColors = useTimetableStore((s) => s.teacherColors)
   const setTeacherColors = useTimetableStore((s) => s.setTeacherColors)
-
-  useTimetableCspProbe(assignments?.length || 0)
 
   useEffect(() => {
     let cancelled = false
@@ -176,27 +89,6 @@ export function PublishedAscWallTimetable({
     }
     return Array.from(map.values())
   }, [teachersProp, assignments])
-
-  // #region agent log
-  useEffect(() => {
-    clientAgentLog({
-      hypothesisId: 'A,E',
-      location: 'PublishedAscWallTimetable.tsx:renderState',
-      message: 'wall render state',
-      data: {
-        assignmentCount: assignments?.length || 0,
-        timeSlotCount: timeSlots?.length || 0,
-        wallClassCount: wallClasses.length,
-        wallTeacherCount: wallTeachers.length,
-        emptyReason: !assignments?.length
-          ? 'no_assignments'
-          : !timeSlots?.length
-            ? 'no_timeslots'
-            : 'rendering_grid',
-      },
-    })
-  }, [assignments, timeSlots, wallClasses.length, wallTeachers.length])
-  // #endregion
 
   if (!assignments.length) {
     return (

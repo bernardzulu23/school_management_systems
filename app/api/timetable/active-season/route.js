@@ -7,7 +7,6 @@ import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { getDefaultAcademicYear, getDefaultTerm } from '@/lib/timetable/timetableTermOptions'
-import { agentDebugLog } from '@/lib/debug/agentLog'
 
 /**
  * GET /api/timetable/active-season
@@ -81,31 +80,6 @@ export const GET = withErrorHandler(async function GET(req) {
     source: best ? 'entries' : 'default',
     prefer: preferPublished ? 'published' : 'total',
   }
-
-  // #region agent log
-  agentDebugLog({
-    hypothesisId: 'A',
-    location: 'api/timetable/active-season/route.js',
-    message: 'active-season resolved',
-    data: {
-      schoolId: String(schoolId).slice(0, 8),
-      preferPublished,
-      seasonCount: ranked.length,
-      term: payload.term,
-      academicYear: payload.academicYear,
-      published: payload.published,
-      draft: payload.draft,
-      total: payload.total,
-      source: payload.source,
-      topSeasons: ranked.slice(0, 5).map((s) => ({
-        term: s.term,
-        academicYear: s.academicYear,
-        published: s.published,
-        draft: s.draft,
-      })),
-    },
-  })
-  // #endregion
 
   return NextResponse.json(payload)
 })

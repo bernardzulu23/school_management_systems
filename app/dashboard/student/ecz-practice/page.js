@@ -18,7 +18,10 @@ import {
   resolveSelectableEczExamLevel,
 } from '@/lib/ecz/ecz-practice-levels'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
-import { useStudentEnrolledSubjects } from '@/hooks/useStudentCurriculumTopics'
+import {
+  useStudentCurriculumTopics,
+  useStudentEnrolledSubjects,
+} from '@/hooks/useStudentCurriculumTopics'
 import { toast } from 'react-hot-toast'
 
 export default function StudentECZPracticePage() {
@@ -34,6 +37,13 @@ export default function StudentECZPracticePage() {
     questionCount: 5,
   })
 
+  const {
+    topics,
+    gradeOrForm: topicGrade,
+    loading: topicsLoading,
+    error: topicsError,
+  } = useStudentCurriculumTopics(form.subject)
+
   useEffect(() => {
     if (gradeOrForm) {
       setForm((p) => ({
@@ -45,12 +55,14 @@ export default function StudentECZPracticePage() {
 
   useEffect(() => {
     setForm((p) => ({ ...p, topic: '' }))
-  }, [form.subject, gradeOrForm])
+  }, [form.subject])
 
   const canGenerate = useMemo(
     () => form.subject.trim() && form.topic.trim(),
     [form.subject, form.topic]
   )
+
+  const topicGradeLabel = topicGrade || gradeOrForm || formatEczExamLevelLabel(form.examLevel)
 
   return (
     <DashboardLayout title="ECZ Practice">
@@ -114,13 +126,17 @@ export default function StudentECZPracticePage() {
                 <CurriculumTopicSelect
                   className="md:col-span-2"
                   subject={form.subject}
-                  gradeOrForm={gradeOrForm || form.examLevel}
+                  gradeOrForm={topicGradeLabel}
                   value={form.topic}
                   onChange={(topic) => setForm((p) => ({ ...p, topic }))}
                   label="Curriculum topic"
                   required
                   allowFreeFormWhenEmpty={false}
                   id="ecz-practice-topic"
+                  topics={topics}
+                  topicsLoading={topicsLoading}
+                  topicsError={topicsError}
+                  requireGrade={false}
                 />
                 <div className="space-y-2">
                   <Label>Question Count</Label>

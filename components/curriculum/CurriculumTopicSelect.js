@@ -9,10 +9,13 @@ import { useCurriculumTopics } from '@/hooks/useCurriculumTopics'
  * Curriculum topic control — ENFORCED dropdown when form/grade + subject are selected.
  *
  * Contract (all formulation UIs: quizzes, tests, flashcards, story weaver, lesson plans, etc.):
- * 1. Topic is disabled until both subject and form/grade are set.
+ * 1. Topic is disabled until subject is set (and grade, unless topics are injected).
  * 2. When syllabus topics exist, selection MUST come from the dropdown (no free-text).
  * 3. Free-text is only allowed when `allowFreeFormWhenEmpty` is explicitly true AND the
  *    syllabus list is empty (legacy / subjects without corpus).
+ *
+ * Pass `topics` / `topicsLoading` / `topicsError` to inject a preloaded list (e.g. student
+ * `/api/student/curriculum-topics`) and skip the internal teacher curriculum-topics fetch.
  *
  * @param {{
  *   subject: string
@@ -25,6 +28,10 @@ import { useCurriculumTopics } from '@/hooks/useCurriculumTopics'
  *   id?: string
  *   allowFreeFormWhenEmpty?: boolean
  *   selectClassName?: string
+ *   topics?: string[]
+ *   topicsLoading?: boolean
+ *   topicsError?: string | null
+ *   requireGrade?: boolean
  * }} props
  */
 export function CurriculumTopicSelect({
@@ -38,12 +45,21 @@ export function CurriculumTopicSelect({
   id = 'curriculum-topic',
   allowFreeFormWhenEmpty = false,
   selectClassName = 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm',
+  topics: topicsProp,
+  topicsLoading: topicsLoadingProp,
+  topicsError: topicsErrorProp,
+  requireGrade = true,
 }) {
-  const { topics, loading, error } = useCurriculumTopics(subject, gradeOrForm)
+  const injectTopics = Array.isArray(topicsProp)
+  const fetched = useCurriculumTopics(injectTopics ? '' : subject, injectTopics ? '' : gradeOrForm)
+  const topics = injectTopics ? topicsProp : fetched.topics
+  const loading = injectTopics ? Boolean(topicsLoadingProp) : fetched.loading
+  const error = injectTopics ? topicsErrorProp || null : fetched.error
+
   const hasTopics = topics.length > 0
   const subjectReady = Boolean(String(subject || '').trim())
   const gradeReady = Boolean(String(gradeOrForm || '').trim())
-  const ready = subjectReady && gradeReady
+  const ready = subjectReady && (injectTopics || !requireGrade || gradeReady)
   const disabled = !ready || loading
   const useDropdown = ready && (hasTopics || !allowFreeFormWhenEmpty)
 
@@ -96,13 +112,15 @@ export function CurriculumTopicSelect({
           required={required}
         >
           <option value="">
-            {!ready
-              ? 'Select form and subject first'
-              : loading
-                ? 'Loading syllabus topics…'
-                : hasTopics
-                  ? 'Choose syllabus topic…'
-                  : 'No syllabus topics for this form/subject'}
+            {!subjectReady
+              ? 'Select subject first'
+              : !ready
+                ? 'Select form and subject first'
+                : loading
+                  ? 'Loading syllabus topics…'
+                  : hasTopics
+                    ? 'Choose syllabus topic…'
+                    : 'No syllabus topics for this form/subject'}
           </option>
           {topics.map((t) => (
             <option key={t} value={t}>
@@ -129,8 +147,8 @@ export function CurriculumTopicSelect({
       {error ? <p className="text-xs text-amber-700">{error}</p> : null}
       {ready && hasTopics ? (
         <p className="text-xs text-muted-foreground">
-          Topics come from the CDC / ECZ syllabus for {gradeOrForm}. Free-text topics are not
-          allowed.
+          Topics come from the CDC / ECZ syllabus
+          {gradeOrForm ? ` for ${gradeOrForm}` : ''}. Free-text topics are not allowed.
         </p>
       ) : null}
       {ready && !loading && !hasTopics && !error && !allowFreeFormWhenEmpty ? (

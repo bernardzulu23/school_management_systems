@@ -22,7 +22,7 @@ export function StudyAssistant() {
   const [refs, setRefs] = useState([])
   const [loading, setLoading] = useState(false)
 
-  const { topics, loading: topicsLoading } = useStudentCurriculumTopics(subject)
+  const { topics, loading: topicsLoading, error: topicsError } = useStudentCurriculumTopics(subject)
 
   useEffect(() => {
     setTopicHint('')
@@ -95,25 +95,28 @@ export function StudyAssistant() {
           </p>
         ) : null}
         {subject ? (
-          <select
-            className="w-full rounded-lg border border-royalPurple-border bg-royalPurple-card p-2 text-sm"
-            value={topicHint}
-            onChange={(e) => setTopicHint(e.target.value)}
-            disabled={topicsLoading}
-          >
-            <option value="">
-              {topicsLoading
-                ? 'Loading curriculum topics…'
-                : topics.length
-                  ? 'Curriculum topic (optional)…'
-                  : 'No syllabus topics listed (optional)'}
-            </option>
-            {topics.map((t) => (
-              <option key={t} value={t}>
-                {t}
+          <div className="space-y-1">
+            <select
+              className="w-full rounded-lg border border-royalPurple-border bg-royalPurple-card p-2 text-sm"
+              value={topicHint}
+              onChange={(e) => setTopicHint(e.target.value)}
+              disabled={topicsLoading}
+            >
+              <option value="">
+                {topicsLoading
+                  ? 'Loading curriculum topics…'
+                  : topics.length
+                    ? 'Curriculum topic (optional)…'
+                    : 'No syllabus topics listed (optional)'}
               </option>
-            ))}
-          </select>
+              {topics.map((t) => (
+                <option key={t} value={t}>
+                  {t}
+                </option>
+              ))}
+            </select>
+            {topicsError ? <p className="text-xs text-kpi-fail">{topicsError}</p> : null}
+          </div>
         ) : null}
         <textarea
           className="w-full min-h-[100px] rounded-lg border border-royalPurple-border bg-royalPurple-card p-3 text-sm"

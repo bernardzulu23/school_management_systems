@@ -5,9 +5,10 @@ import { useEffect, useMemo, useState } from 'react'
 import {
   PLAYGROUND_LANGUAGES,
   buildPreviewDocument,
-  isPistonLanguage,
+  isRunnableLanguage,
   monacoLanguageFor,
 } from '@/lib/creative-teaching/playgroundLanguages'
+import { runJavaScriptInBrowser, runPythonInBrowser } from '@/lib/creative-teaching/browserRuntimes'
 
 const PlaygroundEditor = dynamic(() => import('@/components/creative-teaching/PlaygroundEditor'), {
   ssr: false,
@@ -51,12 +52,37 @@ export default function CodePlayground({ embedded = false }) {
   const editorHeight = embedded ? 'min(50vh, 420px)' : 'calc(100vh - 120px)'
 
   const runCode = async () => {
-    if (!isPistonLanguage(lang) || !code.trim()) return
+    if (!isRunnableLanguage(lang) || !code.trim()) return
     setRunning(true)
     setOutput('')
     setError(false)
 
     try {
+      if (lang.runtime === 'sandbox' || lang.id === 'javascript') {
+        const result = await runJavaScriptInBrowser(code)
+        if (result.stderr) {
+          setOutput(result.stderr)
+          setError(true)
+        } else {
+          setOutput(result.stdout || '(No output)')
+          setError(false)
+        }
+        return
+      }
+
+      if (lang.runtime === 'pyodide' || lang.id === 'python') {
+        setOutput('Loading Python runtime (first run may take a few seconds)…')
+        const result = await runPythonInBrowser(code)
+        if (result.stderr) {
+          setOutput([result.stdout, result.stderr].filter(Boolean).join('\n'))
+          setError(true)
+        } else {
+          setOutput(result.stdout || '(No output)')
+          setError(false)
+        }
+        return
+      }
+
       const res = await fetch('/api/code-playground/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -153,7 +179,7 @@ export default function CodePlayground({ embedded = false }) {
         </div>
 
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
-          {isPistonLanguage(lang) ? (
+          {isRunnableLanguage(lang) ? (
             <>
               <button
                 type="button"
@@ -195,7 +221,7 @@ export default function CodePlayground({ embedded = false }) {
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
 
-      {showChallenges && isPistonLanguage(lang) ? (
+      {showChallenges && isRunnableLanguage(lang) ? (
         <div
           style={{ background: '#FFFFFF', borderBottom: '1px solid #111111', padding: '12px 16px' }}
         >
