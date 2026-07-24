@@ -1,34 +1,21 @@
 'use client'
 
 import { useSchool } from '@/lib/context/SchoolContext'
-import { TRIAL_MONTHS } from '@/lib/billing/subscription'
+import { getSubscriptionState, TRIAL_MONTHS } from '@/lib/billing/subscription'
 import { BillingUpgradeLink } from '@/components/billing/BillingUpgradeLink'
 
 function computeState(school) {
-  const plan = String(school?.plan || 'trial')
-    .trim()
-    .toLowerCase()
-  const trialEndsAt = school?.trialEndsAt ? new Date(school.trialEndsAt) : null
-  const planExpiresAt = school?.planExpiresAt ? new Date(school.planExpiresAt) : null
-  const now = new Date()
-  const onTrial = Boolean(trialEndsAt && trialEndsAt.getTime() > now.getTime())
-  const onPaid = Boolean(planExpiresAt && planExpiresAt.getTime() > now.getTime())
-  const isTrialPlan = plan === 'trial'
-  const expiresAt = onPaid ? planExpiresAt : trialEndsAt || planExpiresAt
-  if (!expiresAt) return { show: false }
-
-  const msLeft = expiresAt.getTime() - now.getTime()
-  const daysLeft = Math.ceil(msLeft / (24 * 60 * 60 * 1000))
-  const isExpired = !onTrial && !onPaid && msLeft < 0
-  const inTrialWindow = onTrial && !onPaid
+  if (!school) return { show: false }
+  const sub = getSubscriptionState(school)
+  if (!sub.expiresAt) return { show: false }
 
   return {
-    show: inTrialWindow || isExpired || (isTrialPlan && !isExpired),
-    isTrial: inTrialWindow || isTrialPlan,
-    isExpired,
-    daysLeft,
-    expiresAt,
-    plan,
+    show: sub.onTrial || sub.expired || (sub.isTrialPlan && !sub.expired),
+    isTrial: sub.onTrial || sub.isTrialPlan,
+    isExpired: sub.expired,
+    daysLeft: sub.daysLeft,
+    expiresAt: sub.expiresAt,
+    plan: sub.plan,
   }
 }
 

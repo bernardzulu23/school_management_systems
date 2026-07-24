@@ -79,6 +79,9 @@ export const PATCH = withSecureHandler(async function PATCH(request, { params })
     // feature gates and dashboard layouts unlock (not only trialEndsAt).
     data.plan = 'trial'
     data.active = true
+    // Clear stale paid expiry so AI/plan gates that still inspect planExpiresAt
+    // cannot treat the school as expired after a pilot extension.
+    data.planExpiresAt = null
   }
 
   const nextProvince = body.province !== undefined ? body.province : existing.province

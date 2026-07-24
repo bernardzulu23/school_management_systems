@@ -13,6 +13,7 @@ import {
   resolveOwnershipFeatureId,
   SECONDARY_ONLY_FEATURES,
 } from '@/lib/zambiaSchoolFeatures'
+import { getSubscriptionState } from '@/lib/billing/subscription'
 
 const PRIVATE_OWNERSHIP_FEATURES = new Set([
   'fee-management',
@@ -46,6 +47,8 @@ export const POST = withErrorHandler(async function POST(request) {
       plan: true,
       planExpiresAt: true,
       trialEndsAt: true,
+      createdAt: true,
+      active: true,
       level: true,
       ownershipType: true,
       facialAttendanceEnabled: true,
@@ -80,22 +83,11 @@ export const POST = withErrorHandler(async function POST(request) {
     })
   }
 
-  const now = new Date()
   const plan = String(school.plan || 'trial').toLowerCase()
   const level = String(school.level || 'combined').toLowerCase()
+  const sub = getSubscriptionState(school)
 
-  const onTrial = Boolean(
-    school.trialEndsAt && new Date(school.trialEndsAt).getTime() > now.getTime()
-  )
-  const isTrialExpired =
-    plan === 'trial' && school.trialEndsAt && new Date(school.trialEndsAt).getTime() < now.getTime()
-  const isPlanExpired =
-    !onTrial &&
-    plan !== 'trial' &&
-    school.planExpiresAt &&
-    new Date(school.planExpiresAt).getTime() < now.getTime()
-
-  if (isTrialExpired || isPlanExpired) {
+  if (sub.expired) {
     return NextResponse.json(
       {
         allowed: false,
@@ -103,7 +95,7 @@ export const POST = withErrorHandler(async function POST(request) {
         code: 'PLAN_EXPIRED',
         requiresUpgrade: true,
         billingUrl: '/dashboard/billing',
-        expiryDate: school.planExpiresAt || school.trialEndsAt || null,
+        expiryDate: sub.expiresAt || school.planExpiresAt || school.trialEndsAt || null,
       },
       { status: 402 }
     )

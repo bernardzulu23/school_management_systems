@@ -6,7 +6,7 @@ import { toUserFacingMessage } from '@/lib/utils/errorMessages'
 
 function getTitle(error) {
   const code = String(error?.code || '').toUpperCase()
-  if (code === 'PLAN_EXPIRED') return 'Plan Expired'
+  if (code === 'PLAN_EXPIRED' || code === 'SUBSCRIPTION_EXPIRED') return 'Plan Expired'
   if (code === 'PLAN_UPGRADE_REQUIRED' || code === 'UPGRADE_REQUIRED') return 'Upgrade Required'
   if (code === 'AI_LIMIT_REACHED' || code === 'AI_QUOTA_EXCEEDED') return 'AI Limit Reached'
   return 'Action Required'
