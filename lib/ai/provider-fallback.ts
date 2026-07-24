@@ -12,8 +12,10 @@ const log = logger({ route: 'AI:provider-fallback' })
 
 export const AI_SSE_HEADERS = {
   'Content-Type': 'text/event-stream',
-  'Cache-Control': 'no-cache',
+  'Cache-Control': 'no-cache, no-transform',
   Connection: 'keep-alive',
+  // Prevent nginx/CDN from buffering the whole AI reply until the stream closes.
+  'X-Accel-Buffering': 'no',
 } as const
 
 export type AIChainGenerateOptions = {
@@ -242,20 +244,26 @@ export class AIProviderChain {
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ text: finalText, replace: true })}\n\n`)
             )
-
-            if (options.onComplete) {
-              await options.onComplete(finalText, {
-                provider,
-                model,
-                promptTokens: 0,
-                completionTokens: 0,
-              })
-            }
-
             controller.enqueue(
               encoder.encode(`data: ${JSON.stringify({ generatedBy: provider, model })}\n\n`)
             )
             controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+            // Persist AFTER the client has the full reply. Awaiting DB before [DONE]
+            // caused proxies to buffer/drop the stream — users only saw the answer after refresh.
+            if (options.onComplete) {
+              try {
+                await options.onComplete(finalText, {
+                  provider,
+                  model,
+                  promptTokens: 0,
+                  completionTokens: 0,
+                })
+              } catch (persistErr) {
+                log.warn('chat SSE onComplete failed after stream close', {
+                  message: persistErr instanceof Error ? persistErr.message : String(persistErr),
+                })
+              }
+            }
             controller.close()
             return
           } catch {
@@ -300,19 +308,24 @@ export class AIProviderChain {
             )
           }
 
-          if (options.onComplete) {
-            await options.onComplete(finalText, {
-              provider,
-              model,
-              promptTokens: Number(usage?.inputTokens ?? 0),
-              completionTokens: Number(usage?.outputTokens ?? 0),
-            })
-          }
-
           controller.enqueue(
             encoder.encode(`data: ${JSON.stringify({ generatedBy: provider, model })}\n\n`)
           )
           controller.enqueue(encoder.encode('data: [DONE]\n\n'))
+          if (options.onComplete) {
+            try {
+              await options.onComplete(finalText, {
+                provider,
+                model,
+                promptTokens: Number(usage?.inputTokens ?? 0),
+                completionTokens: Number(usage?.outputTokens ?? 0),
+              })
+            } catch (persistErr) {
+              log.warn('chat SSE onComplete failed after stream close', {
+                message: persistErr instanceof Error ? persistErr.message : String(persistErr),
+              })
+            }
+          }
           controller.close()
         } catch (error) {
           const message =

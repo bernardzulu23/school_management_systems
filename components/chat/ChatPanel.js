@@ -42,13 +42,41 @@ export default function ChatPanel({
   const bottomRef = useRef(null)
   const resubmitBootstrapped = useRef(false)
   const wsRef = useRef(null)
+  const wsSessionRef = useRef(null)
+  const wsLiveRef = useRef(false)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  const mergeSessionMessages = useCallback((loaded) => {
+    if (!Array.isArray(loaded) || !loaded.length) return
+    setMessages((prev) => {
+      const byId = new Map()
+      for (const m of prev) {
+        if (m?.id) byId.set(String(m.id), m)
+      }
+      for (const m of loaded) {
+        if (!m?.id) continue
+        byId.set(String(m.id), m)
+      }
+      // Prefer server order when we have a full snapshot with more items
+      if (loaded.length >= prev.length) return loaded
+      return Array.from(byId.values())
+    })
+  }, [])
+
   const connectHandoffWs = useCallback(async (sid) => {
     if (!sid) return
+    // Keep one socket per session — reconnecting on PENDING→ACTIVE drops broadcasts.
+    if (
+      wsSessionRef.current === sid &&
+      wsRef.current &&
+      (wsRef.current.readyState === WebSocket.OPEN ||
+        wsRef.current.readyState === WebSocket.CONNECTING)
+    ) {
+      return
+    }
     try {
       const res = await fetch('/api/chat/ws-ticket', {
         method: 'POST',
@@ -58,6 +86,7 @@ export default function ChatPanel({
       })
       const data = await res.json().catch(() => ({}))
       if (!res.ok || !data.url) {
+        wsLiveRef.current = false
         setWsLabel(data.code === 'CHAT_DO_NOT_CONFIGURED' ? '' : 'Live relay unavailable')
         return
       }
@@ -68,9 +97,20 @@ export default function ChatPanel({
       }
       const ws = new WebSocket(data.url)
       wsRef.current = ws
-      ws.onopen = () => setWsLabel('Live')
-      ws.onclose = () => setWsLabel('')
-      ws.onerror = () => setWsLabel('Live error')
+      wsSessionRef.current = sid
+      ws.onopen = () => {
+        wsLiveRef.current = true
+        setWsLabel('Live')
+      }
+      ws.onclose = () => {
+        wsLiveRef.current = false
+        if (wsSessionRef.current === sid) wsSessionRef.current = null
+        setWsLabel('')
+      }
+      ws.onerror = () => {
+        wsLiveRef.current = false
+        setWsLabel('Live error')
+      }
       ws.onmessage = (ev) => {
         try {
           const payload = JSON.parse(ev.data)
@@ -113,6 +153,7 @@ export default function ChatPanel({
         }
       }
     } catch {
+      wsLiveRef.current = false
       setWsLabel('')
     }
   }, [])
@@ -137,9 +178,12 @@ export default function ChatPanel({
     }
   }, [mode, sessionId, sessionStatus, connectHandoffWs])
 
-  // Fallback when live relay is unavailable: poll until an admin claims.
+  // HTTP poll fallback whenever WS is not live (covers missing DO config + HUMAN_ACTIVE).
   useEffect(() => {
-    if (mode !== 'generative' || !sessionId || sessionStatus !== 'PENDING_HUMAN') return
+    if (mode !== 'generative' || !sessionId) return
+    if (sessionStatus !== 'PENDING_HUMAN' && sessionStatus !== 'HUMAN_ACTIVE') return
+    if (wsLabel === 'Live') return
+
     let cancelled = false
     const tick = async () => {
       try {
@@ -148,25 +192,25 @@ export default function ChatPanel({
         })
         const data = await res.json().catch(() => ({}))
         if (!res.ok || cancelled) return
-        if (data.session?.status === 'HUMAN_ACTIVE') {
-          setSessionStatus('HUMAN_ACTIVE')
-          if (data.session?.assignedToName) {
-            setAssignedAdminName(String(data.session.assignedToName))
-          }
-          const loaded = Array.isArray(data.messages) ? data.messages : []
-          if (loaded.length) setMessages(loaded)
+        if (data.session?.status && data.session.status !== sessionStatus) {
+          setSessionStatus(data.session.status)
         }
+        if (data.session?.assignedToName) {
+          setAssignedAdminName(String(data.session.assignedToName))
+        }
+        const loaded = Array.isArray(data.messages) ? data.messages : []
+        if (loaded.length) mergeSessionMessages(loaded)
       } catch {
         // ignore poll errors
       }
     }
-    const id = setInterval(tick, 4000)
+    const id = setInterval(tick, 3000)
     void tick()
     return () => {
       cancelled = true
       clearInterval(id)
     }
-  }, [mode, sessionId, sessionStatus])
+  }, [mode, sessionId, sessionStatus, wsLabel, mergeSessionMessages])
 
   // Phase 4 resubmit: reopen originating session; pin HOD comment; pre-fill prompt (do not auto-send).
   useEffect(() => {
@@ -382,7 +426,28 @@ export default function ChatPanel({
           m.map((msg) => (msg.id === assistantId ? { ...msg, content: finalText } : msg))
         )
       } catch (streamErr) {
-        // Never leave a blank assistant bubble: keep partial text or surface the error inline.
+        // Stream may die after the server already persisted the assistant row (proxy buffer).
+        // Hydrate from the session so the user does not need a full page refresh.
+        try {
+          const hydrateRes = await fetch(`/api/chat/sessions/${encodeURIComponent(sid)}`, {
+            credentials: 'include',
+          })
+          const hydrate = await hydrateRes.json().catch(() => ({}))
+          const loaded = Array.isArray(hydrate.messages) ? hydrate.messages : []
+          const lastAssistant = [...loaded].reverse().find((m) => m.role === 'assistant')
+          if (lastAssistant?.content) {
+            setMessages((m) =>
+              m.map((msg) =>
+                msg.id === assistantId
+                  ? { ...msg, id: lastAssistant.id || msg.id, content: lastAssistant.content }
+                  : msg
+              )
+            )
+            return
+          }
+        } catch {
+          // fall through to inline error
+        }
         const errMsg =
           streamErr instanceof Error
             ? streamErr.message

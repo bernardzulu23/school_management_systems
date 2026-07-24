@@ -97,6 +97,60 @@ function SupportQueueContent() {
     void loadSession(selectedId)
   }, [selectedId, loadSession])
 
+  // Auto-connect live relay for claimed HUMAN_ACTIVE sessions (not only after Claim click).
+  useEffect(() => {
+    if (!selectedId || !session) return
+    if (session.status !== 'HUMAN_ACTIVE') return
+    if (wsStatus === 'open' || wsStatus === 'connecting') return
+
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await sessionFetch('/api/chat/ws-ticket', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: selectedId, asAdmin: true }),
+        })
+        const data = await res.json().catch(() => ({}))
+        if (cancelled || !res.ok || !data.url) return
+        connectWs(data.url)
+      } catch {
+        // DO may be unset — HTTP poll below covers it
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [selectedId, session?.status, session?.assignedToId, wsStatus, connectWs])
+
+  // Poll session messages when WS is not open so teacher↔admin chat updates without refresh.
+  useEffect(() => {
+    if (!selectedId || !session) return
+    if (session.status !== 'HUMAN_ACTIVE' && session.status !== 'PENDING_HUMAN') return
+    if (wsStatus === 'open') return
+
+    let cancelled = false
+    const tick = async () => {
+      try {
+        const res = await sessionFetch(
+          `/api/platform/support/sessions/${encodeURIComponent(selectedId)}`,
+          { cache: 'no-store' }
+        )
+        const data = await res.json().catch(() => ({}))
+        if (!res.ok || cancelled) return
+        if (data.session) setSession(data.session)
+        if (Array.isArray(data.messages)) setMessages(data.messages)
+      } catch {
+        // ignore
+      }
+    }
+    const id = setInterval(tick, 3000)
+    return () => {
+      cancelled = true
+      clearInterval(id)
+    }
+  }, [selectedId, session?.status, wsStatus])
+
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
