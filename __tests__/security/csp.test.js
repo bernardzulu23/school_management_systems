@@ -43,10 +43,10 @@ describe('Content-Security-Policy', () => {
     expect(scriptSrc).not.toContain("'unsafe-inline'")
   })
 
-  it('uses nonce instead of unsafe-inline in style-src when nonce is set', () => {
+  it('keeps unsafe-inline in style-src with nonce (React style attributes need it)', () => {
     const styleSrc = styleSrcDirective(csp)
     expect(styleSrc).toContain(`'nonce-${nonce}'`)
-    expect(styleSrc).not.toContain("'unsafe-inline'")
+    expect(styleSrc).toContain("'unsafe-inline'")
   })
 
   it('allows wasm-unsafe-eval in production script-src (dev uses unsafe-eval for HMR)', () => {
@@ -158,7 +158,7 @@ describe('proxy applies security headers to responses', () => {
     expect(res.headers.get('x-frame-options')).toBe('DENY')
   })
 
-  it('login page uses nonce CSP without unsafe-inline', async () => {
+  it('login page uses nonce CSP; scripts stay strict, styles allow unsafe-inline', async () => {
     const req = buildRequest({
       method: 'GET',
       url: 'https://ndakedaysecondaryschool.bluepeacktechnologies.com/login',
@@ -173,7 +173,7 @@ describe('proxy applies security headers to responses', () => {
     expect(csp).toContain('script-src-elem')
     expect(csp).toContain('https://challenges.cloudflare.com')
     expect(scriptSrcDirective(csp)).not.toContain("'unsafe-inline'")
-    expect(styleSrcDirective(csp)).not.toContain("'unsafe-inline'")
+    expect(styleSrcDirective(csp)).toContain("'unsafe-inline'")
   })
 
   it('static logo path carries asset CSP without ACAO wildcard', async () => {

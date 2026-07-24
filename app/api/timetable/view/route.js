@@ -26,6 +26,7 @@ import { loadTeacherColorMap, teacherColorMapToJson } from '@/lib/timetable/teac
 import { getDraftConflictMeta, formatDraftMetaResponse } from '@/lib/timetable/conflictAudit'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
+import { agentDebugLog } from '@/lib/debug/agentLog'
 
 const VIEW_ENTRY_LIMIT = 2000
 
@@ -109,13 +110,43 @@ function daySortKey(day) {
 
 export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!user) {
+    // #region agent log
+    agentDebugLog({
+      hypothesisId: 'B',
+      location: 'api/timetable/view/route.js:auth',
+      message: 'view unauthorized',
+      data: { status: 401 },
+    })
+    // #endregion
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
 
   const schoolId = await resolveSchoolId(req, user)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+  if (!schoolId) {
+    // #region agent log
+    agentDebugLog({
+      hypothesisId: 'B',
+      location: 'api/timetable/view/route.js:school',
+      message: 'view no school',
+      data: { status: 401, userId: String(user.id || '').slice(0, 8) },
+    })
+    // #endregion
+    return NextResponse.json({ error: 'No school' }, { status: 401 })
+  }
 
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
-  if (!typeCheck.allowed) return typeCheck.response
+  if (!typeCheck.allowed) {
+    // #region agent log
+    agentDebugLog({
+      hypothesisId: 'B',
+      location: 'api/timetable/view/route.js:schoolType',
+      message: 'view blocked school type',
+      data: { schoolId: String(schoolId).slice(0, 8) },
+    })
+    // #endregion
+    return typeCheck.response
+  }
 
   const { searchParams } = new URL(req.url)
   const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
@@ -148,6 +179,19 @@ export const GET = withErrorHandler(async function GET(req) {
   if (wantDepartmentScope) {
     const teacherUserIds = await resolveDepartmentTeacherUserIds(prisma, schoolId, user)
     if (!teacherUserIds.length) {
+      // #region agent log
+      agentDebugLog({
+        hypothesisId: 'C',
+        location: 'api/timetable/view/route.js:hodEmpty',
+        message: 'HOD scope has no department teachers',
+        data: {
+          schoolId: String(schoolId).slice(0, 8),
+          role: String(user.role || ''),
+          term,
+          academicYear,
+        },
+      })
+      // #endregion
       return NextResponse.json({
         entries: [],
         assignments: [],
@@ -170,6 +214,20 @@ export const GET = withErrorHandler(async function GET(req) {
       select: { id: true, classId: true },
     })
     if (!studentRow?.classId) {
+      // #region agent log
+      agentDebugLog({
+        hypothesisId: 'C',
+        location: 'api/timetable/view/route.js:studentNoClass',
+        message: 'Student has no classId',
+        data: {
+          schoolId: String(schoolId).slice(0, 8),
+          userId: String(user.id || '').slice(0, 8),
+          hasStudentRow: Boolean(studentRow),
+          term,
+          academicYear,
+        },
+      })
+      // #endregion
       return NextResponse.json({
         entries: [],
         assignments: [],
@@ -308,6 +366,36 @@ export const GET = withErrorHandler(async function GET(req) {
       includeSummary: schoolAdmin,
     })
   }
+
+  // #region agent log
+  agentDebugLog({
+    hypothesisId: 'A,C,E',
+    location: 'api/timetable/view/route.js:response',
+    message: 'view response counts',
+    data: {
+      schoolId: String(schoolId).slice(0, 8),
+      userId: String(user.id || '').slice(0, 8),
+      role: String(user.role || ''),
+      flags: { teacher, student, hod, schoolAdmin, wantDepartmentScope },
+      term,
+      academicYear,
+      status,
+      scopeFilter: {
+        teacherId: where.teacherId
+          ? where.teacherId.in
+            ? { inCount: where.teacherId.in.length }
+            : 'scalar'
+          : null,
+        classId: where.classId ? true : false,
+      },
+      entriesBeforeMap: Array.isArray(entries) ? entries.length : -1,
+      assignmentsAfterMap: Array.isArray(assignments) ? assignments.length : -1,
+      safeAssignments: Array.isArray(safeAssignments) ? safeAssignments.length : -1,
+      timeSlots: Array.isArray(timeSlots) ? timeSlots.length : -1,
+      scopedClassId: Boolean(scopedClassId),
+    },
+  })
+  // #endregion
 
   return NextResponse.json({
     entries,
