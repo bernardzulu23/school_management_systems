@@ -11,6 +11,8 @@ export type EczValidationSourceValue =
   | 'quiz_maker'
   | 'flashcards'
   | 'mock_exam'
+  | 'scheme_mid_term'
+  | 'scheme_end_of_term'
 
 export type WriteEczValidationLogInput = {
   schoolId: string

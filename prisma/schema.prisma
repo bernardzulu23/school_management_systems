@@ -3277,6 +3277,8 @@ enum EczValidationSource {
   quiz_maker
   flashcards
   mock_exam
+  scheme_mid_term
+  scheme_end_of_term
 }
 
 /// Sidecar log for structural/semantic validator output on AI ECZ generation runs.

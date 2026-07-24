@@ -1,3 +1,8 @@
+/**
+ * Promote a validated quiz / scheme paper to an ECZ SBA mid-term or end-of-term test.
+ * Secondary schools only (ECZ SBA path).
+ */
+
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
@@ -13,6 +18,14 @@ import {
 import { generateEczRubricCriteria, criteriaToPrismaCreate } from '@/lib/ecz/ecz-rubric-builder'
 import { requireSecondarySchoolAccess } from '@/lib/subjects/eczAccess'
 import { safeStringId } from '@/lib/security/safeQueryValue'
+
+function normalizeSlot(raw) {
+  const s = String(raw || 'end_of_term')
+    .toLowerCase()
+    .replace(/-/g, '_')
+  if (s === 'mid_term' || s === 'midterm') return 'mid_term'
+  return 'end_of_term'
+}
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -31,6 +44,11 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!eczCheck.ok) return eczCheck.response
 
   const body = await request.json().catch(() => ({}))
+  const slot = normalizeSlot(body.slot)
+  const isMid = slot === 'mid_term'
+  const taskType = isMid ? 'Mid-term test' : 'End of term test'
+  const defaultTitle = isMid ? 'Mid-term Assessment' : 'End of Term Test'
+
   const formLevel = Number(body.formLevel)
   const formCheck = canCreateSBATask(formLevel)
   if (!formCheck.allowed) throw new ApiError(formCheck.reason, 400)
@@ -38,9 +56,13 @@ export const POST = withErrorHandler(async function POST(request) {
   const subjectId = safeStringId(body.subjectId)
   const classId = safeStringId(body.classId)
   const sourceAssessmentId = safeStringId(body.sourceAssessmentId || body.assessmentId)
-  const title = String(body.title || body.quizTitle || 'End of Term Test').trim()
+  const schemeId = safeStringId(body.schemeId)
+  const title = String(body.title || body.quizTitle || defaultTitle).trim()
   const term = Number(body.term)
   const questions = Array.isArray(body.questions) ? body.questions : []
+  const topicKeys = Array.isArray(body.topicKeys)
+    ? body.topicKeys.map((k) => String(k || '').trim()).filter(Boolean)
+    : []
 
   if (!subjectId) throw new ApiError('subjectId is required', 400)
   if (!Number.isFinite(term) || term < 1 || term > 3) {
@@ -56,7 +78,23 @@ export const POST = withErrorHandler(async function POST(request) {
     if (!source) throw new ApiError('Source assessment not found in this school', 404)
   }
 
-  const context = String(body.context || questions[0]?.question || '').trim()
+  if (schemeId) {
+    const scheme = await prisma.schemeOfWork.findFirst({
+      where: { id: schemeId, schoolId },
+      select: { id: true },
+    })
+    if (!scheme) throw new ApiError('Scheme not found in this school', 404)
+  }
+
+  const metaParts = []
+  if (schemeId) metaParts.push(`scheme:${schemeId}`)
+  if (topicKeys.length) metaParts.push(`topics:${topicKeys.slice(0, 12).join('|')}`)
+  metaParts.push(`slot:${slot}`)
+
+  const baseContext = String(body.context || questions[0]?.question || '').trim()
+  const context = metaParts.length
+    ? `${baseContext}\n[${metaParts.join('; ')}]`.trim()
+    : baseContext
   const contextCheck = validateZambianContext(context)
   if (!contextCheck.valid) throw new ApiError(contextCheck.error, 400)
 
@@ -71,9 +109,12 @@ export const POST = withErrorHandler(async function POST(request) {
       component: 'SBA_TASK',
       formLevel,
       title,
-      type: 'End of term test',
+      description: schemeId
+        ? `Scheme-based ${isMid ? 'mid-term' : 'end-of-term'} test (scheme ${schemeId})`
+        : null,
+      type: taskType,
       context,
-      maxMarks: 40,
+      maxMarks: isMid ? 20 : 40,
       createdBy: auth.user.id,
       status: 'DRAFT',
       term,
@@ -85,14 +126,13 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   await prisma.eczRubric.create({
-    ...(schoolId ? {} : {}),
     data: {
       assessmentId: assessment.id,
       criteria: {
         create: criteriaToPrismaCreate(
           generateEczRubricCriteria({
             subjectName: subject.name,
-            taskType: 'End of term test',
+            taskType,
             numCriteria: 4,
             title,
             description: context,
@@ -102,13 +142,13 @@ export const POST = withErrorHandler(async function POST(request) {
     },
   })
 
+  const maxMarks = isMid ? 20 : 40
   await prisma.eczAssessmentItem.createMany({
-    ...(schoolId ? {} : {}),
     data: questions.map((q, idx) => ({
       assessmentId: assessment.id,
       questionNumber: idx + 1,
-      content: String(q.question || q.content || ''),
-      markAllocation: Number(q.marks) || Math.floor(40 / questions.length),
+      content: String(q.question || q.content || q.zambianScenario || ''),
+      markAllocation: Number(q.marks) || Math.floor(maxMarks / questions.length) || 1,
       commandTerm: q.commandTerm ? String(q.commandTerm) : null,
       expectedAnswer: q.answer ? String(q.answer) : null,
       markingGuidance: q.explanation ? String(q.explanation) : null,
@@ -120,8 +160,11 @@ export const POST = withErrorHandler(async function POST(request) {
   return NextResponse.json(
     {
       success: true,
-      message: 'Quiz promoted to SBA End of Term Test (40 marks)',
+      message: isMid
+        ? 'Quiz promoted to SBA Mid-term Assessment'
+        : 'Quiz promoted to SBA End of Term Test (40 marks)',
       data: assessment,
+      slot,
     },
     { status: 201 }
   )

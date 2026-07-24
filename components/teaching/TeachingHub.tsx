@@ -23,9 +23,10 @@ import {
   CoverageAnalytics,
   type CoverageAnalyticsData,
 } from '@/components/teaching/CoverageAnalytics'
+import { SchemeTestStudio } from '@/components/teaching/SchemeTestStudio'
 import { cn } from '@/lib/utils'
 
-type Tab = 'scheme' | 'progress' | 'analytics'
+type Tab = 'scheme' | 'progress' | 'analytics' | 'tests'
 
 type SchemeOption = {
   id: string
@@ -33,6 +34,7 @@ type SchemeOption = {
   gradeOrForm: string
   term: string
   year: number
+  status?: string
 }
 
 type Props = {
@@ -54,7 +56,12 @@ export function TeachingHub({ teacherId }: Props) {
     if (typeof window === 'undefined') return
     const params = new URLSearchParams(window.location.search)
     const tabParam = String(params.get('tab') || '').toLowerCase()
-    if (tabParam === 'progress' || tabParam === 'analytics' || tabParam === 'scheme') {
+    if (
+      tabParam === 'progress' ||
+      tabParam === 'analytics' ||
+      tabParam === 'scheme' ||
+      tabParam === 'tests'
+    ) {
       setTab(tabParam as Tab)
     }
     const schemeId = String(params.get('schemeId') || '').trim()
@@ -83,12 +90,13 @@ export function TeachingHub({ teacherId }: Props) {
       if (!res.ok) return
       const list = Array.isArray(json.data) ? json.data : []
       setSchemes(
-        list.map((s: SchemeOption) => ({
+        list.map((s: any) => ({
           id: s.id,
           subject: s.subject,
           gradeOrForm: s.gradeOrForm,
           term: s.term,
           year: s.year,
+          status: s.status,
         }))
       )
       setSelectedSchemeId((prev) => prev || list[0]?.id || '')
@@ -201,6 +209,7 @@ export function TeachingHub({ teacherId }: Props) {
     { id: 'scheme', label: 'Scheme & Lessons' },
     { id: 'progress', label: 'Progress' },
     { id: 'analytics', label: 'Analytics' },
+    { id: 'tests', label: 'Mid / EoT tests' },
   ]
 
   return (
@@ -212,13 +221,13 @@ export function TeachingHub({ teacherId }: Props) {
             Teaching Studio
           </h1>
           <p className="mt-2 text-muted-foreground">
-            Unified platform for scheme planning, lesson creation, and progress tracking
+            Unified platform for scheme planning, lesson creation, progress, and term tests
           </p>
         </div>
         <p className="text-xs text-muted-foreground">Teacher · {teacherId.slice(0, 8)}…</p>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 rounded-lg border p-1">
+      <div className="grid grid-cols-2 gap-2 rounded-lg border p-1 sm:grid-cols-4">
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -461,6 +470,15 @@ export function TeachingHub({ teacherId }: Props) {
 
       {tab === 'analytics' && (
         <CoverageAnalytics analytics={analytics} loading={analyticsLoading} />
+      )}
+
+      {tab === 'tests' && (
+        <SchemeTestStudio
+          schemes={schemes}
+          selectedSchemeId={selectedSchemeId}
+          onSchemeChange={setSelectedSchemeId}
+          onRefreshSchemes={loadSchemes}
+        />
       )}
     </div>
   )
