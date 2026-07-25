@@ -1,0 +1,140 @@
+{
+  "subject": "Mathematics",
+  "level": "O-LEVEL",
+  "sourceDocument": {
+    "publisher": "Curriculum Development Centre",
+    "year": 2013,
+    "isbn": "978-9982-00-000-0"
+  },
+  "timeAllocation": {
+    "periodsPerWeek": 6,
+    "minutesPerPeriod": 40
+  },
+  "assessmentPhilosophy": {
+    "structureKnown": false
+  },
+  "domains": [
+    "Numbers & Calculations",
+    "Algebra",
+    "Geometry",
+    "Computers",
+    "Measures",
+    "Probability & Statistics",
+    "Relations"
+  ],
+  "gradeContent": [
+    {
+      "grade": 10,
+      "generalOutcomes": ["Apply number concepts to solve problems in Zambian contexts"],
+      "keyCompetences": ["Critical thinking", "Numeracy"],
+      "topics": [
+        {
+          "topicId": "10.1",
+          "topicName": "SETS",
+          "domain": "Numbers & Calculations",
+          "subtopics": [
+            {
+              "subtopicId": "10.1.1",
+              "subtopicName": "Set notation and operations",
+              "specificOutcomes": [
+                {
+                  "outcomeId": "10.1.1.1",
+                  "statement": "Describe a set using listing and set-builder notation",
+                  "knowledge": ["Set symbols", "Universe", "Complement"],
+                  "skills": ["List members of a set", "Find intersections and unions"],
+                  "values": ["Accuracy", "Logical reasoning"]
+                },
+                {
+                  "outcomeId": "10.1.1.2",
+                  "statement": "Illustrate sets using Venn diagrams",
+                  "knowledge": ["Venn diagrams", "Overlapping sets"],
+                  "skills": ["Draw and interpret Venn diagrams"],
+                  "values": ["Clarity of presentation"]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "topicId": "10.2",
+          "topicName": "NUMBER BASES",
+          "domain": "Numbers & Calculations",
+          "subtopics": [
+            {
+              "subtopicId": "10.2.1",
+              "subtopicName": "Conversion between bases",
+              "specificOutcomes": [
+                {
+                  "outcomeId": "10.2.1.1",
+                  "statement": "Convert numbers between base 10 and other bases",
+                  "knowledge": ["Place value", "Binary", "Base 5"],
+                  "skills": ["Convert to and from base 10"],
+                  "values": ["Persistence"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": 11,
+      "topics": [
+        {
+          "topicId": "11.1",
+          "topicName": "QUADRATIC EQUATIONS",
+          "domain": "Algebra",
+          "subtopics": [
+            {
+              "subtopicId": "11.1.1",
+              "subtopicName": "Solving quadratics",
+              "specificOutcomes": [
+                {
+                  "outcomeId": "11.1.1.1",
+                  "statement": "Solve quadratic equations by factorisation and formula",
+                  "knowledge": ["Discriminant", "Factorisation"],
+                  "skills": ["Apply quadratic formula"],
+                  "values": ["Precision"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "grade": 12,
+      "topics": [
+        {
+          "topicId": "12.1",
+          "topicName": "STATISTICS",
+          "domain": "Probability & Statistics",
+          "subtopics": [
+            {
+              "subtopicId": "12.1.1",
+              "subtopicName": "Measures of central tendency",
+              "specificOutcomes": [
+                {
+                  "outcomeId": "12.1.1.1",
+                  "statement": "Calculate mean, median and mode for grouped data",
+                  "knowledge": ["Frequency tables", "Class midpoints"],
+                  "skills": ["Compute averages from grouped data"],
+                  "values": ["Honesty in data handling"]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "verticalProgression": [
+    {
+      "domain": "Numbers & Calculations",
+      "topic": "SETS",
+      "grade10Outcomes": ["Describe sets", "Venn diagrams"],
+      "grade11Outcomes": [],
+      "grade12Outcomes": []
+    }
+  ]
+}

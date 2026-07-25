@@ -259,6 +259,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           href: '/dashboard/teacher/teaching-studio',
           icon: Zap,
         },
+        {
+          name: 'Old Syllabus',
+          href: '/dashboard/teacher/old-syllabus',
+          icon: BookOpen,
+        },
         { name: 'AI Assistant', href: '/dashboard/hod/chat', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
         { name: 'Topic Test (RAG)', href: '/dashboard/teacher/topic-test', icon: ClipboardList },
@@ -346,6 +351,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Teaching Studio',
           href: '/dashboard/teacher/teaching-studio',
           icon: Zap,
+        },
+        {
+          name: 'Old Syllabus',
+          href: '/dashboard/teacher/old-syllabus',
+          icon: BookOpen,
         },
         { name: 'AI Assistant', href: '/dashboard/teacher/chat', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },

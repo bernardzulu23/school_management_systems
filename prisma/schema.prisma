@@ -4346,3 +4346,75 @@ model LessonPlanSubmission {
   @@index([teacherId])
   @@index([sessionId])
 }
+
+// ─── Old Syllabus (O-Level Grades 10–12) — isolated from CBC corpus ─────────
+
+enum SyllabusVersion {
+  OLD_SYLLABUS
+  CBC
+}
+
+/// National cohort rollout: which syllabus is active for SS1/SS2/SS3 in a given academic year.
+/// Seeded programmatically from year >= 2026 + n (SS1→2027, SS2→2028, SS3→2029).
+model CurriculumRollout {
+  id              String          @id @default(cuid())
+  canonicalLevel  String // "SS1" | "SS2" | "SS3"
+  academicYear    Int
+  displayLabel    String // "Grade 10" pre-2029, "Form 1" from 2029
+  syllabusVersion SyllabusVersion
+  effectiveFrom   DateTime
+  effectiveTo     DateTime?
+  notes           String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([canonicalLevel, academicYear])
+  @@index([canonicalLevel, academicYear])
+}
+
+/// Ingested pre-CBC O-Level syllabus document (Topic → Sub-topic → Outcome with KSV triad).
+model OldSyllabusDocument {
+  id               String   @id @default(cuid())
+  subject          String
+  level            String   @default("O-LEVEL")
+  sourcePublisher  String?
+  sourceYear       Int?
+  sourceIsbn       String?
+  timeAllocation   Json? // { periodsPerWeek, minutesPerPeriod }
+  domains          String[] // fixed domain enum values as strings
+  contentJson      Json // full gradeContent + verticalProgression tree
+  validationStatus String   @default("PENDING") // PENDING | VALID | INVALID
+  validationErrors Json?
+  ingestedAt       DateTime @default(now())
+  ingestedFilename String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([subject, level])
+  @@index([validationStatus])
+}
+
+/// Past-paper assessment structure for old syllabus (not inline in the syllabus PDF).
+model PastPaper {
+  id                   String          @id @default(cuid())
+  syllabusVersion      SyllabusVersion
+  subject              String
+  examBoard            String          @default("ECZ")
+  paperCode            String // e.g. "4024"
+  paperNumber          Int // 1 or 2
+  year                 Int
+  totalMarks           Int
+  durationMinutes      Int
+  calculatorAllowed    Boolean
+  formulaSheetProvided Boolean         @default(false)
+  roundingRule         String?
+  structureJson        Json // sections[] + topicCoverage[]
+  validationStatus     String          @default("PENDING")
+  ingestedAt           DateTime        @default(now())
+  ingestedFilename     String
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
+
+  @@index([subject, syllabusVersion, paperNumber])
+  @@index([validationStatus])
+}

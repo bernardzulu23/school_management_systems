@@ -1,0 +1,125 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OldSyllabusDocument",
+  "type": "object",
+  "required": ["subject", "level", "domains", "gradeContent"],
+  "properties": {
+    "subject": { "type": "string", "minLength": 1 },
+    "level": { "type": "string", "const": "O-LEVEL" },
+    "sourceDocument": {
+      "type": "object",
+      "properties": {
+        "publisher": { "type": "string" },
+        "year": { "type": "integer" },
+        "isbn": { "type": "string" }
+      }
+    },
+    "timeAllocation": {
+      "type": "object",
+      "properties": {
+        "periodsPerWeek": { "type": "integer", "minimum": 1 },
+        "minutesPerPeriod": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "assessmentPhilosophy": {
+      "type": "object",
+      "properties": {
+        "structureKnown": { "type": "boolean", "const": false }
+      },
+      "required": ["structureKnown"]
+    },
+    "domains": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Numbers & Calculations",
+          "Algebra",
+          "Geometry",
+          "Computers",
+          "Measures",
+          "Probability & Statistics",
+          "Relations"
+        ]
+      },
+      "minItems": 1
+    },
+    "gradeContent": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["grade", "topics"],
+        "properties": {
+          "grade": { "type": "integer", "enum": [10, 11, 12] },
+          "generalOutcomes": { "type": "array", "items": { "type": "string" } },
+          "keyCompetences": { "type": "array", "items": { "type": "string" } },
+          "topics": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["topicId", "topicName", "domain", "subtopics"],
+              "properties": {
+                "topicId": { "type": "string", "pattern": "^\\d{2}\\.\\d+$" },
+                "topicName": { "type": "string" },
+                "domain": {
+                  "type": "string",
+                  "enum": [
+                    "Numbers & Calculations",
+                    "Algebra",
+                    "Geometry",
+                    "Computers",
+                    "Measures",
+                    "Probability & Statistics",
+                    "Relations"
+                  ]
+                },
+                "subtopics": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "required": ["subtopicId", "subtopicName", "specificOutcomes"],
+                    "properties": {
+                      "subtopicId": { "type": "string" },
+                      "subtopicName": { "type": "string" },
+                      "specificOutcomes": {
+                        "type": "array",
+                        "minItems": 1,
+                        "items": {
+                          "type": "object",
+                          "required": ["outcomeId", "statement", "knowledge", "skills", "values"],
+                          "properties": {
+                            "outcomeId": { "type": "string" },
+                            "statement": { "type": "string", "minLength": 3 },
+                            "knowledge": { "type": "array", "items": { "type": "string" } },
+                            "skills": { "type": "array", "items": { "type": "string" } },
+                            "values": { "type": "array", "items": { "type": "string" } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "verticalProgression": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "domain": { "type": "string" },
+          "topic": { "type": "string" },
+          "grade10Outcomes": { "type": "array" },
+          "grade11Outcomes": { "type": "array" },
+          "grade12Outcomes": { "type": "array" }
+        }
+      }
+    }
+  }
+}
