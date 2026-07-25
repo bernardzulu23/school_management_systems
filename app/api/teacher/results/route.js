@@ -65,9 +65,6 @@ export const GET = withErrorHandler(async function GET(request) {
   const yearRaw = safeQueryString(searchParams.get('year'), { maxLength: 16 })
   const resultTypeRaw = safeQueryString(searchParams.get('resultType'), { maxLength: 64 })
   const resultTypeFilter = resultTypeRaw ? normalizeResultType(resultTypeRaw) : null
-  const scope = (safeQueryString(searchParams.get('scope'), { defaultValue: '' }) || '')
-    .trim()
-    .toLowerCase()
 
   await assertSecondaryGradingForContext(schoolId, {
     classId: classId || '',
@@ -222,9 +219,9 @@ export const GET = withErrorHandler(async function GET(request) {
       ...(year ? { year } : {}),
       ...(resultTypeFilter ? { resultType: resultTypeFilter } : {}),
       ...(Array.isArray(rosterStudentIds) ? { studentId: { in: rosterStudentIds } } : {}),
-      ...(isTeacher && scope !== 'all' && !resolvedClassId
-        ? { enteredByUserId: auth.user.id }
-        : {}),
+      // Teachers without a class+subject filter only see results they entered.
+      // Never honor scope=all for pure teachers (prevents school-wide grade leakage).
+      ...(isTeacher && !resolvedClassId ? { enteredByUserId: auth.user.id } : {}),
     },
     orderBy: { updatedAt: 'desc' },
   })

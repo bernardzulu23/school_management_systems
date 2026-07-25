@@ -144,11 +144,23 @@ const nextConfig = {
     const marketingCacheHeaders = [{ key: 'Cache-Control', value: marketingCacheControl }]
 
     const privateCacheHeaders = [
-      { key: 'Cache-Control', value: 'private, no-store' },
+      { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
       { key: 'Pragma', value: 'no-cache' },
+      { key: 'Surrogate-Control', value: 'no-store' },
+      { key: 'Vary', value: 'Cookie, Authorization' },
     ]
 
     return [
+      // WCD Fix 5: catch-all no-store for HTML/page routes FIRST so later
+      // static/marketing rules can override Cache-Control for public assets.
+      {
+        source: '/((?!_next/static|_next/image|icons|Assets|favicon).*)',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Surrogate-Control', value: 'no-store' },
+          { key: 'Vary', value: 'Cookie, Authorization' },
+        ],
+      },
       {
         source: '/:path*',
         headers: securityHeaders,
@@ -182,14 +194,20 @@ const nextConfig = {
         headers: privateCacheHeaders,
       },
       {
+        source: '/onboarding/:path*',
+        headers: privateCacheHeaders,
+      },
+      {
         // API responses must never be cached by browsers/proxies — they carry
         // per-user, per-tenant data. (Route handlers also set no-store, this is
         // defence-in-depth at the edge.)
         source: '/api/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, max-age=0' },
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
           { key: 'Pragma', value: 'no-cache' },
+          { key: 'Surrogate-Control', value: 'no-store' },
           { key: 'Expires', value: '0' },
+          { key: 'Vary', value: 'Cookie, Authorization' },
         ],
       },
     ]

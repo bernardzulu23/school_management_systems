@@ -26,8 +26,6 @@ export const GET = withSecureHandler(async function GET(request) {
     select: {
       id: true,
       name: true,
-      phone: true,
-      email: true,
       subdomain: true,
       logo_url: true,
       active: true,
@@ -38,16 +36,16 @@ export const GET = withSecureHandler(async function GET(request) {
       schoolType: true,
       ownershipType: true,
       enabledLocalLanguages: true,
-      enrollmentCode: true,
-      ownerUserId: true,
-      // Add other fields as needed for branding
+      // Public branding only — never expose enrollmentCode, ownerUserId, email, phone.
     },
   })
 
   return NextResponse.json({
-    school: {
-      ...school,
-      subscription: getSubscriptionState(school),
-    },
+    school: school
+      ? {
+          ...school,
+          subscription: getSubscriptionState(school),
+        }
+      : null,
   })
 })

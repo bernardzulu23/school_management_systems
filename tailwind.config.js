@@ -87,6 +87,8 @@ module.exports = {
           text1: 'var(--rp-text1)',
           text2: 'var(--rp-text2)',
           text3: 'var(--rp-text3)',
+          onDeep: 'var(--rp-on-deep)',
+          onDeepMuted: 'var(--rp-on-deep-muted)',
           accent: 'var(--rp-accent)',
           accentBg: 'var(--rp-accentbg)',
           accentTx: 'var(--rp-accenttx)',

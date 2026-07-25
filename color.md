@@ -269,15 +269,16 @@ For changes, prefer adding tokens to `@theme` in `index.css` and replacing `bg-[
 
 The **ZSMS Teacher** app (Expo / React Native — Android APK, iOS, tablets) uses the **same brutalist palette** as the web dashboard. There is no separate purple or slate theme on mobile.
 
-| Source of truth        | Path                                                             | Consumers                                    |
-| ---------------------- | ---------------------------------------------------------------- | -------------------------------------------- |
-| CSS variables          | `app/globals.css` (`:root`)                                      | Next.js web, PWA installed on desktop        |
-| Tailwind tokens        | `tailwind.config.js` (`paper`, `ink`, `accent`, `royalPurple.*`) | Dashboard components                         |
-| JS palette (canonical) | `lib/theme/zsmsPalette.js`                                       | Web inline styles, shared exports            |
-| Web re-export          | `lib/mobile/theme.js`                                            | Docs, scripts                                |
-| Mobile copy            | `zsms-mobile/src/theme/colors.ts`                                | React Native screens (`src/theme/styles.ts`) |
+| Source of truth        | Path                                                             | Consumers                                                       |
+| ---------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------- |
+| CSS variables          | `app/globals.css` (`:root`)                                      | Next.js web, PWA installed on desktop                           |
+| Tailwind tokens        | `tailwind.config.js` (`paper`, `ink`, `accent`, `royalPurple.*`) | Dashboard components                                            |
+| JS palette (canonical) | `lib/theme/zsmsPalette.js`                                       | Web inline styles, shared exports                               |
+| Web re-export          | `lib/mobile/theme.js`                                            | Docs, scripts                                                   |
+| Mobile copy            | `zsms-mobile/src/theme/colors.ts`                                | React Native screens (`src/theme/styles.ts`)                    |
+| Desktop shell CSS      | `zsms-desktop/src/index.css`                                     | Uses `globals.css` CSS variables only — no blue/slate overrides |
 
-**When changing colors:** edit `app/globals.css` and `lib/theme/zsmsPalette.js`, then sync `zsms-mobile/src/theme/colors.ts` (same keys).
+**When changing colors:** edit `app/globals.css` and `lib/theme/zsmsPalette.js`, then sync `zsms-mobile/src/theme/colors.ts` (same keys) and keep desktop `index.css` on `var(--…)` tokens from `globals.css`.
 
 ### Core tokens (web + desktop companion)
 
@@ -290,8 +291,9 @@ The **ZSMS Teacher** app (Expo / React Native — Android APK, iOS, tablets) use
 | `white` / `card`          | `#FFFFFF`   | Cards, inputs        | Card fill, input bg           |
 | `cardAlt`                 | `#F5F2EB`   | Alt rows, pills      | —                             |
 | `muted` / `textSecondary` | `#666666`   | Secondary copy       | `subtitle`                    |
-| `navBg`                   | `#1A1A1A`   | Sidebar (web)        | Dark header blocks            |
+| `navBg`                   | `#1A1A1A`   | Sidebar (web)        | Tab bar / dark headers        |
 | `navActiveBg`             | `#111111`   | Active nav item      | Tab bar active pill           |
+| `navInactiveText`         | `#A8A7A2`   | Muted on dark nav    | Inactive tab labels           |
 | `success` / `present`     | `#1A6B6A`   | KPI pass, attendance | Present chip                  |
 | `danger` / `absent`       | `#FF3B00`   | KPI fail, alerts     | Absent chip                   |
 | `warn` / `late`           | `#C99A2E`   | Pending, late        | Late chip                     |

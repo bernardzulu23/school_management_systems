@@ -11,11 +11,12 @@ import { ZsmsTheme } from '@/theme/colors'
 import type { RosterStudent } from '@/types'
 
 export default function LessonAttendanceSessionScreen() {
-  const { classId, subjectId, className, subjectName } = useLocalSearchParams<{
+  const { classId, subjectId, className, subjectName, periodLabel } = useLocalSearchParams<{
     classId: string
     subjectId: string
     className?: string
     subjectName?: string
+    periodLabel?: string
   }>()
   const {
     draft,
@@ -41,9 +42,10 @@ export default function LessonAttendanceSessionScreen() {
         subjectId,
         className: className || '',
         subjectName: subjectName || '',
+        periodLabel: periodLabel || 'Period 1',
       })
     }
-  }, [classId, subjectId, className, subjectName, startSession])
+  }, [classId, subjectId, className, subjectName, periodLabel, startSession])
 
   const rows = useMemo(() => {
     if (!draft) return []
@@ -113,7 +115,8 @@ export default function LessonAttendanceSessionScreen() {
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>{draft?.className || className || 'Class'}</Text>
       <Text style={globalStyles.subtitle}>
-        {draft?.subjectName || subjectName || 'Subject'} · lesson session
+        {draft?.subjectName || subjectName || 'Subject'}
+        {periodLabel ? ` · ${periodLabel}` : ''} · lesson session
       </Text>
       <Text style={{ color: ZsmsTheme.textMuted, marginBottom: 8, fontSize: 13 }}>
         Manual Present / Late is always available for every pupil (required when there is no

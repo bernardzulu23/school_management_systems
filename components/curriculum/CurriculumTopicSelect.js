@@ -17,6 +17,8 @@ import { useCurriculumTopics } from '@/hooks/useCurriculumTopics'
  * Pass `topics` / `topicsLoading` / `topicsError` to inject a preloaded list (e.g. student
  * `/api/student/curriculum-topics`) and skip the internal teacher curriculum-topics fetch.
  *
+ * Pass `parentTopic` to load subtopics under a selected parent (lesson planner sub-topic).
+ *
  * @param {{
  *   subject: string
  *   gradeOrForm: string
@@ -32,6 +34,8 @@ import { useCurriculumTopics } from '@/hooks/useCurriculumTopics'
  *   topicsLoading?: boolean
  *   topicsError?: string | null
  *   requireGrade?: boolean
+ *   parentTopic?: string
+ *   requireParentTopic?: boolean
  * }} props
  */
 export function CurriculumTopicSelect({
@@ -49,21 +53,36 @@ export function CurriculumTopicSelect({
   topicsLoading: topicsLoadingProp,
   topicsError: topicsErrorProp,
   requireGrade = true,
+  parentTopic,
+  requireParentTopic = false,
 }) {
   const injectTopics = Array.isArray(topicsProp)
-  const fetched = useCurriculumTopics(injectTopics ? '' : subject, injectTopics ? '' : gradeOrForm)
-  const topics = injectTopics ? topicsProp : fetched.topics
-  const loading = injectTopics ? Boolean(topicsLoadingProp) : fetched.loading
+  const parent = String(parentTopic || '').trim()
+  const subtopicMode = requireParentTopic || parentTopic !== undefined
+  const skipFetch = injectTopics || (subtopicMode && !parent)
+
+  const fetched = useCurriculumTopics(
+    skipFetch ? '' : subject,
+    skipFetch ? '' : gradeOrForm,
+    skipFetch ? {} : { parentTopic: subtopicMode ? parent : '' }
+  )
+  const topics = injectTopics ? topicsProp : skipFetch && subtopicMode ? [] : fetched.topics
+  const loading = injectTopics
+    ? Boolean(topicsLoadingProp)
+    : skipFetch && subtopicMode
+      ? false
+      : fetched.loading
   const error = injectTopics ? topicsErrorProp || null : fetched.error
 
   const hasTopics = topics.length > 0
   const subjectReady = Boolean(String(subject || '').trim())
   const gradeReady = Boolean(String(gradeOrForm || '').trim())
-  const ready = subjectReady && (injectTopics || !requireGrade || gradeReady)
+  const parentReady = !subtopicMode || Boolean(parent)
+  const ready = subjectReady && (injectTopics || !requireGrade || gradeReady) && parentReady
   const disabled = !ready || loading
   const useDropdown = ready && (hasTopics || !allowFreeFormWhenEmpty)
 
-  // Clear topic when form/subject not ready.
+  // Clear value when form/subject/parent not ready.
   useEffect(() => {
     if (!ready && String(value || '').trim()) onChange('')
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -96,6 +115,24 @@ export function CurriculumTopicSelect({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [topics, hasTopics, loading, value, ready, allowFreeFormWhenEmpty])
 
+  const placeholder = !subjectReady
+    ? 'Select subject first'
+    : subtopicMode && !parent
+      ? 'Select a topic first'
+      : !ready
+        ? 'Select form and subject first'
+        : loading
+          ? subtopicMode
+            ? 'Loading syllabus sub-topics…'
+            : 'Loading syllabus topics…'
+          : hasTopics
+            ? subtopicMode
+              ? 'Choose syllabus sub-topic…'
+              : 'Choose syllabus topic…'
+            : subtopicMode
+              ? 'No sub-topics for this topic'
+              : 'No syllabus topics for this form/subject'
+
   return (
     <div className={`space-y-2 ${className}`.trim()}>
       <Label htmlFor={id}>
@@ -111,17 +148,7 @@ export function CurriculumTopicSelect({
           disabled={disabled || (!hasTopics && !loading)}
           required={required}
         >
-          <option value="">
-            {!subjectReady
-              ? 'Select subject first'
-              : !ready
-                ? 'Select form and subject first'
-                : loading
-                  ? 'Loading syllabus topics…'
-                  : hasTopics
-                    ? 'Choose syllabus topic…'
-                    : 'No syllabus topics for this form/subject'}
-          </option>
+          <option value="">{placeholder}</option>
           {topics.map((t) => (
             <option key={t} value={t}>
               {t}
@@ -139,13 +166,13 @@ export function CurriculumTopicSelect({
             loading
               ? 'Loading curriculum topics…'
               : !ready
-                ? 'Select form and subject first'
+                ? placeholder
                 : 'No syllabus topics found — enter a topic'
           }
         />
       )}
       {error ? <p className="text-xs text-amber-700">{error}</p> : null}
-      {ready && hasTopics ? (
+      {ready && hasTopics && !subtopicMode ? (
         <p className="text-xs text-muted-foreground">
           Topics come from the CDC / ECZ syllabus
           {gradeOrForm ? ` for ${gradeOrForm}` : ''}. Free-text topics are not allowed.
@@ -153,8 +180,9 @@ export function CurriculumTopicSelect({
       ) : null}
       {ready && !loading && !hasTopics && !error && !allowFreeFormWhenEmpty ? (
         <p className="text-xs text-amber-700">
-          No syllabus topics are available for this subject and form. Add curriculum data or pick
-          another subject/form.
+          {subtopicMode
+            ? 'No syllabus sub-topics are listed for this topic (you can leave this blank).'
+            : 'No syllabus topics are available for this subject and form. Add curriculum data or pick another subject/form.'}
         </p>
       ) : null}
     </div>

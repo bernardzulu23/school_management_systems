@@ -11,14 +11,15 @@ export default function TabsLayout() {
         tabBarStyle: {
           backgroundColor: ZsmsTheme.navBg,
           borderTopWidth: 2,
-          borderTopColor: ZsmsTheme.border,
+          borderTopColor: ZsmsTheme.ink,
         },
-        tabBarActiveTintColor: ZsmsTheme.navActiveText,
+        tabBarActiveTintColor: ZsmsTheme.accent,
         tabBarActiveBackgroundColor: ZsmsTheme.navActiveBg,
         tabBarInactiveTintColor: ZsmsTheme.navInactiveText,
         headerStyle: { backgroundColor: ZsmsTheme.paper },
         headerTintColor: ZsmsTheme.ink,
         headerTitleStyle: { fontWeight: '800' },
+        headerShadowVisible: false,
       }}
     >
       <Tabs.Screen name="index" options={{ title: 'Home', tabBarLabel: 'Home' }} />

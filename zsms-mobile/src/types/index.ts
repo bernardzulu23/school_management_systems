@@ -79,7 +79,11 @@ export interface AttendanceRecord {
 
 export interface AttendanceBatch {
   date: string
+  /** Required for /api/attendance parity with web + desktop (session sync + access checks). */
+  classId?: string
+  subjectId?: string
   records: AttendanceRecord[]
+  source?: string
 }
 
 export interface SbaTask {

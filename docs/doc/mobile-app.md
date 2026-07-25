@@ -348,13 +348,17 @@ zsms-mobile/
 
 ### 9.6 Offline sync
 
-| Function                     | Description                 |
-| ---------------------------- | --------------------------- |
-| `enqueueAttendance(payload)` | SQLite / AsyncStorage queue |
-| `enqueueScore(payload)`      | Queue                       |
-| `flushOfflineQueue()`        | `POST /api/mobile/sync`     |
-| `getPendingCount()`          | Badge on tab                |
-| `retryFailedItems()`         | Exponential backoff         |
+| Function                     | Description                                                                     |
+| ---------------------------- | ------------------------------------------------------------------------------- |
+| `enqueueAttendance(payload)` | AsyncStorage queue (`classId` + records)                                        |
+| `enqueueScore(payload)`      | Queue                                                                           |
+| `enqueueLessonSession(...)`  | Queue lesson marks / close                                                      |
+| `flushOfflineQueue()`        | Daily attendance → `POST /api/attendance`; scores/sessions → `/api/mobile/sync` |
+| `useAutoSync()`              | 30s timer + AppState foreground flush (aligned with web/desktop)                |
+| `getPendingCount()`          | Badge on tab                                                                    |
+| `retryFailedItems()`         | Exponential backoff                                                             |
+
+Partial success clears only synced items; failed items remain for retry.
 
 **Queue item shape:**
 
@@ -362,6 +366,7 @@ zsms-mobile/
 type OfflineQueueItem =
   | { type: 'attendance'; id: string; createdAt: string; payload: AttendanceBatch }
   | { type: 'score'; id: string; createdAt: string; payload: SbaScorePayload }
+  | { type: 'lessonSession'; id: string; createdAt: string; payload: LessonSessionSyncPayload }
 ```
 
 ---

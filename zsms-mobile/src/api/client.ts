@@ -12,7 +12,10 @@ async function refreshAccessToken(): Promise<string | null> {
     if (!refreshToken) return null
     const res = await fetch(`${BASE}/api/mobile/auth/refresh`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Client-Type': 'mobile',
+      },
       body: JSON.stringify({ refreshToken }),
     })
     const data = await res.json().catch(() => ({}))
@@ -51,12 +54,24 @@ export async function api<T>(
   const subdomain = options.subdomain ?? (await getSubdomain())
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
+    'X-Client-Type': 'mobile',
+    'Cache-Control': 'no-store',
+    Pragma: 'no-cache',
     ...(options.headers as Record<string, string>),
   }
   if (token) headers.Authorization = `Bearer ${token}`
   if (subdomain) headers['x-school-subdomain'] = subdomain
 
-  const res = await fetch(`${BASE}${path}`, { ...options, headers })
+  // Reject client-side WCD bait paths (server also enforces).
+  if (/[;]|%2e|%2f|%23|%3f|%00/i.test(path)) {
+    throw new ApiError('Bad Request', 400, { code: 'INVALID_PATH' })
+  }
+
+  const res = await fetch(`${BASE}${path}`, {
+    ...options,
+    headers,
+    cache: 'no-store',
+  })
   const data = await res.json().catch(() => ({}))
 
   if (res.status === 401 && !options.skipAuth && !options.retry) {

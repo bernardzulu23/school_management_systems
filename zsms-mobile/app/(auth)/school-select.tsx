@@ -4,6 +4,7 @@ import { router } from 'expo-router'
 import { searchSchools, validateSubdomain } from '@/api/schools'
 import { BrutalButton } from '@/components/BrutalButton'
 import { setSchoolContext, getSubdomain } from '@/storage/secure'
+import { normalizeSchoolSubdomain } from '@/lib/normalizeSchoolSubdomain'
 import { globalStyles } from '@/theme/styles'
 import type { SchoolSummary } from '@/types'
 
@@ -18,7 +19,14 @@ export default function SchoolSelectScreen() {
     setError(null)
     setLoading(true)
     try {
-      const school = await validateSubdomain(subdomain)
+      const slug = normalizeSchoolSubdomain(subdomain)
+      if (!slug || slug.length < 2) {
+        setError(
+          'Enter the school subdomain only (e.g. ndakedaysecondaryschool), not the full URL.'
+        )
+        return
+      }
+      const school = await validateSubdomain(slug)
       await setSchoolContext(school.subdomain, school.name, school.logoUrl ?? null)
       router.push({ pathname: '/(auth)/login', params: { subdomain: school.subdomain } })
     } catch (e) {
@@ -53,14 +61,17 @@ export default function SchoolSelectScreen() {
   return (
     <View style={globalStyles.container}>
       <Text style={globalStyles.title}>Your school</Text>
-      <Text style={globalStyles.subtitle}>Enter the subdomain from your school portal URL.</Text>
+      <Text style={globalStyles.subtitle}>
+        Enter the short subdomain only (e.g. ndakedaysecondaryschool), not the full https:// URL.
+      </Text>
       <Text style={globalStyles.label}>Subdomain</Text>
       <TextInput
         style={globalStyles.input}
-        placeholder="e.g. stmaryschristian"
+        placeholder="e.g. ndakedaysecondaryschool"
         autoCapitalize="none"
         value={subdomain}
         onChangeText={setSubdomain}
+        onBlur={() => setSubdomain(normalizeSchoolSubdomain(subdomain) || subdomain)}
       />
       {error ? <Text style={globalStyles.errorText}>{error}</Text> : null}
       <BrutalButton title="Continue" onPress={onValidate} loading={loading} />

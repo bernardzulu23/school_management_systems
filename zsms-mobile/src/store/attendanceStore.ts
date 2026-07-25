@@ -104,7 +104,13 @@ export const useAttendanceStore = create<AttendanceState>((set, get) => ({
     const draft = get().draft
     if (!draft) return 'queued'
     set({ draft: { ...draft, saving: true, error: null } })
-    const payload = { date: draft.date, records: draft.records }
+    const payload = {
+      date: draft.date,
+      classId: draft.classId,
+      subjectId: draft.subjectId,
+      records: draft.records,
+      source: 'mobile-app',
+    }
     try {
       if (online) {
         await saveAttendance(payload)

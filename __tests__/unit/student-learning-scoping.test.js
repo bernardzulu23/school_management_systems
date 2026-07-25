@@ -22,6 +22,31 @@ describe('listCurriculumTopics / assertCurriculumTopicAllowed', () => {
     expect(topics.every((t) => typeof t === 'string' && t.trim().length > 0)).toBe(true)
   })
 
+  it('returns no topics for primary Grade 5 against secondary CDC corpora', async () => {
+    const topics = await listCurriculumTopics('English Language', 'Grade 5')
+    expect(topics).toEqual([])
+  })
+
+  it('lists English Form 1 topics (flattened CDC subtopics)', async () => {
+    const topics = await listCurriculumTopics('English Language', 'Form 1')
+    expect(topics.length).toBeGreaterThan(5)
+    expect(topics.some((t) => /greet/i.test(t))).toBe(true)
+  })
+
+  it('exposes Chemistry topic → subtopic tree for Form 1', async () => {
+    const { listCurriculumTopicTree, listCurriculumSubtopics } =
+      await import('@/lib/ai/curriculum-context')
+    const tree = await listCurriculumTopicTree('Chemistry', 'Form 1')
+    expect(tree.length).toBeGreaterThan(0)
+    const first = tree[0]
+    expect(first.topic).toBeTruthy()
+    expect(Array.isArray(first.subtopics)).toBe(true)
+    expect(first.subtopics.length).toBeGreaterThan(0)
+
+    const subs = await listCurriculumSubtopics('Chemistry', 'Form 1', first.topic)
+    expect(subs).toEqual(first.subtopics)
+  })
+
   it('accepts an exact curriculum topic and rejects unrelated free-form when corpus exists', async () => {
     const topics = await listCurriculumTopics('Chemistry', 'Form 1')
     expect(topics.length).toBeGreaterThan(0)

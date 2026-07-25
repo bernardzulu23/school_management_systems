@@ -138,7 +138,7 @@ export default function AILessonPlanner() {
   })
 
   const [form, setForm] = useState({
-    grade: 'Grade 5',
+    grade: 'Form 1',
     subject: 'English Language',
     customSubject: '',
     topic: '',
@@ -932,7 +932,7 @@ export default function AILessonPlanner() {
               subject={activeSubject}
               gradeOrForm={form.grade}
               value={form.topic}
-              onChange={(topic) => setForm((p) => ({ ...p, topic }))}
+              onChange={(topic) => setForm((p) => ({ ...p, topic, subTopic: '' }))}
               label="Topic / Lesson Title"
               required
               allowFreeFormWhenEmpty={false}
@@ -945,11 +945,13 @@ export default function AILessonPlanner() {
               id="lesson-subtopic"
               subject={activeSubject}
               gradeOrForm={form.grade}
+              parentTopic={form.topic}
+              requireParentTopic
               value={form.subTopic}
               onChange={(subTopic) => setForm((p) => ({ ...p, subTopic }))}
               label="Sub-Topic (optional)"
               required={false}
-              allowFreeFormWhenEmpty={false}
+              allowFreeFormWhenEmpty
               selectClassName={selectClass}
             />
           </div>

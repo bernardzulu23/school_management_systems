@@ -1,7 +1,7 @@
 # ZSMS System Documentation
 
 **Zambian School Management System (ZSMS)**  
-**Last updated:** 2026-07-23  
+**Last updated:** 2026-07-25  
 **Application version:** 2.1.0 (`package.json`)  
 **Document version:** 1.0
 
@@ -612,16 +612,17 @@ Vercel crons (see `vercel.json`; all require `CRON_SECRET` via `Authorization: B
 
 ## Mobile app (`zsms-mobile/`)
 
-| Item       | Detail                                                                                                                                                          |
-| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Stack      | Expo 56, Expo Router, TypeScript, Zustand                                                                                                                       |
-| Package    | `com.bluepeack.zsms.teacher`                                                                                                                                    |
-| Scope      | Teacher attendance, SBA scores, student ECZ practice, lesson plan cache, push tokens                                                                            |
-| API prefix | `/api/mobile/*` (12 routes)                                                                                                                                     |
-| Auth       | `/api/mobile/auth/login`, `/api/mobile/auth/refresh`                                                                                                            |
-| Build      | EAS (`eas build`) — see `zsms-mobile/docs/EAS_APK_BUILD.md`                                                                                                     |
-| UI theme   | Brutalist palette — `src/theme/colors.ts` synced with `lib/theme/zsmsPalette.js` and [color.md](../color.md) (paper `#F5F2ED`, ink `#111111`, accent `#FF3B00`) |
-| Platforms  | Android APK (primary), iOS, tablet; same colors as web PWA on desktop                                                                                           |
+| Item       | Detail                                                                                                                                                                                                                       |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Stack      | Expo 56, Expo Router, TypeScript, Zustand                                                                                                                                                                                    |
+| Package    | `com.bluepeack.zsms.teacher`                                                                                                                                                                                                 |
+| Scope      | Teacher attendance, SBA scores, lesson plan cache, push tokens; offline queue with 30s auto-sync                                                                                                                             |
+| API prefix | `/api/mobile/*` (12 routes) + shared `/api/attendance` for daily register                                                                                                                                                    |
+| Auth       | `/api/mobile/auth/login`, `/api/mobile/auth/refresh`; clients send `X-Client-Type: mobile`                                                                                                                                   |
+| Sync       | Daily attendance flushes to `POST /api/attendance` (same as web/desktop → parent SMS); scores/lesson sessions via `POST /api/mobile/sync`                                                                                    |
+| Build      | EAS (`eas build`) — see `zsms-mobile/docs/EAS_APK_BUILD.md`                                                                                                                                                                  |
+| UI theme   | Brutalist palette — `src/theme/colors.ts` synced with `lib/theme/zsmsPalette.js` and [color.md](../color.md) (paper `#F5F2ED`, ink `#111111`, accent `#FF3B00`); desktop shell CSS uses the same `app/globals.css` variables |
+| Platforms  | Android APK (primary), iOS, tablet; same colors as web PWA on desktop                                                                                                                                                        |
 
 Web-only workflows (timetable master build, billing, full ECZ submission, bulk SMS) remain on the school web portal. See [mobile-app-scope.md](./mobile-app-scope.md) and [doc/mobile-app.md](./doc/mobile-app.md).
 

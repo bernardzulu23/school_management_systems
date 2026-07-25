@@ -92,6 +92,10 @@
   --rp-dangerTx: #ff8080;
   --rp-muted: rgba(17, 17, 17, 0.06);
 
+  /* Text on dark chrome (nav / deep panels) — never use --rp-text1 here */
+  --rp-on-deep: #f5f2ed;
+  --rp-on-deep-muted: #a8a7a2;
+
   /* ── Page surfaces ── */
   --page-bg: #f5f2ed;
   --surface: #ffffff;
@@ -111,6 +115,70 @@
   --warn-color: #92400e;
   --danger-bg: #fef2f2;
   --danger-color: #b91c1c;
+}
+
+/*
+ * Contrast fix: --rp-deep is dark (#1A1A1A) but --rp-text1 was remapped to ink (#111).
+ * Panels using bg-royalPurple-deep + text-royalPurple-text1 were invisible until selected.
+ * Deep surfaces inherit light text; light nested cards reset back to ink.
+ */
+[class*='bg-royalPurple-deep'] {
+  color: var(--rp-on-deep);
+}
+
+[class*='bg-royalPurple-deep'] .text-royalPurple-text1,
+[class*='bg-royalPurple-deep'].text-royalPurple-text1 {
+  color: var(--rp-on-deep);
+}
+
+[class*='bg-royalPurple-deep'] .text-royalPurple-text2,
+[class*='bg-royalPurple-deep'].text-royalPurple-text2,
+[class*='bg-royalPurple-deep'] .text-royalPurple-text3,
+[class*='bg-royalPurple-deep'].text-royalPurple-text3,
+[class*='bg-royalPurple-deep'] .text-muted,
+[class*='bg-royalPurple-deep'] .muted {
+  color: var(--rp-on-deep-muted);
+}
+
+[class*='bg-royalPurple-deep'] ::placeholder {
+  color: var(--rp-on-deep-muted);
+  opacity: 0.85;
+}
+
+/* Nested light surfaces inside a deep panel keep ink text */
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card2,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-page,
+[class*='bg-royalPurple-deep'] .bg-white,
+[class*='bg-royalPurple-deep'] .bg-paper,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-pill {
+  color: var(--rp-text1);
+}
+
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card .text-royalPurple-text1,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card2 .text-royalPurple-text1,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-page .text-royalPurple-text1,
+[class*='bg-royalPurple-deep'] .bg-white .text-royalPurple-text1,
+[class*='bg-royalPurple-deep'] .bg-paper .text-royalPurple-text1 {
+  color: var(--rp-text1);
+}
+
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card .text-royalPurple-text2,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card2 .text-royalPurple-text2,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-page .text-royalPurple-text2,
+[class*='bg-royalPurple-deep'] .bg-white .text-royalPurple-text2,
+[class*='bg-royalPurple-deep'] .bg-paper .text-royalPurple-text2,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card .text-royalPurple-text3,
+[class*='bg-royalPurple-deep'] .bg-royalPurple-card2 .text-royalPurple-text3 {
+  color: var(--rp-text2);
+}
+
+/* Dark ink chrome */
+.bg-ink,
+.bg-\[\#111111\],
+.bg-\[\#1a1a1a\],
+.bg-\[\#1A1A1A\] {
+  color: var(--rp-on-deep);
 }
 
 /* ── Brutalist scrollbar ── */

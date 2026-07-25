@@ -11,8 +11,13 @@ import {
   SBA_TERM_TEST_MARKS,
 } from '@/lib/ecz/ecz-compliance'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
-import { recordAttendanceMark, closeAttendanceSession } from '@/lib/attendance/sessions'
+import {
+  recordAttendanceMark,
+  closeAttendanceSession,
+  openAttendanceSession,
+} from '@/lib/attendance/sessions'
 import { scheduleParentAttendanceSmsBatch } from '@/lib/attendance/parentNotifications'
+import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 
 const STAFF_ROLES = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
@@ -147,6 +152,33 @@ export const POST = withSecureHandler(async function POST(request) {
         sessionId: null,
         date: new Date(),
       })
+
+      // Align with web/desktop: when classId (+ subject) present, mirror into lesson session.
+      const classId = safeStringId(batch?.classId)
+      let subjectId = safeStringId(batch?.subjectId)
+      if (classId && !subjectId) {
+        const assignment = await prisma.teachingAssignment.findFirst({
+          where: { schoolId, classId, teacher: { userId: auth.user.id } },
+          select: { subjectId: true },
+        })
+        subjectId = assignment?.subjectId || ''
+      }
+      if (classId && subjectId) {
+        try {
+          await syncWebAttendanceToSession({
+            schoolId,
+            teacherUserId: auth.user.id,
+            classId,
+            subjectId,
+            records: validWrites,
+            openAttendanceSession,
+            recordAttendanceMark,
+          })
+        } catch (err) {
+          console.warn('Mobile sync attendance session mirror failed:', err?.message || err)
+        }
+      }
+
       attendanceResult.synced += 1
     } catch (e) {
       attendanceResult.failed.push({ index: i, error: String(e?.message || e) })

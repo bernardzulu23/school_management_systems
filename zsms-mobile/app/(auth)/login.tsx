@@ -4,6 +4,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { BrutalButton } from '@/components/BrutalButton'
 import { useAuthStore } from '@/store/authStore'
 import { getSubdomain } from '@/storage/secure'
+import { normalizeSchoolSubdomain } from '@/lib/normalizeSchoolSubdomain'
 import { globalStyles } from '@/theme/styles'
 import { ApiError } from '@/api/client'
 
@@ -24,7 +25,12 @@ export default function LoginScreen() {
     setError(null)
     setLoading(true)
     try {
-      await login({ email: email.trim(), password, subdomain: subdomain.trim().toLowerCase() })
+      const school = normalizeSchoolSubdomain(subdomain)
+      if (!school) {
+        setError('Missing school subdomain. Go back and select your school.')
+        return
+      }
+      await login({ email: email.trim(), password, subdomain: school })
       router.replace('/(tabs)')
     } catch (e) {
       const msg =

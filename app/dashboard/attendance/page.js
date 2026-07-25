@@ -7,6 +7,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { api } from '@/lib/api'
+import Link from 'next/link'
 import {
   Users,
   Calendar,
@@ -17,6 +18,7 @@ import {
   AlertTriangle,
   Smartphone,
   Monitor,
+  Play,
 } from 'lucide-react'
 import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
 import { attendanceStore } from '@/lib/offline/attendance-store'
@@ -267,7 +269,15 @@ export default function AttendancePage() {
               Class register synced with ZSMS Mobile lesson sessions — same school database
             </p>
           </div>
-          <SyncStatusBadge />
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/dashboard/attendance/sessions">
+              <Button variant="primary" size="sm">
+                <Play className="h-4 w-4 mr-1" />
+                Lesson sessions
+              </Button>
+            </Link>
+            <SyncStatusBadge />
+          </div>
         </header>
 
         <section aria-labelledby="selection-title">

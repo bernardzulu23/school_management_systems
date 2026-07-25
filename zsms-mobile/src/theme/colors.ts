@@ -55,7 +55,8 @@ export const ZsmsTheme = {
   navBorder: 'rgba(239, 236, 229, 0.1)',
   navActiveBg: '#111111',
   navActiveText: '#F5F2ED',
-  navInactiveText: '#111111',
+  /** Muted paper on dark nav — must stay readable on `navBg` (#1A1A1A). */
+  navInactiveText: '#A8A7A2',
   navBarBg: '#F5F2ED',
 
   tableHeader: '#111111',
@@ -88,6 +89,9 @@ export const ZsmsTheme = {
   rpDanger: '#4A1A1A',
   rpDangerTx: '#FF8080',
   rpMuted: 'rgba(17, 17, 17, 0.06)',
+  /** Light text for dark `--rp-deep` / nav surfaces */
+  rpOnDeep: '#F5F2ED',
+  rpOnDeepMuted: '#A8A7A2',
 
   badgeUpBg: '#E6FAF0',
   badgeUpColor: '#0D7A4C',

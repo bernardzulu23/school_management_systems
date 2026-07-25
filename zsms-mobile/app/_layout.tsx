@@ -4,11 +4,13 @@ import { StatusBar } from 'expo-status-bar'
 import { AuthGuard } from '@/components/AuthGuard'
 import { useOfflineQueue } from '@/store/offlineQueue'
 import { usePushRegistration } from '@/hooks/usePushRegistration'
+import { useAutoSync } from '@/hooks/useAutoSync'
 import { ZsmsTheme } from '@/theme/colors'
 
 export default function RootLayout() {
   const hydrate = useOfflineQueue((s) => s.hydrate)
   usePushRegistration()
+  useAutoSync()
 
   useEffect(() => {
     hydrate()

@@ -53,6 +53,7 @@ interface SessionAttendanceState {
     subjectId: string
     className?: string
     subjectName?: string
+    periodLabel?: string
   }) => Promise<void>
   markPresent: (studentId: string, status?: AttendanceStatus) => Promise<void>
   markByFace: (student: RosterStudent, score: number) => Promise<void>
@@ -102,7 +103,7 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
   draft: null,
   twinPending: null,
 
-  startSession: async ({ classId, subjectId, className, subjectName }) => {
+  startSession: async ({ classId, subjectId, className, subjectName, periodLabel }) => {
     set({ draft: null, twinPending: null })
     set({
       draft: {
@@ -121,7 +122,13 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
     })
     try {
       const [session, roster] = await Promise.all([
-        openLessonSession({ classId, subjectId }),
+        openLessonSession({
+          classId,
+          subjectId,
+          periodLabel: periodLabel || 'Period 1',
+          term: 1,
+          academicYear: String(new Date().getFullYear()),
+        }),
         loadRosterWithFace(classId, subjectId),
       ])
       const markByStudent = new Map(

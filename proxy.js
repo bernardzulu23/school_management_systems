@@ -27,6 +27,24 @@ import {
   stampActivityOnResponse,
 } from './lib/security/sessionActivity'
 import { clearAuthSessionCookies } from './lib/security/cookies'
+import {
+  applyWcdNoStoreHeaders,
+  getRawPathname,
+  hasDangerousPath,
+  shouldApplyWcdNoStore,
+  shouldRejectStaticExtensionOnDynamicPath,
+} from './lib/security/webCacheDeception'
+
+// CLOUDFLARE MANUAL STEP REQUIRED:
+// Dashboard > Caching > Cache Rules > Create Rule:
+// Rule name: "Block WCD — never cache dynamic routes"
+// When: URI path starts with /dashboard OR /api OR /platform
+//       OR /onboarding
+// Then: Cache eligibility = Bypass cache
+//
+// Also enable: Cloudflare > Caching > Cache Deception Armor = ON
+// This verifies Content-Type matches the URL file extension
+// and prevents the static extension path mapping attack.
 
 const PUBLIC_PATHS = [
   '/api/auth/login',
@@ -82,6 +100,9 @@ const CSRF_EXEMPT_PATHS = [
   '/api/auth/logout',
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
+  // Native clients (desktop/mobile) use Bearer tokens — no browser CSRF cookie.
+  '/api/mobile/auth/login',
+  '/api/mobile/auth/refresh',
   '/api/onboarding',
   '/api/payments/lipila/callback',
   '/api/onboarding/lipila/callback',
@@ -96,7 +117,22 @@ const CSRF_EXEMPT_PATHS = [
 
 function secureResponse(body, init, request, securityOptions = {}) {
   const response = body === null ? new NextResponse(null, init) : NextResponse.json(body, init)
-  return applySecurityHeaders(response, request, securityOptions)
+  applySecurityHeaders(response, request, securityOptions)
+  // WCD Fix 1: dynamic / authenticated responses must never be cached.
+  const path = securityOptions.pathname || request?.nextUrl?.pathname || ''
+  if (shouldApplyWcdNoStore(path)) {
+    applyWcdNoStoreHeaders(response)
+  }
+  return response
+}
+
+function finalizeProxyResponse(response, request, securityOpts) {
+  applySecurityHeaders(response, request, securityOpts)
+  const path = securityOpts.pathname || request?.nextUrl?.pathname || ''
+  if (shouldApplyWcdNoStore(path)) {
+    applyWcdNoStoreHeaders(response)
+  }
+  return response
 }
 
 function isPublicApiPath(pathname) {
@@ -106,8 +142,29 @@ function isPublicApiPath(pathname) {
 /** Next.js 16 proxy — multi-tenant subdomain routing and API security. */
 export async function handleSecurityProxy(request) {
   try {
+    // WCD Fix 2: inspect RAW pathname before any route matching / decoding.
+    const rawPathname = getRawPathname(request)
+    if (hasDangerousPath(rawPathname)) {
+      console.warn('[security:wcd] rejected dangerous path', { pathname: rawPathname })
+      return new Response(JSON.stringify({ error: 'Bad Request', code: 'INVALID_PATH' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
     const { pathname } = request.nextUrl
     const method = String(request.method || 'GET').toUpperCase()
+
+    // WCD Fix 4: static extension on a dynamic route → 404 (path mapping).
+    if (
+      shouldRejectStaticExtensionOnDynamicPath(pathname) ||
+      shouldRejectStaticExtensionOnDynamicPath(rawPathname)
+    ) {
+      console.warn('[security:wcd] rejected static extension on dynamic path', {
+        pathname: rawPathname || pathname,
+      })
+      return new Response(null, { status: 404 })
+    }
 
     const nonce = generateNonce()
     const isStaticAsset = isStaticAssetPath(pathname)
@@ -146,12 +203,12 @@ export async function handleSecurityProxy(request) {
 
     if (pathname === '/api/health' || pathname === '/api/ping') {
       const response = NextResponse.next({ request: { headers: requestHeaders } })
-      return applySecurityHeaders(response, request, securityOpts)
+      return finalizeProxyResponse(response, request, securityOpts)
     }
 
     if (method === 'OPTIONS') {
       const response = new NextResponse(null, { status: 204 })
-      return applySecurityHeaders(response, request, securityOpts)
+      return finalizeProxyResponse(response, request, securityOpts)
     }
 
     if (pathname.startsWith('/api') && isForbiddenCrossOrigin(request)) {
@@ -192,14 +249,19 @@ export async function handleSecurityProxy(request) {
       ['POST', 'PUT', 'PATCH', 'DELETE'].includes(method) &&
       !CSRF_EXEMPT_PATHS.some((path) => pathname === path || pathname.startsWith(path + '/'))
     ) {
-      const csrf = verifyCsrfRequest(request)
-      if (!csrf.ok) {
-        return secureResponse(
-          { error: csrf.error || 'Invalid CSRF token' },
-          { status: 403 },
-          request,
-          securityOpts
-        )
+      // Bearer clients are not cookie-CSRF vulnerable (browsers do not attach Authorization).
+      const authHeader = String(request.headers.get('authorization') || '').trim()
+      const hasBearer = /^Bearer\s+\S+/i.test(authHeader)
+      if (!hasBearer) {
+        const csrf = verifyCsrfRequest(request)
+        if (!csrf.ok) {
+          return secureResponse(
+            { error: csrf.error || 'Invalid CSRF token' },
+            { status: 403 },
+            request,
+            securityOpts
+          )
+        }
       }
     }
 
@@ -244,7 +306,7 @@ export async function handleSecurityProxy(request) {
         const loginUrl = new URL('/login', request.url)
         loginUrl.searchParams.set('from', pathname)
         const redirect = NextResponse.redirect(loginUrl)
-        return applySecurityHeaders(redirect, request, securityOpts)
+        return finalizeProxyResponse(redirect, request, securityOpts)
       }
     }
 
@@ -270,8 +332,7 @@ export async function handleSecurityProxy(request) {
         const redirect = NextResponse.redirect(loginUrl)
         clearAuthSessionCookies(redirect, request)
         clearActivityCookie(redirect, request)
-        applySecurityHeaders(redirect, request, securityOpts)
-        return redirect
+        return finalizeProxyResponse(redirect, request, securityOpts)
       }
     }
 
@@ -284,7 +345,7 @@ export async function handleSecurityProxy(request) {
           const loginUrl = new URL('/login', request.url)
           loginUrl.searchParams.set('from', pathname)
           const redirect = NextResponse.redirect(loginUrl)
-          return applySecurityHeaders(redirect, request, securityOpts)
+          return finalizeProxyResponse(redirect, request, securityOpts)
         }
         if (!roleMatchesDashboardGroups(payload.role, dashboardGate.groups)) {
           return secureResponse(
@@ -326,7 +387,7 @@ export async function handleSecurityProxy(request) {
       },
     })
 
-    applySecurityHeaders(response, request, securityOpts)
+    finalizeProxyResponse(response, request, securityOpts)
 
     // Stamp last-activity on genuine interaction (not passive polls / heartbeats).
     if (shouldEnforceCookieIdle(request, pathname) && !isPassiveActivityPath(pathname)) {
@@ -341,10 +402,18 @@ export async function handleSecurityProxy(request) {
 
     return response
   } catch {
+    // Fail closed for API — never skip auth/CSRF/header stripping on proxy errors.
+    const pathname = request?.nextUrl?.pathname || ''
+    if (pathname.startsWith('/api')) {
+      return secureResponse({ error: 'Request failed' }, { status: 500 }, request, {
+        nonce: generateNonce(),
+        pathname,
+      })
+    }
     const response = NextResponse.next()
-    return applySecurityHeaders(response, request, {
+    return finalizeProxyResponse(response, request, {
       nonce: generateNonce(),
-      pathname: request?.nextUrl?.pathname || '',
+      pathname,
     })
   }
 }

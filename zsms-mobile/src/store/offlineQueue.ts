@@ -31,6 +31,8 @@ function newId(): string {
 interface QueueState {
   items: OfflineQueueItem[]
   syncing: boolean
+  lastSyncAt: string | null
+  lastSyncError: string | null
   hydrate: () => Promise<void>
   enqueueAttendance: (payload: AttendanceBatch) => Promise<void>
   enqueueScore: (payload: SbaScoreSubmit) => Promise<void>
@@ -45,6 +47,8 @@ interface QueueState {
 export const useOfflineQueue = create<QueueState>((set, get) => ({
   items: [],
   syncing: false,
+  lastSyncAt: null,
+  lastSyncError: null,
 
   hydrate: async () => {
     const items = await readQueue()
@@ -56,7 +60,10 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
       type: 'attendance',
       id: newId(),
       createdAt: new Date().toISOString(),
-      payload,
+      payload: {
+        ...payload,
+        source: payload.source || 'mobile-offline-sync',
+      },
     }
     const items = [...get().items, item]
     await writeQueue(items)
@@ -121,22 +128,21 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
   flushOfflineQueue: async () => {
     const pending = get().items
     if (!pending.length) return { synced: 0, failed: 0 }
-    set({ syncing: true })
+    if (get().syncing) return { synced: 0, failed: 0 }
+    set({ syncing: true, lastSyncError: null })
     try {
       const result = await flushOfflineQueue(pending)
-      const failedCount =
-        (result.attendance?.failed?.length || 0) +
-        (result.scores?.failed?.length || 0) +
-        (result.lessonSessions?.failed?.length || 0)
-      const synced =
-        (result.attendance?.synced || 0) +
-        (result.scores?.synced || 0) +
-        (result.lessonSessions?.synced || 0)
-      if (failedCount === 0) {
-        await writeQueue([])
-        set({ items: [] })
-      }
-      return { synced, failed: failedCount }
+      await writeQueue(result.remaining)
+      set({
+        items: result.remaining,
+        lastSyncAt: new Date().toISOString(),
+        lastSyncError: result.failed > 0 ? `${result.failed} item(s) failed to sync` : null,
+      })
+      return { synced: result.synced, failed: result.failed }
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Sync failed'
+      set({ lastSyncError: message })
+      return { synced: 0, failed: pending.length }
     } finally {
       set({ syncing: false })
     }

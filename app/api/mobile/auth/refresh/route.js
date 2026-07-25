@@ -47,6 +47,11 @@ export const POST = withSecureHandler(async function POST(request) {
     return NextResponse.json({ error: 'Session expired or revoked' }, { status: 401 })
   }
 
+  // Production: refresh tokens must exist in DB so revocation is enforceable.
+  if (canUseDbTokenRotation && !tokenRecord && process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Session expired or revoked' }, { status: 401 })
+  }
+
   const user = await prisma.user.findFirst({
     where: { id: decoded.id, schoolId: decoded.schoolId },
     select: { id: true, email: true, name: true, role: true, schoolId: true },

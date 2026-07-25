@@ -124,7 +124,14 @@ export const POST = withSecureApi(async function POST(request) {
       // Concurrent refresh in another tab — allow issuing a new session below.
     }
 
-    // Missing DB row but JWT verified: allow refresh (login may have failed to persist token).
+    // Missing DB row but JWT verified: allow refresh only outside production
+    // (login may have failed to persist token during local/dev).
+    if (canUseDbTokenRotation && !tokenRecord && process.env.NODE_ENV === 'production') {
+      return NextResponse.json(
+        { error: 'Session expired or revoked', stopRetry: true },
+        { status: 401 }
+      )
+    }
 
     const user = await prisma.user.findFirst({
       where: decoded.schoolId ? { id: decoded.id, schoolId: decoded.schoolId } : { id: decoded.id },

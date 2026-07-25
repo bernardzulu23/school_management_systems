@@ -68,6 +68,10 @@ if (process.env.NODE_ENV === 'production' && !process.env.PILOT_EMAILS && !proce
 export const POST = withSecureApi(async function POST(request) {
   const route = '/api/auth/login'
   const start = Date.now()
+  const clientType = String(request.headers.get('x-client-type') || '')
+    .trim()
+    .toLowerCase()
+  const isNativeClient = clientType === 'desktop' || clientType === 'mobile'
   const log = logger({ route })
   log.request(request)
 
@@ -392,6 +396,14 @@ export const POST = withSecureApi(async function POST(request) {
     const response = NextResponse.json({
       success: true,
       user: sanitizedUser,
+      // Native clients (desktop/mobile) need tokens in the body; browsers use cookies.
+      ...(isNativeClient
+        ? {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshTokenValue,
+            expiresIn: accessMaxAge,
+          }
+        : {}),
     })
 
     response.cookies.set(

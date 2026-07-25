@@ -171,6 +171,24 @@ export const GET = withSecureApi(async function GET(request) {
   const subjectId = searchParams.get('subjectId') || undefined
   const component = searchParams.get('component') || undefined
 
+  const isTeacherOnly = roleCheck(auth.user, ['TEACHER', 'teacher'])
+  let teacherSubjectIds = null
+  if (isTeacherOnly) {
+    const teacherProfile = await prisma.teacher.findFirst({
+      where: { userId: auth.user.id, schoolId },
+      select: {
+        subjects: { select: { id: true } },
+        teachingAssignments: { where: { schoolId }, select: { subjectId: true } },
+      },
+    })
+    teacherSubjectIds = new Set([
+      ...(teacherProfile?.subjects || []).map((s) => String(s.id)).filter(Boolean),
+      ...(teacherProfile?.teachingAssignments || [])
+        .map((a) => String(a.subjectId || ''))
+        .filter(Boolean),
+    ])
+  }
+
   try {
     const tasks = await prisma.eczAssessment.findMany({
       where: {
@@ -178,6 +196,13 @@ export const GET = withSecureApi(async function GET(request) {
         ...(formLevel ? { formLevel } : {}),
         ...(subjectId ? { subjectId } : {}),
         ...(component ? { component } : {}),
+        ...(isTeacherOnly
+          ? teacherSubjectIds && teacherSubjectIds.size > 0
+            ? {
+                OR: [{ subjectId: { in: [...teacherSubjectIds] } }, { createdBy: auth.user.id }],
+              }
+            : { createdBy: auth.user.id }
+          : {}),
       },
       include: {
         subject: true,
