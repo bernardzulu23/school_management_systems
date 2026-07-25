@@ -92,16 +92,32 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     select: { level: true },
   })
 
-  const paper = await generateSchemeTestPaper({
-    schoolId,
-    subject: scheme.subject,
-    gradeOrForm: scheme.gradeOrForm,
-    schoolLevel: school?.level || 'combined',
-    slot: body.slot,
-    selectedTopics: selection.selected,
-    questionCount: body.questionCount,
-    difficulty: body.difficulty,
-  })
+  let paper
+  try {
+    paper = await generateSchemeTestPaper({
+      schoolId,
+      subject: scheme.subject,
+      gradeOrForm: scheme.gradeOrForm,
+      schoolLevel: school?.level || 'combined',
+      slot: body.slot,
+      selectedTopics: selection.selected,
+      questionCount: body.questionCount,
+      difficulty: body.difficulty,
+    })
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    if (/JSON did not match schema|AI generation failed|unparseable JSON/i.test(message)) {
+      return NextResponse.json(
+        {
+          error:
+            'AI returned an unexpected paper format. Please try again with fewer topics or a smaller question count.',
+          detail: message.slice(0, 240),
+        },
+        { status: 502 }
+      )
+    }
+    throw err
+  }
 
   await trackAIUsage(schoolId, 'scheme-test-generate').catch(() => {})
 
