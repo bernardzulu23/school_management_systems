@@ -59,6 +59,11 @@ async function ingestOldSyllabusPdf(filePath, subject) {
   const parsedJson = parseOldSyllabusText(correctedText, subject)
   const { valid, errors } = validateOldSyllabusJson(parsedJson)
 
+  // Make repeated corpus ingestion idempotent while retaining distinct source PDFs.
+  await prisma.oldSyllabusDocument.deleteMany({
+    where: { ingestedFilename: path.basename(filePath) },
+  })
+
   await prisma.oldSyllabusDocument.create({
     data: {
       subject,

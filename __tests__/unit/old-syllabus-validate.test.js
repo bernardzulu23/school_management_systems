@@ -5,6 +5,27 @@ import {
   validateOldSyllabusJson,
   validatePastPaperJson,
 } from '@/lib/curriculum/validateOldSyllabus'
+import { deriveSubjectFromFilename } from '@/lib/curriculum/oldSyllabusParser'
+
+describe('deriveSubjectFromFilename', () => {
+  it.each([
+    [
+      'Senior_Preparation-Agriculture_Science_agriculture_science_(syllabi).pdf',
+      'Agricultural Science',
+    ],
+    ['Senior_Preparation-Art_Design_art_&_design_(syllabi).pdf', 'Art and Design'],
+    [
+      'Senior_Preparation-Computer_Studies_computer_science_(stem_syllabi) (1).pdf',
+      'Computer Science',
+    ],
+    [
+      'Senior_Preparation-Design_Technology_design_&_technology_(syllabi).pdf',
+      'Design and Technology',
+    ],
+  ])('normalizes %s', (filename, expected) => {
+    expect(deriveSubjectFromFilename(filename)).toBe(expected)
+  })
+})
 
 describe('validateOldSyllabusJson', () => {
   it('accepts the Mathematics O-Level fixture', () => {
