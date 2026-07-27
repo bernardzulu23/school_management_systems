@@ -20,7 +20,18 @@ import { scheduleParentAttendanceSmsBatch } from '@/lib/attendance/parentNotific
 import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 
-const STAFF_ROLES = ['TEACHER', 'teacher', 'HOD', 'hod', 'ADMIN', 'headteacher', 'admin']
+const STAFF_ROLES = [
+  'ADMIN',
+  'HOD',
+  'TEACHER',
+  'DEPUTY',
+  'SENIOR_TEACHER',
+  'GUIDANCE_TEACHER',
+  'headteacher',
+  'teacher',
+  'hod',
+  'admin',
+]
 const VALID_ATTENDANCE = ['present', 'absent', 'late', 'excused']
 const MAX_BATCH = 50
 const MAX_RECORDS_PER_BATCH = 60

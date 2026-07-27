@@ -12,6 +12,7 @@ import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
 import { TimetableNotificationBell } from '@/components/timetable/TimetableNotificationBell'
 import { NotificationBadge } from '@/components/notifications/NotificationBadge'
 import { NotificationToast } from '@/components/notifications/NotificationToast'
+import { WebPushAutoEnable } from '@/components/notifications/WebPushAutoEnable'
 import toast from 'react-hot-toast'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarningBanner'
@@ -218,6 +219,7 @@ export function DashboardLayout({ children, title }) {
         {/* Main content */}
         <main className="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
           <NotificationToast />
+          <WebPushAutoEnable />
           <ServerSessionGuard>
             <div className="px-4 py-6 sm:px-0 space-y-4">
               <SubscriptionBanner />

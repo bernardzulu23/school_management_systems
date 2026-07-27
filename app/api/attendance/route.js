@@ -23,7 +23,7 @@ export const GET = withErrorHandler(async function GET(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+  if (!roleCheck(auth.user, ['ADMIN', 'HOD', 'TEACHER', 'DEPUTY', 'SENIOR_TEACHER'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
@@ -80,7 +80,7 @@ export const POST = withErrorHandler(async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
-  if (!roleCheck(auth.user, ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod'])) {
+  if (!roleCheck(auth.user, ['ADMIN', 'HOD', 'TEACHER', 'DEPUTY', 'SENIOR_TEACHER'])) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 

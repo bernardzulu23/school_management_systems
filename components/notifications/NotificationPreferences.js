@@ -14,6 +14,7 @@ export function NotificationPreferences() {
   const [subscribing, setSubscribing] = useState(false)
   const [prefs, setPrefs] = useState({
     webPushEnabled: true,
+    expoPushEnabled: true,
     emailEnabled: true,
     smsEnabled: true,
     quietHoursStart: '15:00',
@@ -29,6 +30,7 @@ export function NotificationPreferences() {
       if (!res.ok) throw new Error(json.error || 'Failed to load preferences')
       setPrefs({
         webPushEnabled: Boolean(json.data?.webPushEnabled),
+        expoPushEnabled: json.data?.expoPushEnabled !== false,
         emailEnabled: Boolean(json.data?.emailEnabled),
         smsEnabled: Boolean(json.data?.smsEnabled),
         quietHoursStart: json.data?.quietHoursStart || '15:00',
@@ -47,7 +49,12 @@ export function NotificationPreferences() {
   }, [])
 
   const save = async () => {
-    if (!prefs.webPushEnabled && !prefs.emailEnabled && !prefs.smsEnabled) {
+    if (
+      !prefs.webPushEnabled &&
+      !prefs.expoPushEnabled &&
+      !prefs.emailEnabled &&
+      !prefs.smsEnabled
+    ) {
       toast.error('At least one channel must stay enabled')
       return
     }
@@ -105,7 +112,8 @@ export function NotificationPreferences() {
 
         <div className="space-y-3">
           {[
-            { key: 'webPushEnabled', label: 'Web push (browser)' },
+            { key: 'webPushEnabled', label: 'Web push (browser / desktop)' },
+            { key: 'expoPushEnabled', label: 'Mobile push (Expo)' },
             { key: 'emailEnabled', label: 'Email' },
             { key: 'smsEnabled', label: 'SMS (critical alerts only)' },
           ].map((item) => (

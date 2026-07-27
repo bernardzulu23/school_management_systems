@@ -347,16 +347,25 @@ export async function handleSecurityProxy(request) {
           const redirect = NextResponse.redirect(loginUrl)
           return finalizeProxyResponse(redirect, request, securityOpts)
         }
-        if (!roleMatchesDashboardGroups(payload.role, dashboardGate.groups)) {
-          return secureResponse(
-            {
-              error: 'Forbidden',
-              message: 'This request was blocked for security reasons.',
-            },
-            { status: 403 },
-            request,
-            securityOpts
-          )
+        if (
+          !roleMatchesDashboardGroups(payload.role, dashboardGate.groups, {
+            isHod: Boolean(payload.isHod),
+          })
+        ) {
+          // Teachers may hold HeadOfDepartment without role=hod; layout verifies via DB.
+          const rk = roleKey(payload.role)
+          const teacherLike = rk === 'teacher' || rk === 'classteacher' || rk === 'seniorteacher'
+          if (!(dashboardGate.prefix === '/dashboard/hod' && teacherLike)) {
+            return secureResponse(
+              {
+                error: 'Forbidden',
+                message: 'This request was blocked for security reasons.',
+              },
+              { status: 403 },
+              request,
+              securityOpts
+            )
+          }
         }
       }
     }

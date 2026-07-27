@@ -13,6 +13,7 @@ import {
 import { setCsrfCookie } from '@/lib/security/csrf'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
+import { buildSchoolAccessClaims } from '@/lib/auth/accessTokenClaims'
 import { signPlatformToken } from '@/lib/platform/platformAdminAuth'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
@@ -135,7 +136,7 @@ export const POST = withSecureApi(async function POST(request) {
 
     const user = await prisma.user.findFirst({
       where: decoded.schoolId ? { id: decoded.id, schoolId: decoded.schoolId } : { id: decoded.id },
-      select: { id: true, email: true, role: true, schoolId: true },
+      select: { id: true, email: true, role: true, schoolId: true, hodProfile: true },
     })
 
     if (!user) {
@@ -143,11 +144,11 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     // 4. Generate new tokens
-    const newAccessToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
-      JWT_SECRET,
-      { algorithm: 'HS256', expiresIn: '8h', audience: JWT_AUDIENCE }
-    )
+    const newAccessToken = jwt.sign(buildSchoolAccessClaims(user), JWT_SECRET, {
+      algorithm: 'HS256',
+      expiresIn: '8h',
+      audience: JWT_AUDIENCE,
+    })
 
     const newRefreshTokenValue = jwt.sign(
       { id: user.id, schoolId: user.schoolId },

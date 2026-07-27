@@ -154,7 +154,16 @@ export const ROLE_ALIASES: Record<string, string[]> = {
     'headmaster',
     'school principal',
   ],
-  HOD: ['hod', 'head of department', 'head-of-department', 'department head', 'dept head'],
+  HOD: [
+    'hod',
+    'head of department',
+    'head-of-department',
+    'head of dept',
+    'headofdept',
+    'department head',
+    'dept head',
+    'head_of_department',
+  ],
   DEPUTY: [
     'deputyheadteacher',
     'deputyhead',

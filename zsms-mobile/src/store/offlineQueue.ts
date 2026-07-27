@@ -42,6 +42,7 @@ interface QueueState {
   flushOfflineQueue: () => Promise<{ synced: number; failed: number }>
   retryFailedItems: () => Promise<void>
   clearOfflineQueue: () => Promise<void>
+  clearLastSyncError: () => void
 }
 
 export const useOfflineQueue = create<QueueState>((set, get) => ({
@@ -67,7 +68,7 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
     }
     const items = [...get().items, item]
     await writeQueue(items)
-    set({ items })
+    set({ items, lastSyncError: null })
   },
 
   enqueueScore: async (payload) => {
@@ -79,7 +80,7 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
     }
     const items = [...get().items, item]
     await writeQueue(items)
-    set({ items })
+    set({ items, lastSyncError: null })
   },
 
   enqueueLessonSession: async (payload) => {
@@ -91,7 +92,7 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
     }
     const items = [...get().items, item]
     await writeQueue(items)
-    set({ items })
+    set({ items, lastSyncError: null })
   },
 
   mergeLessonSession: async (sessionId, patch) => {
@@ -125,18 +126,40 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
 
   getPendingCount: () => get().items.length,
 
+  clearLastSyncError: () => set({ lastSyncError: null }),
+
   flushOfflineQueue: async () => {
     const pending = get().items
-    if (!pending.length) return { synced: 0, failed: 0 }
+    if (!pending.length) {
+      set({ lastSyncError: null })
+      return { synced: 0, failed: 0 }
+    }
     if (get().syncing) return { synced: 0, failed: 0 }
     set({ syncing: true, lastSyncError: null })
     try {
       const result = await flushOfflineQueue(pending)
       await writeQueue(result.remaining)
+
+      // Queue cleared: do not keep a scary banner after discarded stale items.
+      if (result.remaining.length === 0) {
+        set({
+          items: [],
+          lastSyncAt: new Date().toISOString(),
+          lastSyncError: null,
+        })
+        return { synced: result.synced, failed: result.failed }
+      }
+
+      const errorMsg =
+        result.failed > 0
+          ? result.lastError
+            ? `${result.remaining.length} item(s) still waiting: ${result.lastError}`
+            : `${result.remaining.length} item(s) still waiting to sync`
+          : null
       set({
         items: result.remaining,
         lastSyncAt: new Date().toISOString(),
-        lastSyncError: result.failed > 0 ? `${result.failed} item(s) failed to sync` : null,
+        lastSyncError: errorMsg,
       })
       return { synced: result.synced, failed: result.failed }
     } catch (e) {
@@ -153,13 +176,13 @@ export const useOfflineQueue = create<QueueState>((set, get) => ({
     while (attempt < 3 && get().items.length > 0) {
       await new Promise((r) => setTimeout(r, 2 ** attempt * 1000))
       const { failed } = await get().flushOfflineQueue()
-      if (failed === 0) break
+      if (failed === 0 || get().items.length === 0) break
       attempt += 1
     }
   },
 
   clearOfflineQueue: async () => {
     await writeQueue([])
-    set({ items: [] })
+    set({ items: [], lastSyncError: null })
   },
 }))

@@ -33,14 +33,18 @@ export async function openLessonSession(input: {
   term?: number
   academicYear?: string
 }): Promise<AttendanceSessionDto> {
-  const res = await api<{ success: boolean; data: AttendanceSessionDto }>(
+  const res = await api<{ success?: boolean; data?: AttendanceSessionDto } & AttendanceSessionDto>(
     '/api/mobile/attendance/sessions',
     {
       method: 'POST',
       body: JSON.stringify(input),
     }
   )
-  return res.data
+  const session = res?.data && res.data.id ? res.data : (res as AttendanceSessionDto)
+  if (!session?.id) {
+    throw new Error('Could not open lesson session')
+  }
+  return session
 }
 
 export async function listOpenSessions(): Promise<AttendanceSessionDto[]> {
@@ -128,6 +132,7 @@ export async function loadRosterWithFace(
     class: string | null
     qrCode: string | null
     faceEmbedding?: string | null
+    hasFacialConsent?: boolean | null
     twinGroupId?: string | null
     requiresSecondaryAuth?: boolean
     secondaryAuthMethod?: string | null
@@ -138,5 +143,30 @@ export async function loadRosterWithFace(
     subjectId,
     includeFaceData: 'true',
   })
-  return api(`/api/mobile/class-roster?${params}`)
+  const res = await api<
+    | Array<Record<string, unknown>>
+    | { data?: Array<Record<string, unknown>>; students?: Array<Record<string, unknown>> }
+  >(`/api/mobile/class-roster?${params}`)
+
+  const list = Array.isArray(res)
+    ? res
+    : Array.isArray(res?.data)
+      ? res.data
+      : Array.isArray(res?.students)
+        ? res.students
+        : []
+
+  return list
+    .map((s) => ({
+      id: String(s.id || s.serverId || ''),
+      name: String(s.name || s.displayName || 'Student'),
+      class: (s.class as string | null) ?? null,
+      qrCode: (s.qrCode as string | null) ?? null,
+      faceEmbedding: (s.faceEmbedding as string | null) ?? null,
+      hasFacialConsent: (s.hasFacialConsent as boolean | null) ?? null,
+      twinGroupId: (s.twinGroupId as string | null) ?? null,
+      requiresSecondaryAuth: Boolean(s.requiresSecondaryAuth),
+      secondaryAuthMethod: (s.secondaryAuthMethod as string | null) ?? null,
+    }))
+    .filter((s) => s.id)
 }

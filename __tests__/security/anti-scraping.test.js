@@ -50,6 +50,35 @@ describe('antiScraping module', () => {
     expect(result.code).toBe('blocked_client')
   })
 
+  it('allows Bearer-authenticated mobile clients with okhttp user agents', () => {
+    process.env.ANTI_SCRAPING_ENABLED = 'true'
+
+    const req = buildRequest({
+      url: 'http://localhost:3000/api/timetable/view',
+      headers: {
+        'user-agent': 'okhttp/4.12.0',
+        authorization: `Bearer ${signedAccessToken('teacher')}`,
+        'x-client-type': 'mobile',
+      },
+    })
+
+    const result = checkAntiScraping(req, '/api/timetable/view', { isPublic: false })
+    expect(result.blocked).toBe(false)
+  })
+
+  it('still blocks okhttp without Bearer', () => {
+    process.env.ANTI_SCRAPING_ENABLED = 'true'
+
+    const req = buildRequest({
+      url: 'http://localhost:3000/api/timetable/view',
+      headers: { 'user-agent': 'okhttp/4.12.0' },
+    })
+
+    const result = checkAntiScraping(req, '/api/timetable/view', { isPublic: false })
+    expect(result.blocked).toBe(true)
+    expect(result.code).toBe('blocked_client')
+  })
+
   it('requires XHR headers for cookie-authenticated API calls when enabled', () => {
     process.env.ANTI_SCRAPING_ENABLED = 'true'
 

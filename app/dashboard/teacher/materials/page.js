@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,10 +19,10 @@ import {
   Loader2,
   AlertTriangle,
 } from 'lucide-react'
-import Link from 'next/link'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'react-hot-toast'
+import { openMaterialFile } from '@/lib/materials/openMaterialFile'
 
 export default function StudyMaterialsPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -488,14 +489,19 @@ export default function StudyMaterialsPage() {
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <a
-                        href={material.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        type="button"
                         className="text-sm text-royalPurple-accentTx underline"
+                        onClick={async () => {
+                          try {
+                            await openMaterialFile(material.fileUrl, { title: material.title })
+                          } catch (e) {
+                            toast.error(e?.message || 'Could not open file')
+                          }
+                        }}
                       >
                         Open
-                      </a>
+                      </button>
                       <div className="flex items-center space-x-1">
                         <Button
                           size="sm"

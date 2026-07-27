@@ -10,14 +10,25 @@ import { globalStyles } from '@/theme/styles'
 import { ZsmsTheme } from '@/theme/colors'
 import type { RosterStudent } from '@/types'
 
+function paramOne(value: string | string[] | undefined, fallback = ''): string {
+  if (Array.isArray(value)) return String(value[0] || fallback)
+  return String(value || fallback)
+}
+
 export default function LessonAttendanceSessionScreen() {
-  const { classId, subjectId, className, subjectName, periodLabel } = useLocalSearchParams<{
-    classId: string
-    subjectId: string
-    className?: string
-    subjectName?: string
-    periodLabel?: string
+  const raw = useLocalSearchParams<{
+    classId: string | string[]
+    subjectId: string | string[]
+    className?: string | string[]
+    subjectName?: string | string[]
+    periodLabel?: string | string[]
   }>()
+  const classId = paramOne(raw.classId)
+  const subjectId = paramOne(raw.subjectId)
+  const className = paramOne(raw.className)
+  const subjectName = paramOne(raw.subjectName)
+  const periodLabel = paramOne(raw.periodLabel, 'Period 1')
+
   const {
     draft,
     twinPending,
@@ -37,24 +48,29 @@ export default function LessonAttendanceSessionScreen() {
 
   useEffect(() => {
     if (classId && subjectId) {
-      startSession({
+      void startSession({
         classId,
         subjectId,
-        className: className || '',
-        subjectName: subjectName || '',
-        periodLabel: periodLabel || 'Period 1',
+        className,
+        subjectName,
+        periodLabel,
       })
     }
-  }, [classId, subjectId, className, subjectName, periodLabel, startSession])
+    // Intentionally omit startSession from deps — zustand action is stable; including it
+    // can re-open sessions on store churn.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [classId, subjectId, className, subjectName, periodLabel])
 
   const rows = useMemo(() => {
     if (!draft) return []
     const q = search.trim().toLowerCase()
-    const list = draft.students
+    const list = draft.students || []
     if (!q) return list
     return list.filter(
       (s) =>
-        s.name.toLowerCase().includes(q) ||
+        String(s.name || '')
+          .toLowerCase()
+          .includes(q) ||
         String(s.qrCode || '')
           .toLowerCase()
           .includes(q)
@@ -66,7 +82,7 @@ export default function LessonAttendanceSessionScreen() {
     let present = 0
     let absent = 0
     let unmarked = 0
-    for (const s of draft.students) {
+    for (const s of draft.students || []) {
       if (s.mark === 'unmarked') unmarked += 1
       else if (s.mark === 'present' || s.mark === 'late') present += 1
       else absent += 1
@@ -100,7 +116,16 @@ export default function LessonAttendanceSessionScreen() {
 
   function onFaceMatch(student: RosterStudent, score: number) {
     setScanOpen(false)
-    markByFace(student, score)
+    void markByFace(student, score)
+  }
+
+  if (!classId || !subjectId) {
+    return (
+      <View style={globalStyles.container}>
+        <Text style={globalStyles.errorText}>Missing class or subject. Go back and try again.</Text>
+        <BrutalButton title="Back" variant="secondary" onPress={() => router.back()} />
+      </View>
+    )
   }
 
   if (draft?.loading) {
@@ -127,7 +152,9 @@ export default function LessonAttendanceSessionScreen() {
           Present/late {counts.present} · Absent {counts.absent} · Unmarked {counts.unmarked}
         </Text>
       ) : null}
-      <BrutalButton title="Optional: face scan" onPress={() => setScanOpen(true)} />
+      {draft?.sessionId ? (
+        <BrutalButton title="Optional: face scan" onPress={() => setScanOpen(true)} />
+      ) : null}
       <TextInput
         style={globalStyles.input}
         placeholder="Search student"
@@ -138,6 +165,11 @@ export default function LessonAttendanceSessionScreen() {
         data={rows}
         keyExtractor={(s) => s.id}
         style={{ flex: 1, marginTop: 12 }}
+        ListEmptyComponent={
+          <Text style={globalStyles.subtitle}>
+            {draft?.error || 'No pupils in this roster yet.'}
+          </Text>
+        }
         renderItem={({ item }) => (
           <View style={[globalStyles.card, { paddingVertical: 12 }]}>
             <Text style={{ fontWeight: '700' }}>{item.name}</Text>
@@ -147,11 +179,11 @@ export default function LessonAttendanceSessionScreen() {
               {item.hasFacialConsent === false ? ' · no face consent' : ''}
             </Text>
             <View style={{ flexDirection: 'row', marginTop: 8, gap: 8, flexWrap: 'wrap' }}>
-              <BrutalButton title="Present" onPress={() => markPresent(item.id, 'present')} />
+              <BrutalButton title="Present" onPress={() => void markPresent(item.id, 'present')} />
               <BrutalButton
                 title="Late"
                 variant="secondary"
-                onPress={() => markPresent(item.id, 'late')}
+                onPress={() => void markPresent(item.id, 'late')}
               />
               {!item.faceEmbedding && item.hasFacialConsent !== false ? (
                 <BrutalButton
@@ -169,16 +201,18 @@ export default function LessonAttendanceSessionScreen() {
         onPress={onEndSession}
         loading={draft?.closing}
         variant="secondary"
+        disabled={!draft?.sessionId}
       />
       {draft?.error ? (
         <Text style={{ color: ZsmsTheme.danger, marginTop: 8 }}>{draft.error}</Text>
       ) : null}
 
-      {draft?.sessionId ? (
+      {/* Mount camera only while scanning — avoids native permission hooks on every open. */}
+      {scanOpen && draft?.sessionId ? (
         <FaceScanPanel
           visible={scanOpen}
           sessionId={draft.sessionId}
-          roster={draft.roster}
+          roster={draft.roster || []}
           onMatch={onFaceMatch}
           onClose={() => setScanOpen(false)}
         />
@@ -192,11 +226,12 @@ export default function LessonAttendanceSessionScreen() {
           onDone={() => {
             setEnrollStudent(null)
             if (classId && subjectId) {
-              startSession({
+              void startSession({
                 classId,
                 subjectId,
-                className: className || '',
-                subjectName: subjectName || '',
+                className,
+                subjectName,
+                periodLabel,
               })
             }
           }}
@@ -211,7 +246,7 @@ export default function LessonAttendanceSessionScreen() {
           sessionId={draft.sessionId}
           studentId={twinPending.studentId}
           secondaryAuthMethod={twinPending.secondaryAuthMethod}
-          onVerified={(twinAuthToken) => completeTwinVerification(twinAuthToken)}
+          onVerified={(twinAuthToken) => void completeTwinVerification(twinAuthToken)}
           onCancel={() => clearTwinPending()}
         />
       ) : null}

@@ -9,13 +9,17 @@ type FaceModule = typeof import('expo-face-detection')
 let cached: FaceModule | null = null
 let loadAttempted = false
 
+/**
+ * Must NOT call getFaceModule() in a way that re-enters this function —
+ * previously this caused infinite recursion and crashed "Start session".
+ */
 export function isMobileFaceNetAvailable(): boolean {
   if (Platform.OS !== 'android') return false
   return getFaceModule() !== null
 }
 
 function getFaceModule(): FaceModule | null {
-  if (!isMobileFaceNetAvailable()) return null
+  if (Platform.OS !== 'android') return null
   if (loadAttempted) return cached
   loadAttempted = true
   try {
@@ -25,7 +29,9 @@ function getFaceModule(): FaceModule | null {
       cached = null
       return cached
     }
-    cached.setMatchThreshold(DEFAULT_MATCH_L2_THRESHOLD)
+    if (typeof cached.setMatchThreshold === 'function') {
+      cached.setMatchThreshold(DEFAULT_MATCH_L2_THRESHOLD)
+    }
   } catch {
     cached = null
   }

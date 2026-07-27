@@ -57,16 +57,15 @@ export default function StudyMaterialsPage() {
     },
   })
 
-  const handleDownload = (material) => {
-    downloadMutation.mutate(material.id)
-    // Create fake download link
-    const link = document.createElement('a')
-    link.href = material.fileUrl || '#'
-    link.download = material.title
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    toast.success('Download started')
+  const handleDownload = async (material) => {
+    try {
+      downloadMutation.mutate(material.id)
+      const { openMaterialFile } = await import('@/lib/materials/openMaterialFile')
+      await openMaterialFile(material.fileUrl, { title: material.title })
+      toast.success('Download started')
+    } catch (e) {
+      toast.error(e?.message || 'Could not open file')
+    }
   }
 
   const handleBookmark = (id) => {

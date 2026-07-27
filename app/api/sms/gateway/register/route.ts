@@ -39,7 +39,18 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   // Raw token shown once to pair the Android app — never stored plaintext.
   const rawToken = randomBytes(32).toString('hex')
   const deviceTokenHash = hashDeviceToken(rawToken)
-  const apiTokenEncrypted = encrypt(rawToken)
+  let apiTokenEncrypted: string
+  try {
+    apiTokenEncrypted = encrypt(rawToken)
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : 'Encryption failed'
+    throw new ApiError(
+      msg.includes('SMS_GATEWAY_ENCRYPTION_KEY')
+        ? 'SMS gateway encryption is not configured. Set SMS_GATEWAY_ENCRYPTION_KEY (64-char hex) on the server.'
+        : msg,
+      500
+    )
+  }
 
   const gateway = await basePrisma.sMSGateway.create({
     data: {

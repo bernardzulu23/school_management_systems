@@ -134,9 +134,10 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
       const markByStudent = new Map(
         (session.marks || []).map((m) => [m.studentId, mapApiStatus(m.status)])
       )
-      const students: SessionStudent[] = roster.map((s) => ({
+      const rosterList = Array.isArray(roster) ? roster : []
+      const students: SessionStudent[] = rosterList.map((s) => ({
         id: s.id,
-        name: s.name,
+        name: s.name || 'Student',
         class: s.class,
         mark: markByStudent.get(s.id) || 'unmarked',
         qrCode: s.qrCode,
@@ -154,7 +155,7 @@ export const useSessionAttendanceStore = create<SessionAttendanceState>((set, ge
           className: className || session.class?.name || '',
           subjectName: subjectName || session.subject?.name || '',
           students,
-          roster,
+          roster: rosterList,
           pendingMarks: [],
           loading: false,
           closing: false,

@@ -39,6 +39,8 @@ export default function RootLayout() {
         <Stack.Screen name="scores/student/[studentId]" options={{ title: 'Student score' }} />
         <Stack.Screen name="lesson-plans/index" options={{ title: 'Lesson Plans' }} />
         <Stack.Screen name="lesson-plans/[id]" options={{ title: 'Lesson Plan' }} />
+        <Stack.Screen name="timetable" options={{ title: 'My timetable' }} />
+        <Stack.Screen name="materials" options={{ title: 'Study materials' }} />
         {/* student/* routes intentionally omitted — staff companion only (BOLA) */}
       </Stack>
     </AuthGuard>

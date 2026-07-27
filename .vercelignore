@@ -75,8 +75,17 @@ ios
 /Validation_folder
 /docs/doc
 *.pdf
+# Real empty dir placeholder (replaces local junction) — keep so Next build can stat it
+# /old-syllabus-pdfs  — do NOT ignore the folder itself
+old-syllabus-pdfs/**
+!old-syllabus-pdfs/
+!old-syllabus-pdfs/.gitkeep
 
 # Env / secrets
 .env
 .env.*
 !.env.example
+
+past-papers/**
+!past-papers/
+!past-papers/.gitkeep

@@ -10,6 +10,7 @@ import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
+import { buildSchoolAccessClaims, resolveAccessTokenRole } from '@/lib/auth/accessTokenClaims'
 import { evaluatePassword, weakPasswordLoginPayload } from '@/lib/security/passwordPolicy'
 import {
   checkLoginBruteForce,
@@ -110,7 +111,10 @@ export const POST = withSecureApi(async function POST(request) {
         },
       })
       if (emailMatches.length === 1) {
-        user = emailMatches[0]
+        user = await prisma.user.findFirst({
+          where: { id: emailMatches[0].id },
+          include: { hodProfile: true },
+        })
         schoolId = user.schoolId
       }
     }
@@ -173,11 +177,11 @@ export const POST = withSecureApi(async function POST(request) {
     clearLoginFailures({ email: normalizedEmail, schoolId, ip: clientIp })
     clearLoginFailures({ email: normalizedEmail, schoolId: 'global', ip: clientIp })
 
-    const accessToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
-      JWT_SECRET,
-      { algorithm: 'HS256', expiresIn: '8h', audience: JWT_AUDIENCE }
-    )
+    const accessToken = jwt.sign(buildSchoolAccessClaims(user), JWT_SECRET, {
+      algorithm: 'HS256',
+      expiresIn: '8h',
+      audience: JWT_AUDIENCE,
+    })
 
     const refreshToken = jwt.sign({ id: user.id, schoolId: user.schoolId }, JWT_REFRESH_SECRET, {
       algorithm: 'HS256',
@@ -193,15 +197,23 @@ export const POST = withSecureApi(async function POST(request) {
           expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         },
       })
-    } catch {
-      // non-blocking
+    } catch (err) {
+      // Production refresh requires a DB row — fail login rather than issue a token that cannot refresh.
+      console.error('[mobile auth login] refreshToken.create failed', err)
+      if (process.env.NODE_ENV === 'production') {
+        return NextResponse.json(
+          { error: 'Could not create session. Please try again.' },
+          { status: 500 }
+        )
+      }
     }
 
+    const effectiveRole = resolveAccessTokenRole(user)
     const sanitizedUser = sanitizeOutput({
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role,
+      role: effectiveRole,
       schoolId: user.schoolId,
     })
 

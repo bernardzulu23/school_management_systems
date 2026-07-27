@@ -91,6 +91,8 @@ export interface SbaTask {
   title: string
   formLevel: number
   component: string
+  classId?: string | null
+  class?: { id?: string; name?: string } | null
   subject: { id: string; name: string }
   rubric?: {
     criteria: Array<{ id: string; description: string; maxMarks: number }>
@@ -131,6 +133,7 @@ export interface TimetableAssignment {
   period: number
   startTime?: string | null
   endTime?: string | null
+  classId?: string
   subjectId?: string
   subjectName?: string
   className?: string

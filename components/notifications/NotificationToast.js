@@ -27,6 +27,8 @@ function writeSeen(set) {
 
 /**
  * Polls for new unread notifications and shows a toast (auto-dismiss ~5s).
+ * Also raises an OS notification when the browser/desktop shell grants permission
+ * (covers desktop WebView2 and web when service-worker push is unavailable).
  */
 export function NotificationToast() {
   const router = useRouter()
@@ -34,6 +36,38 @@ export function NotificationToast() {
 
   useEffect(() => {
     let cancelled = false
+
+    async function ensureOsPermission() {
+      if (typeof window === 'undefined' || !('Notification' in window)) return false
+      if (Notification.permission === 'granted') return true
+      if (Notification.permission === 'denied') return false
+      try {
+        const p = await Notification.requestPermission()
+        return p === 'granted'
+      } catch {
+        return false
+      }
+    }
+
+    function showOsNotification(row) {
+      if (typeof window === 'undefined' || !('Notification' in window)) return
+      if (Notification.permission !== 'granted') return
+      try {
+        const n = new Notification(row.title || 'ZSMS', {
+          body: row.message || '',
+          tag: `zsms-${row.id}`,
+          data: { actionUrl: row.actionUrl || '/dashboard/notifications' },
+        })
+        n.onclick = () => {
+          window.focus()
+          const url = row.actionUrl || '/dashboard/notifications'
+          router.push(url)
+          n.close()
+        }
+      } catch {
+        /* ignore */
+      }
+    }
 
     async function poll() {
       try {
@@ -51,12 +85,14 @@ export function NotificationToast() {
           rows.forEach((r) => seen.add(r.id))
           writeSeen(seen)
           primed.current = true
+          await ensureOsPermission()
           return
         }
 
         for (const row of rows) {
           if (seen.has(row.id)) continue
           seen.add(row.id)
+          showOsNotification(row)
           toast.custom(
             (t) => (
               <button

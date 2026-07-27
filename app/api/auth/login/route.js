@@ -20,6 +20,7 @@ import { setCsrfCookie } from '@/lib/security/csrf'
 import { stampActivityOnResponse } from '@/lib/security/sessionActivity'
 import { withSecureApi } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
+import { buildSchoolAccessClaims, resolveAccessTokenRole } from '@/lib/auth/accessTokenClaims'
 import { getSubscriptionState, hydrateLegacySchoolAccess } from '@/lib/billing/subscription'
 import { logger, captureError } from '@/lib/utils/logger'
 import {
@@ -347,11 +348,11 @@ export const POST = withSecureApi(async function POST(request) {
     const accessExpiresIn = remember ? '30d' : '8h'
     const refreshExpiresIn = remember ? '90d' : '7d'
 
-    const newAccessToken = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
-      JWT_SECRET,
-      { algorithm: 'HS256', expiresIn: accessExpiresIn, audience: JWT_AUDIENCE }
-    )
+    const newAccessToken = jwt.sign(buildSchoolAccessClaims(user), JWT_SECRET, {
+      algorithm: 'HS256',
+      expiresIn: accessExpiresIn,
+      audience: JWT_AUDIENCE,
+    })
 
     const newRefreshTokenValue = jwt.sign(
       { id: user.id, schoolId: user.schoolId },
@@ -385,7 +386,7 @@ export const POST = withSecureApi(async function POST(request) {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role,
+      role: resolveAccessTokenRole(user),
       schoolId: user.schoolId,
       schoolType: hydratedSchool?.schoolType || 'SCHOOL',
       schoolLevel: hydratedSchool?.level || 'combined',

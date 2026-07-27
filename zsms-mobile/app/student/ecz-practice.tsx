@@ -8,7 +8,7 @@ import type { EczPaper } from '@/types'
 import {
   ECZ_PRACTICE_EXAM_LEVEL_GROUPS,
   formatEczExamLevelLabel,
-} from '../../../lib/ecz/ecz-practice-levels.js'
+} from '@/lib/ecz/ecz-practice-levels.js'
 
 const DEFAULT_EXAM_LEVEL = 'form1'
 

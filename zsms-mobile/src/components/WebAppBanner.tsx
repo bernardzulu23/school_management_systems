@@ -38,7 +38,8 @@ export function WebAppBanner() {
         Full features on the web
       </Text>
       <Text style={{ color: '#333', fontSize: 13, marginBottom: 8 }}>
-        Timetables, lesson plans, results, and billing are available on the web dashboard.
+        Lesson plans, results, and billing are available on the web dashboard. Timetable is in this
+        app under Home → My timetable.
       </Text>
       <Pressable onPress={() => Linking.openURL(url)}>
         <Text style={{ color: '#0066cc', fontWeight: '600', marginBottom: 8 }}>

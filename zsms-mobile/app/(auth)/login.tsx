@@ -31,6 +31,8 @@ export default function LoginScreen() {
         return
       }
       await login({ email: email.trim(), password, subdomain: school })
+      // Give SecureStore a moment to persist tokens before Home hits the API.
+      await new Promise((r) => setTimeout(r, 100))
       router.replace('/(tabs)')
     } catch (e) {
       const msg =

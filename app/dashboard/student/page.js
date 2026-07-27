@@ -1169,11 +1169,19 @@ export default function StudentDashboard() {
                             <Button
                               size="sm"
                               className="bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
-                              asChild
+                              onClick={async () => {
+                                try {
+                                  const { openMaterialFile } =
+                                    await import('@/lib/materials/openMaterialFile')
+                                  await openMaterialFile(material.fileUrl, {
+                                    title: material.title,
+                                  })
+                                } catch (e) {
+                                  console.warn(e)
+                                }
+                              }}
                             >
-                              <a href={material.fileUrl} target="_blank" rel="noopener noreferrer">
-                                Download
-                              </a>
+                              Download
                             </Button>
                           </div>
                         ))}

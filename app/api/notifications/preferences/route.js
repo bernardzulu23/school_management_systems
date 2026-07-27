@@ -36,6 +36,7 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
 
   const merged = {
     webPushEnabled: data.webPushEnabled ?? existing.webPushEnabled,
+    expoPushEnabled: data.expoPushEnabled ?? existing.expoPushEnabled ?? true,
     emailEnabled: data.emailEnabled ?? existing.emailEnabled,
     smsEnabled: data.smsEnabled ?? existing.smsEnabled,
   }
@@ -48,6 +49,7 @@ export const PATCH = withErrorHandler(async function PATCH(request) {
     where: { userId: auth.user.id, schoolId },
     data: {
       ...(data.webPushEnabled !== undefined ? { webPushEnabled: data.webPushEnabled } : {}),
+      ...(data.expoPushEnabled !== undefined ? { expoPushEnabled: data.expoPushEnabled } : {}),
       ...(data.emailEnabled !== undefined ? { emailEnabled: data.emailEnabled } : {}),
       ...(data.smsEnabled !== undefined ? { smsEnabled: data.smsEnabled } : {}),
       ...(data.quietHoursStart ? { quietHoursStart: data.quietHoursStart } : {}),

@@ -6,6 +6,7 @@ import prisma from '@/lib/prisma'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
 import { JWT_AUDIENCE } from '@/lib/middleware/auth'
+import { buildSchoolAccessClaims } from '@/lib/auth/accessTokenClaims'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -48,13 +49,27 @@ export const POST = withSecureHandler(async function POST(request) {
   }
 
   // Production: refresh tokens must exist in DB so revocation is enforceable.
+  // Heal orphaned JWTs from older logins where create() failed silently.
   if (canUseDbTokenRotation && !tokenRecord && process.env.NODE_ENV === 'production') {
-    return NextResponse.json({ error: 'Session expired or revoked' }, { status: 401 })
+    try {
+      const expMs = decoded.exp ? Number(decoded.exp) * 1000 : Date.now() + 7 * 24 * 60 * 60 * 1000
+      await prisma.refreshToken.create({
+        data: {
+          token: refreshToken,
+          userId: decoded.id,
+          schoolId: decoded.schoolId,
+          expiresAt: new Date(expMs),
+        },
+      })
+      tokenRecord = { id: 'healed', revoked: false, userId: decoded.id }
+    } catch {
+      return NextResponse.json({ error: 'Session expired or revoked' }, { status: 401 })
+    }
   }
 
   const user = await prisma.user.findFirst({
     where: { id: decoded.id, schoolId: decoded.schoolId },
-    select: { id: true, email: true, name: true, role: true, schoolId: true },
+    select: { id: true, email: true, name: true, role: true, schoolId: true, hodProfile: true },
   })
 
   if (!user) {
@@ -69,11 +84,12 @@ export const POST = withSecureHandler(async function POST(request) {
     )
   }
 
-  const accessToken = jwt.sign(
-    { id: user.id, email: user.email, role: user.role, schoolId: user.schoolId },
-    JWT_SECRET,
-    { algorithm: 'HS256', expiresIn: '8h', audience: JWT_AUDIENCE }
-  )
+  const claims = buildSchoolAccessClaims(user)
+  const accessToken = jwt.sign(claims, JWT_SECRET, {
+    algorithm: 'HS256',
+    expiresIn: '8h',
+    audience: JWT_AUDIENCE,
+  })
 
   return NextResponse.json({
     success: true,
@@ -83,7 +99,7 @@ export const POST = withSecureHandler(async function POST(request) {
       id: user.id,
       email: user.email,
       name: user.name,
-      role: user.role,
+      role: claims.role,
       schoolId: user.schoolId,
     },
   })

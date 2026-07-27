@@ -1,5 +1,11 @@
-# Downloads Gradle and points the wrapper at a local file:// URL (fixes Windows SSL/PKIX errors).
+# Downloads Gradle for local Windows builds when Maven SSL/PKIX fails.
+# Does NOT rewrite gradle-wrapper.properties to file:// (that breaks EAS cloud builds).
 # Usage: powershell -ExecutionPolicy Bypass -File scripts/install-gradle.ps1
+# Optional: -UseLocalWrapper  (points wrapper at tools/gradle zip — local only)
+
+param(
+  [switch]$UseLocalWrapper
+)
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
@@ -30,24 +36,31 @@ if (-not (Test-Path $zip)) {
   Write-Error "Download failed. Save manually from:`n$url`nto:`n$zip"
 }
 
-$resolved = (Resolve-Path $zip).Path.Replace("\", "/")
-if ($resolved -match "^([A-Za-z]):/(.*)$") {
-  $fileUrl = "file\:/// $($Matches[1]):/$($Matches[2] -replace ' ','%20')" -replace ' ',''
-} else {
-  Write-Error "Unexpected path: $resolved"
+$distributionUrl = "https\://services.gradle.org/distributions/$zipName"
+$validate = "true"
+
+if ($UseLocalWrapper) {
+  $resolved = (Resolve-Path $zip).Path.Replace("\", "/")
+  if ($resolved -match "^([A-Za-z]):/(.*)$") {
+    $distributionUrl = "file\:///$($Matches[1]):/$($Matches[2] -replace ' ','%20')"
+    $validate = "false"
+    Write-Host "WARNING: local file:// wrapper — EAS cloud builds will fail until restored to HTTPS."
+  } else {
+    Write-Error "Unexpected path: $resolved"
+  }
 }
 
 $props = @"
 distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
-distributionUrl=$fileUrl
+distributionUrl=$distributionUrl
 networkTimeout=60000
-validateDistributionUrl=false
+validateDistributionUrl=$validate
 zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
 "@
 
 Set-Content -Path $wrapperProps -Value $props.TrimEnd()
 Write-Host "OK: $zip"
-Write-Host "OK: $wrapperProps"
-Write-Host "Next: npm run android:device"
+Write-Host "OK: $wrapperProps -> $distributionUrl"
+Write-Host "Next: npm run android:device  (or eas build for APK)"

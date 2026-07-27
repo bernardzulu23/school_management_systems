@@ -1,12 +1,43 @@
 'use client'
 
-import { Suspense } from 'react'
-import OldSyllabusGenerateForm from './GenerateForm'
+import { Suspense, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useAuth } from '@/lib/auth'
+import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import { OldSyllabusHub } from '@/components/old-syllabus/OldSyllabusHub'
+
+function OldSyllabusGenerateInner() {
+  const { user, isAuthenticated, isLoading } = useAuth()
+  const router = useRouter()
+  const search = useSearchParams()
+  const subject = String(search.get('subject') || '')
+  const grade = Number(search.get('grade') || 10)
+
+  useEffect(() => {
+    if (isLoading) return
+    if (!isAuthenticated || !user) router.replace('/login')
+  }, [isAuthenticated, isLoading, user, router])
+
+  if (isLoading || !user) {
+    return <p className="text-sm text-muted-foreground">Loading…</p>
+  }
+
+  return (
+    <OldSyllabusHub
+      teacherId={String(user.id)}
+      initialTab="generate"
+      initialSubject={subject}
+      initialGrade={grade}
+    />
+  )
+}
 
 export default function OldSyllabusGeneratePage() {
   return (
-    <Suspense fallback={<p className="p-6 text-sm">Loading generator…</p>}>
-      <OldSyllabusGenerateForm />
-    </Suspense>
+    <DashboardLayout title="Old Syllabus Studio">
+      <Suspense fallback={<p className="text-sm text-muted-foreground">Loading…</p>}>
+        <OldSyllabusGenerateInner />
+      </Suspense>
+    </DashboardLayout>
   )
 }
