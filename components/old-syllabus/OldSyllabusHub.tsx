@@ -36,6 +36,9 @@ const CONTENT_TYPES = [
   { id: 'lessonPlan', label: 'Lesson Plan' },
 ]
 
+const MIN_WEEKS = 4
+const MAX_WEEKS = 20
+
 type SubjectRow = { id: string; subject: string }
 
 type Topic = {
@@ -77,7 +80,31 @@ export function OldSyllabusHub({
   const [topics, setTopics] = useState<Topic[]>([])
   const [pastPapers, setPastPapers] = useState<any[]>([])
   const [selectedTopicIds, setSelectedTopicIds] = useState<string[]>([])
-  const [contentType, setContentType] = useState('quiz')
+  const [contentType, setContentType] = useState('scheme')
+  const [weeksPerTerm, setWeeksPerTerm] = useState('13')
+  const [midTermWeek, setMidTermWeek] = useState('7')
+  const [midTermWeekEnd, setMidTermWeekEnd] = useState('7')
+  const [endOfTermWeek, setEndOfTermWeek] = useState('12')
+  const [endOfTermWeekEnd, setEndOfTermWeekEnd] = useState('13')
+  const [term, setTerm] = useState('Term 1')
+  const [carryOverTopics, setCarryOverTopics] = useState<
+    Array<{
+      id: string
+      topic: string
+      topicKey?: string | null
+      week?: number
+      unitTitle?: string | null
+      learningOutcomes?: string[]
+      teachingActivities?: string[]
+      assessmentMethod?: string
+      assessmentMethods?: string[]
+      resources?: string[]
+      notes?: string
+    }>
+  >([])
+  const [selectedCarryOverIds, setSelectedCarryOverIds] = useState<string[]>([])
+  const [carryOverMessage, setCarryOverMessage] = useState('')
+  const [loadingCarryOver, setLoadingCarryOver] = useState(false)
   const [result, setResult] = useState<any>(null)
   const [busy, setBusy] = useState(false)
   const [loadingTopics, setLoadingTopics] = useState(false)
@@ -85,7 +112,77 @@ export function OldSyllabusHub({
 
   const canonicalLevel = selectedGrade.canonicalLevel
   const needsPaper = contentType === 'test' || contentType === 'termAssessment'
+  const needsTestSchedule = contentType === 'scheme' || contentType === 'recordOfWork'
   const activePaper = useMemo(() => pastPapers[0] || null, [pastPapers])
+
+  const weeksPerTermNum = Math.min(MAX_WEEKS, Math.max(MIN_WEEKS, Number(weeksPerTerm) || 13))
+  const weekChoices = Array.from({ length: weeksPerTermNum }, (_, i) => i + 1)
+  const midStart = Number(midTermWeek) || 7
+  const midEnd = Number(midTermWeekEnd) || midStart
+  const eotStart = Number(endOfTermWeek) || Math.max(1, weeksPerTermNum - 1)
+  const eotEnd = Number(endOfTermWeekEnd) || eotStart
+  const formatRange = (a: number, b: number) => (a === b ? `Week ${a}` : `Weeks ${a}–${b}`)
+
+  useEffect(() => {
+    const clamp = (raw: string, fallback: number) => {
+      const n = Number(raw)
+      if (!Number.isFinite(n) || n < 1 || n > weeksPerTermNum) return String(fallback)
+      return String(n)
+    }
+    const midDefault = Math.min(weeksPerTermNum, Math.ceil(weeksPerTermNum / 2))
+    const eotDefault = weeksPerTermNum
+    const eotStartDefault = Math.max(1, weeksPerTermNum - 1)
+    setMidTermWeek((prev) => clamp(prev, midDefault))
+    setMidTermWeekEnd((prev) => clamp(prev, Number(midTermWeek) || midDefault))
+    setEndOfTermWeek((prev) => clamp(prev, eotStartDefault))
+    setEndOfTermWeekEnd((prev) => clamp(prev, eotDefault))
+  }, [weeksPerTermNum])
+
+  useEffect(() => {
+    if (!needsTestSchedule || !subject) {
+      setCarryOverTopics([])
+      setSelectedCarryOverIds([])
+      setCarryOverMessage('')
+      return
+    }
+    let cancelled = false
+    ;(async () => {
+      setLoadingCarryOver(true)
+      try {
+        const qs = new URLSearchParams({
+          subject,
+          grade: String(selectedGrade.grade),
+          term,
+          year: String(academicYear),
+        })
+        const res = await fetch(`/api/curriculum/scheme/carry-over?${qs}`, {
+          credentials: 'include',
+        })
+        const json = await res.json().catch(() => ({}))
+        if (cancelled) return
+        if (!res.ok) {
+          setCarryOverTopics([])
+          setSelectedCarryOverIds([])
+          setCarryOverMessage(json.error || '')
+          return
+        }
+        const topics = Array.isArray(json.topics) ? json.topics : []
+        setCarryOverTopics(topics)
+        setSelectedCarryOverIds(topics.map((t: { id: string }) => t.id))
+        setCarryOverMessage(String(json.message || ''))
+      } catch {
+        if (!cancelled) {
+          setCarryOverTopics([])
+          setSelectedCarryOverIds([])
+        }
+      } finally {
+        if (!cancelled) setLoadingCarryOver(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [needsTestSchedule, subject, selectedGrade.grade, term, academicYear])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -198,6 +295,13 @@ export function OldSyllabusHub({
           grade: selectedGrade.grade,
           selectedTopicIds,
           questionCount: 8,
+          weekCount: weeksPerTermNum,
+          term,
+          midTermWeek: midStart,
+          midTermWeekEnd: midEnd,
+          endOfTermWeek: eotStart,
+          endOfTermWeekEnd: eotEnd,
+          carryOverTopics: carryOverTopics.filter((t) => selectedCarryOverIds.includes(t.id)),
         }),
       })
       const json = await res.json()
@@ -510,7 +614,190 @@ export function OldSyllabusHub({
                       </SelectContent>
                     </Select>
                   </div>
+                  {needsTestSchedule ? (
+                    <div className="space-y-1">
+                      <Label>Term</Label>
+                      <Select value={term} onValueChange={setTerm}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {['Term 1', 'Term 2', 'Term 3'].map((t) => (
+                            <SelectItem key={t} value={t}>
+                              {t}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ) : null}
                 </div>
+
+                {needsTestSchedule ? (
+                  <div className="space-y-4 rounded-lg border border-sky-200 bg-sky-50 p-4">
+                    <div>
+                      <h4 className="font-medium text-sky-900">Test schedule (CBC-aligned)</h4>
+                      <p className="mt-1 text-sm text-sky-700">
+                        Mid-term and end-of-term weeks are assessment-only (no teaching topics). Use
+                        a range when tests span multiple weeks (e.g. end-of-term 12–13).
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-3">
+                      <div className="space-y-1">
+                        <Label>Weeks per term</Label>
+                        <Select value={String(weeksPerTermNum)} onValueChange={setWeeksPerTerm}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Array.from(
+                              { length: MAX_WEEKS - MIN_WEEKS + 1 },
+                              (_, i) => MIN_WEEKS + i
+                            ).map((w) => (
+                              <SelectItem key={w} value={String(w)}>
+                                {w} weeks
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label>Mid-term weeks</Label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Select value={midTermWeek} onValueChange={setMidTermWeek}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="From" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {weekChoices.map((w) => (
+                                <SelectItem key={`mid-s-${w}`} value={String(w)}>
+                                  Week {w}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Select value={midTermWeekEnd} onValueChange={setMidTermWeekEnd}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="To" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {weekChoices.map((w) => (
+                                <SelectItem key={`mid-e-${w}`} value={String(w)}>
+                                  Week {w}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {formatRange(midStart, midEnd)} · recommended week{' '}
+                          {Math.ceil(weeksPerTermNum / 2)}
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label>End-of-term weeks</Label>
+                        <div className="grid grid-cols-2 gap-2">
+                          <Select value={endOfTermWeek} onValueChange={setEndOfTermWeek}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="From" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {weekChoices.map((w) => (
+                                <SelectItem key={`eot-s-${w}`} value={String(w)}>
+                                  Week {w}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <Select value={endOfTermWeekEnd} onValueChange={setEndOfTermWeekEnd}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="To" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {weekChoices.map((w) => (
+                                <SelectItem key={`eot-e-${w}`} value={String(w)}>
+                                  Week {w}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <p className="text-xs text-muted-foreground">
+                          {formatRange(eotStart, eotEnd)} · recommended{' '}
+                          {Math.max(1, weeksPerTermNum - 1)}–{weeksPerTermNum}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-md border border-amber-200 bg-amber-50/80 p-3">
+                      <div className="font-medium text-amber-950">Continue unfinished topics</div>
+                      <p className="mt-1 text-xs text-amber-800">
+                        Unfinished teaching weeks from the previous term are listed below. Selected
+                        items are placed first in the new scheme.
+                      </p>
+                      {loadingCarryOver ? (
+                        <p className="mt-2 text-xs text-amber-700">Checking previous term…</p>
+                      ) : (
+                        <>
+                          <p className="mt-2 text-xs text-amber-700">{carryOverMessage || '—'}</p>
+                          {carryOverTopics.length > 0 ? (
+                            <div className="mt-2 max-h-40 space-y-1 overflow-auto rounded border bg-white p-2 text-sm">
+                              <div className="mb-1 flex gap-2">
+                                <button
+                                  type="button"
+                                  className="text-xs underline"
+                                  onClick={() =>
+                                    setSelectedCarryOverIds(carryOverTopics.map((t) => t.id))
+                                  }
+                                >
+                                  Select all
+                                </button>
+                                <button
+                                  type="button"
+                                  className="text-xs underline"
+                                  onClick={() => setSelectedCarryOverIds([])}
+                                >
+                                  Clear
+                                </button>
+                              </div>
+                              {carryOverTopics.map((t) => {
+                                const checked = selectedCarryOverIds.includes(t.id)
+                                return (
+                                  <label key={t.id} className="flex items-start gap-2">
+                                    <input
+                                      type="checkbox"
+                                      className="mt-1"
+                                      checked={checked}
+                                      onChange={() => {
+                                        setSelectedCarryOverIds((prev) =>
+                                          checked
+                                            ? prev.filter((id) => id !== t.id)
+                                            : [...prev, t.id]
+                                        )
+                                      }}
+                                    />
+                                    <span>
+                                      <span className="font-medium">{t.topic}</span>
+                                      {t.week != null ? (
+                                        <span className="text-muted-foreground">
+                                          {' '}
+                                          · prev week {t.week}
+                                        </span>
+                                      ) : null}
+                                    </span>
+                                  </label>
+                                )
+                              })}
+                            </div>
+                          ) : null}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                ) : null}
 
                 {needsPaper ? (
                   <div className="rounded-md border border-amber-300 bg-amber-50 p-3 text-sm">
@@ -571,23 +858,138 @@ export function OldSyllabusHub({
                         save.
                       </div>
                     ) : null}
-                    <div className="font-medium text-sm">
-                      Generated {result.questions?.length || 0} items
-                      {!result.canSave ? ' (save disabled until review)' : ''}
-                    </div>
-                    <ol className="ml-5 list-decimal space-y-3 text-sm">
-                      {(result.questions || []).map((q: any) => (
-                        <li key={q.id}>
-                          <div className="font-medium">
-                            {q.topicName} {q.required === false ? '(optional)' : ''}
-                          </div>
-                          <div>{q.question}</div>
-                        </li>
-                      ))}
-                    </ol>
-                    <Button type="button" variant="outline" disabled={!result.canSave}>
-                      Save (enabled only when similarity check is clear)
-                    </Button>
+
+                    {result.downloadUrl ? (
+                      <a
+                        href={result.downloadUrl}
+                        download={result.downloadFilename || 'old-syllabus-export.docx'}
+                        className="inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
+                      >
+                        Download Word document
+                      </a>
+                    ) : null}
+
+                    {Array.isArray(result.weeks) && result.weeks.length > 0 ? (
+                      <div className="space-y-2">
+                        <div className="font-medium text-sm">
+                          Scheme of work · {result.weeks.length} weeks
+                          {result.testSchedule
+                            ? ` · mid ${formatRange(
+                                Number(result.testSchedule.midTermWeek),
+                                Number(
+                                  result.testSchedule.midTermWeekEnd ??
+                                    result.testSchedule.midTermWeek
+                                )
+                              )} · EOT ${formatRange(
+                                Number(result.testSchedule.endOfTermWeek),
+                                Number(
+                                  result.testSchedule.endOfTermWeekEnd ??
+                                    result.testSchedule.endOfTermWeek
+                                )
+                              )}`
+                            : ''}
+                        </div>
+                        <div className="max-h-96 overflow-auto rounded border">
+                          <table className="w-full text-left text-xs">
+                            <thead className="sticky top-0 bg-muted">
+                              <tr>
+                                <th className="p-2">Wk</th>
+                                <th className="p-2">Type</th>
+                                <th className="p-2">Topic</th>
+                                <th className="p-2">Outcomes</th>
+                                <th className="p-2">Activities</th>
+                                <th className="p-2">Assessment</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {result.weeks.map((w: any) => {
+                                const isTest =
+                                  w.weekType === 'mid_term_test' ||
+                                  w.weekType === 'end_of_term_test'
+                                return (
+                                  <tr
+                                    key={w.week}
+                                    className={cn(
+                                      'border-t align-top',
+                                      isTest ? 'bg-amber-50' : undefined
+                                    )}
+                                  >
+                                    <td className="p-2">{w.week}</td>
+                                    <td className="p-2">
+                                      {w.weekType === 'mid_term_test'
+                                        ? 'Mid-term'
+                                        : w.weekType === 'end_of_term_test'
+                                          ? 'End-of-term'
+                                          : 'Teaching'}
+                                    </td>
+                                    <td className="p-2 font-medium">{w.topic}</td>
+                                    <td className="p-2">
+                                      {(w.learningOutcomes || []).slice(0, 3).join('; ')}
+                                    </td>
+                                    <td className="p-2">
+                                      {(w.teachingActivities || []).slice(0, 3).join('; ')}
+                                    </td>
+                                    <td className="p-2">{w.assessmentMethod || ''}</td>
+                                  </tr>
+                                )
+                              })}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {result.contentType === 'lessonPlan' && result.content ? (
+                      <div className="space-y-2">
+                        <div className="font-medium text-sm">Lesson plan preview</div>
+                        <pre className="max-h-96 overflow-auto whitespace-pre-wrap rounded border bg-muted/40 p-3 text-xs">
+                          {String(result.content).slice(0, 8000)}
+                        </pre>
+                      </div>
+                    ) : null}
+
+                    {Array.isArray(result.flashcards) && result.flashcards.length > 0 ? (
+                      <div className="space-y-2">
+                        <div className="font-medium text-sm">
+                          Flashcards · {result.flashcards.length}
+                        </div>
+                        <ul className="space-y-2 text-sm">
+                          {result.flashcards.map((c: any, i: number) => (
+                            <li key={c.id || i} className="rounded border p-2">
+                              <div className="font-medium">{c.front}</div>
+                              <div className="text-muted-foreground">Answer: {c.answer}</div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    ) : null}
+
+                    {Array.isArray(result.questions) && result.questions.length > 0 ? (
+                      <>
+                        <div className="font-medium text-sm">
+                          Generated {result.questions.length} items
+                          {!result.canSave ? ' (save disabled until review)' : ''}
+                        </div>
+                        <ol className="ml-5 list-decimal space-y-3 text-sm">
+                          {result.questions.map((q: any) => (
+                            <li key={q.id}>
+                              <div className="font-medium">
+                                {q.topicName} {q.required === false ? '(optional)' : ''}
+                              </div>
+                              <div>{q.question}</div>
+                            </li>
+                          ))}
+                        </ol>
+                      </>
+                    ) : null}
+
+                    {(result.contentType === 'quiz' ||
+                      result.contentType === 'test' ||
+                      result.contentType === 'termAssessment') && (
+                      <Button type="button" variant="outline" disabled={!result.canSave}>
+                        Save (enabled only when similarity check is clear)
+                      </Button>
+                    )}
                   </div>
                 ) : null}
               </CardContent>
@@ -598,6 +1000,10 @@ export function OldSyllabusHub({
               <CardTitle className="text-base">Tips</CardTitle>
             </CardHeader>
             <CardContent className="space-y-2 text-sm text-muted-foreground">
+              <p>
+                Schemes and lesson plans now use the same week-table / MoE structure as CBC Teaching
+                Studio.
+              </p>
               <p>Use validated past papers for tests and term assessments.</p>
               <p>Switch to Topics to inspect outcomes before generating.</p>
               <p>

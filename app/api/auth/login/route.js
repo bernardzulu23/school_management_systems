@@ -227,6 +227,7 @@ export const POST = withSecureApi(async function POST(request) {
           studentProfile: true,
           teacherProfile: true,
           hodProfile: true,
+          guidanceAssignment: true,
         },
         take: 2,
       })

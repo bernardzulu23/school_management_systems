@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Calendar, Download, FileText, Layers, Loader2 } from 'lucide-react'
+import { Calendar, Download, FileText, Layers, Loader2, RotateCcw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 const FALLBACK_SUBJECTS = [
@@ -150,6 +150,24 @@ export function CurriculumStudio({
   const [busy, setBusy] = useState(false)
   const [recent, setRecent] = useState<RecentScheme[]>([])
   const [preview, setPreview] = useState<SchemePreview | null>(null)
+  const [carryOverTopics, setCarryOverTopics] = useState<
+    Array<{
+      id: string
+      topic: string
+      topicKey?: string | null
+      week?: number
+      unitTitle?: string | null
+      learningOutcomes?: string[]
+      teachingActivities?: string[]
+      assessmentMethod?: string
+      assessmentMethods?: string[]
+      resources?: string[]
+      notes?: string
+    }>
+  >([])
+  const [selectedCarryOverIds, setSelectedCarryOverIds] = useState<string[]>([])
+  const [carryOverMessage, setCarryOverMessage] = useState('')
+  const [loadingCarryOver, setLoadingCarryOver] = useState(false)
 
   const weeksPerTermNum = Math.min(MAX_WEEKS, Math.max(MIN_WEEKS, Number(weeksPerTerm) || 12))
   const weekChoices = Array.from({ length: weeksPerTermNum }, (_, i) => i + 1)
@@ -229,6 +247,48 @@ export function CurriculumStudio({
     setEndOfTermWeekEnd((prev) => clamp(prev, eotDefault))
   }, [weeksPerTermNum])
 
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      if (!subject || !grade || !term || !year) return
+      setLoadingCarryOver(true)
+      try {
+        const qs = new URLSearchParams({
+          subject,
+          grade,
+          term,
+          year: String(year),
+        })
+        const res = await fetch(`/api/curriculum/scheme/carry-over?${qs}`, {
+          credentials: 'include',
+        })
+        const json = await res.json().catch(() => ({}))
+        if (cancelled) return
+        if (!res.ok) {
+          setCarryOverTopics([])
+          setSelectedCarryOverIds([])
+          setCarryOverMessage(json.error || 'Could not load previous-term topics')
+          return
+        }
+        const topics = Array.isArray(json.topics) ? json.topics : []
+        setCarryOverTopics(topics)
+        setSelectedCarryOverIds(topics.map((t: { id: string }) => t.id))
+        setCarryOverMessage(String(json.message || ''))
+      } catch {
+        if (!cancelled) {
+          setCarryOverTopics([])
+          setSelectedCarryOverIds([])
+          setCarryOverMessage('')
+        }
+      } finally {
+        if (!cancelled) setLoadingCarryOver(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [subject, grade, term, year])
+
   const saveTestSchedule = async (schemeId: string | null | undefined) => {
     if (!schemeId) return
     const res = await fetch('/api/teaching/test-schedule', {
@@ -273,6 +333,7 @@ export function CurriculumStudio({
     setBusy(true)
     setPreview(null)
     try {
+      const selectedCarry = carryOverTopics.filter((t) => selectedCarryOverIds.includes(t.id))
       const res = await fetch('/api/curriculum/scheme', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -290,6 +351,7 @@ export function CurriculumStudio({
           format: exportFormat,
           save: true,
           submit,
+          carryOverTopics: selectedCarry,
         }),
       })
 
@@ -532,6 +594,76 @@ export function CurriculumStudio({
                 </Link>
                 .
               </p>
+
+              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                <div className="flex items-start gap-2">
+                  <RotateCcw className="mt-0.5 h-5 w-5 shrink-0 text-amber-700" />
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-medium text-amber-950">Continue unfinished topics</h4>
+                    <p className="mt-1 text-sm text-amber-800">
+                      Select topics from the previous term that were not marked complete. They are
+                      scheduled first in the new term, then new curriculum units follow.
+                    </p>
+                    {loadingCarryOver ? (
+                      <p className="mt-2 text-sm text-amber-700">Checking previous term…</p>
+                    ) : (
+                      <>
+                        <p className="mt-2 text-xs text-amber-700">{carryOverMessage || '—'}</p>
+                        {carryOverTopics.length > 0 ? (
+                          <div className="mt-3 max-h-48 space-y-1 overflow-auto rounded border border-amber-200 bg-white p-2 text-sm">
+                            <div className="mb-2 flex gap-2">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="h-8 px-2 text-xs"
+                                onClick={() =>
+                                  setSelectedCarryOverIds(carryOverTopics.map((t) => t.id))
+                                }
+                              >
+                                Select all
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="h-8 px-2 text-xs"
+                                onClick={() => setSelectedCarryOverIds([])}
+                              >
+                                Clear
+                              </Button>
+                            </div>
+                            {carryOverTopics.map((t) => {
+                              const checked = selectedCarryOverIds.includes(t.id)
+                              return (
+                                <label key={t.id} className="flex items-start gap-2 py-1">
+                                  <input
+                                    type="checkbox"
+                                    className="mt-1"
+                                    checked={checked}
+                                    onChange={() => {
+                                      setSelectedCarryOverIds((prev) =>
+                                        checked ? prev.filter((id) => id !== t.id) : [...prev, t.id]
+                                      )
+                                    }}
+                                  />
+                                  <span>
+                                    <span className="font-medium">{t.topic}</span>
+                                    {t.week != null ? (
+                                      <span className="text-muted-foreground">
+                                        {' '}
+                                        · prev week {t.week}
+                                      </span>
+                                    ) : null}
+                                  </span>
+                                </label>
+                              )
+                            })}
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

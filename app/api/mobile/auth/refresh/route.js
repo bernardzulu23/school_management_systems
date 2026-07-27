@@ -69,7 +69,15 @@ export const POST = withSecureHandler(async function POST(request) {
 
   const user = await prisma.user.findFirst({
     where: { id: decoded.id, schoolId: decoded.schoolId },
-    select: { id: true, email: true, name: true, role: true, schoolId: true, hodProfile: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      schoolId: true,
+      hodProfile: true,
+      guidanceAssignment: true,
+    },
   })
 
   if (!user) {

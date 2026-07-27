@@ -13,6 +13,23 @@ import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { getLessonPlanTeacherContext } from '@/lib/lesson-plans/teacher-context'
 import { generateSchemeOfWork } from '@/lib/curriculum/schemeOfWorkGenerator'
 import { exportSchemeToCsv, exportSchemeToWord } from '@/lib/curriculum/schemeOfWorkExport'
+import { carryOverTopicsToUnits } from '@/lib/curriculum/schemeCarryOver'
+
+const CarryOverTopicSchema = z.object({
+  id: z.string().optional(),
+  topicKey: z.string().nullable().optional(),
+  topic: z.string().min(1),
+  unitTitle: z.string().nullable().optional(),
+  topicTitle: z.string().nullable().optional(),
+  week: z.number().optional(),
+  learningOutcomes: z.array(z.string()).optional(),
+  teachingActivities: z.array(z.string()).optional(),
+  assessmentMethod: z.string().optional(),
+  assessmentMethods: z.array(z.string()).optional(),
+  resources: z.array(z.string()).optional(),
+  notes: z.string().optional(),
+  homeworkTask: z.string().optional(),
+})
 
 export const SchemeInputSchema = z.object({
   subject: z.string().min(1).max(100),
@@ -29,6 +46,7 @@ export const SchemeInputSchema = z.object({
   format: z.enum(['word', 'csv', 'json']).optional().default('word'),
   save: z.boolean().optional().default(true),
   submit: z.boolean().optional().default(false),
+  carryOverTopics: z.array(CarryOverTopicSchema).max(40).optional().default([]),
 })
 
 export async function handleSchemePost(request: Request): Promise<NextResponse> {
@@ -65,6 +83,7 @@ export async function handleSchemePost(request: Request): Promise<NextResponse> 
     midTermWeekEnd: input.midTermWeekEnd,
     endOfTermWeek: input.endOfTermWeek,
     endOfTermWeekEnd: input.endOfTermWeekEnd,
+    carryOverUnits: carryOverTopicsToUnits(input.carryOverTopics || []),
   })
 
   const ctx = await getLessonPlanTeacherContext(String(user.id), schoolId, input.subject)

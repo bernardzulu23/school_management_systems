@@ -350,12 +350,25 @@ export async function handleSecurityProxy(request) {
         if (
           !roleMatchesDashboardGroups(payload.role, dashboardGate.groups, {
             isHod: Boolean(payload.isHod),
+            isGuidance: Boolean(payload.isGuidance),
           })
         ) {
-          // Teachers may hold HeadOfDepartment without role=hod; layout verifies via DB.
+          // Teachers may hold HOD / Guidance assignments without matching role strings;
+          // layout / DB gates verify the profile before rendering sensitive UI.
           const rk = roleKey(payload.role)
           const teacherLike = rk === 'teacher' || rk === 'classteacher' || rk === 'seniorteacher'
-          if (!(dashboardGate.prefix === '/dashboard/hod' && teacherLike)) {
+          const staffLike =
+            teacherLike ||
+            rk === 'hod' ||
+            rk === 'headofdepartment' ||
+            rk === 'deputyhead' ||
+            rk === 'deputyheadteacher' ||
+            rk === 'guidance' ||
+            rk === 'guidanceteacher'
+          const deferred =
+            (dashboardGate.prefix === '/dashboard/hod' && teacherLike) ||
+            (dashboardGate.prefix === '/dashboard/guidance' && staffLike)
+          if (!deferred) {
             return secureResponse(
               {
                 error: 'Forbidden',

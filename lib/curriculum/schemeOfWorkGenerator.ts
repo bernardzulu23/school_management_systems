@@ -190,6 +190,8 @@ export async function generateSchemeOfWork(input: {
   midTermWeekEnd?: number | null
   endOfTermWeek?: number | null
   endOfTermWeekEnd?: number | null
+  /** Unfinished topics from previous term — placed at the front of teaching weeks. */
+  carryOverUnits?: ResolvedCurriculumUnit[]
 }): Promise<{
   subject: string
   gradeOrForm: string
@@ -197,6 +199,7 @@ export async function generateSchemeOfWork(input: {
   year: number
   source: string
   weeks: SchemeWeekRow[]
+  carryOverCount: number
 }> {
   const subject = String(input.subject || '').trim()
   const gradeOrForm = String(input.grade || '').trim()
@@ -217,10 +220,19 @@ export async function generateSchemeOfWork(input: {
     endOfTermWeekEnd: input.endOfTermWeekEnd,
   }
 
-  const weeks = distributeUnitsAcrossTerm(curriculum.units, input.weekCount ?? 12, testSchedule, {
+  const carryOverUnits = Array.isArray(input.carryOverUnits) ? input.carryOverUnits : []
+  const units = [...carryOverUnits, ...(curriculum.units || [])]
+
+  const weeks = distributeUnitsAcrossTerm(units, input.weekCount ?? 12, testSchedule, {
     subject: curriculum.subject || subject,
     gradeOrForm: curriculum.gradeOrForm || gradeOrForm,
   })
+
+  // Tag carry-over teaching weeks in notes for clarity in UI / Word export.
+  const carryKeys = new Set(
+    carryOverUnits.flatMap((u) => (u.topicKeys || []).map(String)).filter(Boolean)
+  )
+  const carryTitles = new Set(carryOverUnits.map((u) => String(u.title || '').replace(/^↩\s*/, '')))
 
   const teachingModule = loadTeachingModule({
     subject: curriculum.subject || subject,
@@ -230,11 +242,21 @@ export async function generateSchemeOfWork(input: {
 
   const enriched = weeks.map((w) => {
     if (w.weekType && w.weekType !== 'teaching') return w
-    return {
+    const isCarry =
+      (w.topicKey && carryKeys.has(String(w.topicKey))) ||
+      carryTitles.has(String(w.unitTitle || '').replace(/^↩\s*/, '')) ||
+      String(w.topic || '').startsWith('↩')
+    const base = {
       ...w,
       teachingActivities: enrichActivitiesFromModule(w.topic, w.teachingActivities, teachingModule),
       resources: enrichResourcesFromModule(w.topic, w.resources, teachingModule),
       notes: teachingModule ? `${w.notes} · enriched from Teaching Module` : w.notes,
+    }
+    if (!isCarry) return base
+    return {
+      ...base,
+      notes: `${base.notes || ''} · carried from previous term`.trim(),
+      teacherNotes: `${base.teacherNotes || base.notes || ''} · continue unfinished work`.trim(),
     }
   })
 
@@ -243,7 +265,13 @@ export async function generateSchemeOfWork(input: {
     gradeOrForm: curriculum.gradeOrForm || gradeOrForm,
     term,
     year,
-    source: teachingModule ? `${curriculum.source}+teaching-module` : curriculum.source,
+    source:
+      carryOverUnits.length > 0
+        ? `${teachingModule ? `${curriculum.source}+teaching-module` : curriculum.source}+carry-over`
+        : teachingModule
+          ? `${curriculum.source}+teaching-module`
+          : curriculum.source,
     weeks: enriched,
+    carryOverCount: carryOverUnits.length,
   }
 }

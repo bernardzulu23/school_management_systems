@@ -19,9 +19,18 @@ export async function routeGeneration(params: {
   academicYear: number
   subject: string
   tenantId: string
+  schoolId?: string
+  teacherId?: string
   grade?: number
   selectedTopicIds?: string[]
   questionCount?: number
+  weekCount?: number
+  term?: string
+  midTermWeek?: number | null
+  midTermWeekEnd?: number | null
+  endOfTermWeek?: number | null
+  endOfTermWeekEnd?: number | null
+  carryOverTopics?: Array<Record<string, unknown>>
 }) {
   const { syllabusVersion, displayLabel } = await resolveSyllabus(
     params.canonicalLevel,
