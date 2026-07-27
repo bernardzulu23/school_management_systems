@@ -19,8 +19,8 @@ const nextConfig = {
     cpus: 1,
     workerThreads: false,
     staticGenerationMaxConcurrency: 1,
-    // Run webpack in a child process so the main Next process stays smaller.
-    webpackBuildWorker: true,
+    // On Vercel (8GB), a webpack child + 6GB heap OOMs. Keep the worker local only.
+    webpackBuildWorker: !process.env.VERCEL,
     // More aggressive GC / smaller peak during webpack (Next 15+).
     webpackMemoryOptimizations: true,
   },
@@ -264,6 +264,9 @@ module.exports = withSentryConfig(nextConfig, {
   hideSourceMaps: true,
   disableLogger: true,
   tunnelRoute: '/monitoring',
+  // Webpack plugins + map upload spike RAM; keep off unless explicitly uploading.
+  disableServerWebpackPlugin: !sentryUploadSourceMaps,
+  disableClientWebpackPlugin: !sentryUploadSourceMaps,
   webpack: {
     // Instrumentation monitors add webpack work; keep off unless uploading maps.
     automaticVercelMonitors: sentryUploadSourceMaps,

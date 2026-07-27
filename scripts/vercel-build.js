@@ -2,6 +2,7 @@ const { execSync } = require('child_process')
 
 // Belt-and-suspenders for Vercel OOM (also set in vercel.json build.env).
 // Leave ~2GB headroom under the 8GB builder for the OS / build agent.
+// Peak RAM is lower when webpackBuildWorker is off on Vercel (see next.config.js).
 const HEAP = '--max-old-space-size=6144'
 if (!process.env.NODE_OPTIONS) {
   process.env.NODE_OPTIONS = HEAP
