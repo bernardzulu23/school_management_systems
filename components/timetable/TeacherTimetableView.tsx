@@ -83,11 +83,29 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
 
   return (
     <div className="space-y-4">
-      <div className="onboard-card p-5 print:hidden">
-        <div className="text-royalPurple-text1 font-bold text-lg">My Teaching Timetable</div>
-        <div className="text-royalPurple-text2 text-sm mt-1">
-          {summary.total} periods/week · {summary.free} free periods · Busiest: {summary.busiest} ·
-          Least busy: {summary.least}
+      <div className="onboard-card p-4 sm:p-5 print:hidden">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0">
+            <div className="text-royalPurple-text1 font-bold text-lg">My Teaching Timetable</div>
+            <div className="text-royalPurple-text2 text-sm mt-1">
+              {summary.total} periods/week · {summary.free} free periods · Busiest:{' '}
+              {summary.busiest} · Least busy: {summary.least}
+            </div>
+          </div>
+          {props.term || props.academicYear ? (
+            <div className="flex flex-wrap gap-2 shrink-0">
+              {props.term ? (
+                <span className="inline-flex items-center rounded-full border border-royalPurple-border/50 bg-royalPurple-card/50 px-3 py-1 text-xs font-semibold text-royalPurple-text1">
+                  {props.term}
+                </span>
+              ) : null}
+              {props.academicYear ? (
+                <span className="inline-flex items-center rounded-full border border-royalPurple-border/50 bg-royalPurple-card/50 px-3 py-1 text-xs font-semibold text-royalPurple-text1">
+                  {props.academicYear}
+                </span>
+              ) : null}
+            </div>
+          ) : null}
         </div>
         {nextClass ? (
           <div className="mt-3 onboard-summary">

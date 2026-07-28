@@ -215,7 +215,7 @@ export function DashboardLayout({ children, title }) {
                   ) : (
                     <UserIcon className="h-5 w-5" />
                   )}
-                  <span className="hidden sm:inline font-medium">Profile</span>
+                  <span className="font-medium">Profile</span>
                 </Link>
                 <ThemeToggle />
                 <Button

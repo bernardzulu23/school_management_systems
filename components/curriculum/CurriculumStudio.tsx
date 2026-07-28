@@ -483,7 +483,7 @@ export function CurriculumStudio({
 
           {studioTab === 'basic' && (
             <div className="space-y-4">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="space-y-2">
                   <Label>Subject</Label>
                   <Select value={subject} onValueChange={setSubject}>

@@ -362,9 +362,11 @@ export default function TeacherDashboard() {
       <div className="space-y-8">
         <div className="space-y-8">
           <section className="max-w-none">
-            <div className="flex items-center justify-between gap-3 flex-wrap">
-              <h2 className="text-2xl font-bold text-royalPurple-text1">My Teaching Schedule</h2>
-              <div className="flex items-center gap-2 print:hidden">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-xl sm:text-2xl font-bold text-royalPurple-text1">
+                My Teaching Schedule
+              </h2>
+              <div className="flex flex-wrap items-center gap-2 print:hidden">
                 <Link
                   href="/dashboard/timetable/teacher"
                   className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-royalPurple-card/70 border border-royalPurple-border text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-semibold"
@@ -397,21 +399,39 @@ export default function TeacherDashboard() {
 
           <DepartmentActivityReminders />
 
-          <div className="backdrop-blur-lg bg-royalPurple-card/60 dark:bg-royalPurple-card/60 rounded-3xl p-8 shadow-2xl transition-colors duration-300">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">
+          <div className="backdrop-blur-lg bg-royalPurple-card/60 dark:bg-royalPurple-card/60 rounded-3xl p-5 sm:p-8 shadow-2xl transition-colors duration-300">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0">
+                <h1 className="text-2xl sm:text-4xl font-bold text-royalPurple-text1 mb-2 sm:mb-4">
                   Teacher Dashboard
                 </h1>
-                <p className="text-royalPurple-text2 dark:text-royalPurple-text2 text-lg">
+                <p className="text-royalPurple-text2 dark:text-royalPurple-text2 text-base sm:text-lg">
                   Manage your classes and track student progress
                 </p>
                 <p className="text-royalPurple-text2 dark:text-royalPurple-text3 text-sm mt-2">
                   Welcome back, {teacherTitle ? `${teacherTitle} ` : ''}
                   {currentUser?.name || 'Teacher'}!
                 </p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {publishedTerm ? (
+                    <span className="inline-flex items-center rounded-full border border-royalPurple-border/50 bg-royalPurple-page/70 px-3 py-1 text-xs font-semibold text-royalPurple-text1">
+                      {publishedTerm}
+                    </span>
+                  ) : null}
+                  {publishedYear ? (
+                    <span className="inline-flex items-center rounded-full border border-royalPurple-border/50 bg-royalPurple-page/70 px-3 py-1 text-xs font-semibold text-royalPurple-text1">
+                      {publishedYear}
+                    </span>
+                  ) : null}
+                  <Link
+                    href="/dashboard/profile"
+                    className="inline-flex items-center rounded-full border border-royalPurple-border/50 bg-royalPurple-page/70 px-3 py-1 text-xs font-semibold text-royalPurple-text1 hover:bg-royalPurple-card2"
+                  >
+                    Open profile
+                  </Link>
+                </div>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-wrap items-center gap-3 sm:justify-end">
                 {currentUser?.hodProfile && (
                   <Link
                     href="/dashboard/hod"
@@ -420,17 +440,21 @@ export default function TeacherDashboard() {
                     HOD Dashboard
                   </Link>
                 )}
-                <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 text-center">
-                  <div className="text-2xl font-bold text-royalPurple-text1">
+                <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl px-3 py-2 sm:p-4 text-center">
+                  <div className="text-xl sm:text-2xl font-bold text-royalPurple-text1">
                     {new Date().getDate()}
                   </div>
-                  <div className="text-sm text-royalPurple-pillTx">
+                  <div className="text-xs sm:text-sm text-royalPurple-pillTx">
                     {new Date().toLocaleDateString('en-US', { month: 'short' })}
                   </div>
                 </div>
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-accent to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-xl">
+                <Link
+                  href="/dashboard/profile"
+                  className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-gradient-to-r from-accent to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-lg sm:text-xl shrink-0"
+                  aria-label="Open profile"
+                >
                   {currentUser?.name?.charAt(0) || 'T'}
-                </div>
+                </Link>
               </div>
             </div>
           </div>
