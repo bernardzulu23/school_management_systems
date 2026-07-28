@@ -14,6 +14,7 @@ import { periodTypeBadge } from '@/lib/timetable/doublePeriodUtils'
 import { resolveCardColor } from '@/lib/timetable/cardColors'
 import { teacherDisplayName } from '@/lib/timetable/teacherDisplay'
 import { TeacherColorLegend } from '@/components/timetable/TeacherColorLegend'
+import { printTimetable } from '@/lib/timetable/printTimetable'
 
 export type EntityViewMode = 'teacher' | 'class'
 
@@ -134,20 +135,28 @@ export function TimetableEntityView({
           </div>
         ) : null}
         {selectedId && term && academicYear ? (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 print:hidden">
             <a
               className="zsms-btn-outline text-xs h-9 inline-flex items-center px-3 rounded-lg border border-royalPurple-border"
               href={`/api/timetable/export-schedule?scope=${mode}&id=${encodeURIComponent(selectedId)}&term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&format=docx`}
             >
               Download Word
             </a>
-            <a
+            <button
+              type="button"
               className="zsms-btn-outline text-xs h-9 inline-flex items-center px-3 rounded-lg border border-royalPurple-border"
+              onClick={() => printTimetable()}
+            >
+              Print / PDF
+            </button>
+            <a
+              className="zsms-btn-outline text-xs h-9 inline-flex items-center px-3 rounded-lg border border-royalPurple-border text-royalPurple-text3"
               href={`/api/timetable/export-schedule?scope=${mode}&id=${encodeURIComponent(selectedId)}&term=${encodeURIComponent(term)}&academicYear=${encodeURIComponent(academicYear)}&format=html`}
               target="_blank"
               rel="noreferrer"
+              title="Open printable page (Save as PDF)"
             >
-              Print / PDF
+              Save as PDF page
             </a>
           </div>
         ) : null}

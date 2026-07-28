@@ -6,6 +6,7 @@ import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { useAuth } from '@/lib/auth'
 import { PublishedAscWallTimetable } from '@/components/timetable/PublishedAscWallTimetable'
+import { printTimetable } from '@/lib/timetable/printTimetable'
 
 export interface TeacherTimetableViewProps {
   assignments?: Assignment[]
@@ -105,13 +106,21 @@ export function TeacherTimetableView(props: TeacherTimetableViewProps) {
             >
               Download Word
             </a>
-            <a
+            <button
+              type="button"
               className="text-xs px-3 py-1.5 rounded-lg border border-royalPurple-border text-royalPurple-text1 hover:bg-royalPurple-card/40"
+              onClick={() => printTimetable()}
+            >
+              Print / PDF
+            </button>
+            <a
+              className="text-xs px-3 py-1.5 rounded-lg border border-royalPurple-border text-royalPurple-text3 hover:bg-royalPurple-card/40"
               href={`/api/timetable/export-schedule?scope=teacher&id=${encodeURIComponent(effectiveTeacherId)}&term=${encodeURIComponent(props.term)}&academicYear=${encodeURIComponent(props.academicYear)}&format=html`}
               target="_blank"
               rel="noreferrer"
+              title="Open printable page (Save as PDF)"
             >
-              Print / PDF
+              Save as PDF page
             </a>
           </div>
         ) : null}

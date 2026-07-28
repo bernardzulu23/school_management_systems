@@ -78,6 +78,8 @@ export const GET = withErrorHandler(async function GET(req) {
     titleEntity: schedule.titleEntity,
     assignments: schedule.assignments,
     timeSlots: schedule.timeSlots,
+    scope: schedule.scope,
+    colorMap: schedule.colorMap,
   }
 
   if (format === 'html') {
