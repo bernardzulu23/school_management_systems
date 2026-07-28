@@ -2,6 +2,7 @@ import { validateEnv } from '@/lib/config/env'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
+import { Analytics } from '@vercel/analytics/next'
 
 const SITE_DESCRIPTION =
   'The complete school management platform for Zambian primary and secondary schools. ECZ SBA, CBC curriculum, attendance, timetables, and AI tools — built for Zambia.'
@@ -83,6 +84,7 @@ export default function RootLayout({ children }) {
             }}
           />
         </Providers>
+        <Analytics />
       </body>
     </html>
   )
