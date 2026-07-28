@@ -20,9 +20,9 @@ describe('Individual Portal utilities', () => {
     expect(code).not.toMatch(/[0O1I]/)
   })
 
-  it('trial is 2 months (60 days)', () => {
-    expect(TRIAL_MONTHS).toBe(2)
-    expect(TRIAL_DAYS).toBe(60)
+  it('trial is 3 months (90 days)', () => {
+    expect(TRIAL_MONTHS).toBe(3)
+    expect(TRIAL_DAYS).toBe(90)
   })
 
   it('individual plans are teacher-only', () => {

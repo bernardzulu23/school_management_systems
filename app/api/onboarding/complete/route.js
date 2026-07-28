@@ -121,7 +121,7 @@ export const POST = withSecureHandler(async function POST(request) {
     const isIndividual = isIndividualRegistration(reg)
 
     if (isIndividual) {
-      // 2-month trial at signup — payment collected via billing after trial ends
+      // 3-month trial at signup — payment collected via billing after trial ends
     } else if (!isTrial && String(reg.paymentStatus || '').toLowerCase() !== 'paid') {
       log.response(402, Date.now() - start)
       return NextResponse.json({ error: 'Payment required' }, { status: 402 })

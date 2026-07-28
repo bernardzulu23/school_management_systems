@@ -10,7 +10,7 @@ const plans = [
   {
     name: 'Trial',
     price: 'Free',
-    period: '30 days',
+    period: '3 months',
     description: 'Test everything risk-free',
     features: [
       'ECZ SBA Hub (full trial)',

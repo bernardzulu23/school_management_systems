@@ -85,7 +85,7 @@ function PlatformDashboardContent() {
   }
 
   async function extendPilot(school) {
-    const months = Number(pilotMonthsById[school.id] || 2)
+    const months = Number(pilotMonthsById[school.id] || 3)
     if (!Number.isFinite(months) || months < 1 || months > 12) {
       toast.error('Choose 1–12 months')
       return
@@ -318,7 +318,7 @@ function PlatformDashboardContent() {
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       <select
                         className="border border-ink/30 rounded px-2 py-1 text-xs"
-                        value={String(pilotMonthsById[s.id] || 2)}
+                        value={String(pilotMonthsById[s.id] || 3)}
                         onChange={(e) =>
                           setPilotMonthsById((prev) => ({
                             ...prev,

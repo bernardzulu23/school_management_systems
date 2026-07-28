@@ -152,7 +152,7 @@ describe('POST /api/auth/login', () => {
     getSubscriptionState.mockReturnValue({
       expired: true,
       isTrialExpired: true,
-      trialDaysTotal: 30,
+      trialDaysTotal: 90,
     })
 
     const res = await POST(

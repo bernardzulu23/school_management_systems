@@ -252,26 +252,30 @@ const { withSentryConfig } = require('@sentry/nextjs')
 // Source map upload during build is very memory-heavy; opt in explicitly.
 const sentryUploadSourceMaps = process.env.SENTRY_UPLOAD_SOURCEMAPS === '1'
 
-module.exports = withSentryConfig(nextConfig, {
-  org: process.env.SENTRY_ORG || 'zinks-0m',
-  project: process.env.SENTRY_PROJECT || 'javascript-nextjs',
-  authToken: process.env.SENTRY_AUTH_TOKEN,
-  silent: !process.env.CI,
-  sourcemaps: {
-    disable: !sentryUploadSourceMaps,
-  },
-  widenClientFileUpload: sentryUploadSourceMaps,
-  hideSourceMaps: true,
-  disableLogger: true,
-  tunnelRoute: '/monitoring',
-  // Webpack plugins + map upload spike RAM; keep off unless explicitly uploading.
-  disableServerWebpackPlugin: !sentryUploadSourceMaps,
-  disableClientWebpackPlugin: !sentryUploadSourceMaps,
-  webpack: {
-    // Instrumentation monitors add webpack work; keep off unless uploading maps.
-    automaticVercelMonitors: sentryUploadSourceMaps,
-    treeshake: {
-      removeDebugLogging: true,
+// On constrained Vercel builders, skip withSentryConfig entirely unless uploading
+// maps — the wrapper still adds webpack/telemetry overhead even with plugins off.
+if (process.env.VERCEL && !sentryUploadSourceMaps) {
+  module.exports = nextConfig
+} else {
+  module.exports = withSentryConfig(nextConfig, {
+    org: process.env.SENTRY_ORG || 'zinks-0m',
+    project: process.env.SENTRY_PROJECT || 'javascript-nextjs',
+    authToken: process.env.SENTRY_AUTH_TOKEN,
+    silent: !process.env.CI,
+    sourcemaps: {
+      disable: !sentryUploadSourceMaps,
     },
-  },
-})
+    widenClientFileUpload: sentryUploadSourceMaps,
+    hideSourceMaps: true,
+    disableLogger: true,
+    tunnelRoute: '/monitoring',
+    disableServerWebpackPlugin: !sentryUploadSourceMaps,
+    disableClientWebpackPlugin: !sentryUploadSourceMaps,
+    webpack: {
+      automaticVercelMonitors: sentryUploadSourceMaps,
+      treeshake: {
+        removeDebugLogging: true,
+      },
+    },
+  })
+}
