@@ -23,46 +23,6 @@ const HOD_DUTY_FLAGS = {
   'stock-book': 'HOD_STOCK_BOOK',
   'daily-routine': 'HOD_DAILY_ROUTINE',
 }
-const DEPARTMENTS = {
-  Mathematics: [
-    'Mathematics',
-    'Information Technology',
-    'Computer Studies',
-    'Additional Mathematics',
-  ],
-  'Literature and Languages': [
-    'English Language',
-    'Literature',
-    'Kikaonde',
-    'Silozi',
-    'Chibemba',
-    'Cinyanja',
-    'Chitonga',
-    'Luvale',
-    'Lunda',
-    'Chinese',
-    'French',
-  ],
-  'Social Sciences': ['Geography', 'Social Studies', 'Civic', 'History'],
-  'Arts and Design': [
-    'Physical Education',
-    'Music',
-    'Expressive Art',
-    'Design and Technology',
-    'Metalwork',
-    'Woodwork',
-  ],
-  'Natural Sciences': [
-    'Biology',
-    'Physics',
-    'Chemistry',
-    'Integrated Science',
-    'Agricultural Sciences',
-  ],
-  'Business Studies': ['Commerce', 'Accounts', 'Business Studies', 'Religious Education'],
-  'Home Economics': ['Home Economics', 'Fashion and Fabrics', 'Food and Nutrition'],
-}
-
 function filterHodDuties(duties) {
   return duties.filter((d) => {
     const flag = HOD_DUTY_FLAGS[d.id]
@@ -210,15 +170,12 @@ export default function HodDashboard() {
     () => defaultClassrooms(Math.max(12, timetableTeachers.length)),
     [timetableTeachers.length]
   )
-  const normalizedDepartment =
-    currentDepartment === 'Art and Design' ? 'Arts and Design' : currentDepartment
   const departmentSubjects = useMemo(() => {
     const fromApi = Array.isArray(departmentData?.subjects)
       ? departmentData.subjects.map((s) => (typeof s === 'string' ? s : s?.name)).filter(Boolean)
       : []
-    if (fromApi.length > 0) return fromApi
-    return DEPARTMENTS[normalizedDepartment] || DEPARTMENTS[currentDepartment] || []
-  }, [departmentData?.subjects, normalizedDepartment, currentDepartment])
+    return fromApi
+  }, [departmentData?.subjects])
 
   useEffect(() => {
     const update = () => setTimetableMobile(window.innerWidth < 768)
@@ -1332,43 +1289,73 @@ export default function HodDashboard() {
               <CardContent>
                 <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
                   <div className="space-y-4">
-                    {departmentData.classes.map((classItem) => (
-                      <div
-                        key={classItem.id}
-                        className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
-                      >
-                        <div className="flex items-center space-x-4">
-                          <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-xl p-3">
-                            <Group className="h-6 w-6 text-royalPurple-text1" />
+                    {departmentData.classes.map((classItem) => {
+                      const className = classItem?.name ? String(classItem.name) : ''
+                      const studentsInClass =
+                        typeof classItem.students === 'number'
+                          ? classItem.students
+                          : typeof classItem.studentCount === 'number'
+                            ? classItem.studentCount
+                            : className
+                              ? departmentData.students.filter(
+                                  (s) => String(s?.class || '') === className
+                                ).length
+                              : 0
+                      const subjectsInClass = Array.isArray(classItem?.subjects)
+                        ? classItem.subjects
+                        : Array.isArray(classItem?.subjectNames)
+                          ? classItem.subjectNames
+                          : []
+                      const maxShown = Math.max(
+                        ...departmentData.classes.map((c) =>
+                          typeof c.students === 'number'
+                            ? c.students
+                            : typeof c.studentCount === 'number'
+                              ? c.studentCount
+                              : 0
+                        ),
+                        studentsInClass,
+                        1
+                      )
+
+                      return (
+                        <div
+                          key={classItem.id || className}
+                          className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
+                        >
+                          <div className="flex items-center space-x-4">
+                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-xl p-3">
+                              <Group className="h-6 w-6 text-royalPurple-text1" />
+                            </div>
+                            <div>
+                              <h4 className="font-semibold text-royalPurple-text1">
+                                {classItem.name}
+                              </h4>
+                              <p className="text-royalPurple-text2 text-sm">
+                                {studentsInClass} students
+                              </p>
+                              <p className="text-royalPurple-text3 text-xs">
+                                {subjectsInClass.length} department subjects
+                              </p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="font-semibold text-royalPurple-text1">
-                              {classItem.name}
-                            </h4>
-                            <p className="text-royalPurple-text2 text-sm">
-                              {classItem.students} students
-                            </p>
-                            <p className="text-royalPurple-text3 text-xs">
-                              {classItem.subjects?.length || 0} department subjects
-                            </p>
+                          <div className="text-right">
+                            <div className="text-lg font-bold text-royalPurple-text1">
+                              {studentsInClass}
+                            </div>
+                            <div className="text-sm text-royalPurple-text2">Students</div>
+                            <div className="w-20 bg-royalPurple-muted/60 rounded-full h-2 mt-2">
+                              <div
+                                className="bg-royalPurple-accent h-2 rounded-full"
+                                style={{
+                                  width: `${Math.min((studentsInClass / maxShown) * 100, 100)}%`,
+                                }}
+                              ></div>
+                            </div>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className="text-lg font-bold text-royalPurple-text1">
-                            {classItem.students}
-                          </div>
-                          <div className="text-sm text-royalPurple-text2">Students</div>
-                          <div className="w-20 bg-royalPurple-muted/60 rounded-full h-2 mt-2">
-                            <div
-                              className="bg-royalPurple-accent h-2 rounded-full"
-                              style={{
-                                width: `${Math.min((classItem.students / 35) * 100, 100)}%`,
-                              }}
-                            ></div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      )
+                    })}
                     {departmentData.classes.length === 0 && (
                       <div className="text-center py-8">
                         <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">

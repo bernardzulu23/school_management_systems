@@ -451,6 +451,98 @@ export const GET = withErrorHandler(async function GET(request) {
     console.error('[HOD Dashboard] Failed loading attendance:', e?.message)
   }
 
+  const classIds = mergedClasses.map((c) => String(c.id || '')).filter(Boolean)
+  const countByClassId = new Map()
+  if (classIds.length > 0) {
+    try {
+      const grouped = await prisma.student.groupBy({
+        by: ['classId'],
+        where: { schoolId, classId: { in: classIds } },
+        _count: { _all: true },
+      })
+      for (const row of grouped) {
+        if (row.classId) countByClassId.set(String(row.classId), Number(row._count?._all || 0))
+      }
+    } catch (e) {
+      console.error('[HOD Dashboard] Failed counting students by classId:', e?.message)
+    }
+  }
+
+  const countByClassName = new Map()
+  if (effectiveClassNames.length > 0) {
+    try {
+      const grouped = await prisma.student.groupBy({
+        by: ['class'],
+        where: { schoolId, class: { in: effectiveClassNames } },
+        _count: { _all: true },
+      })
+      for (const row of grouped) {
+        if (row.class) countByClassName.set(String(row.class), Number(row._count?._all || 0))
+      }
+    } catch (e) {
+      console.error('[HOD Dashboard] Failed counting students by class name:', e?.message)
+    }
+  }
+
+  const subjectsByClassId = new Map()
+  const teacherNamesByClassId = new Map()
+  for (const t of teachers) {
+    const teacherName = String(t?.user?.name || '').trim()
+    for (const a of t.teachingAssignments || []) {
+      const cid = String(a?.class?.id || '').trim()
+      if (!cid) continue
+      if (!subjectsByClassId.has(cid)) subjectsByClassId.set(cid, new Set())
+      const subjectName = String(a?.subject?.name || '').trim()
+      if (subjectName) subjectsByClassId.get(cid).add(subjectName)
+      if (teacherName) {
+        if (!teacherNamesByClassId.has(cid)) teacherNamesByClassId.set(cid, [])
+        const list = teacherNamesByClassId.get(cid)
+        if (!list.includes(teacherName)) list.push(teacherName)
+      }
+    }
+  }
+
+  const teacherById = new Map(teachers.map((t) => [String(t.id), t]))
+  const scoreBucketsByClass = new Map()
+  for (const r of resultsWithMeta) {
+    const className = String(r?.className || r?.student?.class || '').trim()
+    if (!className) continue
+    const score = Number(r.score)
+    if (!Number.isFinite(score)) continue
+    const bucket = scoreBucketsByClass.get(className) || { sum: 0, count: 0 }
+    bucket.sum += score
+    bucket.count += 1
+    scoreBucketsByClass.set(className, bucket)
+  }
+
+  const enrichedClasses = mergedClasses.map((c) => {
+    const id = String(c.id || '')
+    const name = String(c.name || '')
+    const studentsCount =
+      countByClassId.get(id) ??
+      countByClassName.get(name) ??
+      students.filter((s) => String(s?.class || '') === name || String(s?.classId || '') === id)
+        .length
+    const subjectNames = Array.from(subjectsByClassId.get(id) || [])
+    const homeroom = c.teacherId ? teacherById.get(String(c.teacherId)) : null
+    const classTeacher =
+      String(homeroom?.user?.name || '').trim() || (teacherNamesByClassId.get(id) || [])[0] || ''
+    const scoreBucket = scoreBucketsByClass.get(name)
+    const averageGrade =
+      scoreBucket && scoreBucket.count > 0 ? Math.round(scoreBucket.sum / scoreBucket.count) : null
+
+    return {
+      ...c,
+      students: studentsCount,
+      studentCount: studentsCount,
+      subjects: subjectNames,
+      subjectNames,
+      classTeacher,
+      teachers: teacherNamesByClassId.get(id) || [],
+      averageGrade,
+    }
+  })
+
   return NextResponse.json({
     success: true,
     data: {
@@ -463,7 +555,7 @@ export const GET = withErrorHandler(async function GET(request) {
       stats: {
         totalTeachers: teachers.length,
         totalStudents: students.length,
-        totalClasses: mergedClasses.length,
+        totalClasses: enrichedClasses.length,
         totalSubjects: subjects.length,
         averagePerformance:
           results.length > 0
@@ -483,7 +575,7 @@ export const GET = withErrorHandler(async function GET(request) {
       },
       teachers,
       students,
-      classes: mergedClasses,
+      classes: enrichedClasses,
       subjects,
       results: resultsWithMeta,
       assessments,
