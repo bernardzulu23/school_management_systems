@@ -683,6 +683,48 @@ html:not(.dark) .bg-white {
   box-shadow: 0 0 0 3px rgba(255, 59, 0, 0.16);
 }
 
+@media (max-width: 640px) {
+  .onboard-shell {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .onboard-card {
+    border-radius: 16px;
+  }
+
+  .stepper {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .step {
+    align-items: flex-start;
+  }
+
+  .step-label {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    line-height: 1.35;
+  }
+
+  .onboard-summary {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .provider-row {
+    flex-direction: column;
+  }
+
+  .provider-pill {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
 .provider-dot {
   width: 32px;
   height: 32px;

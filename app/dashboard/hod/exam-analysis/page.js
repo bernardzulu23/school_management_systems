@@ -102,8 +102,8 @@ export default function ExamAnalysisPage() {
   return (
     <DashboardLayout title="Exam Analysis">
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:space-x-4">
             <Link href="/dashboard/hod">
               <Button variant="outline" size="sm">
                 <ArrowLeft className="h-4 w-4 mr-2" />
@@ -111,8 +111,8 @@ export default function ExamAnalysisPage() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-royalPurple-text1 flex items-center">
-                <BarChart3 className="h-8 w-8 mr-3 text-royalPurple-accentTx" />
+              <h1 className="flex items-center text-2xl font-bold text-royalPurple-text1 sm:text-3xl">
+                <BarChart3 className="mr-3 h-7 w-7 text-royalPurple-accentTx sm:h-8 sm:w-8" />
                 Exam Analysis
               </h1>
               <p className="text-royalPurple-text2 mt-1">
@@ -120,9 +120,9 @@ export default function ExamAnalysisPage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:flex xl:flex-wrap xl:items-center">
             <select
-              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
+              className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
               value={selectedTerm}
               onChange={(e) => setSelectedTerm(e.target.value)}
             >
@@ -131,7 +131,7 @@ export default function ExamAnalysisPage() {
               <option value="Term 3">Term 3</option>
             </select>
             <select
-              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
+              className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
               value={selectedResultType}
               onChange={(e) => setSelectedResultType(e.target.value)}
             >
@@ -147,7 +147,7 @@ export default function ExamAnalysisPage() {
               </option>
             </select>
             <select
-              className="px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
+              className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
             >
@@ -160,7 +160,7 @@ export default function ExamAnalysisPage() {
                 )
               })}
             </select>
-            <Button variant="outline" onClick={() => refetch()}>
+            <Button variant="outline" onClick={() => refetch()} className="w-full sm:w-auto">
               <Download className="h-4 w-4 mr-2" />
               Refresh
             </Button>

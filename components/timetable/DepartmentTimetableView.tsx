@@ -90,6 +90,7 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
   const assignments = props.assignments ?? storeAssignments
   const [selectedTeacherId, setSelectedTeacherId] = useState<string>('')
   const [isMobile, setIsMobile] = useState(false)
+  const [selectedDay, setSelectedDay] = useState<string>('monday')
   const [open, setOpen] = useState(false)
   const editable = props.editable === true
   const [activeAssignmentId, setActiveAssignmentId] = useState<string | null>(null)
@@ -234,6 +235,12 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       setSelectedTeacherId(String(departmentTeachers[0]?.id || ''))
     }
   }, [departmentTeachers, selectedTeacherId, teacherSet])
+
+  useEffect(() => {
+    if (!days.includes(selectedDay)) {
+      setSelectedDay(days[0] || 'monday')
+    }
+  }, [days, selectedDay])
 
   const visibleTeachers = useMemo(() => {
     if (!isMobile) return departmentTeachers
@@ -568,29 +575,47 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
       ) : null}
 
       {isMobile ? (
-        <div className="flex flex-wrap gap-2 print:hidden">
-          {(departmentTeachers as any[]).slice(0, 12).map((t) => {
-            const tid = String(t.id)
-            const hours = (workload.perTeacherMinutes.get(tid) || 0) / 60
-            const max = workload.perTeacherMaxHours.get(tid) || 25
-            const overloaded = hours > max
-            return (
+        <div className="space-y-3 print:hidden">
+          <div className="flex flex-wrap gap-2">
+            {(departmentTeachers as any[]).slice(0, 12).map((t) => {
+              const tid = String(t.id)
+              const hours = (workload.perTeacherMinutes.get(tid) || 0) / 60
+              const max = workload.perTeacherMaxHours.get(tid) || 25
+              const overloaded = hours > max
+              return (
+                <button
+                  key={tid}
+                  type="button"
+                  onClick={() => setSelectedTeacherId(tid)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${
+                    selectedTeacherId === tid
+                      ? 'bg-royalPurple-accent text-white border-royalPurple-accent'
+                      : overloaded
+                        ? 'bg-royalPurple-danger/10 text-royalPurple-dangerTx border-royalPurple-danger/30'
+                        : 'bg-royalPurple-card/40 text-royalPurple-text2 border-royalPurple-border/40'
+                  }`}
+                >
+                  {String(t.fullName || 'Teacher').split(' ')[0]} · {hours.toFixed(0)}/{max}h
+                </button>
+              )
+            })}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {days.map((day) => (
               <button
-                key={tid}
+                key={day}
                 type="button"
-                onClick={() => setSelectedTeacherId(tid)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold border ${
-                  selectedTeacherId === tid
-                    ? 'bg-royalPurple-accent text-white border-royalPurple-accent'
-                    : overloaded
-                      ? 'bg-royalPurple-danger/10 text-royalPurple-dangerTx border-royalPurple-danger/30'
-                      : 'bg-royalPurple-card/40 text-royalPurple-text2 border-royalPurple-border/40'
+                onClick={() => setSelectedDay(day)}
+                className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                  selectedDay === day
+                    ? 'border-royalPurple-accent bg-royalPurple-accent text-white'
+                    : 'border-royalPurple-border/40 bg-royalPurple-card/40 text-royalPurple-text2'
                 }`}
               >
-                {String(t.fullName || 'Teacher').split(' ')[0]} · {hours.toFixed(0)}/{max}h
+                {day.slice(0, 3).toUpperCase()}
               </button>
-            )
-          })}
+            ))}
+          </div>
         </div>
       ) : null}
 
@@ -603,7 +628,84 @@ export function DepartmentTimetableView(props: DepartmentTimetableViewProps) {
         </div>
       )}
 
-      {hasTimeSlots ? (
+      {hasTimeSlots && isMobile ? (
+        <div className="space-y-3">
+          {baseSlots.map((slot) => {
+            const teacher = visibleTeachers[0] as any
+            const tid = teacher ? String(teacher.id) : ''
+            const cellK = `${tid}|${selectedDay}|${slot.period}|${slot.startTime}|${slot.endTime}`
+            const list = tid ? byTeacherAndSlot.get(cellK) || [] : []
+            const isFree = !slot.isBreak && list.length === 0
+            return (
+              <div
+                key={`${selectedDay}|${slotKey(slot)}`}
+                className={`rounded-2xl border border-royalPurple-border/40 p-4 ${
+                  slot.isBreak ? 'bg-slate-100/70' : 'bg-royalPurple-card/60'
+                }`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-sm font-semibold text-royalPurple-text1">
+                      {slot.label || (slot.isBreak ? 'BREAK' : `Period ${slot.period}`)}
+                    </div>
+                    <div className="text-xs text-royalPurple-text3">
+                      {selectedDay.slice(0, 3).toUpperCase()} · {slot.startTime}–{slot.endTime}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  {slot.isBreak ? (
+                    <div className="text-xs font-bold text-slate-500">BREAK</div>
+                  ) : list.length ? (
+                    <div className="space-y-2">
+                      {list.map((a) => {
+                        const conflicts = storeConflicts.get(String(a.id)) || []
+                        const hasConflict = conflicts.length > 0
+                        const label = `${subjectLabel.get(String(a.subjectId)) || (a as any).subjectName || 'Subject'} · ${(a as any).className || className.get(String(a.classId)) || 'Class'}`
+                        return (
+                          <button
+                            key={String(a.id)}
+                            type="button"
+                            onClick={
+                              editable
+                                ? () => {
+                                    setActiveAssignmentId(String(a.id))
+                                    setNextTeacherId(String(a.teacherId))
+                                    setOpen(true)
+                                  }
+                                : undefined
+                            }
+                            className={`w-full rounded-xl border px-3 py-3 text-left ${
+                              hasConflict
+                                ? 'border-red-400 bg-red-500/10'
+                                : 'border-royalPurple-border/40 bg-white'
+                            }`}
+                          >
+                            <div className="text-sm font-semibold text-royalPurple-text1">
+                              {label}
+                            </div>
+                            <div className="mt-1 text-xs text-royalPurple-text3">
+                              {teacherName.get(String(a.teacherId)) || 'Teacher'}
+                            </div>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ) : (
+                    <div
+                      className={`text-xs font-semibold ${isFree ? 'text-blue-500' : 'text-royalPurple-text3'}`}
+                    >
+                      {isFree ? 'FREE' : 'No lesson'}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      ) : null}
+
+      {hasTimeSlots && !isMobile ? (
         <div className="timetable-container border border-royalPurple-border/40 rounded-2xl overflow-auto bg-royalPurple-card/60">
           <div className="min-w-[780px]">
             <div

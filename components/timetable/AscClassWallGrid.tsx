@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, memo, useMemo, useState, type DragEvent, type ReactNode } from 'react'
+import { Fragment, memo, useEffect, useMemo, useState, type DragEvent, type ReactNode } from 'react'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
@@ -94,6 +94,9 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
 
   const [selectedAssignment, setSelectedAssignment] = useState<Assignment | null>(null)
   const [zoom, setZoom] = useState(100)
+  const [isMobile, setIsMobile] = useState(false)
+  const [selectedClassId, setSelectedClassId] = useState('')
+  const [selectedDay, setSelectedDay] = useState('monday')
 
   const subjectMeta = useMemo(() => {
     const label = new Map<string, string>()
@@ -374,6 +377,34 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
   const periodColumns = days.length * bellRows.length
   const scale = zoom / 100
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const update = () => setIsMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
+  useEffect(() => {
+    if (!sortedClasses.length) return
+    if (
+      !selectedClassId ||
+      !sortedClasses.some((cls) => String(cls.id) === String(selectedClassId))
+    ) {
+      setSelectedClassId(String(sortedClasses[0]?.id || ''))
+    }
+  }, [sortedClasses, selectedClassId])
+
+  useEffect(() => {
+    if (!days.includes(selectedDay)) {
+      setSelectedDay(days[0] || 'monday')
+    }
+  }, [days, selectedDay])
+
+  const mobileClassAssignments = useMemo(() => {
+    return assignmentsByClass.get(String(selectedClassId)) || []
+  }, [assignmentsByClass, selectedClassId])
+
   return (
     <div className="w-full space-y-2">
       <div className="flex flex-wrap items-center justify-between gap-2 print:hidden text-[11px]">
@@ -400,148 +431,243 @@ export const AscClassWallGrid = memo(function AscClassWallGrid(props: AscClassWa
             </span>
           ) : null}
         </div>
-        <label className="inline-flex items-center gap-2 text-royalPurple-text3">
-          Zoom
-          <input
-            type="range"
-            min={70}
-            max={130}
-            step={5}
-            value={zoom}
-            onChange={(e) => setZoom(Number(e.target.value))}
-            className="w-24 h-1 accent-royalPurple-accent"
-          />
-          <span className="w-8 text-right tabular-nums">{zoom}%</span>
-        </label>
+        {!isMobile ? (
+          <label className="inline-flex items-center gap-2 text-royalPurple-text3">
+            Zoom
+            <input
+              type="range"
+              min={70}
+              max={130}
+              step={5}
+              value={zoom}
+              onChange={(e) => setZoom(Number(e.target.value))}
+              className="w-24 h-1 accent-royalPurple-accent"
+            />
+            <span className="w-8 text-right tabular-nums">{zoom}%</span>
+          </label>
+        ) : null}
       </div>
 
-      <div
-        className="timetable-container overflow-auto bg-[#e5e7eb] border border-[#9ca3af] print:bg-white print:border-gray-400"
-        style={{ maxHeight: 'min(72vh, 680px)' }}
-      >
+      {isMobile ? (
+        <div className="space-y-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 print:hidden">
+            <div>
+              <div className="mb-2 text-xs font-semibold text-royalPurple-text3">Class</div>
+              <select
+                value={selectedClassId}
+                onChange={(e) => setSelectedClassId(e.target.value)}
+                className="zsms-select w-full"
+              >
+                {sortedClasses.map((cls) => (
+                  <option key={String(cls.id)} value={String(cls.id)}>
+                    {cls.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <div className="mb-2 text-xs font-semibold text-royalPurple-text3">Day</div>
+              <div className="flex flex-wrap gap-2">
+                {days.map((day) => (
+                  <button
+                    key={day}
+                    type="button"
+                    onClick={() => setSelectedDay(day)}
+                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                      selectedDay === day
+                        ? 'border-royalPurple-accent bg-royalPurple-accent text-white'
+                        : 'border-royalPurple-border/40 bg-white text-royalPurple-text2'
+                    }`}
+                  >
+                    {day.slice(0, 3).toUpperCase()}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          {bellRows.map((slot, i) => {
+            if (slot.isBreak) {
+              return (
+                <div
+                  key={`${selectedDay}-break-${i}`}
+                  className="rounded-xl border border-[#9ca3af] bg-[#d1d5db] px-4 py-3 text-xs font-semibold text-[#374151]"
+                >
+                  {slot.label || 'Break'} · {slot.startTime}-{slot.endTime}
+                </div>
+              )
+            }
+            if (isContinuationSlot(selectedDay, slot, mobileClassAssignments, bellRows)) return null
+            const primary = assignmentsForPrimaryCell(selectedDay, slot, mobileClassAssignments)
+            const a = primary[0]
+            const subjectId = String(a?.subjectId || '')
+            const subjectName =
+              subjectMeta.label.get(subjectId) || (a as any)?.subjectName || 'Subject'
+            const teacher = a ? teacherName.get(String(a.teacherId)) || 'Teacher' : null
+            return (
+              <div
+                key={`${selectedDay}-${slot.period}-${slot.startTime}`}
+                className="rounded-2xl border border-[#9ca3af] bg-white p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-sm font-semibold text-[#111827]">Period {slot.period}</div>
+                    <div className="text-xs text-[#4b5563]">
+                      {selectedDay.slice(0, 3).toUpperCase()} · {slot.startTime}-{slot.endTime}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  {a ? (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onAssignmentClick?.(a)
+                        setSelectedAssignment(a)
+                      }}
+                      className="w-full rounded-xl border border-[#d1d5db] px-3 py-3 text-left"
+                    >
+                      <div className="text-sm font-semibold text-[#111827]">{subjectName}</div>
+                      <div className="mt-1 text-xs text-[#4b5563]">{teacher}</div>
+                    </button>
+                  ) : (
+                    <div className="text-xs font-semibold text-[#9ca3af]">Free slot</div>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
         <div
-          style={{
-            transform: scale === 1 ? undefined : `scale(${scale})`,
-            transformOrigin: 'top left',
-            width: scale === 1 ? undefined : `${100 / scale}%`,
-          }}
+          className="timetable-container overflow-auto bg-[#e5e7eb] border border-[#9ca3af] print:bg-white print:border-gray-400"
+          style={{ maxHeight: 'min(72vh, 680px)' }}
         >
-          <table
-            className="border-collapse bg-white"
+          <div
             style={{
-              tableLayout: 'fixed',
-              fontSize: 9,
-              minWidth: GRID.classColW + periodColumns * GRID.cellW,
+              transform: scale === 1 ? undefined : `scale(${scale})`,
+              transformOrigin: 'top left',
+              width: scale === 1 ? undefined : `${100 / scale}%`,
             }}
           >
-            <thead className="sticky top-0 z-20">
-              <tr>
-                <th
-                  rowSpan={2}
-                  className="sticky left-0 z-30 p-0 font-semibold text-[#374151] bg-[#d1d5db] text-left"
-                  style={{
-                    ...cellStyle(GRID.classColW, GRID.cellH),
-                    height: GRID.cellH * 2,
-                    paddingLeft: 4,
-                    borderRight: `1px solid ${GRID.border}`,
-                    borderBottom: `1px solid ${GRID.border}`,
-                  }}
-                />
-                {days.map((d) => (
+            <table
+              className="border-collapse bg-white"
+              style={{
+                tableLayout: 'fixed',
+                fontSize: 9,
+                minWidth: GRID.classColW + periodColumns * GRID.cellW,
+              }}
+            >
+              <thead className="sticky top-0 z-20">
+                <tr>
                   <th
-                    key={d}
-                    colSpan={bellRows.length}
-                    className="p-0 font-bold text-[#111827] bg-[#d1d5db] text-center uppercase"
+                    rowSpan={2}
+                    className="sticky left-0 z-30 p-0 font-semibold text-[#374151] bg-[#d1d5db] text-left"
                     style={{
-                      height: GRID.cellH,
-                      fontSize: 9,
+                      ...cellStyle(GRID.classColW, GRID.cellH),
+                      height: GRID.cellH * 2,
+                      paddingLeft: 4,
                       borderRight: `1px solid ${GRID.border}`,
                       borderBottom: `1px solid ${GRID.border}`,
                     }}
-                  >
-                    {d.slice(0, 3)}
-                  </th>
-                ))}
-              </tr>
-              <tr>
-                {days.flatMap((d) =>
-                  bellRows.map((slot, idx) => {
-                    const dayStart = idx === 0 ? { borderLeft: `2px solid ${GRID.dayDivider}` } : {}
-                    if (slot.isBreak) {
+                  />
+                  {days.map((d) => (
+                    <th
+                      key={d}
+                      colSpan={bellRows.length}
+                      className="p-0 font-bold text-[#111827] bg-[#d1d5db] text-center uppercase"
+                      style={{
+                        height: GRID.cellH,
+                        fontSize: 9,
+                        borderRight: `1px solid ${GRID.border}`,
+                        borderBottom: `1px solid ${GRID.border}`,
+                      }}
+                    >
+                      {d.slice(0, 3)}
+                    </th>
+                  ))}
+                </tr>
+                <tr>
+                  {days.flatMap((d) =>
+                    bellRows.map((slot, idx) => {
+                      const dayStart =
+                        idx === 0 ? { borderLeft: `2px solid ${GRID.dayDivider}` } : {}
+                      if (slot.isBreak) {
+                        return (
+                          <th
+                            key={`${d}-b-${idx}`}
+                            className="p-0 bg-[#9ca3af]"
+                            style={{
+                              ...cellStyle(GRID.breakW, GRID.cellH),
+                              borderRight: `1px solid ${GRID.border}`,
+                              borderBottom: `1px solid ${GRID.border}`,
+                              ...dayStart,
+                            }}
+                          />
+                        )
+                      }
+                      const periodLabel =
+                        slot.period != null ? String(slot.period) : String(idx + 1)
                       return (
                         <th
-                          key={`${d}-b-${idx}`}
-                          className="p-0 bg-[#9ca3af]"
+                          key={`${d}-${slot.period}-${idx}`}
+                          className="p-0 font-normal text-[#4b5563] bg-[#e5e7eb] text-center"
                           style={{
-                            ...cellStyle(GRID.breakW, GRID.cellH),
+                            ...cellStyle(GRID.cellW, GRID.cellH),
                             borderRight: `1px solid ${GRID.border}`,
                             borderBottom: `1px solid ${GRID.border}`,
                             ...dayStart,
                           }}
-                        />
+                          title={`${slot.startTime}–${slot.endTime}`}
+                        >
+                          {periodLabel}
+                        </th>
                       )
-                    }
-                    const periodLabel = slot.period != null ? String(slot.period) : String(idx + 1)
-                    return (
-                      <th
-                        key={`${d}-${slot.period}-${idx}`}
-                        className="p-0 font-normal text-[#4b5563] bg-[#e5e7eb] text-center"
-                        style={{
-                          ...cellStyle(GRID.cellW, GRID.cellH),
-                          borderRight: `1px solid ${GRID.border}`,
-                          borderBottom: `1px solid ${GRID.border}`,
-                          ...dayStart,
-                        }}
-                        title={`${slot.startTime}–${slot.endTime}`}
-                      >
-                        {periodLabel}
-                      </th>
-                    )
-                  })
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {sortedClasses.map((cls, rowIdx) => {
-                const classAssignments = assignmentsByClass.get(String(cls.id)) || []
-                const gradeDivider =
-                  rowIdx > 0 &&
-                  String(sortedClasses[rowIdx - 1]?.name || '').replace(/\D/g, '') !==
-                    String(cls.name || '').replace(/\D/g, '')
+                    })
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {sortedClasses.map((cls, rowIdx) => {
+                  const classAssignments = assignmentsByClass.get(String(cls.id)) || []
+                  const gradeDivider =
+                    rowIdx > 0 &&
+                    String(sortedClasses[rowIdx - 1]?.name || '').replace(/\D/g, '') !==
+                      String(cls.name || '').replace(/\D/g, '')
 
-                return (
-                  <Fragment key={String(cls.id)}>
-                    {gradeDivider ? (
-                      <tr>
+                  return (
+                    <Fragment key={String(cls.id)}>
+                      {gradeDivider ? (
+                        <tr>
+                          <td
+                            colSpan={1 + periodColumns}
+                            className="p-0 h-[3px] bg-[#6b7280] border-0"
+                          />
+                        </tr>
+                      ) : null}
+                      <tr className="hover:brightness-[0.98]">
                         <td
-                          colSpan={1 + periodColumns}
-                          className="p-0 h-[3px] bg-[#6b7280] border-0"
-                        />
+                          className="sticky left-0 z-10 p-0 font-bold text-[#111827] bg-[#f9fafb] whitespace-nowrap overflow-hidden text-ellipsis"
+                          style={{
+                            ...cellStyle(GRID.classColW, GRID.cellH),
+                            paddingLeft: 3,
+                            borderRight: `1px solid ${GRID.border}`,
+                            borderBottom: `1px solid ${GRID.border}`,
+                            fontSize: 9,
+                          }}
+                          title={cls.name}
+                        >
+                          {compactClassLabel(cls.name)}
+                        </td>
+                        {renderDayCells(String(cls.id), classAssignments)}
                       </tr>
-                    ) : null}
-                    <tr className="hover:brightness-[0.98]">
-                      <td
-                        className="sticky left-0 z-10 p-0 font-bold text-[#111827] bg-[#f9fafb] whitespace-nowrap overflow-hidden text-ellipsis"
-                        style={{
-                          ...cellStyle(GRID.classColW, GRID.cellH),
-                          paddingLeft: 3,
-                          borderRight: `1px solid ${GRID.border}`,
-                          borderBottom: `1px solid ${GRID.border}`,
-                          fontSize: 9,
-                        }}
-                        title={cls.name}
-                      >
-                        {compactClassLabel(cls.name)}
-                      </td>
-                      {renderDayCells(String(cls.id), classAssignments)}
-                    </tr>
-                  </Fragment>
-                )
-              })}
-            </tbody>
-          </table>
+                    </Fragment>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
 
       <TeacherColorLegend
         teachers={teachers.map((t) => ({

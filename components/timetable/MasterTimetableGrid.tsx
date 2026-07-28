@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, memo, useCallback, useMemo, useState } from 'react'
+import { Fragment, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import type { DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core'
 import type { Assignment, Class, Classroom, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
@@ -102,6 +102,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
   const [activeDragId, setActiveDragId] = useState<string | null>(null)
   const [hoverDropId, setHoverDropId] = useState<string | null>(null)
   const [swap, setSwap] = useState<SwapState>({ open: false })
+  const [autoMobile, setAutoMobile] = useState(false)
 
   const teacherColorMap = useMemo(
     () =>
@@ -140,6 +141,20 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
     for (const a of assignments || []) set.add(String(a.dayOfWeek))
     return Array.from(set).sort((a, b) => dayOrder(a) - dayOrder(b))
   }, [props.timeSlots, assignments])
+
+  useEffect(() => {
+    if (!days.includes(selectedDay)) {
+      setSelectedDay(days[0] || 'monday')
+    }
+  }, [days, selectedDay])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const update = () => setAutoMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   const baseSlots = useMemo((): BellScheduleSlot[] => {
     const src = (props.timeSlots?.length ? props.timeSlots : storeTimeSlots) as BellScheduleSlot[]
@@ -195,7 +210,7 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
     return countUniqueConflicts(storeConflicts)
   }, [storeConflicts, showConflicts])
 
-  const isMobile = props.mobile || false
+  const isMobile = props.mobile || autoMobile
   const effectiveDays = isMobile ? [selectedDay] : days
 
   const [scrollTop, setScrollTop] = useState(0)
@@ -367,12 +382,14 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
       onScroll={(e) => setScrollTop((e.target as HTMLDivElement).scrollTop)}
       style={{ maxHeight: useVirtual ? `${viewportH}px` : undefined }}
     >
-      <div className="min-w-[900px]">
+      <div className={isMobile ? 'min-w-full' : 'min-w-[900px]'}>
         <div className="sticky top-0 z-10 bg-royalPurple-deep/95 backdrop-blur border-b border-royalPurple-border/40 print:static print:bg-white">
           <div
             className="grid"
             style={{
-              gridTemplateColumns: `160px repeat(${effectiveDays.length}, minmax(160px, 1fr))`,
+              gridTemplateColumns: isMobile
+                ? '96px minmax(0, 1fr)'
+                : `160px repeat(${effectiveDays.length}, minmax(160px, 1fr))`,
             }}
           >
             <div className="px-3 py-2 text-xs font-semibold text-royalPurple-text3 uppercase">
@@ -392,7 +409,9 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: `160px repeat(${effectiveDays.length}, minmax(160px, 1fr))`,
+            gridTemplateColumns: isMobile
+              ? '96px minmax(0, 1fr)'
+              : `160px repeat(${effectiveDays.length}, minmax(160px, 1fr))`,
             gridAutoRows: `${ROW_H}px`,
             paddingTop: padTop,
             paddingBottom: padBottom,
@@ -542,8 +561,8 @@ export const MasterTimetableGrid = memo(function MasterTimetableGrid(
             </div>
           </div>
           {isMobile ? (
-            <div className="flex items-center gap-2">
-              {days.slice(0, 5).map((d) => (
+            <div className="flex flex-wrap items-center gap-2">
+              {days.map((d) => (
                 <button
                   key={d}
                   type="button"

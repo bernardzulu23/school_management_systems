@@ -240,14 +240,14 @@ export default function RegisterSchoolClient() {
 
           <div>
             <label className="form-label">Your Portal URL</label>
-            <div className="flex items-center mt-1 form-input">
+            <div className="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center form-input">
               <input
-                className="bg-transparent dash-text font-mono flex-1 outline-none"
+                className="bg-transparent dash-text font-mono flex-1 outline-none min-w-0"
                 value={form.subdomain}
                 onChange={handleSubdomainChange}
                 required
               />
-              <span className="dash-subtext text-sm whitespace-nowrap">
+              <span className="dash-subtext break-all text-sm sm:break-normal">
                 .bluepeacktechnologies.com
               </span>
             </div>

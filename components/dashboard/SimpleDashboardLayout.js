@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
@@ -37,6 +37,7 @@ export function DashboardLayout({ children, title }) {
   const showSicLink = hasSicAssignment(user)
   const [showFeedback, setShowFeedback] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [feedbackForm, setFeedbackForm] = useState({
     category: 'general',
     rating: '',
@@ -110,32 +111,44 @@ export function DashboardLayout({ children, title }) {
     }
   }
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const updateIsMobile = () => setIsMobile(window.innerWidth < 1024)
+    updateIsMobile()
+    window.addEventListener('resize', updateIsMobile)
+    return () => window.removeEventListener('resize', updateIsMobile)
+  }, [])
+
   return (
     <div className="min-h-screen bg-royalPurple-page transition-colors duration-200 flex">
       <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
       <div className="flex-1 flex flex-col min-w-0">
         <header className="bg-royalPurple-deep border-b border-royalPurple-border transition-colors duration-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between h-16">
-              <div className="flex items-center lg:hidden mr-3">
-                <button
-                  onClick={() => setMobileOpen(true)}
-                  className="p-2 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1"
-                  aria-label="Open menu"
-                >
-                  <Menu className="h-6 w-6" />
-                </button>
+            <div className="flex min-h-16 flex-col gap-3 py-3 lg:h-16 lg:flex-row lg:items-center lg:justify-between lg:py-0">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="flex items-center lg:hidden">
+                  <button
+                    onClick={() => setMobileOpen(true)}
+                    className="p-2 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1"
+                    aria-label="Open menu"
+                  >
+                    <Menu className="h-6 w-6" />
+                  </button>
+                </div>
+                <div className="min-w-0">
+                  <h1 className="truncate text-base font-semibold text-royalPurple-text1 sm:text-lg lg:text-xl">
+                    Zambian School Management System
+                  </h1>
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm">
+                    <span className="text-royalPurple-text2 font-medium">{roleLabel}</span>
+                    {title && String(title).trim() !== String(roleLabel).trim() && (
+                      <span className="text-royalPurple-text3">{title}</span>
+                    )}
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center">
-                <h1 className="text-xl font-semibold text-royalPurple-text1">
-                  Zambian School Management System
-                </h1>
-              </div>
-              <div className="flex items-center space-x-4">
-                <span className="text-royalPurple-text2 font-medium">{roleLabel}</span>
-                {title && String(title).trim() !== String(roleLabel).trim() && (
-                  <span className="text-sm text-royalPurple-text3">| {title}</span>
-                )}
+              <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                 {['headteacher', 'admin', 'administrator', 'superadmin'].includes(
                   String(user?.role || '')
                     .trim()
@@ -151,15 +164,17 @@ export function DashboardLayout({ children, title }) {
                   <MessageSquare className="h-4 w-4" />
                   <span className="hidden sm:inline">Feedback</span>
                 </button>
-                {(user?.teacherProfile || String(user?.role || '').toLowerCase() === 'teacher') && (
-                  <Link
-                    href="/dashboard/teacher"
-                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
-                  >
-                    Teacher Dashboard
-                  </Link>
-                )}
-                {showHodLink &&
+                {!isMobile &&
+                  (user?.teacherProfile || String(user?.role || '').toLowerCase() === 'teacher' ? (
+                    <Link
+                      href="/dashboard/teacher"
+                      className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                    >
+                      Teacher Dashboard
+                    </Link>
+                  ) : null)}
+                {!isMobile &&
+                  showHodLink &&
                   (user?.hodProfile || String(user?.role || '').toLowerCase() === 'hod') && (
                     <Link
                       href="/dashboard/hod"
@@ -168,7 +183,7 @@ export function DashboardLayout({ children, title }) {
                       HOD Dashboard
                     </Link>
                   )}
-                {showGuidanceLink && (
+                {!isMobile && showGuidanceLink && (
                   <Link
                     href="/dashboard/guidance"
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
@@ -176,7 +191,7 @@ export function DashboardLayout({ children, title }) {
                     Guidance Dashboard
                   </Link>
                 )}
-                {showSicLink && (
+                {!isMobile && showSicLink && (
                   <Link
                     href="/dashboard/sic"
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
@@ -209,8 +224,8 @@ export function DashboardLayout({ children, title }) {
                   onClick={logout}
                   className="text-royalPurple-dangerTx hover:bg-royalPurple-card2"
                 >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
+                  <LogOut className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Logout</span>
                 </Button>
               </div>
             </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { Assignment, TimeSlot } from '@/lib/timetable/types'
 import { uniqueBellRows } from '@/lib/timetable/bellSchedule'
 import {
@@ -30,6 +30,7 @@ export type CompactWeekTimetableGridProps = {
   emptyMessage?: string
   /** Show teacher colour key under the grid (default true when colours used). */
   showLegend?: boolean
+  mobile?: boolean
 }
 
 export function CompactWeekTimetableGrid({
@@ -38,10 +39,21 @@ export function CompactWeekTimetableGrid({
   hideTeacher = false,
   emptyMessage = 'No published timetable yet. Ask your headteacher to publish the master timetable.',
   showLegend = true,
+  mobile = false,
 }: CompactWeekTimetableGridProps) {
   const getTeacherColorHex = useTimetableStore((s) => s.getTeacherColorHex)
   const teacherColors = useTimetableStore((s) => s.teacherColors)
   const setTeacherColors = useTimetableStore((s) => s.setTeacherColors)
+  const [autoMobile, setAutoMobile] = useState(false)
+  const [selectedDay, setSelectedDay] = useState('monday')
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const update = () => setAutoMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -64,6 +76,8 @@ export function CompactWeekTimetableGrid({
   }, [teacherColors, setTeacherColors])
 
   const bellRows = useMemo(() => uniqueBellRows(timeSlots || []), [timeSlots])
+  const isMobile = mobile || autoMobile
+  const visibleDays = isMobile ? DAYS.filter((d) => d.key === selectedDay) : DAYS
 
   const legendTeachers = useMemo(() => {
     const map = new Map<string, { id: string; fullName: string; colorHex?: string }>()
@@ -99,14 +113,34 @@ export function CompactWeekTimetableGrid({
 
   return (
     <div className="space-y-3">
+      {isMobile ? (
+        <div className="flex flex-wrap gap-2">
+          {DAYS.map((day) => (
+            <button
+              key={day.key}
+              type="button"
+              onClick={() => setSelectedDay(day.key)}
+              className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                selectedDay === day.key
+                  ? 'border-royalPurple-accent bg-royalPurple-accent text-white'
+                  : 'border-[#d1d5db] bg-white text-[#4b5563]'
+              }`}
+            >
+              {day.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
       <div className="timetable-container overflow-x-auto rounded-lg border border-[#9ca3af] bg-white">
-        <table className="min-w-[640px] w-full border-collapse text-xs">
+        <table
+          className={`${isMobile ? 'min-w-full' : 'min-w-[640px]'} w-full border-collapse text-xs`}
+        >
           <thead>
             <tr className="bg-[#e5e7eb]">
               <th className="sticky left-0 z-10 bg-[#e5e7eb] px-2 py-1.5 text-left font-semibold text-[#374151] border-b border-[#9ca3af]">
                 Time
               </th>
-              {DAYS.map((d, idx) => (
+              {visibleDays.map((d, idx) => (
                 <th
                   key={d.key}
                   className={`px-2 py-1.5 text-center font-semibold text-[#374151] border-b border-[#9ca3af] ${
@@ -132,7 +166,7 @@ export function CompactWeekTimetableGrid({
                       {slot.startTime}–{slot.endTime}
                     </td>
                     <td
-                      colSpan={DAYS.length}
+                      colSpan={visibleDays.length}
                       className="px-2 py-1 text-center text-[#4b5563] font-semibold uppercase tracking-widest border-b border-[#9ca3af]"
                     >
                       {slot.label || 'Break'}
@@ -150,7 +184,7 @@ export function CompactWeekTimetableGrid({
                   >
                     {slot.startTime}–{slot.endTime}
                   </td>
-                  {DAYS.map((d, dayIdx) => {
+                  {visibleDays.map((d, dayIdx) => {
                     if (isContinuationSlot(d.key, slot, assignments, bellRows)) {
                       return null
                     }

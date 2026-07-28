@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { Button } from '@/components/ui/Button'
@@ -57,6 +57,8 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
   const [selectedDayOfWeek, setSelectedDayOfWeek] = useState(1)
   const [selectedPeriod, setSelectedPeriod] = useState(1)
   const [notes, setNotes] = useState('')
+  const [reviewDayOfWeek, setReviewDayOfWeek] = useState(1)
+  const [isMobile, setIsMobile] = useState(false)
 
   const teachersQuery = useQuery({
     queryKey: ['teachers', props.schoolId],
@@ -179,6 +181,14 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
 
   const loading = teachersQuery.isLoading || timeSlotsQuery.isLoading || assignmentsQuery.isLoading
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined
+    const update = () => setIsMobile(window.innerWidth < 768)
+    update()
+    window.addEventListener('resize', update)
+    return () => window.removeEventListener('resize', update)
+  }, [])
+
   return (
     <div className="w-full max-w-6xl mx-auto space-y-6">
       <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
@@ -282,87 +292,176 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
           Step 2: Review assignments
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="min-w-[980px] w-full border-collapse">
-            <thead>
-              <tr className="bg-royalPurple-deep/40">
-                <th className="px-3 py-2 text-left text-xs font-semibold text-royalPurple-text3 border-b border-royalPurple-border/40">
-                  Day / Period
-                </th>
-                {periods.map((p) => (
-                  <th
-                    key={p}
-                    className="px-3 py-2 text-center text-xs font-semibold text-royalPurple-text3 border-b border-royalPurple-border/40"
-                  >
-                    P{p}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
+        {isMobile ? (
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
               {days.map((d) => (
-                <tr key={d} className="border-b border-royalPurple-border/30">
-                  <td className="px-3 py-2 font-semibold text-royalPurple-text1 whitespace-nowrap">
-                    {dayNameFromNumber(d)}
-                  </td>
-                  {periods.map((p) => {
-                    const slot = slotsByDayPeriod.get(`${d}|${p}`)
-                    const a = assignmentByDayPeriod.get(`${d}|${p}`)
-                    const isBreak = Boolean(slot?.isBreak)
-                    return (
-                      <td
-                        key={p}
-                        className={`px-2 py-2 text-center text-sm ${
-                          isBreak ? 'bg-royalPurple-deep/60' : 'bg-royalPurple-card/30'
-                        }`}
-                      >
-                        {isBreak ? (
-                          <div className="text-xs font-bold text-royalPurple-text3">BREAK</div>
-                        ) : a ? (
-                          <div className="flex flex-col items-center gap-1">
-                            <div className="text-sm font-semibold text-royalPurple-accentTx">
-                              {String(a.teacher?.user?.name || '').split(' ')[0] ||
-                                String(a.teacherId).slice(0, 6)}
-                            </div>
-                            {a.notes ? (
-                              <div className="text-[11px] text-royalPurple-text3 max-w-[120px] truncate">
-                                {a.notes}
-                              </div>
-                            ) : null}
-                            {slot ? (
-                              <div className="text-[11px] text-royalPurple-text3">
-                                {slot.startTime}-{slot.endTime}
-                              </div>
-                            ) : null}
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => {
-                                if (!slot) return
-                                unassignMutation.mutate({
-                                  teacherId: a.teacherId,
-                                  timeSlotId: slot.id,
-                                })
-                              }}
-                              disabled={unassignMutation.isPending || !slot}
-                              className="mt-1"
-                            >
-                              Remove
-                            </Button>
-                          </div>
-                        ) : slot ? (
-                          <div className="text-xs text-royalPurple-text3">—</div>
-                        ) : (
-                          <div className="text-xs text-royalPurple-text3">N/A</div>
-                        )}
-                      </td>
-                    )
-                  })}
-                </tr>
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setReviewDayOfWeek(d)}
+                  className={`rounded-full border px-3 py-1.5 text-xs font-semibold ${
+                    reviewDayOfWeek === d
+                      ? 'border-royalPurple-accent bg-royalPurple-accent text-white'
+                      : 'border-royalPurple-border/40 bg-royalPurple-card/40 text-royalPurple-text2'
+                  }`}
+                >
+                  {dayNameFromNumber(d)}
+                </button>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              {periods.map((p) => {
+                const slot = slotsByDayPeriod.get(`${reviewDayOfWeek}|${p}`)
+                const a = assignmentByDayPeriod.get(`${reviewDayOfWeek}|${p}`)
+                const isBreak = Boolean(slot?.isBreak)
+                return (
+                  <div
+                    key={p}
+                    className={`rounded-xl border border-royalPurple-border/40 p-4 ${
+                      isBreak ? 'bg-royalPurple-deep/50' : 'bg-royalPurple-card/30'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <div className="text-sm font-semibold text-royalPurple-text1">
+                          Period {p}
+                        </div>
+                        {slot ? (
+                          <div className="text-xs text-royalPurple-text3">
+                            {slot.startTime}-{slot.endTime}
+                          </div>
+                        ) : null}
+                      </div>
+                      <div className="text-xs font-semibold text-royalPurple-text3">
+                        {dayNameFromNumber(reviewDayOfWeek)}
+                      </div>
+                    </div>
+                    <div className="mt-3">
+                      {isBreak ? (
+                        <div className="text-xs font-bold text-royalPurple-text3">BREAK</div>
+                      ) : a ? (
+                        <div className="space-y-2">
+                          <div className="text-sm font-semibold text-royalPurple-accentTx">
+                            {String(a.teacher?.user?.name || '').trim() ||
+                              String(a.teacherId).slice(0, 6)}
+                          </div>
+                          {a.notes ? (
+                            <div className="text-xs text-royalPurple-text3">{a.notes}</div>
+                          ) : null}
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              if (!slot) return
+                              unassignMutation.mutate({
+                                teacherId: a.teacherId,
+                                timeSlotId: slot.id,
+                              })
+                            }}
+                            disabled={unassignMutation.isPending || !slot}
+                          >
+                            Remove
+                          </Button>
+                        </div>
+                      ) : slot ? (
+                        <div className="text-xs text-royalPurple-text3">
+                          No locked teacher for this period.
+                        </div>
+                      ) : (
+                        <div className="text-xs text-royalPurple-text3">
+                          No configured slot for this period.
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="min-w-[980px] w-full border-collapse">
+              <thead>
+                <tr className="bg-royalPurple-deep/40">
+                  <th className="px-3 py-2 text-left text-xs font-semibold text-royalPurple-text3 border-b border-royalPurple-border/40">
+                    Day / Period
+                  </th>
+                  {periods.map((p) => (
+                    <th
+                      key={p}
+                      className="px-3 py-2 text-center text-xs font-semibold text-royalPurple-text3 border-b border-royalPurple-border/40"
+                    >
+                      P{p}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {days.map((d) => (
+                  <tr key={d} className="border-b border-royalPurple-border/30">
+                    <td className="px-3 py-2 font-semibold text-royalPurple-text1 whitespace-nowrap">
+                      {dayNameFromNumber(d)}
+                    </td>
+                    {periods.map((p) => {
+                      const slot = slotsByDayPeriod.get(`${d}|${p}`)
+                      const a = assignmentByDayPeriod.get(`${d}|${p}`)
+                      const isBreak = Boolean(slot?.isBreak)
+                      return (
+                        <td
+                          key={p}
+                          className={`px-2 py-2 text-center text-sm ${
+                            isBreak ? 'bg-royalPurple-deep/60' : 'bg-royalPurple-card/30'
+                          }`}
+                        >
+                          {isBreak ? (
+                            <div className="text-xs font-bold text-royalPurple-text3">BREAK</div>
+                          ) : a ? (
+                            <div className="flex flex-col items-center gap-1">
+                              <div className="text-sm font-semibold text-royalPurple-accentTx">
+                                {String(a.teacher?.user?.name || '').split(' ')[0] ||
+                                  String(a.teacherId).slice(0, 6)}
+                              </div>
+                              {a.notes ? (
+                                <div className="text-[11px] text-royalPurple-text3 max-w-[120px] truncate">
+                                  {a.notes}
+                                </div>
+                              ) : null}
+                              {slot ? (
+                                <div className="text-[11px] text-royalPurple-text3">
+                                  {slot.startTime}-{slot.endTime}
+                                </div>
+                              ) : null}
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => {
+                                  if (!slot) return
+                                  unassignMutation.mutate({
+                                    teacherId: a.teacherId,
+                                    timeSlotId: slot.id,
+                                  })
+                                }}
+                                disabled={unassignMutation.isPending || !slot}
+                                className="mt-1"
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          ) : slot ? (
+                            <div className="text-xs text-royalPurple-text3">—</div>
+                          ) : (
+                            <div className="text-xs text-royalPurple-text3">N/A</div>
+                          )}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
       <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-5">

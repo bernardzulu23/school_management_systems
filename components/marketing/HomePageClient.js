@@ -340,10 +340,44 @@ export default function HomePageClient() {
           .problems-grid { grid-template-columns: 1fr !important; }
           .features-grid { grid-template-columns: 1fr !important; }
           .testimonials-grid { grid-template-columns: 1fr !important; }
+          .public-nav {
+            align-items: flex-start !important;
+            gap: 12px !important;
+            padding: 0.875rem 1rem !important;
+          }
+          .public-nav-brand {
+            width: 100%;
+            flex-wrap: wrap;
+          }
+          .public-nav-actions {
+            width: 100%;
+            flex-wrap: wrap;
+          }
+          .public-nav-actions > * {
+            flex: 1 1 160px;
+            text-align: center;
+          }
+          .find-school-row {
+            flex-direction: column;
+          }
+          .find-school-row > * {
+            width: 100%;
+          }
+          .school-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+          }
+          .cta-button {
+            width: 100%;
+            padding: 14px 22px !important;
+            box-shadow: 4px 4px 0 0 #FF3B00 !important;
+          }
         }
       `}</style>
 
       <nav
+        className="public-nav"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -356,7 +390,10 @@ export default function HomePageClient() {
           zIndex: 100,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div
+          className="public-nav-brand"
+          style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+        >
           <div style={{ width: 40, height: 28, display: 'flex', alignItems: 'center' }}>
             <SchoolLogo
               src={tenantSchool?.logo_url || '/Assets/logo.jpg'}
@@ -382,7 +419,10 @@ export default function HomePageClient() {
             ECZ-aligned
           </span>
         </div>
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+        <div
+          className="public-nav-actions"
+          style={{ display: 'flex', gap: 8, alignItems: 'center' }}
+        >
           {tenantSchool ? (
             <>
               <Link href="/login" className="btn-sm">
@@ -698,7 +738,10 @@ export default function HomePageClient() {
               <p style={{ color: 'var(--text-secondary)', fontSize: 14, marginBottom: '1.5rem' }}>
                 Search by school name or district to go directly to your school&apos;s login page.
               </p>
-              <div style={{ display: 'flex', gap: 10, marginBottom: '1.5rem' }}>
+              <div
+                className="find-school-row"
+                style={{ display: 'flex', gap: 10, marginBottom: '1.5rem' }}
+              >
                 <input
                   type="text"
                   className="search-input"
@@ -714,7 +757,7 @@ export default function HomePageClient() {
                 />
                 <button
                   className="btn-primary"
-                  style={{ whiteSpace: 'nowrap', padding: '12px 20px', fontSize: 13 }}
+                  style={{ padding: '12px 20px', fontSize: 13 }}
                   type="button"
                   onClick={handleSearchSchools}
                 >
@@ -832,6 +875,7 @@ export default function HomePageClient() {
           </p>
           <Link
             href={registerUrl}
+            className="cta-button"
             style={{
               display: 'inline-block',
               fontSize: 16,
