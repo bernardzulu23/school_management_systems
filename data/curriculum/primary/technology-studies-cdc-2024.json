@@ -1,0 +1,1283 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Technology Studies Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — TECHNOLOGY-STUDIES-UPPER-PRIMARY.pdf",
+    "level": "Primary Education",
+    "grades": [4, 5, 6],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Technology Studies",
+    "slug": "technology-studies",
+    "sourceFileBytes": 799080,
+    "extractionNote": "Extracted from the official CDC PDF via per-file auto-detected character-code shift and table parsing. Content is transcribed from the source, not fabricated."
+  },
+  "curriculum": [
+    {
+      "id": "G4-T1-S1",
+      "form": 4,
+      "topicNumber": "4.1",
+      "topic": "INTRODUCTION TO TECHNOLOGY STUDIES",
+      "subtopicNumber": "4.1.1",
+      "subtopic": "Career Prospects in Technology Studies",
+      "specificCompetences": ["Explore career prospects in Technology Studies"],
+      "learningActivities": [
+        "Discussing components of Technology Studies ( ICT and D &T",
+        "Identifying career prospects in Technology Studies ( architecture, civil engineering, computer programming, electrical engineering, surveying«",
+        "Identifying entrepreneurial activities"
+      ],
+      "expectedStandard": "Career prospects in Technology Studies explored appropriately",
+      "keywords": [
+        "introduction",
+        "technology",
+        "studies",
+        "career",
+        "prospects",
+        "technology",
+        "studies",
+        "explore",
+        "career",
+        "prospects",
+        "technology",
+        "studies"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T2-S1",
+      "form": 4,
+      "topicNumber": "4.2",
+      "topic": "SAFETY",
+      "subtopicNumber": "4.2.1",
+      "subtopic": "Personal Safety",
+      "specificCompetences": ["Apply safety precautions in a work environment"],
+      "learningActivities": [
+        "Discussing personal safety precautions in a work environment ( safety attire, behaviour in a work room, waste disposal«)",
+        "Identifying types of safety attire to be used in a work environment",
+        "Applying safety precautions while in the work environment ( wearing safety attire, wearing antistatic wrist bands«)"
+      ],
+      "expectedStandard": "Safety precautions applied in a work environment correctly",
+      "keywords": [
+        "safety",
+        "personal",
+        "safety",
+        "apply",
+        "safety",
+        "precautions",
+        "work",
+        "environment"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T3-S1",
+      "form": 4,
+      "topicNumber": "4.3",
+      "topic": "WORD PROCESSING",
+      "subtopicNumber": "4.3.1",
+      "subtopic": "Introduction to Word Processing",
+      "specificCompetences": ["Create a word document"],
+      "learningActivities": [
+        "Opening a word document",
+        "Typing a wor d document",
+        "Saving a word document ( Save, Save As)",
+        "Formatting text (bold, italic, underline«)"
+      ],
+      "expectedStandard": "A word document created accordingly Technology Status Syllabus 2024",
+      "keywords": [
+        "word",
+        "processing",
+        "introduction",
+        "word",
+        "processing",
+        "create",
+        "word",
+        "document"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T4-S1",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "TOOLS AND EQUIPMENT",
+      "subtopicNumber": "4.4.1",
+      "subtopic": "Work Bench",
+      "specificCompetences": ["Use parts of a work bench"],
+      "learningActivities": [
+        "Identifying parts of a work bench",
+        "Discussing functions of parts of a work bench",
+        "Using parts of a work bench when measuring, marking, cutting and holding materials"
+      ],
+      "expectedStandard": "Parts of a work bench used accordingly",
+      "keywords": ["tools", "equipment", "work", "bench", "parts", "work", "bench"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T4-S2",
+      "form": 4,
+      "topicNumber": "4.4",
+      "topic": "TOOLS AND EQUIPMENT",
+      "subtopicNumber": "4.4.2",
+      "subtopic": "Classi¿cation and Use of Tools and Equipment",
+      "specificCompetences": ["Use tools and equipment to make products"],
+      "learningActivities": [
+        "Classifying tools and equipment according to their use (Measuring tools: Steel rule Measuring tape Marking out tools: Scriber, Marking gauge, Marking knife Cutting tools: Saws, Planes, Chisels Testing tools: Try square, Spirit level Holding tools: G-clamps, bench vice, sash clamps Driving tools: Hammer, mallet Building tools: Trowel, Building square)",
+        "Using tools and equipment to make products"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "tools",
+        "equipment",
+        "classi",
+        "cation",
+        "tools",
+        "equipment",
+        "tools",
+        "equipment",
+        "make",
+        "products"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T5-S1",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "MATERIALS",
+      "subtopicNumber": "4.5.1",
+      "subtopic": "Joining of Materials",
+      "specificCompetences": ["Join materials"],
+      "learningActivities": [
+        "Selecting tools for joining materials",
+        "Joining materials using simple joints ( nailing, butt, lap, housing, bolt and nut«)",
+        "Applying joints in product making"
+      ],
+      "expectedStandard": "Materials joined correctly",
+      "keywords": ["materials", "joining", "materials", "join", "materials"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T5-S2",
+      "form": 4,
+      "topicNumber": "4.5",
+      "topic": "MATERIALS",
+      "subtopicNumber": "4.5.2",
+      "subtopic": "Finishing Materials",
+      "specificCompetences": ["Apply ¿nishes to materials"],
+      "learningActivities": [
+        "Exploring methods of ¿nishing materials",
+        "Preparing materials in readiness for finishing ( sanding, grinding, polishing«)",
+        "Applying ¿nishes to products ( varnish, paint, wax«)",
+        "Practising safety precautions when applying ¿nishes"
+      ],
+      "expectedStandard": "Finishes applied to materials appropriately",
+      "keywords": ["materials", "finishing", "materials", "apply", "nishes", "materials"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T6-S1",
+      "form": 4,
+      "topicNumber": "4.6",
+      "topic": "PRESENTATION",
+      "subtopicNumber": "4.6.1",
+      "subtopic": "Basics of Presentations",
+      "specificCompetences": ["Create presentations"],
+      "learningActivities": [
+        "Exploring presentation software",
+        "Creating presentations with text and images",
+        "Exploring di൵erent slide layouts and designs."
+      ],
+      "expectedStandard": "Presentations created appropriately",
+      "keywords": ["presentation", "basics", "presentations", "create", "presentations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T7-S1",
+      "form": 4,
+      "topicNumber": "4.7",
+      "topic": "ENERGY",
+      "subtopicNumber": "4.7.1",
+      "subtopic": "Electricity",
+      "specificCompetences": ["Make electrical Circuits"],
+      "learningActivities": [
+        "Identifying components of an electrical circuit (c ells,",
+        "Sketching electrical components in a circuit ( cell, switch and bulb ).",
+        "Identifying terminals on the cells ( positive and negative)",
+        "Connecting cells in series",
+        "Making circuits using electrical components"
+      ],
+      "expectedStandard": "",
+      "keywords": ["energy", "electricity", "make", "electrical", "circuits"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T8-S1",
+      "form": 4,
+      "topicNumber": "4.8",
+      "topic": "SPREAD SHEET",
+      "subtopicNumber": "4.8.1",
+      "subtopic": "Basics of preadsheet",
+      "specificCompetences": ["Use spreadsheet applications"],
+      "learningActivities": [
+        "Exploring features of the spreadsheet ( insertion, active cell, rows, columns«)",
+        "Navigating the ribbon of the spreadsheet",
+        "Identifying cells, rows and columns of a spreadsheet",
+        "Naming cells by column and row ( A1, C5, D6«)",
+        "Entering data in cells"
+      ],
+      "expectedStandard": "",
+      "keywords": ["spread", "sheet", "basics", "preadsheet", "spreadsheet", "applications"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T9-S1",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "4.9.1",
+      "subtopic": "Lettering",
+      "specificCompetences": ["Print letters and numbers"],
+      "learningActivities": [
+        "Printing letters between construction lines",
+        "Printing numbers in upper and lower case between construction lines"
+      ],
+      "expectedStandard": "Letters and numbers printed accordingly",
+      "keywords": ["graphic", "communication", "lettering", "print", "letters", "numbers"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T9-S2",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "4.9.2",
+      "subtopic": "Types of Lines",
+      "specificCompetences": ["Draw lines used in construction"],
+      "learningActivities": [
+        "Drawing types of lines used in construction ( hidden line, centre line, outline«)",
+        "Drawing lines used in construction using free hand",
+        "Drawing lines used in construction using drawing instruments ( perpendicular line, bisecting a line )"
+      ],
+      "expectedStandard": "Lines used in construction drawn correctly",
+      "keywords": [
+        "graphic",
+        "communication",
+        "types",
+        "lines",
+        "draw",
+        "lines",
+        "used",
+        "construction"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T9-S3",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "4.9.3",
+      "subtopic": "Angles",
+      "specificCompetences": ["Construct angles"],
+      "learningActivities": [
+        "Identifying types of angles ( acute, right angle, obtuse, reÀex)",
+        "Constructing angles (60 ,90,120",
+        "Bisecting angles ( ,90 ,180 «)"
+      ],
+      "expectedStandard": "Angles constructed accurately",
+      "keywords": ["graphic", "communication", "angles", "construct", "angles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T9-S4",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "4.9.4",
+      "subtopic": "Triangles",
+      "specificCompetences": ["Construct triangles from given data"],
+      "learningActivities": [
+        "Naming types of triangles ( Equilateral, right-angled and Isosceles triangles",
+        "Analysing characteristics of types of triangles",
+        "Constructing types of triangles ( Equilateral, right- angled and Isosceles",
+        "'HVLJQLQJ SURGXFWV XVLQJ WULDQJOHV",
+        "Applying triangles in product development"
+      ],
+      "expectedStandard": "Triangles constructed from given data accordingly Technology Status Syllabus 2024",
+      "keywords": [
+        "graphic",
+        "communication",
+        "triangles",
+        "construct",
+        "triangles",
+        "from",
+        "given",
+        "data"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T9-S5",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "4.9.5",
+      "subtopic": "Quadrilaterals",
+      "specificCompetences": ["Construct TXDGULODWHUDOV"],
+      "learningActivities": [
+        "Identifying types RI TXDGULODWHUDOV square, rectangle, kite, rhombus and trapezium",
+        "Analysing characteristics of quadrilaterals",
+        "Constructing quadrilaterals square, rectangle, kite, rhombus and trapezium",
+        "'HVLJQLQJ SURGXFWV",
+        "using TXDGULODWHUDOV"
+      ],
+      "expectedStandard": "Quadrilaterals constructed accordingly",
+      "keywords": ["graphic", "communication", "quadrilaterals", "construct", "txdgulodwhudov"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T9-S6",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "4.9.6",
+      "subtopic": "Circles",
+      "specificCompetences": ["Construct FLUFOHV"],
+      "learningActivities": [
+        "Identifying parts of a circle ( radius, diameter, centre-line, centre, circumference",
+        "Constructing FLUFOHV JLYHQ WKH radius or diameter",
+        "Recording GLPHQVLRQV of a circle LQ PLOOLPHWUHV or centimetres",
+        "Making designs using FLUFOHV"
+      ],
+      "expectedStandard": "Circles constructed correctly",
+      "keywords": ["graphic", "communication", "circles", "construct", "flufohv"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T9-S7",
+      "form": 4,
+      "topicNumber": "4.9",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "4.9.7",
+      "subtopic": "Circles",
+      "specificCompetences": ["Use graphic software in product design"],
+      "learningActivities": [
+        "Identifying graphic software ( CorelDRAW, paint, photoshop, publisher«)",
+        "([SORULQJ WRROV IRU GUDZLQJ and editing shapes.",
+        "Creating JUDSKLF LPDJHV stickers, logos«)."
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "graphic",
+        "communication",
+        "circles",
+        "graphic",
+        "software",
+        "product",
+        "design"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T10-S1",
+      "form": 4,
+      "topicNumber": "4.10",
+      "topic": "TECHNOLOGY",
+      "subtopicNumber": "4.10.1",
+      "subtopic": "Technological Innovations",
+      "specificCompetences": ["Explore technological Innovations"],
+      "learningActivities": [
+        "Exploring technological Innovations",
+        "Performing reverse engineering on innovations ( dis-assembling and assembling products"
+      ],
+      "expectedStandard": "Technological Innovations explored appropriately",
+      "keywords": [
+        "technology",
+        "technological",
+        "innovations",
+        "explore",
+        "technological",
+        "innovations"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T11-S1",
+      "form": 4,
+      "topicNumber": "4.11",
+      "topic": "CODING",
+      "subtopicNumber": "4.11.1",
+      "subtopic": "Block- Based Coding",
+      "specificCompetences": ["Use Block-based coding Platforms"],
+      "learningActivities": [
+        "Using block-based coding platforms ( scratch, code monkey, codingal«)",
+        "Exploring programming concepts ( sequence, loops, events«)"
+      ],
+      "expectedStandard": "Block-based coding platforms used accordingly",
+      "keywords": ["coding", "block", "based", "coding", "block", "based", "coding", "platforms"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T12-S1",
+      "form": 4,
+      "topicNumber": "4.12",
+      "topic": "STRUCTURES",
+      "subtopicNumber": "4.12.1",
+      "subtopic": "Types of Structures",
+      "specificCompetences": ["Classify Structures"],
+      "learningActivities": [
+        "Researching on types of structures ( frame, shell )",
+        "Classifying structures according to their attributes",
+        "Drawing di൵erent types of structures ( house, cup, bicycle, bridge«)"
+      ],
+      "expectedStandard": "Structures classi¿ed accordingly",
+      "keywords": ["structures", "types", "structures", "classify", "structures"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T13-S1",
+      "form": 4,
+      "topicNumber": "4.13",
+      "topic": "INTERNET",
+      "subtopicNumber": "4.13.1",
+      "subtopic": "Internet",
+      "specificCompetences": ["Use the Internet"],
+      "learningActivities": [
+        "Using internet browsers ( chrome, safari, Firefox, Edge )",
+        "Practising safety and responsible internet usage ( passwords, privacy«)",
+        "Searching tasks on specific",
+        "Internet used accordingly topics. SUB -TOPIC Technology Status Syllabus 2024"
+      ],
+      "expectedStandard": "",
+      "keywords": ["internet", "internet", "internet"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G4-T14-S1",
+      "form": 4,
+      "topicNumber": "4.14",
+      "topic": "ENTREPRENEURSHIP",
+      "subtopicNumber": "4.14.1",
+      "subtopic": "Business Idea",
+      "specificCompetences": ["Develop a business idea"],
+      "learningActivities": [
+        "Identifying needs in the immediate environment",
+        "Analysing factors to consider when selecting a product or service to be offered",
+        "Costing a product",
+        "Forming companies ( sole trader, partnership«)",
+        "Suggesting a name of the company/business",
+        "Identifying the location of the business/company"
+      ],
+      "expectedStandard": "",
+      "keywords": ["entrepreneurship", "business", "idea", "develop", "business", "idea"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 4,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T1-S1",
+      "form": 5,
+      "topicNumber": "5.1",
+      "topic": "SAFETY",
+      "subtopicNumber": "5.1.1",
+      "subtopic": "Care and Maintenance of tools and Equipment",
+      "specificCompetences": ["Maintain tools and equipment"],
+      "learningActivities": [
+        "Sorting damaged/broken tools",
+        "Cleaning tools and equipment",
+        "Oiling speci¿c tools ( Hand drill, Rip saw blades, wheelbarrow«)",
+        "Fixing broken equipment ( desks, chairs, shelves, cabinets«)",
+        "Sharpening tools",
+        "Storing tools and equipment in safe places"
+      ],
+      "expectedStandard": "Tools and equipment maintained properly",
+      "keywords": [
+        "safety",
+        "care",
+        "maintenance",
+        "tools",
+        "equipment",
+        "maintain",
+        "tools",
+        "equipment"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T2-S1",
+      "form": 5,
+      "topicNumber": "5.2",
+      "topic": "WORD PROCESSING",
+      "subtopicNumber": "5.2.1",
+      "subtopic": "Formatting",
+      "specificCompetences": ["Format a word document"],
+      "learningActivities": ["Formatting text", "Formatting images and objects"],
+      "expectedStandard": "Word document formatted correctly",
+      "keywords": ["word", "processing", "formatting", "format", "word", "document"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T3-S1",
+      "form": 5,
+      "topicNumber": "5.3",
+      "topic": "TOOLS AND EQUIPMENT",
+      "subtopicNumber": "5.3.1",
+      "subtopic": "Hand tools",
+      "specificCompetences": ["Use hand tools to make products"],
+      "learningActivities": [
+        "Identifying hand tools for making products ( saws, planes, ¿les, hammers«)",
+        "Utilising hand tools to make products",
+        "Practising safety precautions when using hand tools"
+      ],
+      "expectedStandard": "Hand tools to make products used correctly",
+      "keywords": ["tools", "equipment", "hand", "tools", "hand", "tools", "make", "products"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T4-S1",
+      "form": 5,
+      "topicNumber": "5.4",
+      "topic": "MATERIALS",
+      "subtopicNumber": "5.4.1",
+      "subtopic": "Joining Materials",
+      "specificCompetences": ["Join materials"],
+      "learningActivities": [
+        "Identifying the following joints ( mortise and tenon, halving, dovetail, seam, rebate«)",
+        "Joining materials using various joints ( mortise and tenon,",
+        "Materials joined correctly SUB -TOPIC Technology Status Syllabus 2024 halving, dovetail, seam, rebate«)",
+        "Practising safety precautions when joining materials"
+      ],
+      "expectedStandard": "",
+      "keywords": ["materials", "joining", "materials", "join", "materials"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T5-S1",
+      "form": 5,
+      "topicNumber": "5.5",
+      "topic": "PRESENTATION",
+      "subtopicNumber": "5.5.1",
+      "subtopic": "Multimedia Presentations",
+      "specificCompetences": ["Develop multimedia presentations"],
+      "learningActivities": [
+        "Adding multimedia elements ( audio, video) to presentations.",
+        "Adding animation e൵ects and transitions to a presentation"
+      ],
+      "expectedStandard": "Multimedia presentations developed appropriately",
+      "keywords": [
+        "presentation",
+        "multimedia",
+        "presentations",
+        "develop",
+        "multimedia",
+        "presentations"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T6-S1",
+      "form": 5,
+      "topicNumber": "5.6",
+      "topic": "ENERGY",
+      "subtopicNumber": "5.6.1",
+      "subtopic": "Design Circuits",
+      "specificCompetences": ["Construct circuits in series and parallel"],
+      "learningActivities": [
+        "Identifying Circuit Symbols ( Bulb, battery, wire, switch«)",
+        "Sketching symbols of electrical components.",
+        "Designing circuit diagrams ( in series and parallel ) using circuit symbols",
+        "Making series and parallel circuits"
+      ],
+      "expectedStandard": "Circuits constructed in series and parallel correctly",
+      "keywords": ["energy", "design", "circuits", "construct", "circuits", "series", "parallel"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T7-S1",
+      "form": 5,
+      "topicNumber": "5.7",
+      "topic": "SPREADSHEET",
+      "subtopicNumber": "5.7.1",
+      "subtopic": "Addition and Subtraction in Spreadsheet",
+      "specificCompetences": ["Perform addition and subtraction in spreadsheet"],
+      "learningActivities": [
+        "Using addition, subtraction and equal signs (+, -, ) to perform calculations in spreadsheet",
+        "Adding at least two real numbers in spreadsheet",
+        "Subtracting at least two real numbers in VSUHDGVKHHW",
+        "Technology Status Syllabus 2024"
+      ],
+      "expectedStandard": "Addition and subtraction in spreadsheet performed correctly",
+      "keywords": [
+        "spreadsheet",
+        "addition",
+        "subtraction",
+        "spreadsheet",
+        "perform",
+        "addition",
+        "subtraction",
+        "spreadsheet"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T8-S1",
+      "form": 5,
+      "topicNumber": "5.8",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "5.8.1",
+      "subtopic": "Polygons",
+      "specificCompetences": ["Construct regular polygons"],
+      "learningActivities": [
+        "Identifying types of polygons ( Pentagon, Hexagon, Heptagon and Octagon)",
+        "Constructing regular polygons using the general method pentagon, hexagon, o ctagon«)",
+        "Designing products using polygons",
+        "Applying regular polygons in product development"
+      ],
+      "expectedStandard": "",
+      "keywords": ["graphic", "communication", "polygons", "construct", "regular", "polygons"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T8-S2",
+      "form": 5,
+      "topicNumber": "5.8",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "5.8.2",
+      "subtopic": "Polygons",
+      "specificCompetences": ["Construct irregular polygons"],
+      "learningActivities": [
+        "Analysing characteristics of irregular polygons",
+        "Constructing irregular polygons ( given sides, angles«)",
+        "Applying irregular polygons in product development"
+      ],
+      "expectedStandard": "Irregular polygons constructed correctly",
+      "keywords": ["graphic", "communication", "polygons", "construct", "irregular", "polygons"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T8-S3",
+      "form": 5,
+      "topicNumber": "5.8",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "5.8.3",
+      "subtopic": "Pictorial Drawing",
+      "specificCompetences": ["Construct objects in pictorial view"],
+      "learningActivities": [
+        "Identifying objects in isometric and oblique view",
+        "Constructing an isometric box",
+        "Constructing objects in isometric",
+        "Constructing objects in oblique",
+        "Drawing pictorial objects using Free Hand"
+      ],
+      "expectedStandard": "Objects in pictorial view constructed appropriately",
+      "keywords": [
+        "graphic",
+        "communication",
+        "pictorial",
+        "drawing",
+        "construct",
+        "objects",
+        "pictorial",
+        "view"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T8-S3-2",
+      "form": 5,
+      "topicNumber": "5.8",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "5.8.3",
+      "subtopic": "Pictorial Drawing",
+      "specificCompetences": ["Apply Rendering on pictorial drawings"],
+      "learningActivities": [
+        "Rendering di൵erent materials ( wood, glass, metal, concrete«)",
+        "Rendering pictorial drawings",
+        "Rendering on pictorial drawings applied appropriately SUB -TOPIC",
+        "Technology Status Syllabus 2024"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "graphic",
+        "communication",
+        "pictorial",
+        "drawing",
+        "apply",
+        "rendering",
+        "pictorial",
+        "drawings"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T8-S4",
+      "form": 5,
+      "topicNumber": "5.8",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "5.8.4",
+      "subtopic": "Image Editing tools",
+      "specificCompetences": ["Edit images"],
+      "learningActivities": [
+        "Exploring image editing tools ( paint, adobe photoshop, CorelDRAW«)",
+        "Editing images ( static images",
+        "Creating illustrations on digital images"
+      ],
+      "expectedStandard": "",
+      "keywords": ["graphic", "communication", "image", "editing", "tools", "edit", "images"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T9-S1",
+      "form": 5,
+      "topicNumber": "5.9",
+      "topic": "TECHNOLOGY",
+      "subtopicNumber": "5.9.1",
+      "subtopic": "Sustainable Technology",
+      "specificCompetences": ["Use sustainable Technology"],
+      "learningActivities": [
+        "Researching on sustainable technologies ( solar power, wind power, hydropower, green buildings, biodegradable plastics«)",
+        "Researching on unsustainable technologies ( fossil fuel energy, single-use plastics, non-rechargeable batteries, e- waste«)",
+        "Disposing e-waste",
+        "Using sustainable technologies in product making ( models of houses with solar panels, wind turbine, birdhouses, mini hydroponic«)"
+      ],
+      "expectedStandard": "Sustainable Technology used accordingly",
+      "keywords": ["technology", "sustainable", "technology", "sustainable", "technology"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T10-S1",
+      "form": 5,
+      "topicNumber": "5.10",
+      "topic": "CODING",
+      "subtopicNumber": "5.10.1",
+      "subtopic": "Block-Based Coding",
+      "specificCompetences": ["Animate situations"],
+      "learningActivities": [
+        "Exploring animation concepts ( sequencing, timing, loops, events«)",
+        "Animating situations ( stories, games«)"
+      ],
+      "expectedStandard": "Situations animated accordingly",
+      "keywords": ["coding", "block", "based", "coding", "animate", "situations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T11-S1",
+      "form": 5,
+      "topicNumber": "5.11",
+      "topic": "STRUCTURES",
+      "subtopicNumber": "5.11.1",
+      "subtopic": "Designing Structures",
+      "specificCompetences": ["Make strong and stable structures"],
+      "learningActivities": [
+        "Discussing causes of structural failure ( overloading, poor material selection, poor design )",
+        "SUB -TOPIC Technology Status Syllabus 2024",
+        "Designing strong and stable structures",
+        "Strengthening and stabilising structures ( ties, struts, cross member, widening the base, lowering the centre of mass, making the base heavier«)",
+        "Making stable structures ( desks, chair, TV stand«)"
+      ],
+      "expectedStandard": "Strong and stable structures made correctly",
+      "keywords": [
+        "structures",
+        "designing",
+        "structures",
+        "make",
+        "strong",
+        "stable",
+        "structures"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T11-S2",
+      "form": 5,
+      "topicNumber": "5.11",
+      "topic": "STRUCTURES",
+      "subtopicNumber": "5.11.2",
+      "subtopic": "Site Preparation",
+      "specificCompetences": ["Prepare a site for construction"],
+      "learningActivities": [
+        "Investigating the site ( checking soil type, slope, drainage system«)",
+        "Clearing the site ( clearing shrubs/vegetation, slashing, removing loose rocks«)"
+      ],
+      "expectedStandard": "Leveling the site ite for constructionprepared properly",
+      "keywords": ["structures", "site", "preparation", "prepare", "site", "construction"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T12-S1",
+      "form": 5,
+      "topicNumber": "5.12",
+      "topic": "INTERNET",
+      "subtopicNumber": "5.12.1",
+      "subtopic": "Online Communication",
+      "specificCompetences": ["Use online communication tools responsibly"],
+      "learningActivities": [
+        "Exploring social media platforms and their features ( Facebook, WhatsApp, Messenger«)",
+        "Practising online etiquette",
+        "Creating accounts on social media platforms",
+        "Communicating using online tools ( email, video conferencing«)"
+      ],
+      "expectedStandard": "Online communication tools used responsibly",
+      "keywords": [
+        "internet",
+        "online",
+        "communication",
+        "online",
+        "communication",
+        "tools",
+        "responsibly"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G5-T13-S1",
+      "form": 5,
+      "topicNumber": "5.13",
+      "topic": "ENTREPRENEURSHIP",
+      "subtopicNumber": "5.13.1",
+      "subtopic": "Marketing",
+      "specificCompetences": ["Design a Marketing SODQ"],
+      "learningActivities": [
+        "Identifying competitors",
+        "Pricing a product",
+        "Designing promotion materials",
+        "Identifying products/services to be o൵ered",
+        "Identifying potential customers"
+      ],
+      "expectedStandard": "Marketing plan designed correctly",
+      "keywords": ["entrepreneurship", "marketing", "design", "marketing", "sodq"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 5,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T1-S1",
+      "form": 6,
+      "topicNumber": "6.1",
+      "topic": "SAFETY",
+      "subtopicNumber": "6.1.1",
+      "subtopic": "First Aid",
+      "specificCompetences": ["Apply First Aid"],
+      "learningActivities": [
+        "Researching on ¿rst aid",
+        "Identifying items in the First Aid Kit",
+        "Demonstrating the use of First Aid Kit contents ( Surgical blade, scissors, plaster«)",
+        "Making First Aid Carrier ( Box, bag«)",
+        "Role-playing how to care for an injured person"
+      ],
+      "expectedStandard": "First Aid applied accordingly",
+      "keywords": ["safety", "first", "apply", "first"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T2-S1",
+      "form": 6,
+      "topicNumber": "6.2",
+      "topic": "WORD PROCESSING",
+      "subtopicNumber": "6.2.1",
+      "subtopic": "Document Collaboration",
+      "specificCompetences": ["Perform collaborative document editing and version control"],
+      "learningActivities": [
+        "Exploring document collaborative tools ( Docs, sheets, only o৽ce )",
+        "Collaborative document editing",
+        "Exploring version history and revision tracking features"
+      ],
+      "expectedStandard": "Collaborative document editing and version control performed accordingly",
+      "keywords": [
+        "word",
+        "processing",
+        "document",
+        "collaboration",
+        "perform",
+        "collaborative",
+        "document",
+        "editing",
+        "version",
+        "control"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T3-S1",
+      "form": 6,
+      "topicNumber": "6.3",
+      "topic": "TOOLS AND EQUIPMENT",
+      "subtopicNumber": "6.3.1",
+      "subtopic": "Building Tools",
+      "specificCompetences": ["Classify building tools"],
+      "learningActivities": [
+        "Identifying building tools ( spirit OHYHO , building square, trowel, wooden Àoat«)",
+        "Classifying building tools according to use ( laying tools, wall straightening, ¿nishing tools«",
+        "Building tools classi¿ed accordingly SUB -TOPIC",
+        "Using building tools to build a structure Technology Status Syllabus 2024"
+      ],
+      "expectedStandard": "",
+      "keywords": ["tools", "equipment", "building", "tools", "classify", "building", "tools"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T4-S1",
+      "form": 6,
+      "topicNumber": "6.4",
+      "topic": "MATERIALS",
+      "subtopicNumber": "6.4.1",
+      "subtopic": "Building Materials",
+      "specificCompetences": ["Classify building Materials"],
+      "learningActivities": [
+        "Identifying building materials ( sand, quarry, clay, stones, bricks cement, lime«)",
+        "Classifying building materials ( ¿ne aggregates, coarse aggregates, binders, bricks«)"
+      ],
+      "expectedStandard": "Building materials classi¿ed accordingly",
+      "keywords": ["materials", "building", "materials", "classify", "building", "materials"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T4-S1-2",
+      "form": 6,
+      "topicNumber": "6.4",
+      "topic": "MATERIALS",
+      "subtopicNumber": "6.4.1",
+      "subtopic": "Building Materials",
+      "specificCompetences": ["Make bricks"],
+      "learningActivities": ["Kneading the clay", "Moulding clay bricks", "Curing of clay bricks"],
+      "expectedStandard": "Bricks made accordingly",
+      "keywords": ["materials", "building", "materials", "make", "bricks"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T5-S1",
+      "form": 6,
+      "topicNumber": "6.5",
+      "topic": "PRESENTATION",
+      "subtopicNumber": "6.5.1",
+      "subtopic": "Animations",
+      "specificCompetences": ["Create interactive presentations"],
+      "learningActivities": [
+        "Creating custom animations and transitions.",
+        "Using motion paths and e൵ects.",
+        "Developing Interactive presentations ( hyperlinks, PHQXV «)"
+      ],
+      "expectedStandard": "Interactive presentations created appropriately",
+      "keywords": ["presentation", "animations", "create", "interactive", "presentations"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T6-S1",
+      "form": 6,
+      "topicNumber": "6.6",
+      "topic": "ENERGY",
+      "subtopicNumber": "6.6.1",
+      "subtopic": "Installation of electrical components",
+      "specificCompetences": ["Install electrical components"],
+      "learningActivities": [
+        "Identifying types of switches ( single pole-single throw, single-pole-double throw«",
+        "Designing and making switches",
+        "Designing circuits (",
+        "using: cells, bulbs and switches",
+        "Installing electrical components",
+        "installing electrical components Technology Status Syllabus 2024"
+      ],
+      "expectedStandard": "Electrical components installed correctly",
+      "keywords": [
+        "energy",
+        "installation",
+        "electrical",
+        "components",
+        "install",
+        "electrical",
+        "components"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T7-S1",
+      "form": 6,
+      "topicNumber": "6.7",
+      "topic": "SPREADSHEET",
+      "subtopicNumber": "6.7.1",
+      "subtopic": "Multiplication and division in spreadsheet",
+      "specificCompetences": ["Perform multiplication and division in spreadsheet"],
+      "learningActivities": [
+        "Using multiplication and division signs (*, /)",
+        "Multiplying at least two real numbers in spreadsheet",
+        "Dividing at least two real numbers in spreadsheet",
+        "Multiplying and adding at least two real numbers in spreadsheet",
+        "Dividing and subtracting at least two real numbers in spreadsheet"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "spreadsheet",
+        "multiplication",
+        "division",
+        "spreadsheet",
+        "perform",
+        "multiplication",
+        "division",
+        "spreadsheet"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T8-S1",
+      "form": 6,
+      "topicNumber": "6.8",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "6.8.1",
+      "subtopic": "Orthographic Projection",
+      "specificCompetences": ["Construct Orthographic views"],
+      "learningActivities": [
+        "Identifying orthographic projection views ( Front, plan, End",
+        "Converting pictorial drawing to orthographic views",
+        "Dimensioning of the elevations"
+      ],
+      "expectedStandard": "Orthographic views constructed correctly",
+      "keywords": [
+        "graphic",
+        "communication",
+        "orthographic",
+        "projection",
+        "construct",
+        "orthographic",
+        "views"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T8-S2",
+      "form": 6,
+      "topicNumber": "6.8",
+      "topic": "GRAPHIC COMMUNICATION",
+      "subtopicNumber": "6.8.2",
+      "subtopic": "Modeling",
+      "specificCompetences": ["Create 3D models"],
+      "learningActivities": [
+        "Exploring 3D modeling software ( Paint 3D, sketch up, blender«)",
+        "Creating 3D models of simple objects.",
+        "Applying textures to 3D",
+        "PRGHOV",
+        "Applying 3D animation and rendering. Technology Status Syllabus 2024"
+      ],
+      "expectedStandard": "",
+      "keywords": ["graphic", "communication", "modeling", "create", "models"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T9-S1",
+      "form": 6,
+      "topicNumber": "6.9",
+      "topic": "DESIGNING",
+      "subtopicNumber": "6.9.1",
+      "subtopic": "Product",
+      "specificCompetences": ["Design products to solve real life problems"],
+      "learningActivities": [
+        "Identifying situations that need solutions in the immediate environment",
+        "Designing products to solve problems",
+        "Developing products",
+        "Evaluating product designs"
+      ],
+      "expectedStandard": "Products designed appropriately to solve real life problems",
+      "keywords": [
+        "designing",
+        "product",
+        "design",
+        "products",
+        "solve",
+        "real",
+        "life",
+        "problems"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T10-S1",
+      "form": 6,
+      "topicNumber": "6.10",
+      "topic": "CODING",
+      "subtopicNumber": "6.10.1",
+      "subtopic": "Block Based Coding",
+      "specificCompetences": ["Create simple computer programs"],
+      "learningActivities": [
+        "Creating simple computer programs ( animations, JDPHV« ) using block-based coding."
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "coding",
+        "block",
+        "based",
+        "coding",
+        "create",
+        "simple",
+        "computer",
+        "programs"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T11-S1",
+      "form": 6,
+      "topicNumber": "6.11",
+      "topic": "STRUCTURES",
+      "subtopicNumber": "6.11.1",
+      "subtopic": "Building Structures",
+      "specificCompetences": ["Construct buildings"],
+      "learningActivities": [
+        "Making designs of buildings ( Àoor plan",
+        "Setting out the structure using the square method.",
+        "Mixing building materials in correct proportions",
+        "Constructing the building using bricks and mortar ( pit latrine, chicken run, kennel«",
+        "Practising safety precautions when constructing buildings"
+      ],
+      "expectedStandard": "Buildings constructed accordingly",
+      "keywords": ["structures", "building", "structures", "construct", "buildings"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T12-S1",
+      "form": 6,
+      "topicNumber": "6.12",
+      "topic": "INTERNET",
+      "subtopicNumber": "6.12.1",
+      "subtopic": "Building Structures",
+      "specificCompetences": ["Apply digital citizenship ethics"],
+      "learningActivities": [
+        "Discussing digital rights and responsibilities.",
+        "Exploring online privacy and",
+        "Utilising strategies to evade Cyberbullying"
+      ],
+      "expectedStandard": "Digital citizenship ethics applied accordingly Technology Status Syllabus 2024 security issues.",
+      "keywords": [
+        "internet",
+        "building",
+        "structures",
+        "apply",
+        "digital",
+        "citizenship",
+        "ethics"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    },
+    {
+      "id": "G6-T13-S1",
+      "form": 6,
+      "topicNumber": "6.13",
+      "topic": "ENTREPRENEURSHIP",
+      "subtopicNumber": "6.13.1",
+      "subtopic": "Business Plan",
+      "specificCompetences": ["Develop business plans"],
+      "learningActivities": [
+        "Researching on the main parts of a Business plan ( Name of the business, location, product/service, marketing",
+        "Developing a Business plan Writing a Business plan"
+      ],
+      "expectedStandard": "Business plans developed appropriately",
+      "keywords": ["entrepreneurship", "business", "plan", "develop", "business", "plans"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 6,
+      "level": "primary"
+    }
+  ]
+}

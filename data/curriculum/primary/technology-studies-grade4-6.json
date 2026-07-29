@@ -1,0 +1,646 @@
+{
+  "subject": "Technology Studies",
+  "level": "Grade 4-6",
+  "gradesCovered": [4, 5, 6],
+  "totalDuration": "3 years (Grades 4-6)",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Grade 4: INTRODUCTION TO TECHNOLOGY STUDIES",
+      "topics": ["Career Prospects in Technology Studies"],
+      "learningOutcomes": ["Explore career prospects in Technology Studies"],
+      "suggestedActivities": [
+        "Discussing components of Technology Studies ( ICT and D &T",
+        "Identifying career prospects in Technology Studies ( architecture, civil engineering, computer programming, electrical engineering, surveying«",
+        "Identifying entrepreneurial activities"
+      ],
+      "assessmentMethods": ["Career prospects in Technology Studies explored appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Grade 4: SAFETY",
+      "topics": ["Personal Safety"],
+      "learningOutcomes": ["Apply safety precautions in a work environment"],
+      "suggestedActivities": [
+        "Discussing personal safety precautions in a work environment ( safety attire, behaviour in a work room, waste disposal«)",
+        "Identifying types of safety attire to be used in a work environment",
+        "Applying safety precautions while in the work environment ( wearing safety attire, wearing antistatic wrist bands«)"
+      ],
+      "assessmentMethods": ["Safety precautions applied in a work environment correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Grade 4: WORD PROCESSING",
+      "topics": ["Introduction to Word Processing"],
+      "learningOutcomes": ["Create a word document"],
+      "suggestedActivities": [
+        "Opening a word document",
+        "Typing a wor d document",
+        "Saving a word document ( Save, Save As)",
+        "Formatting text (bold, italic, underline«)"
+      ],
+      "assessmentMethods": ["A word document created accordingly Technology Status Syllabus 2024"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Grade 4: TOOLS AND EQUIPMENT",
+      "topics": ["Work Bench", "Classi¿cation and Use of Tools and Equipment"],
+      "learningOutcomes": ["Use parts of a work bench", "Use tools and equipment to make products"],
+      "suggestedActivities": [
+        "Identifying parts of a work bench",
+        "Discussing functions of parts of a work bench",
+        "Using parts of a work bench when measuring, marking, cutting and holding materials",
+        "Classifying tools and equipment according to their use (Measuring tools: Steel rule Measuring tape Marking out tools: Scriber, Marking gauge, Marking knife Cutting tools: Saws, Planes, Chisels Testing tools: Try square, Spirit level Holding tools: G-clamps, bench vice, sash clamps Driving tools: Hammer, mallet Building tools: Trowel, Building square)",
+        "Using tools and equipment to make products"
+      ],
+      "assessmentMethods": ["Parts of a work bench used accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Grade 4: MATERIALS",
+      "topics": ["Joining of Materials", "Finishing Materials"],
+      "learningOutcomes": ["Join materials", "Apply ¿nishes to materials"],
+      "suggestedActivities": [
+        "Selecting tools for joining materials",
+        "Joining materials using simple joints ( nailing, butt, lap, housing, bolt and nut«)",
+        "Applying joints in product making",
+        "Exploring methods of ¿nishing materials",
+        "Preparing materials in readiness for finishing ( sanding, grinding, polishing«)",
+        "Applying ¿nishes to products ( varnish, paint, wax«)",
+        "Practising safety precautions when applying ¿nishes"
+      ],
+      "assessmentMethods": [
+        "Materials joined correctly",
+        "Finishes applied to materials appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Grade 4: PRESENTATION",
+      "topics": ["Basics of Presentations"],
+      "learningOutcomes": ["Create presentations"],
+      "suggestedActivities": [
+        "Exploring presentation software",
+        "Creating presentations with text and images",
+        "Exploring di൵erent slide layouts and designs."
+      ],
+      "assessmentMethods": ["Presentations created appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Grade 4: ENERGY",
+      "topics": ["Electricity"],
+      "learningOutcomes": ["Make electrical Circuits"],
+      "suggestedActivities": [
+        "Identifying components of an electrical circuit (c ells,",
+        "Sketching electrical components in a circuit ( cell, switch and bulb ).",
+        "Identifying terminals on the cells ( positive and negative)",
+        "Connecting cells in series",
+        "Making circuits using electrical components"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Grade 4: SPREAD SHEET",
+      "topics": ["Basics of preadsheet"],
+      "learningOutcomes": ["Use spreadsheet applications"],
+      "suggestedActivities": [
+        "Exploring features of the spreadsheet ( insertion, active cell, rows, columns«)",
+        "Navigating the ribbon of the spreadsheet",
+        "Identifying cells, rows and columns of a spreadsheet",
+        "Naming cells by column and row ( A1, C5, D6«)",
+        "Entering data in cells"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Grade 4: GRAPHIC COMMUNICATION",
+      "topics": ["Lettering", "Types of Lines", "Angles", "Triangles", "Quadrilaterals", "Circles"],
+      "learningOutcomes": [
+        "Print letters and numbers",
+        "Draw lines used in construction",
+        "Construct angles",
+        "Construct triangles from given data",
+        "Construct TXDGULODWHUDOV",
+        "Construct FLUFOHV",
+        "Use graphic software in product design"
+      ],
+      "suggestedActivities": [
+        "Printing letters between construction lines",
+        "Printing numbers in upper and lower case between construction lines",
+        "Drawing types of lines used in construction ( hidden line, centre line, outline«)",
+        "Drawing lines used in construction using free hand",
+        "Drawing lines used in construction using drawing instruments ( perpendicular line, bisecting a line )",
+        "Identifying types of angles ( acute, right angle, obtuse, reÀex)",
+        "Constructing angles (60 ,90,120",
+        "Bisecting angles ( ,90 ,180 «)",
+        "Naming types of triangles ( Equilateral, right-angled and Isosceles triangles",
+        "Analysing characteristics of types of triangles",
+        "Constructing types of triangles ( Equilateral, right- angled and Isosceles",
+        "'HVLJQLQJ SURGXFWV XVLQJ WULDQJOHV",
+        "Applying triangles in product development",
+        "Identifying types RI TXDGULODWHUDOV square, rectangle, kite, rhombus and trapezium",
+        "Analysing characteristics of quadrilaterals",
+        "Constructing quadrilaterals square, rectangle, kite, rhombus and trapezium",
+        "'HVLJQLQJ SURGXFWV",
+        "using TXDGULODWHUDOV",
+        "Identifying parts of a circle ( radius, diameter, centre-line, centre, circumference",
+        "Constructing FLUFOHV JLYHQ WKH radius or diameter",
+        "Recording GLPHQVLRQV of a circle LQ PLOOLPHWUHV or centimetres",
+        "Making designs using FLUFOHV",
+        "Identifying graphic software ( CorelDRAW, paint, photoshop, publisher«)",
+        "([SORULQJ WRROV IRU GUDZLQJ and editing shapes.",
+        "Creating JUDSKLF LPDJHV stickers, logos«)."
+      ],
+      "assessmentMethods": [
+        "Letters and numbers printed accordingly",
+        "Lines used in construction drawn correctly",
+        "Angles constructed accurately",
+        "Triangles constructed from given data accordingly Technology Status Syllabus 2024",
+        "Quadrilaterals constructed accordingly",
+        "Circles constructed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Grade 4: TECHNOLOGY",
+      "topics": ["Technological Innovations"],
+      "learningOutcomes": ["Explore technological Innovations"],
+      "suggestedActivities": [
+        "Exploring technological Innovations",
+        "Performing reverse engineering on innovations ( dis-assembling and assembling products"
+      ],
+      "assessmentMethods": ["Technological Innovations explored appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Grade 4: CODING",
+      "topics": ["Block- Based Coding"],
+      "learningOutcomes": ["Use Block-based coding Platforms"],
+      "suggestedActivities": [
+        "Using block-based coding platforms ( scratch, code monkey, codingal«)",
+        "Exploring programming concepts ( sequence, loops, events«)"
+      ],
+      "assessmentMethods": ["Block-based coding platforms used accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Grade 4: STRUCTURES",
+      "topics": ["Types of Structures"],
+      "learningOutcomes": ["Classify Structures"],
+      "suggestedActivities": [
+        "Researching on types of structures ( frame, shell )",
+        "Classifying structures according to their attributes",
+        "Drawing di൵erent types of structures ( house, cup, bicycle, bridge«)"
+      ],
+      "assessmentMethods": ["Structures classi¿ed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Grade 4: INTERNET",
+      "topics": ["Internet"],
+      "learningOutcomes": ["Use the Internet"],
+      "suggestedActivities": [
+        "Using internet browsers ( chrome, safari, Firefox, Edge )",
+        "Practising safety and responsible internet usage ( passwords, privacy«)",
+        "Searching tasks on specific",
+        "Internet used accordingly topics. SUB -TOPIC Technology Status Syllabus 2024"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Grade 4: ENTREPRENEURSHIP",
+      "topics": ["Business Idea"],
+      "learningOutcomes": ["Develop a business idea"],
+      "suggestedActivities": [
+        "Identifying needs in the immediate environment",
+        "Analysing factors to consider when selecting a product or service to be offered",
+        "Costing a product",
+        "Forming companies ( sole trader, partnership«)",
+        "Suggesting a name of the company/business",
+        "Identifying the location of the business/company"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Grade 5: SAFETY",
+      "topics": ["Care and Maintenance of tools and Equipment"],
+      "learningOutcomes": ["Maintain tools and equipment"],
+      "suggestedActivities": [
+        "Sorting damaged/broken tools",
+        "Cleaning tools and equipment",
+        "Oiling speci¿c tools ( Hand drill, Rip saw blades, wheelbarrow«)",
+        "Fixing broken equipment ( desks, chairs, shelves, cabinets«)",
+        "Sharpening tools",
+        "Storing tools and equipment in safe places"
+      ],
+      "assessmentMethods": ["Tools and equipment maintained properly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Grade 5: WORD PROCESSING",
+      "topics": ["Formatting"],
+      "learningOutcomes": ["Format a word document"],
+      "suggestedActivities": ["Formatting text", "Formatting images and objects"],
+      "assessmentMethods": ["Word document formatted correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Grade 5: TOOLS AND EQUIPMENT",
+      "topics": ["Hand tools"],
+      "learningOutcomes": ["Use hand tools to make products"],
+      "suggestedActivities": [
+        "Identifying hand tools for making products ( saws, planes, ¿les, hammers«)",
+        "Utilising hand tools to make products",
+        "Practising safety precautions when using hand tools"
+      ],
+      "assessmentMethods": ["Hand tools to make products used correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Grade 5: MATERIALS",
+      "topics": ["Joining Materials"],
+      "learningOutcomes": ["Join materials"],
+      "suggestedActivities": [
+        "Identifying the following joints ( mortise and tenon, halving, dovetail, seam, rebate«)",
+        "Joining materials using various joints ( mortise and tenon,",
+        "Materials joined correctly SUB -TOPIC Technology Status Syllabus 2024 halving, dovetail, seam, rebate«)",
+        "Practising safety precautions when joining materials"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Grade 5: PRESENTATION",
+      "topics": ["Multimedia Presentations"],
+      "learningOutcomes": ["Develop multimedia presentations"],
+      "suggestedActivities": [
+        "Adding multimedia elements ( audio, video) to presentations.",
+        "Adding animation e൵ects and transitions to a presentation"
+      ],
+      "assessmentMethods": ["Multimedia presentations developed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Grade 5: ENERGY",
+      "topics": ["Design Circuits"],
+      "learningOutcomes": ["Construct circuits in series and parallel"],
+      "suggestedActivities": [
+        "Identifying Circuit Symbols ( Bulb, battery, wire, switch«)",
+        "Sketching symbols of electrical components.",
+        "Designing circuit diagrams ( in series and parallel ) using circuit symbols",
+        "Making series and parallel circuits"
+      ],
+      "assessmentMethods": ["Circuits constructed in series and parallel correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Grade 5: SPREADSHEET",
+      "topics": ["Addition and Subtraction in Spreadsheet"],
+      "learningOutcomes": ["Perform addition and subtraction in spreadsheet"],
+      "suggestedActivities": [
+        "Using addition, subtraction and equal signs (+, -, ) to perform calculations in spreadsheet",
+        "Adding at least two real numbers in spreadsheet",
+        "Subtracting at least two real numbers in VSUHDGVKHHW",
+        "Technology Status Syllabus 2024"
+      ],
+      "assessmentMethods": ["Addition and subtraction in spreadsheet performed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Grade 5: GRAPHIC COMMUNICATION",
+      "topics": ["Polygons", "Pictorial Drawing", "Image Editing tools"],
+      "learningOutcomes": [
+        "Construct regular polygons",
+        "Construct irregular polygons",
+        "Construct objects in pictorial view",
+        "Apply Rendering on pictorial drawings",
+        "Edit images"
+      ],
+      "suggestedActivities": [
+        "Identifying types of polygons ( Pentagon, Hexagon, Heptagon and Octagon)",
+        "Constructing regular polygons using the general method pentagon, hexagon, o ctagon«)",
+        "Designing products using polygons",
+        "Applying regular polygons in product development",
+        "Analysing characteristics of irregular polygons",
+        "Constructing irregular polygons ( given sides, angles«)",
+        "Applying irregular polygons in product development",
+        "Identifying objects in isometric and oblique view",
+        "Constructing an isometric box",
+        "Constructing objects in isometric",
+        "Constructing objects in oblique",
+        "Drawing pictorial objects using Free Hand",
+        "Rendering di൵erent materials ( wood, glass, metal, concrete«)",
+        "Rendering pictorial drawings",
+        "Rendering on pictorial drawings applied appropriately SUB -TOPIC",
+        "Technology Status Syllabus 2024",
+        "Exploring image editing tools ( paint, adobe photoshop, CorelDRAW«)",
+        "Editing images ( static images",
+        "Creating illustrations on digital images"
+      ],
+      "assessmentMethods": [
+        "Irregular polygons constructed correctly",
+        "Objects in pictorial view constructed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Grade 5: TECHNOLOGY",
+      "topics": ["Sustainable Technology"],
+      "learningOutcomes": ["Use sustainable Technology"],
+      "suggestedActivities": [
+        "Researching on sustainable technologies ( solar power, wind power, hydropower, green buildings, biodegradable plastics«)",
+        "Researching on unsustainable technologies ( fossil fuel energy, single-use plastics, non-rechargeable batteries, e- waste«)",
+        "Disposing e-waste",
+        "Using sustainable technologies in product making ( models of houses with solar panels, wind turbine, birdhouses, mini hydroponic«)"
+      ],
+      "assessmentMethods": ["Sustainable Technology used accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Grade 5: CODING",
+      "topics": ["Block-Based Coding"],
+      "learningOutcomes": ["Animate situations"],
+      "suggestedActivities": [
+        "Exploring animation concepts ( sequencing, timing, loops, events«)",
+        "Animating situations ( stories, games«)"
+      ],
+      "assessmentMethods": ["Situations animated accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Grade 5: STRUCTURES",
+      "topics": ["Designing Structures", "Site Preparation"],
+      "learningOutcomes": ["Make strong and stable structures", "Prepare a site for construction"],
+      "suggestedActivities": [
+        "Discussing causes of structural failure ( overloading, poor material selection, poor design )",
+        "SUB -TOPIC Technology Status Syllabus 2024",
+        "Designing strong and stable structures",
+        "Strengthening and stabilising structures ( ties, struts, cross member, widening the base, lowering the centre of mass, making the base heavier«)",
+        "Making stable structures ( desks, chair, TV stand«)",
+        "Investigating the site ( checking soil type, slope, drainage system«)",
+        "Clearing the site ( clearing shrubs/vegetation, slashing, removing loose rocks«)"
+      ],
+      "assessmentMethods": [
+        "Strong and stable structures made correctly",
+        "Leveling the site ite for constructionprepared properly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Grade 5: INTERNET",
+      "topics": ["Online Communication"],
+      "learningOutcomes": ["Use online communication tools responsibly"],
+      "suggestedActivities": [
+        "Exploring social media platforms and their features ( Facebook, WhatsApp, Messenger«)",
+        "Practising online etiquette",
+        "Creating accounts on social media platforms",
+        "Communicating using online tools ( email, video conferencing«)"
+      ],
+      "assessmentMethods": ["Online communication tools used responsibly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Grade 5: ENTREPRENEURSHIP",
+      "topics": ["Marketing"],
+      "learningOutcomes": ["Design a Marketing SODQ"],
+      "suggestedActivities": [
+        "Identifying competitors",
+        "Pricing a product",
+        "Designing promotion materials",
+        "Identifying products/services to be o൵ered",
+        "Identifying potential customers"
+      ],
+      "assessmentMethods": ["Marketing plan designed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Grade 6: SAFETY",
+      "topics": ["First Aid"],
+      "learningOutcomes": ["Apply First Aid"],
+      "suggestedActivities": [
+        "Researching on ¿rst aid",
+        "Identifying items in the First Aid Kit",
+        "Demonstrating the use of First Aid Kit contents ( Surgical blade, scissors, plaster«)",
+        "Making First Aid Carrier ( Box, bag«)",
+        "Role-playing how to care for an injured person"
+      ],
+      "assessmentMethods": ["First Aid applied accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Grade 6: WORD PROCESSING",
+      "topics": ["Document Collaboration"],
+      "learningOutcomes": ["Perform collaborative document editing and version control"],
+      "suggestedActivities": [
+        "Exploring document collaborative tools ( Docs, sheets, only o৽ce )",
+        "Collaborative document editing",
+        "Exploring version history and revision tracking features"
+      ],
+      "assessmentMethods": [
+        "Collaborative document editing and version control performed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Grade 6: TOOLS AND EQUIPMENT",
+      "topics": ["Building Tools"],
+      "learningOutcomes": ["Classify building tools"],
+      "suggestedActivities": [
+        "Identifying building tools ( spirit OHYHO , building square, trowel, wooden Àoat«)",
+        "Classifying building tools according to use ( laying tools, wall straightening, ¿nishing tools«",
+        "Building tools classi¿ed accordingly SUB -TOPIC",
+        "Using building tools to build a structure Technology Status Syllabus 2024"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Grade 6: MATERIALS",
+      "topics": ["Building Materials"],
+      "learningOutcomes": ["Classify building Materials", "Make bricks"],
+      "suggestedActivities": [
+        "Identifying building materials ( sand, quarry, clay, stones, bricks cement, lime«)",
+        "Classifying building materials ( ¿ne aggregates, coarse aggregates, binders, bricks«)",
+        "Kneading the clay",
+        "Moulding clay bricks",
+        "Curing of clay bricks"
+      ],
+      "assessmentMethods": ["Building materials classi¿ed accordingly", "Bricks made accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Grade 6: PRESENTATION",
+      "topics": ["Animations"],
+      "learningOutcomes": ["Create interactive presentations"],
+      "suggestedActivities": [
+        "Creating custom animations and transitions.",
+        "Using motion paths and e൵ects.",
+        "Developing Interactive presentations ( hyperlinks, PHQXV «)"
+      ],
+      "assessmentMethods": ["Interactive presentations created appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Grade 6: ENERGY",
+      "topics": ["Installation of electrical components"],
+      "learningOutcomes": ["Install electrical components"],
+      "suggestedActivities": [
+        "Identifying types of switches ( single pole-single throw, single-pole-double throw«",
+        "Designing and making switches",
+        "Designing circuits (",
+        "using: cells, bulbs and switches",
+        "Installing electrical components",
+        "installing electrical components Technology Status Syllabus 2024"
+      ],
+      "assessmentMethods": ["Electrical components installed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Grade 6: SPREADSHEET",
+      "topics": ["Multiplication and division in spreadsheet"],
+      "learningOutcomes": ["Perform multiplication and division in spreadsheet"],
+      "suggestedActivities": [
+        "Using multiplication and division signs (*, /)",
+        "Multiplying at least two real numbers in spreadsheet",
+        "Dividing at least two real numbers in spreadsheet",
+        "Multiplying and adding at least two real numbers in spreadsheet",
+        "Dividing and subtracting at least two real numbers in spreadsheet"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Grade 6: GRAPHIC COMMUNICATION",
+      "topics": ["Orthographic Projection", "Modeling"],
+      "learningOutcomes": ["Construct Orthographic views", "Create 3D models"],
+      "suggestedActivities": [
+        "Identifying orthographic projection views ( Front, plan, End",
+        "Converting pictorial drawing to orthographic views",
+        "Dimensioning of the elevations",
+        "Exploring 3D modeling software ( Paint 3D, sketch up, blender«)",
+        "Creating 3D models of simple objects.",
+        "Applying textures to 3D",
+        "PRGHOV",
+        "Applying 3D animation and rendering. Technology Status Syllabus 2024"
+      ],
+      "assessmentMethods": ["Orthographic views constructed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Grade 6: DESIGNING",
+      "topics": ["Product"],
+      "learningOutcomes": ["Design products to solve real life problems"],
+      "suggestedActivities": [
+        "Identifying situations that need solutions in the immediate environment",
+        "Designing products to solve problems",
+        "Developing products",
+        "Evaluating product designs"
+      ],
+      "assessmentMethods": ["Products designed appropriately to solve real life problems"],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Grade 6: CODING",
+      "topics": ["Block Based Coding"],
+      "learningOutcomes": ["Create simple computer programs"],
+      "suggestedActivities": [
+        "Creating simple computer programs ( animations, JDPHV« ) using block-based coding."
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Grade 6: STRUCTURES",
+      "topics": ["Building Structures"],
+      "learningOutcomes": ["Construct buildings"],
+      "suggestedActivities": [
+        "Making designs of buildings ( Àoor plan",
+        "Setting out the structure using the square method.",
+        "Mixing building materials in correct proportions",
+        "Constructing the building using bricks and mortar ( pit latrine, chicken run, kennel«",
+        "Practising safety precautions when constructing buildings"
+      ],
+      "assessmentMethods": ["Buildings constructed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Grade 6: INTERNET",
+      "topics": ["Building Structures"],
+      "learningOutcomes": ["Apply digital citizenship ethics"],
+      "suggestedActivities": [
+        "Discussing digital rights and responsibilities.",
+        "Exploring online privacy and",
+        "Utilising strategies to evade Cyberbullying"
+      ],
+      "assessmentMethods": [
+        "Digital citizenship ethics applied accordingly Technology Status Syllabus 2024 security issues."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Grade 6: ENTREPRENEURSHIP",
+      "topics": ["Business Plan"],
+      "learningOutcomes": ["Develop business plans"],
+      "suggestedActivities": [
+        "Researching on the main parts of a Business plan ( Name of the business, location, product/service, marketing",
+        "Developing a Business plan Writing a Business plan"
+      ],
+      "assessmentMethods": ["Business plans developed appropriately"],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "Ministry of Education, Curriculum Development Centre — TECHNOLOGY-STUDIES-UPPER-PRIMARY.pdf",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-29",
+    "sourceFileBytes": 799080,
+    "extractionNote": "Extracted deterministically from the official primary CDC PDF with automatic CDC font decoding. No curriculum content was fabricated.",
+    "curated": true,
+    "recordCount": 55
+  }
+}

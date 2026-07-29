@@ -78,6 +78,7 @@
     "ingest:old-syllabus:clear": "npx tsx --tsconfig tsconfig.json scripts/clear-old-syllabus-corpus.ts",
     "ingest:past-papers:reviewed": "npx tsx --tsconfig tsconfig.json scripts/mark-past-paper-reviewed.ts",
     "ingest:syllabi": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" scripts/ingest-syllabi.ts",
+    "ingest:primary": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" scripts/ingest-primary-syllabus.ts",
     "ingest:teaching-modules": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" scripts/ingest-teaching-modules.ts",
     "ingest:extract": "python ingest/01_extract_and_fix.py",
     "ingest:structure-syllabus": "ts-node --transpile-only -r tsconfig-paths/register --compiler-options \"{\\\"module\\\":\\\"CommonJS\\\",\\\"moduleResolution\\\":\\\"node\\\"}\" ingest/02_structure_syllabus.ts",

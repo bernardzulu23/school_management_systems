@@ -57,12 +57,19 @@ function slugify(subject: string): string {
 
 function curriculumDirs(): string[] {
   const root = path.join(process.cwd(), 'data', 'curriculum')
-  return [root, path.join(root, 'form1-4'), path.join(root, 'form1-6')]
+  return [root, path.join(root, 'primary'), path.join(root, 'form1-4'), path.join(root, 'form1-6')]
 }
 
 function listCandidateFiles(subject: string): string[] {
   const slug = slugify(subject)
-  const names = [`${slug}-form1-4.json`, `${slug}-form1-6.json`, `${slug}.json`]
+  const names = [
+    `${slug}-grade1-3.json`,
+    `${slug}-grade4-6.json`,
+    `${slug}-grade1-7.json`,
+    `${slug}-form1-4.json`,
+    `${slug}-form1-6.json`,
+    `${slug}.json`,
+  ]
   const files: string[] = []
   for (const dir of curriculumDirs()) {
     if (!fs.existsSync(dir)) continue
@@ -133,11 +140,18 @@ function gradeMatches(data: CurriculumJSON, gradeOrForm: string): boolean {
   if (/form\s*1\s*[-–to]+\s*6/i.test(level)) {
     if (/\bForm\s*[1-6]\b/i.test(gradeOrForm)) return true
   }
+  const primaryBand = level.match(/grade\s*([1-7])\s*[-–to]+\s*([1-7])/i)
+  if (primaryBand) {
+    const requestedGrade = gradeOrForm.match(/\bGrade\s*([1-7])\b/i)
+    if (!requestedGrade) return false
+    const n = Number(requestedGrade[1])
+    return n >= Number(primaryBand[1]) && n <= Number(primaryBand[2])
+  }
 
   if (!data.gradesCovered?.length) return true
 
   const form = gradeOrForm.match(/\bForm\s*([1-6])\b/i)
-  const grade = gradeOrForm.match(/\bGrade\s*(1[0-2]|[7-9])\b/i)
+  const grade = gradeOrForm.match(/\bGrade\s*(1[0-2]|[1-9])\b/i)
   const n = form ? Number(form[1]) : grade ? Number(grade[1]) : null
   if (n == null) return true
   if (data.gradesCovered.includes(n)) return true

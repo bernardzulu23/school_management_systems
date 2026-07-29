@@ -37,7 +37,7 @@ function normalizeWhitespace(text: string): string {
     .trim()
 }
 
-/** Known CBC / ECZ secondary subjects (Form 1–4). */
+/** Known CBC / ECZ subjects used by built-in curriculum corpora. */
 export const KNOWN_CBC_SUBJECTS = [
   'Chemistry',
   'Physics',
@@ -76,6 +76,11 @@ export const KNOWN_CBC_SUBJECTS = [
   'Kikaonde',
   'Lunda',
   'Luvale',
+  'Technology Studies',
+  'Creative and Technology Studies',
+  'Information Technology Study',
+  'Expressive Arts',
+  'Zambian Sign Language',
 ] as const
 
 const SUBJECT_ALIASES: Record<string, string> = {
@@ -116,6 +121,11 @@ const SUBJECT_ALIASES: Record<string, string> = {
   'civic education': 'Civic Education',
   'design and technology': 'Design and Technology',
   'design and technology studies': 'Design and Technology',
+  'technology studies': 'Technology Studies',
+  'creative and technology studies': 'Technology Studies',
+  'information technology study': 'Technology Studies',
+  'expressive arts': 'Expressive Arts',
+  'zambian sign language': 'Zambian Sign Language',
   commerce: 'Commerce',
   accounts: 'Accounts',
   'principles of accounts': 'Principles of Accounts',
@@ -190,6 +200,12 @@ export function extractSubjectFromFilename(filename: string): string | null {
   }
   if (/civic[-_\s]*education/i.test(rawBase)) return 'Civic Education'
   if (/physical[-_\s]*education/i.test(rawBase)) return 'Physical Education'
+  if (/technology[-_\s]*studies.*upper[-_\s]*primary/i.test(rawBase)) {
+    return 'Technology Studies'
+  }
+  if (/expressive[-_\s]*arts.*upper[-_\s]*primary/i.test(rawBase)) {
+    return 'Expressive Arts'
+  }
   if (/literature[-_\s]*in[-_\s]*bemba|lit[-_\s]*in[-_\s]*icibemba/i.test(rawBase)) {
     return 'Icibemba'
   }
