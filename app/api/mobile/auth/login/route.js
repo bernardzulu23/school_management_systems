@@ -113,7 +113,7 @@ export const POST = withSecureApi(async function POST(request) {
       if (emailMatches.length === 1) {
         user = await prisma.user.findFirst({
           where: { id: emailMatches[0].id },
-          include: { hodProfile: true },
+          include: { hodProfile: true, seniorTeacherAssignment: true, guidanceAssignment: true },
         })
         schoolId = user.schoolId
       }
@@ -215,6 +215,11 @@ export const POST = withSecureApi(async function POST(request) {
       name: user.name,
       role: effectiveRole,
       schoolId: user.schoolId,
+      isSeniorTeacher: Boolean(
+        user?.seniorTeacherAssignment?.id &&
+        user?.seniorTeacherAssignment?.active !== false &&
+        !user?.seniorTeacherAssignment?.revokedAt
+      ),
     })
 
     return NextResponse.json({

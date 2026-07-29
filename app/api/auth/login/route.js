@@ -227,6 +227,7 @@ export const POST = withSecureApi(async function POST(request) {
           studentProfile: true,
           teacherProfile: true,
           hodProfile: true,
+          seniorTeacherAssignment: true,
           guidanceAssignment: true,
         },
         take: 2,
@@ -393,6 +394,11 @@ export const POST = withSecureApi(async function POST(request) {
       schoolLevel: hydratedSchool?.level || 'combined',
       profile_picture_url: user.profile_picture_url,
       department: user?.hodProfile?.department || undefined,
+      isSeniorTeacher: Boolean(
+        user?.seniorTeacherAssignment?.id &&
+        user?.seniorTeacherAssignment?.active !== false &&
+        !user?.seniorTeacherAssignment?.revokedAt
+      ),
     })
 
     const response = NextResponse.json({

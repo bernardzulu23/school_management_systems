@@ -76,6 +76,7 @@ export const POST = withSecureHandler(async function POST(request) {
       role: true,
       schoolId: true,
       hodProfile: true,
+      seniorTeacherAssignment: true,
       guidanceAssignment: true,
     },
   })
@@ -109,6 +110,11 @@ export const POST = withSecureHandler(async function POST(request) {
       name: user.name,
       role: claims.role,
       schoolId: user.schoolId,
+      isSeniorTeacher: Boolean(
+        user?.seniorTeacherAssignment?.id &&
+        user?.seniorTeacherAssignment?.active !== false &&
+        !user?.seniorTeacherAssignment?.revokedAt
+      ),
     },
   })
 })

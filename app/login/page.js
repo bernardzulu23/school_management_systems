@@ -151,6 +151,8 @@ function LoginPageContent() {
         router.push(featurePath)
       } else if (['headteacher', 'admin', 'administrator', 'superadmin'].includes(role)) {
         router.push('/dashboard/admin')
+      } else if (result?.user?.isSeniorTeacher) {
+        router.push('/dashboard/senior-teacher')
       } else if (['hod', 'head of department'].includes(role)) {
         const schoolLevel = String(result?.user?.schoolLevel || '').toLowerCase()
         router.push(schoolLevel === 'primary' ? '/dashboard/teacher' : '/dashboard/hod')

@@ -10,7 +10,8 @@ export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {
+  const isSeniorTeacher = Boolean(auth.user?.isSeniorTeacher)
+  if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher']) && !isSeniorTeacher) {
     throw new ApiError('Forbidden', 403)
   }
 

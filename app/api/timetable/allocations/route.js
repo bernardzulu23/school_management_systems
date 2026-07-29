@@ -8,6 +8,10 @@ import { resolveBundleFromBody } from '@/lib/timetable/bundle-utils'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
+import {
+  hasActiveSeniorTeacherAssignment,
+  resolvePrimaryClassScope,
+} from '@/lib/senior-teacher/seniorTeacherAccess'
 
 const ALLOCATION_LIST_LIMIT = 500
 
@@ -26,15 +30,24 @@ export const GET = withErrorHandler(async function GET(req) {
   if (!typeCheck.allowed) return typeCheck.response
 
   const isAllowedRole = roleCheck(user, ['ADMIN', 'headteacher', 'HOD', 'hod'])
+  const hasSeniorTeacherAssignment = await hasActiveSeniorTeacherAssignment(
+    prisma,
+    user.id,
+    schoolId
+  )
   const hasHodProfile = await prisma.headOfDepartment.findFirst({
     where: { userId: user.id, schoolId },
     select: { id: true },
   })
-  if (!isAllowedRole && !hasHodProfile) {
+  if (!isAllowedRole && !hasHodProfile && !hasSeniorTeacherAssignment) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
   const isHod = roleCheck(user, ['HOD', 'hod']) || Boolean(hasHodProfile)
+  const isSeniorTeacher = Boolean(hasSeniorTeacherAssignment)
+  const { classIds: primaryClassIds } = isSeniorTeacher
+    ? await resolvePrimaryClassScope(prisma, schoolId)
+    : { classIds: [] }
   const { searchParams } = new URL(req.url)
   const term = safeQueryString(searchParams.get('term'), { defaultValue: 'Term 1' })
   const academicYear =
@@ -50,6 +63,7 @@ export const GET = withErrorHandler(async function GET(req) {
       term,
       academicYear,
       ...(isHod ? { hodId: user.id } : {}),
+      ...(isSeniorTeacher ? { classId: { in: primaryClassIds } } : {}),
       ...(department ? { hod: { hodProfile: { department } } } : {}),
       ...(status ? { status } : {}),
     },
@@ -99,13 +113,19 @@ export const POST = withErrorHandler(async function POST(req) {
   if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
 
   const isAdmin = roleCheck(user, ['ADMIN'])
+  const hasSeniorTeacherAssignment = await hasActiveSeniorTeacherAssignment(
+    prisma,
+    user.id,
+    schoolId
+  )
   const hasHodProfile = await prisma.headOfDepartment.findFirst({
     where: { userId: user.id, schoolId },
     select: { id: true },
   })
   const isHod = roleCheck(user, ['HOD', 'hod']) || Boolean(hasHodProfile)
-  if (!isAdmin && !isHod) {
-    return NextResponse.json({ error: 'HOD or above required' }, { status: 403 })
+  const isSeniorTeacher = Boolean(hasSeniorTeacherAssignment)
+  if (!isAdmin && !isHod && !isSeniorTeacher) {
+    return NextResponse.json({ error: 'HOD, Senior Teacher, or admin required' }, { status: 403 })
   }
 
   const body = await req.json()
@@ -139,6 +159,16 @@ export const POST = withErrorHandler(async function POST(req) {
   const resolvedBlockType = String(blockType || 'MIXED')
     .trim()
     .toUpperCase()
+
+  if (isSeniorTeacher) {
+    const { classIds: primaryClassIds } = await resolvePrimaryClassScope(prisma, schoolId)
+    if (!primaryClassIds.includes(String(classId))) {
+      return NextResponse.json(
+        { error: 'Senior Teachers can only allocate primary classes' },
+        { status: 403 }
+      )
+    }
+  }
 
   try {
     const allocation = await prisma.teacherAllocation.upsert({

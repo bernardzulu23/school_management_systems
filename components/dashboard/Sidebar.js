@@ -154,10 +154,14 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     rawRoleKey === 'admin' || rawRoleKey === 'administrator' ? 'headteacher' : rawRoleKey
 
   const getNavigationItems = () => {
+    const hasSeniorTeacherRole = Boolean(user?.isSeniorTeacher || user?.seniorTeacherAssignment?.id)
+    const baseDashboardHref = hasSeniorTeacherRole
+      ? '/dashboard/senior-teacher'
+      : `/dashboard/${roleKey || 'student'}`
     const baseItems = [
       {
         name: 'Dashboard',
-        href: `/dashboard/${roleKey || 'student'}`,
+        href: baseDashboardHref,
         icon: Home,
       },
       {
@@ -201,6 +205,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'SIC (In-service)',
           href: '/dashboard/headteacher/sic',
           icon: GraduationCap,
+        },
+        {
+          name: 'Senior Teachers',
+          href: '/dashboard/headteacher/senior-teachers',
+          icon: UserCheck,
         },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         {
@@ -336,6 +345,24 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Analytics', href: '/dashboard/sic/analytics', icon: BarChart3 },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
+      'senior-teacher': [
+        { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
+        { name: 'Primary Classes', href: '/dashboard/classes', icon: GraduationCap },
+        {
+          name: 'Primary Allocation',
+          href: '/dashboard/senior-teacher/allocation',
+          icon: BookOpen,
+        },
+        { name: 'Primary Timetable', href: '/dashboard/senior-teacher/timetable', icon: Calendar },
+        { name: 'Lesson Plans', href: '/dashboard/senior-teacher/lesson-plans', icon: FileText },
+        { name: 'Quizzes', href: '/dashboard/senior-teacher/quizzes', icon: ClipboardList },
+        { name: 'Teacher Monitoring', href: '/dashboard/senior-teacher/monitoring', icon: Eye },
+        { name: 'Teaching Studio', href: '/dashboard/teacher/teaching-studio', icon: Zap },
+        { name: 'Assessments', href: '/dashboard/teacher/assessments', icon: ClipboardList },
+        { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
+        { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
+        { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
+      ],
       teacher: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
@@ -451,9 +478,14 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     const guidancePortal = pathname?.startsWith('/dashboard/guidance')
     const sicPortal = pathname?.startsWith('/dashboard/sic')
     const hodPortal = pathname?.startsWith('/dashboard/hod')
+    const seniorTeacherPortal = pathname?.startsWith('/dashboard/senior-teacher')
     const hasGuidanceRole = hasGuidanceAssignment(user)
     const hasSicRole = hasSicAssignment(user)
-    let navRoleKey = roleKey === 'hod' && !showHod ? 'teacher' : roleKey
+    let navRoleKey = hasSeniorTeacherRole
+      ? 'senior-teacher'
+      : roleKey === 'hod' && !showHod
+        ? 'teacher'
+        : roleKey
     if (hodPortal && (user?.hodProfile || roleKey === 'hod' || roleKey === 'teacher')) {
       navRoleKey = 'hod'
     }
@@ -462,6 +494,9 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     }
     if (sicPortal && hasSicRole) {
       navRoleKey = 'sic'
+    }
+    if (seniorTeacherPortal && hasSeniorTeacherRole) {
+      navRoleKey = 'senior-teacher'
     }
 
     let roleItems = roleSpecificItems[navRoleKey] || []

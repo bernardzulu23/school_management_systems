@@ -32,6 +32,13 @@ export function createMockPrisma() {
       findFirst: vi.fn(),
       findUnique: vi.fn(),
     },
+    seniorTeacherAssignment: {
+      findFirst: vi.fn(),
+      findMany: vi.fn(),
+      upsert: vi.fn(),
+      update: vi.fn(),
+      create: vi.fn(),
+    },
     student: {
       findFirst: vi.fn(),
       findMany: vi.fn(),

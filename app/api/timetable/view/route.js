@@ -26,6 +26,10 @@ import { loadTeacherColorMap, teacherColorMapToJson } from '@/lib/timetable/teac
 import { getDraftConflictMeta, formatDraftMetaResponse } from '@/lib/timetable/conflictAudit'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
+import {
+  hasActiveSeniorTeacherAssignment,
+  resolvePrimaryClassScope,
+} from '@/lib/senior-teacher/seniorTeacherAccess'
 
 const VIEW_ENTRY_LIMIT = 2000
 
@@ -43,6 +47,10 @@ function isStudentRole(user) {
 
 function isHodRole(user) {
   return roleCheck(user, ['HOD', 'hod'])
+}
+
+function isSeniorTeacherRole(user) {
+  return Boolean(user?.isSeniorTeacher)
 }
 
 /**
@@ -132,6 +140,8 @@ export const GET = withErrorHandler(async function GET(req) {
   const schoolAdmin = isSchoolAdminRole(user)
   const student = isStudentRole(user)
   const hod = isHodRole(user)
+  const seniorTeacher =
+    isSeniorTeacherRole(user) || (await hasActiveSeniorTeacherAssignment(prisma, user.id, schoolId))
   const teacher = isTeacherRole(user)
   const scopeParam = safeQueryString(searchParams.get('scope'), { defaultValue: '' }).toLowerCase()
   const wantDepartmentScope =
@@ -167,6 +177,9 @@ export const GET = withErrorHandler(async function GET(req) {
       })
     }
     where.teacherId = { in: teacherUserIds }
+  } else if (seniorTeacher) {
+    const { classIds } = await resolvePrimaryClassScope(prisma, schoolId)
+    where.classId = classIds.length > 0 ? { in: classIds } : '__no_primary_classes__'
   } else if (teacher) {
     // TimetableAllocationEntry.teacherId is User.id
     where.teacherId = user.id
@@ -206,7 +219,11 @@ export const GET = withErrorHandler(async function GET(req) {
       } else if (where.teacherId) {
         if (String(row.teacherId) !== String(where.teacherId)) return false
       }
-      if (where.classId && String(row.classId) !== String(where.classId)) return false
+      if (where.classId?.in) {
+        if (!where.classId.in.map(String).includes(String(row.classId))) return false
+      } else if (where.classId) {
+        if (String(row.classId) !== String(where.classId)) return false
+      }
       if (where.subjectId?.in) {
         const allowed = where.subjectId.in.map(String)
         if (!allowed.includes(String(row.subjectId))) return false

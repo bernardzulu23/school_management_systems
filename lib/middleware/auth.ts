@@ -11,6 +11,9 @@ export interface AppUser extends JWTPayload {
   name?: string
   subdomain?: string
   isPlatform?: boolean
+  isSeniorTeacher?: boolean
+  isGuidance?: boolean
+  isHod?: boolean
 }
 
 export function isPlatformSession(user: AppUser | undefined): boolean {
@@ -190,8 +193,17 @@ export const ROLE_ALIASES: Record<string, string[]> = {
 
 export const ROLE_GROUPS = {
   ADMIN_ONLY: ['ADMIN'],
-  SCHOOL_STAFF: ['ADMIN', 'HOD', 'TEACHER'],
-  ALL_AUTHENTICATED: ['ADMIN', 'HOD', 'TEACHER', 'STUDENT', 'PARENT'],
+  SCHOOL_STAFF: ['ADMIN', 'HOD', 'TEACHER', 'SENIOR_TEACHER', 'GUIDANCE_TEACHER', 'DEPUTY'],
+  ALL_AUTHENTICATED: [
+    'ADMIN',
+    'HOD',
+    'TEACHER',
+    'SENIOR_TEACHER',
+    'GUIDANCE_TEACHER',
+    'DEPUTY',
+    'STUDENT',
+    'PARENT',
+  ],
 }
 
 export function normalizeRole(role: string): string {

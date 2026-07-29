@@ -351,6 +351,7 @@ export async function handleSecurityProxy(request) {
           !roleMatchesDashboardGroups(payload.role, dashboardGate.groups, {
             isHod: Boolean(payload.isHod),
             isGuidance: Boolean(payload.isGuidance),
+            isSeniorTeacher: Boolean(payload.isSeniorTeacher),
           })
         ) {
           // Teachers may hold HOD / Guidance assignments without matching role strings;
@@ -367,7 +368,8 @@ export async function handleSecurityProxy(request) {
             rk === 'guidanceteacher'
           const deferred =
             (dashboardGate.prefix === '/dashboard/hod' && teacherLike) ||
-            (dashboardGate.prefix === '/dashboard/guidance' && staffLike)
+            (dashboardGate.prefix === '/dashboard/guidance' && staffLike) ||
+            (dashboardGate.prefix === '/dashboard/senior-teacher' && staffLike)
           if (!deferred) {
             return secureResponse(
               {

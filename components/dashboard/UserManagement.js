@@ -22,6 +22,7 @@ import {
   Briefcase,
   ClipboardList,
   Bell,
+  UserCheck,
 } from 'lucide-react'
 import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
@@ -108,6 +109,9 @@ export default function UserManagement() {
   const router = useRouter()
   const { school } = useSchool()
   const showHodFeatures = canAccessHodFeatures({ schoolLevel: school?.level })
+  const showSeniorTeacherAssign = ['primary', 'combined'].includes(
+    String(school?.level || '').toLowerCase()
+  )
   const isIndividualSchool = String(school?.schoolType || 'SCHOOL').toUpperCase() === 'INDIVIDUAL'
   /** Always show for school tenants — assignment pages enforce their own access rules. */
   const showGuidanceAssign = !isIndividualSchool
@@ -717,6 +721,47 @@ export default function UserManagement() {
                     >
                       <Users className="h-4 w-4 mr-2" aria-hidden="true" />
                       Manage SIC assignment
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {showSeniorTeacherAssign && (
+              <Card className="bg-royalPurple-card border border-royalPurple-border rounded-xl overflow-hidden hover:scale-105 transition-all duration-300">
+                <CardHeader className="bg-royalPurple-card2 p-4 border-b border-royalPurple-border">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-royalPurple-card border border-royalPurple-border rounded-lg p-2">
+                      <UserCheck className="h-5 w-5 text-royalPurple-text2" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <CardTitle className="text-royalPurple-text1 font-semibold text-base">
+                        Assign Senior Teachers
+                      </CardTitle>
+                      <p className="text-royalPurple-text2 text-sm mt-1">
+                        Manage whole-primary oversight for approvals, allocations, and monitoring
+                      </p>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6">
+                  <div className="space-y-3">
+                    <Button
+                      className="bg-royalPurple-accent text-royalPurple-deep font-semibold rounded-lg w-full py-2"
+                      onClick={() => router.push('/dashboard/headteacher/senior-teachers')}
+                      aria-label="Assign a Senior Teacher"
+                    >
+                      <Plus className="h-4 w-4 mr-2" aria-hidden="true" />
+                      Assign Senior Teacher
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                      onClick={() => router.push('/dashboard/headteacher/senior-teachers')}
+                      aria-label="Manage Senior Teacher assignments"
+                    >
+                      <Users className="h-4 w-4 mr-2" aria-hidden="true" />
+                      Manage Senior Teachers
                     </Button>
                   </div>
                 </CardContent>

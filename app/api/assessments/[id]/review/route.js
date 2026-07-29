@@ -17,7 +17,8 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
 
-  if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher'])) {
+  const isSeniorTeacher = Boolean(auth.user?.isSeniorTeacher)
+  if (!roleCheck(auth.user, ['HOD', 'hod', 'ADMIN', 'headteacher']) && !isSeniorTeacher) {
     throw new ApiError('Forbidden', 403)
   }
 

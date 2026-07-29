@@ -33,9 +33,10 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!userId) throw new ApiError('Unauthorized', 401)
 
   const role = String(auth.user?.role || '').toLowerCase()
+  const isSeniorTeacher = Boolean(auth.user?.isSeniorTeacher)
 
   const wantsMine = scope.toLowerCase() === 'mine' || role === 'teacher'
-  const wantsReview = scope.toLowerCase() === 'review' || role === 'hod'
+  const wantsReview = scope.toLowerCase() === 'review' || role === 'hod' || isSeniorTeacher
 
   if (!wantsMine && !wantsReview && !roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     throw new ApiError('Forbidden', 403)

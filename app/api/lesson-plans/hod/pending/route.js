@@ -19,9 +19,12 @@ export const GET = withErrorHandler(async function GET(request) {
   const role = String(auth.user?.role || '').toLowerCase()
   const isHod =
     role === 'hod' || roleCheck(auth.user, ['HOD', 'hod']) || Boolean(auth.user?.hodProfile)
+  const isSeniorTeacher = Boolean(auth.user?.isSeniorTeacher)
   const isAdmin = roleCheck(auth.user, ['ADMIN', 'headteacher'])
 
-  if (!isHod && !isAdmin) throw new ApiError('HOD access required', 403)
+  if (!isHod && !isSeniorTeacher && !isAdmin) {
+    throw new ApiError('HOD or Senior Teacher access required', 403)
+  }
 
   const pending = await prisma.lessonPlan.findMany({
     where: {

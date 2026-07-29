@@ -173,6 +173,7 @@ model School {
   careerResources      CareerResource[]
   careers              Career[]
   sicAssignments       SicAssignment[]
+  seniorTeacherAssignments SeniorTeacherAssignment[]
   sicCpdPlans          SicCpdPlan[]
   sicActivityPlans     SicActivityPlan[]
   sicHimMeetings       SicHimMeeting[]
@@ -253,10 +254,12 @@ model User {
   parentStudentLinks ParentStudentLink[] @relation("ParentUserLinks")
   teacherProfile Teacher?
   hodProfile     HeadOfDepartment?
+  seniorTeacherAssignment SeniorTeacherAssignment? @relation("SeniorTeacher")
   guidanceAssignment GuidanceAssignment? @relation("GuidanceTeacher")
   guidanceAssignmentsCreated GuidanceAssignment[] @relation("GuidanceAssignedBy")
   sicAssignment SicAssignment? @relation("SicCoordinator")
   sicAssignmentsCreated SicAssignment[] @relation("SicAssignedBy")
+  seniorTeacherAssignmentsCreated SeniorTeacherAssignment[] @relation("SeniorTeacherAssignedBy")
   sicCpdPlansSubmitted SicCpdPlan[] @relation("SicCpdPlanSubmitter")
   sicCpdPlansReviewed SicCpdPlan[] @relation("SicCpdPlanReviewer")
   sicActivityPlansCreated SicActivityPlan[] @relation("SicActivityPlanAuthor")
@@ -1174,6 +1177,25 @@ model SicAssignment {
   school     School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   user       User   @relation("SicCoordinator", fields: [userId], references: [id], onDelete: Cascade)
   assignedBy User   @relation("SicAssignedBy", fields: [assignedById], references: [id], onDelete: Cascade)
+
+  @@index([schoolId, active])
+  @@index([userId, active])
+}
+
+model SeniorTeacherAssignment {
+  id           String   @id @default(cuid())
+  schoolId     String
+  userId       String   @unique
+  assignedById String
+  assignedAt   DateTime @default(now())
+  revokedAt    DateTime?
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  school     School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  user       User   @relation("SeniorTeacher", fields: [userId], references: [id], onDelete: Cascade)
+  assignedBy User   @relation("SeniorTeacherAssignedBy", fields: [assignedById], references: [id], onDelete: Cascade)
 
   @@index([schoolId, active])
   @@index([userId, active])
