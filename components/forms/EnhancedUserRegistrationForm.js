@@ -29,6 +29,7 @@ import ProfessionalInfoStep from './enhanced-registration/ProfessionalInfoStep'
 import AdministrativeInfoStep from './enhanced-registration/AdministrativeInfoStep'
 import ParentGuardianStep from './enhanced-registration/ParentGuardianStep'
 import { getPasswordFormError } from '@/lib/security/passwordValidate'
+import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 
 let lookupsCache = null
 let lookupsCacheAt = 0
@@ -40,6 +41,7 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
   const [lookups, setLookups] = useState({ classes: [], subjects: [], departments: [] })
   const [schoolLevel, setSchoolLevel] = useState('combined')
   const [schoolType, setSchoolType] = useState('SCHOOL')
+  const supportsDepartments = canAccessHodFeatures({ schoolLevel })
   const [formData, setFormData] = useState({
     // Basic user info
     name: '',
@@ -330,7 +332,10 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
       if (role === 'teacher' || role === 'hod') {
         if (!formData.ts_number.trim()) newErrors.ts_number = 'TS Number is required'
         if (role === 'teacher') {
-          if (!formData.department_ids || formData.department_ids.length === 0) {
+          if (
+            supportsDepartments &&
+            (!formData.department_ids || formData.department_ids.length === 0)
+          ) {
             newErrors.department_ids = 'At least one department is required'
           }
           const assignments = Array.isArray(formData.teaching_assignments)
@@ -447,9 +452,10 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         submitData = {
           ...submitData,
           assignments,
-          departmentIds: Array.isArray(formData.department_ids)
-            ? formData.department_ids.map(String)
-            : [],
+          departmentIds:
+            supportsDepartments && Array.isArray(formData.department_ids)
+              ? formData.department_ids.map(String)
+              : [],
         }
       }
       await onSubmit(submitData)
@@ -517,6 +523,8 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
               classes={lookups.classes}
               subjects={lookups.subjects}
               departments={lookups.departments}
+              supportsDepartments={supportsDepartments}
+              schoolLevel={schoolLevel}
             />
           )
         } else {

@@ -1,7 +1,11 @@
 import React from 'react'
 import { Briefcase, FileText, GraduationCap, BookOpen, Plus, Trash2 } from 'lucide-react'
 import { FormGroup, FormSection } from '@/components/ui/FormGroup'
-import { DEPARTMENTS as FALLBACK_DEPARTMENTS, GRADE_LEVELS, SECTIONS } from '@/lib/constants'
+import {
+  DEPARTMENTS as FALLBACK_DEPARTMENTS,
+  SECTIONS,
+  getGradeLevelsForSchoolLevel,
+} from '@/lib/constants'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 
 export default function ProfessionalInfoStep({
@@ -14,6 +18,8 @@ export default function ProfessionalInfoStep({
   classes = [],
   subjects = [],
   departments = [],
+  supportsDepartments = true,
+  schoolLevel = 'combined',
 }) {
   const departmentIds = Array.isArray(formData.department_ids) ? formData.department_ids : []
   const teachingAssignments = Array.isArray(formData.teaching_assignments)
@@ -24,19 +30,7 @@ export default function ProfessionalInfoStep({
     return found ? `${found.name} (${found.category})` : name
   }
 
-  const allowedYearGroups = new Set([
-    'Form 1',
-    'Form 2',
-    'Form 3',
-    'Form 4',
-    'Form 5',
-    'Form 6',
-    'Grade 10',
-    'Grade 11',
-    'Grade 12',
-  ])
-
-  const yearOrder = GRADE_LEVELS.filter((g) => allowedYearGroups.has(String(g).trim()))
+  const yearOrder = getGradeLevelsForSchoolLevel(schoolLevel)
 
   const departmentOptions =
     departments.length > 0 ? departments : FALLBACK_DEPARTMENTS.map((name) => ({ id: name, name }))
@@ -152,7 +146,7 @@ export default function ProfessionalInfoStep({
           />
         </div>
 
-        {role === 'teacher' && (
+        {role === 'teacher' && supportsDepartments && (
           <div className="bg-royalPurple-pill p-6 rounded-xl border border-royalPurple-border2">
             <h4 className="text-lg font-semibold text-royalPurple-pillTx mb-4 flex items-center">
               <Briefcase className="h-5 w-5 mr-2" />

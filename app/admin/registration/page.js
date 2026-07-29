@@ -121,7 +121,9 @@ function RegistrationContent() {
       features: [
         'Subject assignment from 29 available subjects',
         'Local language specializations (Cinyanja, Chitonga, Bemba, etc.)',
-        'Department allocation',
+        ...(canAccessHodFeatures({ schoolLevel: schoolMeta?.level })
+          ? ['Department allocation']
+          : []),
         'Professional qualifications tracking',
         'Emergency contact information',
       ],

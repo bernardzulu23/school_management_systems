@@ -93,9 +93,10 @@ export const POST = withErrorHandler(async (request) => {
   }
 
   const roleNormalized = String(role || '').toLowerCase()
+  const supportsDepartments = canAccessHodFeatures({ schoolLevel: school?.level })
   if (
     (roleNormalized === 'hod' || roleNormalized === 'head of department') &&
-    !canAccessHodFeatures({ schoolLevel: school?.level })
+    !supportsDepartments
   ) {
     return NextResponse.json(
       {
@@ -328,7 +329,7 @@ export const POST = withErrorHandler(async (request) => {
             ? body.department_ids.map(String)
             : []
 
-        if (rawDepartmentIds.length > 0) {
+        if (supportsDepartments && rawDepartmentIds.length > 0) {
           for (const rawId of rawDepartmentIds) {
             const existing = await tx.department.findFirst({
               where: { id: rawId, schoolId },
@@ -349,7 +350,7 @@ export const POST = withErrorHandler(async (request) => {
             })
             resolvedDepartmentIds.push(created.id)
           }
-        } else {
+        } else if (supportsDepartments) {
           const departmentName = String(body.department || '').trim()
           if (departmentName) {
             const dept = await tx.department.upsert({
@@ -443,7 +444,7 @@ export const POST = withErrorHandler(async (request) => {
           data: {
             userId: user.id,
             schoolId,
-            department: String(body.department || '').trim() || null,
+            department: supportsDepartments ? String(body.department || '').trim() || null : null,
             ts_number: body.ts_number,
             qualifications: body.qualifications,
             specialization: body.specialization,
