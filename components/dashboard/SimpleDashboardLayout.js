@@ -175,7 +175,9 @@ export function DashboardLayout({ children, title }) {
                   ) : null)}
                 {!isMobile &&
                   showHodLink &&
-                  (user?.hodProfile || String(user?.role || '').toLowerCase() === 'hod') && (
+                  (user?.isHod ||
+                    user?.hodProfile ||
+                    String(user?.role || '').toLowerCase() === 'hod') && (
                     <Link
                       href="/dashboard/hod"
                       className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"

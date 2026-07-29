@@ -215,6 +215,7 @@ export const POST = withSecureApi(async function POST(request) {
       name: user.name,
       role: effectiveRole,
       schoolId: user.schoolId,
+      isHod: Boolean(user?.hodProfile),
       isSeniorTeacher: Boolean(
         user?.seniorTeacherAssignment?.id &&
         user?.seniorTeacherAssignment?.active !== false &&

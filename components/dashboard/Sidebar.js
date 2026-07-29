@@ -486,7 +486,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       : roleKey === 'hod' && !showHod
         ? 'teacher'
         : roleKey
-    if (hodPortal && (user?.hodProfile || roleKey === 'hod' || roleKey === 'teacher')) {
+    if (hodPortal && (user?.isHod || user?.hodProfile || roleKey === 'hod')) {
       navRoleKey = 'hod'
     }
     if (guidancePortal && hasGuidanceRole && showCareer) {

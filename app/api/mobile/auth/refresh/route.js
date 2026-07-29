@@ -110,6 +110,7 @@ export const POST = withSecureHandler(async function POST(request) {
       name: user.name,
       role: claims.role,
       schoolId: user.schoolId,
+      isHod: Boolean(user?.hodProfile),
       isSeniorTeacher: Boolean(
         user?.seniorTeacherAssignment?.id &&
         user?.seniorTeacherAssignment?.active !== false &&

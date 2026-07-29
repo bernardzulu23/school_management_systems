@@ -127,6 +127,7 @@ export const GET = withSecureApi(async function GET(request) {
       studentProfile: dbUser.studentProfile || undefined,
       teacherProfile: dbUser.teacherProfile || undefined,
       hodProfile: dbUser.hodProfile || undefined,
+      isHod: Boolean(dbUser.hodProfile),
       guidanceAssignment:
         dbUser.guidanceAssignment?.active && !dbUser.guidanceAssignment?.revokedAt
           ? {

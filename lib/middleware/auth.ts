@@ -218,13 +218,22 @@ function normalizeRoleKey(role: string): string {
 
 export function roleCheck(user: AppUser | undefined, allowedRoles: string[]): boolean {
   if (!user || !user.role) return false
-  const role = normalizeRole(user.role)
-  const roleKey = normalizeRoleKey(user.role)
-  return allowedRoles.some((allowed) => {
-    const aliases = ROLE_ALIASES[allowed] || [normalizeRole(allowed)]
-    const lowerAliases = aliases.map((a) => normalizeRole(a))
-    if (lowerAliases.includes(role)) return true
-    const aliasKeys = aliases.map((a) => normalizeRoleKey(a))
-    return aliasKeys.includes(roleKey)
+  const claimedRoles = [
+    user.role,
+    ...(user.isHod ? ['HOD'] : []),
+    ...(user.isSeniorTeacher ? ['SENIOR_TEACHER'] : []),
+    ...(user.isGuidance ? ['GUIDANCE_TEACHER'] : []),
+  ]
+
+  return claimedRoles.some((claimedRole) => {
+    const role = normalizeRole(claimedRole)
+    const roleKey = normalizeRoleKey(claimedRole)
+    return allowedRoles.some((allowed) => {
+      const aliases = ROLE_ALIASES[allowed] || [normalizeRole(allowed)]
+      const lowerAliases = aliases.map((a) => normalizeRole(a))
+      if (lowerAliases.includes(role)) return true
+      const aliasKeys = aliases.map((a) => normalizeRoleKey(a))
+      return aliasKeys.includes(roleKey)
+    })
   })
 }

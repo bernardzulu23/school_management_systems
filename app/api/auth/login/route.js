@@ -394,6 +394,7 @@ export const POST = withSecureApi(async function POST(request) {
       schoolLevel: hydratedSchool?.level || 'combined',
       profile_picture_url: user.profile_picture_url,
       department: user?.hodProfile?.department || undefined,
+      isHod: Boolean(user?.hodProfile),
       isSeniorTeacher: Boolean(
         user?.seniorTeacherAssignment?.id &&
         user?.seniorTeacherAssignment?.active !== false &&
