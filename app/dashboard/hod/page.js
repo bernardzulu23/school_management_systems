@@ -197,11 +197,6 @@ export default function HodDashboard() {
     })
   }, [departmentSubjects])
 
-  const { data: stats } = useQuery({
-    queryKey: ['dashboard-stats'],
-    queryFn: () => api.getDashboardStats().then((res) => res.data),
-  })
-
   const { data: dashboardData } = useQuery({
     queryKey: ['hod-dashboard', selectedTerm, selectedYear],
     queryFn: () =>

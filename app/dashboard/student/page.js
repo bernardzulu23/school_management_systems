@@ -174,12 +174,6 @@ export default function StudentDashboard() {
     classId: scopedClassId,
   } = usePublishedTimetableView({ enabled: Boolean(currentUser) })
   const timeSlots = publishedTimeSlots.length ? publishedTimeSlots : schoolTimeSlots
-
-  const { data: stats } = useQuery({
-    queryKey: ['dashboard-stats'],
-    queryFn: () => api.getDashboardStats().then((res) => res.data),
-  })
-
   const { data: dashboardData, isLoading } = useQuery({
     queryKey: ['student-dashboard'],
     queryFn: async () => {
