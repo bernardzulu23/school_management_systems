@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import LessonPlanViewer from '@/components/lesson-plans/LessonPlanViewer'
 import { useAuth } from '@/lib/auth'
+import { hasHodPortalAccess } from '@/lib/hod/hodAccess'
 import toast from 'react-hot-toast'
 import { ArrowLeft, CheckCircle, FileText, XCircle } from 'lucide-react'
 
@@ -34,10 +35,10 @@ export default function HodLessonPlanDetailPage() {
   const [approvalNotes, setApprovalNotes] = useState('')
 
   useEffect(() => {
-    const role = String(user?.role || '').toLowerCase()
-    const allowed =
-      role === 'hod' || role === 'headteacher' || role === 'admin' || Boolean(user?.hodProfile)
-    if (user && !allowed) router.replace(`/dashboard/${role || 'teacher'}`)
+    if (user && !hasHodPortalAccess(user)) {
+      const role = String(user.role || '').toLowerCase() || 'teacher'
+      router.replace(`/dashboard/${role}`)
+    }
   }, [user, router])
 
   useEffect(() => {

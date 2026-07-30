@@ -789,7 +789,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           const isActive = pathname === item.href
           return (
             <Link
-              key={item.name}
+              key={`${item.href}:${item.name}`}
               href={item.href}
               onClick={() => mobileOpen && setMobileOpen(false)}
               className={cn(
@@ -852,7 +852,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       {/* Sidebar for Desktop & Mobile */}
       <nav
         className={cn(
-          'fixed lg:static inset-y-0 left-0 bg-royalPurple-deep text-royalPurple-text1 transition-all duration-300 border-r border-royalPurple-border z-50',
+          'fixed lg:static inset-y-0 left-0 bg-royalPurple-deep text-royalPurple-text1 transition-all duration-300 border-r border-royalPurple-border z-[60] isolate',
           isCollapsed ? 'w-20' : 'w-64',
           mobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0',
           className

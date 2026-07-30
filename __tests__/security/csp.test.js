@@ -45,9 +45,10 @@ describe('Content-Security-Policy', () => {
 
   it('allows React inline style attributes via style-src-attr (timetable grids)', () => {
     expect(csp).toContain("style-src-attr 'unsafe-inline'")
-    expect(csp).toMatch(/style-src-elem [^;]*'nonce-test-nonce-value'/)
-    // Fallback style-src keeps unsafe-inline without relying on nonce+unsafe-inline
-    // (CSP3 ignores unsafe-inline when a nonce is present in the same directive).
+    // style-src-elem uses unsafe-inline (no nonce) so libraries like react-hot-toast
+    // can inject <style> tags; CSP3 would ignore unsafe-inline if a nonce were present.
+    expect(csp).toMatch(/style-src-elem [^;]*'unsafe-inline'/)
+    expect(csp).not.toMatch(/style-src-elem [^;]*'nonce-/)
     const styleSrc = styleSrcDirective(csp)
     expect(styleSrc).toContain("'unsafe-inline'")
     expect(styleSrc).not.toContain("'nonce-")

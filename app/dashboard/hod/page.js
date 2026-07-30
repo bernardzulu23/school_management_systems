@@ -4,8 +4,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
-import { useSchool } from '@/lib/context/SchoolContext'
-import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
+import { hasHodPortalAccess } from '@/lib/hod/hodAccess'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { StatsCard } from '@/components/dashboard/StatsCard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -121,24 +120,12 @@ export default function HodDashboard() {
 
   // Get current user data from auth context
   const { user: currentUser } = useAuth()
-  const { school } = useSchool()
-  useEffect(() => {
-    if (!school?.level) return
-    if (!canAccessHodFeatures({ schoolLevel: school.level })) {
-      router.replace('/dashboard/teacher')
-    }
-  }, [school?.level, router])
+  // School-level gate lives in HodSchoolLevelGate (layout) — do not duplicate here.
   useEffect(() => {
     if (!currentUser) return
-    const role = String(currentUser.role || '').toLowerCase()
-    const allowed =
-      role === 'hod' ||
-      role === 'headteacher' ||
-      role === 'admin' ||
-      Boolean(currentUser.hodProfile)
-
-    if (!allowed) {
-      router.replace(`/dashboard/${role || 'teacher'}`)
+    if (!hasHodPortalAccess(currentUser)) {
+      const role = String(currentUser.role || '').toLowerCase() || 'teacher'
+      router.replace(`/dashboard/${role}`)
     }
   }, [currentUser, router])
 
@@ -433,1075 +420,931 @@ export default function HodDashboard() {
 
   if (!currentDepartment) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-ink via-g-800 to-g-700 relative overflow-hidden">
-        <DashboardLayout title="Head of Department Dashboard">
-          <div className="space-y-6">
-            <Card variant="glass">
-              <CardContent className="p-8 text-center">
-                <AlertTriangle className="h-16 w-16 text-royalPurple-dangerTx mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-royalPurple-text1 mb-2">
-                  No Department Assigned
-                </h2>
-                <p className="text-royalPurple-text2">
-                  Please contact the administrator to assign you to a department.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </DashboardLayout>
-      </div>
+      <DashboardLayout title="Head of Department Dashboard">
+        <div className="space-y-6">
+          <Card variant="glass">
+            <CardContent className="p-8 text-center">
+              <AlertTriangle className="h-16 w-16 text-royalPurple-dangerTx mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-royalPurple-text1 mb-2">
+                No Department Assigned
+              </h2>
+              <p className="text-royalPurple-text2">
+                Please contact the administrator to assign you to a department.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ink via-g-800 to-g-700 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-r from-accent/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-r from-accent/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-40 left-40 w-80 h-80 bg-gradient-to-r from-warn/20 to-accent/20 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-blob animation-delay-4000"></div>
-      </div>
+    <DashboardLayout title="Head of Department Dashboard">
+      <div className="relative space-y-8">
+        <div
+          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+          aria-hidden="true"
+        >
+          <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-gradient-to-r from-accent/20 to-accent/20 opacity-40 mix-blend-multiply blur-xl" />
+          <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-gradient-to-r from-accent/20 to-accent/20 opacity-40 mix-blend-multiply blur-xl" />
+          <div className="absolute left-40 top-40 h-80 w-80 rounded-full bg-gradient-to-r from-warn/20 to-accent/20 opacity-40 mix-blend-multiply blur-xl" />
+        </div>
 
-      <DashboardLayout title="Head of Department Dashboard">
-        <div className="space-y-8 relative z-10">
-          {/* Enhanced Header */}
-          <div className="backdrop-blur-lg bg-royalPurple-card/60 border border-accent/100/40 rounded-3xl p-8 shadow-2xl">
-            <div className="flex justify-between items-center">
-              <div>
-                <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">
-                  {currentDepartment} Department
-                </h1>
-                <p className="text-royalPurple-text2 text-lg">Head of Department Dashboard</p>
-                <p className="text-royalPurple-text3 text-sm mt-2">
-                  Welcome back, {currentUser?.name || 'HOD'}!
-                </p>
+        {/* Enhanced Header */}
+        <div className="backdrop-blur-lg bg-royalPurple-card/60 border border-accent/100/40 rounded-3xl p-8 shadow-2xl">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-4xl font-bold text-royalPurple-text1 mb-4">
+                {currentDepartment} Department
+              </h1>
+              <p className="text-royalPurple-text2 text-lg">Head of Department Dashboard</p>
+              <p className="text-royalPurple-text3 text-sm mt-2">
+                Welcome back, {currentUser?.name || 'HOD'}!
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 sm:justify-end">
+              <Link
+                href="/dashboard/teacher"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalPurple-card/70 dark:bg-royalPurple-muted/70 border border-royalPurple-border dark:border-royalPurple-border/40 text-royalPurple-text2 hover:text-royalPurple-text1 hover:bg-royalPurple-card2 transition-colors"
+              >
+                Teacher Dashboard
+              </Link>
+              <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 text-center">
+                <div className="text-2xl font-bold text-royalPurple-text1">
+                  {new Date().getDate()}
+                </div>
+                <div className="text-sm text-accent/40">
+                  {new Date().toLocaleDateString('en-US', { month: 'short' })}
+                </div>
               </div>
-              <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-                <Link
-                  href="/dashboard/teacher"
-                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalPurple-card/70 dark:bg-royalPurple-muted/70 border border-royalPurple-border dark:border-royalPurple-border/40 text-royalPurple-text2 hover:text-royalPurple-text1 hover:bg-royalPurple-card2 transition-colors"
-                >
-                  Teacher Dashboard
-                </Link>
-                <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 text-center">
-                  <div className="text-2xl font-bold text-royalPurple-text1">
-                    {new Date().getDate()}
+              <div className="backdrop-blur-md bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <div className="text-xs text-royalPurple-text3 mb-1">Term</div>
+                    <select
+                      className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 outline-none"
+                      value={selectedTerm}
+                      onChange={(e) => setSelectedTerm(e.target.value)}
+                    >
+                      <option value="All Terms">All Terms</option>
+                      <option value="Term 1">Term 1</option>
+                      <option value="Term 2">Term 2</option>
+                      <option value="Term 3">Term 3</option>
+                    </select>
                   </div>
-                  <div className="text-sm text-accent/40">
-                    {new Date().toLocaleDateString('en-US', { month: 'short' })}
-                  </div>
-                </div>
-                <div className="backdrop-blur-md bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-4">
-                  <div className="flex items-center gap-3">
-                    <div>
-                      <div className="text-xs text-royalPurple-text3 mb-1">Term</div>
-                      <select
-                        className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 outline-none"
-                        value={selectedTerm}
-                        onChange={(e) => setSelectedTerm(e.target.value)}
-                      >
-                        <option value="All Terms">All Terms</option>
-                        <option value="Term 1">Term 1</option>
-                        <option value="Term 2">Term 2</option>
-                        <option value="Term 3">Term 3</option>
-                      </select>
-                    </div>
-                    <div>
-                      <div className="text-xs text-royalPurple-text3 mb-1">Year</div>
-                      <input
-                        className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 outline-none w-24"
-                        value={selectedYear}
-                        onChange={(e) => setSelectedYear(e.target.value)}
-                        inputMode="numeric"
-                      />
-                    </div>
+                  <div>
+                    <div className="text-xs text-royalPurple-text3 mb-1">Year</div>
+                    <input
+                      className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-sm text-royalPurple-text1 outline-none w-24"
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                      inputMode="numeric"
+                    />
                   </div>
                 </div>
-                <div className="w-16 h-16 rounded-full bg-gradient-to-r from-accent/100 to-accent flex items-center justify-center text-royalPurple-text1 font-bold text-xl">
-                  {currentUser?.name?.charAt(0) || 'H'}
-                </div>
+              </div>
+              <div className="w-16 h-16 rounded-full bg-gradient-to-r from-accent/100 to-accent flex items-center justify-center text-royalPurple-text1 font-bold text-xl">
+                {currentUser?.name?.charAt(0) || 'H'}
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Department Subjects Overview */}
+        {/* Department Subjects Overview */}
+        <Card variant="glass">
+          <CardHeader>
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <Library className="h-6 w-6 mr-3 text-accent/80" />
+              Department Subjects
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+              <div className="flex flex-wrap gap-3">
+                {departmentSubjects.map((subject, index) => (
+                  <div
+                    key={index}
+                    className="px-4 py-2 bg-accent text-white border border-accent rounded-full text-sm font-medium flex items-center"
+                  >
+                    <BookOpen className="h-4 w-4 mr-2" />
+                    {subject}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="space-y-6">
+          {/* Enhanced Stats Cards */}
+          <section className="w-full py-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-x-10 gap-y-6">
+              <StatsCard
+                title="Teachers"
+                value={dashboardStats.totalTeachers}
+                icon={Users}
+                color="blue"
+                description="Department teachers"
+                variant="flat"
+              />
+              <StatsCard
+                title="Students"
+                value={dashboardStats.totalStudents}
+                icon={School}
+                color="green"
+                description="Department students"
+                variant="flat"
+              />
+              <StatsCard
+                title="Subjects"
+                value={dashboardStats.totalSubjects}
+                icon={Library}
+                color="purple"
+                description="Subjects managed"
+                variant="flat"
+              />
+              <StatsCard
+                title="Classes"
+                value={dashboardStats.totalClasses}
+                icon={Group}
+                color="yellow"
+                description="Classes supervised"
+                variant="flat"
+              />
+              <StatsCard
+                title="Lesson Plans"
+                value={dashboardStats.pendingLessonPlans}
+                icon={FileText}
+                color="purple"
+                description="Pending approval"
+                variant="flat"
+                href="/dashboard/hod/lesson-plans"
+                actionLabel="Review →"
+              />
+              <StatsCard
+                title="Performance"
+                value={`${dashboardStats.averagePerformance}%`}
+                icon={TrendingUp}
+                color="orange"
+                description="Average performance"
+                variant="flat"
+              />
+              <StatsCard
+                title="Assessments"
+                value={dashboardStats.pendingAssessments}
+                icon={ClipboardList}
+                color="red"
+                description="Pending assessments"
+                variant="flat"
+                href="/dashboard/hod/quizzes"
+                actionLabel="Approve →"
+              />
+            </div>
+          </section>
+
+          <LearningAnalyticsPanel role="hod" department={currentDepartment || ''} />
+
+          <section className="max-w-none">
+            <div className="flex items-center justify-between gap-3 flex-wrap">
+              <h2 className="text-2xl font-bold text-royalPurple-text1">Class Allocations</h2>
+              <div className="flex items-center gap-2 print:hidden">
+                <Link
+                  href="/dashboard/hod/allocation"
+                  className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-accent/70 border border-accent/80/50 text-royalPurple-text1 hover:bg-accent transition-colors font-semibold"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add/Push Allocations
+                </Link>
+              </div>
+            </div>
+            <div className="mt-4 p-8 backdrop-blur-md bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-3xl text-center">
+              <BookOpen className="h-12 w-12 text-accent/80 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-royalPurple-text1">
+                Manage Department Teaching
+              </h3>
+              <p className="text-royalPurple-text2 mt-2 max-w-md mx-auto">
+                Assign teachers to subjects and classes. Once complete, push them to the headteacher
+                to generate the master timetable.
+              </p>
+              <Link href="/dashboard/hod/allocation">
+                <Button className="mt-6 bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50">
+                  Open Allocation Manager
+                </Button>
+              </Link>
+            </div>
+          </section>
+
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Library className="h-6 w-6 mr-3 text-accent/80" />
-                Department Subjects
+                <UserCheck className="h-6 w-6 mr-3 text-accent/80" />
+                Teacher Progress & CPD ({teacherProgressData?.data?.term || 'Term'})
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                <div className="flex flex-wrap gap-3">
-                  {departmentSubjects.map((subject, index) => (
-                    <div
-                      key={index}
-                      className="px-4 py-2 bg-accent text-white border border-accent rounded-full text-sm font-medium flex items-center"
-                    >
-                      <BookOpen className="h-4 w-4 mr-2" />
-                      {subject}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
+                    <div className="text-sm text-royalPurple-text2 mb-2">Schemes of Work</div>
+                    <div className="flex items-end justify-between">
+                      <div className="text-2xl font-bold text-royalPurple-text1">
+                        {teacherProgressData?.data?.summary?.schemePercent || 0}%
+                      </div>
+                      <div className="text-sm text-royalPurple-text3">
+                        {teacherProgressData?.data?.summary?.schemeCount || 0}/
+                        {teacherProgressData?.data?.summary?.totalTeachers || 0}
+                      </div>
                     </div>
-                  ))}
+                    <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
+                      <div
+                        className="bg-royalPurple-pill h-2 rounded-full"
+                        style={{
+                          width: `${teacherProgressData?.data?.summary?.schemePercent || 0}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
+                    <div className="text-sm text-royalPurple-text2 mb-2">Records of Work</div>
+                    <div className="flex items-end justify-between">
+                      <div className="text-2xl font-bold text-royalPurple-text1">
+                        {teacherProgressData?.data?.summary?.recordsPercent || 0}%
+                      </div>
+                      <div className="text-sm text-royalPurple-text3">
+                        {teacherProgressData?.data?.summary?.recordsCount || 0}/
+                        {teacherProgressData?.data?.summary?.totalTeachers || 0}
+                      </div>
+                    </div>
+                    <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
+                      <div
+                        className="bg-royalPurple-success h-2 rounded-full"
+                        style={{
+                          width: `${teacherProgressData?.data?.summary?.recordsPercent || 0}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
+                    <div className="text-sm text-royalPurple-text2 mb-2">CPD Hours (Term)</div>
+                    <div className="flex items-end justify-between">
+                      <div className="text-2xl font-bold text-royalPurple-text1">
+                        {teacherProgressData?.data?.summary?.cpdPercent || 0}%
+                      </div>
+                      <div className="text-sm text-royalPurple-text3">
+                        {teacherProgressData?.data?.summary?.totalCpdHours || 0}/
+                        {teacherProgressData?.data?.summary?.totalCpdTarget || 0}
+                      </div>
+                    </div>
+                    <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
+                      <div
+                        className="bg-royalPurple-accent h-2 rounded-full"
+                        style={{
+                          width: `${teacherProgressData?.data?.summary?.cpdPercent || 0}%`,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-royalPurple-text3">
+                        <th className="py-2 pr-4 font-semibold">Teacher</th>
+                        <th className="py-2 pr-4 font-semibold">Scheme</th>
+                        <th className="py-2 pr-4 font-semibold">Records</th>
+                        <th className="py-2 pr-4 font-semibold">CPD Hours</th>
+                        <th className="py-2 pr-4 font-semibold">Target</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(teacherProgressData?.data?.teachers || []).slice(0, 10).map((t) => (
+                        <tr key={t.teacherId} className="border-t border-royalPurple-border/30">
+                          <td className="py-3 pr-4">
+                            <div className="text-royalPurple-text1 font-medium">{t.name}</div>
+                            <div className="text-royalPurple-text3 text-xs">{t.email}</div>
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="checkbox"
+                              className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-deep accent-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
+                              checked={t.schemeSubmitted === true}
+                              onChange={(e) =>
+                                updateTeacherProgress(t.teacherId, {
+                                  schemeSubmitted: e.target.checked,
+                                })
+                              }
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="checkbox"
+                              className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-deep accent-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
+                              checked={t.recordsSubmitted === true}
+                              onChange={(e) =>
+                                updateTeacherProgress(t.teacherId, {
+                                  recordsSubmitted: e.target.checked,
+                                })
+                              }
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="number"
+                              min="0"
+                              defaultValue={t.cpdHours ?? 0}
+                              className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-royalPurple-text1 w-28"
+                              onBlur={(e) =>
+                                updateTeacherProgress(t.teacherId, { cpdHours: e.target.value })
+                              }
+                            />
+                          </td>
+                          <td className="py-3 pr-4">
+                            <input
+                              type="number"
+                              min="0"
+                              defaultValue={t.cpdTargetHours ?? 10}
+                              className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-royalPurple-text1 w-28"
+                              onBlur={(e) =>
+                                updateTeacherProgress(t.teacherId, {
+                                  cpdTargetHours: e.target.value,
+                                })
+                              }
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="flex justify-end mt-5">
+                  <Button
+                    className="bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50"
+                    onClick={() => router.push('/dashboard/hod/cpd')}
+                  >
+                    Open CPD Tracker
+                  </Button>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <div className="space-y-6">
-            {/* Enhanced Stats Cards */}
-            <section className="w-full py-3">
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-x-10 gap-y-6">
-                <StatsCard
-                  title="Teachers"
-                  value={dashboardStats.totalTeachers}
-                  icon={Users}
-                  color="blue"
-                  description="Department teachers"
-                  variant="flat"
-                />
-                <StatsCard
-                  title="Students"
-                  value={dashboardStats.totalStudents}
-                  icon={School}
-                  color="green"
-                  description="Department students"
-                  variant="flat"
-                />
-                <StatsCard
-                  title="Subjects"
-                  value={dashboardStats.totalSubjects}
-                  icon={Library}
-                  color="purple"
-                  description="Subjects managed"
-                  variant="flat"
-                />
-                <StatsCard
-                  title="Classes"
-                  value={dashboardStats.totalClasses}
-                  icon={Group}
-                  color="yellow"
-                  description="Classes supervised"
-                  variant="flat"
-                />
-                <StatsCard
-                  title="Lesson Plans"
-                  value={dashboardStats.pendingLessonPlans}
-                  icon={FileText}
-                  color="purple"
-                  description="Pending approval"
-                  variant="flat"
-                  href="/dashboard/hod/lesson-plans"
-                  actionLabel="Review →"
-                />
-                <StatsCard
-                  title="Performance"
-                  value={`${dashboardStats.averagePerformance}%`}
-                  icon={TrendingUp}
-                  color="orange"
-                  description="Average performance"
-                  variant="flat"
-                />
-                <StatsCard
-                  title="Assessments"
-                  value={dashboardStats.pendingAssessments}
-                  icon={ClipboardList}
-                  color="red"
-                  description="Pending assessments"
-                  variant="flat"
-                  href="/dashboard/hod/quizzes"
-                  actionLabel="Approve →"
-                />
-              </div>
-            </section>
-
-            <LearningAnalyticsPanel role="hod" department={currentDepartment || ''} />
-
-            <section className="max-w-none">
-              <div className="flex items-center justify-between gap-3 flex-wrap">
-                <h2 className="text-2xl font-bold text-royalPurple-text1">Class Allocations</h2>
-                <div className="flex items-center gap-2 print:hidden">
-                  <Link
-                    href="/dashboard/hod/allocation"
-                    className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-accent/70 border border-accent/80/50 text-royalPurple-text1 hover:bg-accent transition-colors font-semibold"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add/Push Allocations
-                  </Link>
-                </div>
-              </div>
-              <div className="mt-4 p-8 backdrop-blur-md bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-3xl text-center">
-                <BookOpen className="h-12 w-12 text-accent/80 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-royalPurple-text1">
-                  Manage Department Teaching
-                </h3>
-                <p className="text-royalPurple-text2 mt-2 max-w-md mx-auto">
-                  Assign teachers to subjects and classes. Once complete, push them to the
-                  headteacher to generate the master timetable.
-                </p>
-                <Link href="/dashboard/hod/allocation">
-                  <Button className="mt-6 bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50">
-                    Open Allocation Manager
-                  </Button>
-                </Link>
-              </div>
-            </section>
-
-            <Card variant="glass">
-              <CardHeader>
-                <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <UserCheck className="h-6 w-6 mr-3 text-accent/80" />
-                  Teacher Progress & CPD ({teacherProgressData?.data?.term || 'Term'})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                    <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
-                      <div className="text-sm text-royalPurple-text2 mb-2">Schemes of Work</div>
-                      <div className="flex items-end justify-between">
-                        <div className="text-2xl font-bold text-royalPurple-text1">
-                          {teacherProgressData?.data?.summary?.schemePercent || 0}%
-                        </div>
-                        <div className="text-sm text-royalPurple-text3">
-                          {teacherProgressData?.data?.summary?.schemeCount || 0}/
-                          {teacherProgressData?.data?.summary?.totalTeachers || 0}
-                        </div>
+          {/* Advanced HOD Features */}
+          <Card variant="glass">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1 flex items-center">
+                <Zap className="h-6 w-6 mr-3 text-warn" />
+                Advanced Department Management Features
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                  {/* Department Analytics */}
+                  <div className="bg-gradient-to-br from-accent/20 to-accent/20 border border-accent/80/30 rounded-xl p-4">
+                    <div className="flex items-center mb-3">
+                      <div className="w-10 h-10 bg-accent/100/30 rounded-lg flex items-center justify-center mr-3">
+                        <BarChart3 className="h-5 w-5 text-accent/60" />
                       </div>
-                      <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
-                        <div
-                          className="bg-royalPurple-pill h-2 rounded-full"
-                          style={{
-                            width: `${teacherProgressData?.data?.summary?.schemePercent || 0}%`,
-                          }}
-                        />
-                      </div>
+                      <h4 className="font-semibold text-royalPurple-text1">Department Analytics</h4>
                     </div>
-
-                    <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
-                      <div className="text-sm text-royalPurple-text2 mb-2">Records of Work</div>
-                      <div className="flex items-end justify-between">
-                        <div className="text-2xl font-bold text-royalPurple-text1">
-                          {teacherProgressData?.data?.summary?.recordsPercent || 0}%
-                        </div>
-                        <div className="text-sm text-royalPurple-text3">
-                          {teacherProgressData?.data?.summary?.recordsCount || 0}/
-                          {teacherProgressData?.data?.summary?.totalTeachers || 0}
-                        </div>
-                      </div>
-                      <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
-                        <div
-                          className="bg-royalPurple-success h-2 rounded-full"
-                          style={{
-                            width: `${teacherProgressData?.data?.summary?.recordsPercent || 0}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className="bg-royalPurple-deep/60 border border-royalPurple-border/40 rounded-xl p-4">
-                      <div className="text-sm text-royalPurple-text2 mb-2">CPD Hours (Term)</div>
-                      <div className="flex items-end justify-between">
-                        <div className="text-2xl font-bold text-royalPurple-text1">
-                          {teacherProgressData?.data?.summary?.cpdPercent || 0}%
-                        </div>
-                        <div className="text-sm text-royalPurple-text3">
-                          {teacherProgressData?.data?.summary?.totalCpdHours || 0}/
-                          {teacherProgressData?.data?.summary?.totalCpdTarget || 0}
-                        </div>
-                      </div>
-                      <div className="w-full bg-royalPurple-card2 rounded-full h-2 mt-3">
-                        <div
-                          className="bg-royalPurple-accent h-2 rounded-full"
-                          style={{
-                            width: `${teacherProgressData?.data?.summary?.cpdPercent || 0}%`,
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="text-left text-royalPurple-text3">
-                          <th className="py-2 pr-4 font-semibold">Teacher</th>
-                          <th className="py-2 pr-4 font-semibold">Scheme</th>
-                          <th className="py-2 pr-4 font-semibold">Records</th>
-                          <th className="py-2 pr-4 font-semibold">CPD Hours</th>
-                          <th className="py-2 pr-4 font-semibold">Target</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(teacherProgressData?.data?.teachers || []).slice(0, 10).map((t) => (
-                          <tr key={t.teacherId} className="border-t border-royalPurple-border/30">
-                            <td className="py-3 pr-4">
-                              <div className="text-royalPurple-text1 font-medium">{t.name}</div>
-                              <div className="text-royalPurple-text3 text-xs">{t.email}</div>
-                            </td>
-                            <td className="py-3 pr-4">
-                              <input
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-deep accent-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
-                                checked={t.schemeSubmitted === true}
-                                onChange={(e) =>
-                                  updateTeacherProgress(t.teacherId, {
-                                    schemeSubmitted: e.target.checked,
-                                  })
-                                }
-                              />
-                            </td>
-                            <td className="py-3 pr-4">
-                              <input
-                                type="checkbox"
-                                className="h-4 w-4 rounded border-royalPurple-border bg-royalPurple-deep accent-royalPurple-accent focus:ring-1 focus:ring-royalPurple-border2 focus:ring-offset-0"
-                                checked={t.recordsSubmitted === true}
-                                onChange={(e) =>
-                                  updateTeacherProgress(t.teacherId, {
-                                    recordsSubmitted: e.target.checked,
-                                  })
-                                }
-                              />
-                            </td>
-                            <td className="py-3 pr-4">
-                              <input
-                                type="number"
-                                min="0"
-                                defaultValue={t.cpdHours ?? 0}
-                                className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-royalPurple-text1 w-28"
-                                onBlur={(e) =>
-                                  updateTeacherProgress(t.teacherId, { cpdHours: e.target.value })
-                                }
-                              />
-                            </td>
-                            <td className="py-3 pr-4">
-                              <input
-                                type="number"
-                                min="0"
-                                defaultValue={t.cpdTargetHours ?? 10}
-                                className="bg-royalPurple-deep border border-royalPurple-border rounded-lg px-3 py-2 text-royalPurple-text1 w-28"
-                                onBlur={(e) =>
-                                  updateTeacherProgress(t.teacherId, {
-                                    cpdTargetHours: e.target.value,
-                                  })
-                                }
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  <div className="flex justify-end mt-5">
+                    <ul className="space-y-2 text-sm text-royalPurple-text2">
+                      <li>Performance Dashboards</li>
+                      <li>Teacher Effectiveness Metrics</li>
+                      <li>Student Progress Tracking</li>
+                      <li>Resource Utilization Reports</li>
+                    </ul>
                     <Button
-                      className="bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50"
+                      className="w-full mt-3 bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50"
+                      onClick={() => router.push('/dashboard/hod/exam-analysis')}
+                    >
+                      View Analytics
+                    </Button>
+                  </div>
+
+                  {/* Teacher Development */}
+                  <div className="bg-gradient-to-br from-ink/20 to-g-700/20 border border-royalPurple-border2/30 rounded-xl p-4">
+                    <div className="flex items-center mb-3">
+                      <div className="w-10 h-10 bg-royalPurple-accent/30 rounded-lg flex items-center justify-center mr-3">
+                        <Users className="h-5 w-5 text-royalPurple-accentTx" />
+                      </div>
+                      <h4 className="font-semibold text-royalPurple-text1">Teacher Development</h4>
+                    </div>
+                    <ul className="space-y-2 text-sm text-royalPurple-text2">
+                      <li>Professional Development Plans</li>
+                      <li>Training Resource Library</li>
+                      <li>Mentorship Programs</li>
+                      <li>Performance Evaluations</li>
+                    </ul>
+                    <Button
+                      className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
                       onClick={() => router.push('/dashboard/hod/cpd')}
                     >
-                      Open CPD Tracker
+                      Manage Development
+                    </Button>
+                  </div>
+
+                  {/* Curriculum Management */}
+                  <div className="bg-gradient-to-br from-kpi-pass/20 to-kpi-pass/20 border border-royalPurple-border/30 rounded-xl p-4">
+                    <div className="flex items-center mb-3">
+                      <div className="w-10 h-10 bg-royalPurple-success/30 rounded-lg flex items-center justify-center mr-3">
+                        <BookOpen className="h-5 w-5 text-royalPurple-successTx" />
+                      </div>
+                      <h4 className="font-semibold text-royalPurple-text1">
+                        Curriculum Management
+                      </h4>
+                    </div>
+                    <ul className="space-y-2 text-sm text-royalPurple-text2">
+                      <li>Curriculum Planning Tools</li>
+                      <li>Assessment Coordination</li>
+                      <li>Academic Calendar Management</li>
+                      <li>Learning Outcome Tracking</li>
+                    </ul>
+                    <Button
+                      className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
+                      onClick={() => router.push('/dashboard/hod/timetable')}
+                    >
+                      Manage Curriculum
                     </Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Advanced HOD Features */}
-            <Card variant="glass">
-              <CardHeader>
-                <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <Zap className="h-6 w-6 mr-3 text-warn" />
-                  Advanced Department Management Features
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                    {/* Department Analytics */}
-                    <div className="bg-gradient-to-br from-accent/20 to-accent/20 border border-accent/80/30 rounded-xl p-4">
-                      <div className="flex items-center mb-3">
-                        <div className="w-10 h-10 bg-accent/100/30 rounded-lg flex items-center justify-center mr-3">
-                          <BarChart3 className="h-5 w-5 text-accent/60" />
-                        </div>
-                        <h4 className="font-semibold text-royalPurple-text1">
-                          Department Analytics
-                        </h4>
-                      </div>
-                      <ul className="space-y-2 text-sm text-royalPurple-text2">
-                        <li>Performance Dashboards</li>
-                        <li>Teacher Effectiveness Metrics</li>
-                        <li>Student Progress Tracking</li>
-                        <li>Resource Utilization Reports</li>
-                      </ul>
-                      <Button
-                        className="w-full mt-3 bg-accent/60 hover:bg-accent/80 text-royalPurple-text1 border border-accent/80/50"
-                        onClick={() => router.push('/dashboard/hod/exam-analysis')}
-                      >
-                        View Analytics
-                      </Button>
-                    </div>
-
-                    {/* Teacher Development */}
-                    <div className="bg-gradient-to-br from-ink/20 to-g-700/20 border border-royalPurple-border2/30 rounded-xl p-4">
-                      <div className="flex items-center mb-3">
-                        <div className="w-10 h-10 bg-royalPurple-accent/30 rounded-lg flex items-center justify-center mr-3">
-                          <Users className="h-5 w-5 text-royalPurple-accentTx" />
-                        </div>
-                        <h4 className="font-semibold text-royalPurple-text1">
-                          Teacher Development
-                        </h4>
-                      </div>
-                      <ul className="space-y-2 text-sm text-royalPurple-text2">
-                        <li>Professional Development Plans</li>
-                        <li>Training Resource Library</li>
-                        <li>Mentorship Programs</li>
-                        <li>Performance Evaluations</li>
-                      </ul>
-                      <Button
-                        className="w-full mt-3 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
-                        onClick={() => router.push('/dashboard/hod/cpd')}
-                      >
-                        Manage Development
-                      </Button>
-                    </div>
-
-                    {/* Curriculum Management */}
-                    <div className="bg-gradient-to-br from-kpi-pass/20 to-kpi-pass/20 border border-royalPurple-border/30 rounded-xl p-4">
-                      <div className="flex items-center mb-3">
-                        <div className="w-10 h-10 bg-royalPurple-success/30 rounded-lg flex items-center justify-center mr-3">
-                          <BookOpen className="h-5 w-5 text-royalPurple-successTx" />
-                        </div>
-                        <h4 className="font-semibold text-royalPurple-text1">
-                          Curriculum Management
-                        </h4>
-                      </div>
-                      <ul className="space-y-2 text-sm text-royalPurple-text2">
-                        <li>Curriculum Planning Tools</li>
-                        <li>Assessment Coordination</li>
-                        <li>Academic Calendar Management</li>
-                        <li>Learning Outcome Tracking</li>
-                      </ul>
-                      <Button
-                        className="w-full mt-3 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
-                        onClick={() => router.push('/dashboard/hod/timetable')}
-                      >
-                        Manage Curriculum
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Live department readiness (from API) */}
-                  <div className="bg-gradient-to-r from-accent/20 to-warn/20 border border-royalPurple-border2/30 rounded-xl p-4">
-                    <h4 className="font-semibold text-royalPurple-text1 mb-3 flex items-center">
-                      <Target className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
-                      Department workload snapshot
-                    </h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                      <div>
-                        <div className="text-royalPurple-text2">Pending lesson plans</div>
-                        <div className="text-xl font-bold text-royalPurple-text1">
-                          {dashboardStats.pendingLessonPlans}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-royalPurple-text2">Active assessments</div>
-                        <div className="text-xl font-bold text-royalPurple-text1">
-                          {dashboardStats.pendingAssessments}
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-royalPurple-text2">Results recorded</div>
-                        <div className="text-xl font-bold text-royalPurple-text1">
-                          {dashboardStats.totalResults}
-                        </div>
+                {/* Live department readiness (from API) */}
+                <div className="bg-gradient-to-r from-accent/20 to-warn/20 border border-royalPurple-border2/30 rounded-xl p-4">
+                  <h4 className="font-semibold text-royalPurple-text1 mb-3 flex items-center">
+                    <Target className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
+                    Department workload snapshot
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                    <div>
+                      <div className="text-royalPurple-text2">Pending lesson plans</div>
+                      <div className="text-xl font-bold text-royalPurple-text1">
+                        {dashboardStats.pendingLessonPlans}
                       </div>
                     </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Department Overview */}
-            <Card variant="glass">
-              <CardHeader>
-                <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
-                  Department Overview
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="text-center">
-                      <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                        <Users className="h-10 w-10 text-royalPurple-text1" />
-                      </div>
-                      <h3 className="font-bold text-royalPurple-text1 text-lg">Teachers</h3>
-                      <p className="text-3xl font-bold text-royalPurple-accentTx mt-2">
-                        {dashboardStats.totalTeachers}
-                      </p>
-                      <p className="text-royalPurple-text2 text-sm mt-1">Department staff</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                        <School className="h-10 w-10 text-royalPurple-text1" />
-                      </div>
-                      <h3 className="font-bold text-royalPurple-text1 text-lg">Students</h3>
-                      <p className="text-3xl font-bold text-royalPurple-successTx mt-2">
-                        {dashboardStats.totalStudents}
-                      </p>
-                      <p className="text-royalPurple-text2 text-sm mt-1">Enrolled students</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                        <Award className="h-10 w-10 text-royalPurple-text1" />
-                      </div>
-                      <h3 className="font-bold text-royalPurple-text1 text-lg">Performance</h3>
-                      <p className="text-3xl font-bold text-royalPurple-pillTx mt-2">
-                        {dashboardStats.averagePerformance}%
-                      </p>
-                      <p className="text-royalPurple-text2 text-sm mt-1">Department average</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                        <ClipboardList className="h-10 w-10 text-royalPurple-text1" />
-                      </div>
-                      <h3 className="font-bold text-royalPurple-text1 text-lg">Assessments</h3>
-                      <p className="text-3xl font-bold text-accent/80 mt-2">
+                    <div>
+                      <div className="text-royalPurple-text2">Active assessments</div>
+                      <div className="text-xl font-bold text-royalPurple-text1">
                         {dashboardStats.pendingAssessments}
-                      </p>
-                      <p className="text-royalPurple-text2 text-sm mt-1">Pending review</p>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-royalPurple-text2">Results recorded</div>
+                      <div className="text-xl font-bold text-royalPurple-text1">
+                        {dashboardStats.totalResults}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
 
-            <StudentRosterCard title="Registered Students by Class (School-wide)" />
-
-            {/* Department Management */}
-            <Card variant="glass">
-              <CardHeader>
-                <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <Users className="h-6 w-6 mr-3 text-royalPurple-successTx" />
-                  Department Management
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Department Teachers */}
-                    <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
-                          <Users className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
-                          Department Teachers
-                        </h3>
-                        <span className="text-royalPurple-text2 text-sm">
-                          {departmentData.teachers.length} teachers
-                        </span>
-                      </div>
-                      <div className="space-y-3">
-                        {departmentData.teachers.slice(0, 4).map((teacher, index) => {
-                          const teacherName = teacher?.user?.name || teacher?.name || 'Unknown'
-                          const teacherUserId = String(teacher?.user?.id || teacher?.userId || '')
-                          const teacherSubjects = Array.isArray(teacher?.assignedSubjects)
-                            ? teacher.assignedSubjects
-                            : Array.isArray(teacher?.subjects)
-                              ? teacher.subjects
-                              : Array.isArray(teacher?.teachingAssignments)
-                                ? Array.from(
-                                    new Set(
-                                      teacher.teachingAssignments
-                                        .map((a) => a?.subject?.name || a?.subjectId)
-                                        .filter(Boolean)
-                                        .map(String)
-                                    )
-                                  )
-                                : []
-                          const teacherClasses = Array.isArray(teacher?.classes)
-                            ? teacher.classes
-                            : Array.isArray(teacher?.assignedClasses)
-                              ? teacher.assignedClasses
-                              : Array.isArray(teacher?.teachingAssignments)
-                                ? Array.from(
-                                    new Set(
-                                      teacher.teachingAssignments
-                                        .map((a) => a?.class?.name || a?.classId)
-                                        .filter(Boolean)
-                                        .map(String)
-                                    )
-                                  )
-                                : []
-
-                          const perf =
-                            departmentData.teacherPerformance.find(
-                              (p) => String(p?.userId || '') === teacherUserId
-                            ) || null
-
-                          return (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-ink to-accent flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
-                                  {teacherName.charAt(0)}
-                                </div>
-                                <div>
-                                  <p className="text-royalPurple-text1 font-semibold text-sm">
-                                    {teacherName}
-                                  </p>
-                                  <p className="text-royalPurple-text2 text-xs">
-                                    {teacherSubjects.length} subjects • {teacherClasses.length}{' '}
-                                    classes • Avg {perf?.averageScore ?? 0}% •{' '}
-                                    {perf?.resultsEntered ?? 0} results
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          )
-                        })}
-                        {departmentData.teachers.length > 4 && (
-                          <p className="text-royalPurple-text2 text-sm text-center">
-                            +{departmentData.teachers.length - 4} more teachers
-                          </p>
-                        )}
-                      </div>
-                      <Button
-                        className="w-full mt-4 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
-                        onClick={() => router.push('/dashboard/users?filter=teachers')}
-                      >
-                        Manage Teachers
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="w-full mt-3"
-                        onClick={() => router.push('/dashboard/hod/teacher-performance')}
-                      >
-                        Teacher Performance
-                      </Button>
+          {/* Department Overview */}
+          <Card variant="glass">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1 flex items-center">
+                <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                Department Overview
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="text-center">
+                    <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                      <Users className="h-10 w-10 text-royalPurple-text1" />
                     </div>
+                    <h3 className="font-bold text-royalPurple-text1 text-lg">Teachers</h3>
+                    <p className="text-3xl font-bold text-royalPurple-accentTx mt-2">
+                      {dashboardStats.totalTeachers}
+                    </p>
+                    <p className="text-royalPurple-text2 text-sm mt-1">Department staff</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                      <School className="h-10 w-10 text-royalPurple-text1" />
+                    </div>
+                    <h3 className="font-bold text-royalPurple-text1 text-lg">Students</h3>
+                    <p className="text-3xl font-bold text-royalPurple-successTx mt-2">
+                      {dashboardStats.totalStudents}
+                    </p>
+                    <p className="text-royalPurple-text2 text-sm mt-1">Enrolled students</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                      <Award className="h-10 w-10 text-royalPurple-text1" />
+                    </div>
+                    <h3 className="font-bold text-royalPurple-text1 text-lg">Performance</h3>
+                    <p className="text-3xl font-bold text-royalPurple-pillTx mt-2">
+                      {dashboardStats.averagePerformance}%
+                    </p>
+                    <p className="text-royalPurple-text2 text-sm mt-1">Department average</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
+                      <ClipboardList className="h-10 w-10 text-royalPurple-text1" />
+                    </div>
+                    <h3 className="font-bold text-royalPurple-text1 text-lg">Assessments</h3>
+                    <p className="text-3xl font-bold text-accent/80 mt-2">
+                      {dashboardStats.pendingAssessments}
+                    </p>
+                    <p className="text-royalPurple-text2 text-sm mt-1">Pending review</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
 
-                    {/* Department Students */}
-                    <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
-                          <School className="h-5 w-5 mr-2 text-royalPurple-successTx" />
-                          Department Students
-                        </h3>
-                        <span className="text-royalPurple-text2 text-sm">
-                          {departmentData.students.length} students
-                        </span>
-                      </div>
-                      <div className="space-y-3">
-                        {departmentData.students.slice(0, 4).map((student, index) => {
-                          const studentName = student?.user?.name || student?.name || 'Unknown'
-                          const studentClass =
-                            student?.class ||
-                            student?.yearGroup ||
-                            student?.year_group ||
-                            'No class'
-                          const studentSubjects = Array.isArray(student?.selected_subjects)
-                            ? student.selected_subjects
-                            : Array.isArray(student?.subjects)
-                              ? student.subjects
+          <StudentRosterCard title="Registered Students by Class (School-wide)" />
+
+          {/* Department Management */}
+          <Card variant="glass">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1 flex items-center">
+                <Users className="h-6 w-6 mr-3 text-royalPurple-successTx" />
+                Department Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                  {/* Department Teachers */}
+                  <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
+                        <Users className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                        Department Teachers
+                      </h3>
+                      <span className="text-royalPurple-text2 text-sm">
+                        {departmentData.teachers.length} teachers
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {departmentData.teachers.slice(0, 4).map((teacher, index) => {
+                        const teacherName = teacher?.user?.name || teacher?.name || 'Unknown'
+                        const teacherUserId = String(teacher?.user?.id || teacher?.userId || '')
+                        const teacherSubjects = Array.isArray(teacher?.assignedSubjects)
+                          ? teacher.assignedSubjects
+                          : Array.isArray(teacher?.subjects)
+                            ? teacher.subjects
+                            : Array.isArray(teacher?.teachingAssignments)
+                              ? Array.from(
+                                  new Set(
+                                    teacher.teachingAssignments
+                                      .map((a) => a?.subject?.name || a?.subjectId)
+                                      .filter(Boolean)
+                                      .map(String)
+                                  )
+                                )
+                              : []
+                        const teacherClasses = Array.isArray(teacher?.classes)
+                          ? teacher.classes
+                          : Array.isArray(teacher?.assignedClasses)
+                            ? teacher.assignedClasses
+                            : Array.isArray(teacher?.teachingAssignments)
+                              ? Array.from(
+                                  new Set(
+                                    teacher.teachingAssignments
+                                      .map((a) => a?.class?.name || a?.classId)
+                                      .filter(Boolean)
+                                      .map(String)
+                                  )
+                                )
                               : []
 
-                          return (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-kpi-pass/100 to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
-                                  {studentName.charAt(0)}
-                                </div>
-                                <div>
-                                  <p className="text-royalPurple-text1 font-semibold text-sm">
-                                    {studentName}
-                                  </p>
-                                  <p className="text-royalPurple-text2 text-xs">{studentClass}</p>
-                                  <div className="flex flex-wrap gap-1 mt-1">
-                                    {studentSubjects
-                                      .filter((subject) => departmentSubjects.includes(subject))
-                                      .slice(0, 2)
-                                      .map((subject, idx) => (
-                                        <span
-                                          key={idx}
-                                          className="px-2 py-1 bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 rounded text-xs"
-                                        >
-                                          {subject}
-                                        </span>
-                                      ))}
-                                  </div>
-                                </div>
+                        const perf =
+                          departmentData.teacherPerformance.find(
+                            (p) => String(p?.userId || '') === teacherUserId
+                          ) || null
+
+                        return (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-ink to-accent flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                {teacherName.charAt(0)}
+                              </div>
+                              <div>
+                                <p className="text-royalPurple-text1 font-semibold text-sm">
+                                  {teacherName}
+                                </p>
+                                <p className="text-royalPurple-text2 text-xs">
+                                  {teacherSubjects.length} subjects • {teacherClasses.length}{' '}
+                                  classes • Avg {perf?.averageScore ?? 0}% •{' '}
+                                  {perf?.resultsEntered ?? 0} results
+                                </p>
                               </div>
                             </div>
-                          )
-                        })}
-                        {departmentData.students.length > 4 && (
-                          <p className="text-royalPurple-text2 text-sm text-center">
-                            +{departmentData.students.length - 4} more students
-                          </p>
-                        )}
-                      </div>
-                      <Button
-                        className="w-full mt-4 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
-                        onClick={() => router.push('/dashboard/users?filter=students')}
-                      >
-                        View All Students
-                      </Button>
+                          </div>
+                        )
+                      })}
+                      {departmentData.teachers.length > 4 && (
+                        <p className="text-royalPurple-text2 text-sm text-center">
+                          +{departmentData.teachers.length - 4} more teachers
+                        </p>
+                      )}
                     </div>
+                    <Button
+                      className="w-full mt-4 bg-royalPurple-accent/60 hover:bg-royalPurple-accent/80 text-royalPurple-text1 border border-royalPurple-border2/50"
+                      onClick={() => router.push('/dashboard/users?filter=teachers')}
+                    >
+                      Manage Teachers
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full mt-3"
+                      onClick={() => router.push('/dashboard/hod/teacher-performance')}
+                    >
+                      Teacher Performance
+                    </Button>
+                  </div>
 
-                    {/* Department Classes */}
-                    <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
-                          <Group className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
-                          Department Classes
-                        </h3>
-                        <span className="text-royalPurple-text2 text-sm">
-                          {departmentData.classes.length} classes
-                        </span>
-                      </div>
-                      <div className="space-y-3">
-                        {departmentData.classes.slice(0, 4).map((classItem, index) => {
-                          const className = classItem?.name ? String(classItem.name) : ''
-                          const studentsInClass = className
-                            ? departmentData.students.filter(
-                                (s) => String(s?.class || '') === className
-                              ).length
-                            : 0
-                          const subjectsInClass = Array.isArray(classItem?.subjects)
-                            ? classItem.subjects
+                  {/* Department Students */}
+                  <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
+                        <School className="h-5 w-5 mr-2 text-royalPurple-successTx" />
+                        Department Students
+                      </h3>
+                      <span className="text-royalPurple-text2 text-sm">
+                        {departmentData.students.length} students
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {departmentData.students.slice(0, 4).map((student, index) => {
+                        const studentName = student?.user?.name || student?.name || 'Unknown'
+                        const studentClass =
+                          student?.class || student?.yearGroup || student?.year_group || 'No class'
+                        const studentSubjects = Array.isArray(student?.selected_subjects)
+                          ? student.selected_subjects
+                          : Array.isArray(student?.subjects)
+                            ? student.subjects
                             : []
 
-                          return (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-lg p-2">
-                                  <Group className="h-4 w-4 text-royalPurple-text1" />
-                                </div>
-                                <div>
-                                  <p className="text-royalPurple-text1 font-semibold text-sm">
-                                    {classItem.name}
-                                  </p>
-                                  <p className="text-royalPurple-text2 text-xs">
-                                    {typeof classItem.students === 'number'
-                                      ? classItem.students
-                                      : studentsInClass}{' '}
-                                    students
-                                  </p>
-                                </div>
+                        return (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-kpi-pass/100 to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                {studentName.charAt(0)}
                               </div>
-                              <div className="text-right">
-                                <p className="text-royalPurple-pillTx text-sm font-semibold">
-                                  {subjectsInClass.length}
+                              <div>
+                                <p className="text-royalPurple-text1 font-semibold text-sm">
+                                  {studentName}
                                 </p>
-                                <p className="text-royalPurple-text3 text-xs">subjects</p>
+                                <p className="text-royalPurple-text2 text-xs">{studentClass}</p>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {studentSubjects
+                                    .filter((subject) => departmentSubjects.includes(subject))
+                                    .slice(0, 2)
+                                    .map((subject, idx) => (
+                                      <span
+                                        key={idx}
+                                        className="px-2 py-1 bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 rounded text-xs"
+                                      >
+                                        {subject}
+                                      </span>
+                                    ))}
+                                </div>
                               </div>
                             </div>
-                          )
-                        })}
-                        {departmentData.classes.length > 4 && (
-                          <p className="text-royalPurple-text2 text-sm text-center">
-                            +{departmentData.classes.length - 4} more classes
-                          </p>
-                        )}
-                      </div>
-                      <Button
-                        className="w-full mt-4 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50"
-                        onClick={() => router.push('/dashboard/classes')}
-                      >
-                        Manage Classes
-                      </Button>
+                          </div>
+                        )
+                      })}
+                      {departmentData.students.length > 4 && (
+                        <p className="text-royalPurple-text2 text-sm text-center">
+                          +{departmentData.students.length - 4} more students
+                        </p>
+                      )}
                     </div>
+                    <Button
+                      className="w-full mt-4 bg-royalPurple-success/60 hover:bg-royalPurple-success/80 text-royalPurple-text1 border border-royalPurple-border/50"
+                      onClick={() => router.push('/dashboard/users?filter=students')}
+                    >
+                      View All Students
+                    </Button>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* HOD Administrative Duties Section */}
-          <div className="space-y-6">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-royalPurple-text1 mb-2">
-                HOD Administrative Duties
-              </h2>
-              <p className="text-royalPurple-text2">
-                Comprehensive department management and administrative functions
-              </p>
-            </div>
-
-            {/* File Management Section */}
-            {renderDutySection(
-              'File Management',
-              filterHodDuties(fileManagementDuties),
-              'bg-royalPurple-accent',
-              'hover:bg-royalPurple-accent hover:text-royalPurple-text1'
-            )}
-
-            {/* Academic Management Section */}
-            {renderDutySection(
-              'Academic Management',
-              academicManagementDuties,
-              'bg-royalPurple-pill',
-              'hover:bg-royalPurple-pill hover:text-royalPurple-text1'
-            )}
-
-            {/* Daily Operations Section */}
-            {renderDutySection(
-              'Daily Operations',
-              filterHodDuties(dailyOperationsDuties),
-              'bg-royalPurple-success',
-              'hover:bg-royalPurple-success hover:text-royalPurple-text1'
-            )}
-
-            {/* Financial Management Section */}
-            {renderDutySection(
-              'Financial Management',
-              filterHodDuties(financialManagementDuties),
-              'bg-accent',
-              'hover:bg-accent hover:text-royalPurple-text1'
-            )}
-          </div>
-
-          {/* HOD Department Assignments - Detailed View */}
-          <HodAssignments hodData={dashboardData} />
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Enhanced Department Classes */}
-            <Card variant="glass">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <Group className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
-                  Department Classes
-                </CardTitle>
-                <Link href="/dashboard/classes">
-                  <Button className="bg-gradient-to-r from-ink to-kpi-pass hover:from-g-800 hover:to-g-700 text-royalPurple-text1">
-                    Manage Classes
-                  </Button>
-                </Link>
-              </CardHeader>
-              <CardContent>
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                  <div className="space-y-4">
-                    {departmentData.classes.map((classItem) => {
-                      const className = classItem?.name ? String(classItem.name) : ''
-                      const studentsInClass =
-                        typeof classItem.students === 'number'
-                          ? classItem.students
-                          : typeof classItem.studentCount === 'number'
-                            ? classItem.studentCount
-                            : className
-                              ? departmentData.students.filter(
-                                  (s) => String(s?.class || '') === className
-                                ).length
-                              : 0
-                      const subjectsInClass = Array.isArray(classItem?.subjects)
-                        ? classItem.subjects
-                        : Array.isArray(classItem?.subjectNames)
-                          ? classItem.subjectNames
+                  {/* Department Classes */}
+                  <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
+                        <Group className="h-5 w-5 mr-2 text-royalPurple-pillTx" />
+                        Department Classes
+                      </h3>
+                      <span className="text-royalPurple-text2 text-sm">
+                        {departmentData.classes.length} classes
+                      </span>
+                    </div>
+                    <div className="space-y-3">
+                      {departmentData.classes.slice(0, 4).map((classItem, index) => {
+                        const className = classItem?.name ? String(classItem.name) : ''
+                        const studentsInClass = className
+                          ? departmentData.students.filter(
+                              (s) => String(s?.class || '') === className
+                            ).length
+                          : 0
+                        const subjectsInClass = Array.isArray(classItem?.subjects)
+                          ? classItem.subjects
                           : []
-                      const maxShown = Math.max(
-                        ...departmentData.classes.map((c) =>
-                          typeof c.students === 'number'
-                            ? c.students
-                            : typeof c.studentCount === 'number'
-                              ? c.studentCount
-                              : 0
-                        ),
-                        studentsInClass,
-                        1
-                      )
 
-                      return (
-                        <div
-                          key={classItem.id || className}
-                          className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
-                        >
-                          <div className="flex items-center space-x-4">
-                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-xl p-3">
-                              <Group className="h-6 w-6 text-royalPurple-text1" />
+                        return (
+                          <div
+                            key={index}
+                            className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                          >
+                            <div className="flex items-center space-x-3">
+                              <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-lg p-2">
+                                <Group className="h-4 w-4 text-royalPurple-text1" />
+                              </div>
+                              <div>
+                                <p className="text-royalPurple-text1 font-semibold text-sm">
+                                  {classItem.name}
+                                </p>
+                                <p className="text-royalPurple-text2 text-xs">
+                                  {typeof classItem.students === 'number'
+                                    ? classItem.students
+                                    : studentsInClass}{' '}
+                                  students
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <h4 className="font-semibold text-royalPurple-text1">
-                                {classItem.name}
-                              </h4>
-                              <p className="text-royalPurple-text2 text-sm">
-                                {studentsInClass} students
+                            <div className="text-right">
+                              <p className="text-royalPurple-pillTx text-sm font-semibold">
+                                {subjectsInClass.length}
                               </p>
-                              <p className="text-royalPurple-text3 text-xs">
-                                {subjectsInClass.length} department subjects
-                              </p>
+                              <p className="text-royalPurple-text3 text-xs">subjects</p>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-royalPurple-text1">
-                              {studentsInClass}
-                            </div>
-                            <div className="text-sm text-royalPurple-text2">Students</div>
-                            <div className="w-20 bg-royalPurple-muted/60 rounded-full h-2 mt-2">
-                              <div
-                                className="bg-royalPurple-accent h-2 rounded-full"
-                                style={{
-                                  width: `${Math.min((studentsInClass / maxShown) * 100, 100)}%`,
-                                }}
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
-                      )
-                    })}
-                    {departmentData.classes.length === 0 && (
-                      <div className="text-center py-8">
-                        <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                          <Group className="h-8 w-8 text-royalPurple-text1" />
-                        </div>
-                        <p className="text-royalPurple-text2">No classes assigned yet</p>
-                        <p className="text-royalPurple-text3 text-sm mt-2">
-                          Classes will appear here when assigned
+                        )
+                      })}
+                      {departmentData.classes.length > 4 && (
+                        <p className="text-royalPurple-text2 text-sm text-center">
+                          +{departmentData.classes.length - 4} more classes
                         </p>
-                      </div>
-                    )}
+                      )}
+                    </div>
+                    <Button
+                      className="w-full mt-4 bg-royalPurple-pill/60 hover:bg-royalPurple-pill/80 text-royalPurple-text1 border border-royalPurple-border2/50"
+                      onClick={() => router.push('/dashboard/classes')}
+                    >
+                      Manage Classes
+                    </Button>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-            {/* Enhanced Department Subjects */}
-            <Card variant="glass">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <Library className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
-                  Department Subjects
-                </CardTitle>
-                <Link href="/admin/subjects">
-                  <Button className="bg-gradient-to-r from-accent to-ink hover:from-accent hover:to-g-800 text-royalPurple-text1">
-                    Manage Subjects
-                  </Button>
-                </Link>
-              </CardHeader>
-              <CardContent>
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                  <div className="space-y-4">
-                    {departmentSubjects.map((subject, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
-                      >
-                        <div className="flex items-center space-x-4">
-                          <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-xl p-3">
-                            <Library className="h-6 w-6 text-royalPurple-text1" />
-                          </div>
-                          <div>
-                            <h4 className="font-semibold text-royalPurple-text1">{subject}</h4>
-                            <p className="text-royalPurple-text2 text-sm">Department subject</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="px-3 py-1 bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 rounded-full text-xs font-medium">
-                            Active
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                    {departmentSubjects.length === 0 && (
-                      <div className="text-center py-8">
-                        <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                          <Library className="h-8 w-8 text-royalPurple-text1" />
-                        </div>
-                        <p className="text-royalPurple-text2">No subjects assigned yet</p>
-                        <p className="text-royalPurple-text3 text-sm mt-2">
-                          Subjects will appear here when assigned
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+        {/* HOD Administrative Duties Section */}
+        <div className="space-y-6">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold text-royalPurple-text1 mb-2">
+              HOD Administrative Duties
+            </h2>
+            <p className="text-royalPurple-text2">
+              Comprehensive department management and administrative functions
+            </p>
           </div>
 
-          {/* Enhanced Department Assessments */}
+          {/* File Management Section */}
+          {renderDutySection(
+            'File Management',
+            filterHodDuties(fileManagementDuties),
+            'bg-royalPurple-accent',
+            'hover:bg-royalPurple-accent hover:text-royalPurple-text1'
+          )}
+
+          {/* Academic Management Section */}
+          {renderDutySection(
+            'Academic Management',
+            academicManagementDuties,
+            'bg-royalPurple-pill',
+            'hover:bg-royalPurple-pill hover:text-royalPurple-text1'
+          )}
+
+          {/* Daily Operations Section */}
+          {renderDutySection(
+            'Daily Operations',
+            filterHodDuties(dailyOperationsDuties),
+            'bg-royalPurple-success',
+            'hover:bg-royalPurple-success hover:text-royalPurple-text1'
+          )}
+
+          {/* Financial Management Section */}
+          {renderDutySection(
+            'Financial Management',
+            filterHodDuties(financialManagementDuties),
+            'bg-accent',
+            'hover:bg-accent hover:text-royalPurple-text1'
+          )}
+        </div>
+
+        {/* HOD Department Assignments - Detailed View */}
+        <HodAssignments hodData={dashboardData} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Enhanced Department Classes */}
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <ClipboardList className="h-6 w-6 mr-3 text-accent/80" />
-                Department Assessments
+                <Group className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                Department Classes
               </CardTitle>
-              <div className="flex space-x-2">
-                <Link href="/dashboard/teacher/assessments?create=1">
-                  <Button className="bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create Assessment
-                  </Button>
-                </Link>
-                <Link href="/dashboard/hod/quizzes">
-                  <Button className="bg-royalPurple-muted/60 hover:bg-royalPurple-muted/80 text-royalPurple-text1 border border-royalPurple-border/50">
-                    Review quizzes
-                  </Button>
-                </Link>
-              </div>
+              <Link href="/dashboard/classes">
+                <Button className="bg-gradient-to-r from-ink to-kpi-pass hover:from-g-800 hover:to-g-700 text-royalPurple-text1">
+                  Manage Classes
+                </Button>
+              </Link>
             </CardHeader>
             <CardContent>
               <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
                 <div className="space-y-4">
-                  {/* Department assessments - will be loaded from API */}
-                  {departmentData.assessments.map((assessment) => (
-                    <div
-                      key={assessment.id}
-                      className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
-                    >
-                      <div className="flex items-center space-x-4">
-                        <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-xl p-3">
-                          <ClipboardList className="h-6 w-6 text-royalPurple-text1" />
+                  {departmentData.classes.map((classItem) => {
+                    const className = classItem?.name ? String(classItem.name) : ''
+                    const studentsInClass =
+                      typeof classItem.students === 'number'
+                        ? classItem.students
+                        : typeof classItem.studentCount === 'number'
+                          ? classItem.studentCount
+                          : className
+                            ? departmentData.students.filter(
+                                (s) => String(s?.class || '') === className
+                              ).length
+                            : 0
+                    const subjectsInClass = Array.isArray(classItem?.subjects)
+                      ? classItem.subjects
+                      : Array.isArray(classItem?.subjectNames)
+                        ? classItem.subjectNames
+                        : []
+                    const maxShown = Math.max(
+                      ...departmentData.classes.map((c) =>
+                        typeof c.students === 'number'
+                          ? c.students
+                          : typeof c.studentCount === 'number'
+                            ? c.studentCount
+                            : 0
+                      ),
+                      studentsInClass,
+                      1
+                    )
+
+                    return (
+                      <div
+                        key={classItem.id || className}
+                        className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
+                      >
+                        <div className="flex items-center space-x-4">
+                          <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-xl p-3">
+                            <Group className="h-6 w-6 text-royalPurple-text1" />
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-royalPurple-text1">
+                              {classItem.name}
+                            </h4>
+                            <p className="text-royalPurple-text2 text-sm">
+                              {studentsInClass} students
+                            </p>
+                            <p className="text-royalPurple-text3 text-xs">
+                              {subjectsInClass.length} department subjects
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <h4 className="font-semibold text-royalPurple-text1">
-                            {assessment.title}
-                          </h4>
-                          <p className="text-royalPurple-text2 text-sm">
-                            {assessment.subject} • {assessment.class}
-                          </p>
-                          <p className="text-royalPurple-text3 text-xs">
-                            Start: {new Date(assessment.start_date).toLocaleDateString()}
-                          </p>
+                        <div className="text-right">
+                          <div className="text-lg font-bold text-royalPurple-text1">
+                            {studentsInClass}
+                          </div>
+                          <div className="text-sm text-royalPurple-text2">Students</div>
+                          <div className="w-20 bg-royalPurple-muted/60 rounded-full h-2 mt-2">
+                            <div
+                              className="bg-royalPurple-accent h-2 rounded-full"
+                              style={{
+                                width: `${Math.min((studentsInClass / maxShown) * 100, 100)}%`,
+                              }}
+                            ></div>
+                          </div>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <div
-                          className={`px-3 py-1 rounded-full text-xs font-medium mb-2 ${
-                            assessment.status === 'published'
-                              ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
-                              : assessment.status === 'draft'
-                                ? 'bg-warn/60 text-warn/20 border border-warn/50'
-                                : 'bg-royalPurple-muted/60 text-royalPurple-text1 border border-royalPurple-border/50'
-                          }`}
-                        >
-                          {assessment.status}
-                        </div>
-                        <div className="px-2 py-1 bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 rounded text-xs">
-                          {assessment.type}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                  {(!departmentData.assessments || departmentData.assessments.length === 0) && (
+                    )
+                  })}
+                  {departmentData.classes.length === 0 && (
                     <div className="text-center py-8">
-                      <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                        <ClipboardList className="h-8 w-8 text-royalPurple-text1" />
+                      <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <Group className="h-8 w-8 text-royalPurple-text1" />
                       </div>
-                      <p className="text-royalPurple-text2">No assessments in department yet</p>
-                      <Link href="/dashboard/teacher/assessments?create=1">
-                        <Button className="mt-4 bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
-                          Create Department Assessment
-                        </Button>
-                      </Link>
+                      <p className="text-royalPurple-text2">No classes assigned yet</p>
+                      <p className="text-royalPurple-text3 text-sm mt-2">
+                        Classes will appear here when assigned
+                      </p>
                     </div>
                   )}
                 </div>
@@ -1509,406 +1352,537 @@ export default function HodDashboard() {
             </CardContent>
           </Card>
 
-          {/* Department Management Actions */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Department Management</CardTitle>
+          {/* Enhanced Department Subjects */}
+          <Card variant="glass">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-royalPurple-text1 flex items-center">
+                <Library className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
+                Department Subjects
+              </CardTitle>
+              <Link href="/admin/subjects">
+                <Button className="bg-gradient-to-r from-accent to-ink hover:from-accent hover:to-g-800 text-royalPurple-text1">
+                  Manage Subjects
+                </Button>
+              </Link>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Link href="/dashboard/teachers">
-                  <Button variant="outline" className="w-full h-20 flex flex-col">
-                    <Users className="h-6 w-6 mb-2" />
-                    Manage Teachers
-                  </Button>
-                </Link>
-                <Link href="/dashboard/attendance">
-                  <Button variant="outline" className="w-full h-20 flex flex-col">
-                    <UserCheck className="h-6 w-6 mb-2" />
-                    Attendance Overview
-                  </Button>
-                </Link>
-                <Link href="/dashboard/reports">
-                  <Button variant="outline" className="w-full h-20 flex flex-col">
-                    <TrendingUp className="h-6 w-6 mb-2" />
-                    Department Reports
-                  </Button>
-                </Link>
-                <Link href="/dashboard/sdg">
-                  <Button
-                    variant="outline"
-                    className="w-full h-20 flex flex-col bg-gradient-to-r from-accent/5 to-kpi-pass/10 hover:from-accent/10 hover:to-kpi-pass/20 border-royalPurple-border2"
-                  >
-                    <Globe className="h-6 w-6 mb-2 text-royalPurple-accentTx" />
-                    <span className="text-royalPurple-accentTx font-semibold">🇺🇳 UN SDGs</span>
-                    <span className="text-xs text-royalPurple-accentTx">Global Impact</span>
-                  </Button>
-                </Link>
+              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+                <div className="space-y-4">
+                  {departmentSubjects.map((subject, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-xl p-3">
+                          <Library className="h-6 w-6 text-royalPurple-text1" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-royalPurple-text1">{subject}</h4>
+                          <p className="text-royalPurple-text2 text-sm">Department subject</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="px-3 py-1 bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50 rounded-full text-xs font-medium">
+                          Active
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  {departmentSubjects.length === 0 && (
+                    <div className="text-center py-8">
+                      <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                        <Library className="h-8 w-8 text-royalPurple-text1" />
+                      </div>
+                      <p className="text-royalPurple-text2">No subjects assigned yet</p>
+                      <p className="text-royalPurple-text3 text-sm mt-2">
+                        Subjects will appear here when assigned
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </CardContent>
           </Card>
+        </div>
 
-          {/* Enhanced Performance Analytics */}
+        {/* Enhanced Department Assessments */}
+        <Card variant="glass">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <ClipboardList className="h-6 w-6 mr-3 text-accent/80" />
+              Department Assessments
+            </CardTitle>
+            <div className="flex space-x-2">
+              <Link href="/dashboard/teacher/assessments?create=1">
+                <Button className="bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Assessment
+                </Button>
+              </Link>
+              <Link href="/dashboard/hod/quizzes">
+                <Button className="bg-royalPurple-muted/60 hover:bg-royalPurple-muted/80 text-royalPurple-text1 border border-royalPurple-border/50">
+                  Review quizzes
+                </Button>
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+              <div className="space-y-4">
+                {/* Department assessments - will be loaded from API */}
+                {departmentData.assessments.map((assessment) => (
+                  <div
+                    key={assessment.id}
+                    className="flex items-center justify-between p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-colors duration-200"
+                  >
+                    <div className="flex items-center space-x-4">
+                      <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-xl p-3">
+                        <ClipboardList className="h-6 w-6 text-royalPurple-text1" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-royalPurple-text1">{assessment.title}</h4>
+                        <p className="text-royalPurple-text2 text-sm">
+                          {assessment.subject} • {assessment.class}
+                        </p>
+                        <p className="text-royalPurple-text3 text-xs">
+                          Start: {new Date(assessment.start_date).toLocaleDateString()}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div
+                        className={`px-3 py-1 rounded-full text-xs font-medium mb-2 ${
+                          assessment.status === 'published'
+                            ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
+                            : assessment.status === 'draft'
+                              ? 'bg-warn/60 text-warn/20 border border-warn/50'
+                              : 'bg-royalPurple-muted/60 text-royalPurple-text1 border border-royalPurple-border/50'
+                        }`}
+                      >
+                        {assessment.status}
+                      </div>
+                      <div className="px-2 py-1 bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 rounded text-xs">
+                        {assessment.type}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                {(!departmentData.assessments || departmentData.assessments.length === 0) && (
+                  <div className="text-center py-8">
+                    <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                      <ClipboardList className="h-8 w-8 text-royalPurple-text1" />
+                    </div>
+                    <p className="text-royalPurple-text2">No assessments in department yet</p>
+                    <Link href="/dashboard/teacher/assessments?create=1">
+                      <Button className="mt-4 bg-gradient-to-r from-accent to-accent hover:from-accent hover:to-accent text-royalPurple-text1">
+                        Create Department Assessment
+                      </Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Department Management Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Department Management</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <Link href="/dashboard/teachers">
+                <Button variant="outline" className="w-full h-20 flex flex-col">
+                  <Users className="h-6 w-6 mb-2" />
+                  Manage Teachers
+                </Button>
+              </Link>
+              <Link href="/dashboard/attendance">
+                <Button variant="outline" className="w-full h-20 flex flex-col">
+                  <UserCheck className="h-6 w-6 mb-2" />
+                  Attendance Overview
+                </Button>
+              </Link>
+              <Link href="/dashboard/reports">
+                <Button variant="outline" className="w-full h-20 flex flex-col">
+                  <TrendingUp className="h-6 w-6 mb-2" />
+                  Department Reports
+                </Button>
+              </Link>
+              <Link href="/dashboard/sdg">
+                <Button
+                  variant="outline"
+                  className="w-full h-20 flex flex-col bg-gradient-to-r from-accent/5 to-kpi-pass/10 hover:from-accent/10 hover:to-kpi-pass/20 border-royalPurple-border2"
+                >
+                  <Globe className="h-6 w-6 mb-2 text-royalPurple-accentTx" />
+                  <span className="text-royalPurple-accentTx font-semibold">🇺🇳 UN SDGs</span>
+                  <span className="text-xs text-royalPurple-accentTx">Global Impact</span>
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Enhanced Performance Analytics */}
+        <Card variant="glass">
+          <CardHeader>
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
+              Department Performance Analytics
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                  <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <Award className="h-8 w-8 text-royalPurple-text1" />
+                  </div>
+                  <div
+                    className={`text-3xl font-bold mb-2 ${percentTextClass(dashboardStats.averagePerformance)}`}
+                  >
+                    {Number(dashboardStats.averagePerformance) || 0}%
+                  </div>
+                  <p className="text-royalPurple-text2 font-medium">Average Grade</p>
+                  <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
+                    <div
+                      className="bg-royalPurple-success h-3 rounded-full"
+                      style={{ width: `${dashboardStats.averagePerformance}%` }}
+                    ></div>
+                  </div>
+                </div>
+                <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                  <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <UserCheck className="h-8 w-8 text-royalPurple-text1" />
+                  </div>
+                  <div className={`text-3xl font-bold mb-2 ${percentTextClass(attendanceRate)}`}>
+                    {attendanceRate}%
+                  </div>
+                  <p className="text-royalPurple-text2 font-medium">Attendance Rate</p>
+                  <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
+                    <div
+                      className="bg-royalPurple-accent h-3 rounded-full"
+                      style={{ width: `${Math.min(100, attendanceRate)}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-royalPurple-text3 mt-2">Last 30 days · department</p>
+                </div>
+                <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                  <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <ClipboardList className="h-8 w-8 text-royalPurple-text1" />
+                  </div>
+                  <div className="text-3xl font-bold text-royalPurple-pillTx mb-2">
+                    {dashboardStats.pendingAssessments}
+                  </div>
+                  <p className="text-royalPurple-text2 font-medium">Active Assessments</p>
+                  <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
+                    <div
+                      className="bg-royalPurple-pill h-3 rounded-full"
+                      style={{
+                        width: `${Math.min(
+                          100,
+                          dashboardStats.totalAssessments
+                            ? Math.round(
+                                (dashboardStats.pendingAssessments /
+                                  Math.max(1, dashboardStats.totalAssessments)) *
+                                  100
+                              )
+                            : 0
+                        )}%`,
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Performance Analytics */}
+        {departmentData.results.length > 0 && (
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <TrendingUp className="h-6 w-6 mr-3 text-royalPurple-successTx" />
+                <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
                 Department Performance Analytics
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                    <div className="backdrop-blur-md bg-royalPurple-success/60 border border-royalPurple-border/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <Award className="h-8 w-8 text-royalPurple-text1" />
-                    </div>
-                    <div
-                      className={`text-3xl font-bold mb-2 ${percentTextClass(dashboardStats.averagePerformance)}`}
-                    >
-                      {Number(dashboardStats.averagePerformance) || 0}%
-                    </div>
-                    <p className="text-royalPurple-text2 font-medium">Average Grade</p>
-                    <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
-                      <div
-                        className="bg-royalPurple-success h-3 rounded-full"
-                        style={{ width: `${dashboardStats.averagePerformance}%` }}
-                      ></div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  {/* Performance by Subject */}
+                  <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                    <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
+                      <BarChart3 className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                      Performance by Subject
+                    </h3>
+                    <div className="space-y-4">
+                      {(subjectPerformance.length
+                        ? subjectPerformance.slice(0, 6)
+                        : departmentSubjects.slice(0, 4).map((name) => ({
+                            name,
+                            averageScore: 0,
+                            resultCount: 0,
+                          }))
+                      ).map((subject, index) => {
+                        const performance = Number(subject.averageScore) || 0
+                        const label = subject.name || subject
+                        return (
+                          <div
+                            key={`${label}-${index}`}
+                            className="p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <span className="text-royalPurple-text1 font-semibold text-sm">
+                                {label}
+                              </span>
+                              <span className={`font-bold ${percentTextClass(performance)}`}>
+                                {performance}%
+                              </span>
+                            </div>
+                            <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
+                              <div
+                                className={`h-2 rounded-full ${
+                                  performance >= 85
+                                    ? 'bg-royalPurple-success'
+                                    : performance >= 75
+                                      ? 'bg-royalPurple-accent'
+                                      : 'bg-warn/100'
+                                }`}
+                                style={{ width: `${Math.min(100, performance)}%` }}
+                              ></div>
+                            </div>
+                            {subject.resultCount != null ? (
+                              <p className="text-xs text-royalPurple-text3 mt-1">
+                                {subject.resultCount} result(s)
+                              </p>
+                            ) : null}
+                          </div>
+                        )
+                      })}
+                      {subjectPerformance.length === 0 && departmentData.results.length === 0 ? (
+                        <p className="text-sm text-royalPurple-text3">
+                          No department results yet for this term.
+                        </p>
+                      ) : null}
                     </div>
                   </div>
-                  <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                    <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <UserCheck className="h-8 w-8 text-royalPurple-text1" />
-                    </div>
-                    <div className={`text-3xl font-bold mb-2 ${percentTextClass(attendanceRate)}`}>
-                      {attendanceRate}%
-                    </div>
-                    <p className="text-royalPurple-text2 font-medium">Attendance Rate</p>
-                    <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
-                      <div
-                        className="bg-royalPurple-accent h-3 rounded-full"
-                        style={{ width: `${Math.min(100, attendanceRate)}%` }}
-                      ></div>
-                    </div>
-                    <p className="text-xs text-royalPurple-text3 mt-2">Last 30 days · department</p>
-                  </div>
-                  <div className="text-center p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                    <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                      <ClipboardList className="h-8 w-8 text-royalPurple-text1" />
-                    </div>
-                    <div className="text-3xl font-bold text-royalPurple-pillTx mb-2">
-                      {dashboardStats.pendingAssessments}
-                    </div>
-                    <p className="text-royalPurple-text2 font-medium">Active Assessments</p>
-                    <div className="w-full bg-royalPurple-muted/60 rounded-full h-3 mt-3">
-                      <div
-                        className="bg-royalPurple-pill h-3 rounded-full"
-                        style={{
-                          width: `${Math.min(
-                            100,
-                            dashboardStats.totalAssessments
-                              ? Math.round(
-                                  (dashboardStats.pendingAssessments /
-                                    Math.max(1, dashboardStats.totalAssessments)) *
-                                    100
-                                )
-                              : 0
-                          )}%`,
-                        }}
-                      ></div>
+
+                  {/* Grade Distribution */}
+                  <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                    <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
+                      <Award className="h-5 w-5 mr-2 text-royalPurple-successTx" />
+                      Grade Distribution
+                    </h3>
+                    <div className="space-y-3">
+                      {(gradeDistribution.length
+                        ? gradeDistribution
+                        : [
+                            {
+                              grade: 'Distinction',
+                              percentage: 0,
+                              color: 'bg-royalPurple-success',
+                            },
+                            { grade: 'Merit', percentage: 0, color: 'bg-royalPurple-accent' },
+                            { grade: 'Credit', percentage: 0, color: 'bg-accent/100' },
+                            {
+                              grade: 'Pass/Satisfactory',
+                              percentage: 0,
+                              color: 'bg-royalPurple-pill',
+                            },
+                            {
+                              grade: 'Fail/Unsatisfactory',
+                              percentage: 0,
+                              color: 'bg-royalPurple-danger',
+                            },
+                            { grade: 'Absent', percentage: 0, color: 'bg-royalPurple-muted' },
+                          ]
+                      ).map((item, index) => {
+                        const color =
+                          item.color ||
+                          {
+                            Distinction: 'bg-royalPurple-success',
+                            Merit: 'bg-royalPurple-accent',
+                            Credit: 'bg-accent/100',
+                            'Pass/Satisfactory': 'bg-royalPurple-pill',
+                            'Fail/Unsatisfactory': 'bg-royalPurple-danger',
+                            Absent: 'bg-royalPurple-muted',
+                          }[item.grade] ||
+                          'bg-royalPurple-muted'
+                        return (
+                          <div key={index} className="flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-4 h-4 rounded ${color}`}></div>
+                              <span className="text-royalPurple-text1 text-sm">{item.grade}</span>
+                            </div>
+                            <span className="text-royalPurple-text2 font-semibold">
+                              {item.percentage}%{item.count != null ? ` · ${item.count}` : ''}
+                            </span>
+                          </div>
+                        )
+                      })}
                     </div>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
+        )}
 
-          {/* Performance Analytics */}
-          {departmentData.results.length > 0 && (
-            <Card variant="glass">
-              <CardHeader>
-                <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
-                  Department Performance Analytics
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Performance by Subject */}
-                    <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                      <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                        <BarChart3 className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
-                        Performance by Subject
-                      </h3>
-                      <div className="space-y-4">
-                        {(subjectPerformance.length
-                          ? subjectPerformance.slice(0, 6)
-                          : departmentSubjects.slice(0, 4).map((name) => ({
-                              name,
-                              averageScore: 0,
-                              resultCount: 0,
-                            }))
-                        ).map((subject, index) => {
-                          const performance = Number(subject.averageScore) || 0
-                          const label = subject.name || subject
-                          return (
-                            <div
-                              key={`${label}-${index}`}
-                              className="p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                            >
-                              <div className="flex items-center justify-between mb-2">
-                                <span className="text-royalPurple-text1 font-semibold text-sm">
-                                  {label}
-                                </span>
-                                <span className={`font-bold ${percentTextClass(performance)}`}>
-                                  {performance}%
-                                </span>
-                              </div>
-                              <div className="w-full bg-royalPurple-muted/60 rounded-full h-2">
-                                <div
-                                  className={`h-2 rounded-full ${
-                                    performance >= 85
-                                      ? 'bg-royalPurple-success'
-                                      : performance >= 75
-                                        ? 'bg-royalPurple-accent'
-                                        : 'bg-warn/100'
-                                  }`}
-                                  style={{ width: `${Math.min(100, performance)}%` }}
-                                ></div>
-                              </div>
-                              {subject.resultCount != null ? (
-                                <p className="text-xs text-royalPurple-text3 mt-1">
-                                  {subject.resultCount} result(s)
-                                </p>
-                              ) : null}
+        {/* Recent Department Activities */}
+        <Card variant="glass">
+          <CardHeader>
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <Clock className="h-6 w-6 mr-3 text-warn" />
+              Recent Department Activities
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Recent Assessments */}
+                <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                  <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
+                    <ClipboardList className="h-5 w-5 mr-2 text-accent/80" />
+                    Recent Assessments
+                  </h3>
+                  <div className="space-y-3">
+                    {departmentData.assessments.length > 0 ? (
+                      departmentData.assessments.slice(0, 4).map((assessment, index) => (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-lg p-2">
+                              <ClipboardList className="h-4 w-4 text-royalPurple-text1" />
                             </div>
-                          )
-                        })}
-                        {subjectPerformance.length === 0 && departmentData.results.length === 0 ? (
-                          <p className="text-sm text-royalPurple-text3">
-                            No department results yet for this term.
-                          </p>
-                        ) : null}
-                      </div>
-                    </div>
-
-                    {/* Grade Distribution */}
-                    <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                      <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                        <Award className="h-5 w-5 mr-2 text-royalPurple-successTx" />
-                        Grade Distribution
-                      </h3>
-                      <div className="space-y-3">
-                        {(gradeDistribution.length
-                          ? gradeDistribution
-                          : [
-                              {
-                                grade: 'Distinction',
-                                percentage: 0,
-                                color: 'bg-royalPurple-success',
-                              },
-                              { grade: 'Merit', percentage: 0, color: 'bg-royalPurple-accent' },
-                              { grade: 'Credit', percentage: 0, color: 'bg-accent/100' },
-                              {
-                                grade: 'Pass/Satisfactory',
-                                percentage: 0,
-                                color: 'bg-royalPurple-pill',
-                              },
-                              {
-                                grade: 'Fail/Unsatisfactory',
-                                percentage: 0,
-                                color: 'bg-royalPurple-danger',
-                              },
-                              { grade: 'Absent', percentage: 0, color: 'bg-royalPurple-muted' },
-                            ]
-                        ).map((item, index) => {
-                          const color =
-                            item.color ||
-                            {
-                              Distinction: 'bg-royalPurple-success',
-                              Merit: 'bg-royalPurple-accent',
-                              Credit: 'bg-accent/100',
-                              'Pass/Satisfactory': 'bg-royalPurple-pill',
-                              'Fail/Unsatisfactory': 'bg-royalPurple-danger',
-                              Absent: 'bg-royalPurple-muted',
-                            }[item.grade] ||
-                            'bg-royalPurple-muted'
-                          return (
-                            <div key={index} className="flex items-center justify-between">
-                              <div className="flex items-center space-x-3">
-                                <div className={`w-4 h-4 rounded ${color}`}></div>
-                                <span className="text-royalPurple-text1 text-sm">{item.grade}</span>
-                              </div>
-                              <span className="text-royalPurple-text2 font-semibold">
-                                {item.percentage}%{item.count != null ? ` · ${item.count}` : ''}
-                              </span>
+                            <div>
+                              <p className="text-royalPurple-text1 font-semibold text-sm">
+                                {assessment.title}
+                              </p>
+                              <p className="text-royalPurple-text2 text-xs">
+                                {assessment.subject} • {assessment.status}
+                              </p>
                             </div>
-                          )
-                        })}
-                      </div>
-                    </div>
+                          </div>
+                          <div
+                            className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              assessment.status === 'completed'
+                                ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
+                                : 'bg-warn/60 text-warn/20 border border-warn/50'
+                            }`}
+                          >
+                            {assessment.status}
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-royalPurple-text2 text-center py-4">
+                        No recent assessments
+                      </p>
+                    )}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          )}
 
-          {/* Recent Department Activities */}
-          <Card variant="glass">
-            <CardHeader>
-              <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Clock className="h-6 w-6 mr-3 text-warn" />
-                Recent Department Activities
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  {/* Recent Assessments */}
-                  <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                    <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                      <ClipboardList className="h-5 w-5 mr-2 text-accent/80" />
-                      Recent Assessments
-                    </h3>
-                    <div className="space-y-3">
-                      {departmentData.assessments.length > 0 ? (
-                        departmentData.assessments.slice(0, 4).map((assessment, index) => (
+                {/* Recent Results */}
+                <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
+                  <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
+                    <Award className="h-5 w-5 mr-2 text-royalPurple-successTx" />
+                    Recent Results
+                  </h3>
+                  <div className="space-y-3">
+                    {departmentData.results.length > 0 ? (
+                      departmentData.results.slice(0, 4).map((result, index) => {
+                        const studentName =
+                          result?.student?.name || result?.studentName || result?.student || 'N/A'
+                        const subjectName =
+                          result?.subject?.name || result?.subjectName || result?.subject || 'N/A'
+                        const score =
+                          typeof result?.score === 'number'
+                            ? result.score
+                            : typeof result?.marks === 'number'
+                              ? result.marks
+                              : null
+                        const total =
+                          typeof result?.totalMarks === 'number'
+                            ? result.totalMarks
+                            : score !== null
+                              ? 100
+                              : null
+                        const percent =
+                          score !== null && total
+                            ? Math.round((Number(score) / Number(total)) * 100)
+                            : null
+                        const gradeLabel =
+                          result?.grade || (percent !== null ? `${percent}%` : 'N/A')
+                        const meta = [
+                          result?.student?.class || result?.className || '',
+                          result?.term ? String(result.term) : '',
+                          result?.year ? String(result.year) : '',
+                          result?.enteredByName ? `Entered by ${String(result.enteredByName)}` : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' • ')
+
+                        return (
                           <div
                             key={index}
                             className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
                           >
                             <div className="flex items-center space-x-3">
-                              <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-lg p-2">
-                                <ClipboardList className="h-4 w-4 text-royalPurple-text1" />
+                              <div className="w-8 h-8 rounded-full bg-gradient-to-r from-kpi-pass/100 to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
+                                {String(gradeLabel).slice(0, 2)}
                               </div>
                               <div>
                                 <p className="text-royalPurple-text1 font-semibold text-sm">
-                                  {assessment.title}
+                                  {studentName}
                                 </p>
                                 <p className="text-royalPurple-text2 text-xs">
-                                  {assessment.subject} • {assessment.status}
+                                  {subjectName}
+                                  {meta ? ` • ${meta}` : ''}
+                                </p>
+                                <p className="text-royalPurple-text3 text-xs">
+                                  {score !== null && total !== null && percent !== null
+                                    ? `${score}/${total} (${percent}%)`
+                                    : ''}
                                 </p>
                               </div>
                             </div>
-                            <div
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                assessment.status === 'completed'
-                                  ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
-                                  : 'bg-warn/60 text-warn/20 border border-warn/50'
-                              }`}
-                            >
-                              {assessment.status}
-                            </div>
                           </div>
-                        ))
-                      ) : (
-                        <p className="text-royalPurple-text2 text-center py-4">
-                          No recent assessments
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Recent Results */}
-                  <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
-                    <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                      <Award className="h-5 w-5 mr-2 text-royalPurple-successTx" />
-                      Recent Results
-                    </h3>
-                    <div className="space-y-3">
-                      {departmentData.results.length > 0 ? (
-                        departmentData.results.slice(0, 4).map((result, index) => {
-                          const studentName =
-                            result?.student?.name || result?.studentName || result?.student || 'N/A'
-                          const subjectName =
-                            result?.subject?.name || result?.subjectName || result?.subject || 'N/A'
-                          const score =
-                            typeof result?.score === 'number'
-                              ? result.score
-                              : typeof result?.marks === 'number'
-                                ? result.marks
-                                : null
-                          const total =
-                            typeof result?.totalMarks === 'number'
-                              ? result.totalMarks
-                              : score !== null
-                                ? 100
-                                : null
-                          const percent =
-                            score !== null && total
-                              ? Math.round((Number(score) / Number(total)) * 100)
-                              : null
-                          const gradeLabel =
-                            result?.grade || (percent !== null ? `${percent}%` : 'N/A')
-                          const meta = [
-                            result?.student?.class || result?.className || '',
-                            result?.term ? String(result.term) : '',
-                            result?.year ? String(result.year) : '',
-                            result?.enteredByName
-                              ? `Entered by ${String(result.enteredByName)}`
-                              : '',
-                          ]
-                            .filter(Boolean)
-                            .join(' • ')
-
-                          return (
-                            <div
-                              key={index}
-                              className="flex items-center justify-between p-3 bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-lg"
-                            >
-                              <div className="flex items-center space-x-3">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-kpi-pass/100 to-ink flex items-center justify-center text-royalPurple-text1 font-bold text-sm">
-                                  {String(gradeLabel).slice(0, 2)}
-                                </div>
-                                <div>
-                                  <p className="text-royalPurple-text1 font-semibold text-sm">
-                                    {studentName}
-                                  </p>
-                                  <p className="text-royalPurple-text2 text-xs">
-                                    {subjectName}
-                                    {meta ? ` • ${meta}` : ''}
-                                  </p>
-                                  <p className="text-royalPurple-text3 text-xs">
-                                    {score !== null && total !== null && percent !== null
-                                      ? `${score}/${total} (${percent}%)`
-                                      : ''}
-                                  </p>
-                                </div>
-                              </div>
-                            </div>
-                          )
-                        })
-                      ) : (
-                        <p className="text-royalPurple-text2 text-center py-4">No recent results</p>
-                      )}
-                    </div>
+                        )
+                      })
+                    ) : (
+                      <p className="text-royalPurple-text2 text-center py-4">No recent results</p>
+                    )}
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* AI tools (includes AI Assistant chat entry) */}
-          <AIFeaturesShowcase />
+        {/* AI tools (includes AI Assistant chat entry) */}
+        <AIFeaturesShowcase />
 
-          {/* Creative Teaching & STEM Hub */}
-          <Card variant="glass">
-            <CardHeader>
-              <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Rocket className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
-                Creative Teaching & STEM Hub
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CreativeTeachingHub />
-            </CardContent>
-          </Card>
+        {/* Creative Teaching & STEM Hub */}
+        <Card variant="glass">
+          <CardHeader>
+            <CardTitle className="text-royalPurple-text1 flex items-center">
+              <Rocket className="h-6 w-6 mr-3 text-royalPurple-pillTx" />
+              Creative Teaching & STEM Hub
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <CreativeTeachingHub />
+          </CardContent>
+        </Card>
 
-          {/* HOD Department Assignments - Detailed View */}
-          <HodAssignments hodData={dashboardData} />
-        </div>
-      </DashboardLayout>
-    </div>
+        {/* HOD Department Assignments - Detailed View */}
+        <HodAssignments hodData={dashboardData} />
+      </div>
+    </DashboardLayout>
   )
 }

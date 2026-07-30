@@ -7,6 +7,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { useAuth } from '@/lib/auth'
+import { hasHodPortalAccess } from '@/lib/hod/hodAccess'
 import { FileText, ArrowLeft, CheckCircle, XCircle, Clock } from 'lucide-react'
 
 function fmtDate(v) {
@@ -35,10 +36,10 @@ export default function HodLessonPlansPage() {
   const [statusFilter, setStatusFilter] = useState('SUBMITTED')
 
   useEffect(() => {
-    const role = String(user?.role || '').toLowerCase()
-    const allowed =
-      role === 'hod' || role === 'headteacher' || role === 'admin' || Boolean(user?.hodProfile)
-    if (user && !allowed) router.replace(`/dashboard/${role || 'teacher'}`)
+    if (user && !hasHodPortalAccess(user)) {
+      const role = String(user.role || '').toLowerCase() || 'teacher'
+      router.replace(`/dashboard/${role}`)
+    }
   }, [user, router])
 
   useEffect(() => {
