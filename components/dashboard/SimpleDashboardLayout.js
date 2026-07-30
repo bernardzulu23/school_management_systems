@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { ThemeToggle } from '@/components/ui/ThemeToggle'
 import { useAuth } from '@/lib/auth'
 import { useSchool } from '@/lib/context/SchoolContext'
@@ -35,9 +35,35 @@ export function DashboardLayout({ children, title }) {
     getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' }).careerGuidance &&
     hasGuidanceAssignment(user)
   const showSicLink = hasSicAssignment(user)
+  const roleLower = String(user?.role || '')
+    .trim()
+    .toLowerCase()
+  const isHodUser =
+    Boolean(user?.isHod) ||
+    Boolean(user?.hodProfile) ||
+    roleLower === 'hod' ||
+    roleLower === 'head of department'
+  // HODs are teaching staff; allow Teacher Dashboard even when role is "hod"
+  // and teacherProfile is missing from the session payload.
+  const canOpenTeacherDashboard =
+    Boolean(user?.teacherProfile) ||
+    isHodUser ||
+    [
+      'teacher',
+      'classteacher',
+      'seniorteacher',
+      'deputyhead',
+      'deputyheadteacher',
+      'guidance',
+      'guidanceteacher',
+    ].includes(roleLower)
+  const onTeacherPortal = typeof pathname === 'string' && pathname.startsWith('/dashboard/teacher')
+  const onHodPortal = typeof pathname === 'string' && pathname.startsWith('/dashboard/hod')
+  const onGuidancePortal =
+    typeof pathname === 'string' && pathname.startsWith('/dashboard/guidance')
+  const onSicPortal = typeof pathname === 'string' && pathname.startsWith('/dashboard/sic')
   const [showFeedback, setShowFeedback] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const [feedbackForm, setFeedbackForm] = useState({
     category: 'general',
     rating: '',
@@ -111,14 +137,6 @@ export function DashboardLayout({ children, title }) {
     }
   }
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-    const updateIsMobile = () => setIsMobile(window.innerWidth < 1024)
-    updateIsMobile()
-    window.addEventListener('resize', updateIsMobile)
-    return () => window.removeEventListener('resize', updateIsMobile)
-  }, [])
-
   return (
     <div className="min-h-screen bg-royalPurple-page transition-colors duration-200 flex">
       <Sidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
@@ -164,43 +182,38 @@ export function DashboardLayout({ children, title }) {
                   <MessageSquare className="h-4 w-4" />
                   <span className="hidden sm:inline">Feedback</span>
                 </button>
-                {!isMobile &&
-                  (user?.teacherProfile || String(user?.role || '').toLowerCase() === 'teacher' ? (
-                    <Link
-                      href="/dashboard/teacher"
-                      className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
-                    >
-                      Teacher Dashboard
-                    </Link>
-                  ) : null)}
-                {!isMobile &&
-                  showHodLink &&
-                  (user?.isHod ||
-                    user?.hodProfile ||
-                    String(user?.role || '').toLowerCase() === 'hod') && (
-                    <Link
-                      href="/dashboard/hod"
-                      className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
-                    >
-                      HOD Dashboard
-                    </Link>
-                  )}
-                {!isMobile && showGuidanceLink && (
+                {canOpenTeacherDashboard && !onTeacherPortal ? (
+                  <Link
+                    href="/dashboard/teacher"
+                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                  >
+                    Teacher Dashboard
+                  </Link>
+                ) : null}
+                {showHodLink && isHodUser && !onHodPortal ? (
+                  <Link
+                    href="/dashboard/hod"
+                    className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
+                  >
+                    HOD Dashboard
+                  </Link>
+                ) : null}
+                {showGuidanceLink && !onGuidancePortal ? (
                   <Link
                     href="/dashboard/guidance"
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
                     Guidance Dashboard
                   </Link>
-                )}
-                {!isMobile && showSicLink && (
+                ) : null}
+                {showSicLink && !onSicPortal ? (
                   <Link
                     href="/dashboard/sic"
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
                     SIC Dashboard
                   </Link>
-                )}
+                ) : null}
                 <Link
                   href="/dashboard/profile"
                   className="inline-flex items-center gap-2 h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors"

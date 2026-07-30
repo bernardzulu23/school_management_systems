@@ -104,22 +104,35 @@ Include:
   'Mathematics (Core)': tpl(
     'WORD_PROBLEMS',
     'Word problems',
-    `Generate 5 realistic word problems about: {topic}.
+    `Generate 5 realistic word problems that REQUIRE applying the mathematics of: {topic}.
+
+TOPIC FIDELITY (mandatory):
+- Every problem must assess "{topic}" specifically. Do NOT generate generic shopping/market totals, simple buy-and-sell arithmetic, or unrelated number work unless "{topic}" itself is that skill.
+- Example: if topic is Simultaneous Equations, each problem must require forming and solving two (or more) equations with two (or more) unknowns (substitution, elimination, or another {grade}-appropriate method). A problem that only adds prices is WRONG.
+- Example: if topic is Quadratic Equations, solutions must involve quadratic methods — not linear totals.
+- Zambian names, places, and ZMW may flavour the story only; they must not replace the required mathematics.
+
 For each problem include:
-(1) Problem statement (Zambian names and places)
-(2) Step-by-step solution with all arithmetic shown
+(1) Problem statement (Zambian names and places; context must still force "{topic}")
+(2) Step-by-step solution showing the "{topic}" method clearly
 (3) Final answer clearly marked
-(4) Alternative method if applicable`,
-    'Assume {grade} mathematics. Use Zambian currency (K / ZMW) where relevant. Setting: {setting}.',
+(4) Alternative method if applicable to "{topic}"`,
+    'Assume {grade} mathematics focused strictly on "{topic}". Setting: {setting}. Use ZMW only when it supports that topic.',
     ['PROBLEM SET', 'SOLUTIONS AND ANSWER KEY']
   ),
 
   'Additional Mathematics (Core)': tpl(
     'WORD_PROBLEMS',
     'Advanced problem set',
-    `Generate 5 advanced word problems about: {topic} for Additional Mathematics.
-For each: problem statement, full algebraic/calculus working, final answer, and an optional alternative method.`,
-    'Assume {grade} Additional Mathematics. Use engineering, finance, or surveying contexts in Zambia ({setting}).',
+    `Generate 5 advanced word problems that REQUIRE Additional Mathematics methods for: {topic}.
+
+TOPIC FIDELITY (mandatory):
+- Every problem must assess "{topic}" — not generic arithmetic or commerce totals.
+- Use engineering, surveying, science, or finance contexts only when they force the "{topic}" technique.
+- Zambian setting ({setting}) is flavour only.
+
+For each: problem statement, full algebraic/calculus (or topic-specific) working, final answer, and an optional alternative method.`,
+    'Assume {grade} Additional Mathematics focused strictly on "{topic}". Setting: {setting}.',
     ['PROBLEM SET', 'SOLUTIONS AND ANSWER KEY']
   ),
 
@@ -794,6 +807,9 @@ Context: ${context}
 CRITICAL RULES:
 - Do NOT write an English comprehension story unless the content type is COMPREHENSION.
 - Output MUST match content type ${template.type}.
+- Stay strictly on TOPIC "${topic}". Every exercise, problem, scenario, or question must teach or assess that topic's concepts and methods.
+- The setting and cultural flavour (places, names, ZMW) must NOT change the academic skill. Never drift into a different subject skill (e.g. commerce/business arithmetic when the topic is algebraic equations, or a generic lab when the topic is a specific chemistry concept).
+- If syllabus/RAG notes are appended below, use them only to ground facts for "${topic}" — do not replace the topic with unrelated retrieved text.
 - Use Zambian context (places, names, Kwacha/ZMW, local examples) where relevant.
 - Use ALL CAPS section headers exactly as listed below.
 - Keep school-safe: no dangerous unsupervised experiments or harmful advice.

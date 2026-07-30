@@ -18,7 +18,10 @@ import {
   createGroqTextEventStream,
   GROQ_SSE_HEADERS,
 } from '@/lib/ai/groq-client'
-import { buildSubjectContentPrompt } from '@/lib/ai/subjectPromptTemplates'
+import {
+  buildSubjectContentPrompt,
+  getSubjectPromptTemplate,
+} from '@/lib/ai/subjectPromptTemplates'
 import { formatSubjectContent } from '@/lib/ai/contentFormatters'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
@@ -149,7 +152,8 @@ export const POST = withAILimits(async function POST(request: Request) {
     })
     if (guard.ok === false) return guard.response
 
-    const cachePayload = { schoolId, input }
+    // v2: topic-fidelity prompt rewrite — invalidate older shopping-arithmetic caches.
+    const cachePayload = { schoolId, input, promptVersion: 2 }
     const cached = await getCachedAIResponse<{
       story: string
       generatedBy?: string
@@ -175,6 +179,15 @@ export const POST = withAILimits(async function POST(request: Request) {
     })
 
     const promptBase = buildPrompt(input)
+    const contentType = getSubjectPromptTemplate(input.subject || 'English (Core)').type
+    // Lower temperature for problem/lab generation so topic methods stay on-rail.
+    const temperature =
+      contentType === 'WORD_PROBLEMS' ||
+      contentType === 'PROBLEM_SCENARIO' ||
+      contentType === 'LAB_PROCEDURE' ||
+      contentType === 'CODE_CHALLENGE'
+        ? 0.35
+        : 0.75
     // CDC syllabus RAG first (via buildRagContextForQuery). TM static-fallback is
     // optional enrichment only — Form 3–4 known-gaps must not imply story failure.
     const rag = await buildRagContextForQuery({
@@ -185,13 +198,16 @@ export const POST = withAILimits(async function POST(request: Request) {
       gradeLevel: input.grade || 'Form 3',
       topic: input.topic,
     })
-    const prompt = rag.block ? appendRagToSystemPrompt(promptBase, rag.block) : promptBase
+    const ragBlock = rag.block
+      ? `${rag.block}\n\nRAG USAGE RULE: Use retrieved notes only to ground facts for topic "${input.topic}". Do not replace that topic with unrelated retrieved scenarios.`
+      : ''
+    const prompt = ragBlock ? appendRagToSystemPrompt(promptBase, ragBlock) : promptBase
     const startTime = Date.now()
 
     const stream = createGroqTextEventStream({
       prompt,
       maxTokens: 2200,
-      temperature: 0.8,
+      temperature,
       plainText: true,
       onErrorMessage: 'Failed to generate content',
       onComplete: async (responseText) => {

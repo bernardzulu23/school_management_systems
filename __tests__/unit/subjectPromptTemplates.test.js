@@ -52,7 +52,23 @@ describe('subjectPromptTemplates', () => {
     })
     expect(prompt).toMatch(/WORD_PROBLEMS/)
     expect(prompt).toMatch(/Algebra/)
-    expect(prompt.toLowerCase()).toMatch(/kwacha|zmw|currency/)
+    expect(prompt.toLowerCase()).toMatch(/kwacha|zmw/)
+  })
+
+  it('forces Math topic fidelity for simultaneous equations (not shopping totals)', () => {
+    const prompt = buildSubjectContentPrompt({
+      subject: 'Mathematics',
+      grade: 'Form 2',
+      topic: 'Simultaneous Equations',
+      setting: 'Eastern Province',
+    })
+    expect(prompt).toMatch(/WORD_PROBLEMS/)
+    expect(prompt).toMatch(/Simultaneous Equations/)
+    expect(prompt).toMatch(/TOPIC FIDELITY/)
+    expect(prompt).toMatch(/Stay strictly on TOPIC "Simultaneous Equations"/)
+    expect(prompt).toMatch(/two \(or more\) equations/)
+    expect(prompt).toMatch(/must NOT change the academic skill/)
+    expect(prompt).toMatch(/commerce\/business arithmetic/)
   })
 
   it('builds English comprehension prompt without forbidding stories', () => {

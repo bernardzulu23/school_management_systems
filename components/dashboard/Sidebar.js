@@ -153,9 +153,14 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
   const getNavigationItems = () => {
     const hasSeniorTeacherRole = Boolean(user?.isSeniorTeacher || user?.seniorTeacherAssignment?.id)
     const schoolReady = Boolean(school?.level) && !schoolLoading
+    const teacherPortal = pathname?.startsWith('/dashboard/teacher')
+    const isHodUser = Boolean(user?.isHod || user?.hodProfile || roleKey === 'hod')
+    // When an HOD is viewing the teacher portal, home should stay on teacher.
     const baseDashboardHref = hasSeniorTeacherRole
       ? '/dashboard/senior-teacher'
-      : `/dashboard/${roleKey || 'student'}`
+      : teacherPortal && isHodUser
+        ? '/dashboard/teacher'
+        : `/dashboard/${roleKey || 'student'}`
     const baseItems = [
       {
         name: 'Dashboard',
@@ -557,7 +562,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       : roleKey === 'hod' && !showHod
         ? 'teacher'
         : roleKey
-    if (hodPortal && (user?.isHod || user?.hodProfile || roleKey === 'hod')) {
+    // Portal path drives nav so dual-role staff can switch without the sidebar
+    // bouncing them back to their primary role home.
+    if (teacherPortal && isHodUser) {
+      navRoleKey = 'teacher'
+    }
+    if (hodPortal && isHodUser && showHod) {
       navRoleKey = 'hod'
     }
     if (guidancePortal && hasGuidanceRole && showCareer) {
@@ -692,6 +702,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     if (navRoleKey === 'hod') {
       items = items.map((item) =>
         item.name === 'Dashboard' ? { ...item, href: '/dashboard/hod' } : item
+      )
+    }
+    if (navRoleKey === 'teacher') {
+      items = items.map((item) =>
+        item.name === 'Dashboard' ? { ...item, href: '/dashboard/teacher' } : item
       )
     }
     const isIndividual = String(school?.schoolType || '').toUpperCase() === 'INDIVIDUAL'

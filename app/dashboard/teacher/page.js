@@ -432,7 +432,11 @@ export default function TeacherDashboard() {
                 </div>
               </div>
               <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-                {currentUser?.hodProfile && (
+                {(currentUser?.hodProfile ||
+                  currentUser?.isHod ||
+                  String(currentUser?.role || '')
+                    .trim()
+                    .toLowerCase() === 'hod') && (
                   <Link
                     href="/dashboard/hod"
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalPurple-card/70 dark:bg-royalPurple-muted/70 border border-royalPurple-border dark:border-royalPurple-border/40 text-royalPurple-text2 hover:text-royalPurple-text1 hover:bg-royalPurple-card2 transition-colors"
