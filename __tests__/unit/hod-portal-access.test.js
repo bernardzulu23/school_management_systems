@@ -30,6 +30,7 @@ describe('HOD navigation rendering', () => {
     const source = readFileSync(join(process.cwd(), 'components/dashboard/Sidebar.js'), 'utf8')
     expect(source).toContain('<a')
     expect(source).toContain('href={item.href}')
+    expect(source).toContain('window.location.assign(item.href)')
     expect(source).not.toContain("import Link from 'next/link'")
   })
 

@@ -790,7 +790,10 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
             <a
               key={`${item.href}:${item.name}`}
               href={item.href}
-              onClick={() => mobileOpen && setMobileOpen(false)}
+              onClick={(event) => {
+                event.preventDefault()
+                window.location.assign(item.href)
+              }}
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-200 group relative',
                 isActive
