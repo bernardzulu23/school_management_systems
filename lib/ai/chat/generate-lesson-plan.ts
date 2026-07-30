@@ -12,7 +12,10 @@ const log = logger({ route: 'AI:chat-lesson-plan' })
 const SYSTEM = `You are an expert Zambian CBC curriculum lesson planner aligned with the 2023 ZECF.
 Create practical, culturally relevant lesson plans for Zambian classrooms.
 Respond with ONLY valid JSON matching the requested schema. No markdown fences.
-Optional field "mermaidDiagram": Mermaid flowchart/diagram syntax for ICT or science topics; omit or null if not useful.`
+Content must be rich enough for a professional table-based Word document (scheme-of-work quality).
+Optional "visualAids": typed cartesian/line/bar/conceptual specs with real numbers for this topic.
+Optional legacy "mermaidDiagram": Mermaid flowchart for ICT/science; omit or null if not useful.
+Never invent decorative graphs for non-visual topics.`
 
 function extractJsonObject(raw: string): unknown {
   const text = String(raw || '').trim()
@@ -61,9 +64,15 @@ export async function generateChatLessonPlanJson(
 
   const chatBit = String(input.chatContext || '').trim()
   const schemaHint = `
-Also include optional "topic" and "subTopic" strings, and optional "mermaidDiagram"
-(Mermaid syntax string) when a diagram helps ICT/science lessons. Omit mermaidDiagram otherwise.
+Also include:
+- "topic" and "subTopic" strings
+- "workedExamples" (array of short strings)
+- "differentiation": { "support", "challenge" }
+- "homework" string
+- "visualAids" when the topic needs graphs/diagrams (cartesian/line/bar/conceptual objects only)
+- optional legacy "mermaidDiagram" (Mermaid string) or null
 
+Activities: minimum 3 covering Introduction, Development, Conclusion with detailed teacher/learner actions.
 Respond with a single JSON object only.`
 
   const prompts = [

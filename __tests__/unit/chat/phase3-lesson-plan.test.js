@@ -23,19 +23,34 @@ const validPlan = {
       phase: 'Introduction',
       durationMinutes: 5,
       activity: 'Recall previous work on integers with a short oral quiz.',
-      teacherAction: 'Ask probing questions',
-      learnerAction: 'Respond orally',
+      teacherAction: 'Ask probing questions about signed numbers',
+      learnerAction: 'Respond orally in pairs',
       resources: ['Chalkboard'],
     },
     {
       phase: 'Development',
       durationMinutes: 25,
       activity: 'Worked examples of linear equations using Zambian market price scenarios.',
-      teacherAction: 'Demonstrate on board',
-      learnerAction: 'Copy and practise',
+      teacherAction: 'Demonstrate on board step by step',
+      learnerAction: 'Copy and practise in exercise books',
       resources: ['Exercise books'],
+      assessmentCheck: 'Two board questions answered correctly',
+    },
+    {
+      phase: 'Conclusion',
+      durationMinutes: 10,
+      activity: 'Summarise the method for isolating the unknown and set exit ticket.',
+      teacherAction: 'Recap key steps with learners',
+      learnerAction: 'Complete a short exit ticket',
+      resources: ['Exit tickets'],
     },
   ],
+  workedExamples: ['Solve 2x + 3 = 11', 'Solve x − 5 = 4'],
+  differentiation: {
+    support: 'Provide number lines and partially completed examples',
+    challenge: 'Solve two-step equations with brackets',
+  },
+  homework: 'Complete exercise 3.2 questions 1–8 on linear equations.',
   assessment: {
     method: 'Oral and written',
     tool: 'Exit ticket',
@@ -77,9 +92,69 @@ describe('ChatLessonPlanSchema', () => {
           activity: 'too short',
         },
         validPlan.activities[1],
+        validPlan.activities[2],
       ],
     }
     expect(ChatLessonPlanSchema.safeParse(bad).success).toBe(false)
+  })
+
+  it('accepts validated cartesian visualAids', () => {
+    const result = ChatLessonPlanSchema.safeParse({
+      ...validPlan,
+      visualAids: [
+        {
+          type: 'cartesian',
+          title: 'y = 2x + 1',
+          caption: 'Plot of a linear function',
+          xAxis: { min: -5, max: 5, label: 'x', step: 1 },
+          yAxis: { min: -10, max: 12, label: 'y', step: 2 },
+          series: [
+            {
+              name: 'y=2x+1',
+              points: [
+                { x: -2, y: -3 },
+                { x: 0, y: 1 },
+                { x: 2, y: 5 },
+              ],
+            },
+          ],
+          showGrid: true,
+        },
+      ],
+    })
+    expect(result.success).toBe(true)
+  })
+
+  it('rejects malformed visualAids with out-of-range values', () => {
+    const result = ChatLessonPlanSchema.safeParse({
+      ...validPlan,
+      visualAids: [
+        {
+          type: 'line',
+          title: 'Bad graph',
+          xAxis: { min: -5, max: 5 },
+          yAxis: { min: -5, max: 5 },
+          series: [
+            {
+              name: 's1',
+              points: [
+                { x: 0, y: 99999 },
+                { x: 1, y: 1 },
+              ],
+            },
+          ],
+        },
+      ],
+    })
+    expect(result.success).toBe(false)
+  })
+
+  it('rejects fewer than three activities', () => {
+    const result = ChatLessonPlanSchema.safeParse({
+      ...validPlan,
+      activities: validPlan.activities.slice(0, 2),
+    })
+    expect(result.success).toBe(false)
   })
 })
 

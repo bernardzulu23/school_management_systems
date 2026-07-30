@@ -85,4 +85,15 @@ describe('staff chat nav wiring (source)', () => {
     expect(src).toContain('Teachers and HODs can chat here; students use ZSMS Help.')
     expect(src).not.toContain('Student chat is not enabled')
   })
+
+  it('uses canonical form and subject dropdowns before loading lesson-plan topics', async () => {
+    const fs = await import('node:fs/promises')
+    const path = await import('node:path')
+    const src = await fs.readFile(path.join(process.cwd(), 'components/chat/ChatPanel.js'), 'utf8')
+    expect(src).toContain('id="chat-lp-grade"')
+    expect(src).toContain('id="chat-lp-subject"')
+    expect(src).toContain('lessonPlanSubjects.map')
+    expect(src).toContain('subject={lpSubject}')
+    expect(src).toContain('gradeOrForm={lpGrade}')
+  })
 })

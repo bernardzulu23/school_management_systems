@@ -1,10 +1,15 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Loader2, Send, FileText, Download, SendHorizontal, Headphones } from 'lucide-react'
 import { EMPTY_CHAT_REPLY_MESSAGE, readChatSseStream } from '@/lib/ai/chat/sse-client'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
+import { useSchool } from '@/lib/context/SchoolContext'
+import {
+  getSchoolGradeOptions,
+  getSchoolSubjectNameOptions,
+} from '@/lib/subjects/schoolSubjectOptions'
 
 const DEFAULT_RESUBMIT_PROMPT = "Rewrite the evaluation section based on the HOD's comment"
 
@@ -44,6 +49,22 @@ export default function ChatPanel({
   const wsRef = useRef(null)
   const wsSessionRef = useRef(null)
   const wsLiveRef = useRef(false)
+  const { school, isLoading: schoolLoading } = useSchool()
+  const schoolLevel = String(school?.level || 'combined').toLowerCase()
+  const lessonPlanGrades = useMemo(
+    () => getSchoolGradeOptions(schoolLevel, lpGrade || null),
+    [schoolLevel, lpGrade]
+  )
+  const lessonPlanSubjects = useMemo(
+    () =>
+      getSchoolSubjectNameOptions({
+        schoolLevel,
+        gradeLevel: lpGrade || null,
+        assignmentSubjects: [],
+        enabledLocalLanguages: school?.enabledLocalLanguages,
+      }).sort((a, b) => a.localeCompare(b)),
+    [schoolLevel, lpGrade, school?.enabledLocalLanguages]
+  )
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -720,26 +741,51 @@ export default function ChatPanel({
       {mode === 'generative' && sessionStatus === 'AI_MANAGED' && (
         <div className="px-3 pt-2 border-t border-ink/10 space-y-2">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <input
+            <select
+              id="chat-lp-grade"
               className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs"
-              placeholder="Subject"
+              value={lpGrade}
+              onChange={(e) => {
+                setLpGrade(e.target.value)
+                setLpSubject('')
+                setLpTopic('')
+              }}
+              disabled={lpBusy || schoolLoading}
+              aria-label="Form or grade"
+            >
+              <option value="">
+                {schoolLoading ? 'Loading forms / grades…' : 'Select form / grade…'}
+              </option>
+              {lessonPlanGrades.map((grade) => (
+                <option key={grade} value={grade}>
+                  {grade}
+                </option>
+              ))}
+            </select>
+            <select
+              id="chat-lp-subject"
+              className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs"
               value={lpSubject}
               onChange={(e) => {
                 setLpSubject(e.target.value)
                 setLpTopic('')
               }}
-              disabled={lpBusy}
-            />
-            <input
-              className="rounded-lg border-2 border-ink/10 px-2 py-1.5 text-xs"
-              placeholder="Form / Grade (e.g. Form 2)"
-              value={lpGrade}
-              onChange={(e) => {
-                setLpGrade(e.target.value)
-                setLpTopic('')
-              }}
-              disabled={lpBusy}
-            />
+              disabled={lpBusy || schoolLoading || !lpGrade}
+              aria-label="Subject"
+            >
+              <option value="">
+                {!lpGrade
+                  ? 'Select form / grade first…'
+                  : schoolLoading
+                    ? 'Loading subjects…'
+                    : 'Select subject…'}
+              </option>
+              {lessonPlanSubjects.map((subject) => (
+                <option key={subject} value={subject}>
+                  {subject}
+                </option>
+              ))}
+            </select>
           </div>
           <CurriculumTopicSelect
             subject={lpSubject}

@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto'
 import type { LessonPlanSubmission } from '@prisma/client'
 import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { generateChatLessonPlanJson } from '@/lib/ai/chat/generate-lesson-plan'
-import { renderMermaidToPng } from '@/lib/ai/chat/mermaid-render'
+import { renderLessonPlanVisuals } from '@/lib/ai/chat/lesson-plan-visual-render'
 import {
   generateLessonPlanFilename,
   generateLessonPlanWordDocFromStructured,
@@ -58,16 +58,15 @@ export async function createLessonPlanSubmissionFromChat(input: CreateFromChatIn
     chatContext: input.chatContext,
   })
 
-  let diagramPng: Buffer | null = null
-  let diagramFailed = false
-  if (plan.mermaidDiagram) {
-    diagramPng = await renderMermaidToPng(plan.mermaidDiagram)
-    if (!diagramPng) {
-      diagramFailed = true
-      log.warn('Mermaid diagram skipped — continuing without image', {
-        topic: input.topic,
-      })
-    }
+  const { visuals, diagramFailed } = await renderLessonPlanVisuals({
+    visualAids: plan.visualAids,
+    mermaidDiagram: plan.mermaidDiagram,
+  })
+  if (diagramFailed) {
+    log.warn('One or more lesson-plan visuals skipped — continuing without them', {
+      topic: input.topic,
+      rendered: visuals.length,
+    })
   }
 
   const teacherCtx = await getLessonPlanTeacherContext(
@@ -89,7 +88,12 @@ export async function createLessonPlanSubmissionFromChat(input: CreateFromChatIn
     subTopic: plan.subTopic || input.subTopic || plan.title,
     duration: plan.duration || input.duration || 40,
     approvalStatus: 'DRAFT',
-    diagramPng,
+    diagramPng: visuals[0]?.png || null,
+    visualImages: visuals.map((v) => ({
+      title: v.title,
+      caption: v.caption,
+      png: v.png,
+    })),
   })
 
   const submissionId = randomUUID()
