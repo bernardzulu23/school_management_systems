@@ -1,0 +1,269 @@
+{
+  "subject": "Silozi",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 1,
+  "sourceFile": "SILOZI-TEACHING-MODULE-GRADE-1-TERM-1.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "Analytical thinking Kunahana ka kualunguta ni kutomahanya",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 2,
+      "title": "Citizenship Kuba mwanaa naha yatezi",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 3,
+      "title": "Collaboration",
+      "topics": ["Kuswalisana"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 4,
+      "title": "Communication Kufitisa mañusa ni maikuto ku babañwi",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 5,
+      "title": "Creativity and",
+      "topics": ["innovation", "Kueza lika ka buikupuleli"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 6,
+      "title": "Critical thinking Kutibisa munahano",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 7,
+      "lesson": 7,
+      "title": "Emotional intelligence Kuomeka nyakalalo kapa/ ni masitapilu",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 8,
+      "lesson": 8,
+      "title": "Environmental",
+      "topics": [
+        "sustainability",
+        "Kusayundisa zefumaneha mwa libaka",
+        "zelupotolohile",
+        "Problem solving",
+        "Kutungunyuna ni Kufumana likalabo za"
+      ],
+      "activities": [
+        "Musebezi 1: kutosa manzwi ni lipulelo zelukela kuitusiswa fa kuambola ni babahulu",
+        "abuze bana ba sikolo kuli babulele lipulelo zeitusiswa hakuamboliwa ni",
+        "batu babahulu mwa miinelo yeshutana",
+        "a) haubiziwa fa libizo",
+        "b) hauhanisiwa kueza sika",
+        "c) haukupa sika",
+        "d) haukupa swalelo",
+        "Muluti afe mitala ya pulelo yezwa ku yomuhulu"
+      ],
+      "resources": [],
+      "assessment": [
+        "a) Batomahanye ltaba zeinzi mwa kakande",
+        "b) Bange kabelo mwa tupapali totuzwelela fa tukande",
+        "Tutonyana ka bukuswani",
+        "Tutonyana ye neiluta bana ba sikolo kukandeka tukande ni kunga kabelo mwa",
+        "kabapala lipapali zezwelela fa tukande.",
+        "KALULO: KUBALA (READING)"
+      ],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 9,
+      "title": "Sikala sesi supa kukona musebezi: papali ya kubupa manzwi ibapalilwe",
+      "topics": [
+        "kaswanelo.",
+        "Kutatuba banaba sikolo",
+        "(a) Bana ba sikolo ba bulele mulumo okwa makalelelo amanzwi.",
+        "(b) Bana ba sikolo batose mulumo okwa mafelelezo manzwi.",
+        "(c) Bana ba sikolo bataleleze manzwi a takuzwi"
+      ],
+      "activities": [
+        "Tuto -nyana (a): milumo wa hH",
+        "(Kutosa milumo ye kwa makalelo a manzwi",
+        "bulelela banana kuli baka bapala papali ya munwana omutuna",
+        "mwahalimu (thumbs up) aka punda linzwi leli nani mulumo o lutiwa lizazi",
+        "leo h, munwana omutuna fafasi muluti aka punda linzwi leli sina mulumo",
+        "osa lutiwi lizazileo inge: yaneha, yola, mukiti.",
+        "abonise banana mwa ku supisa munwana mwa halimu haka punda linzwi",
+        "lelinani mulumo wa zazi leo ni ku supa munwana omutuna fafasi (thumbs"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 10,
+      "title": "Kaze /ica/ ndongo.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 11,
+      "title": "Mwangala uya kwa sikolo.",
+      "topics": ["~ 112 ~"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 12,
+      "title": "Kwalombota ki mushimani.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 13,
+      "title": "Twaambo wa bapala.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 14,
+      "title": "Ngombo uca buhobe.",
+      "topics": [
+        "Sikala sesisupa kukona musebezi: manzwi tosiwe kakuitusisa miseto ka kuluka.",
+        "Tutonyana ka bukuswani:",
+        "Bana ba sikolo baituta kutosa litaku ze bupa manzwi, ni manzwi abupa",
+        "lipulelo mi hape bakaituta kualula manzwi ainzi mwa pulelo(sentence).",
+        "Liitusiso kwa kuluta ni kuituta:"
+      ],
+      "activities": [
+        "Cati ya litaku ni manzwi nyana",
+        "(Syllabic chart)",
+        "kadi ya manzwi",
+        "Manzwi a swala( Magnetic",
+        "kalulo: kuutwisisa",
+        "Tuto: kuteeleza kakutwisiso",
+        "Tuto - nyana: kunahanela sika amulaho wa kubona muinelo wataba (Simple",
+        "Inferences)"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 15,
+      "title": "Simbotwe sile kai?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 16,
+      "title": "Simbotwe sisabani?",
+      "topics": [
+        "Muluti:",
+        "v Afe bana ba sikolo tubuka twakuipalela",
+        "Bana ba sikolo:",
+        "v babale libuka zakuipalela.",
+        "v babale tubuka alimuћwi ka alimuћwi kakutiisa."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 17,
+      "title": "Wacama Nainzi kai?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 18,
+      "title": "Likuhu nelilila likamaћi?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 19,
+      "title": "Mbande yafufa kusabani .........................",
+      "topics": [
+        "Bana ba sikolo",
+        "v batelaza",
+        "v baalabe lipuzo.",
+        "~ 136 ~",
+        "Misebezinyana ( c) kukandela likande (Story Telling"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:48.524Z",
+    "rawTextLength": 146979,
+    "educationLevel": "primary"
+  }
+}

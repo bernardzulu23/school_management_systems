@@ -1,0 +1,31 @@
+{
+  "subject": "Literacy in English",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 3,
+  "sourceFile": "Grade-1-Literacy-in-English-teaching-Module-for-term-3.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "1.9 Sounds Total No. of Learners:",
+      "topics": ["Sub-Topic: 1.9.3.1 Long Vowels"],
+      "activities": [],
+      "resources": [
+        "word cards",
+        "Expected Standard: Long vowels sounded out correctly, Words with long vowels blend",
+        "and read correctly.",
+        "LESSON PROGRESSION:",
+        "STAGES TEACHER’S ROLE",
+        "LEARNERS’ ROLE"
+      ],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:41.219Z",
+    "rawTextLength": 128584,
+    "educationLevel": "primary"
+  }
+}

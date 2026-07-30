@@ -1,0 +1,97 @@
+{
+  "subject": "English (Intellectual Disability Level I)",
+  "level": "Grade 1-3",
+  "gradesCovered": [1, 2, 3],
+  "totalDuration": "3 years (Grades 1-3)",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Grade 1: Topic 1.7",
+      "topics": ["Subtopic 1.7.1"],
+      "learningOutcomes": ["Recognize simple words"],
+      "suggestedActivities": [
+        "Identifying singular nouns (a boy, girl, school, book, dog«.)",
+        "Using singular nouns in a sentence (A girl is walking«)",
+        "Identifying plural nouns (cats, girls, books, boys«)",
+        "Using plural nouns in a sentence (The boys are pl~yingK",
+        "Practicing sitting posture (sit like Leo. Sit like jumbo)",
+        "Tracing shapes (plain shapes«)",
+        "Tracing pattern (ziz-zag wave lines«)",
+        "Tracing letters (a,b.c«)",
+        "Using main punctuation marks (full stop and capital letter)",
+        "Tracing capital letters (A,B,C )",
+        "LISTENING AND SPEAKING",
+        "Identifying members of nuclear family using pictures.",
+        "Listening to instructions (Simon says, follow the leader, stand up, sit down, bring a chair«.)",
+        "Role playing occupations found in the community.",
+        "Using pictures to name wild animals (monkey, zebra, lion rhino«)",
+        "Discussing what the learners know about wild animals (live in the bush, come in all shapes and sizes (big/small e.g. hares small, elephants-bigI some ~nim~ls e~t gr~ss ~nd others e~t other animals, some are dangerous«.)",
+        "Discussing respect, honesty and empathy (telling the truth, being faithful, respecting others«)",
+        "Role playing asking for permission (Please, te~cherI m~y f go outsideI would you ~llow me to go out?)"
+      ],
+      "assessmentMethods": ["Simple instructions given and followed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Grade 2: Topic 2.2",
+      "topics": ["Subtopic 2.2.1"],
+      "learningOutcomes": [
+        "Analyze simple stories iistening to simple tr~dition~l stories on different themes (animals, legends) Re-telling simple stories (animals, legends«)"
+      ],
+      "suggestedActivities": [
+        "Dramatizing simple plays following the basic rules (voice projection, stage movement, public speaking, conÀdence«)",
+        "Reciting poems (Poems on cross cutting issues e.g. choler~I good pr~ctices in the communityJcle~ning the environment«)",
+        "Reciting tongue twisters (Tommy told Timmy to touch his toesI but qimmy thought qommy told him to touch his nose )",
+        "Reciting simple riddles (a house without a door or window«)",
+        "Playing language games (Simon says, story chain, quest the sounds, I spy, what am I«)",
+        "Identifying the long vowel sounds (/ai, ee, ie, oe,)",
+        "Identifying initial consonant blends (e.g. st-, cl-, Á-, gr-, bl-«) and Ànal consonant blends (e.g. ²st, -nd,-sk,-mp,-ct«)",
+        "Identifying the diagraph sounds (/ch, sh,th,/)",
+        "Using appropriate simple nouns in sentences (our t~ble",
+        "Using prepositions in simple sentences (the book is on the table; The ball is",
+        "Using verbs in sentences (I walk fast; she is eating a cake«)",
+        "Practicing writing words (Decodable and sight words c~rrying ~scendersI descenders ~nd squ~re letters ² bag, bridge, Áy ««)",
+        "Practicing writing phrases (Three blue bags, fat cat «.)",
+        "LISTENING AND SPEAKING",
+        "Identifying simple processes",
+        "using narrative techniques.",
+        "Identifying the poem to recite",
+        "Reciting simple poems",
+        "Identifying words forms in present tense (walk, sit, eat«).",
+        "Making sentences using common nouns (I saw a boy and a girl going to school).",
+        "Using prepositions in pictorial sentences (at, with, for, on, in, behind, over«).",
+        "Constructing sentences using prepositions ( The dog jumped over the gate.).",
+        "Using Conjunctions to connect phrases (because, since and ) (He passed the test because he studied).",
+        "Using different types of verbs in sentences ( Chanda is jumping«)."
+      ],
+      "assessmentMethods": ["Simple information in a given story provided accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Grade 3: Topic 3.17",
+      "topics": ["Subtopic 3.17.2"],
+      "learningOutcomes": [
+        "Classify linking verbs in sentences Identifying different linking verbs. (are, was, is, am, were) Classifying different types of linking verbs in sentences (Ngambo is a girl«)."
+      ],
+      "suggestedActivities": [
+        "Identifying Àrst person singular pronouns in the text (I, me, my, mine,) (we, us, our, ours).",
+        "Identifying second person in the text (you, your, yours)",
+        "Identifying third person pronouns in text ( it, they, she, he its, theirs, them, his, hers )."
+      ],
+      "assessmentMethods": ["Different occupations found in the community related appropriately"],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "Ministry of Education, Curriculum Development Centre — INTELLECTUAL-DISABILITY-ENGLISH-LANGUAGE-SYLLABUS-LEVEL-I-3.pdf",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-30",
+    "sourceFileBytes": 323108,
+    "extractionNote": "Extracted deterministically from the official primary/ECE CDC PDF with automatic CDC font decoding. No curriculum content was fabricated.",
+    "curated": true,
+    "recordCount": 3
+  }
+}

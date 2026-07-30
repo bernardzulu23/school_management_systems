@@ -1,0 +1,34 @@
+{
+  "sourceFile": "LOWER-PRIMARY-SYLLABI-GRADE-1-3-FINAL-CAMERA-REDY-1.pdf",
+  "subject": "Creative and Technology Studies",
+  "educationLevel": "primary",
+  "grades": [1, 2, 3],
+  "sourceRecordRange": [337, 438],
+  "ok": true,
+  "recordCount": 102,
+  "expectedGrades": [1, 2, 3],
+  "recordsByGrade": {
+    "1": 34,
+    "2": 32,
+    "3": 36
+  },
+  "duplicateIds": [],
+  "missingGrades": [],
+  "incompleteRecordIds": [],
+  "emptyActivityRecordIds": ["G2-T15-S2"],
+  "mismatchedGradeRecordIds": [],
+  "gradeCodeMismatchRecordIds": [],
+  "suspiciousHeadingRecordIds": [],
+  "activityCoverage": {
+    "present": 101,
+    "total": 102,
+    "percent": 99,
+    "requiredPercent": 0
+  },
+  "expectedStandardCoverage": {
+    "present": 98,
+    "total": 102,
+    "percent": 96.1,
+    "requiredPercent": 0
+  }
+}

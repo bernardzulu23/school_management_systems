@@ -17,6 +17,7 @@ import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { Download, FileText, Printer } from 'lucide-react'
 import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
+import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
 
 const GRADE_GROUPS = [
   {
@@ -123,6 +124,7 @@ const RESOURCE_LEVELS = [
 export default function AILessonPlanner() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const { grades, subjects, schoolLevel, schoolLoading } = useSchoolSubjectSelectors()
   const [useCustomSubject, setUseCustomSubject] = useState(false)
   const [saving, setSaving] = useState(false)
   const [savedPlanId, setSavedPlanId] = useState(null)
@@ -138,8 +140,8 @@ export default function AILessonPlanner() {
   })
 
   const [form, setForm] = useState({
-    grade: 'Form 1',
-    subject: 'English Language',
+    grade: '',
+    subject: '',
     customSubject: '',
     topic: '',
     subTopic: '',
@@ -177,6 +179,30 @@ export default function AILessonPlanner() {
     useAIStream('/api/ai/lesson-planner')
 
   const activeSubject = useCustomSubject ? form.customSubject : form.subject
+  const isPrimarySchool = schoolLevel === 'primary'
+  const gradesIncludeForms = useMemo(() => grades.some((g) => /^Form\s/i.test(String(g))), [grades])
+  const useFlatGrades = isPrimarySchool || !gradesIncludeForms
+
+  const filteredGradeGroups = useMemo(() => {
+    if (useFlatGrades) return []
+    if (!grades.length) return GRADE_GROUPS
+    const allowed = new Set(grades)
+    return GRADE_GROUPS.map((group) => ({
+      ...group,
+      grades: group.grades.filter((g) => allowed.has(g)),
+    })).filter((group) => group.grades.length > 0)
+  }, [useFlatGrades, grades])
+
+  const filteredSubjectGroups = useMemo(() => {
+    if (isPrimarySchool) return []
+    if (!subjects.length) return SUBJECT_GROUPS
+    const allowed = new Set(subjects)
+    return SUBJECT_GROUPS.map((group) => ({
+      ...group,
+      subjects: group.subjects.filter((s) => allowed.has(s)),
+    })).filter((group) => group.subjects.length > 0)
+  }, [isPrimarySchool, subjects])
+
   const isProfessional = form.templateType === 'professional'
   const rawContent = isProfessional ? professionalContent : text
   const activeRagReferences = isProfessional ? professionalRagReferences : ragReferences
@@ -187,6 +213,23 @@ export default function AILessonPlanner() {
     setProfessionalRagReferences([])
     setSavedPlanId(null)
   }
+
+  useEffect(() => {
+    if (schoolLoading) return
+    setForm((p) => {
+      const nextGrade = p.grade && grades.includes(p.grade) ? p.grade : grades[0] || p.grade || ''
+      const nextSubject =
+        p.subject && subjects.includes(p.subject) ? p.subject : subjects[0] || p.subject || ''
+      if (nextGrade === p.grade && nextSubject === p.subject) return p
+      return { ...p, grade: nextGrade, subject: nextSubject }
+    })
+  }, [grades, subjects, schoolLoading])
+
+  useEffect(() => {
+    if (isPrimarySchool && useCustomSubject) {
+      setUseCustomSubject(false)
+    }
+  }, [isPrimarySchool, useCustomSubject])
 
   // Prefill from Teaching Studio deep-link: ?schemeId=&week=
   useEffect(() => {
@@ -852,20 +895,29 @@ export default function AILessonPlanner() {
               onChange={(e) =>
                 setForm((p) => ({ ...p, grade: e.target.value, topic: '', subTopic: '' }))
               }
+              disabled={schoolLoading || !grades.length}
             >
-              {GRADE_GROUPS.map((group) => (
-                <optgroup key={group.label} label={group.label}>
-                  {group.grades.map((g) => (
+              {useFlatGrades
+                ? grades.map((g) => (
                     <option key={g} value={g}>
                       {g}
                     </option>
+                  ))
+                : filteredGradeGroups.map((group) => (
+                    <optgroup key={group.label} label={group.label}>
+                      {group.grades.map((g) => (
+                        <option key={g} value={g}>
+                          {g}
+                        </option>
+                      ))}
+                    </optgroup>
                   ))}
-                </optgroup>
-              ))}
             </select>
-            <p className="text-xs text-royalPurple-text2/60">
-              Note: Grades 8 &amp; 9 are phased out under the 2023 CBC and are not listed.
-            </p>
+            {!isPrimarySchool ? (
+              <p className="text-xs text-royalPurple-text2/60">
+                Note: Grades 8 &amp; 9 are phased out under the 2023 CBC and are not listed.
+              </p>
+            ) : null}
           </div>
 
           <div className="space-y-2">
@@ -889,16 +941,18 @@ export default function AILessonPlanner() {
           <div className="space-y-2 md:col-span-2">
             <div className="flex items-center justify-between">
               <Label>Subject</Label>
-              <button
-                type="button"
-                onClick={() => setUseCustomSubject((v) => !v)}
-                className="text-xs text-royalPurple-text2 underline underline-offset-2"
-              >
-                {useCustomSubject ? '← Choose from list' : 'Type a custom subject →'}
-              </button>
+              {!isPrimarySchool ? (
+                <button
+                  type="button"
+                  onClick={() => setUseCustomSubject((v) => !v)}
+                  className="text-xs text-royalPurple-text2 underline underline-offset-2"
+                >
+                  {useCustomSubject ? '← Choose from list' : 'Type a custom subject →'}
+                </button>
+              ) : null}
             </div>
 
-            {useCustomSubject ? (
+            {!isPrimarySchool && useCustomSubject ? (
               <Input
                 value={form.customSubject}
                 onChange={(e) =>
@@ -913,16 +967,23 @@ export default function AILessonPlanner() {
                 onChange={(e) =>
                   setForm((p) => ({ ...p, subject: e.target.value, topic: '', subTopic: '' }))
                 }
+                disabled={schoolLoading || !subjects.length}
               >
-                {SUBJECT_GROUPS.map((group) => (
-                  <optgroup key={group.label} label={group.label}>
-                    {group.subjects.map((s) => (
+                {isPrimarySchool
+                  ? subjects.map((s) => (
                       <option key={s} value={s}>
                         {s}
                       </option>
+                    ))
+                  : filteredSubjectGroups.map((group) => (
+                      <optgroup key={group.label} label={group.label}>
+                        {group.subjects.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
-                  </optgroup>
-                ))}
               </select>
             )}
           </div>

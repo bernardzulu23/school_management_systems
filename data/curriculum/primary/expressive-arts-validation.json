@@ -1,7 +1,12 @@
 {
   "sourceFile": "EXPRESSIVE-ARTS-UPPER-PRIMARY-2.pdf",
   "subject": "Expressive Arts",
+  "band": null,
+  "educationLevel": "primary",
   "sourceFileBytes": 1243664,
+  "extractionNote": "Extracted deterministically from the official CDC/ECE PDF. Missing fields are reported; content is never fabricated.",
+  "rawRecordCount": 107,
+  "excludedUnexpectedGradeRecords": [],
   "ok": true,
   "recordCount": 107,
   "grades": [4, 5, 6],

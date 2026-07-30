@@ -1,0 +1,68 @@
+{
+  "subject": "Icibemba",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 3,
+  "sourceFile": "ICIBEMBA-GRADE-1-TEACHING-MODULE-TERM-3.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Umutwe",
+      "topics": ["Sub-Topic – Umutwe Unoono"],
+      "activities": [
+        "General Competence – Ubwishibilo",
+        "Specific Competence – Ifilekabilwa ukwishiba",
+        "Expected Standard – Imibombele ileenekelwa"
+      ],
+      "resources": [],
+      "assessment": [
+        "Summary– Ukukusupawila",
+        "Conclusion– Ukusondwelela",
+        "Methodology – Imifundile",
+        "Listening and Speaking – Ukumfwa na Ukulanda",
+        "Reading – Ukubelenga",
+        "Writing – Ukulemba"
+      ],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 2,
+      "title": "of 2 lessons on sound /t/ in Week",
+      "topics": ["REFERENCES: Literacy and Language syllabus pages 59, 61, 64 and 67."],
+      "activities": [
+        "words used to",
+        "describe people",
+        "Sings the",
+        "description song",
+        "with learners",
+        "again and asks",
+        "learners to",
+        "identify words"
+      ],
+      "resources": [
+        "the vowels, pictures or objects whose names begin with /t/.",
+        "INTRODUCTION (5 minutes): Teacher sings a description song with learners e.g., song in",
+        "Ba teacher bapa college ‘teachers at college",
+        "Baliba abapusanasana ‘",
+        "Bambi abepi ‘",
+        "Bambi abatali ‘"
+      ],
+      "assessment": [
+        "CRITERIA",
+        "LISTENING",
+        "SPEAKING (20",
+        "minutes)",
+        "Activity 1: Listing",
+        "words used to"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:42.257Z",
+    "rawTextLength": 131949,
+    "educationLevel": "primary"
+  }
+}

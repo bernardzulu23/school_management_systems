@@ -19,8 +19,24 @@ function slugify(subject: string): string {
 }
 
 function parseForm(gradeOrForm: string): number | null {
-  const m = String(gradeOrForm || '').match(/\b(?:Form|Grade)?\s*([1-6])\b/i)
+  const raw = String(gradeOrForm || '')
+  if (/\b(ece|reception|early)\b/i.test(raw)) return null
+  // Primary Grade 1–7 must not be treated as Form 1–7
+  if (/\bGrade\s*([1-7])\b/i.test(raw)) return null
+  const m = raw.match(/\bForm\s*([1-6])\b/i)
   return m ? Number(m[1]) : null
+}
+
+function parseGrade(gradeOrForm: string): number | null {
+  const m = String(gradeOrForm || '').match(/\bGrade\s*([1-7])\b/i)
+  return m ? Number(m[1]) : null
+}
+
+function parseBand(gradeOrForm: string): 'ece' | 'reception' | null {
+  const raw = String(gradeOrForm || '')
+  if (/\bece\b|\bearly\b/i.test(raw)) return 'ece'
+  if (/\breception\b/i.test(raw)) return 'reception'
+  return null
 }
 
 function parseTerm(term: string | number): number | null {
@@ -39,6 +55,8 @@ export function loadTeachingModule(options: {
   if (!fs.existsSync(root)) return null
 
   const form = parseForm(options.gradeOrForm || '')
+  const grade = parseGrade(options.gradeOrForm || '')
+  const band = parseBand(options.gradeOrForm || '')
   const term = parseTerm(options.term ?? '')
 
   const candidates: string[] = []
@@ -56,12 +74,18 @@ export function loadTeachingModule(options: {
   const scored = candidates.map((filePath) => {
     const name = path.basename(filePath)
     const f = name.match(/form(\d+|unknown)/i)?.[1]
+    const g = name.match(/grade(\d+|unknown)/i)?.[1]
+    const b = /ece/i.test(name) ? 'ece' : /reception/i.test(name) ? 'reception' : null
     const t = name.match(/term(\d+|unknown)/i)?.[1]
     let score = 0
+    if (band && b === band) score += 3
+    if (grade != null && g === String(grade)) score += 3
     if (form != null && f === String(form)) score += 2
     if (term != null && t === String(term)) score += 2
-    if (f === 'unknown') score -= 1
+    if (f === 'unknown' || g === 'unknown') score -= 1
     if (t === 'unknown') score -= 1
+    // Prefer grade-tagged files when resolving primary grades
+    if (grade != null && f && !g) score -= 2
     return { filePath, score }
   })
   scored.sort((a, b) => b.score - a.score)
@@ -126,6 +150,15 @@ export function enrichResourcesFromModule(
   return Array.from(new Set([...existingResources, ...extra])).slice(0, 8)
 }
 
+function formatModuleLevelLabel(module: TeachingModuleJSON): string {
+  if (module.band === 'ece' || module.band === 'reception') {
+    return module.band === 'reception' ? 'Reception' : 'ECE'
+  }
+  if (module.grade != null) return `Grade ${module.grade}`
+  if (module.form != null) return `Form ${module.form}`
+  return ''
+}
+
 export function formatModuleContextForPrompt(
   module: TeachingModuleJSON | null,
   topic: string
@@ -133,8 +166,9 @@ export function formatModuleContextForPrompt(
   if (!module) return ''
   const lesson = matchLessonToTopic(module.lessons, topic)
   if (!lesson) return ''
+  const level = formatModuleLevelLabel(module)
   const parts = [
-    `MoE Teaching Module (${module.subject}${module.form ? ` Form ${module.form}` : ''}${
+    `MoE Teaching Module (${module.subject}${level ? ` ${level}` : ''}${
       module.term ? ` Term ${module.term}` : ''
     }):`,
     lesson.title ? `Lesson: ${lesson.title}` : '',

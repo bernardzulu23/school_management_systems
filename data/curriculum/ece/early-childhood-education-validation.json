@@ -1,0 +1,37 @@
+{
+  "sourceFile": "EARLY-CHILDHOOD-EDUCATION-Syllabi-3-to-5-Year-corrected.pdf",
+  "subject": "Early Childhood Education",
+  "band": "ece-3-5",
+  "ageBands": ["3-4 years", "4-5 years"],
+  "educationLevel": "ece",
+  "sourceFileBytes": 791294,
+  "extractionNote": "Extracted deterministically from the official CDC/ECE PDF. Missing fields are reported; content is never fabricated.",
+  "rawRecordCount": 279,
+  "excludedUnexpectedGradeRecords": [],
+  "ok": true,
+  "recordCount": 279,
+  "grades": [1, 2],
+  "expectedGrades": [],
+  "recordsByGrade": {
+    "1": 132,
+    "2": 147
+  },
+  "duplicateIds": [],
+  "missingGrades": [],
+  "incompleteRecordIds": [],
+  "emptyActivityRecordIds": [],
+  "mismatchedGradeRecordIds": [],
+  "suspiciousHeadingRecordIds": [],
+  "activityCoverage": {
+    "present": 279,
+    "total": 279,
+    "percent": 100,
+    "requiredPercent": 50
+  },
+  "expectedStandardCoverage": {
+    "present": 203,
+    "total": 279,
+    "percent": 72.8,
+    "requiredPercent": 55
+  }
+}

@@ -41,6 +41,7 @@ import { EczReferencePanel } from '@/components/assessments/EczReferencePanel'
 import { EczModerationPanel } from '@/components/assessments/EczModerationPanel'
 import { ECZ_GUIDELINES_SUBJECT_COUNT } from '@/lib/ecz/ecz-subjects-data'
 import { StaffRouteGuard } from '@/components/auth/StaffRouteGuard'
+import { SecondaryOnlyRouteGuard } from '@/components/auth/SecondaryOnlyRouteGuard'
 import { FileText, Target, ShieldCheck } from 'lucide-react'
 
 const HUB_TAB_IDS = [
@@ -597,13 +598,17 @@ export default function EczAssessmentHubPage() {
     <Suspense
       fallback={
         <StaffRouteGuard>
-          <DashboardLayout>
-            <div className="p-6 text-muted-foreground">Loading ECZ hub…</div>
-          </DashboardLayout>
+          <SecondaryOnlyRouteGuard redirectTo="/dashboard/teacher/assessments">
+            <DashboardLayout>
+              <div className="p-6 text-muted-foreground">Loading ECZ hub…</div>
+            </DashboardLayout>
+          </SecondaryOnlyRouteGuard>
         </StaffRouteGuard>
       }
     >
-      <EczAssessmentHubContent />
+      <SecondaryOnlyRouteGuard redirectTo="/dashboard/teacher/assessments">
+        <EczAssessmentHubContent />
+      </SecondaryOnlyRouteGuard>
     </Suspense>
   )
 }

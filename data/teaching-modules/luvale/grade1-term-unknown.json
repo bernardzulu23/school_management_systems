@@ -1,0 +1,30 @@
+{
+  "subject": "Luvale",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": null,
+  "sourceFile": "LUVALE-TEACHING-MODULE-GRADE-1-TEMU-1.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Chihande",
+      "topics": [
+        "| Page",
+        "CHIHANDE CHIVENE 1: KWIVWILILA KUMIJIMBU.",
+        "Kujimbula: chino Chihande Chivene, nautala ha kuhanjika na kwivwilila,",
+        "kutanga na kusoneka",
+        "Uhashi wakunangakana chuma: kulivwasana"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:46.842Z",
+    "rawTextLength": 121835,
+    "educationLevel": "primary"
+  }
+}

@@ -15,6 +15,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { CurriculumStudio } from '@/components/curriculum/CurriculumStudio'
+import { OfficialPrimaryResources } from '@/components/teaching/OfficialPrimaryResources'
+import { OfficialSecondaryResources } from '@/components/teaching/OfficialSecondaryResources'
 import {
   WeekProgressSidebar,
   type WeekProgressItem,
@@ -25,8 +27,10 @@ import {
 } from '@/components/teaching/CoverageAnalytics'
 import { SchemeTestStudio } from '@/components/teaching/SchemeTestStudio'
 import { cn } from '@/lib/utils'
+import { useSchool } from '@/lib/context/SchoolContext'
+import { hasPrimaryClasses, hasSecondaryClasses } from '@/lib/school/schoolTypeHelpers'
 
-type Tab = 'scheme' | 'progress' | 'analytics' | 'tests'
+type Tab = 'scheme' | 'progress' | 'analytics' | 'tests' | 'resources'
 
 type SchemeOption = {
   id: string
@@ -42,6 +46,10 @@ type Props = {
 }
 
 export function TeachingHub({ teacherId }: Props) {
+  const { school, isLoading: schoolLoading } = useSchool()
+  const showPrimaryResources = !schoolLoading && hasPrimaryClasses(school)
+  const showSecondaryResources = !schoolLoading && hasSecondaryClasses(school)
+  const showOfficialResources = showPrimaryResources || showSecondaryResources
   const [tab, setTab] = useState<Tab>('scheme')
   const [schemes, setSchemes] = useState<SchemeOption[]>([])
   const [selectedSchemeId, setSelectedSchemeId] = useState<string>('')
@@ -53,6 +61,10 @@ export function TeachingHub({ teacherId }: Props) {
   const [progressFilter, setProgressFilter] = useState<'all' | 'completed' | 'in-progress'>('all')
 
   useEffect(() => {
+    if (!showPrimaryResources && tab === 'resources') setTab('scheme')
+  }, [showPrimaryResources, tab])
+
+  useEffect(() => {
     if (typeof window === 'undefined') return
     const params = new URLSearchParams(window.location.search)
     const tabParam = String(params.get('tab') || '').toLowerCase()
@@ -60,7 +72,8 @@ export function TeachingHub({ teacherId }: Props) {
       tabParam === 'progress' ||
       tabParam === 'analytics' ||
       tabParam === 'scheme' ||
-      tabParam === 'tests'
+      tabParam === 'tests' ||
+      (tabParam === 'resources' && showPrimaryResources)
     ) {
       setTab(tabParam as Tab)
     }
@@ -68,7 +81,7 @@ export function TeachingHub({ teacherId }: Props) {
     if (schemeId) setSelectedSchemeId(schemeId)
     const filter = String(params.get('filter') || '').toLowerCase()
     if (filter === 'completed' || filter === 'in-progress') setProgressFilter(filter)
-  }, [])
+  }, [showPrimaryResources])
 
   const selectedScheme = useMemo(
     () => schemes.find((s) => s.id === selectedSchemeId) || null,
@@ -210,6 +223,7 @@ export function TeachingHub({ teacherId }: Props) {
     { id: 'progress', label: 'Progress' },
     { id: 'analytics', label: 'Analytics' },
     { id: 'tests', label: 'Mid / EoT tests' },
+    ...(showOfficialResources ? [{ id: 'resources' as const, label: 'Official Resources' }] : []),
   ]
 
   return (
@@ -227,7 +241,12 @@ export function TeachingHub({ teacherId }: Props) {
         <p className="text-xs text-muted-foreground">Teacher · {teacherId.slice(0, 8)}…</p>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 rounded-lg border p-1 sm:grid-cols-4">
+      <div
+        className={cn(
+          'grid gap-2 rounded-lg border p-1',
+          showPrimaryResources ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4'
+        )}
+      >
         {tabs.map((t) => (
           <button
             key={t.id}
@@ -479,6 +498,13 @@ export function TeachingHub({ teacherId }: Props) {
           onSchemeChange={setSelectedSchemeId}
           onRefreshSchemes={loadSchemes}
         />
+      )}
+
+      {tab === 'resources' && showOfficialResources && (
+        <div className="space-y-4">
+          {showPrimaryResources && <OfficialPrimaryResources />}
+          {showSecondaryResources && <OfficialSecondaryResources />}
+        </div>
       )}
     </div>
   )

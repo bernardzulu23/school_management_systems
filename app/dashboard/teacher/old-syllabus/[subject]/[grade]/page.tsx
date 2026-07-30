@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { OldSyllabusHub } from '@/components/old-syllabus/OldSyllabusHub'
+import { SecondaryOnlyRouteGuard } from '@/components/auth/SecondaryOnlyRouteGuard'
 
 export default function OldSyllabusSubjectGradePage() {
   const params = useParams()
@@ -28,12 +29,14 @@ export default function OldSyllabusSubjectGradePage() {
 
   return (
     <DashboardLayout title="Old Syllabus Studio">
-      <OldSyllabusHub
-        teacherId={String(user.id)}
-        initialTab="topics"
-        initialSubject={subject}
-        initialGrade={grade}
-      />
+      <SecondaryOnlyRouteGuard redirectTo="/dashboard/teacher/teaching-studio">
+        <OldSyllabusHub
+          teacherId={String(user.id)}
+          initialTab="topics"
+          initialSubject={subject}
+          initialGrade={grade}
+        />
+      </SecondaryOnlyRouteGuard>
     </DashboardLayout>
   )
 }

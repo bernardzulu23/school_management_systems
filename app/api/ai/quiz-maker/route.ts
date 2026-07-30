@@ -27,6 +27,7 @@ import {
 } from '@/lib/ecz/assessment-engine'
 import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
 import { runValidationSideBySide } from '@/lib/ecz/eoc/runValidationSideBySide'
+import { assertSubjectInSchoolCatalog } from '@/lib/subjects/assertSubjectInSchoolCatalog'
 
 const QUIZ_SYSTEM =
   'You are a Zambian CBC assessment expert. Return only valid quiz data matching the schema. Use Zambian context where appropriate.'
@@ -114,6 +115,18 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const raw = await request.json().catch(() => null)
     const parsedInput = QuizMakerInputSchema.parse(raw)
+
+    try {
+      assertSubjectInSchoolCatalog(parsedInput.subject, {
+        schoolLevel: school.level,
+        gradeLevel: parsedInput.grade,
+      })
+    } catch (e) {
+      return NextResponse.json(
+        { error: e instanceof Error ? e.message : 'Invalid subject' },
+        { status: 400 }
+      )
+    }
 
     let topic = parsedInput.topic
     try {

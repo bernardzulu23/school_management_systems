@@ -33,11 +33,16 @@ async function main() {
   const args = process.argv.slice(2)
   const wantAll = args.includes('--all')
   const overwrite = args.includes('--overwrite')
+  const recursive = args.includes('--recursive') || args.includes('-r')
   const folder =
     args.find(
       (a) =>
         !a.startsWith('-') &&
-        (a.includes('Teaching') || a.includes('/') || a.includes('\\') || a === '.')
+        (a.includes('Teaching') ||
+          a.includes('Primary_Education') ||
+          a.includes('/') ||
+          a.includes('\\') ||
+          a === '.')
     ) || './Teaching Module'
   const subjects = args.filter(
     (a) =>
@@ -52,19 +57,36 @@ async function main() {
   if (!fs.existsSync(absIn)) {
     console.error(`❌ Directory not found: ${absIn}`)
     console.error('   Example: npm run ingest:teaching-modules -- "./Teaching Module" --all')
+    console.error(
+      '   Primary: npm run ingest:teaching-modules -- "./Primary_Education_teaching" --all --recursive'
+    )
     process.exit(1)
   }
 
   const allow = wantAll || subjects.length === 0 ? null : subjects.map((s) => s.toLowerCase())
+  const sourceEducationLevel = /primary[_\s-]*education/i.test(absIn)
+    ? ('primary' as const)
+    : undefined
 
-  let files = fs
-    .readdirSync(absIn)
-    .filter((f) => f.toLowerCase().endsWith('.pdf'))
-    .sort()
+  function collectPdfs(dir: string): string[] {
+    const out: string[] = []
+    for (const entry of fs.readdirSync(dir)) {
+      const full = path.join(dir, entry)
+      const st = fs.statSync(full)
+      if (st.isDirectory()) {
+        if (recursive) out.push(...collectPdfs(full))
+        continue
+      }
+      if (entry.toLowerCase().endsWith('.pdf')) out.push(full)
+    }
+    return out
+  }
+
+  let files = collectPdfs(absIn).sort()
 
   if (allow) {
     files = files.filter((f) => {
-      const subj = resolveTeachingModuleSubject(f)
+      const subj = resolveTeachingModuleSubject(path.basename(f))
       return subj && allow.includes(subj.toLowerCase())
     })
   }
@@ -86,13 +108,15 @@ async function main() {
   let successCount = 0
   let failureCount = 0
 
-  for (const file of files) {
+  for (const full of files) {
+    const file = path.basename(full)
     const short = file.length > 52 ? `${file.slice(0, 49)}...` : file
     process.stdout.write(`⏳ ${short} `)
     try {
-      const full = path.join(absIn, file)
       const buffer = fs.readFileSync(full)
-      const parsed = await parseTeachingModuleFromBuffer(buffer, file)
+      const parsed = await parseTeachingModuleFromBuffer(buffer, file, {
+        educationLevel: sourceEducationLevel,
+      })
       if (!parsed) {
         console.log(`⚠️  Skipped (unknown subject)`)
         failureCount++

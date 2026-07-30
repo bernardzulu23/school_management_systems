@@ -1,0 +1,479 @@
+{
+  "subject": "Chitonga",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 2,
+  "sourceFile": "CHITONGA-GRADE-1-EACHING-MODULE-TERM-2.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "Eugine Muuka – Senior Curriculum Specialist – TESS- CDC.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 2,
+      "title": "Hamaundu Hilary – Lecturer - Chalimbana University - Chongwe",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 3,
+      "title": "Mwanza Mariana – Teacher - Maamba Mine Primary School -Sinazongwe",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 4,
+      "title": "Namoonga Lukubi – Teacher - Moomba Primary School - Chibombo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 5,
+      "title": "Namwila Barbara – Teacher - Simakakata Primary School - Kalomo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 6,
+      "title": "Nawa Inonge Martha – Lecturer - Charles Lwanga College of Education -Monze",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 7,
+      "lesson": 7,
+      "title": "Sikota Joshua – Teacher - Bwacha Primary School - Kalomo",
+      "topics": ["MATALIKILO"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 8,
+      "title": "Balembi ....................................................... 3",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 9,
+      "title": "Matalikilo ................................................... 4",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 10,
+      "title": "Kulumba ....................................................... 5",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 11,
+      "title": "Mabala mapati-pati .................................... 6",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 12,
+      "title": "Ntalisyo .........................................................10",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 13,
+      "title": "Zyakucita Zyeelede (General Competences)...... 12",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 7,
+      "lesson": 14,
+      "title": "Zyitondezyo Ncozyipandulula ...............................14",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 8,
+      "lesson": 15,
+      "title": "Mubandi ............ .......................................... 15",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 9,
+      "lesson": 16,
+      "title": "Kwaanzyanya................................................ 33",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 10,
+      "lesson": 17,
+      "title": "Mubandi Wakukazyanya ................................... 62",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 11,
+      "lesson": 18,
+      "title": "Mzeezo Yako Omwini ..................................... 90",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 12,
+      "lesson": 19,
+      "title": "Kwaambaula / Mubandi...................................... 114",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 13,
+      "lesson": 20,
+      "title": "Kupandulula Bantu ......................................... 141",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 14,
+      "lesson": 21,
+      "title": "Citondezyo Cabwakuyiisya ( Sample Lesson Plan) ..... 160",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 15,
+      "lesson": 22,
+      "title": "Bibliography .....................................................165",
+      "topics": [
+        "NTALISYO",
+        "Bbuku lyakubelesya kuyiisya mulaka naa Modyu (Teaching module) lyakalembwa",
+        "kugwasyilizya bamayi kuyiisya bweelede zyiiyo zyamulaka mu Chitonga kubelesya nzila",
+        "yakuyiisya mpya.",
+        "Bbuku eeli lyakalembwa kutobelezya kuzuminanwa kwakacitika kwakubelesya kucita zyintu naa"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 23,
+      "title": "Kusinyuka kuyeeya kujana",
+      "topics": [
+        "bwiinguzi bweelede",
+        "(Analytical thinking)",
+        " Kusansaula kuzyiba zyintu mbozyeelede"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 24,
+      "title": "Kutuma akutambula milumbe",
+      "topics": [
+        "(Communication)",
+        " Tondezya nzila zyibotu zyakuswiilila,",
+        "kwaambaula akulemba.",
+        " Belesya mulaka weelede munzila",
+        "zyaandeene."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 25,
+      "title": "Busengwe-sengwe aluzyibo",
+      "topics": [
+        "lwakwaanza zyintu",
+        "(Creativity and innovation)",
+        " Kutuma akutambula mizeezo yamuntu",
+        "kubuleya.",
+        " Kubuzya mibuzyo."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 26,
+      "title": "Kubelekela antoomwe",
+      "topics": ["(Collaboration)", " Kubelekela antoomwe."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 27,
+      "title": "Kuyeeyesya",
+      "topics": [
+        "(Critical thinking)",
+        " Kubuzya mibuzyo.",
+        " Kubelekela mutubunga akubandisyanya",
+        " Kubelekela antoomwe akubandisyanya",
+        "mutubunga."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 28,
+      "title": "Lwiiyo lwakuzyiba kubala",
+      "topics": [
+        "akulemba mumayuwe/luzyibo",
+        "lwakubelesya kompyuta",
+        " Kuba abusongo bwakweendelanya maanza",
+        "ameso kumincini yamayuwe",
+        "(Digital literacy)"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 7,
+      "lesson": 29,
+      "title": "Busongo",
+      "topics": [
+        "bwamizeezo/Bucenjezu",
+        "butondezya mubili ncuuyanda",
+        "(Emotional intelligence)",
+        " Kutuma akutambula milumbe abamwi bantu.",
+        " Kubelekela amwi/antoomwe."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 8,
+      "lesson": 30,
+      "title": "Luzyibo lwakucita makwebo",
+      "topics": [
+        "/Makwebo aakumanizya",
+        "mapenzi (Financial literacy)",
+        "(Entrepreneurship)",
+        " Kubelesya mulaka kutondezya nzila",
+        "zyuubauba zyabukkale mbuli kusambala"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 9,
+      "lesson": 31,
+      "title": "Nzila yakumana mapenzi",
+      "topics": [
+        "(problem solving)",
+        " Kobelesya luzyibo lwatubala twa Alufabeti",
+        "kubamba mabala",
+        "ZYITONDEZYO NCOZYIPANDULULA",
+        "Twaambo tupati-pati mubufwaafwi"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 32,
+      "title": "Muleya wabona ŋola",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 33,
+      "title": "Duunkulu usamide hheete",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 34,
+      "title": "Munene ula hhala",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 35,
+      "title": "Jesi wawacca cisani",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 36,
+      "title": "Maliya wasama wacci",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 37,
+      "title": "Kubota cikocci cabo",
+      "topics": [
+        "Basicikolo:",
+        "o Baambe mweelwe wamabala ambwa mukaambo akwaandaanya bweelede (nkokuti",
+        "mweelwe 3, Mabala: Nkuku, yatula, mayi).",
+        "o Babe bobilo-bobilo, baambilane twaambo mpoonya kabaandaanya bbala abbala",
+        "mukaambo kaambwa. Bapane ciindi kwaamba kaambo mpoonya umwi aandaanye mabala"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 38,
+      "title": "Ino muyeeya kuti Milimo wakali kutantila nzi mucisamu camutobo?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 39,
+      "title": "Sena ncaakali kuyanda wakacijana?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 40,
+      "title": "Ino mwazyiba buti?",
+      "topics": [
+        "Basicikolo:",
+        "o Baswiilisisye mwiiyi anikubala.",
+        "o Baingule mibuzyo njatiibuzye mwiiyi.",
+        "Zyibelesyo: Kaano kalembedwe.",
+        "Bulangizi bweelede: Camvwugwa cazubululwa bweelede kuzwa kutwaambo."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:38.342Z",
+    "rawTextLength": 259416,
+    "educationLevel": "primary"
+  }
+}

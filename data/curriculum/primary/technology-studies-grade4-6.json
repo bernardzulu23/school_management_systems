@@ -637,9 +637,9 @@
     "source": "Ministry of Education, Curriculum Development Centre — TECHNOLOGY-STUDIES-UPPER-PRIMARY.pdf",
     "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
     "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
-    "accessedAt": "2026-07-29",
+    "accessedAt": "2026-07-30",
     "sourceFileBytes": 799080,
-    "extractionNote": "Extracted deterministically from the official primary CDC PDF with automatic CDC font decoding. No curriculum content was fabricated.",
+    "extractionNote": "Extracted deterministically from the official primary/ECE CDC PDF with automatic CDC font decoding. No curriculum content was fabricated.",
     "curated": true,
     "recordCount": 55
   }

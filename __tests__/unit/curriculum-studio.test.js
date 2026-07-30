@@ -15,7 +15,10 @@ import {
   parseFormTermFromFilename,
   resolveTeachingModuleSubject,
 } from '@/lib/curriculum/teachingModuleParser'
-import { matchLessonToTopic } from '@/lib/curriculum/teachingModuleLoader'
+import {
+  matchLessonToTopic,
+  formatModuleContextForPrompt,
+} from '@/lib/curriculum/teachingModuleLoader'
 
 describe('syllabusParsing extractors', () => {
   const sample = `
@@ -216,13 +219,32 @@ describe('teaching module parser', () => {
   it('parses form and term from filename', () => {
     expect(parseFormTermFromFilename('Chemistry-Teaching-Module-Form-1-final.pdf')).toEqual({
       form: 1,
+      grade: null,
+      band: null,
       term: null,
     })
     expect(
       parseFormTermFromFilename('ENGLISH-LANGUAGE-TEACHING-MODULE-FORM-1-TERM-3-1.pdf')
     ).toEqual({
       form: 1,
+      grade: null,
+      band: null,
       term: 3,
+    })
+  })
+
+  it('parses primary grade and ECE band from filename', () => {
+    expect(parseFormTermFromFilename('CTS-GRADE-1-TERM-2-MODULE.pdf')).toEqual({
+      form: null,
+      grade: 1,
+      band: null,
+      term: 2,
+    })
+    expect(parseFormTermFromFilename('ID_ECE_TEACHING_MODULE-2025-FINAL.pdf')).toEqual({
+      form: null,
+      grade: null,
+      band: 'ece',
+      term: null,
     })
   })
 
@@ -270,5 +292,49 @@ Activities
       'Atomic Structure: Electron configuration'
     )
     expect(lesson?.title).toMatch(/Atomic/i)
+  })
+
+  it('formats module prompt context with Grade or Form labels', () => {
+    const primary = formatModuleContextForPrompt(
+      {
+        subject: 'Literacy in English',
+        grade: 1,
+        form: null,
+        term: 2,
+        lessons: [
+          {
+            title: 'Sight words',
+            topics: ['sight words'],
+            activities: ['Reading flash cards'],
+            resources: ['Flash cards'],
+            assessment: [],
+            notes: '',
+          },
+        ],
+      },
+      'Sight words'
+    )
+    expect(primary).toContain('Grade 1')
+    expect(primary).not.toContain('Form 1')
+
+    const secondary = formatModuleContextForPrompt(
+      {
+        subject: 'Chemistry',
+        form: 1,
+        term: 1,
+        lessons: [
+          {
+            title: 'Matter',
+            topics: ['matter'],
+            activities: ['Observing samples'],
+            resources: ['Charts'],
+            assessment: [],
+            notes: '',
+          },
+        ],
+      },
+      'Matter'
+    )
+    expect(secondary).toContain('Form 1')
   })
 })

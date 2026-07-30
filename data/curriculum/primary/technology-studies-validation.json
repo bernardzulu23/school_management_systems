@@ -1,7 +1,12 @@
 {
   "sourceFile": "TECHNOLOGY-STUDIES-UPPER-PRIMARY.pdf",
   "subject": "Technology Studies",
+  "band": null,
+  "educationLevel": "primary",
   "sourceFileBytes": 799080,
+  "extractionNote": "Extracted deterministically from the official CDC/ECE PDF. Missing fields are reported; content is never fabricated.",
+  "rawRecordCount": 55,
+  "excludedUnexpectedGradeRecords": [],
   "ok": true,
   "recordCount": 55,
   "grades": [4, 5, 6],

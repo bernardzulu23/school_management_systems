@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { useAIStream } from '@/hooks/useAIStream'
+import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
 import {
   BookOpen,
   Bookmark,
@@ -17,7 +18,6 @@ import {
   Trash2,
   X,
 } from 'lucide-react'
-import { CANONICAL_SUBJECTS } from '@/lib/ai/subject-adaptive-prompts'
 import {
   getContentTypeLabel,
   usesStoryControls,
@@ -27,8 +27,6 @@ import {
 import { getSubjectPromptTemplate } from '@/lib/ai/subjectPromptTemplates'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 
-const GRADES = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
-const SUBJECTS = CANONICAL_SUBJECTS
 const STORY_TYPES = [
   { id: 'story', label: 'Narrative Story', desc: 'Engaging story with characters' },
   { id: 'fable', label: 'Fable', desc: 'Animal story with a moral lesson' },
@@ -60,8 +58,8 @@ const QUESTION_TYPE_OPTIONS = [
 const STORY_LIBRARY_KEY = 'story-weaver-library'
 
 const defaultForm = {
-  grade: 'Form 3',
-  subject: 'English (Core)',
+  grade: '',
+  subject: '',
   topic: '',
   storyType: 'story',
   setting: 'Eastern Province',
@@ -80,6 +78,7 @@ const defaultForm = {
 }
 
 export default function AIStoryWeaver() {
+  const { grades, subjects, schoolLoading } = useSchoolSubjectSelectors()
   const [form, setForm] = useState(defaultForm)
   const [characterDraft, setCharacterDraft] = useState('')
   const [vocabDraft, setVocabDraft] = useState('')
@@ -98,6 +97,17 @@ export default function AIStoryWeaver() {
   const showStoryControls = usesStoryControls(form.subject)
   const contentTypeLabel = getContentTypeLabel(form.subject)
   const contentTemplate = getSubjectPromptTemplate(form.subject)
+
+  useEffect(() => {
+    if (schoolLoading) return
+    setForm((p) => {
+      const nextGrade = p.grade && grades.includes(p.grade) ? p.grade : grades[0] || p.grade || ''
+      const nextSubject =
+        p.subject && subjects.includes(p.subject) ? p.subject : subjects[0] || p.subject || ''
+      if (nextGrade === p.grade && nextSubject === p.subject) return p
+      return { ...p, grade: nextGrade, subject: nextSubject }
+    })
+  }, [grades, subjects, schoolLoading])
 
   const generate = async () => {
     const lengthMap = { short: '2-3 paragraphs', medium: '4-5 paragraphs', long: '6-8 paragraphs' }
@@ -262,14 +272,16 @@ export default function AIStoryWeaver() {
         <Select
           value={form.grade}
           onChange={(v) => setForm((f) => ({ ...f, grade: v, topic: '' }))}
-          options={GRADES}
+          options={grades}
+          disabled={schoolLoading || !grades.length}
         />
 
         <Label>Subject</Label>
         <Select
           value={form.subject}
           onChange={(v) => setForm((f) => ({ ...f, subject: v, topic: '' }))}
-          options={SUBJECTS}
+          options={subjects}
+          disabled={schoolLoading || !subjects.length}
         />
         <p className="mb-2 mt-1 text-[11px] text-[var(--text-secondary)]">
           Generates: <strong className="text-[var(--text-primary)]">{contentTypeLabel}</strong>
@@ -606,12 +618,13 @@ function Label({ children }) {
   )
 }
 
-function Select({ value, onChange, options }) {
+function Select({ value, onChange, options, disabled = false }) {
   return (
     <select
       value={value}
       onChange={(e) => onChange(e.target.value)}
-      className={`${inputClass} cursor-pointer`}
+      disabled={disabled}
+      className={`${inputClass} cursor-pointer disabled:cursor-not-allowed disabled:opacity-60`}
     >
       {options.map((o) => (
         <option key={o} value={o}>

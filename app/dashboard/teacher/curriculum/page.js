@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label'
 import { BookOpen, Download, Layers, Loader2, Upload } from 'lucide-react'
 import { buildTopicKey } from '@/lib/curriculum/topicKey'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
+import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
 
 function downloadBase64Docx(base64, filename) {
   const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0))
@@ -25,35 +26,16 @@ function downloadBase64Docx(base64, filename) {
   URL.revokeObjectURL(url)
 }
 
-const FALLBACK_SUBJECTS = [
-  'Chemistry',
-  'Physics',
-  'Biology',
-  'Mathematics',
-  'English',
-  'History',
-  'Geography',
-  'Civic Education',
-  'Computer Studies',
-  'Agricultural Science',
-]
-
-const GRADES = [
-  'Form 1',
-  'Form 2',
-  'Form 3',
-  'Form 4',
-  'Form 5',
-  'Form 6',
-  'Grade 10',
-  'Grade 11',
-  'Grade 12',
-]
-
 export default function TeacherCurriculumStudioPage() {
-  const [subjects, setSubjects] = useState(FALLBACK_SUBJECTS)
-  const [subject, setSubject] = useState('Chemistry')
-  const [grade, setGrade] = useState('Form 2')
+  const {
+    grades,
+    subjects: hookSubjects,
+    assignmentSubjects,
+    schoolLoading,
+  } = useSchoolSubjectSelectors()
+  const [subjects, setSubjects] = useState([])
+  const [subject, setSubject] = useState('')
+  const [grade, setGrade] = useState('')
   const [topic, setTopic] = useState('')
   const [unit, setUnit] = useState('')
   const [duration, setDuration] = useState(40)
@@ -65,34 +47,39 @@ export default function TeacherCurriculumStudioPage() {
   const [lastPlanId, setLastPlanId] = useState(null)
 
   useEffect(() => {
+    if (!grades.length) return
+    setGrade((prev) => (prev && grades.includes(prev) ? prev : grades[0]))
+  }, [grades])
+
+  useEffect(() => {
+    if (schoolLoading) return
     let cancelled = false
-    async function loadSubjects() {
+    async function loadCatalogSubjects() {
       try {
-        const [currRes, assignRes] = await Promise.all([
-          fetch('/api/curriculum', { credentials: 'include' }),
-          fetch('/api/teaching-assignments', { credentials: 'include' }),
-        ])
-        const currJson = await currRes.json().catch(() => ({}))
-        const assignJson = await assignRes.json().catch(() => ({}))
+        const res = await fetch('/api/curriculum', { credentials: 'include' })
+        const json = await res.json().catch(() => ({}))
         if (cancelled) return
-        const catalog = Array.isArray(currJson?.subjects) ? currJson.subjects.map(String) : []
-        const assigned = (Array.isArray(assignJson?.data) ? assignJson.data : [])
-          .map((a) => String(a.subjectName || '').trim())
-          .filter(Boolean)
-        const merged = [...new Set([...assigned, ...catalog, ...FALLBACK_SUBJECTS])]
+        const catalog = Array.isArray(json?.subjects) ? json.subjects.map(String) : []
+        const merged = [
+          ...new Set([...(assignmentSubjects || []), ...(hookSubjects || []), ...catalog]),
+        ]
         if (merged.length) {
           setSubjects(merged)
-          setSubject((prev) => (merged.includes(prev) ? prev : merged[0]))
+          setSubject((prev) => (prev && merged.includes(prev) ? prev : merged[0]))
         }
       } catch {
-        /* keep fallback */
+        const fallback = [...new Set([...(assignmentSubjects || []), ...(hookSubjects || [])])]
+        if (!cancelled && fallback.length) {
+          setSubjects(fallback)
+          setSubject((prev) => (prev && fallback.includes(prev) ? prev : fallback[0]))
+        }
       }
     }
-    loadSubjects()
+    loadCatalogSubjects()
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [schoolLoading, hookSubjects, assignmentSubjects])
 
   useEffect(() => {
     let cancelled = false
@@ -300,8 +287,9 @@ export default function TeacherCurriculumStudioPage() {
                   className="w-full bg-royalPurple-deep border border-royalPurple-border rounded-lg p-3 text-royalPurple-text1"
                   value={grade}
                   onChange={(e) => setGrade(e.target.value)}
+                  disabled={schoolLoading || !grades.length}
                 >
-                  {GRADES.map((g) => (
+                  {grades.map((g) => (
                     <option key={g} value={g}>
                       {g}
                     </option>

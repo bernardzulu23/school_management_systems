@@ -1,0 +1,462 @@
+{
+  "subject": "Kikaonde",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 3,
+  "sourceFile": "KIKAONDE-GRADE-1-TEACHING-MODULE-TERM-3.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "Specific Competence: byaketekelwa kubiwa bulongo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 2,
+      "title": "Expected standard: bipimo byañingijilo byaketekelwa kubiwa mwafwainwa",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 3,
+      "title": "Assessment: lweseko",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 4,
+      "title": "Summary: mpezho",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 5,
+      "title": "Print concept: buyuke bwa byanembewa",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 6,
+      "title": "Hook: kongola milangwe",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 7,
+      "lesson": 7,
+      "title": "Key words: byambo byanema",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 8,
+      "lesson": 8,
+      "title": "Manuscript: kunemba kisopelo kimo kimo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 9,
+      "lesson": 9,
+      "title": "Cursive: kunemba kwa kusendelela",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 10,
+      "lesson": 10,
+      "title": "Analytical analysis: ndangulukilo ya kusobolola",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 11,
+      "lesson": 11,
+      "title": "Critical thinking: ndangulukilo yazhika",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 12,
+      "lesson": 12,
+      "title": "Directionality: kwakutala pa kutanga",
+      "topics": [
+        "TUYUKILO",
+        "Kimye Kutanga kibaaba",
+        "Buyuke Byakuvuluka",
+        "Ngipipisho Mwingilo-kata",
+        "Byambo Lweseko lwa kuuba"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 13,
+      "title": "Bungikazhi (Citizenship)",
+      "topics": ["Umweshe kuyuka mikambizho"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 14,
+      "title": "Minsambo",
+      "topics": [
+        "(Communication)",
+        "Kwingijisha mulaka mwa fwainwa mu mapunzha",
+        "apusana-pusana",
+        "Kuteleka, kwamba, kutanga ne kunemba kwawama"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 15,
+      "title": "Lwendo lwa ku Lusaka lwalepa.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 16,
+      "title": "Sukuulu wetu wabaya.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 17,
+      "title": "Nzubo ya ba nkambo yakeepa",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 18,
+      "title": "Shomeka uji peulu.",
+      "topics": [
+        "Mingilo Ya Bafunda",
+        " Babwezhepo kwamba byambo bilumbulula mapunzha nobe:",
+        "Kubaya, kulepa, peulu, bwipi",
+        " Batongole bintu byabaya, byalepa bipi, biji peulu ne biji panshi mukalasi nangwa",
+        "pangye ya sukuulu."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 19,
+      "title": "Solwezi boma mukatampe.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 20,
+      "title": "Mukola wa Zambezi walepa.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 21,
+      "title": "Mabuuku aji peulu.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 22,
+      "title": "Twikala pa bwipi na sukuulu.",
+      "topics": ["Mikumbu"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 23,
+      "title": "Mukatampe",
+      "topics": [
+        "Walepa",
+        "Peulu",
+        "Bwipi",
+        "Bipimo Byañingilo Yaketekelwa",
+        " Byambo bilumbulula mapunzha byaingijishiwa mwaifwanwa."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 24,
+      "title": "Twikala mu nzubo icheche.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 25,
+      "title": "Ku mushima kwalepa.",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 26,
+      "title": "Sukuulu yetu ikatampe.",
+      "topics": [
+        " Bafunda balenge kikope kya nzubo yobekalamo ne kwilumbulula byo iji.",
+        "Bipimo Byañingijilo Yaketekelwa",
+        " Kuyuka kwa byambo bilumbulula mwekelo ya mapunzha kwaubiwa",
+        "mwafwainwa.",
+        "Lweseko"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 27,
+      "title": "Bantu beya na kutapula meema kwi amiwa. Yami ñanyi?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 28,
+      "title": "Myotoka ne bantu banyaanta kimye kyonse. Yami ñanyi?",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 29,
+      "title": "Amiwa mpa kajo bantu, mayowo banjima, kisalo bansoka. Yami ñanyi?",
+      "topics": ["Mikumbu"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 30,
+      "title": "Mushima/ mukola/bboho/pompi",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 31,
+      "title": "Mukwakwa",
+      "topics": [
+        "Bujimi",
+        "Bipimo Bya Ñingijilo Yaketekelwa",
+        " Bisela bya kulumbulula mapunzha byaingijishiwa mwafwainwa.",
+        "KUTANGA",
+        "MUTWE: NDABIJILO YA BILULUMO"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 32,
+      "title": "Mposola---sola",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 33,
+      "title": "Mpamenga-----",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 34,
+      "title": "Myotoka-----",
+      "topics": [
+        "Lweseko",
+        " Bafunda bafuute ne kupingishako bipimvwa-byambo mu kulenga byambo.",
+        "Mposola----",
+        "Mpamenga---",
+        "Myotoka-----"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 35,
+      "title": "Mpanga mye—mba",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 36,
+      "title": "Myemba mpa—nga",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 37,
+      "title": "Mpombo mya—ka",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 38,
+      "title": "Myaka mpo—mbo",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 39,
+      "title": "Mwana mvi—lu—ka",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 40,
+      "title": "Mviluka mwaa—na",
+      "topics": [
+        "Bipimo Byañingijilo Yaketekelwa",
+        " Kusobolola bipimvwa-byambo mu byambo kwaubiwa mwafwainwa...",
+        "Mwingilo 4.2",
+        "Mingilo ya lufunjisho",
+        "Mufunjishi:"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:44.143Z",
+    "rawTextLength": 138694,
+    "educationLevel": "primary"
+  }
+}

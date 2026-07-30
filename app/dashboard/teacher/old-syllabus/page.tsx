@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { OldSyllabusHub } from '@/components/old-syllabus/OldSyllabusHub'
+import { SecondaryOnlyRouteGuard } from '@/components/auth/SecondaryOnlyRouteGuard'
 
 export default function OldSyllabusLandingPage() {
   const { user, isAuthenticated, isLoading } = useAuth()
@@ -32,7 +33,9 @@ export default function OldSyllabusLandingPage() {
 
   return (
     <DashboardLayout title="Old Syllabus Studio">
-      <OldSyllabusHub teacherId={String(user.id)} initialTab="browse" />
+      <SecondaryOnlyRouteGuard redirectTo="/dashboard/teacher/teaching-studio">
+        <OldSyllabusHub teacherId={String(user.id)} initialTab="browse" />
+      </SecondaryOnlyRouteGuard>
     </DashboardLayout>
   )
 }

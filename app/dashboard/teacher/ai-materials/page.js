@@ -20,18 +20,7 @@ import {
   Upload,
 } from 'lucide-react'
 import { upload } from '@vercel/blob/client'
-
-const GRADE_OPTIONS = [
-  'Form 1',
-  'Form 2',
-  'Form 3',
-  'Form 4',
-  'Form 5',
-  'Grade 7',
-  'Grade 10',
-  'Grade 11',
-  'Grade 12',
-]
+import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
 
 // Direct multipart upload goes through the serverless function, whose request
 // body is capped (Vercel ~4.5 MB). When blob storage is configured the browser
@@ -61,6 +50,7 @@ async function getCsrfToken() {
 }
 
 export default function AiMaterialsPage() {
+  const { grades, schoolLoading: gradesLoading } = useSchoolSubjectSelectors()
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(false)
   const [materials, setMaterials] = useState([])
@@ -436,9 +426,10 @@ export default function AiMaterialsPage() {
                     className="w-full rounded-md border border-royalPurple-border bg-royalPurple-card px-3 py-2 text-sm"
                     value={form.gradeLevel}
                     onChange={(e) => setForm({ ...form, gradeLevel: e.target.value })}
+                    disabled={gradesLoading || !grades.length}
                   >
                     <option value="">— Not specified —</option>
-                    {GRADE_OPTIONS.map((g) => (
+                    {grades.map((g) => (
                       <option key={g} value={g}>
                         {g}
                       </option>

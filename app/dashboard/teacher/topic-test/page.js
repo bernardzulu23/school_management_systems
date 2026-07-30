@@ -14,6 +14,8 @@ import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
 import { useAIFetch } from '@/hooks/useAIStream'
 import UpgradePrompt from '@/components/shared/UpgradePrompt'
 import { toast } from 'react-hot-toast'
+import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
+import { resolveAssignmentGradeLabel } from '@/lib/subjects/schoolSubjectOptions'
 
 const STEPS = ['Class & subject', 'Topic & materials', 'Generate & assign']
 
@@ -33,19 +35,24 @@ export default function TopicTestPage() {
   const { data, loading, error, fetch: fetchQuiz } = useAIFetch('/api/ai/quiz-maker')
   const quiz = data?.quiz || null
   const ragReferences = Array.isArray(data?.ragReferences) ? data.ragReferences : []
+  const { assignments: hookAssignments } = useSchoolSubjectSelectors()
 
   const selectedAssignment =
     teachingAssignments.find((a) => a.id === targetAssignmentId) || teachingAssignments[0] || null
 
-  const grade = useMemo(() => {
-    const name = String(selectedAssignment?.className || '')
-    const m = name.match(/Form\s*(\d)/i)
-    return m ? `Form ${m[1]}` : 'Form 2'
-  }, [selectedAssignment?.className])
+  const grade = useMemo(
+    () => resolveAssignmentGradeLabel(selectedAssignment) || '',
+    [selectedAssignment]
+  )
 
   const subject = selectedAssignment?.subjectName || ''
 
   useEffect(() => {
+    if (hookAssignments?.length) {
+      setTeachingAssignments(hookAssignments)
+      setTargetAssignmentId((prev) => prev || hookAssignments[0]?.id || '')
+      return
+    }
     fetch('/api/teaching-assignments', { credentials: 'include' })
       .then((r) => r.json())
       .then((json) => {
@@ -54,7 +61,7 @@ export default function TopicTestPage() {
         if (items[0]) setTargetAssignmentId(items[0].id)
       })
       .catch(() => setTeachingAssignments([]))
-  }, [])
+  }, [hookAssignments])
 
   useEffect(() => {
     setTopic('')

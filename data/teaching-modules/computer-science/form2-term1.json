@@ -1,0 +1,412 @@
+{
+  "subject": "Computer Science",
+  "form": 2,
+  "grade": null,
+  "band": null,
+  "term": 1,
+  "sourceFile": "Computer-Science-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "1: PRODUCTIVITY TOOLS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "2: DATA REPRESENTATION",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "3: INTRODUCTION TO PROGRAMMING",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "4: NETWORKING",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "5: CYBER SECURITY",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "6: ALGORITHMS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 7,
+      "title": "7: WEB DEVELOPMENT",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 8,
+      "title": "8: DATABASES",
+      "topics": [
+        "Computer Science Teaching Module – Form 2 | Ministry of Education, Zambia | 2026",
+        "Form 2 – Secondary Education",
+        "Quality, lifelong education for all which is accessible, inclusive and relevant to individual,"
+      ],
+      "activities": [
+        "As a Ministry, we understand the challenges that come with transitioning to a new",
+        "curriculum framework. This module reflects our commitment to making this journey as"
+      ],
+      "resources": [
+        "new competence-based curriculum, enhancing their ability to inspire and equip learners",
+        "with essential Computer Science knowledge and skills. Together, let us work towards",
+        "creating a vibrant and responsive education system that prepares our learners for the",
+        "demands of the digital age.",
+        "Kelvin Mambwe (PhD.)",
+        "Permanent Secretary- Educational Services"
+      ],
+      "assessment": [
+        "As a Ministry, we understand the challenges that come with transitioning to a new",
+        "curriculum framework. This module reflects our commitment to making this journey as",
+        "smooth as possible for teachers, by providing structured guidance, suggested activities,",
+        "encourage educators to supplement this module with their own research and innovations",
+        "to address any gaps that may arise during implementation.",
+        "practical and critical thinking skills in learners while ensuring relevance and adaptability to"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 9,
+      "title": "1: PRODUCTIVITY TOOLS",
+      "topics": [
+        "Overview",
+        "This topic introduces learners to essential productivity tools, with a primary focus on spreadsheets.",
+        "Learners will understand how software applications enhance efficiency in organising, calculating,",
+        "analysing, and presenting data across various contexts such as schools, offices, and homes. By the end",
+        "of this topic, learners will be able to perform fundamental data entry, analysis, and visualisation tasks."
+      ],
+      "activities": [
+        "Learning Environment Setup",
+        "Choose any of the following but not limited to:",
+        "Artificial (Physical – Classroom)",
+        "Classroom: Use board or charts to discuss spreadsheet components.",
+        "Charts and Posters: Display labelled spreadsheet parts.",
+        "Hands-On Demo: Learners explore spreadsheet software on computers.",
+        "Technology Environment",
+        "Computer Laboratory: Learners interact directly with spreadsheet tools."
+      ],
+      "resources": [],
+      "assessment": [
+        "Examples of Formative",
+        "Scenario: Your cousin Bwalya runs a small kantemba at Soweto Market in Lusaka. She sells vegetables such",
+        "as tomatoes, onions, and cabbage. She has an exercise book where she writes each day’s sales, but at the",
+        "end of the week, she spends hours adding everything with a calculator and often makes mistakes. She has",
+        "heard that a computer can help her.",
+        "(Data Entry & Interface) You open a blank spreadsheet for Bwalya. She looks at all the empty boxes"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 10,
+      "title": "2: DATA REPRESENTATION",
+      "topics": [
+        "Overview",
+        "Data representation refers to the way data such as numbers, text, images, and sound are stored and",
+        "processed in a computer. Since computers only understand binary, different number systems and coding",
+        "schemes are used. This topic introduces learners to binary, denary, octal, and hexadecimal number",
+        "systems, and how text is represented using coding systems like ASCII."
+      ],
+      "activities": [
+        "Learning Environment Setup",
+        "Artificial (Physical – Classroom):",
+        " Classroom arranged for group work with space to create posters.",
+        " Clear view of board/projector for class discussion and comparison table.",
+        "Technology Environment:",
+        " Optional: computers or tablets for reference or digital base charts.",
+        " Projector/board to display examples of number systems.",
+        "Natural Environment:"
+      ],
+      "resources": [],
+      "assessment": [
+        "Examples of Formative",
+        "Scenario: Your younger cousin in Chipata sees you working on a computer at a community centre",
+        "and asks, “Bakamba (Elder), I heard that computers only understand 0 and 1. But we are learning",
+        "about numbers like 10, 25, and 100 in school. How can a computer work with many school numbers",
+        "if it only knows two digits?”",
+        "(Binary/Denary) Explain to your cousin how the computer takes the number he sees (like 5)"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 11,
+      "title": "3: INTRODUCTION TO PROGRAMMING",
+      "topics": [
+        "Overview",
+        "This topic introduces learners to the fundamental concepts of programming through visual, block-based",
+        "environments. It focuses on how to think logically, sequence instructions, and create simple programs",
+        "using drag-and-drop coding blocks."
+      ],
+      "activities": [
+        "Learning Environment Setup",
+        "Artificial (Physical – Classroom):",
+        " Classroom arranged for individual exploration and pair discussion",
+        " Clear view of board/projector for demonstrations and comparisons",
+        "Technology Environment:",
+        " Computers or laptops with internet access",
+        " Block-based programming software: Scratch, Blockly, MIT App Inventor, Code.org",
+        " Projector to show interface overview and examples"
+      ],
+      "resources": [],
+      "assessment": [
+        "Examples of Formative",
+        "Scenario: In your Scratch class, a learner named Chileshe has created a simple animation of a goat (sprite).",
+        "He wants the goat to walk 10 steps, then bleat, then walk another 10 steps. He has put the blocks in this order:",
+        "play sound “Meee” → move 10 steps → move 10 steps.",
+        "(Debugging) When Chileshe runs his program, the goat bleats first, then moves 20 steps all at once.",
+        "What is wrong with his sequence? Explain how he should reorder the blocks to make it work as he"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 12,
+      "title": "4: NETWORKING",
+      "topics": [
+        "Overview",
+        "Computer networking is the process of connecting multiple computing devices to enable the sharing of"
+      ],
+      "activities": [
+        "Learning Environment Setup",
+        "Artificial (Physical – Classroom):",
+        " Classroom arranged for movement and group interaction to model physical networks",
+        " Space to safely form Star, Bus, Ring, and Mesh topologies with string and learners",
+        "Technology Environment:",
+        " Computers for reference to real network layouts",
+        "Natural Environment:",
+        " Supportive, interactive environment encouraging hands-on exploration, observation, and"
+      ],
+      "resources": [
+        "of network connections – and how they determine how information flows across a Local Area Network",
+        "General Competence(s):",
+        "Analytical Thinking Analyses different network topologies and evaluates their",
+        "suitability for specific scenarios.",
+        "Collaboration and",
+        "Communication"
+      ],
+      "assessment": [
+        "Examples of Formative",
+        "Scenario: A small clinic in your area has four computers connected to a single switch in the reception",
+        "area. If the cable to one consultation room is unplugged, the other doctors and the receptionist can",
+        "still work.",
+        "(Topology Identification) What network topology is the clinic using? Explain why the failure of",
+        "one cable doesn’t affect the others."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 13,
+      "title": "5: CYBER SECURITY",
+      "topics": [
+        "Overview",
+        "Cyber security focuses on keeping digital devices and information safe from threats such as viruses,",
+        "hacking, and online scams. In schools, homes, and workplaces in Zambia, people rely on computers and",
+        "mobile phones for communication and services. Learning cyber security helps learners protect their data,",
+        "avoid cybercrime, and use technology safely and responsibly."
+      ],
+      "activities": [
+        "Learning Environment Setup",
+        "Artificial (Physical – Classroom):",
+        " Classroom arranged for small group discussions and board presentation",
+        " Tables or desks grouped to allow collaboration",
+        "Technology Environment:",
+        " Projector/board to display anonymised cybercrime stories, CIA Triad diagram, and examples",
+        " Optional computers for learners to research additional local cyber incidents",
+        "Natural Environment:"
+      ],
+      "resources": [],
+      "assessment": [
+        "Examples of Formative",
+        "Scenario: Your grandmother receives a text message: “Grandma, it’s me your grandson. I have lost my",
+        "phone. This is my new number. Please send me K200 for data so I can call you later.”",
+        "(Identifying Threats) What type of cyber threat is this message an example of?",
+        "(Policy Development) What are two specific pieces of advice you would give your grandmother to",
+        "help her avoid falling for this kind of trick in the future?"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 14,
+      "title": "6: ALGORITHMS",
+      "topics": [
+        "Overview",
+        "This topic introduces learners to the fundamental principles of algorithms. Learners will explore how to",
+        "design, represent, and refine step-by-step procedures to solve computational and real-world problems.",
+        "Emphasis is placed on algorithmic thinking, logic development, and the use of visual tools like flowcharts",
+        "and pseudocode."
+      ],
+      "activities": [
+        "Learning Environment Setup",
+        "Artificial (Physical – Classroom):",
+        " Classroom arranged for interactive discussion and pair work",
+        " Open space at the front for demonstration (role-play of the nshima-making algorithm)",
+        "Technology Environment:",
+        " Projector/board to display examples of algorithms (recipes, routines, GPS routes)",
+        " Optional digital devices for viewing additional examples",
+        "Natural Environment:"
+      ],
+      "resources": [
+        "Computer Science Teaching Module – Form 2 | Ministry of Education, Zambia | 2026",
+        "Form 2 – Secondary Education",
+        "Introduction: This sub-topic introduces algorithms as step-by-step instructions that solve problems.",
+        "Teachers should explain the different types of algorithms and discuss their key characteristics, helping",
+        "learners understand how algorithms work in computing. Guide learners to design flowcharts and write",
+        "pseudocode, showing how algorithms can be applied to solve computational problems. Encourage"
+      ],
+      "assessment": [
+        " Problem-Solving: Identify errors and propose improvements to algorithms",
+        " Guided Inquiry: Teacher facilitates linking examples to key characteristics",
+        "▪ How to Conduct:",
+        "Present four instruction sets on the board and ask learners to evaluate each against the four algorithm",
+        "characteristics (finiteness, definiteness, input/output, effectiveness). Example 1: a good algorithm",
+        "(clear steps with a definite end). Example 2: an infinite loop (\"Keep counting up from 1\" – violates"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 15,
+      "title": "7: WEB DEVELOPMENT",
+      "topics": [
+        "Overview",
+        "Web development involves the creation and styling of digital content to ensure it is functional, accessible,",
+        "and visually engaging. This topic focuses on Cascading Style Sheets (CSS), the essential design tool that",
+        "allows developers to control the presentation of HTML structures."
+      ],
+      "activities": [
+        "Learning Environment Setup",
+        "Artificial (Physical – Classroom):",
+        " Computer lab with individual workstations for learners",
+        " Space for learners to implement CSS on HTML templates and share screens",
+        "Technology Environment:",
+        " Computers with text editor (VS Code, Notepad++) and web browser",
+        " Projector and screen to demonstrate CSS transformations",
+        "Natural Environment:"
+      ],
+      "resources": [
+        " Colour blindness simulation tool (Spectrum or similar extension)",
+        " Starter HTML/CSS page designed by learners for accessibility testing",
+        " Worksheet to record observations, contrast ratio results, and responsive design issues",
+        "Suggested Teaching Methods",
+        " Demonstration: Teacher shows how to use DevTools and extensions to test accessibility",
+        " Hands-on Practice: Learners test their own pages for colour contrast, readability, and mobile"
+      ],
+      "assessment": [
+        "Examples of Formative",
+        "Scenario: You are helping a family member build a simple website for their restaurant in Kitwe called",
+        "“Mama B’s Kitchen.” You want all page titles (<h1> elements) to be dark green, and the main text",
+        "(<p>) to be dark grey on a light background.",
+        "(Applying Style Methods) What is the most professional and efficient way to apply these",
+        "styles? Why is this method better than the others, especially if more pages are added later?"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 16,
+      "title": "8: DATABASES",
+      "topics": [
+        "Overview",
+        "Databases are organised collections of data that allow for efficient storage, retrieval, and management of",
+        "information. This topic introduces Structured Query Language (SQL), the universal standard for interacting",
+        "with relational databases. Learners will move from understanding basic data organisation to designing",
+        "schemas and writing SQL scripts to create and modify database structures."
+      ],
+      "activities": [
+        "Specific Competence(s) – Learners will:",
+        "2.8.1.1 Design and create databases using SQL.",
+        "Learning Environment Setup",
+        "Artificial (Physical – Classroom):",
+        " Classroom arranged for group work and pair discussions",
+        " Space to lay out index cards for the physical database simulation",
+        "Technology Environment:",
+        " Computers with internet access to run SQL in an online sandbox (SQLiteOnline.com or"
+      ],
+      "resources": [
+        "Code.org. (2024). CS fundamentals. Retrieved from https://code.org/educate/csf",
+        "Google for Education. (2024). CS First: Computer science curriculum. Retrieved from",
+        "https://csfirst.withgoogle.com",
+        "MDN Web Docs. (2024). CSS: Cascading Style Sheets. Retrieved from",
+        "https://developer.mozilla.org/en-US/docs/Web/CSS",
+        "MDN Web Docs. (2024). HTML: HyperText Markup Language. Retrieved from"
+      ],
+      "assessment": [
+        "Examples of Formative",
+        "Scenario: A small video club in Matero, Lusaka, wants to move from a paper list to a computer",
+        "database. They have one notebook where they write the customer’s name, the movie they rented,",
+        "and the date. They notice that if “Banda” rents a movie three times, his name is written over and over",
+        "(Schema Design) Why is this “one notebook” method inefficient? Draw a quick sketch showing",
+        "how you could split this information into two tables (Customers and Rentals) to avoid repeating"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 17,
+      "title": "2.4 Networking (This must come from the syllabus with its serial number)",
+      "topics": [
+        "SUB-TOPIC: 2.4.1 Network Topologies (This must come from the syllabus with its serial number)"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 18,
+      "title": "4.1",
+      "topics": [
+        "PRIOR KNOWLEDGE:",
+        "Learners have been introduced to basic computer hardware components and understand that computers"
+      ],
+      "activities": [
+        "Computer Science Teaching Module – Form 2 | Ministry of Education, Zambia | 2026",
+        "Form 2 – Secondary Education"
+      ],
+      "resources": ["everyday experience (e.g, mobile data, school Wi-Fi)."],
+      "assessment": [
+        "CRITERIA",
+        "INTRODUCTION",
+        "Discuss a \"hook” with",
+        "learners.",
+        "Poses question: \"How",
+        "can one printer be"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:55.601Z",
+    "rawTextLength": 260898,
+    "educationLevel": "secondary"
+  }
+}

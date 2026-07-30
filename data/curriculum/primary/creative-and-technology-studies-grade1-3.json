@@ -1,0 +1,935 @@
+{
+  "subject": "Creative and Technology Studies",
+  "level": "Grade 1-3",
+  "gradesCovered": [1, 2, 3],
+  "totalDuration": "3 years (Grades 1-3)",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Grade 1: SAFETY",
+      "topics": ["Safety in the immediate environment", "Body Posture"],
+      "learningOutcomes": [
+        "Apply safety in the immediate environment",
+        "Demonstrate correct postural habits"
+      ],
+      "suggestedActivities": [
+        "Demonstrating safety practises in the classroom (cleaning up the room, Storing materials and equipment securely«)",
+        "Practising safety rules in specialised rooms (rules relating to specialised rooms«)",
+        "Practising safety rules on the playground/play space",
+        "Demonstrating safety rules on the road (Correct way of crossing the road«)",
+        "Performing correct postural habits (sitting, standing, lifting, kneeling, walking«)"
+      ],
+      "assessmentMethods": [
+        "Safety practises in the immediate environment applied correctly",
+        "Correct postural habits demonstrated accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Grade 1: DRAWIN COLOURI NG",
+      "topics": ["Free Hand Sketching", "Free rawing", "Colouring"],
+      "learningOutcomes": [
+        "Sketch simple objects",
+        "Draw pictures of objects",
+        "Draw pictures showing activities"
+      ],
+      "suggestedActivities": [
+        "Sketching simple objects (kite, house, car, hat«)",
+        "Drawing various pictures of objects found in the home and school (chairs, pots, cups, money box«)",
+        "Drawing pictures showing various activities (cooking, eating «)"
+      ],
+      "assessmentMethods": [
+        "Simple objects sketched appropriately.",
+        "Pictures of objects drawn accordingly",
+        "Pictures showing activities drawn appropriately AND"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Grade 1: Topic 1.2",
+      "topics": ["Subtopic 1.2.3"],
+      "learningOutcomes": ["Paint pictures based on given themes"],
+      "suggestedActivities": [
+        "Painting di൵erent pictures (people, bus station, animals, the Zambian Àag «)"
+      ],
+      "assessmentMethods": ["Pictures based on given themes painted creatively"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Grade 1: TOOLS AND EQUIPME NT",
+      "topics": ["Hand Tools", "Kitchen Utensils"],
+      "learningOutcomes": ["Use hand tools", "Use kitchen utensils"],
+      "suggestedActivities": [
+        "Identifying hand tools used to make products (knife, adze, saw«)",
+        "Matching hand tools to their usage.",
+        "Making products using hand tools (Toys)",
+        "Using kitchen utensils (lunchboxes, plates, spoons, drinking bottles )",
+        "Cleaning kitchen utensils (lunchboxes, plates, drinking bottles«) Storing kitchen utensils in suitable places"
+      ],
+      "assessmentMethods": ["Hand tools used correctly", "Kitchen utensils used correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Grade 1: MATERIA LS",
+      "topics": ["Sources of Materials", "Material Conservation", "Use of Materials"],
+      "learningOutcomes": [
+        "Identify sources of materials used to make things",
+        "Practise ways of conserving materials",
+        "Use locally available materials to make products"
+      ],
+      "suggestedActivities": [
+        "Identifying sources of materials ( tree, soil, animals",
+        "Matching products to their sources",
+        "Demonstrating di൵erent ways of conserving materials ( re-using, reducing, recycling for the purpose of",
+        "Using locally available materials to make products ( grass, clay, plasticine, UHHG «)"
+      ],
+      "assessmentMethods": [
+        "Sources of materials used to make things identi¿ed correctly",
+        "Ways of conserving materials practised correctly",
+        "Locally available materials to make products used appropriately."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Grade 1: PATTERN",
+      "topics": ["Simple Patterns"],
+      "learningOutcomes": ["Make simple patterns"],
+      "suggestedActivities": [
+        "Making simple patterns ( ¿nger print, scribble, line, splash, tear patterns« )."
+      ],
+      "assessmentMethods": ["Simple patterns made appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Grade 1: SOUNDS 1.6.1 Exploration of Sounds",
+      "topics": ["Simple Patterns"],
+      "learningOutcomes": ["Produce di൵erent sounds"],
+      "suggestedActivities": ["Producing di൵erent sounds (", "clapping, hissing, whistling«)"],
+      "assessmentMethods": ["Di൵erent sounds produced accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Grade 1: DRAMA 1.7.1 Drama",
+      "topics": ["Simple Patterns"],
+      "learningOutcomes": ["Practise simple plays."],
+      "suggestedActivities": ["Role playing given themes ( washing cars, selling artefacts«)"],
+      "assessmentMethods": ["Simple plays practised accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Grade 1: LITY",
+      "topics": ["Customer Service", "Cleaning"],
+      "learningOutcomes": ["Perform customer service skills", "Clean rooms using di൵erent items."],
+      "suggestedActivities": [
+        "Performing customer service skills ( being friendly, welcoming, being helpful to guests, responding and answering to phone calls«)",
+        "Customer service skills performed con¿dently.",
+        "Cleaning rooms using di൵erent items ( Brooms, pieces of cloth, detergents"
+      ],
+      "assessmentMethods": ["Rooms cleaned using di൵erent items correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Grade 1: ICT DEVICES IN",
+      "topics": ["ICT Devices"],
+      "learningOutcomes": ["Use ICT devices"],
+      "suggestedActivities": [
+        "Identifying ICT devices ( Desktop, laptop, smart phone, Television, Radio, printer«).",
+        "ICT devices used appropriately HOSPITA EVERY DAY /,)(",
+        "Switching on/o൵ of ICT devices",
+        "Using digital devices Sending/receiving phone calls, capturing photos«)"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Grade 1: UTER SOFTWA RE",
+      "topics": ["Computer Educational Games"],
+      "learningOutcomes": ["Play computer educational games"],
+      "suggestedActivities": ["Playing Computer Educational games"],
+      "assessmentMethods": ["Description games played accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Grade 1: H AND FITNESS MANAGE MENT",
+      "topics": ["Fitness and health", "Educational Gymnastics"],
+      "learningOutcomes": [
+        "Perform ¿tness and health activities",
+        "Perform tumbling activities",
+        "Perform stunt activities"
+      ],
+      "suggestedActivities": [
+        "Performing various ¿tness and health activities ( climbing, running, jumping, deep breathing «)",
+        "Using ( horizontal bars, Ropes, Sliders, Ladders, Stair cases)",
+        "Performing simple tumbling activities ( forward roll, cartwheel, frog jump«)",
+        "Performing simple stunts activities ( arm, trunk, leg rolling, squatting, balancing «)"
+      ],
+      "assessmentMethods": [
+        "Fitness and health activities performed appropriately",
+        "Computer Educational games played correctly.",
+        "Tumbling activities performed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Grade 1: TOURI SM",
+      "topics": ["Cultures and Landmarks"],
+      "learningOutcomes": [
+        "Explore di൵erent cultures in the community.",
+        "Locate landmarks using cardinal points"
+      ],
+      "suggestedActivities": [
+        "Identifying di൵erent cultures",
+        "Exploring di൵erent cultures ( traditional clothing, unique customs, «)",
+        "Identifying di൵erent land marks",
+        "Locating landmarks XVLQJ cardinal points ( markets, hospital, police station, curio shop«)"
+      ],
+      "assessmentMethods": [
+        "Telling stories about di൵erent cultures Di൵erent cultures in the community explored accordingly COMP HEALT",
+        "Landmarks located using cardinal points accurately."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Grade 1: SPOR TS SKILL DEVE LOPM ENT",
+      "topics": ["Games", "Field and Track (YHQWV"],
+      "learningOutcomes": ["Perform games", "Perform Field and Track Events"],
+      "suggestedActivities": [
+        "Naming various types of games",
+        "Discussing simple rules of di൵erent games",
+        "Performing various games ( Modi¿ed conventional and traditional games",
+        "Identifying di൵erent types of Field and Track Events",
+        "Discussing simple rules of Field and Track Events",
+        "Performing ¿eld and track events ( relays, 20 meters sack race«)"
+      ],
+      "assessmentMethods": [
+        "Games performed appropriately",
+        "Field and Track Events performed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Grade 1: EWORK",
+      "topics": ["Needlework Tools"],
+      "learningOutcomes": ["Use small needlework tools"],
+      "suggestedActivities": [
+        "Naming small needle work tools ( tailors chalk, tape measures, thimble«)",
+        "Drawing small needlework tools ( tailor¶s chalk tape measure, thimble «).",
+        "Using small needlework tools, make small items ( pin cushion, handkerchief «)",
+        "Storing small needlework tools in suitable places."
+      ],
+      "assessmentMethods": ["Small needle work tools used accordingly NEEDL"],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Grade 1: COMM UNICAT ION",
+      "topics": ["Needlework Tools"],
+      "learningOutcomes": ["Draw di൵erent types of lines"],
+      "suggestedActivities": [
+        "Identifying di൵erent types of lines",
+        "Drawing di൵erent types of lines using free hand (straight line, zig-zag, wavy«)",
+        "Drawing di൵erent types of lines using instruments ( vertical and horizontal lines)"
+      ],
+      "assessmentMethods": ["Di൵erent types of print identi¿ed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Grade 1: CRAFTS",
+      "topics": ["Paper Crafts", "Modeling"],
+      "learningOutcomes": [
+        "Make items using paper",
+        "Make di൵erent pictures using collage technique",
+        "Model objects using clay/ plasticine"
+      ],
+      "suggestedActivities": [
+        "Identifying items made in paper craft",
+        "Making of various items ( chain, belts, house model, mask, National Àag, ox- cart, cars, train, cell phone«)",
+        "Making different pictures using collage technique",
+        "Different pictures using collage technique made appropriately. GRAPHI",
+        "Modeling of free form objects using clay/ plasticine ( animals, dolls fruits, birds«"
+      ],
+      "assessmentMethods": [
+        "Items made using paper accordingly.",
+        "Di൵erent types of lines drawn accordingly.",
+        "Objects modelled using clay/ plasticine accordingly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 18,
+      "title": "Grade 1: RING",
+      "topics": ["Letters of the Alphabet"],
+      "learningOutcomes": ["Design letters of the alphabet"],
+      "suggestedActivities": ["Designing letters of the alphabet ( copy, cut-out, paint letters«)"],
+      "assessmentMethods": ["Letters of the alphabet designed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 19,
+      "title": "Grade 1: ING",
+      "topics": ["Pool Hygiene"],
+      "learningOutcomes": ["Apply rules on pool hygiene"],
+      "suggestedActivities": [
+        "Applying basic rules on pool hygiene ( shower before getting in the pool, do not urinate in the pool«)"
+      ],
+      "assessmentMethods": ["Rules on pool hygiene applied appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 20,
+      "title": "Grade 1: TURES",
+      "topics": ["Types of Structures"],
+      "learningOutcomes": ["Identify types of structures"],
+      "suggestedActivities": [
+        "Identifying types of structures ( house, bicycle, egg, car, bridge«)"
+      ],
+      "assessmentMethods": ["Types of structures identi¿ed correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 21,
+      "title": "Grade 1: PRENE URSHIP",
+      "topics": ["(QWUHSUHQHXU"],
+      "learningOutcomes": ["Demonstrate knowledge on the roles of an entrepreneur"],
+      "suggestedActivities": [
+        "Identifying entrepreneurs in the community ( shop owners, market traders, transporters, «)",
+        "Discussing the roles of an entrepreneur in the community (",
+        "making goods, selling goods, providing services«)",
+        "Role playing the roles of an entrepreneur ( selling, Buying«)",
+        "Knowledge on the roles of an entrepreneur demonstrated correctly. SWIMM LETTE STRUC ENTRE"
+      ],
+      "assessmentMethods": [],
+      "resources": []
+    },
+    {
+      "unitNumber": 22,
+      "title": "Grade 2: SAFETY",
+      "topics": ["Accidents Prevention", "First Aid"],
+      "learningOutcomes": [
+        "Demonstrate ways of preventing accidents in the immediate environment",
+        "Demonstrate skills in First Aid"
+      ],
+      "suggestedActivities": [
+        "Identifying causes of accidents in the immediate environment Neglected upkeep of classroom Àoors and facilities, Hazards like slippery Àoors or broken tiles«",
+        "Observing proper use of pedestrian crossing",
+        "Applying safety measures in the environment",
+        "Reporting injuries/accidents",
+        "Sharing information on First Aid.",
+        "Role playing First Aid procedures"
+      ],
+      "assessmentMethods": [
+        "Ways of preventing accidents in the immediate environment demonstrated accordingly.",
+        "Skills in First Aid demonstrated correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 23,
+      "title": "Grade 2: TOOLS AND EQUIPMENT",
+      "topics": ["Measuring Tools", "Kitchen Equipment"],
+      "learningOutcomes": ["Use measuring tools", "Use equipment found in the kitchen"],
+      "suggestedActivities": [
+        "Identifying measuring tools (r uler, measuring tape«)",
+        "Using measuring tools to take dimensions",
+        "Stating dimensions.",
+        "Identifying kitchen equipment ( stove, brazier «)",
+        "Using kitchen equipment (cooking, freezing«)",
+        "Cleaning of the kitchen equipment"
+      ],
+      "assessmentMethods": [
+        "Measuring tools used appropriately",
+        "Equipment found in Kitchen used appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 24,
+      "title": "Grade 2: DRAWING AND COLOURING",
+      "topics": ["Free Drawing", "Colouring"],
+      "learningOutcomes": ["Draw pictures", "Paint pictures from still life"],
+      "suggestedActivities": [
+        "'UDZLQJ of various pictures animals, birds, rivers, trees, mountains, a person saving money in the saving box, schools, churches«)",
+        "Identifying primary colours (Red, Yellow and Blue)",
+        "Painting pictures from still life (shovel, bucket, ax e«)"
+      ],
+      "assessmentMethods": [
+        "Pictures drawn accordingly.",
+        "Pictures from still life painted accordingly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 25,
+      "title": "Grade 2: MATERIALS 2.4.1 Making Items",
+      "topics": ["Colouring"],
+      "learningOutcomes": ["Make items using available local materials"],
+      "suggestedActivities": [
+        "Making items using available local available materials ( i. Materials; clay, grass and reeds, ii. Items; car, reed mats, bicycle«)"
+      ],
+      "assessmentMethods": ["Items using available local materials made accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 26,
+      "title": "Grade 2: PATTERNS 2.5.1 Types of Patterns",
+      "topics": ["Colouring"],
+      "learningOutcomes": ["Design patterns"],
+      "suggestedActivities": ["Designing patterns ( cut paper patterns, writing patterns «)"],
+      "assessmentMethods": ["Patterns designed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 27,
+      "title": "Grade 2: HOSPITALIT",
+      "topics": ["Places in Hospitality"],
+      "learningOutcomes": ["Explore places in hospitality"],
+      "suggestedActivities": [
+        "Identifying hospitality places.",
+        "Exploring places in hospitality ( +RWHOV where travellers rest; Restaurants : where people have meals; Cafes : where people have snacks and drinks«)"
+      ],
+      "assessmentMethods": ["Places in hospitality explored accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 28,
+      "title": "Grade 2: MATERIALS",
+      "topics": ["Waste Disposal", "Making Items"],
+      "learningOutcomes": [
+        "Demonstrate correct ways of disposing waste",
+        "Make items using locally available materials"
+      ],
+      "suggestedActivities": [
+        "Classifying di൵erent types of waste (solid waste garbage; liquid waste : dirty water«)",
+        "Managing waste using reduce, reuse and recycle (3Rs);",
+        "Disposing of waste in designated places.",
+        "Making items using available local available materials ( i. Materials; clay, grass and reeds, ii. Items; car, reed mats, bicycle«)"
+      ],
+      "assessmentMethods": [
+        "Ways of disposing waste demonstrated correctly.",
+        "Items made accordingly using locally available materials ."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 29,
+      "title": "Grade 2: COMPUTER",
+      "topics": ["Computer Hardware", "Computer Software"],
+      "learningOutcomes": ["Operate basic Computer", "Use word document"],
+      "suggestedActivities": [
+        "Using di൵erent types of computer hardware ( mouse, keyboard, monitor",
+        "Inserting shapes in a word document",
+        "Painting shapes inserted in word document"
+      ],
+      "assessmentMethods": [
+        "Basic Computer hardware RSHUDWHG appropriately",
+        "Word document used correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 30,
+      "title": "Grade 2: SOUNDS",
+      "topics": ["Sounds"],
+      "learningOutcomes": ["Imitate sounds from di൵erent sources"],
+      "suggestedActivities": ["Imitating sounds from di൵erent sources ( birds, cars, cow, cats «)"],
+      "assessmentMethods": ["Sounds from di൵erent sources imitated accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 31,
+      "title": "Grade 2: TOURISM 2.10.1 Attraction Sites",
+      "topics": ["Sounds"],
+      "learningOutcomes": ["Explore local attraction sites"],
+      "suggestedActivities": [
+        "Discussing local attraction sites",
+        "Exploring local attraction sites ( parks, dam, waterfalls, museums «)"
+      ],
+      "assessmentMethods": ["Local attraction sites explored accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 32,
+      "title": "Grade 2: ENERGY 2.11.1 Heat",
+      "topics": ["Sounds", "Energy Conservatio"],
+      "learningOutcomes": ["Use heat to treat materials", "Identify items that conserve energy"],
+      "suggestedActivities": [
+        "Treating materials using heat ( clay pot, wires, plastic «)",
+        "Identifying items for conserving energy (traditional stove and oven, brazier"
+      ],
+      "assessmentMethods": [
+        "Heat used to treat materials appropriately.",
+        "Items that conserve energy identified accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 33,
+      "title": "Grade 2: HEALTH AND FITNESS MANAGE MENT",
+      "topics": ["Fitness", "Educational Gymnastics"],
+      "learningOutcomes": [
+        "Perform developmental activities",
+        "Perform tumbling activities",
+        "Perform stunts activities"
+      ],
+      "suggestedActivities": [
+        "Performing developmental activities ( deep breath in and out, climbing, hanging «)",
+        "Performing tumbling activities (trunk rolling, tummy rolling, balancing «)",
+        "Performing stunts activities ( high jump, twisting «)"
+      ],
+      "assessmentMethods": [
+        "Developmental activities performed accordingly",
+        "Tumbling activities performed correctly",
+        "Stunt activities performed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 34,
+      "title": "Grade 2: NEEDLEW ORK",
+      "topics": ["Needlework tools"],
+      "learningOutcomes": ["Use needlework tools"],
+      "suggestedActivities": [
+        "Discussing small needlework tools (s eam riper, cutting scissor, needles «)",
+        "Drawing and labelling small needlework tools"
+      ],
+      "assessmentMethods": [
+        "Using small needlework tools, make small items (fridge mat, head bands«) Needlework tools used appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 35,
+      "title": "Grade 2: RECREAT ION",
+      "topics": ["Movement and Dance"],
+      "learningOutcomes": ["Perform structured movements"],
+      "suggestedActivities": [
+        "Performing structured movements (using traditional songs, contemporary music «)"
+      ],
+      "assessmentMethods": ["Structured movements performed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 36,
+      "title": "Grade 2: CRAFTS",
+      "topics": ["Plaiting", "Weaving", "Papier Machq", "Construction"],
+      "learningOutcomes": [
+        "Plait using locally available materials",
+        "Make familiar objects using weaving techniques",
+        "Model items using Papier machq",
+        "Construct familiar objects"
+      ],
+      "suggestedActivities": [
+        "Plaiting using available local materials ( sisal, grass, pieces of fabric«)",
+        "Preparing paper pulp for modeling",
+        "Modeling various items using Papier machq ( fruits, balls «)",
+        "Constructing familiar objects ( human ¿gures, bicycles, wire FDUV «)",
+        "Decorating ¿nished objects",
+        "Making structures using geometric shapes"
+      ],
+      "assessmentMethods": [
+        "Plaiting using locally available materials done skillfully",
+        "Making familiar objects by weaving ( mats, hats, belts «) Familiar objects using ZHDYLQJ techniques wove skillfully",
+        "Items using papier machq modelled correctly",
+        "Familiar objects constructed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 37,
+      "title": "Grade 2: SPORTS SKILLS DEVELOP MENT",
+      "topics": ["Games", "Field andTrack (YHQWV"],
+      "learningOutcomes": [
+        "Apply skills in conventional and traditional games",
+        "Perform Field and Track Events"
+      ],
+      "suggestedActivities": [
+        "Applying skills in conventional and traditional games,",
+        "Performing Field and Track Events ( 30meter relays, Bottle race, Bean bags, Lane, Throw, Catch «)"
+      ],
+      "assessmentMethods": [
+        "Skills in conventional and traditional games applied appropriately.",
+        "Field and track events performed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 38,
+      "title": "Grade 2: DESIGNIN",
+      "topics": ["Designing"],
+      "learningOutcomes": ["Make designs of di൵erent objects"],
+      "suggestedActivities": [
+        "Identifying objects to be designed (car, bicycle, house, boat«)",
+        "Designing identi¿ed objects"
+      ],
+      "assessmentMethods": ["Designs of different objects made accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 39,
+      "title": "Grade 2: LETTERI NG",
+      "topics": ["Letters of the Alphabet"],
+      "learningOutcomes": ["Design and cut letters of the alphabet"],
+      "suggestedActivities": [
+        "Designing and cutting - out letters ( lower case and uppercase letters)"
+      ],
+      "assessmentMethods": ["Letters of the alphabet designed and cut appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 40,
+      "title": "Grade 2: SWIMMIN",
+      "topics": ["Water Orientation"],
+      "learningOutcomes": ["Exhibit swimming skills"],
+      "suggestedActivities": [
+        "Exhibiting swimming skills ( diving, jumping, sliding, breathing and Àoating )"
+      ],
+      "assessmentMethods": ["Swimming skills exhibited accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 41,
+      "title": "Grade 2: ENTREPR ENEURSH IP",
+      "topics": ["Entrepreneurial Activities"],
+      "learningOutcomes": ["Demonstrate entrepreneurial activities"],
+      "suggestedActivities": [
+        "Identifying entrepreneurial activities ( buying and selling at the market, cookery, crafts«)",
+        "Demonstrating entrepreneurial activities (buying and selling«)"
+      ],
+      "assessmentMethods": ["Entrepreneurial activities demonstrated correctly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 42,
+      "title": "Grade 3: SAFETY",
+      "topics": ["Safety in handling hand tools", "First Aid", "Body Posture"],
+      "learningOutcomes": [
+        "Practise safety in handling hand tools",
+        "Apply First Aid in di൵erent situations",
+        "'HPRQVWUDWH postural DFWLYLWLHV"
+      ],
+      "suggestedActivities": [
+        "Applying safety rules in handling hand tools",
+        "Packing tools in safe places",
+        "Role playing First Aid in di൵erent situations ( cuts, bruises, nose bleeding, scalds«)",
+        "First Aid applied correctly in di൵erent situations",
+        "'HPRQVWUDWLQJ postural activities ( sit ups on flat surfaces, stretches, bends, rolls, sitting at a computer«)"
+      ],
+      "assessmentMethods": [
+        "Safety in handling hand tools practiced correctly",
+        "Postural activities demonstrated appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 43,
+      "title": "Grade 3: COOKERY",
+      "topics": ["Snacks"],
+      "learningOutcomes": ["Make healthy snacks"],
+      "suggestedActivities": [
+        "Making healthy snacks ( sandwich, roasted nuts, roasted cassava, smoothies«)"
+      ],
+      "assessmentMethods": ["Healthy snacks made accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 44,
+      "title": "Grade 3: DRAWING AND COLOURING",
+      "topics": ["Drawing", "Colouring"],
+      "learningOutcomes": ["Draw pictures", "Colour pictures."],
+      "suggestedActivities": [
+        "Drawing pictures based on life experiences and events ( worshiping, dancing«)",
+        "Identifying secondary colours ( orange, green, violet)",
+        "Colouring various pictures depicting life experiences ( my village, my town, market place«)"
+      ],
+      "assessmentMethods": ["Pictures drawn accordingly", "Pictures coloured appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 45,
+      "title": "Grade 3: MATERIALS",
+      "topics": ["Making Items"],
+      "learningOutcomes": ["Make items using locally available materials"],
+      "suggestedActivities": [
+        "Making items using locally available materials ( i. Materials: wood, plastic"
+      ],
+      "assessmentMethods": ["Items made using locally available materials accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 46,
+      "title": "Grade 3: COMPUTER",
+      "topics": ["Computer Hardware", "Computer Software"],
+      "learningOutcomes": [
+        "Use Computer Hardware components",
+        "Design digital arts using creative and art software"
+      ],
+      "suggestedActivities": [
+        "Identifying Computer Hardware components ( computer case,mouse and storage devices«)",
+        "Using computer hardware components ( computer case and storage devices«)",
+        "Designing digital arts using creative and art software ( word, Kid Pix, Tux Paint, Crayola Art Studio«)",
+        "Editing photos"
+      ],
+      "assessmentMethods": [
+        "Computer Hardware components used correctly",
+        "Digital arts designed using creative and art software accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 47,
+      "title": "Grade 3: HOSPITALITY 3.7.1 Etiquette",
+      "topics": ["Computer Software", "Laundry"],
+      "learningOutcomes": ["Demonstrate good table manners", "Launder articles"],
+      "suggestedActivities": [
+        "Demonstrating good table manners ( Washing hands before touching food, chewing with a closed mouth«)",
+        "Demonstrating laundry processes ( sorting, soaking, washing, rinsing, drying)",
+        "Laundering small articles (handkerchief, socks, table napkins«)"
+      ],
+      "assessmentMethods": [
+        "Good table manners demonstrated accordingly.",
+        "Articles laundered accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 48,
+      "title": "Grade 3: SOUNDS",
+      "topics": ["Elements of Sound"],
+      "learningOutcomes": ["Apply basic skills in singing and instrument playing"],
+      "suggestedActivities": [
+        "Identifying di൵erent elements of sound ( tone, pitch, rhythm, volume«)",
+        "Singing a variety of songs (contemporary , traditional, tonic sounds«)",
+        "Playing local instruments ( GUXPV banjos, silimba«)"
+      ],
+      "assessmentMethods": ["Basic skills in singing and instrument playing applied accordingly."],
+      "resources": []
+    },
+    {
+      "unitNumber": 49,
+      "title": "Grade 3: RECREATION 3.9.1 Dance",
+      "topics": ["Elements of Sound", "Songs"],
+      "learningOutcomes": [
+        "Perform local dances and simple rhythmic activities",
+        "Compose songs on cross cutting issues"
+      ],
+      "suggestedActivities": [
+        "Performing local dances ( structured and unstructured movements",
+        "Performing simple rhythmic activities (",
+        "clapping, singing,",
+        "dancing«)",
+        "Composing songs on cross cutting issues ( health, corruption, child labour, drug and substance abuse, climate change«)"
+      ],
+      "assessmentMethods": [
+        "Local dances and simple rhythmic activities performed accordingly",
+        "Cross-cutting issues discussed accordingly using appropriate language"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 50,
+      "title": "Grade 3: TRAVEL 3.10.1 Travel Etiquette",
+      "topics": ["Songs"],
+      "learningOutcomes": ["Demonstrate travel etiquette"],
+      "suggestedActivities": [
+        "Demonstrating travel etiquette ( try local foods, learn basic greetings, phrases , «)"
+      ],
+      "assessmentMethods": ["Songs on cross cutting issues various composed appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 51,
+      "title": "Grade 3: ENERGY 3.11.1 Circuit",
+      "topics": ["Songs"],
+      "learningOutcomes": ["Make a circuit to produce light"],
+      "suggestedActivities": [
+        "Identifying circuit components used to produce light ( cells, wires, bulb«)",
+        "Designing a circuit to produce light",
+        "Connecting circuit components to produce light"
+      ],
+      "assessmentMethods": ["Circuit to produce light correctly made"],
+      "resources": []
+    },
+    {
+      "unitNumber": 52,
+      "title": "Grade 3: HEALTH AND FITNESS MANAGEMENT",
+      "topics": ["Fitness", "Health", "Educational gymnastics (Tumbling and Stunts)"],
+      "learningOutcomes": [
+        "Perform simple isometric activities",
+        "Perform developmental activities",
+        "Perform simple tumbling activities",
+        "Demonstrate simple stunts activities"
+      ],
+      "suggestedActivities": [
+        "Performing simple isometric activities ( strength training H[HUFLVHV",
+        "Performing developmental activities ( jogging, hanging, lifting, pulling, pushing«)",
+        "Performing simple tumbling activities ( landing, balancing«)",
+        "Demonstrating simple stunts ( pyramid formation, balance«)"
+      ],
+      "assessmentMethods": [
+        "Simple isometric activities performed appropriately",
+        "Developmental activities performed appropriately",
+        "Stunts activities performed correctly",
+        "Simple tumbling activities performed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 53,
+      "title": "Grade 3: NEEDLEWO RK",
+      "topics": ["Stitches"],
+      "learningOutcomes": ["Work out samples of temporary stitches"],
+      "suggestedActivities": [
+        "Working out temporary stiches ( even tacking, running stitch, long and short tacking"
+      ],
+      "assessmentMethods": ["Samples of temporary stitches worked out correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 54,
+      "title": "Grade 3: SPORTS SKILLS DEVELOPMENT",
+      "topics": ["Modi¿ed conventional games", "Field and Track Events", "Traditional Games"],
+      "learningOutcomes": [
+        "Perform modi¿ed conventional games",
+        "Perform ¿eld and track events",
+        "Perform traditional games"
+      ],
+      "suggestedActivities": [
+        "Performing modi¿ed conventional games ( Volleyball, netball, football«)",
+        "Performing ¿eld and track events ( 40 meters relays, bucket race, high jump«)",
+        "Performing traditional games ( throw, catch, ciyenga. ..)"
+      ],
+      "assessmentMethods": [
+        "Modi¿ed conventional games performed appropriately",
+        "Field and track events performed correctly",
+        "Traditional games performed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 55,
+      "title": "Grade 3: CRAFTS",
+      "topics": [
+        "Plaiting",
+        "Weaving",
+        "Knotting",
+        "Modeling",
+        "Construction",
+        "Types of Structures"
+      ],
+      "learningOutcomes": [
+        "Plait using di൵erent styles",
+        "Make familiar objects using weaving techniques",
+        "Knot familiar objects",
+        "Model familiar objects",
+        "Decorate ¿nished items",
+        "Construct familiar items using locally available materials",
+        "Di൵erentiate natural and arti¿cial structures"
+      ],
+      "suggestedActivities": [
+        "Plaiting using di൵erent styles ( twisting, corn roll«)",
+        "Making objects using weaving techniques ( Belts, baskets«)",
+        "Knotting familiar objects ( ropes, bags«)",
+        "Modeling familiar objects using clay/ paper pulp ( Cups, pots bowls, fruits«)",
+        "Decorating ¿nished items by painting, vanishing or ¿ring",
+        "Constructing familiar items ( buildings, human ¿gures, mobiles, wire cars«)using locally available materials",
+        "Di൵erentiating natural from arti¿cial structures ( Arti¿cial: bridges, house«, Natural: hill,"
+      ],
+      "assessmentMethods": [
+        "Di൵erent styles of plaiting used accordingly.",
+        "Familiar objects made using weaving techniques accordingly",
+        "Familiar objects knotted correctly",
+        "Familiar objects modelled correctly",
+        "Finished items decorated appropriately",
+        "Familiar items constructed using locally available materials appropriately",
+        "Natural and arti¿cial structures di൵erentiated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 56,
+      "title": "Grade 3: DESIGNING 3.17.1 Item Designing and Making",
+      "topics": ["Types of Structures"],
+      "learningOutcomes": ["Design and make Items"],
+      "suggestedActivities": [
+        "Designing items ( kite, toy car, house«)",
+        "Selecting materials for the design",
+        "Making items ( kite, toy FDU«"
+      ],
+      "assessmentMethods": ["Items designed and made appropriately"],
+      "resources": []
+    },
+    {
+      "unitNumber": 57,
+      "title": "Grade 3: LETTERING 3.18.1 Letters",
+      "topics": ["Types of Structures", "Poster Making"],
+      "learningOutcomes": ["Design capital and small letters", "Design posters based on"],
+      "suggestedActivities": [
+        "Designing letters ( Upper and lower case letters, spacing, size, and colour",
+        "Designing posters to convey short meaningful messages based on diৼerent concepts (human rights, environmental health and pollution, child labour, road safety«)",
+        "Posters to based"
+      ],
+      "assessmentMethods": [
+        "Cutting designed letters Capital and small letters designed correctly",
+        "designed appropriately"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 58,
+      "title": "Grade 3: SWIMMING 3.19.1 Water Orientation",
+      "topics": ["Poster Making"],
+      "learningOutcomes": ["Demonstrate basic swimming strokes"],
+      "suggestedActivities": [
+        "Demonstrating basic swimming strokes ( side strokes, unskilled strokes: push inhale Àoat«)"
+      ],
+      "assessmentMethods": ["Basic swimming strokes demonstrated correctly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 59,
+      "title": "Grade 3: ENTREPREN EURSHIP",
+      "topics": ["Entrepreneurial activities"],
+      "learningOutcomes": ["Practise making and selling items"],
+      "suggestedActivities": [
+        "Identifying the products to make",
+        "Costing materials for making the product",
+        "Pricing the products to be made with a view of making pro¿t",
+        "Identifying the possible selling places and targeted customers",
+        "Saving the profit in the saving box",
+        "w fW",
+        "f, d D",
+        "Revise letter sound j J RGXFH OHW HU VR XQ b B Revise letter sound b B Revise work done j J, b B Week 12 RGXFH OHW HU VR XQ Revise letter sound l L RGXFH OHW HU VR XQ ch CH Revise letter sound ch CH Revise work done l L, ch CH Week 13 End of Term Assessment",
+        "Week 3 RGXFH OHW HU VR XQ n N Revise letter sound n N RGXFH OHW HU VR XQ k K Revise letter sound k K Revise work done n, k Week 4 RGXFH OHW HU VR XQ kh KH Revise letter sound kh KH RGXFH OHW HU VR XQ m M Revise letter sound m M Revise work done kh KH, m M Week 5 RGXFH OHW HU VR XQ l L Revise letter sound l L Revise work done l L Assessment and Remediation Week 6 RGXFH OHW HU VR XQ h H Revise letter sound h H RGXFH OHW HU VR XQ w W Revise letter sound w W Revise work done h H, w W Week 7 RGXFH OHW HU VR XQ t T Revise letter sound t T RGXFH OHW HU VR XQ th TH Revise letter sound th TH Revise work done t T, th TH Week 8 RGXFH OHW HU VR XQ v V Revise letter sound v V RGXFH OHW HU VR XQ y Y Revise letter sound y Y Revise work done v V, y Y Week 9 RGXFH OHW HU VR XQ s S Revise letter sound s S RGXFH OHW HU VR XQ ny NY Revise letter sound ny NY Revise work done s S, ny NY Week 10 RGXFH OHW HU VR",
+        "Revise letter sound",
+        "RGXFH OHW HU VR XQ c C Revise letter sound c C Revise work done x f, c C Week 12 RGXFH letter sound sh SH Revise letter sound sh SH RGXFH letter sound xZ Revise letter sound xw fW Revise work done sh SH, xw fW Week 13 End of Term Assessment"
+      ],
+      "assessmentMethods": ["Making and selling of items practised accordingly"],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "Ministry of Education, Curriculum Development Centre — LOWER-PRIMARY-SYLLABI-GRADE-1-3-FINAL-CAMERA-REDY-1.pdf",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-30",
+    "sourceFileBytes": 1913157,
+    "extractionNote": "Extracted from the named learning-area section of the official Grades 1–3 omnibus. No curriculum content was fabricated.",
+    "curated": true,
+    "recordCount": 102
+  }
+}

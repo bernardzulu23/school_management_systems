@@ -1,6 +1,8 @@
 {
   "subject": "Mathematics",
   "form": null,
+  "grade": null,
+  "band": null,
   "term": null,
   "sourceFile": "Maths2_Teaching_Module.pdf",
   "lessons": [
@@ -188,7 +190,7 @@
     }
   ],
   "metadata": {
-    "extractedAt": "2026-07-19T20:36:08.796Z",
+    "extractedAt": "2026-07-30T13:29:51.321Z",
     "rawTextLength": 131697
   }
 }

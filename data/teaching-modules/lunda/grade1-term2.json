@@ -1,0 +1,102 @@
+{
+  "subject": "Lunda",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 2,
+  "sourceFile": "LUNDA-GRADE-1-TEACHING-MODULE-TERM-2.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "Mukanda weniwu wunambulewi munyitu yansañu dichi nawa mutu himutu",
+      "topics": [
+        "wansañu wudi nayuma yakutañisha muyibalu yamboka, yidi neyi Kuhosha",
+        "Nakutiyilila, Kutaña, Mazu Akutaña, Kutaña Nakanañachima ni Kusoneka. Iyi yuma",
+        "yakutañisha yinasonekewi muniwu mukanda hizhindizilu zhinaloñeshewuku ilaña",
+        "yatela kuzatishewa kulonda kuloñesha nikusoneka nachi mwakutañishila zhindizilu.",
+        "Hakuloñesha nikusoneka mwakutañishila zhindizilu, watela kufumisha yuma"
+      ],
+      "activities": ["makina amaana amaha", "chinakuhwelelewi", "kwilukisha"],
+      "resources": [
+        "for letter ‘t’ and the vowels, pictures or objects whose names begin",
+        "with /t/.",
+        "INTRODUCTION (5 minutes): Teacher sings a description song with",
+        "learners e.g., song in Bemba:",
+        "Ba teacher bapa college ‘teachers at college",
+        "Baliba abapusanasana ‘"
+      ],
+      "assessment": [
+        "kwilukisha",
+        "TWINYIKILU",
+        "Kukoka yitoñozhoka",
+        "Mutu wasañu muwihi",
+        "Kusoneka/mudimu",
+        "Chanukishi"
+      ],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 2,
+      "title": "LISTENING AND",
+      "topics": ["SPEAKING (20", "minutes)", "Sings the", "description", "song with"],
+      "activities": [
+        "words used to",
+        "describe people",
+        "describing",
+        "teachers in the",
+        "song (short,",
+        "tall, has a",
+        "Explains that",
+        "describing"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 3,
+      "title": "READING (20",
+      "topics": ["minutes)", "Provides words", "(using pictures", "or objects)", "Listen to"],
+      "activities": [
+        "Identifying syllables",
+        "in oral words",
+        "syllables are",
+        "formed by",
+        "sound /t/ e.g.",
+        "tala (Lunda)",
+        "Explains that",
+        "the word has"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 4,
+      "title": "WRITING (10",
+      "topics": ["minutes)", "Write letters"],
+      "activities": [
+        "letter ‘t’",
+        "Demonstrate",
+        "s how to form",
+        "letter ‘t’",
+        "Works with",
+        "learners to",
+        "demonstrate",
+        "how to write"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:44.954Z",
+    "rawTextLength": 191105,
+    "educationLevel": "primary"
+  }
+}

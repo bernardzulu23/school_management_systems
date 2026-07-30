@@ -1,0 +1,671 @@
+{
+  "subject": "Mathematics and Science",
+  "level": "Grade 1-3",
+  "gradesCovered": [1, 2, 3],
+  "totalDuration": "3 years (Grades 1-3)",
+  "units": [
+    {
+      "unitNumber": 1,
+      "title": "Grade 1: EXPLORING MY WORLD",
+      "topics": ["Grouping Things", "Things in the Surroundings", "Plants and Animals"],
+      "learningOutcomes": [
+        "Distinguish groups of things according to their characteristics",
+        "Care for natural resources using ways such as recovering, reducing, reusing««.",
+        "Use whole numbers in variety of ways in daily life",
+        "Explore physical features of natural and man-made environments.",
+        "Classify Plants and Animals according to their characteristics"
+      ],
+      "suggestedActivities": [
+        "Exploring di൵erent things in the environment",
+        "Collecting things from the environment according to the speci¿ed characteristics",
+        "Sorting things according to size, colour, shape and other characteristics. Groups to contain things in intervals of 1 ± 6, 1 ± 9, 1 - 20 and up to 100",
+        "Describing groups (sets) using things",
+        "Matching groups into one-to-one correspondence. Number of objects can be in intervals of 1 ± 6, 1 ± 9, 1 - 20 and up to 100",
+        "Ordering groups according to their ordinal (1st, 2nd, 3rd «) and cardinal (1, 2, 3«) numbers.",
+        "Assigning numerals 0 to 10 to elements in a set. Assign numerals in intervals of 0 ± 6, 0 ± 10.",
+        "Using cardinal and ordinal numbers in everyday life",
+        "Group of things distinguished according to their attributes",
+        "Exploring My World",
+        "Exploring ways of caring for natural resources in the local environment such as rivers, lakes, plants, animals, ant-hills and mountains using ways such as recovering, reducing, reusing«",
+        "Counting natural resources in the surroundings",
+        "Counting in groups (2s, 5s,)",
+        "Matching quantities to numbers",
+        "Counting using things in intervals such as 1 ± 6, 1 ± 9, 1 - 20 and up to 100",
+        "Recognising numbers in intervals such as 1-3, 1 - 6, 1 ± 9 and up to 100",
+        "Reading numbers in intervals of 1-6, 1 ± 9, 1 ± 20 up to 100",
+        "Writing numbers up to 100 (including the meaning of zero)",
+        "Writing numbers in intervals of 1- 6, 1 - 9, 1 - 10 and up to 100",
+        "Counting numbers in 10s up to 100",
+        "Interpreting numbers using ten as a unit.",
+        "Interpreting numbers using the Ten frame, bundles of ten in intervals such as 10 -20, 20 ± 50",
+        "Interpret numbers using place values",
+        "Comparing numbers in intervals of 1-6, 1-9, 1-20 up to 100.",
+        "Ordering numbers in terms of magnitude",
+        "Using number patterns in intervals of 1-6, 1-9, 1-20 up to 100 (ascending and descending order)",
+        "Identifying physical features of natural environment (plants and animals, mountains, rocks, rivers«).",
+        "Identifying physical features of man-made environment (buildings, houses, roads«)",
+        "Comparing physical features of both natural and man-made environments",
+        "Identifying common plants in the local environment (weeds; crops, flowers and trees)",
+        "Counting plants in the local environment",
+        "Naming the common plants in the local environment",
+        "Classifying plants as Àowering and non-Àowering plants in local environment",
+        "Identifying di൵erent animals in the environment",
+        "Counting di൵erent animals in the environment",
+        "Grouping animals according to their characteristics as vertebrate (with backbone) and invertebrate (without backbone)",
+        "Studying the skeletal structures of vertebrate and invertebrate (Drawing, Label)",
+        "Identifying domestic animals in the local environment (dog, cat, goat, pig, sheep, cow, chicken, duck, dove.)",
+        "Counting domestic animals in the local environment",
+        "Identifying common wild animals",
+        "Classifying domestic and wild animals based on their characteristics and habitat"
+      ],
+      "assessmentMethods": [
+        "Care for natural resources demonstrated accordingly",
+        "Whole numbers in a variety of ways used correctly",
+        "Natural and man-made environments explored accordingly",
+        "Plants and Animals classi¿ed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 2,
+      "title": "Grade 1: UNDERSTANDING MY BODY",
+      "topics": ["The Human Body", "Water borne and Food borne Diseases"],
+      "learningOutcomes": [
+        "Relate external structures of the human body to their functions",
+        "Measure using a variety of units",
+        "Practise hygiene",
+        "Practise hygiene to prevent Water borne and foodborne diseases"
+      ],
+      "suggestedActivities": [
+        "Identifying the external parts of the human body ( head, neck, chest, arms, knees, abdomen, legs, eyes, nose, mouth, ears ).",
+        "Relating the external parts of the human body to their functions",
+        "Exploring ways of measuring lengths using nonstandard units of di൵erent external body parts and other objects",
+        "Grouping di൵erent objects according to lengths using non-standard measure of units (short, long)",
+        "Identifying the five senses of a human being (smelling, seeing, touching, feeling and hearing) using di൵erent objects or elements found in the environment",
+        "Grouping external parts of the human body",
+        "Exploring the environment using senses such as touch/feeling - skin,",
+        "ears",
+        "Using senses to identify and count the objects in the environment",
+        "Demonstrating personal hygiene by; washing hands, face, feet, brushing teeth, cleaning nails, and combing hair",
+        "Exploring sources of water borne and Food borne diseases ± Diarrhea, Cholera, Dysentery«)",
+        "Discussing causes of water and Foodborne diseases such as Diarrhea, Cholera, Dysentery.",
+        "Describing ways of preventing water borne diseases"
+      ],
+      "assessmentMethods": [
+        "External structure of the human body related to the functions correctly",
+        "Lengths measured using a variety of units accordingly",
+        "Hygiene practised accordingly",
+        "Control measures used to prevent waterborne and Foodborne diseases correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 3,
+      "title": "Grade 1: EXPLORING THE SKY AND SEASONS",
+      "topics": ["Time"],
+      "learningOutcomes": ["Use measures of time in everyday life"],
+      "suggestedActivities": [
+        "Identifying activities taking place at di൵erent times of the day (morning, afternoon, evening)",
+        "Identifying the activities taking place on di൵erent days of the week",
+        "Determining weeks in a month and months in a year"
+      ],
+      "assessmentMethods": ["Measures of time used in everyday life accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 4,
+      "title": "Grade 1: EXPLORING MATERIALS",
+      "topics": ["Materials", "Energy", "Plane and Solid shapes", "Safe Water", "Surroundings"],
+      "learningOutcomes": [
+        "Explore di൵erent materials in the environment",
+        "Explore sources of energy using di൵erent materials",
+        "Make shapes using di൵erent materials according to criteria",
+        "Use safe and clean water.",
+        "Exhibit care for the surroundings"
+      ],
+      "suggestedActivities": [
+        "Exploring di൵erent types of materials in the environment",
+        "Identifying di൵erent types of materials: (wood, metal, plastic, stone, sand, mud, water and textiles)",
+        "Demonstrating uses of di൵erent types of materials (building, making tools, clothing, toys)",
+        "Identifying sources of energy (such as food, sun, wind, water and fossil fuels«)",
+        "Relating the energy sources to their uses (food, sun, wind, water, and fossil fuels«)",
+        "Exploring di൵erent shapes in their environment",
+        "Tracing the outline of objects using local resources such as bottle tops (circle), cut-outs (square, rectangle and triangle)",
+        "Recognising the shapes using concrete and semi concrete objects (circle, square, rectangle and triangle).",
+        "Sorting shapes according to di൵erent properties",
+        "Creating and manipulating shapes using various materials.",
+        "Making regular and irregular shapes using di൵erent materials.",
+        "Shapes made using di൵erent materials according to criteria",
+        "Exploring the water sources in the environment",
+        "Identifying clean and safe water,",
+        "Discussing the importance of water in maintaining bodily functions.",
+        "Relating safe and clean water to prevent spread of waterborne diseases such as cholera, dysentery, and typhoid",
+        "Making water safe to drink",
+        "Exploring the importance of caring for the local environment",
+        "Demonstrating environmental care activities (sustainable ways of using the environment)",
+        "Practising ways of caring for the local environment such as picking litter, suppressing dust, sweeping, planting trees and grass."
+      ],
+      "assessmentMethods": [
+        "Di൵erent materials explored accordingly",
+        "Sources of energy explored appropriately Apply adaptation measures to weatherchanges",
+        "Safe and clean water used accordingly",
+        "Surroundings cared for accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 5,
+      "title": "Grade 1: EXPLORING MIXITURES",
+      "topics": ["Mixtures", "Addition and Subtraction of things", "Domestic Waste"],
+      "learningOutcomes": [
+        "Make mixtures",
+        "Use whole numbers in addition of things",
+        "Use whole numbers in subtraction things",
+        "Manage domestic waste"
+      ],
+      "suggestedActivities": [
+        "Exploring di൵erent mixtures in the surrounding such as soil, waste, salads, saltwater«",
+        "Identifying mixtures in the surrounding",
+        "Sorting out mixtures in terms of colour, texture. Size«",
+        "Adding single digit numbers with a sum up to 9 using concrete and semi concrete objects and transit to",
+        "Exploring activities involving zero to show that when zero is added to a number the result is that number",
+        "Adding numbers using composition and decomposition of numbers (number bonds)",
+        "Adding numbers using frames of 10",
+        "Adding single digit numbers with a sum up to 18 (using the concept of ten as a unit)",
+        "Adding whole numbers with sums up to 100 without carrying",
+        "Completing addition of number sentences",
+        "Using addition to carry out activities involving money and other real-life quantities",
+        "Subtracting single digit whole numbers in intervals of 1 to 6, 1 to 9 using concrete and semi concrete",
+        "Carrying out activities involving zero to show that: i. When zero is subtracted from a number the result is that number ii. When a number is subtracted from itself the result is zero",
+        "Subtracting double digit numbers up to 18 using the unit of 10",
+        "Subtracting whole numbers in 10s up to 100",
+        "Subtracting whole numbers up to 100",
+        "Relating subtraction to addition such as 6 ± 2 4 or 4 + 2 6",
+        "Completing subtraction of number sentences.",
+        "Using subtraction to carry out activities involving",
+        "Identifying domestic waste in the environment such as plastics, empty water bottles, empty cleaning detergents, insecticide, perfume bottles and agro-chemicals (fertilizers, Pesticides and fungicides.",
+        "Demonstrating safe handling and disposal of household waste in designated places.",
+        "Sorting household waste into categories (poison, non-poison, useful, non useful«)",
+        "Recognising the risks associated with household chemical waste."
+      ],
+      "assessmentMethods": ["Mixtures identi¿ed correctly", "Domestic waste managed accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 6,
+      "title": "Grade 2: EXPLORING MY WORLD",
+      "topics": ["Grouping Things"],
+      "learningOutcomes": [
+        "Use set notation to show membership of things",
+        "Express whole numbers in a variety of ways"
+      ],
+      "suggestedActivities": [
+        "Exploring di൵erent natural resources such as animals, water bodies, forests, minerals, land by taking a walk in the environment",
+        "Identifying di൵erent natural resources in the environment",
+        "Classifying di൵erent natural resources found in the environment according to their characteristics",
+        "Exploring membership of groups of things",
+        "Demonstrating the meaning of ³is a member of ́ and ³is not a member of ́ practically including the correct use of the symbols ³ ́ for ³is a member of ́ and ³ ́ for ³is not a member of ́.",
+        "Illustrating the meaning of empty set and applying correctly the use of the symbol ³ or ³ ^` ́ for ³an empty set ́.",
+        "Exploring the environment to make squares",
+        "Representing whole numbers from 1-999 using squares or tiles of ones, tens and hundreds"
+      ],
+      "assessmentMethods": [
+        "Set Notation used to show memberships appropriately",
+        "Numbers expressed in a variety of ways correctly."
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 7,
+      "title": "Grade 2: Topic 2.1",
+      "topics": ["Subtopic 2.1.1"],
+      "learningOutcomes": [
+        "Investigate the structure of a plant.",
+        "Demonstrate care for plants.",
+        "Interpret chemical labels.",
+        "Analyse data",
+        "Prevent common diseases",
+        "Exhibit care for the environment."
+      ],
+      "suggestedActivities": [
+        "Identifying di൵erent parts of a plant such as root, stem, leaf, Àower, fruit and seed.",
+        "Discussing importance of di൵erent parts of a plant.",
+        "Drawing and labeling di൵erent parts of a plant",
+        "Planting seeds",
+        "Identifying the process of early seed germination",
+        "Investigating plant life cycle from seed, seedling, adult plant with Àowers and adult plant with fruits and seeds",
+        "Recognising importance of plants in producing oxygen for survival of living things: sources of medicine, food, habitats or shelter",
+        "Identifying chemical labels like colour bands, hazard symbol and safety information about chemicals",
+        "Interpreting signal words and colour bands, hazard symbol and safety information about chemicals and other substances",
+        "Collecting and Recording data",
+        "Presenting data sets on a pictograph",
+        "Interpreting data from a pictograph",
+        "Exploring common diseases in the community",
+        "Identifying causes of common diseases in the community",
+        "Demonstrating ways of preventing common diseases in the community such as Malaria, TB, common Colds, Coughing Diarrhea, Cholera, Bilharzia, COVID,",
+        "Matching common diseases with their symptoms",
+        "Discussing the importance of caring for the environment",
+        "Take part in activities on ways of caring for the environment such as planting trees, picking liter and disposing of waste in designated places, and cleaning the surroundings.",
+        "Designing awareness materials such as Àyers, walks«"
+      ],
+      "assessmentMethods": [
+        "The structure of the Plant investigated correctly.",
+        "Care for plants demonstrated correctly",
+        "Chemical labels interpreted correctly",
+        "Common diseases prevented accordingly",
+        "Care for the environment exhibited accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 8,
+      "title": "Grade 2: UNDERSTANDING MY BODY",
+      "topics": ["The Human Body"],
+      "learningOutcomes": [
+        "Demonstrate understanding of parts of the human body and their functions.",
+        "Use relations in life context",
+        "Practise food hygiene.",
+        "Apply good eating habits"
+      ],
+      "suggestedActivities": [
+        "Identifying the internal parts of the human body on charts, picture or models, simulations (brain, heart, intestines, kidneys, lungs, stomach, liver, bladder.)",
+        "Drawing shapes and making patterns related to internal parts of the human body",
+        "Measuring the lengths and width using non standards units",
+        "Relating internal organs of the human body to the external",
+        "Internal parts of the human body related to their functions",
+        "Drawing internal parts of the human body as shown on charts, picture or models",
+        "Measuring the lengths and width of drawn parts of the human body using non standards units",
+        "Molding internal organs of the human body using clay or playdough, balloons.",
+        "Matching internal parts of the human body with their functions (brain ± thinking; throat ± passing food; lungs- exchanging air; stomach- digesting food; intestine -food absorption; heart -pumping blood)",
+        "Identifying suitable objects",
+        "using the sense of smell",
+        "Sorting the objects according to characteristic smell (pleasant and unpleasant).",
+        "Breathing in and out of air",
+        "Demonstrating meaning of relation from life situations such as one to one relation and one to many relations",
+        "Comparing measure relations such as big/small, long/shorter, more/less",
+        "Matching sets using arrow to illustrate the relationship using concrete and semi concrete objects",
+        "Identifying the relation between two sets",
+        "Discussing the importance of why keeping food clean is important for staying healthy",
+        "Demonstrating proper hand washing techniques before eating, after using the bathroom, after playing outside, after touching pets««",
+        "Practising covering food to prevent contamination and foodborne illnesses",
+        "Practising good eating habits by: taking small and manageable bites, such as using",
+        "Practising eating balanced varied nutritious amounts"
+      ],
+      "assessmentMethods": [
+        "Relations used life context accordingly",
+        "Food hygiene practised correctly",
+        "Good eating habits practised accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 9,
+      "title": "Grade 2: EXPLORING THE SKY AND SEASONS",
+      "topics": ["Time and length", "Weather and Climate change"],
+      "learningOutcomes": [
+        "Use standard units of measures in everyday life",
+        "Recognise the signi¿cance of weather changes."
+      ],
+      "suggestedActivities": [
+        "Reading and telling time using analogue clock in relation to time in full hours and in half hours.",
+        "Measuring duration of activities",
+        "Measuring of length and width of different object using standard units. (cm, mm, m)",
+        "Finding the perimeter of plane ¿gures",
+        "Standard units of measures in everyday life used",
+        "Identifying di൵erent weather patterns; (cold, hot«)",
+        "Recognising weather changes in terms of temperature, rain, wind, and cloud formations.",
+        "Identifying e൵ects of climate change such as: heat waves; Àoods, drought."
+      ],
+      "assessmentMethods": ["Adaptation measures applied to weather changes accordingly"],
+      "resources": []
+    },
+    {
+      "unitNumber": 10,
+      "title": "Grade 2: EXPLORING MATERIALS",
+      "topics": [
+        "Materials",
+        "Energy",
+        "Plane and Solid Shapes",
+        "Sound",
+        "Light",
+        "Soluble and Insoluble materials"
+      ],
+      "learningOutcomes": [
+        "Explore the existence of matter.",
+        "1 Use energy sustainably",
+        "Make three-dimensional regular shapes",
+        "Make di൵erent sounds.",
+        "Classify sources of light in the environment",
+        "1 Analyse the solubility of materials in water"
+      ],
+      "suggestedActivities": [
+        "Identifying di൵erent states of matter",
+        "Recognising existence of matter in di൵erent forms.",
+        "Demonstrating changes in state of matter (melting, freezing, «.)",
+        "Exploring the existence of matter in di൵erent forms",
+        "Identifying of energy-saving devices ( energy saving bulbs, energy saving braziers",
+        "Practising energy-conserving by turning o൵ lights and electrical appliances or closing doors to keep heat inside the room and using natural light during the day.",
+        "Exploring ways of conserving energy",
+        "Energy used sustainably",
+        "Exploring three dimensional shapes in the environment and classify them according to features",
+        "Identifying corners in their environment",
+        "Forming corners using di൵erent materials in their environment",
+        "Drawing rectangle, square and triangle on squared surfaces",
+        "Describing the features of three-dimensional shapes (sides, corners and edges)",
+        "Recognising di൵erent solid shapes such as cuboids, cubes sphere from the environment.",
+        "Drawing solid shapes",
+        "Three-dimensional regular shapes made",
+        "Molding the shapes cuboid, cube, cylinder and sphere using plasticine or clay",
+        "Identify sources of sounds from the local environment.",
+        "Classifying sounds into categories such as natural sounds (birds, wind) and arti¿cial sounds (machines, instruments) such as metallic objects, drums, speakers, headphones, bell.",
+        "Investigating sound properties (loud, soft,..)",
+        "Producing di൵erent sounds using local materials",
+        "Exploring natural sources of light in the environment (sun, moon, stars,)",
+        "Recognising arti¿cial sources of light in the environment (fire, candle, torch, lamp, bulb)",
+        "Comparing and contrasting natural and arti¿cial sources of light in the environment",
+        "Exploring soluble and insoluble materials.",
+        "Experimenting on solubility of materials in water (sugar, soda, salt«)",
+        "Experimenting with di൵erent insoluble materials (sand, stones, chalk«).",
+        "Comparing and contrasting soluble and insoluble materials"
+      ],
+      "assessmentMethods": [
+        "Existence of matter explored accordingly",
+        "Di൵erent sounds made correctly",
+        "Sources of light in the environment classi¿ed accordingly",
+        "Solubility of materials in water analysed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 11,
+      "title": "Grade 2: EXPLORING MIXITURES",
+      "topics": ["Addition, Subtraction, Multiplication and Division of Things", "Domestic waste"],
+      "learningOutcomes": [
+        "Use whole numbers in addition, in di൵erent situation",
+        "Use whole numbers in Subtraction in di൵erent situations",
+        "Use whole numbers in multiplication in life situation",
+        "Use whole numbers in division in di൵erent life situations",
+        "Manage waste."
+      ],
+      "suggestedActivities": [
+        "Adding numbers using di൵erent materials such as tiles, number line",
+        "Adding two double-digit numbers with sum up to 99 (Including carrying and without carrying)",
+        "Adding two double digit numbers vertically with sum up to 99 by expanded notation",
+        "Adding whole numbers with sum up to 999 without regrouping and regrouping",
+        "Applying commutative law and the zero property of addition",
+        "Adding numbers using di൵erent strategies such as number trees, wheels and magic squares",
+        "Identifying number patterns involving addition and determining the rule in the number patterns",
+        "Exploring practical activities involving money up to K999 and other quantities",
+        "Whole numbers used addition, in di൵erent situation",
+        "Identifying place values using three-digit numbers using di൵erent strategies such as place value charts, abacus and number box",
+        "Subtracting numbers using tiles",
+        "Subtracting whole numbers up to 99 (including decomposition)",
+        "Subtracting whole numbers vertically up to 999",
+        "Subtracting whole numbers up to 999 by expanded notation",
+        "Subtracting whole numbers up to 999 without regrouping",
+        "Subtracting whole numbers up to 999 using strategies such as number trees, magic squares and number games.",
+        "Identifying number patterns involving subtraction and determining the rule in the number patterns",
+        "Carrying out practical activities involving money up to K999 and other quantities",
+        "Illustrating the meaning of multiplication as number of equal groups and number of elements in the group.",
+        "Illustrating the meaning of multiplication using di൵erent strategies (repeated addition, an",
+        "Multiplying single digit numbers",
+        "Completing single digit multiplication tables",
+        "Applying commutative law of multiplication",
+        "Identifying the property of 1 as an identity in multiplication and the property of 0",
+        "Carrying out multiplication using composition and decomposition of double-digit numbers by single digit number",
+        "Identifying number patterns involving multiplication and determining the rule in the number patterns.",
+        "Carrying out practical activities involving money up to K99 and other quantities",
+        "Illustrating the meaning of division as a group shared into equal portions",
+        "Identifying number patterns involving division and determining the rule in the number patterns",
+        "Identifying household chemical wastes ( cleaning agents, pesticides and insecticides, SDLQWV",
+        "Analyse e൵ects of household wastes to the environment",
+        "Explore ways of managing household chemical waste"
+      ],
+      "assessmentMethods": [
+        "Whole numbers used in addition in di൵erent situations correctly",
+        "Subtraction of whole numbers used in di൵erent situations correctly",
+        "Whole numbers used in multiplication in life situations correctly",
+        "Whole numbers used in Subtraction in di൵erent situations correctly",
+        "Waste managed correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 12,
+      "title": "Grade 2: EXPLORING MIXITURES",
+      "topics": ["Addition, Subtraction, Multiplication and Division of Things"],
+      "learningOutcomes": [
+        "Interpret warning signs and labels on household chemicals.",
+        "Analyse data",
+        "Classify plants and animals according to their characteristics"
+      ],
+      "suggestedActivities": [
+        "Identifying household chemicals such as detergents, pesticides, insecticides, disinfectant, air fresheners, soap, shampoo, toothpaste",
+        "Recognising warning signs and chemical labels such as hazard symbols",
+        "Exploring ways of disposing household chemical wastes",
+        "Collecting and recording data by tallying",
+        "Presenting data in a frequency table using tallies and related numerals",
+        "Interpreting data in a frequency table",
+        "Exploring di൵erent plants in the local environment",
+        "Classifying plants such as Flowering plants (maize, mangoes, beans) and non-Àowering plants (ferns, moss, pine trees)",
+        "Relating the structures of Àowering and non-Àowering plants to their functions"
+      ],
+      "assessmentMethods": [
+        "Warning signs and labels on household chemicals interpreted correctly",
+        "Data analysed appropriately",
+        "Plants and animals classi¿ed accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 13,
+      "title": "Grade 3: EXPLORING MY WORLD",
+      "topics": ["Grouping Things", "Things in the Surroundings"],
+      "learningOutcomes": [
+        "Apply relationship between sets",
+        "Apply the bene¿t of natural resources in daily life.",
+        "Analyse water cycle process",
+        "Express whole numbers in a variety of ways",
+        "Classify foods according to their nutrients",
+        "Analyse components of soil.",
+        "Practise care for the surroundings"
+      ],
+      "suggestedActivities": [
+        "Describing a given group (set) of whole numbers (natural numbers, even numbers and odd numbers).",
+        "Listing members of a described group.",
+        "Identifying whether or not groups are equal ³ ¶ or not equal ³ ́ through inspection of members of the groups.",
+        "Identifying equivalent groups using concrete and semi concrete objects.",
+        "Identifying subgroups (subsets) including the subset symbol ³ ́ using concrete and semi concrete objects",
+        "Exploring the bene¿t of natural resources to the community such as forests, water, minerals, soil, rocks",
+        "Exploring water cycle (stages of water cycle such as evaporation,",
+        "Recognising that the water cycle is an ongoing process with no beginning or end",
+        "Reading and writing numbers up to 99999",
+        "Identifying the place values up to 5-digit numbers",
+        "Reading and writing 5-digit numbers in expanded notation with and without words",
+        "Writing 5-digit numbers in numerals and in words",
+        "Whole numbers expressed in a variety of ways",
+        "Exploring the bene¿ts of eating a variety of foods such as energy giving, body building, and protective food",
+        "Classifying Food according to the nutrients (energy giving such as nsima, rice, potatoes, Body building foods such as beans, beef, ¿sh, eggs, Protective foods such as fruits and vegetables)",
+        "Identifying classes of animals as vertebrates and invertebrates",
+        "Classifying animals into Vertebrates (Man, chicken, ¿sh, cow, goat, frog, snake)",
+        "Classifying animals into Invertebrates (Worms, spiders, cockroaches)",
+        "Investigating Soil formation (Agents of weathering- wind, trees, water and animals)",
+        "Examining soil layers- top soil sub soil, bedrock)",
+        "Classifying types of Soil (Clay, sand and loam)",
+        "Analysing uses of soil in farming, building, molding objects",
+        "Identifying types of pollution such as air, land, water",
+        "Exploring causes of pollution such as open burning, indiscriminate disposal of waste, smoke, dust, littering"
+      ],
+      "assessmentMethods": [
+        "Relationship between sets applied accordingly",
+        "Bene¿ts of natural resources applied in daily life accordingly",
+        "Water cycle analysed accordingly",
+        "Foods classi¿ed according to their nutritive value correctly",
+        "Components of soil analysed accordingly",
+        "Care for the surroundings practised correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 14,
+      "title": "Grade 3: UNDERSTANDING MY BODY",
+      "topics": ["The Human Body"],
+      "learningOutcomes": [
+        "Exhibit care for the sensory organs",
+        "Practise care for the human body",
+        "Practise Personal hygiene.",
+        "Use relations in di൵erent life context"
+      ],
+      "suggestedActivities": [
+        "Identifying the sensory organs (eye, ear, skin..)",
+        "Examining basic parts of the eye",
+        "Illustrating the diagrams and also labeling basic eye parts",
+        "Exploring use of eyes in terms of seeing objects, colors, producing tears to wash away debris, keep the eye moist and the surrounding environment",
+        "Identifying the di൵erent parts of the ear, such as the outer ear, ear canal, eardrum, and inner ear.",
+        "Labeling the di൵erent parts of the ear using a diagram, such as the outer ear, ear canal, eardrum, and inner ear.",
+        "Investigating the functions of the ear in terms of hearing and balancing",
+        "Practising ways of protecting the ears from loud noises, keeping them clean",
+        "Investigating the function of the skin",
+        "Practicing good skin hygiene through washing the skin, applying jelly, covering",
+        "Identify movable joints (elbow, knee, hip, wrist, ankle).",
+        "Practice moving movable joints",
+        "Practising care for bones and muscles (consuming calcium-rich foods such as cassava, milk, ¿sh for bones; Protein foods such as meat, eggs, beans« for muscles)",
+        "Exercising regularly (physical activity such as games sports, simple exercises)",
+        "Classifying diseases such as Infectious (HIV, TB, Ebola, Measles, COVID, Chicken Pox), and Non-infectious diseases (Asthma, malaria, Malnutrition)",
+        "Practising preventive measures such as care for",
+        "Matching one set to another using arrow diagrams based on a given double digit number using addition or subtraction operations",
+        "Mapping two sets using a one-to-one correspondence using the combined operations e.g. ³times 2, plus 1 ́ of whole numbers in the range not exceeding 99999",
+        "Identifying the relation between two given sets on a given arrow diagram",
+        "Illustrating one-to-many relations (³is greater than ( )ޓ́, ³is less than ( )ޒ́, ³is greater or equal to () ́ and ³is less or equal to () ́) using arrow diagrams"
+      ],
+      "assessmentMethods": [
+        "Care for sensory organs exhibited accordingly",
+        "Care for human body practised correctly",
+        "Personal hygiene practised correctly",
+        "Relations used in life context accordingly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 15,
+      "title": "Grade 3: EXPLORING THE SKY AND SEASONS",
+      "topics": ["Time, length, mass and capacity", "Weather and Climate Change"],
+      "learningOutcomes": [
+        "Use measures in everyday life",
+        "Demonstrate understanding of causes of climate change"
+      ],
+      "suggestedActivities": [
+        "Telling time at speci¿ed intervals (half of an hour, quarter of an hour and ¿ve-minute intervals) using the 24-hour analogue clock",
+        "Reading and using the Gregorian calendar (January ± December)",
+        "Describing the unit for measuring long distances (km)",
+        "Measuring mass of di൵erent objects using standard units (kilograms, grams)",
+        "Measuring capacity of di൵erent objects using standard units (litres)",
+        "Solving problems involving mass and capacity",
+        "Exploring the Sky and Seasons",
+        "Recognising causes of climate change such as deforestation, open burning (air pollution), improper waste disposal",
+        "Analyse effects of climate change such as habitat"
+      ],
+      "assessmentMethods": [
+        "Measures used in real life accordingly",
+        "Understanding of causes of climate change demonstrated correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 16,
+      "title": "Grade 3: EXPLORING MATERIALS",
+      "topics": ["Materials", "Plane and Solid Shapes", "Forces", "Simple Machines"],
+      "learningOutcomes": [
+        "Investigate characteristics of materials.",
+        "Construct di൵erent types of shapes",
+        "Analyse the relationship between forces and movement of objects",
+        "Make simple machines"
+      ],
+      "suggestedActivities": [
+        "Identifying observable characteristics of materials",
+        "Recognising properties of materials such as rough/smooth, hard/soft, Àexible /rigid, strong/fragile, sinking/Àoating",
+        "Examining properties of materials based on characteristics such as color, shape, size, texture, and weight. (Properties of matter)",
+        "Drawing a rectangle and square using a protractor and a set square",
+        "Identify isosceles and equilateral triangles from concrete and semi concrete objects",
+        "Sorting out isosceles and equilateral triangle from di൵erent triangles",
+        "Drawing isosceles and equilateral using set square and protractor",
+        "Demonstrating how forces cause objects to move, or change direction in terms of pushing and pulling (exerting force away - pushing or closer - pulling)",
+        "Analysing the relationship between forces and movement objects",
+        "Identify simple machines in toys, tools, and other objects used in daily life, such as screw, scissors, seesaw, lever.",
+        "Making simple machines such as seesaw, pulley, lever, wheel and axle, wedge, inclined plane",
+        "Applying the uses of simple machines in everyday life"
+      ],
+      "assessmentMethods": [
+        "Characteristics of materials of matter investigated accordingly",
+        "Di൵erent shapes constructed accordingly",
+        "The relationship between forces and movement of objects analysed accordingly.",
+        "Simple machines made correctly"
+      ],
+      "resources": []
+    },
+    {
+      "unitNumber": 17,
+      "title": "Grade 3: EXPLORING MIXITURES",
+      "topics": ["Mixtures", "Addition, Subtraction, Multiplication and Division of Things"],
+      "learningOutcomes": [
+        "Create di൵erent types of mixtures",
+        "Use whole numbers in Addition in di൵erent situations",
+        "Use whole numbers in subtraction in di൵erent life situations.",
+        "Use whole numbers in multiplication in di൵erent life situations",
+        "Use whole numbers in division in di൵erent life situations",
+        "Use fractions in life situations"
+      ],
+      "suggestedActivities": [
+        "Identifying mixture components from the surroundings",
+        "Conducting simple experiments to simple mixtures",
+        "Observing the properties of di൵erent mixtures",
+        "Creating di൵erent types of mixtures",
+        "Exploring Mixtures:",
+        "Adding 5-digit numbers to 3, 4 and 5-digits in expanded notation up to the sum of 99999 with carrying up to 4 times.",
+        "Adding of whole numbers with the sum up to 99999 without regrouping.",
+        "Adding numbers using various strategies such as number trees, wheels and magic squares",
+        "Identifying number patterns involving addition and determining the rule in the number patterns",
+        "Applying addition of numbers in di൵erent quantities and using money",
+        "Whole numbers used in Addition in di൵erent situations accuratelty",
+        "Subtracting 3, 4 and 5-digit numbers from 5-digit numbers in expanded notation with borrowing up to up to 4 times",
+        "Subtracting whole numbers with and without regrouping up to 99999",
+        "Subtracting numbers using various strategies such as number trees, wheels and magic squares",
+        "Identifying number patterns involving subtraction and determining the rule in the number patterns",
+        "Applying subtraction of numbers in di൵erent quantities and using money",
+        "Multiplying numbers (3-digit by 1-digit, 3-digit by a 2-digit) vertically using variety of strategies",
+        "Multiplying numbers by 10, 100 and1000.",
+        "Using number facts in multiplication such as 10 fact, 5 fact.",
+        "Identifying number patterns involving multiplication",
+        "Applying multiplication of numbers in di൵erent quantities and using money",
+        "Dividing 1-digit number, 2-digit numbers and 3-digit numbers by 1-digit number with remainders using long",
+        "Identifying number patterns involving division",
+        "Applying division of numbers in di൵erent quantities and using money",
+        "Dividing a whole object (concrete and semi concrete materials) into equal and unequal parts.",
+        "Dividing a whole into equal parts (meaning of a fraction using models such as the area, set and linear model)",
+        "Naming parts of the fractions.",
+        "Identifying proper fractions from a given number of fractions.",
+        "Drawing and shading proper fractions",
+        "Adding and subtracting proper fractions with common denominator (single digit numbers)."
+      ],
+      "assessmentMethods": [
+        "Di൵erent types of mixtures created correctly",
+        "Di൵erent situations role played accordingly",
+        "Whole numbers used in division in life situations correctly",
+        "Whole numbers used in subtraction in di൵erent life situations accurately",
+        "Whole numbers used in multiplication in di൵erent life situations accurately",
+        "Whole numbers used in division in di൵erent life situations accurately"
+      ],
+      "resources": []
+    }
+  ],
+  "metadata": {
+    "source": "Ministry of Education, Curriculum Development Centre — LOWER-PRIMARY-SYLLABI-GRADE-1-3-FINAL-CAMERA-REDY-1.pdf",
+    "authority": "Curriculum Development Centre (CDC), Ministry of Education, Republic of Zambia",
+    "sourceIndexUrl": "https://www.edu.gov.zm/?page_id=1142",
+    "accessedAt": "2026-07-30",
+    "sourceFileBytes": 1913157,
+    "extractionNote": "Extracted from the named learning-area section of the official Grades 1–3 omnibus. No curriculum content was fabricated.",
+    "curated": true,
+    "recordCount": 70
+  }
+}

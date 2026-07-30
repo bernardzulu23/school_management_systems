@@ -1,0 +1,290 @@
+{
+  "subject": "Lunda",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 1,
+  "sourceFile": "LUNDA-TEACHING-MODULE-GRADE-1-TERM-1.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "Febby .S. Chikunji –Mulenda Specialist – Curriculum Development",
+      "topics": ["(Lunda),Curriculum Development Centre,", "Lusaka."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 2,
+      "title": "Harriet Mbimbi: Head of Department-Languages,",
+      "topics": ["Kasisi ST.Thresa Secondary School, Chongwe."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 3,
+      "title": "Edah Samutamu: Teacher,",
+      "topics": ["Mwinilunga Primary School, Mwinilunga."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 4,
+      "title": "Brian Kabamba: Teacher,",
+      "topics": ["Nyamazhiya Primary School, Ikelenge."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 5,
+      "lesson": 5,
+      "title": "Vandick Saisada: Teacher,",
+      "topics": ["Makondu Primary School, Zambezi."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 6,
+      "lesson": 6,
+      "title": "Brenda Kahona: Teacher,",
+      "topics": ["Kanyihampa Primary School, Mwinilunga."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 7,
+      "lesson": 7,
+      "title": "Tina Muvwala: Teacher,",
+      "topics": ["Kabanda Primary School, Mwinilunga."],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 8,
+      "title": "MAZU ATACHI",
+      "topics": ["Kutachika kwanloñeshelu yayiha yayuma yikutachika kutañishewa mumashikola,"],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 9,
+      "title": "KUSAKILILA",
+      "topics": [
+        "Iwu Mukanda Wakulombola Ntañishi hamwakutañishila atudizi amu Mañu 1",
+        "wunasonekewi kuhitila mukuhumañana-humañana nakuhanjeka nanowu",
+        "ezhima akwatahu makasa hansañu zhamashikola. Kwadiñi kuhumañana",
+        "nawantu, mazanvu ninyitayi yamboka kulonda kutambula yitoñozhoka yawu",
+        "hantanjikilu yantañilu amu Mañu 1 nakuyinka nawa mpinji yakushimuna"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 4,
+      "lesson": 10,
+      "title": "MWATELA KUWUZATISHILA IWU MUKANDA",
+      "topics": [
+        "Muniwu mukanda mudi yuma yezhima yatela kutañishewa mu Temu 1 yamu",
+        "Mañu 1. Mukanda weniwu wunambulewi munyitu yansañu dichi nawa mutu",
+        "himutu wansañu wudi nayuma yakutañisha muyibalu yamboka, yidi neyi Kuhosha",
+        "Nakutiyilila, Kutaña, Mazu Akutaña, Kutaña Nakanañachima ni Kusoneka. Iyi",
+        "yuma yakutañisha yinasonekewi muniwu mukanda hizhindizilu zhinaloñeshewuku"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [
+        "CHIBALU: KUTIYILILA KUNSAÑU",
+        "KUHOSHA NAKUTIYILILA",
+        "Mutu Wansañu: Tuheka",
+        "Kulumbulula:",
+        "Iwu mutu wansañu hatuheka wudi naniwu mutu wansañu wanyanya;",
+        "Kutiyilila kutuheka"
+      ],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 11,
+      "title": "Kwiluka nsona niyivumina",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 12,
+      "title": "Yikunku yamazu",
+      "topics": [
+        "Iwu mutu wansañu wakwiluka nsona niyivumina wukukwasha atudizi kutuña",
+        "chikuku chakutaña.",
+        "Kukoka yitoñozhoka yawatudizi",
+        "Mweluka nenu tuda nitunyama twedishaña yivumina? Twayenu tutenenu",
+        "yivumina yawatuda nitunyama. Ikolukolu welaña nindi kolu kolu..., kasumbi"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 13,
+      "title": "Yivumina yansona",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 14,
+      "title": "Yikunku yamazu",
+      "topics": [
+        "Mazu",
+        "Iwu mutu wansañu wukukwasha atudizi kwiluka mwakutenena yivumina yansona",
+        "muyatiyakenaña",
+        "Kukoka yitoñozhoka yawatudizi",
+        "Hemenu yisela yakunyinu yambo-mboka nawa tudizi."
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 15,
+      "title": "Kwiluka yivumina yansona",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 16,
+      "title": "Kwiluka nsona",
+      "topics": [
+        "Iwu mutu wansañu hakwiluka nsona niyivumina wukukwasha atudizi kwiluka",
+        "Kukoka yitoñozhoka yawatudizi",
+        "Yuma yamboka yadiñi nakuditadikisha, atuda, nyitondu, motoka ninsona. Atuda",
+        "diwu atachikili nawu, etu twedishaña yivumina, nyitondu niyena nayu ninetu neyi",
+        "mpeepela yinakukunka twedishaña yivumina kumafu, motoka hiyadiñi nayu,"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 17,
+      "title": "Yivumina yansona",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 18,
+      "title": "Yikunku yamazu",
+      "topics": [
+        "Mazu",
+        "Iwu mutu wansañu wukukwasha atudizi kwiluka kwidisha yivumina yansona.",
+        "Kukoka yitoñozhoka yawatudizi",
+        "Atunyama apompeli kulonda atiyi kanyama wumu yodihi wedishaña chivumina",
+        "chachiwahi. Dichi watachikili kapela nindi; sssssss! Hadiñi chuula. Kelechikelechi!"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 19,
+      "title": "Kwiluka yivumina yansona",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 20,
+      "title": "Kwiluka nsona",
+      "topics": [
+        "Iwu mutu wansañu hakwiluka nsona niyivumina wukukwasha atudizi kwiluka",
+        "Yuma Yinakukuhwelelewa Atudizi Kwilukisha",
+        "Kadizi anakumukuhwelela kwila yuma yidi neyi:",
+        "ü Kumanisha kukala",
+        "azatishi maana a alufabeti hakutuña mazu amaha"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 1,
+      "lesson": 21,
+      "title": "Yivumina yansona",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 22,
+      "title": "Yikunku yamazu",
+      "topics": [
+        "Mazu",
+        "Iwu mutu wansañu wukukwasha atudizi kwiluka kwidisha yivumina yansona.",
+        "Yuma yinakukuhwelelewa atudizi kwilukisha",
+        "Kadizi anakumukuhwelela kwila yuma yidi neyi:",
+        "ü Kumanisha kukala"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:45.599Z",
+    "rawTextLength": 135159,
+    "educationLevel": "primary"
+  }
+}

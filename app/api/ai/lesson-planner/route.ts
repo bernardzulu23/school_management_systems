@@ -20,6 +20,7 @@ import { aiChain, AI_SSE_HEADERS } from '@/lib/ai/provider-fallback'
 import { validateAIGuardrails } from '@/lib/ai/guardrails'
 import { getCachedAIResponse, setCachedAIResponse } from '@/lib/ai/cache'
 import { assertCurriculumTopicAllowed } from '@/lib/ai/curriculum-context'
+import { assertSubjectInSchoolCatalog } from '@/lib/subjects/assertSubjectInSchoolCatalog'
 
 const LESSON_PLAN_SYSTEM =
   'You are an expert Zambian CBC lesson planner. Write complete, practical lesson plans aligned to MoGE guidelines and Zambian classroom context.'
@@ -179,6 +180,17 @@ export const POST = withAILimits(async function POST(request: Request) {
 
     const raw = await request.json().catch(() => null)
     const parsed = LessonPlannerInputSchema.parse(raw)
+    try {
+      assertSubjectInSchoolCatalog(parsed.subject, {
+        schoolLevel: school.level,
+        gradeLevel: parsed.grade,
+      })
+    } catch (e) {
+      return NextResponse.json(
+        { error: e instanceof Error ? e.message : 'Invalid subject' },
+        { status: 400 }
+      )
+    }
     let topic = parsed.topic
     let subtopic = parsed.subtopic
     try {

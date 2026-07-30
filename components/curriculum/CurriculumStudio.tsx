@@ -16,47 +16,7 @@ import {
 } from '@/components/ui/select'
 import { Calendar, Download, FileText, Layers, Loader2, RotateCcw } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-const FALLBACK_SUBJECTS = [
-  'Agricultural Science',
-  'Art and Design',
-  'Biology',
-  'Chemistry',
-  'Civic Education',
-  'Commerce and Principles of Accounts',
-  'Computer Science',
-  'Design and Technology Studies',
-  'English',
-  'Fashion and Fabrics',
-  'Food and Nutrition',
-  'French Language',
-  'Geography',
-  'History',
-  'Hospitality Management',
-  'ICT',
-  'Literature in English',
-  'Mathematics',
-  'Mathematics II',
-  'Music Arts',
-  'Physical Education',
-  'Physics',
-  'Religious Education',
-  'Travel and Tourism',
-  'Zambian Languages',
-]
-
-const GRADES = [
-  'Form 1',
-  'Form 2',
-  'Form 3',
-  'Form 4',
-  'Form 5',
-  'Form 6',
-  'Grade 7',
-  'Grade 10',
-  'Grade 11',
-  'Grade 12',
-]
+import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
 
 const TERMS = ['Term 1', 'Term 2', 'Term 3'] as const
 const MIN_WEEKS = 1
@@ -135,9 +95,16 @@ export function CurriculumStudio({
   onSchemeSaved,
   onSchemeGenerated,
 }: CurriculumStudioProps) {
-  const [subjects, setSubjects] = useState<string[]>(FALLBACK_SUBJECTS)
-  const [subject, setSubject] = useState('Chemistry')
-  const [grade, setGrade] = useState('Form 2')
+  const {
+    grades,
+    subjects: schoolSubjects,
+    assignmentSubjects,
+    schoolLevel,
+    schoolLoading,
+  } = useSchoolSubjectSelectors()
+  const [subjects, setSubjects] = useState<string[]>([])
+  const [subject, setSubject] = useState('')
+  const [grade, setGrade] = useState('')
   const [term, setTerm] = useState('Term 1')
   const [year, setYear] = useState(new Date().getFullYear())
   const [weeksPerTerm, setWeeksPerTerm] = useState('12')
@@ -168,6 +135,21 @@ export function CurriculumStudio({
   const [selectedCarryOverIds, setSelectedCarryOverIds] = useState<string[]>([])
   const [carryOverMessage, setCarryOverMessage] = useState('')
   const [loadingCarryOver, setLoadingCarryOver] = useState(false)
+
+  useEffect(() => {
+    if (!grades.length) return
+    setGrade((prev) => (prev && grades.includes(prev) ? prev : grades[0]))
+  }, [grades])
+
+  useEffect(() => {
+    const merged = [...new Set([...(assignmentSubjects || []), ...(schoolSubjects || [])])].filter(
+      Boolean
+    )
+    setSubjects(merged)
+    if (merged.length) {
+      setSubject((prev) => (prev && merged.includes(prev) ? prev : merged[0]))
+    }
+  }, [assignmentSubjects, schoolSubjects])
 
   const weeksPerTermNum = Math.min(MAX_WEEKS, Math.max(MIN_WEEKS, Number(weeksPerTerm) || 12))
   const weekChoices = Array.from({ length: weeksPerTermNum }, (_, i) => i + 1)
@@ -204,33 +186,35 @@ export function CurriculumStudio({
     let cancelled = false
     ;(async () => {
       try {
-        const [currRes, assignRes] = await Promise.all([
-          fetch('/api/curriculum', { credentials: 'include' }),
-          fetch('/api/teaching-assignments', { credentials: 'include' }),
-        ])
+        const qs =
+          schoolLevel === 'primary'
+            ? '?list=1'
+            : grade
+              ? `?list=1&grade=${encodeURIComponent(grade)}`
+              : '?list=1'
+        const currRes = await fetch(`/api/curriculum${qs}`, { credentials: 'include' })
         const currJson = await currRes.json().catch(() => ({}))
-        const assignJson = await assignRes.json().catch(() => ({}))
         if (cancelled) return
         const catalog =
           currRes.ok && Array.isArray(currJson.subjects)
             ? currJson.subjects.map(String).filter(Boolean)
             : []
-        const assigned = (Array.isArray(assignJson?.data) ? assignJson.data : [])
-          .map((a: { subjectName?: string }) => String(a.subjectName || '').trim())
-          .filter(Boolean)
-        const list = [...new Set([...assigned, ...catalog, ...FALLBACK_SUBJECTS])]
-        if (list.length) {
-          setSubjects(list)
-          setSubject((prev) => (list.includes(prev) ? prev : list[0]))
-        }
+        if (!catalog.length) return
+        setSubjects((prev) => {
+          const list = [...new Set([...(assignmentSubjects || []), ...catalog, ...prev])]
+          if (list.length) {
+            setSubject((cur) => (list.includes(cur) ? cur : list[0]))
+          }
+          return list
+        })
       } catch {
-        // keep fallback
+        // keep school catalog / assignments
       }
     })()
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [schoolLevel, grade, assignmentSubjects])
 
   useEffect(() => {
     const clamp = (raw: string, fallback: number) => {
@@ -501,13 +485,17 @@ export function CurriculumStudio({
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Grade / Form</Label>
-                  <Select value={grade} onValueChange={setGrade}>
+                  <Label>{schoolLevel === 'primary' ? 'Grade' : 'Grade / Form'}</Label>
+                  <Select
+                    value={grade || undefined}
+                    onValueChange={setGrade}
+                    disabled={schoolLoading || !grades.length}
+                  >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select grade" />
+                      <SelectValue placeholder={schoolLoading ? 'Loading…' : 'Select grade'} />
                     </SelectTrigger>
                     <SelectContent>
-                      {GRADES.map((g) => (
+                      {grades.map((g) => (
                         <SelectItem key={g} value={g}>
                           {g}
                         </SelectItem>

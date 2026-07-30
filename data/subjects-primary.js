@@ -143,6 +143,22 @@ export const PRIMARY_SUBJECTS = [
     isLocalLanguage: true,
     description: 'Kaonde language and customs',
   },
+  {
+    id: 118,
+    name: 'Zambian Languages',
+    code: 'ZML',
+    category: 'Languages',
+    educationLevel: 'primary',
+    description: 'Official Grades 1–3 Zambian Languages learning area',
+  },
+  {
+    id: 119,
+    name: 'Mathematics and Science',
+    code: 'MASC',
+    category: 'Core',
+    educationLevel: 'primary',
+    description: 'Official integrated Mathematics and Science learning area for Grades 1–3',
+  },
 ]
 
 export const PRIMARY_SUBJECT_CATEGORIES = [

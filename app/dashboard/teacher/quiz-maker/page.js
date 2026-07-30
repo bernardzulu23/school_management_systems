@@ -14,17 +14,23 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import { toast } from 'react-hot-toast'
+import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
+import { resolveAssignmentGradeLabel } from '@/lib/subjects/schoolSubjectOptions'
 
 export default function TeacherQuizMakerPage() {
   const { data, loading, error, fetch: fetchQuiz } = useAIFetch('/api/ai/quiz-maker')
   const quiz = data?.quiz || null
   const ragReferences = Array.isArray(data?.ragReferences) ? data.ragReferences : []
-
-  const FORM_LEVELS = ['Form 1', 'Form 2', 'Form 3', 'Form 4', 'Form 5']
+  const {
+    grades,
+    subjects: schoolSubjects,
+    schoolLevel,
+    assignments: hookAssignments,
+  } = useSchoolSubjectSelectors()
 
   const [form, setForm] = useState({
-    grade: 'Form 2',
-    subject: 'English',
+    grade: '',
+    subject: '',
     topic: '',
     questionCount: 10,
     difficulty: 'medium',
@@ -45,6 +51,12 @@ export default function TeacherQuizMakerPage() {
 
   const selectedTeachingAssignment =
     teachingAssignments.find((a) => a.id === targetAssignmentId) || teachingAssignments[0] || null
+
+  useEffect(() => {
+    if (schoolLevel === 'primary' && generationPurpose === 'secondary_scenario') {
+      setGenerationPurpose('formative')
+    }
+  }, [schoolLevel, generationPurpose])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -113,6 +125,11 @@ export default function TeacherQuizMakerPage() {
   }, [schemeContextId])
 
   useEffect(() => {
+    if (hookAssignments?.length) {
+      setTeachingAssignments(hookAssignments)
+      setTargetAssignmentId((prev) => prev || hookAssignments[0]?.id || '')
+      return
+    }
     const loadAssignments = async () => {
       try {
         const res = await fetch('/api/teaching-assignments')
@@ -125,7 +142,36 @@ export default function TeacherQuizMakerPage() {
       }
     }
     loadAssignments()
-  }, [])
+  }, [hookAssignments])
+
+  useEffect(() => {
+    setForm((p) => {
+      const nextGrade = p.grade && grades.includes(p.grade) ? p.grade : grades[0] || p.grade || ''
+      const subjectOptions = [
+        ...new Set([
+          ...teachingAssignments.map((a) => String(a.subjectName || '').trim()).filter(Boolean),
+          ...(schoolSubjects || []),
+        ]),
+      ]
+      const nextSubject =
+        p.subject && (subjectOptions.length === 0 || subjectOptions.includes(p.subject))
+          ? p.subject
+          : subjectOptions[0] || p.subject || ''
+      if (nextGrade === p.grade && nextSubject === p.subject) return p
+      return { ...p, grade: nextGrade, subject: nextSubject }
+    })
+  }, [grades, schoolSubjects, teachingAssignments])
+
+  useEffect(() => {
+    if (!selectedTeachingAssignment) return
+    const nextGrade = resolveAssignmentGradeLabel(selectedTeachingAssignment)
+    const nextSubject = String(selectedTeachingAssignment.subjectName || '').trim()
+    setForm((p) => ({
+      ...p,
+      ...(nextGrade ? { grade: nextGrade } : {}),
+      ...(nextSubject ? { subject: nextSubject } : {}),
+    }))
+  }, [selectedTeachingAssignment])
 
   const activeSubject = selectedTeachingAssignment?.subjectName || form.subject
 
@@ -465,13 +511,13 @@ export default function TeacherQuizMakerPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Form level</Label>
+                  <Label>{schoolLevel === 'primary' ? 'Grade' : 'Grade / Form'}</Label>
                   <select
                     className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                     value={form.grade}
                     onChange={(e) => setForm((p) => ({ ...p, grade: e.target.value, topic: '' }))}
                   >
-                    {FORM_LEVELS.map((g) => (
+                    {grades.map((g) => (
                       <option key={g} value={g}>
                         {g}
                       </option>
@@ -480,10 +526,19 @@ export default function TeacherQuizMakerPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Subject</Label>
-                  <Input
+                  <select
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                     value={form.subject}
                     onChange={(e) => setForm((p) => ({ ...p, subject: e.target.value, topic: '' }))}
-                  />
+                  >
+                    {(schoolSubjects.length ? schoolSubjects : [form.subject].filter(Boolean)).map(
+                      (s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      )
+                    )}
+                  </select>
                 </div>
                 <CurriculumTopicSelect
                   className="md:col-span-2"
@@ -504,9 +559,11 @@ export default function TeacherQuizMakerPage() {
                   >
                     <option value="formative">Formative quiz (MCQ / short / TF)</option>
                     <option value="exercise">Practice exercises</option>
-                    <option value="secondary_scenario">
-                      Secondary ECSEOL / ECZ scenarios (from syllabus &amp; schemes)
-                    </option>
+                    {schoolLevel !== 'primary' ? (
+                      <option value="secondary_scenario">
+                        Secondary ECSEOL / ECZ scenarios (from syllabus &amp; schemes)
+                      </option>
+                    ) : null}
                   </select>
                   {schemeContextId ? (
                     <p className="text-xs text-royalPurple-text3">

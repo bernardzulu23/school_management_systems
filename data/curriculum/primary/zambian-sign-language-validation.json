@@ -1,0 +1,37 @@
+{
+  "sourceFile": "ZAMBIAN-SIGN-LANGUAGES-Grades-1-3.pdf",
+  "subject": "Zambian Sign Language",
+  "band": null,
+  "educationLevel": "primary",
+  "sourceFileBytes": 916594,
+  "extractionNote": "Extracted deterministically from the official CDC/ECE PDF. Missing fields are reported; content is never fabricated.",
+  "rawRecordCount": 115,
+  "excludedUnexpectedGradeRecords": [],
+  "ok": true,
+  "recordCount": 115,
+  "grades": [1, 2, 3],
+  "expectedGrades": [1, 2, 3],
+  "recordsByGrade": {
+    "1": 39,
+    "2": 38,
+    "3": 38
+  },
+  "duplicateIds": [],
+  "missingGrades": [],
+  "incompleteRecordIds": [],
+  "emptyActivityRecordIds": [],
+  "mismatchedGradeRecordIds": [],
+  "suspiciousHeadingRecordIds": [],
+  "activityCoverage": {
+    "present": 115,
+    "total": 115,
+    "percent": 100,
+    "requiredPercent": 10
+  },
+  "expectedStandardCoverage": {
+    "present": 102,
+    "total": 115,
+    "percent": 88.7,
+    "requiredPercent": 10
+  }
+}

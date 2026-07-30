@@ -60,6 +60,68 @@ describe('primary CDC syllabus parser', () => {
     })
     expect(parsed.records[0].grade).toBeUndefined()
   })
+
+  it('tracks Lower Primary learning-area headings and preserves anomalous printed codes', () => {
+    const parsed = parseCdcSyllabusText(
+      `
+      A. ENGLISH LANGUAGE
+      GRADE 1: ENGLISH LANGUAGE
+      1.1 CONVERSATION
+      1.1.1 Greetings
+      1.1.1.1 Use greetings
+      • Practising greetings
+      Greetings used appropriately
+      ZAMBIAN LANGUAGES
+      GRADE 1: ZAMBIAN LANGUAGES
+      1.1 STORIES
+      1.1.1 Listening to Stories
+      1.1.1.1 Listen to stories
+      • Listening to stories
+      Stories listened to attentively
+      MATHEMATICS AND SCIENCE
+      GRADE 2: MATHEMATICS AND SCIENCE
+      2.5 EXPLORING MATERIALS
+      2.5.1 Solids and Liquids
+      3.1.1.5 Interpret chemical labels.
+      • Reading chemical labels
+      Labels interpreted correctly
+      2.5.1.2 Sort materials
+      • Sorting materials
+      Materials sorted correctly
+      CREATIVE AND TECHNOLOGY STUDIES
+      GRADE 1: CREATIVE AND TECHNOLOGY STUDIES
+      1.1 SAFETY
+      1.1.1 Safety in the immediate environment
+      1.1.1.1 Apply safety
+      • Discussing safety
+      Safety applied correctly
+      `,
+      {
+        subject: 'Lower Primary Omnibus',
+        educationLevel: 'primary',
+        alreadyDecoded: true,
+        trackLearningAreas: true,
+      }
+    )
+
+    expect(parsed.records.map((record) => record.subject)).toEqual([
+      'English',
+      'Zambian Languages',
+      'Mathematics and Science',
+      'Mathematics and Science',
+      'Creative and Technology Studies',
+    ])
+    const anomalous = parsed.records.find((record) => record.sourceCompetenceCode === '3.1.1.5')
+    expect(anomalous).toMatchObject({
+      subject: 'Mathematics and Science',
+      grade: 2,
+      topicNumber: '3.1',
+      subtopicNumber: '3.1.1',
+      sourceCompetenceCode: '3.1.1.5',
+      gradeCodeMismatch: true,
+      specificCompetences: ['Interpret chemical labels.'],
+    })
+  })
 })
 
 describe('primary curriculum AI grounding', () => {

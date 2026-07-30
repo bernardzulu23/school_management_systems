@@ -1,0 +1,66 @@
+{
+  "subject": "Icibemba",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 2,
+  "sourceFile": "ICIBEMBA-GRADE-1-TEACHING-MODULE-TERM-2.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Umutwe",
+      "topics": ["Sub-Topic – Umutwe Unoono"],
+      "activities": [
+        "General Competence – Ubwishibilo",
+        "Specific Competence – Ifilekabilwa ukwishiba",
+        "Expected Standard – Imibombele ileenekelwa"
+      ],
+      "resources": [],
+      "assessment": [
+        "Summary - Ukukusupawila",
+        "Conclusion - Ukusondwelela",
+        "Methodology – Imifundile",
+        "Listening and Speaking – Ukumfwa na Ukulanda",
+        "Reading – Ukubelenga",
+        "Writing – Ukulemba"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "Phonics",
+      "topics": [
+        "Umutwe Unoono 1: Ifilundwa fya mashiwi mukulemba (kw-, fw-, mb-, mf-)",
+        "Ifilekabilwa ukwishiba: Ifilekabilwa ukwishiba: Ukubelenga ifilundwa mukwikatisha",
+        "Amashiwi ayakankala: ifiunda, imfumu, ifilundwa",
+        "Ifyakubomfya: caati ya filundwa, ama kadi ya filundwa",
+        "Ifyakucita 1: Ukubelenga ifilundwa kwa, kwe, kwi"
+      ],
+      "activities": [
+        ": Listing",
+        "Sings the",
+        "description song",
+        "with learners",
+        "again and asks",
+        "learners to",
+        "identify words",
+        "which are"
+      ],
+      "resources": [
+        "letter ‘t’ and the vowels, pictures or objects whose names begin with /t/.",
+        "INTRODUCTION (5 minutes): Teacher sings a description song with learners e.g.,",
+        "song in Bemba:",
+        "Ba teacher bapa college ‘teachers at college",
+        "Baliba abapusanasana ‘",
+        "Bambi abepi ‘"
+      ],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:41.927Z",
+    "rawTextLength": 158782,
+    "educationLevel": "primary"
+  }
+}

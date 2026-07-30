@@ -1,0 +1,2836 @@
+{
+  "meta": {
+    "title": "Zambia CDC 2024 Zambian Sign Language Syllabus — Structured RAG Dataset",
+    "source": "Ministry of Education, Curriculum Development Centre — ZAMBIAN-SIGN-LANGUAGES-Grades-1-3.pdf",
+    "level": "Primary Education",
+    "grades": [1, 2, 3],
+    "purpose": "Structured curriculum data for AI-assisted quiz, lesson plan, and assessment generation. Each record maps to one embeddable chunk aligned to official CDC competences.",
+    "version": "1.0",
+    "generated": "2026",
+    "subject": "Zambian Sign Language",
+    "slug": "zambian-sign-language",
+    "sourceFileBytes": 916594,
+    "extractionNote": "Extracted from the official CDC PDF via per-file auto-detected character-code shift and table parsing. Content is transcribed from the source, not fabricated."
+  },
+  "curriculum": [
+    {
+      "id": "G1-T1-S1",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.1",
+      "subtopic": "Greetings",
+      "specificCompetences": ["Use appropriate greetings at di൵erent times of the day"],
+      "learningActivities": [
+        "Demonstrating greetings at di൵erent times of the day ( MORNING : GOOD MORNING) (AFTERNOON : GOOD AFTERNOON) (EVENING : GOOD EVENING",
+        "Responding to greetings at di൵erent times of the day."
+      ],
+      "expectedStandard": "Observing and signing greetings using appropriately attention getting strategies",
+      "keywords": ["conversation", "greetings", "appropriate", "greetings", "erent", "times"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S2",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.2",
+      "subtopic": "Family",
+      "specificCompetences": ["Identify members of a nuclear family"],
+      "learningActivities": [
+        "Identifying members of a nuclear family ( FATHER, MOTHER, CHILD/CHILDREN)",
+        "Telling the relationships that exist within the nuclear family ( PARENT, BROTHER, SISTER«"
+      ],
+      "expectedStandard": "Members of a nuclear family identi¿ed correctly",
+      "keywords": ["conversation", "family", "identify", "members", "nuclear", "family"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S3",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.3",
+      "subtopic": "Simple Commands",
+      "specificCompetences": ["Observe simple commands and respond"],
+      "learningActivities": [
+        "Role-playing giving and responding to simple commands ( FOLLOW LEADER, YOUR HAND CLAP, SIT, JUMP «)",
+        "Playing games on giving and responding to commands such as; (S IMON SIGN «YOUR EAR TOUCH"
+      ],
+      "expectedStandard": "Simple commands given and responded to correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "conversation",
+        "simple",
+        "commands",
+        "observe",
+        "simple",
+        "commands",
+        "respond"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S4",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.4",
+      "subtopic": "Classroom Rules",
+      "specificCompetences": ["Observe and follow classroom rules."],
+      "learningActivities": [
+        "Discussing classroom rules ( LANGUAGE BAD USE NOT, FIGHT NOT, LITTER NOT «)",
+        "Observing classroom routines",
+        "Asking for permission ( TEACHER PRO-ME ROOM LEAVE, TEACHER PRO-ME PERMISSION+ (POINTING SIGN) (TEACHER PRO-ME PERMISSION TOILET, TEACHER PLEASE TOILET GO«"
+      ],
+      "expectedStandard": "Classroom rules followed using correct vocabulary accordingly",
+      "keywords": ["conversation", "classroom", "rules", "observe", "follow", "classroom", "rules"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S5",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.5",
+      "subtopic": "Home Chores and Responsibilities",
+      "specificCompetences": [
+        "Use appropriate vocabulary to discuss chores and responsibilities of family members"
+      ],
+      "learningActivities": [
+        "Describing chores of family members TABLE-SET, PLATE CLEAN, CLOTH WASH, THING CLEAN, DIRTY PICK«",
+        "Describing responsibilities of family members (CARE, OBEY",
+        "'LVFXVVLQJ responsibilities of family members (PARENT FAMILY THING PROVIDE, PARENT RESPECT-OBEY, SICK PEOPLE CARE, FOOD SHARE «)"
+      ],
+      "expectedStandard": "Chores and responsibilities of family members described appropriately",
+      "keywords": [
+        "conversation",
+        "home",
+        "chores",
+        "responsibilities",
+        "appropriate",
+        "vocabulary",
+        "discuss",
+        "chores",
+        "responsibilities",
+        "family",
+        "members"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S6",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.6",
+      "subtopic": "Time",
+      "specificCompetences": [
+        "Use appropriate language to tell time of the day, days of the week and months of the year"
+      ],
+      "learningActivities": ["Telling time of the day MORNING, AFTERNOON, NIGHT)"],
+      "expectedStandard": "Greetings at di൵erent times of the day used correctly",
+      "keywords": [
+        "conversation",
+        "time",
+        "appropriate",
+        "language",
+        "tell",
+        "time",
+        "days",
+        "week",
+        "months",
+        "year"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S7",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.7",
+      "subtopic": "Food and Meals",
+      "specificCompetences": [
+        "Use appropriate vocabulary to identify different foods and meals of the day"
+      ],
+      "learningActivities": [
+        "Identifying di൵erent types of foods ( FRUIT, VEGETABLE, GRAIN«)",
+        "Mentioning types of meals BREAKFAST, LUNCH, DINNER, SUPPER",
+        "Reciting prayer before meals"
+      ],
+      "expectedStandard": "Di൵erent types of foods of the day identi¿ed correctly",
+      "keywords": [
+        "conversation",
+        "food",
+        "meals",
+        "appropriate",
+        "vocabulary",
+        "identify",
+        "different",
+        "foods",
+        "meals"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S8",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.8",
+      "subtopic": "Occupations",
+      "specificCompetences": ["Name di൵erent occupations found in the community"],
+      "learningActivities": [
+        "Naming occupations in the community TEACHER, NURSE, POLICE OFFICER, SHOP KEEPER, DRIVER, WATCHMAN, FARMER «)",
+        "Describing the role played by people in di൵erent occupations in the community TEACHER ± TEACH, POLICE OFFICER ± PROTECT, NURSE ± SICK PEOPLE CARE «)",
+        "Role-play recording of di൵erent occupations in play situations"
+      ],
+      "expectedStandard": "Occupations in the community named correctly",
+      "keywords": [
+        "conversation",
+        "occupations",
+        "name",
+        "erent",
+        "occupations",
+        "found",
+        "community"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S9",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.9",
+      "subtopic": "Things Found at Home",
+      "specificCompetences": ["Use appropriate language to identify things found at home"],
+      "learningActivities": [
+        "Identifying things found at home ( KITCHEN ± PLATE, SPOON« SITTING ROOM",
+        "TELEVISION, SOFA,"
+      ],
+      "expectedStandard": "Things found at home identi¿ed correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "conversation",
+        "things",
+        "found",
+        "home",
+        "appropriate",
+        "language",
+        "identify",
+        "things",
+        "found",
+        "home"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S10",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.10",
+      "subtopic": "Things Found at School",
+      "specificCompetences": ["Use appropriate language to name things found at school"],
+      "learningActivities": [
+        "Naming things found at school (DESK, CHAIR, BOOK, CHALKBOARD, FLAG, PENCIL, ERASER, PLAYGROUND, RULER «)"
+      ],
+      "expectedStandard": "Things found at school named correctly",
+      "keywords": [
+        "conversation",
+        "things",
+        "found",
+        "school",
+        "appropriate",
+        "language",
+        "name",
+        "things",
+        "found",
+        "school"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S11",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.11",
+      "subtopic": "Domestic Animals",
+      "specificCompetences": ["Use appropriate language to identify GRPHVWLF DQLPDOV"],
+      "learningActivities": [
+        "Identifying domestic animals ( DOG, CAT, COW, PIG, GOAT, CHICKEN «)",
+        "Describing domestic Animals ( FRIENDLY, LOYAL, DEPENDENT ON HUMANS, USEFUL TO HUMANS, PRODUCE DIFFERENT SOUNDS«"
+      ],
+      "expectedStandard": "Domestic animals identi¿ed accurately",
+      "keywords": [
+        "conversation",
+        "domestic",
+        "animals",
+        "appropriate",
+        "language",
+        "identify",
+        "grphvwlf",
+        "dqlpdov"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S12",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.12",
+      "subtopic": "The Market",
+      "specificCompetences": ["Use appropriate vocabulary for buying and selling at the market"],
+      "learningActivities": [
+        "Role-playing buying and selling ( PRICE WHAT, HOW-MUCH, COST WHAT, PRO-ME« BUY, PRO-ME PAY «, PRO-ME SELL«, THANK-YOU"
+      ],
+      "expectedStandard": "Vocabulary for buying and selling used appropriately",
+      "keywords": [
+        "conversation",
+        "market",
+        "appropriate",
+        "vocabulary",
+        "buying",
+        "selling",
+        "market"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S13",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.13",
+      "subtopic": "Community Practices",
+      "specificCompetences": ["Use appropriate vocabulary to discuss community practices"],
+      "learningActivities": [
+        "Mentioning good community practices ( ENVIRONMENT CLEAN, ENVIRONMENT GREEN KEEP, TREE PLANT, SHARE«)",
+        "Acts of kindness; KIND HAVE, HONEST HAVE AND FAIR HAVE «)"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "conversation",
+        "community",
+        "practices",
+        "appropriate",
+        "vocabulary",
+        "discuss",
+        "community",
+        "practices"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S14",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.14",
+      "subtopic": "Statements",
+      "specificCompetences": [
+        "Use appropriate sign language to deny, con¿rm, correct and express statements or propositions"
+      ],
+      "learningActivities": [
+        "Using dialogue to practise appropriate language to deny, con¿rm, correct and express statements or propositions Deny: PRO-ME HAVE NOT «, Con¿rm: YES, BALL MINE« Correct SORRY, PRO-ME SAY «, Express: IF SISTER COME, ME HAPPY«"
+      ],
+      "expectedStandard": "Appropriate language to deny, con¿rm, correct and express statements or propositions used appropriately",
+      "keywords": [
+        "conversation",
+        "statements",
+        "appropriate",
+        "sign",
+        "language",
+        "deny",
+        "correct",
+        "express",
+        "statements",
+        "propositions"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T1-S15",
+      "form": 1,
+      "topicNumber": "1.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "1.1.15",
+      "subtopic": "Plurals",
+      "specificCompetences": ["Demonstrate correct use of the plural forms of regular nouns"],
+      "learningActivities": [
+        "Changing regular nouns from singular to plural forms: ( singular: CAT, BOOK, plural: CAT-CAT, BOOK-BOOK «)",
+        "Note : in ZSL repetition of signs show pluralisation",
+        "Using duplication to show plural nouns (CAT: CAT- CAT, DOG: DOG-DOG«)"
+      ],
+      "expectedStandard": "Plural forms of regular nouns used correctly",
+      "keywords": [
+        "conversation",
+        "plurals",
+        "demonstrate",
+        "correct",
+        "plural",
+        "forms",
+        "regular",
+        "nouns"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T2-S1",
+      "form": 1,
+      "topicNumber": "1.2",
+      "topic": "ETIQUETTE",
+      "subtopicNumber": "1.2.1",
+      "subtopic": "Plurals",
+      "specificCompetences": ["Demonstrate good manners and behavior"],
+      "learningActivities": [
+        "Describing table manners: ( IF EAT, SIGN NOT, BEFORE EAT HAND WASH, BEFORE EAT PRAY OR PRAY BEFORE EAT«",
+        "Discussing good behaviour: ( PEOPLE RESPECT, HONEST HAVE, TIME KEEP, APOLOGISE (SORRY ), GRATITUDE SHOW (THANK-YOU",
+        "Role-play table manners and behaviour",
+        "*RRG PDQQHUV and behaviour described appropriately Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "",
+      "keywords": ["etiquette", "plurals", "demonstrate", "good", "manners", "behavior"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T3-S1",
+      "form": 1,
+      "topicNumber": "1.3",
+      "topic": "STORIES AND TEXTS",
+      "subtopicNumber": "1.3.1",
+      "subtopic": "Simple Stories and Texts",
+      "specificCompetences": ["Sign simple stories"],
+      "learningActivities": [
+        "Signing simple stories ( folk tales, fables, traditional stories, fairytales «)",
+        "Re-telling simple stories ( sequencing events in a story",
+        "Answering questions based on the story ( main character(s), setting, and important events in a story",
+        "Answering questions based on the text - expository Cholera, HIV/AIDS «)",
+        "Retelling recorded signed simple story"
+      ],
+      "expectedStandard": "Simple stories signed accordingly",
+      "keywords": ["stories", "texts", "simple", "stories", "texts", "sign", "simple", "stories"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T4-S1",
+      "form": 1,
+      "topicNumber": "1.4",
+      "topic": "SONGS",
+      "subtopicNumber": "1.4.1",
+      "subtopic": "Simple Songs",
+      "specificCompetences": ["Sign simple songs"],
+      "learningActivities": [
+        "Observing and singing simple songs ( Greeting song, Alphabet song, Number song, Days of the Week, National Anthem«",
+        "Answering questions based on songs ( lessons/message/moral drawn from song«",
+        "Signing recorded signed simple songs"
+      ],
+      "expectedStandard": "Simple songs signed correctly",
+      "keywords": ["songs", "simple", "songs", "sign", "simple", "songs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T5-S1",
+      "form": 1,
+      "topicNumber": "1.5",
+      "topic": "DRAMA",
+      "subtopicNumber": "1.5.1",
+      "subtopic": "Role- playing",
+      "specificCompetences": ["Use appropriate signs to depict real-life situations"],
+      "learningActivities": [
+        "Role-playing simple stories, events ( Birthdays present, cake, Christmas merry Christmas, Independence"
+      ],
+      "expectedStandard": "Appropriate signs to depict real-life situations used correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "drama",
+        "role",
+        "playing",
+        "appropriate",
+        "signs",
+        "depict",
+        "real",
+        "life",
+        "situations"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T6-S1",
+      "form": 1,
+      "topicNumber": "1.6",
+      "topic": "POETRY",
+      "subtopicNumber": "1.6.1",
+      "subtopic": "Simple Poems",
+      "specificCompetences": ["Sign simple poems"],
+      "learningActivities": [
+        "Reciting simple poems on animals, colours, friendship, family",
+        "Signing recorded simple poems"
+      ],
+      "expectedStandard": "Simple poems recited accurately",
+      "keywords": ["poetry", "simple", "poems", "sign", "simple", "poems"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T7-S1",
+      "form": 1,
+      "topicNumber": "1.7",
+      "topic": "PUZZLES",
+      "subtopicNumber": "1.7.1",
+      "subtopic": "Simple Puzzles",
+      "specificCompetences": ["Interpret simple puzzles"],
+      "learningActivities": [
+        "Solving simple puzzles THREE LETTER WORD (C-T, D-G, P-T«)",
+        "nterpreting simple puzzles"
+      ],
+      "expectedStandard": "Simple puzzles interpreted correctly",
+      "keywords": ["puzzles", "simple", "puzzles", "interpret", "simple", "puzzles"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T8-S1",
+      "form": 1,
+      "topicNumber": "1.8",
+      "topic": "DESCRIPTIONS",
+      "subtopicNumber": "1.8.1",
+      "subtopic": "Describing People and Objects",
+      "specificCompetences": ["Use appropriate vocabulary to describe people and objects"],
+      "learningActivities": [
+        "Describing people using appropriate adjectives (TALL, FAT, THIN, DARK, SHORT)",
+        "Describing objects using appropriate adjectives ( BIG, SMALL, LONG, SHORT, RED, BLUE«"
+      ],
+      "expectedStandard": "People and objects described using appropriate vocabulary correctly",
+      "keywords": [
+        "descriptions",
+        "describing",
+        "people",
+        "objects",
+        "appropriate",
+        "vocabulary",
+        "describe",
+        "people",
+        "objects"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T9-S1",
+      "form": 1,
+      "topicNumber": "1.9",
+      "topic": "GAMES",
+      "subtopicNumber": "1.9.1",
+      "subtopic": "Language",
+      "specificCompetences": ["Use appropriate signs in playing games"],
+      "learningActivities": ["Playing language games spy«)"],
+      "expectedStandard": "Appropriate signs in playing games used correctly Zambian Sign Language Syllabus",
+      "keywords": ["games", "language", "appropriate", "signs", "playing", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T10-S1",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "VOWELS AND CONSONANTS",
+      "subtopicNumber": "1.10.1",
+      "subtopic": "Short Vowels",
+      "specificCompetences": ["Identify the ¿ve major YRZHOV"],
+      "learningActivities": [
+        "Identifying the short vowel ( a/e/i/o/u)",
+        "Signing short vowel; ( a/e/i/o/ u)"
+      ],
+      "expectedStandard": "Five major vowels identi¿ed correctly",
+      "keywords": ["vowels", "consonants", "short", "vowels", "identify", "major", "yrzhov"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T10-S2",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "VOWELS AND CONSONANTS",
+      "subtopicNumber": "1.10.2",
+      "subtopic": "Consonants",
+      "specificCompetences": ["Identify FRQVRQDQWV in a text."],
+      "learningActivities": [
+        "Identifying consonants; (s,t,p,n,c,k,h,r,m,d,g,l,f,b,j,z,w,v,y,x)",
+        "Signing FRQVRQDQWV (s,t,p,n,c,k,h,r,m,d,g,l,f,b,j,z,w,v,y,x )",
+        "Blending and segmenting decodable words with consonants Vowel-Consonants ( VC ) ( it, at «), Consonant Vowel Consonant ( CVC ) ( pot, jam«",
+        "Identifying initial, middle and end letters in words ( it, t, po",
+        "Adding ( F_t ± ), deleting at ± DW ) and substituting Fat-F ) and isolating ( Fat- at letters",
+        "Reading decodable words (fat, cat «)"
+      ],
+      "expectedStandard": "Consonants identi¿ed in a WH[W correctly.",
+      "keywords": ["vowels", "consonants", "consonants", "identify", "frqvrqdqwv", "text"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T10-S3",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "VOWELS AND CONSONANTS",
+      "subtopicNumber": "1.10.3",
+      "subtopic": "Long vowels",
+      "specificCompetences": ["Form words using the five major vowels"],
+      "learningActivities": [
+        "Identifying the long vowel (/ ai, ee, ie, oa, ue /)",
+        "Blending and segmenting decodable words with long vowels VC ( DL «) CVC RD «)"
+      ],
+      "expectedStandard": "Words formed using the ¿ve major vowels correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "vowels",
+        "consonants",
+        "long",
+        "vowels",
+        "form",
+        "words",
+        "using",
+        "five",
+        "major",
+        "vowels"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T10-S4",
+      "form": 1,
+      "topicNumber": "1.10",
+      "topic": "VOWELS AND CONSONANTS",
+      "subtopicNumber": "1.10.4",
+      "subtopic": "Grapheme Phoneme Correspondence",
+      "specificCompetences": ["Sign words with grapheme phoneme correspondence"],
+      "learningActivities": [
+        "Signing grapheme phoneme correspondences CH, SH, TH, QU, NG, WH, QU, NG, WH, OR, ER, OO, AR«",
+        "Blending and segmenting decodable words with pair of letters VC ( VK ) CVC ( RR )DUP «)",
+        "Identifying initial, middle and end pair of letters in words ( ZK eel, m RR n, ri QJ",
+        "Note : Grapheme phoneme correspondences are recommended to the deafened and hard or hearing."
+      ],
+      "expectedStandard": "Grapheme phoneme correspondences signed correctly",
+      "keywords": [
+        "vowels",
+        "consonants",
+        "grapheme",
+        "phoneme",
+        "correspondence",
+        "sign",
+        "words",
+        "with",
+        "grapheme",
+        "phoneme",
+        "correspondence"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T11-S1",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "SENTENCES",
+      "subtopicNumber": "1.11.1",
+      "subtopic": "Sight Words",
+      "specificCompetences": ["Read sight words with automaticity"],
+      "learningActivities": [
+        "Recognising sight words: DO, I, ALL, YOU, HE, SHE, WE, ME«",
+        "Reading sight words"
+      ],
+      "expectedStandard": "Sight words read with automaticity correctly",
+      "keywords": ["sentences", "sight", "words", "read", "sight", "words", "with", "automaticity"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T11-S2",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "SENTENCES",
+      "subtopicNumber": "1.11.2",
+      "subtopic": "Logical Order",
+      "specificCompetences": [
+        "Re-arrange words within a phrase in Zambian Sign Language logical order"
+      ],
+      "learningActivities": [
+        "Re-arranging words within a phrase in Zambian Sign Language logical order ( the",
+        "Words within a phrase re-arranged in logically Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "Times of the day described correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "sentences",
+        "logical",
+        "order",
+        "arrange",
+        "words",
+        "within",
+        "phrase",
+        "zambian",
+        "sign",
+        "language",
+        "logical",
+        "order"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T11-S2-2",
+      "form": 1,
+      "topicNumber": "1.11",
+      "topic": "SENTENCES",
+      "subtopicNumber": "1.11.2",
+      "subtopic": "Logical Order",
+      "specificCompetences": [
+        "Re-arrange words within a sentence in Zambian Sign Language logical order"
+      ],
+      "learningActivities": [
+        "Re-arranging words within a sentence in logical order ( the cat is sick - CAT SICK",
+        "Words within a phrase re-arranged in logically Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "Good community practices described correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "sentences",
+        "logical",
+        "order",
+        "arrange",
+        "words",
+        "within",
+        "sentence",
+        "zambian",
+        "sign",
+        "language",
+        "logical",
+        "order"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T12-S1",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "HANDWRITING (manuscript/print)",
+      "subtopicNumber": "1.12.1",
+      "subtopic": "Sitting Posture",
+      "specificCompetences": ["Demonstrate correct sitting SRVWXUH"],
+      "learningActivities": [
+        "Practising sitting upright versus slouching over ( sit like Leo/jumbo, feet flat on the Àoor, back straight, elbows at 90 degrees"
+      ],
+      "expectedStandard": "Correct sitting posture demonstrated correctly",
+      "keywords": [
+        "handwriting",
+        "manuscript",
+        "print",
+        "sitting",
+        "posture",
+        "demonstrate",
+        "correct",
+        "sitting",
+        "srvwxuh"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T12-S2",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "HANDWRITING (manuscript/print)",
+      "subtopicNumber": "1.12.2",
+      "subtopic": "Fine Motor Skills",
+      "specificCompetences": ["Demonstrate increased"],
+      "learningActivities": [
+        "Practising ¿nger manipulation exercises (",
+        "making shapes in the air, clutching, ¿nger snapping, moulding",
+        "Holding pencil with the tripod grip ( the pencil rests against the hand and the middle ¿nger while thumb and the index ¿nger controls the pencil"
+      ],
+      "expectedStandard": "Increased ¿nger control and dexterity demonstrated correctly",
+      "keywords": [
+        "handwriting",
+        "manuscript",
+        "print",
+        "fine",
+        "motor",
+        "skills",
+        "demonstrate",
+        "increased"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T12-S3",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "HANDWRITING (manuscript/print)",
+      "subtopicNumber": "1.12.3",
+      "subtopic": "Concepts of Print",
+      "specificCompetences": ["Demonstrate knowledge of the basic concepts of print"],
+      "learningActivities": [
+        "Identifying parts of a book ( front cover, back cover, title SDJH",
+        "Moving top to bottom and left to right on a page, returning to the beginning of the next line",
+        "Distinguish letters from words within sentences",
+        "Identifying all upper and lowercase letters of the alphabet",
+        "Handling books correctly ( gently turning pages, shelving, keeping books away from water and food, no"
+      ],
+      "expectedStandard": "Knowledge of basic concepts of print demonstrated correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "handwriting",
+        "manuscript",
+        "print",
+        "concepts",
+        "print",
+        "demonstrate",
+        "knowledge",
+        "basic",
+        "concepts",
+        "print"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T12-S4",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "HANDWRITING (manuscript/print)",
+      "subtopicNumber": "1.12.4",
+      "subtopic": "Copying Patterns",
+      "specificCompetences": ["Draw a variety of patterns"],
+      "learningActivities": [
+        "Drawing patterns ( strokes; horizontal, vertical, right-slanting, left-slanting, semi-circle all directions, zig-zag, curves, loops",
+        "Copying shapes circles, triangles, rectangular and squares",
+        "Coping Arabic numbers ( numbers 0-9",
+        "Copying short word in word families ( at, fat, cat, sat, mat, UDW «)"
+      ],
+      "expectedStandard": "Variety of patterns drawn correctly",
+      "keywords": [
+        "handwriting",
+        "manuscript",
+        "print",
+        "copying",
+        "patterns",
+        "draw",
+        "variety",
+        "patterns"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T12-S5",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "HANDWRITING (manuscript/print)",
+      "subtopicNumber": "1.12.5",
+      "subtopic": "Letters of the Alphabet",
+      "specificCompetences": ["Form correct upper and lowercase letters in print"],
+      "learningActivities": [
+        "Practising letter formation of lowercase letters - DVFHQGHUV b, d, l, f, h, t, k ), descenders g, j, p, q, y ) and square letters ( a, c, e, i, m, n, o, r, s, u, v, w, x",
+        "Practising letter formation of uppercase letters - DVFHQGHUV A -"
+      ],
+      "expectedStandard": "Upper and lowercase letters in print formed correctly",
+      "keywords": [
+        "handwriting",
+        "manuscript",
+        "print",
+        "letters",
+        "alphabet",
+        "form",
+        "correct",
+        "upper",
+        "lowercase",
+        "letters",
+        "print"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T12-S6",
+      "form": 1,
+      "topicNumber": "1.12",
+      "topic": "HANDWRITING (manuscript/print)",
+      "subtopicNumber": "1.12.6",
+      "subtopic": "Own Name",
+      "specificCompetences": ["Write own name"],
+      "learningActivities": [
+        "Fingerspelling own names",
+        "Copying own name from name cards ( John Mwale«",
+        "Writing own name (John Mwale«)"
+      ],
+      "expectedStandard": "Own name written correctly Zambian Sign Language Syllabus",
+      "keywords": ["handwriting", "manuscript", "print", "name", "write", "name"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T13-S1",
+      "form": 1,
+      "topicNumber": "1.13",
+      "topic": "PUNCTUATION",
+      "subtopicNumber": "1.13.1",
+      "subtopic": "Punctuate sentences",
+      "specificCompetences": ["Use punctuation marks in sentences"],
+      "learningActivities": [
+        "Punctuating sentences using capital letters ( he, ary ), spacing and full stop (.)"
+      ],
+      "expectedStandard": "Punctuation marks used in sentences correctly",
+      "keywords": ["punctuation", "punctuate", "sentences", "punctuation", "marks", "sentences"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T14-S1",
+      "form": 1,
+      "topicNumber": "1.14",
+      "topic": "WORD BUILDING",
+      "subtopicNumber": "1.14.1",
+      "subtopic": "Decodable Words",
+      "specificCompetences": ["Use the alphabet to build words"],
+      "learningActivities": [
+        "Building words with VC and CVC (VC: IN, ON, UP«, CVC: PIG, PEN, MAT «)",
+        "Building word families with same ending letters ( at, it, ot, XW : mat, bat, pit, hit, hot, pot, put, hut «)"
+      ],
+      "expectedStandard": "Word patterns using the alphabet built correctly",
+      "keywords": ["word", "building", "decodable", "words", "alphabet", "build", "words"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G1-T15-S1",
+      "form": 1,
+      "topicNumber": "1.15",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "1.15.1",
+      "subtopic": "Decodable Words",
+      "specificCompetences": ["Take dictation of decodable words"],
+      "learningActivities": [
+        "Fingerspelling decodable words from a given picture ( cup; C-U-P, cat; C-A-T «)",
+        "Fingerspelling decodable words ( cup; C-U-P, tap; T-A- P«",
+        "Fingerspelling decodable words in phrases ( SIX RED C-U-P «)",
+        "Fingerspelling word in sentences ( DOG BIG M-A-T SIT «)"
+      ],
+      "expectedStandard": "Dictation of decodable words taken correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "decodable",
+        "words",
+        "take",
+        "dictation",
+        "decodable",
+        "words"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 1,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S1",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.1",
+      "subtopic": "Family",
+      "specificCompetences": [
+        "Use appropriate vocabulary to discuss composition of an extended family"
+      ],
+      "learningActivities": [
+        "Identifying members of an extended family using pictures",
+        "Discussing the composition of an extended family ( AUNT, UNCLE, COUSIN, GRANDMOTHER, GRANDFATHER «)"
+      ],
+      "expectedStandard": "Composition of an extended family GLVFXVVHG correctly",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "family",
+        "appropriate",
+        "vocabulary",
+        "discuss",
+        "composition",
+        "extended",
+        "family"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S2",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.2",
+      "subtopic": "Time",
+      "specificCompetences": ["Describe seasons of the year using appropriate vocabulary"],
+      "learningActivities": [
+        "Mentioning seasons of the year in Zambia COLD SEASON; DRY SEASON RAINY SEASON",
+        "Describing the conditions associated to the seasons of the year RAINY SEASON- RAIN; COLD SEASON ± COLD; DRY SEASON-HOT «)"
+      ],
+      "expectedStandard": "Seasons of the year GHVFULEHG correctly",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "time",
+        "describe",
+        "seasons",
+        "year",
+        "using",
+        "appropriate",
+        "vocabulary"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S3",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.3",
+      "subtopic": "Places in the Community",
+      "specificCompetences": ["Use appropriate vocabulary to name places found in the community"],
+      "learningActivities": [
+        "Naming places in the community ( SCHOOL, CLINIC, HOSPITAL, POLICE STATION, MARKET, SHOP, CHURCH «)"
+      ],
+      "expectedStandard": "Places found in the community QDPHG correctly",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "places",
+        "community",
+        "appropriate",
+        "vocabulary",
+        "name",
+        "places",
+        "found",
+        "community"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S4",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.4",
+      "subtopic": "Community Practices",
+      "specificCompetences": [
+        "Use appropriate vocabulary to identify good practices in the community"
+      ],
+      "learningActivities": [
+        "Mentioning good practices in the community ( LITTER/DIRTY NO, RULE FOLLOW, KIND, HONEST, FAIR «)"
+      ],
+      "expectedStandard": "Good practices in the community identi¿ed correctly",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "community",
+        "practices",
+        "appropriate",
+        "vocabulary",
+        "identify",
+        "good",
+        "practices",
+        "community"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S5",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.5",
+      "subtopic": "Instructions",
+      "specificCompetences": ["Observe instructions and UHVSRQG"],
+      "learningActivities": [
+        "Observing and responding to instructions (Teacher signs; LEADER FOLLOW «)"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "instructions",
+        "observe",
+        "instructions",
+        "uhvsrqg"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S6",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.6",
+      "subtopic": "Occupations",
+      "specificCompetences": ["Identify the occupations found in the community"],
+      "learningActivities": [
+        "Naming di൵erent occupations in the community (NURSE, FARMER, DRIVER, TEACHER «)",
+        "Discussing the roles played by di൵erent workers in the community ( TEACHER- TEACH, NURSE-SICK PEOPLE CARE, FARMER CROP GROW«",
+        "Interpreting pictures showing di൵erent occupations in the community."
+      ],
+      "expectedStandard": "Di൵erent occupations in the community named appropriately",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "occupations",
+        "identify",
+        "occupations",
+        "found",
+        "community"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S7",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.7",
+      "subtopic": "Expressing",
+      "specificCompetences": ["Use appropriate language to express feelings"],
+      "learningActivities": [
+        "Discussing feelings expressed in given pictures ( SAD, HAPPY«",
+        "([SUHVVLQJ feelings ( PRO-me HAPPY SEE YOU «)",
+        "Note: Expressing of feelings must be accompanied by correct facial expressions"
+      ],
+      "expectedStandard": "Appropriate language to express feelings used correctly",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "expressing",
+        "appropriate",
+        "language",
+        "express",
+        "feelings"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S8",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.8",
+      "subtopic": "Expressing Opinions",
+      "specificCompetences": ["Use appropriate sign language to express personal opinions"],
+      "learningActivities": [
+        "Discussing pictures depicting di൵erent activities and expressing which one they like and why ( OUTSIDE PLAY, BOOK READ, FOOD, ANIMAL, COLOUR «)",
+        "Personal opinions expressed accordingly. Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "Instructions observed and UHVSRQGHG to appropriately Zambian Sign Language Syllabus",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "expressing",
+        "opinions",
+        "appropriate",
+        "sign",
+        "language",
+        "express",
+        "personal",
+        "opinions"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S9",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.9",
+      "subtopic": "Wild Animals",
+      "specificCompetences": ["Describe wild animals using appropriate vocabulary"],
+      "learningActivities": [
+        "Naming wild animals using pictures ( MONKEY, ZEBRA- white-black; LION-big, RHINO-horns «)",
+        "Discussing what the learners know about wild animals (ANIMAL OTHER BUSH LIVE, ANIMAL SIZE DIFFERENT HAVE (OTHER BIG, OTHER SMALL. ANIMAL OTHER GRASS EAT, ANIMAL OTHER DANGEROUS «)"
+      ],
+      "expectedStandard": "Wild animals described correctly",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "wild",
+        "animals",
+        "describe",
+        "wild",
+        "animals",
+        "using",
+        "appropriate",
+        "vocabulary"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T1-S10",
+      "form": 2,
+      "topicNumber": "2.1",
+      "topic": "DICTATION 1.15.1 Decodable Texts",
+      "subtopicNumber": "2.1.10",
+      "subtopic": "Etiquette",
+      "specificCompetences": ["Demonstrate good manners and behaviour"],
+      "learningActivities": [
+        "Discussing respect, honesty and empathy based on a text ( identify honest, respect, empathetic characters from the text«",
+        "Discussing good behavior ( GREET, LANGUAGE GOOD USE, PLEASE, SORRY, ME EXCUSE, THANK-YOU"
+      ],
+      "expectedStandard": "Good manners and behaviour demonstrated accordingly.",
+      "keywords": [
+        "dictation",
+        "decodable",
+        "texts",
+        "etiquette",
+        "demonstrate",
+        "good",
+        "manners",
+        "behaviour"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T2-S1",
+      "form": 2,
+      "topicNumber": "2.2",
+      "topic": "STORIES",
+      "subtopicNumber": "2.2.1",
+      "subtopic": "Simple Stories",
+      "specificCompetences": ["Analyse simple stories."],
+      "learningActivities": [
+        "Observing signing of simple traditional stories on di൵erent themes ( animals, legends «)",
+        "Re-telling simple stories ( DQLPDOV OHJHQGV «)",
+        "Simple stories analysed correctly. Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "",
+      "keywords": ["stories", "simple", "stories", "analyse", "simple", "stories"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T3-S1",
+      "form": 2,
+      "topicNumber": "2.3",
+      "topic": "DRAMA",
+      "subtopicNumber": "2.3.1",
+      "subtopic": "Simple Plays",
+      "specificCompetences": ["Depict elements of simple plays"],
+      "learningActivities": [
+        "Dramatising simple plays (",
+        "observing parameters of the sign, stage movement, signing, con¿dence «)",
+        "Answering questions based on the play ( theme, plot, setting, characterisation«",
+        "Recording simple plays in playful situations"
+      ],
+      "expectedStandard": "Elements of simple plays depicted appropriately",
+      "keywords": ["drama", "simple", "plays", "depict", "elements", "simple", "plays"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T4-S1",
+      "form": 2,
+      "topicNumber": "2.4",
+      "topic": "POETRY",
+      "subtopicNumber": "2.4.1",
+      "subtopic": "Simple Poems",
+      "specificCompetences": ["Sign simple poems"],
+      "learningActivities": [
+        "Signing simple poems ( poems on cross cutting issues; Cholera, good practices in the community- ENVIRONMENT CLEAN KEEP «)"
+      ],
+      "expectedStandard": "Poems signed correctly.",
+      "keywords": ["poetry", "simple", "poems", "sign", "simple", "poems"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T5-S1",
+      "form": 2,
+      "topicNumber": "2.5",
+      "topic": "SONGS",
+      "subtopicNumber": "2.5.1",
+      "subtopic": "Simple Songs",
+      "specificCompetences": ["Sing simple sign language VRQJV"],
+      "learningActivities": [
+        "Observing and singing simple songs ( National Anthem, Hymns, praise and worship songs Road Safety Songs, the Alphabet Song, Twinkle, Twinkle, Little Star\", Head, Shoulders, Knees, and Toes, If You re Happy and You Know It\", Five Little Monkeys Jumping on the bed «)",
+        "Answering questions based on the song"
+      ],
+      "expectedStandard": "Simple sign language songs sang accordingly Zambian Sign Language Syllabus",
+      "keywords": ["songs", "simple", "songs", "sing", "simple", "sign", "language", "vrqjv"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T6-S1",
+      "form": 2,
+      "topicNumber": "2.6",
+      "topic": "DESCRIPTIONS 2.6.1 Describing SHRSOH",
+      "subtopicNumber": "2.6.1",
+      "subtopic": "Simple Songs",
+      "specificCompetences": ["Use appropriate vocabulary to describe people"],
+      "learningActivities": [
+        "Describing people using appropriate adjectives ( TALL, SHORT, FAT, SLIM«"
+      ],
+      "expectedStandard": "People described appropriately",
+      "keywords": [
+        "descriptions",
+        "describing",
+        "shrsoh",
+        "simple",
+        "songs",
+        "appropriate",
+        "vocabulary",
+        "describe",
+        "people"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T7-S1",
+      "form": 2,
+      "topicNumber": "2.7",
+      "topic": "GAMES",
+      "subtopicNumber": "2.7.1",
+      "subtopic": "Language Games",
+      "specificCompetences": ["Use appropriate language in playing games"],
+      "learningActivities": [
+        "Playing language games ( Simon Says, story chain, I spy, what am I «).",
+        "Appropriate language in games used correctly. Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "",
+      "keywords": ["games", "language", "games", "appropriate", "language", "playing", "games"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T8-S1",
+      "form": 2,
+      "topicNumber": "2.8",
+      "topic": "READING",
+      "subtopicNumber": "2.8.1",
+      "subtopic": "Consonant",
+      "specificCompetences": ["Read words with consonant blends (clusters)"],
+      "learningActivities": [
+        "Identifying initial consonant EOHQGV pl-, sl-, br-, cr-, dr-, fr-, pr-, tr-, sc, sm-, tw-«) and ¿nal consonant blends (lb, -ld, -lf,-lk, -lm, -ln, -lp, -lt, -ft, -nt, -pt, -x t«)",
+        "Reading words with consonant blends ( SO ate, VO ow, EU own«) (Bu OE , ha OI OH IW «)"
+      ],
+      "expectedStandard": "Words with consonant blends read correctly",
+      "keywords": [
+        "reading",
+        "consonant",
+        "read",
+        "words",
+        "with",
+        "consonant",
+        "blends",
+        "clusters"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T9-S1",
+      "form": 2,
+      "topicNumber": "2.9",
+      "topic": "SENTENCES",
+      "subtopicNumber": "2.9.1",
+      "subtopic": "Sight Words",
+      "specificCompetences": ["Read sight words in sentences with automaticity"],
+      "learningActivities": [
+        "Recognising sight words: COME, SOME, HERE, THERE, GO, NO, ONLY, YOUR, ONE, MY, HAVE, LIVE, GIVE, LITTLE, DOWN«)",
+        "Reading sight words",
+        "Reading sight words in sentences; Subject + verb (SV) MARY COME Object +Verb (OV) BOOK READ Subject +Object+ verb (SOV) MARY BOOK READ Object +Subject + Verb (OSV)"
+      ],
+      "expectedStandard": "Sight words in sentences read with automaticity correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "sentences",
+        "sight",
+        "words",
+        "read",
+        "sight",
+        "words",
+        "sentences",
+        "with",
+        "automaticity"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T10-S1",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "STORY READING",
+      "subtopicNumber": "2.10.1",
+      "subtopic": "Reading Comprehension (Intensive Reading)",
+      "specificCompetences": ["Read text with understanding"],
+      "learningActivities": [
+        "Reading simple stories ( folk tales, fables, traditional stories, fairytale s«)",
+        "Re-telling simple stories sequencing events in a story",
+        "Answering questions based on the story main character(s), setting, and important events in a story",
+        "Answering comprehension questions ( WH-Questions"
+      ],
+      "expectedStandard": "Text read with comprehension appropriately",
+      "keywords": [
+        "story",
+        "reading",
+        "reading",
+        "comprehension",
+        "intensive",
+        "reading",
+        "read",
+        "text",
+        "with",
+        "understanding"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T10-S2",
+      "form": 2,
+      "topicNumber": "2.10",
+      "topic": "STORY READING",
+      "subtopicNumber": "2.10.2",
+      "subtopic": "Supplementary Reading (Extensive Reading)",
+      "specificCompetences": ["Explore a variety of reading materials"],
+      "learningActivities": [
+        "Carrying out book-reviews re-telling, identify characters of the story"
+      ],
+      "expectedStandard": "A variety of reading materials explored accordingly Zambian Sign Language Syllabus",
+      "keywords": [
+        "story",
+        "reading",
+        "supplementary",
+        "reading",
+        "extensive",
+        "reading",
+        "explore",
+        "variety",
+        "reading",
+        "materials"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T11-S1",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "HANDWRITING (tailed writing)",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Copying",
+      "specificCompetences": [
+        "Demonstrate legible formation of both lower- and upper-case letters"
+      ],
+      "learningActivities": [
+        "Practising letter formation of lowercase letters - DVFHQGHUV b, d, l, f, h, t, k) , descenders g, j, p, q, y ) and square letters ( a, c, e, i, m, n, o, r, s, u, v, w, x",
+        "Practising letter formation of uppercase letters - DVFHQGHUV (A - Z)"
+      ],
+      "expectedStandard": "Legible formation of both lower- and upper-case OHWWHUV demonstrated correctly",
+      "keywords": [
+        "handwriting",
+        "tailed",
+        "writing",
+        "copying",
+        "demonstrate",
+        "legible",
+        "formation",
+        "both",
+        "lower",
+        "upper",
+        "case",
+        "letters"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T11-S1-2",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "HANDWRITING (tailed writing)",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Copying",
+      "specificCompetences": ["Demonstrate legible writing of words"],
+      "learningActivities": [
+        "Practising writing words ( decodable and sight words carrying ascenders, descenders and square letters ± BAG, BRIDGE, )/<«"
+      ],
+      "expectedStandard": "Legible writing of words demonstrated correctly",
+      "keywords": [
+        "handwriting",
+        "tailed",
+        "writing",
+        "copying",
+        "demonstrate",
+        "legible",
+        "writing",
+        "words"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T11-S1-3",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "HANDWRITING (tailed writing)",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Copying",
+      "specificCompetences": ["Demonstrate legible writing of phrases"],
+      "learningActivities": [
+        "Practising writing phrases (THREE BLUE BAG, CAT FAT «)",
+        "'UDZLQJ and labelling SLFWXUHV depicting the phrases to be written (DOG HAPPY ± Picture, FISH BIG ± Picture «)"
+      ],
+      "expectedStandard": "Legible writing of phrases demonstrated correctly",
+      "keywords": [
+        "handwriting",
+        "tailed",
+        "writing",
+        "copying",
+        "demonstrate",
+        "legible",
+        "writing",
+        "phrases"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T11-S1-4",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "HANDWRITING (tailed writing)",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Copying",
+      "specificCompetences": ["Demonstrate correct writing of sentences"],
+      "learningActivities": [
+        "Practising writing sentences paying attention to capital letters, comma, spacing, full stop and question mark ( PRO-she SPOON CARRY;",
+        "NAME YOUR WHAT? MARY PENCIL, PEN, RUBBER-BOOK BUY",
+        "Drawing pictures depicting the sentences to be written"
+      ],
+      "expectedStandard": "Correct writing of sentences demonstrated accordingly Zambian Sign Language Syllabus",
+      "keywords": [
+        "handwriting",
+        "tailed",
+        "writing",
+        "copying",
+        "demonstrate",
+        "correct",
+        "writing",
+        "sentences"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T11-S1-5",
+      "form": 2,
+      "topicNumber": "2.11",
+      "topic": "HANDWRITING (tailed writing)",
+      "subtopicNumber": "2.11.1",
+      "subtopic": "Copying",
+      "specificCompetences": ["Write paragraphs"],
+      "learningActivities": [
+        "Practising writing paragraphs with three to four sentences ( DAY BEAUTIFUL. SUN SKY SHINE. BIRD TREE HAPPY SING . «)"
+      ],
+      "expectedStandard": "Paragraphs written correctly",
+      "keywords": ["handwriting", "tailed", "writing", "copying", "write", "paragraphs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T12-S1",
+      "form": 2,
+      "topicNumber": "2.12",
+      "topic": "SENTENCE CONSTRUCTION",
+      "subtopicNumber": "2.12.1",
+      "subtopic": "Words, Phrases and Sentences",
+      "specificCompetences": ["Write words, phrases and simple sentences independently"],
+      "learningActivities": [
+        "Writing words independently (",
+        "using a picture, real objects «)",
+        "Filling in crossword puzzles ( cross and down words",
+        "Write phrases based on pictures and real objects independently ( picture of big ball, picture of red dress. ..)",
+        "Write sentences based on pictures such as conversation posters and picture strips independently ( CAT BLACK. BUS ME SEE «)",
+        "Words, phrases and simple sentences written independently"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "sentence",
+        "construction",
+        "words",
+        "phrases",
+        "sentences",
+        "write",
+        "words",
+        "phrases",
+        "simple",
+        "sentences",
+        "independently"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T13-S1",
+      "form": 2,
+      "topicNumber": "2.13",
+      "topic": "ALPHABETICAL ORDER AND SEQUENCING",
+      "subtopicNumber": "2.13.1",
+      "subtopic": "Alphabetical Order",
+      "specificCompetences": ["Sequence words according to alphabetical order."],
+      "learningActivities": [
+        "Arranging given words in the alphabetical order ( SKY, HIPPO, PEAR, BEANS, ZEBRA «)"
+      ],
+      "expectedStandard": "Words arranged in alphabetical order correctly",
+      "keywords": [
+        "alphabetical",
+        "order",
+        "sequencing",
+        "alphabetical",
+        "order",
+        "sequence",
+        "words",
+        "according",
+        "alphabetical",
+        "order"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T13-S2",
+      "form": 2,
+      "topicNumber": "2.13",
+      "topic": "ALPHABETICAL ORDER AND SEQUENCING",
+      "subtopicNumber": "2.13.2",
+      "subtopic": "Logical Order: Sentences",
+      "specificCompetences": ["Sequence sentences logically."],
+      "learningActivities": [
+        "Rearranging sentences logically; 1. FISH MARKET SELL. 2. BANDA FISH CATCH. 3. BANDA FISHERMAN.",
+        "Sentences sequenced logically Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "alphabetical",
+        "order",
+        "sequencing",
+        "logical",
+        "order",
+        "sentences",
+        "sequence",
+        "sentences",
+        "logically"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T14-S1",
+      "form": 2,
+      "topicNumber": "2.14",
+      "topic": "SPELLINGS",
+      "subtopicNumber": "2.14.1",
+      "subtopic": "Word Spellings",
+      "specificCompetences": ["Use spelling rules"],
+      "learningActivities": [
+        "Completing given words by writing missing letters/graphemes ( b²d - LU d tr²n - WU DL n)",
+        "Playing spelling games Word building- learners use cards to build words that follow a speci¿c spelling pattern«)",
+        "Searching for words in a text ( Learners search for words in a text that follow a certain spelling rule«)",
+        "Keeping a spelling journal ± (l earners keep a journal where they write sentences or short paragraphs using their writing spelling"
+      ],
+      "expectedStandard": "Spelling rules applied correctly",
+      "keywords": ["spellings", "word", "spellings", "spelling", "rules"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T14-S2",
+      "form": 2,
+      "topicNumber": "2.14",
+      "topic": "SPELLINGS",
+      "subtopicNumber": "2.14.2",
+      "subtopic": "Dictation",
+      "specificCompetences": ["Write dictated words, phrases and sentences"],
+      "learningActivities": [
+        "Writing dictated words ( DOG, CAT, BOY, CHURCH",
+        "Writing dictated phrases (F LOWER RED, MAN TALL«)",
+        "Writing dictated sentences GIRL FLOOR SIT«)"
+      ],
+      "expectedStandard": "Dictated words, phrases and sentences written correctly",
+      "keywords": ["spellings", "dictation", "write", "dictated", "words", "phrases", "sentences"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T15-S1",
+      "form": 2,
+      "topicNumber": "2.15",
+      "topic": "WORD RELATIONSHIPS",
+      "subtopicNumber": "2.15.1",
+      "subtopic": "Synonyms",
+      "specificCompetences": ["Demonstrate word relationships in synonyms"],
+      "learningActivities": [
+        "Mapping given words with their synonyms ( LARGE ± BIG, SMALL-LITTLE«",
+        "Matching words with similar meanings ( FAR -DISTANT, GOOD-FINE, HARD-DIFFICULT«"
+      ],
+      "expectedStandard": "Word relationships in synonym demonstrated appropriately Zambian Sign Language Syllabus",
+      "keywords": [
+        "word",
+        "relationships",
+        "synonyms",
+        "demonstrate",
+        "word",
+        "relationships",
+        "synonyms"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T15-S2",
+      "form": 2,
+      "topicNumber": "2.15",
+      "topic": "WORD RELATIONSHIPS",
+      "subtopicNumber": "2.15.2",
+      "subtopic": "Antonyms",
+      "specificCompetences": ["Demonstrate word relationships in antonyms"],
+      "learningActivities": [
+        "Mapping given words with their antonyms ( LARGE ± SMALL, LITTLE, THIN«)",
+        "Matching words with opposite meanings (FAR - NEAR)",
+        "Sorting words into categories of antonyms. ( LARGE ± SMALL, LITTLE, THIN«",
+        "Drawing pictures to depict antonyms (big ball and a small dish to represent big and small)"
+      ],
+      "expectedStandard": "Word relationships in antonyms demonstrated appropriately",
+      "keywords": [
+        "word",
+        "relationships",
+        "antonyms",
+        "demonstrate",
+        "word",
+        "relationships",
+        "antonyms"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T16-S1",
+      "form": 2,
+      "topicNumber": "2.16",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "2.16.1",
+      "subtopic": "Nouns",
+      "specificCompetences": ["Use nouns"],
+      "learningActivities": [
+        "Circling proper nouns from a list of words ( JOHN, LUSAKA, BOY, SCHOOL, BOOK «)",
+        "Writing two or three nouns found in the classroom (BOOK, PENCIL, RULER «)",
+        "Creating a list of nouns found in a picture.",
+        "Drawing pictures next to appropriate nouns to illustrate the meaning.",
+        "Writing a short story using at least two to three di൵erent nouns and underlining them."
+      ],
+      "expectedStandard": "Nouns used accordingly Zambian Sign Language Syllabus",
+      "keywords": ["grammatical", "categories", "nouns", "nouns"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T16-S2",
+      "form": 2,
+      "topicNumber": "2.16",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "2.16.2",
+      "subtopic": "Verbs",
+      "specificCompetences": ["Apply knowledge of using verbs"],
+      "learningActivities": [
+        "Identifying verbs depicted in pictures on di൵erent animals (BIRD FLY, CAT JUMP, RABBIT HOP«)",
+        "Writing sentences with action words represented in a picture (JOHN FLOOR SWEEP or FLOOR JOHN SWEEP; BOY BALL KICK or BALL BOY KICK«)"
+      ],
+      "expectedStandard": "Knowledge of verbs applied correctly",
+      "keywords": ["grammatical", "categories", "verbs", "apply", "knowledge", "using", "verbs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T16-S3",
+      "form": 2,
+      "topicNumber": "2.16",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "2.16.3",
+      "subtopic": "Prepositions",
+      "specificCompetences": ["Use prepositions correctly"],
+      "learningActivities": [
+        "Identifying prepositions (position of things) in given sentences N, ON, UNDER, AT, NEXT, BEHIND, FRONT«)",
+        "Using prepositions in simple sentences BALL TABLE UNDER, BOOK TABLE ON«)"
+      ],
+      "expectedStandard": "Prepositions applied appropriately",
+      "keywords": ["grammatical", "categories", "prepositions", "prepositions", "correctly"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T16-S4",
+      "form": 2,
+      "topicNumber": "2.16",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "2.16.4",
+      "subtopic": "Conjunctions",
+      "specificCompetences": ["Use Conjunctions"],
+      "learningActivities": [
+        "Identifying conjunctions in given sentences ( but, and",
+        "Writing two simple sentences and join them using μbut¶ or μand¶ ( ME FOOTBALL PLAY LIKE %87 BROTHER MY BASKETBALL PLAY LIKE; TOMORROW BANANA AND ORANGE ME EAT «)"
+      ],
+      "expectedStandard": "Conjunctions applied accordingly Zambian Sign Language Syllabus",
+      "keywords": ["grammatical", "categories", "conjunctions", "conjunctions"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T16-S5",
+      "form": 2,
+      "topicNumber": "2.16",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "2.16.5",
+      "subtopic": "Possessive Pronouns",
+      "specificCompetences": ["Use possessive pronouns"],
+      "learningActivities": [
+        "Identifying Possessive Pronouns in given sentences ( MY, MINE, YOUR«)",
+        "Using correct pronouns to ¿ll in the blank spaces in given sentences MY, MINE, YOUR (NAME POSS-my John; BOOK POSS-my; BAG POSS-your «) NAME PRO-me JOHN BOOK MINE BAG YOUR"
+      ],
+      "expectedStandard": "Possessive pronouns used appropriately TOPIC",
+      "keywords": ["grammatical", "categories", "possessive", "pronouns", "possessive", "pronouns"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G2-T17-S1",
+      "form": 2,
+      "topicNumber": "2.17",
+      "topic": "PUNCTUATION MARKS",
+      "subtopicNumber": "2.17.1",
+      "subtopic": "Comma and Question Mark",
+      "specificCompetences": ["Use punctuation marks in sentences"],
+      "learningActivities": [
+        "Punctuating a list of items with a comma ( BANANA, APPLE, MANGO .. .)",
+        "Adding question marks to interrogative statements (YOUR NAME WHAT? YOU LIVE WHERE?) ___wh-q PRO-your NAME WHAT ____wh-q PRO-you LIVE WHERE",
+        "Using punctuation marks in given text ( capital letter, full stop, spacing, question mark Comma)."
+      ],
+      "expectedStandard": "Punctuation marks in sentences used correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "punctuation",
+        "marks",
+        "comma",
+        "question",
+        "mark",
+        "punctuation",
+        "marks",
+        "sentences"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 2,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T1-S1",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "3.1.1",
+      "subtopic": "Time",
+      "specificCompetences": ["Use appropriate vocabulary to tell seasons of the year"],
+      "learningActivities": [
+        "Mentioning seasons of the year in Zambia: ( COLD SEASON; DRY SEASON RAINY SEASON)",
+        "Describing the activities done in the seasons of the year Rain Season- UMBRELLA CARRY, CROP PLANT«; Cold Season",
+        "WARM CLOTH WEAR; Dry Season -CROP HARVEST «)",
+        "Role-playing activities done in di൵erent seasons",
+        "Seasons of the year described",
+        "using appropriate vocabulary accordingly."
+      ],
+      "expectedStandard": "",
+      "keywords": ["conversation", "time", "appropriate", "vocabulary", "tell", "seasons", "year"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T1-S2",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "3.1.2",
+      "subtopic": "Places in the Community",
+      "specificCompetences": [
+        "Use appropriate vocabulary to discuss places found in the community"
+      ],
+      "learningActivities": [
+        "Naming places in the community ( SCHOOL, CLINIC AND HOSPITAL, POLICE STATION, MARKET, SHOP« ; Places of worship ; CHURCH, MOSQUE, TEMPLE, SHRINE«)",
+        "Describing the activities that are done in various places of the community ( Places of worship: PRAY«, hospital: TREATMENT, CARE« Police station SECURITY«"
+      ],
+      "expectedStandard": "Places found in the community discussed using appropriate vocabulary correctly",
+      "keywords": [
+        "conversation",
+        "places",
+        "community",
+        "appropriate",
+        "vocabulary",
+        "discuss",
+        "places",
+        "found",
+        "community"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T1-S3",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "3.1.3",
+      "subtopic": "Community Responsibilities",
+      "specificCompetences": ["Use appropriate vocabulary to discuss community responsibilities"],
+      "learningActivities": [
+        "Mentioning community responsibilities ( THING/PROPERTY CARE, WORK COMMUNITY PARTICIPATE, CHARITY WORK HAVE«)",
+        "Discussing the importance of community responsibilities ( COMMUNITY HEALTH AND SAFETY PROMOTE.. .)",
+        "Role-playing various community responsibilities ( LITTER PICK, ENVIRONMENT SWEEP«)"
+      ],
+      "expectedStandard": "Community responsibilities discussed correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "conversation",
+        "community",
+        "responsibilities",
+        "appropriate",
+        "vocabulary",
+        "discuss",
+        "community",
+        "responsibilities"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T1-S4",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "3.1.4",
+      "subtopic": "Directions",
+      "specificCompetences": ["Ask for and give simple directions using appropriate vocabulary"],
+      "learningActivities": [
+        "Discussing vocabulary for asking for and giving simple directions ( FORWARD, BACKWARD, LEFT, RIGHT, TURN, OPPOSITE, NEXT, NORTH, SOUTH, EAST, WEST«",
+        "Asking for directions ( POLICE STATION _ ___wh-q WHERE, BBB wh-q HOSPITAL WHERE, THANK-YOU)",
+        "Giving directions ( ROAD :$/. LEFT/RIGHT TURN)"
+      ],
+      "expectedStandard": "Asking and giving simple direction using appropriate vocabulary demonstrated accordingly",
+      "keywords": [
+        "conversation",
+        "directions",
+        "give",
+        "simple",
+        "directions",
+        "using",
+        "appropriate",
+        "vocabulary"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T1-S5",
+      "form": 3,
+      "topicNumber": "3.1",
+      "topic": "CONVERSATION",
+      "subtopicNumber": "3.1.5",
+      "subtopic": "Instructions",
+      "specificCompetences": [
+        "Give and follow a series of instructions using appropriate vocabulary"
+      ],
+      "learningActivities": [
+        "Identifying vocabulary for giving and following instructions ( FIRST, SECOND, ADD, STIR, NEXT, THEN, GET, PUT«)",
+        "Role-playing giving and following instructions (how to make a paper boat) ( FIRST, PAPER HALF"
+      ],
+      "expectedStandard": "Giving and following series of instructions using appropriate vocabulary demonstrated correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "conversation",
+        "instructions",
+        "give",
+        "follow",
+        "series",
+        "instructions",
+        "using",
+        "appropriate",
+        "vocabulary"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T2-S1",
+      "form": 3,
+      "topicNumber": "3.2",
+      "topic": "ETIQUETTE",
+      "subtopicNumber": "3.2.1",
+      "subtopic": "Manners",
+      "specificCompetences": ["Demonstrate good manners and behavior"],
+      "learningActivities": [
+        "Demonstrate communication etiquette ( OBSERVE BEFORE SIGN, PERSON SIGN INTERRUPT NOT, WAIT PERSON SIGN FINISH, YOU SIGN (turn-taking) «), BEHAVIOUR GOOD AND BAD (CULTURE RESPECT, HONEST SHOW, EMPATHY SHOW«) AND APROPRIATE/CORRECT DRESS (CLEAN«)",
+        "Making polite requests using appropriate vocabulary ( PLEASE, EXCUSE. ..)"
+      ],
+      "expectedStandard": "Good manners and behavior demonstrated appropriately",
+      "keywords": ["etiquette", "manners", "demonstrate", "good", "manners", "behavior"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T3-S1",
+      "form": 3,
+      "topicNumber": "3.3",
+      "topic": "STORIES AND TEXTS",
+      "subtopicNumber": "3.3.1",
+      "subtopic": "Simple Stories and Texts",
+      "specificCompetences": ["Analyse simple stories and texts"],
+      "learningActivities": [
+        "Observing and signing simple stories and texts on di൵erent themes ( GENDER ISSUES, HUMAN RIGHT, HEALTH AND NUTRITION«)",
+        "Re-telling simple stories and texts on di൵erent themes ( sequencing events in a story or text)",
+        "Answering questions based on the story ( main character(s), setting, plot, and important events in a story)"
+      ],
+      "expectedStandard": "Simple stories and texts analysed accordingly Zambian Sign Language Syllabus",
+      "keywords": [
+        "stories",
+        "texts",
+        "simple",
+        "stories",
+        "texts",
+        "analyse",
+        "simple",
+        "stories",
+        "texts"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T4-S1",
+      "form": 3,
+      "topicNumber": "3.4",
+      "topic": "SONGS",
+      "subtopicNumber": "3.4.1",
+      "subtopic": "Simple Songs",
+      "specificCompetences": ["Analyse simple sign language songs"],
+      "learningActivities": [
+        "Observing and singing simple songs ( National Anthem, Road Safety Songs«)",
+        "Answering questions based on the songs theme, rhythm, FKDUDFWHUL]DWLRQ «)"
+      ],
+      "expectedStandard": "Simple sign language songs analysed correctly",
+      "keywords": ["songs", "simple", "songs", "analyse", "simple", "sign", "language", "songs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T5-S1",
+      "form": 3,
+      "topicNumber": "3.5",
+      "topic": "DRAMA",
+      "subtopicNumber": "3.5.1",
+      "subtopic": "Simple Plays",
+      "specificCompetences": ["Depict elements of simple plays"],
+      "learningActivities": [
+        "Dramatising simple plays (",
+        "observing the parameters of a sign, stage movement, con¿dence «)",
+        "Answering questions based on the play (t heme, plot, setting, characterisation«)"
+      ],
+      "expectedStandard": "Elements of simple plays depicted correctly.",
+      "keywords": ["drama", "simple", "plays", "depict", "elements", "simple", "plays"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T6-S1",
+      "form": 3,
+      "topicNumber": "3.6",
+      "topic": "POETRY",
+      "subtopicNumber": "3.6.1",
+      "subtopic": "Simple Poems",
+      "specificCompetences": ["Recognise basic elements of poetry"],
+      "learningActivities": [
+        "Identifying basic elements of poetry ( imagery, stan za«)",
+        "Reciting poems"
+      ],
+      "expectedStandard": "Basic elements of poetry recognized correctly",
+      "keywords": ["poetry", "simple", "poems", "recognise", "basic", "elements", "poetry"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T7-S1",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "DESCRIPTIONS",
+      "subtopicNumber": "3.7.1",
+      "subtopic": "Describing People and Objects",
+      "specificCompetences": ["Use appropriate vocabulary to describe people and objects"],
+      "learningActivities": [
+        "Describing people using appropriate adjectives ( SMART, KIND, SLOW, HELP, POLITE, SELFISH/GREEDY«",
+        "Describing objects using appropriate adjectives (STRIPE, ROUND, FLORAL «)"
+      ],
+      "expectedStandard": "People and objects described using appropriate vocabulary correctly Zambian Sign Language Syllabus",
+      "keywords": [
+        "descriptions",
+        "describing",
+        "people",
+        "objects",
+        "appropriate",
+        "vocabulary",
+        "describe",
+        "people",
+        "objects"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T7-S2",
+      "form": 3,
+      "topicNumber": "3.7",
+      "topic": "DESCRIPTIONS",
+      "subtopicNumber": "3.7.2",
+      "subtopic": "Describing Events",
+      "specificCompetences": ["Use appropriate vocabulary to describe events"],
+      "learningActivities": [
+        "Describing events using appropriate adjectives ( FUN, INTERESTING, COLOUR, WONDERFUL, UNIQUE"
+      ],
+      "expectedStandard": "Appropriate vocabulary used to describe events accordingly Zambian Sign Language Syllabus",
+      "keywords": [
+        "descriptions",
+        "describing",
+        "events",
+        "appropriate",
+        "vocabulary",
+        "describe",
+        "events"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T8-S1",
+      "form": 3,
+      "topicNumber": "3.8",
+      "topic": "SPELLINGS",
+      "subtopicNumber": "3.8.1",
+      "subtopic": "Consonant",
+      "specificCompetences": ["Read words with consonant blends (clusters)"],
+      "learningActivities": [
+        "Identifying three-letter consonant blends str-, spr-, thr-, shr-, scr-, spl-«",
+        "Reading words with three-letter consonant blends ( STREAM, SPRING, THRONE, SHRINE, SCREW, SPLASH)"
+      ],
+      "expectedStandard": "Words with consonant blends (clusters) read correctly",
+      "keywords": [
+        "spellings",
+        "consonant",
+        "read",
+        "words",
+        "with",
+        "consonant",
+        "blends",
+        "clusters"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T9-S1",
+      "form": 3,
+      "topicNumber": "3.9",
+      "topic": "SENTENCES",
+      "subtopicNumber": "3.9.1",
+      "subtopic": "Sight Words",
+      "specificCompetences": ["Read sight words in sentences with automaticity"],
+      "learningActivities": [
+        "Recognising sight words: ( EVERY, GO, DO, MAKE, THEIR, ONCE, UPON, ALWAYS, ALSO, EIGHT, LOVE, COVER, AFTER, WANT«",
+        "Reading sight words in sentences Subject + object + verb (SOV ± JOHN BALL KICK; JANE FLOOR SWEEP«"
+      ],
+      "expectedStandard": "Sight words in sentences read with automaticity accordingly.",
+      "keywords": [
+        "sentences",
+        "sight",
+        "words",
+        "read",
+        "sight",
+        "words",
+        "sentences",
+        "with",
+        "automaticity"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T10-S1",
+      "form": 3,
+      "topicNumber": "3.10",
+      "topic": "READING",
+      "subtopicNumber": "3.10.1",
+      "subtopic": "Fluency and ([SUHVVLRQ",
+      "specificCompetences": ["Read text with Àuency"],
+      "learningActivities": [
+        "Reading complex words, longer sentences and simple books with Àuency",
+        "Asking questions, making predictions, and discussing key FRQFHSWV",
+        "Discussing new vocabulary within the context of the story or text.",
+        "Modelling Àuent reading by using appropriate pacing and expression",
+        "Text UHDG with Àuency accordingly. Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "",
+      "keywords": ["reading", "fluency", "suhvvlrq", "read", "text", "with", "uency"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T11-S1",
+      "form": 3,
+      "topicNumber": "3.11",
+      "topic": "SHARED READING",
+      "subtopicNumber": "3.11.1",
+      "subtopic": "Simple Stories and Texts",
+      "specificCompetences": ["Enhance shared reading experiences with peers"],
+      "learningActivities": [
+        "Reading in peer-reading sessions di൵erent genres ¿ction and non-¿ction",
+        "Re-telling stories or texts to enhance comprehension",
+        "Asking and responding to comprehension questions based on main elements ( story characters, setting, plot and central idea and relevant details: informational text theme, main points «)"
+      ],
+      "expectedStandard": "Shared reading experiences with peers enhanced accordingly",
+      "keywords": [
+        "shared",
+        "reading",
+        "simple",
+        "stories",
+        "texts",
+        "enhance",
+        "shared",
+        "reading",
+        "experiences",
+        "with",
+        "peers"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T12-S1",
+      "form": 3,
+      "topicNumber": "3.12",
+      "topic": "INDEPENDENT READING",
+      "subtopicNumber": "3.12.1",
+      "subtopic": "Stories and Texts",
+      "specificCompetences": ["Decode words independently"],
+      "learningActivities": [
+        "Independent reading of ¿ction and non- ¿ction JHQUHV",
+        "Reading passages on various themes (cultural celebrations and festivals, traditional ceremonies entrepreneurship, health «)",
+        "Words decoded independently"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "independent",
+        "reading",
+        "stories",
+        "texts",
+        "decode",
+        "words",
+        "independently"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T13-S1",
+      "form": 3,
+      "topicNumber": "3.13",
+      "topic": "EXTENSIVE READING",
+      "subtopicNumber": "3.13.1",
+      "subtopic": "Extensive Reading",
+      "specificCompetences": ["Read a variety of texts with comprehension"],
+      "learningActivities": [
+        "Reading texts and supplementary books with comprehension",
+        "Comprehending new words in context",
+        "Answering follow up questions on read texts",
+        "Reporting main messages on the texts read"
+      ],
+      "expectedStandard": "A variety of texts UHDG with FRPSUHKHQVLRQ appropriately",
+      "keywords": [
+        "extensive",
+        "reading",
+        "extensive",
+        "reading",
+        "read",
+        "variety",
+        "texts",
+        "with",
+        "comprehension"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T14-S1",
+      "form": 3,
+      "topicNumber": "3.14",
+      "topic": "INTENSIVE READING",
+      "subtopicNumber": "3.14.1",
+      "subtopic": "Silent Reading",
+      "specificCompetences": ["Read given passages"],
+      "learningActivities": [
+        "Practicing good reading habits ( avoiding signing, Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "Passages given UHDG silently and follow-up activities GRQH accordingly",
+      "keywords": ["intensive", "reading", "silent", "reading", "read", "given", "passages"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T15-S1",
+      "form": 3,
+      "topicNumber": "3.15",
+      "topic": "REFERENCE SKILLS",
+      "subtopicNumber": "3.15.1",
+      "subtopic": "Skimming and Scanning",
+      "specificCompetences": ["Extract information from a text by skimming and scanning"],
+      "learningActivities": [
+        "Reading quickly over the text to get a general idea - skimming ( for title, pictures, «)",
+        "Searching for speci¿c information in a short story or informational text ± scanning and answering a list of questions ( MAIN CHARACTER LIVE WHERE?.. .)",
+        "Identifying the story, topic/ themes(s) «",
+        "Discussing new or unfamiliar vocabulary in context"
+      ],
+      "expectedStandard": "Information extracted from a text by skimming and scanning accordingly Zambian Sign Language Syllabus",
+      "keywords": [
+        "reference",
+        "skills",
+        "skimming",
+        "scanning",
+        "extract",
+        "information",
+        "from",
+        "text",
+        "skimming",
+        "scanning"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T15-S2",
+      "form": 3,
+      "topicNumber": "3.15",
+      "topic": "REFERENCE SKILLS",
+      "subtopicNumber": "3.15.2",
+      "subtopic": "Charts, Graphs, Diagrams, Tables and Maps",
+      "specificCompetences": ["Extract information from Charts/Visual Elements"],
+      "learningActivities": [
+        "Interpreting information from charts/visual elements ( bar charts, line charts, pie charts )",
+        "Extracting information from charts/visual elements ( interpreting process Àows and relationships",
+        "Information from charts/visual elements extracted correctly. Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "reference",
+        "skills",
+        "charts",
+        "graphs",
+        "diagrams",
+        "tables",
+        "maps",
+        "extract",
+        "information",
+        "from",
+        "charts",
+        "visual"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T16-S1",
+      "form": 3,
+      "topicNumber": "3.16",
+      "topic": "HANDWRITING (joined writing/cursive)",
+      "subtopicNumber": "3.16.1",
+      "subtopic": "Cursive Writing",
+      "specificCompetences": ["Use cursive writing skills"],
+      "learningActivities": [
+        ":ULWLQJ in cursive (all lowercase letters - DVFHQGHUV b, d, l, f, h, t, k), GHVFHQGHUV (g, j, p, q, y) and square letters (a, c, e, i, m, n, o, r, s, u, v, w, x ))",
+        "Copying words and sentences in cursive writing"
+      ],
+      "expectedStandard": "Legible cursive writing skills used correctly",
+      "keywords": [
+        "handwriting",
+        "joined",
+        "writing",
+        "cursive",
+        "cursive",
+        "writing",
+        "cursive",
+        "writing",
+        "skills"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T17-S1",
+      "form": 3,
+      "topicNumber": "3.17",
+      "topic": "SPELLING",
+      "subtopicNumber": "3.17.1",
+      "subtopic": "Word Spellings",
+      "specificCompetences": ["Develop spelling proficiency"],
+      "learningActivities": [
+        "Re-arranging letters to spell selected words ( PSXM jump, thero other«)",
+        "Writing words with the same spelling pattern ± word families (ood good, food ough ± rough, tough, SORXJK «)",
+        "Playing the μClap and Spell¶ game to fingerspell words (F-O-O-D«)",
+        "Keeping a spelling journal ± learners keep a journal where they write sentences or short paragraphs using their writing spelling).",
+        "Word building ( learners use cards to build words that follow a speci¿c spelling pattern«"
+      ],
+      "expectedStandard": "Spelling pro¿ciency developed accordingly",
+      "keywords": ["spelling", "word", "spellings", "develop", "spelling", "proficiency"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T17-S2",
+      "form": 3,
+      "topicNumber": "3.17",
+      "topic": "SPELLING",
+      "subtopicNumber": "3.17.2",
+      "subtopic": "Dictation",
+      "specificCompetences": ["Take dictation"],
+      "learningActivities": ["Writing dictated words (MORNING, SCHOOL, TEACHER«)"],
+      "expectedStandard": "",
+      "keywords": ["spelling", "dictation", "take", "dictation"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T18-S1",
+      "form": 3,
+      "topicNumber": "3.18",
+      "topic": "WORD RELATIONSHIPS",
+      "subtopicNumber": "3.18.1",
+      "subtopic": "Synonyms",
+      "specificCompetences": ["Use synonyms"],
+      "learningActivities": [
+        "Matching words with similar meanings ( CLEAN ± TIDY, THIN - SKINNY",
+        "Mapping given words with their synonyms ( EXPENSIVE COSTLY, PRICEY, +,*+« ).",
+        "Completing sentences using suitable synonyms ( ANNIE GIRL BEAUTIFUL (PRETTY"
+      ],
+      "expectedStandard": "Dictated words written correctly Zambian Sign Language Syllabus",
+      "keywords": ["word", "relationships", "synonyms", "synonyms"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T18-S2",
+      "form": 3,
+      "topicNumber": "3.18",
+      "topic": "WORD RELATIONSHIPS",
+      "subtopicNumber": "3.18.2",
+      "subtopic": "Antonyms",
+      "specificCompetences": ["Use antonyms"],
+      "learningActivities": [
+        "Matching words with opposite meanings (QUIET ± LOUD, SLOW ± FAST«)",
+        "Mapping given words with their Antonyms ( SAD ± HAPPY, EXCITED, JOYFUL, CHEERFUL «).",
+        "Sorting words into categories of antonyms (BIG ± SMALL, LITTLE, SHORT«"
+      ],
+      "expectedStandard": "Antonyms used correctly",
+      "keywords": ["word", "relationships", "antonyms", "antonyms"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T19-S1",
+      "form": 3,
+      "topicNumber": "3.19",
+      "topic": "SENTENCES",
+      "subtopicNumber": "3.19.1",
+      "subtopic": "Sentence Construction",
+      "specificCompetences": ["Construct Simple Sentences"],
+      "learningActivities": [
+        "Constructing sentences using Subject + Verb (PATRICK SLEEP. Subject + Object Verb ( BOY BALL KICK.",
+        "Simple sentences constructed correctly. Zambian Sign Language Syllabus"
+      ],
+      "expectedStandard": "Stories written using given vocabulary correctly Sentences Zambian Sign Language Syllabus",
+      "keywords": ["sentences", "sentence", "construction", "construct", "simple", "sentences"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T20-S1",
+      "form": 3,
+      "topicNumber": "3.20",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "3.20.1",
+      "subtopic": "Nouns",
+      "specificCompetences": ["Use nouns"],
+      "learningActivities": [
+        "Identifying countable nouns (BALL-BALL MANY, PEN-PEN MANY, BOOK-BOOK FIVE) and uncountable nouns (SALT- SALT, SUGAR-SUGAR, WATER-WATER «)",
+        "Classifying nouns into countable and uncountable (countable nouns-BOOK, PEN«; uncountable nouns, SALT, SUGAR, WATER«)",
+        "Construct sentences using countable and uncountable nouns"
+      ],
+      "expectedStandard": "Nouns used correctly",
+      "keywords": ["grammatical", "categories", "nouns", "nouns"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T20-S2",
+      "form": 3,
+      "topicNumber": "3.20",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "3.20.2",
+      "subtopic": "Verbs",
+      "specificCompetences": ["Use verbs"],
+      "learningActivities": [
+        "Conjugating verbs by placing a personal pronoun before the verb MXPS «) (ME JUMP YOU JUMP HE/SHE/ JUMP WE JUMP THEY JUMP«)"
+      ],
+      "expectedStandard": "Verbs used correctly",
+      "keywords": ["grammatical", "categories", "verbs", "verbs"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T20-S3",
+      "form": 3,
+      "topicNumber": "3.20",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "3.20.3",
+      "subtopic": "Tenses",
+      "specificCompetences": ["Use verb tenses"],
+      "learningActivities": [
+        "Identifying the simple present tense (NOW WALK, NOW COOK), the simple continuous tense (NOW ME WALK, NOW ME COOK«)"
+      ],
+      "expectedStandard": "Verbs tenses used correctly Zambian Sign Language Syllabus",
+      "keywords": ["grammatical", "categories", "tenses", "verb", "tenses"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T20-S4",
+      "form": 3,
+      "topicNumber": "3.20",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "3.20.4",
+      "subtopic": "Adjectives",
+      "specificCompetences": ["Use adjectives"],
+      "learningActivities": [
+        "Describing nouns using adjectives (DOG %/$&. :20$1 OLD , COAT RED ANIMAL VICIOUS/DANGEROUS GIRL BEAUTIFUL"
+      ],
+      "expectedStandard": "Adjectives used appropriately",
+      "keywords": ["grammatical", "categories", "adjectives", "adjectives"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T20-S5",
+      "form": 3,
+      "topicNumber": "3.20",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "3.20.5",
+      "subtopic": "Adverbs",
+      "specificCompetences": ["Use adverbs of manner"],
+      "learningActivities": [
+        "Describing verbs using adverbs of manner (WALK SLOWLY , EAT HUNGRILY , WALK QUIETLY «)"
+      ],
+      "expectedStandard": "Adverbs of manner applied correctly",
+      "keywords": ["grammatical", "categories", "adverbs", "adverbs", "manner"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T20-S6",
+      "form": 3,
+      "topicNumber": "3.20",
+      "topic": "GRAMMATICAL CATEGORIES",
+      "subtopicNumber": "3.20.6",
+      "subtopic": "ReÀexive Pronouns",
+      "specificCompetences": ["Use reÀexive pronouns"],
+      "learningActivities": [
+        "Describing reÀexive pronouns singular (MYSELF, YOU/YOURSELF, HIM/HIMSELF, HER/HERSELF, IT/ITSELF) and reÀexive pronouns plural (WE/OURSELVES, YOU/YOURSELVES, THEM/THEMSELVES)",
+        "Identifying reÀexive pronouns in a text"
+      ],
+      "expectedStandard": "ReÀexive pronouns used correctly Zambian Sign Language Syllabus",
+      "keywords": ["grammatical", "categories", "exive", "pronouns", "exive", "pronouns"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T21-S1",
+      "form": 3,
+      "topicNumber": "3.21",
+      "topic": "PUNCTUATION",
+      "subtopicNumber": "3.21.1",
+      "subtopic": "Sentences and Short Paragraphs",
+      "specificCompetences": ["Use punctuation marks in sentences and paragraphs"],
+      "learningActivities": ["Punctuating sentences and paragraphs using exclamation marks (!)"],
+      "expectedStandard": "Sentences punctuated correctly",
+      "keywords": [
+        "punctuation",
+        "sentences",
+        "short",
+        "paragraphs",
+        "punctuation",
+        "marks",
+        "sentences",
+        "paragraphs"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T22-S1",
+      "form": 3,
+      "topicNumber": "3.22",
+      "topic": "ALPHABETICAL ORDER AND SEQUENCING",
+      "subtopicNumber": "3.22.1",
+      "subtopic": "Arranging Words and",
+      "specificCompetences": ["Arrange words according to alphabetical RUGHU"],
+      "learningActivities": [
+        "Arranging words in alphabetical order ( sun, stove, ship, sink - ship, sink, stove, sun)",
+        "Rearranging given sentences in logical order 1. MWANSA MORNING WAKE UP. 2. SHE FACE WASH. 3. MWANSA MARKET GO"
+      ],
+      "expectedStandard": "",
+      "keywords": [
+        "alphabetical",
+        "order",
+        "sequencing",
+        "arranging",
+        "words",
+        "arrange",
+        "words",
+        "according",
+        "alphabetical",
+        "rughu"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T22-S2",
+      "form": 3,
+      "topicNumber": "3.22",
+      "topic": "ALPHABETICAL ORDER AND SEQUENCING",
+      "subtopicNumber": "3.22.2",
+      "subtopic": "Using a Dictionary",
+      "specificCompetences": ["Locate words in a dictionary"],
+      "learningActivities": [
+        "Scanning through a dictionary to locate speci¿c words",
+        "Extracting de¿nitions of speci¿c words from a dictionary"
+      ],
+      "expectedStandard": "Words located in a dictionary accordingly",
+      "keywords": [
+        "alphabetical",
+        "order",
+        "sequencing",
+        "using",
+        "dictionary",
+        "locate",
+        "words",
+        "dictionary"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T23-S1",
+      "form": 3,
+      "topicNumber": "3.23",
+      "topic": "SUMMARY",
+      "subtopicNumber": "3.23.1",
+      "subtopic": "Simple sentences",
+      "specificCompetences": ["Identify main points of a given text"],
+      "learningActivities": [
+        "Reading texts to identify the main points using WH-questions.",
+        "Identifying themes and main elements in stories and texts"
+      ],
+      "expectedStandard": "Punctuation marks in sentences and paragraphs used correctly",
+      "keywords": ["summary", "simple", "sentences", "identify", "main", "points", "given", "text"],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    },
+    {
+      "id": "G3-T24-S1",
+      "form": 3,
+      "topicNumber": "3.24",
+      "topic": "COMPOSITION",
+      "subtopicNumber": "3.24.1",
+      "subtopic": "Guided Composition",
+      "specificCompetences": ["Write stories using given vocabulary"],
+      "learningActivities": [
+        "Writing stories from picture strips ± topical issues (HIV/AIDS, human rights, corruption, substance abuse«",
+        "Composing stories using given vocabulary"
+      ],
+      "expectedStandard": "Main points of a given texts identi¿ed correctly",
+      "keywords": [
+        "composition",
+        "guided",
+        "composition",
+        "write",
+        "stories",
+        "using",
+        "given",
+        "vocabulary"
+      ],
+      "suggestedAssessmentTypes": ["short answer", "practical assessment", "discussion"],
+      "grade": 3,
+      "level": "primary"
+    }
+  ]
+}

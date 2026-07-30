@@ -81,11 +81,16 @@ export const KNOWN_CBC_SUBJECTS = [
   'Information Technology Study',
   'Expressive Arts',
   'Zambian Sign Language',
+  'Literacy in English',
+  'Oral English',
 ] as const
 
 const SUBJECT_ALIASES: Record<string, string> = {
   english: 'English',
   'english language': 'English',
+  'literacy in english': 'Literacy in English',
+  'oral english': 'Oral English',
+  cts: 'Creative and Technology Studies',
   literature: 'Literature in English',
   'literature in english': 'Literature in English',
   'lit in english': 'Literature in English',
@@ -208,6 +213,42 @@ export function extractSubjectFromFilename(filename: string): string | null {
   }
   if (/literature[-_\s]*in[-_\s]*bemba|lit[-_\s]*in[-_\s]*icibemba/i.test(rawBase)) {
     return 'Icibemba'
+  }
+  if (/\bCTS\b|creative[-_\s]*and[-_\s]*technology|adapted[-_\s]*cts/i.test(rawBase)) {
+    return 'Creative and Technology Studies'
+  }
+  if (/literacy[-_\s]*in[-_\s]*english/i.test(rawBase)) {
+    return 'Literacy in English'
+  }
+  if (/oral[-_\s]*english/i.test(rawBase)) {
+    return 'Oral English'
+  }
+  if (/icibemba|(^|[^A-Za-z])bemba([^A-Za-z]|$)/i.test(rawBase)) {
+    return 'Icibemba'
+  }
+  if (/kikaonde/i.test(rawBase)) {
+    return 'Kikaonde'
+  }
+  if (/zambian[-_\s]*sign[-_\s]*language/i.test(rawBase)) {
+    return 'Zambian Sign Language'
+  }
+  if (
+    /(^|[^A-Za-z0-9])id([^A-Za-z0-9]|$).*ece|ece.*intellectual|intellectual.*disability.*ece/i.test(
+      rawBase
+    )
+  ) {
+    return 'Early Childhood Education'
+  }
+  if (
+    /(^|[^A-Za-z0-9])id[-_\s]*level[-_\s]*1([^A-Za-z0-9]|$)/i.test(rawBase) ||
+    /intellectual[-_\s]*disabil(?:ity|ty).*(?:learning[-_\s]*materials?|level[-_\s]*1)/i.test(
+      rawBase
+    )
+  ) {
+    return 'Special Needs Education'
+  }
+  if (/intellectual[-_\s]*disabil(?:ity|ty)/i.test(rawBase)) {
+    return 'Special Needs Education'
   }
 
   const base = rawBase

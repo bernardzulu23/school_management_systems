@@ -1,0 +1,37 @@
+{
+  "sourceFile": "INTELLECTUAL-DISABILITY-ENGLISH-LANGUAGE-SYLLABUS-LEVEL-I-3.pdf",
+  "subject": "English (Intellectual Disability Level I)",
+  "band": null,
+  "educationLevel": "primary",
+  "sourceFileBytes": 323108,
+  "extractionNote": "Extracted deterministically from the official CDC/ECE PDF. Missing fields are reported; content is never fabricated.",
+  "rawRecordCount": 3,
+  "excludedUnexpectedGradeRecords": [],
+  "ok": true,
+  "recordCount": 3,
+  "grades": [1, 2, 3],
+  "expectedGrades": [1, 2, 3],
+  "recordsByGrade": {
+    "1": 1,
+    "2": 1,
+    "3": 1
+  },
+  "duplicateIds": [],
+  "missingGrades": [],
+  "incompleteRecordIds": [],
+  "emptyActivityRecordIds": [],
+  "mismatchedGradeRecordIds": [],
+  "suspiciousHeadingRecordIds": [],
+  "activityCoverage": {
+    "present": 3,
+    "total": 3,
+    "percent": 100,
+    "requiredPercent": 10
+  },
+  "expectedStandardCoverage": {
+    "present": 3,
+    "total": 3,
+    "percent": 100,
+    "requiredPercent": 10
+  }
+}

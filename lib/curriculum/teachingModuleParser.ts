@@ -28,7 +28,12 @@ export type TeachingModuleLesson = {
 
 export type TeachingModuleJSON = {
   subject: string
+  /** Secondary Form number (1–6), when applicable */
   form: number | null
+  /** Primary Grade number (1–7), when applicable */
+  grade: number | null
+  /** ECE / Reception band label when not a numbered grade */
+  band: 'ece' | 'reception' | null
   term: number | null
   sourceFile: string
   lessons: TeachingModuleLesson[]
@@ -36,6 +41,7 @@ export type TeachingModuleJSON = {
     extractedAt?: string
     rawTextLength?: number
     pilot?: boolean
+    educationLevel?: 'primary' | 'secondary' | 'ece'
   }
 }
 
@@ -68,21 +74,42 @@ function normalizeWhitespace(text: string): string {
 
 export function parseFormTermFromFilename(filename: string): {
   form: number | null
+  grade: number | null
+  band: 'ece' | 'reception' | null
   term: number | null
 } {
   const base = String(filename || '')
     .replace(/^.*[\\/]/, '')
     .replace(/\.[^.]+$/, '')
-  const form =
-    base.match(/\bForm[-_\s]*([1-6])(?!\d)/i)?.[1] ||
-    base.match(/\bF([1-6])(?![0-9a-z])/i)?.[1] ||
+
+  const band = /(^|[^A-Za-z0-9])(ece|early[-_\s]*childhood)([^A-Za-z0-9]|$)/i.test(base)
+    ? 'ece'
+    : /(^|[^A-Za-z0-9])reception([^A-Za-z0-9]|$)/i.test(base)
+      ? 'reception'
+      : null
+
+  const gradeRaw =
+    base.match(/\bGrade[-_\s]*([1-7])(?!\d)/i)?.[1] ||
+    base.match(/\bG([1-7])(?![0-9a-z])/i)?.[1] ||
+    base.match(/\bGeledi[-_\s]*([1-7])\b/i)?.[1] ||
     null
+
+  // Prefer explicit Grade over Form when both could match (primary modules).
+  const formRaw = gradeRaw
+    ? null
+    : base.match(/\bForm[-_\s]*([1-6])(?!\d)/i)?.[1] ||
+      base.match(/\bF([1-6])(?![0-9a-z])/i)?.[1] ||
+      null
+
   const term =
     base.match(/\bTerm[-_\s]*([1-3])(?!\d)/i)?.[1] ||
     base.match(/\bT([1-3])(?![0-9a-z])/i)?.[1] ||
     null
+
   return {
-    form: form ? Number(form) : null,
+    form: formRaw ? Number(formRaw) : null,
+    grade: gradeRaw ? Number(gradeRaw) : null,
+    band,
     term: term ? Number(term) : null,
   }
 }
@@ -246,7 +273,8 @@ export function extractLessonsFromModuleText(text: string): TeachingModuleLesson
 
 export async function parseTeachingModuleFromBuffer(
   buffer: Buffer,
-  filename: string
+  filename: string,
+  options: { educationLevel?: 'primary' | 'secondary' | 'ece' } = {}
 ): Promise<TeachingModuleJSON | null> {
   const raw = await extractTextFromBuffer(buffer, 'pdf')
   const text = normalizeWhitespace(raw)
@@ -257,18 +285,28 @@ export async function parseTeachingModuleFromBuffer(
   const subject = resolveTeachingModuleSubject(filename, text)
   if (!subject) return null
 
-  const { form, term } = parseFormTermFromFilename(filename)
+  const { form, grade, band, term } = parseFormTermFromFilename(filename)
   const lessons = extractLessonsFromModuleText(text)
+  const educationLevel = band
+    ? 'ece'
+    : grade != null
+      ? 'primary'
+      : form != null
+        ? 'secondary'
+        : options.educationLevel
 
   return {
     subject,
     form,
+    grade,
+    band,
     term,
     sourceFile: path.basename(filename),
     lessons,
     metadata: {
       extractedAt: new Date().toISOString(),
       rawTextLength: text.length,
+      educationLevel,
     },
   }
 }
@@ -278,9 +316,21 @@ export function teachingModuleOutputPath(
   rootDir = 'data/teaching-modules'
 ): string {
   const subjectSlug = slugify(module.subject)
-  const formPart = module.form ? `form${module.form}` : 'form-unknown'
+  let levelPart = 'form-unknown'
+  if (module.band === 'ece') levelPart = 'ece'
+  else if (module.band === 'reception') levelPart = 'reception'
+  else if (module.grade != null) levelPart = `grade${module.grade}`
+  else if (module.form != null) levelPart = `form${module.form}`
+  else if (module.metadata?.educationLevel === 'primary') levelPart = 'grade-unknown'
+  else if (module.metadata?.educationLevel === 'ece') levelPart = 'ece'
+
   const termPart = module.term ? `term${module.term}` : 'term-unknown'
-  return path.join(rootDir, subjectSlug, `${formPart}-${termPart}.json`)
+  const needsSourceSuffix =
+    module.band == null && module.grade == null && module.form == null && module.term == null
+  const sourceSuffix = needsSourceSuffix
+    ? `-${slugify(path.basename(module.sourceFile, path.extname(module.sourceFile))).slice(0, 72)}`
+    : ''
+  return path.join(rootDir, subjectSlug, `${levelPart}-${termPart}${sourceSuffix}.json`)
 }
 
 /**
@@ -312,7 +362,9 @@ export async function processTeachingModulesFolder(
     try {
       const full = path.join(abs, entry)
       const buffer = fs.readFileSync(full)
-      const parsed = await parseTeachingModuleFromBuffer(buffer, entry)
+      const parsed = await parseTeachingModuleFromBuffer(buffer, entry, {
+        educationLevel: /primary[_\s-]*education/i.test(abs) ? 'primary' : undefined,
+      })
       if (!parsed) {
         console.warn(`Skipping ${entry}: could not resolve CBC subject`)
         continue
@@ -341,6 +393,25 @@ export async function exportTeachingModulesAsJSON(
   for (const mod of modules) {
     const rel = teachingModuleOutputPath(mod, absRoot)
     fs.mkdirSync(path.dirname(rel), { recursive: true })
+    // When parser metadata improves (for example form-unknown → grade-unknown),
+    // remove the stale generated file for the same source PDF in overwrite mode.
+    if (overwrite) {
+      for (const entry of fs.readdirSync(path.dirname(rel))) {
+        const candidate = path.join(path.dirname(rel), entry)
+        if (candidate === rel || !entry.toLowerCase().endsWith('.json')) continue
+        try {
+          const prior = JSON.parse(fs.readFileSync(candidate, 'utf8')) as TeachingModuleJSON
+          if (
+            String(prior.sourceFile || '').toLowerCase() ===
+            String(mod.sourceFile || '').toLowerCase()
+          ) {
+            fs.unlinkSync(candidate)
+          }
+        } catch {
+          // Ignore unrelated or invalid JSON files.
+        }
+      }
+    }
     if (!overwrite && fs.existsSync(rel)) {
       try {
         const existing = JSON.parse(fs.readFileSync(rel, 'utf8')) as TeachingModuleJSON

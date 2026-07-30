@@ -1,0 +1,173 @@
+{
+  "subject": "Mathematics",
+  "form": 2,
+  "grade": null,
+  "band": null,
+  "term": 1,
+  "sourceFile": "Mathematics-1-Teaching-Module-Form-2-Term-1-and-2.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "COORDINATE GEOMETRY",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "RELATIONS AND FUNCTIONS",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "ALGEBRA",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "POLYGONS",
+      "topics": [
+        "INTRODUCTION",
+        "The Mathematics I Form 2 Teaching Module has been developed to guide teachers on how to facilitate"
+      ],
+      "activities": [
+        "a) are consistent with teaching and learning in a competence-based curriculum;",
+        "b) show processes that allow achievement of",
+        "Century Skills such as creativity, collaboration,",
+        "communication and critical thinking;",
+        "HOW TO USE THE MODULE",
+        "through manipulation of tasks that are interactive and learning through practice. We should bear in mind that",
+        "the desired competences and",
+        "century skills will NOT be achieved by the topics ‘covered’ but by the"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "COORDINATE GEOMETRY",
+      "topics": [
+        "INTRODUCTION",
+        "Coordinate Geometry is a branch of Mathematics that helps us locate and describe the position of points on a",
+        "plane using ordered pairs (푥,푦). It connects Algebra and Geometry, allowing us to draw graphs, measure",
+        "distances, and understand shapes more clearly. Beyond the classroom, Coordinate Geometry plays a vital role",
+        "in everyday life. It is used in maps and Global Positioning System (GPS) to find locations, in architecture and"
+      ],
+      "activities": [
+        "Instructions:",
+        "Ensure that learners are in clearly defined rows and columns.",
+        "Ask learners to describe their own location using rows and columns.",
+        "Ask learners to find a friend’s location using rows and columns.",
+        "Content Tips",
+        "Rows and columns can be numbered to make the location description easier.",
+        "Instruction:",
+        "In small groups learners should perform the following assignment:"
+      ],
+      "resources": [],
+      "assessment": [
+        "Draw a rectangular park on the cartesian plane and state the coordinates of its vertices.",
+        "A football pitch is represented on a Cartesian plane with corners at A(0,0), B(0,90), C(120,90), and",
+        "D(120,0).",
+        "a) Plot the pitch.",
+        "b) Find the coordinates of the centre of the football pitch.",
+        "A road runs through two towns represented by points M(2,−3) and N(6,5)."
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "RELATIONS AND FUNCTIONS",
+      "topics": [
+        "INTRODUCTION",
+        "Relations and functions are important concepts in Mathematics that help us understand how different quantities are",
+        "connected. A relation describes a relationship between two sets of values, showing how elements from one set",
+        "correspond to elements in another. A function is a special type of relation where each input is linked to exactly one",
+        "output. Relations and functions are widely used in areas such as science, economics, engineering, and technology,"
+      ],
+      "activities": [
+        "many to many)",
+        "Instructions",
+        "Divide learners into small groups.",
+        "Provide each group with at least 4 cards. Each card should contain a pair of real-life sets, for example:",
+        "Learners and ID numbers",
+        "Teachers and subjects taught",
+        "Learners and their favorite sports",
+        "Countries and languages spoken"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 7,
+      "title": "ALGEBRA",
+      "topics": [
+        "Introduction",
+        "In Form 1, learners were introduced to the basics of algebra, such as variables, constants, coefficients, and",
+        "terms, and they practiced simplifying expressions. To build on this foundation, in form 2, learners will now focus",
+        "on the basic processes of algebra.",
+        "Key terms: Monomial, Binomial, Linear expression, Quadratic expression, Simplification, Factorization"
+      ],
+      "activities": [
+        "(monomial by binomial and binomial by binomial)",
+        "Instructions:",
+        "Scenario: Chanda goes to a shop to buy school exercise books and pens. Each exercise book costs k8, but the",
+        "learner does not know how many exercise books she will buy. Each pen costs k3, and she buys 4 pens.",
+        "a. Let x represent the number of exercise books bought, write an expression for the total cost of the exercise",
+        "books and pens.",
+        "b. Given that the total cost of the books and pens can be written as 4(2푥 +3), compare the expression in",
+        "(a) with this one. What steps would we take to convert the expression in (b) to the expression in (a)"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 8,
+      "title": "POLYGONS",
+      "topics": [
+        "Introduction:",
+        "Polygons surround us in ways both obvious and subtle. They are two-dimensional shapes that form surfaces of",
+        "three-dimensional shapes such as pavers, road signs, windows and in the intricate geometric patterns woven",
+        "into traditional fabrics and crafts passed down through generations. These shapes formed by straight lines",
+        "meeting at angles are more than mere drawings on paper; they represent order, symmetry, and structure in the"
+      ],
+      "activities": [
+        "Materials Needed",
+        "Cut outs of polygons (both regular and irregular)",
+        "Rulers and protractors",
+        "regular polygons",
+        "on soccer ball",
+        "irregular polygon on a",
+        "surface of a building",
+        "Chart paper or poster boards"
+      ],
+      "resources": [],
+      "assessment": [
+        "Criteria Excellent (4) Good (3) Basic (2) Emerging (1)",
+        "Planning",
+        "(coordinates)",
+        "All points plotted correctly",
+        "on the coordinate grid;",
+        "coordinates labeled clearly;"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:56.005Z",
+    "rawTextLength": 137873,
+    "educationLevel": "secondary"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "subject": "Lunda",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 3,
+  "sourceFile": "LUNDA-GRADE-1-TEACHING-MODULE-TERM-3.pdf",
+  "lessons": [
+    {
+      "week": 1,
+      "lesson": 1,
+      "title": "LISTENING AND",
+      "topics": ["SPEAKING (20", "minutes)", "Sings the", "description", "song with"],
+      "activities": [
+        "words used to",
+        "describe people",
+        "identify words",
+        "which are",
+        "describing",
+        "teachers in the",
+        "song (short,",
+        "tall, has a"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 2,
+      "lesson": 2,
+      "title": "READING (20",
+      "topics": ["minutes)", "(Phonologica", "Provides words", "(using pictures", "or objects)"],
+      "activities": [
+        "Identifying syllables",
+        "in oral words",
+        "whose syllables",
+        "are formed by",
+        "sound /t/ e.g.",
+        "tala (Lunda)",
+        "Explains that",
+        "the word has"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "week": 3,
+      "lesson": 3,
+      "title": "WRITING (10",
+      "topics": ["minutes)", "Write letters"],
+      "activities": [
+        "letter ‘t’",
+        "Demonstrate",
+        "s how to form",
+        "letter ‘t’",
+        "Works with",
+        "learners to",
+        "demonstrate",
+        "how to write"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:45.300Z",
+    "rawTextLength": 156205,
+    "educationLevel": "primary"
+  }
+}

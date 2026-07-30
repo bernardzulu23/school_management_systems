@@ -1,0 +1,35 @@
+{
+  "subject": "Icibemba",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 1,
+  "sourceFile": "ICIBEMBA-TEACHING-MODULE-GELEDI-1-TERM-1.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Umutwe",
+      "topics": ["Sub-Topic – Umutwe Unoono"],
+      "activities": [
+        "General Competence – Ubwishibilo",
+        "Specific Competence – Ifilekabilwa ukwishiba",
+        "Expected Standard – Imibombele ileenekelwa"
+      ],
+      "resources": [],
+      "assessment": [
+        "Summary - Ukukusupawila",
+        "Conclusion - Ukusondwelela",
+        "Methodology – Imifundile",
+        "Listening and Speaking – Ukumfwa na Ukulanda",
+        "Reading – Ukubelenga",
+        "Writing – Ukulemba"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:42.550Z",
+    "rawTextLength": 105590,
+    "educationLevel": "primary"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "subject": "Luvale",
+  "form": null,
+  "grade": 1,
+  "band": null,
+  "term": 3,
+  "sourceFile": "LUVALE-GRADE-1-TEACHING-MODULE-TERM-3.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Chihande",
+      "topics": [
+        "TUTHACHIKIJILO VANAZACHISA MUMUKANDA UNO",
+        "Thando Kutanga",
+        "Shinganyeka kukhukulula",
+        "Mazu amalemu Eseseko",
+        "Mulimo wakulinga Kushimutwila"
+      ],
+      "activities": [
+        "used to describe people",
+        "Sings the",
+        "description song",
+        "with learners again",
+        "and asks learners to",
+        "identify words",
+        "which are",
+        "describing teachers"
+      ],
+      "resources": [
+        "the vowels, pictures or objects whose names begin with /t/.",
+        "INTRODUCTION (5 minutes): Teacher sings a description song with learners e.g., song in",
+        "Milongeshi vah college ‘teachers at college",
+        "Vapwa vakulihandununa ‘",
+        "Vekha vavehi ‘",
+        "Vekha vavasuku ‘"
+      ],
+      "assessment": [
+        "CRITERIA",
+        "LISTENING AND",
+        "SPEAKING (20",
+        "minutes)",
+        "Activity 1: Listing words",
+        "used to describe people"
+      ],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:46.468Z",
+    "rawTextLength": 188367,
+    "educationLevel": "primary"
+  }
+}

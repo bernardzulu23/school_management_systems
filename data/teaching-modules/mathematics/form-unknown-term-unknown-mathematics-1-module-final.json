@@ -1,0 +1,144 @@
+{
+  "subject": "Mathematics",
+  "form": null,
+  "grade": null,
+  "band": null,
+  "term": null,
+  "sourceFile": "MATHEMATICS-1-MODULE-FINAL.pdf",
+  "lessons": [
+    {
+      "lesson": 1,
+      "title": "Numbers",
+      "topics": [
+        "Subtopic 1: Classification of Numbers................................................................................11",
+        "Subtopic 2: Combined Operations ...................................................................................21"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 2,
+      "title": "Integers",
+      "topics": [
+        "Subtopic 1: The Four Operations on Integers ....................................................................25"
+      ],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 3,
+      "title": "Approximation and Estimation",
+      "topics": [],
+      "activities": [],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 4,
+      "title": "Sets",
+      "topics": [
+        "INTRODUCTION",
+        "The Form 1 Mathematics Teaching Module has been developed to guide teachers on how to facilitate"
+      ],
+      "activities": [
+        "a) are consistent with teaching and learning in a competence-based curriculum;",
+        "b) show processes that allow achievement of",
+        "Century Skills such as creativity, collaboration,",
+        "communication and critical thinking;",
+        "HOW TO USE THE MODULE",
+        "through manipulation of tasks that are interactive and learning through practice. We should bearing in mind",
+        "that the desired competences and",
+        "century skills will NOT be achieved by the topics ‘covered’ but by the"
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    },
+    {
+      "lesson": 5,
+      "title": "NUMBERS",
+      "topics": ["INTRODUCTION", "on real numbers.", "Key terms"],
+      "activities": [
+        "numbers, even numbers, odd numbers, rational, irrational, composite numbers) using materials (puzzles, number",
+        "Learners in pairs examine the groups of numbers given to them. Their task is to figure out the properties that numbers in each group",
+        "share. What do they have in common?",
+        "a. {1,2,3,4,5,6,7,",
+        "f. {2,3,5,7,11,13",
+        "Next Pairs compare number groups;",
+        "i. (a) and (b)",
+        "ii. (c) and (b)"
+      ],
+      "resources": [
+        "overlapping events, and Time Management, Building Projects (Like Fencing),",
+        "LCM is useful when finding smallest common interval or multiple when events with different cycles need to align or",
+        "match, (purchasing items in bulk, coordinating schedules, Finding Common Time Intervals, Planning Work Cycles, Working",
+        "with Timetables",
+        "Learning Activity 4:Creating number patterns (games, puzzles)",
+        "Activity 4.1 : Project: Design and Present a Math Board Game"
+      ],
+      "assessment": [
+        "Accuracy: Correctly identifying and explaining properties of numbers, finding factors, and calculating HCF and LCM.",
+        "Creativity: Originality and design of the number-based games, puzzles, and patterns.",
+        "Presentation: Clear and confident explanation of the final project (board game), with an emphasis on the math concepts",
+        "involved.",
+        "Expected standard: Numbers applied in real life situations consistently.",
+        "INTRODUCTION"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 6,
+      "title": "APPROXIMATIONS AND ESTIMATIONS",
+      "topics": ["Introduction", "real-life contexts."],
+      "activities": [
+        "world applications, empowering learners to make sound, data-driven decisions in their everyday lives.",
+        "Key Terms:Approximation, Significant Figures, Scientific Notation, Estimation, Relative Error, Absolute Error, Percentage Errors,",
+        "Tolerance.",
+        "General Competence(s): Problem solving, analytical thinking, collaboration, communication, digital literacy and financial literacy.",
+        "The Heroes Stadium is",
+        "almost full, with just a",
+        "few seats remaining, how",
+        "would you tell the"
+      ],
+      "resources": [],
+      "assessment": [
+        "Accuracy in calculations:Determiningof errors.",
+        "Content Tip:",
+        "The objective of the activity is to increase learners’ awareness of how errors arise during manufacturing process as they",
+        "compare the measurements of the model to those on their design"
+      ],
+      "notes": ""
+    },
+    {
+      "lesson": 7,
+      "title": "SETS",
+      "topics": [
+        "Introduction",
+        "organization and logic as we encounter different kinds of information, objects, tools in the environment.",
+        "Key Terms:Subset, Complement, Union, Intersection, Notations, Venn Diagram"
+      ],
+      "activities": [
+        "In pairs learners gather objects/information",
+        "Instructions",
+        "Divide learners into small groups and assign each group a specific category to gather information about (names of villages where they",
+        "come from, seasons, rivers in Zambia, colors, groups of numbers, unit of sweets, letters of the English alphabet, all the teachers in",
+        "school, shoe sizes, teachers of mathematics at your school, members of your class, sets of numbers, whole numbers less than 10, set of",
+        "multiples of 10 less than 100,",
+        "Each group must either research online or brainstorm to list items at least 10 items that fit their assigned category.",
+        "Learners to then present their work to the class, using the blackboard, paperboard or power point."
+      ],
+      "resources": [],
+      "assessment": [],
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "extractedAt": "2026-07-30T13:29:51.010Z",
+    "rawTextLength": 78313
+  }
+}

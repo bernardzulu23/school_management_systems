@@ -1,0 +1,34 @@
+{
+  "sourceFile": "LOWER-PRIMARY-SYLLABI-GRADE-1-3-FINAL-CAMERA-REDY-1.pdf",
+  "subject": "English",
+  "educationLevel": "primary",
+  "grades": [1, 2, 3],
+  "sourceRecordRange": [0, 139],
+  "ok": true,
+  "recordCount": 140,
+  "expectedGrades": [1, 2, 3],
+  "recordsByGrade": {
+    "1": 45,
+    "2": 47,
+    "3": 48
+  },
+  "duplicateIds": [],
+  "missingGrades": [],
+  "incompleteRecordIds": [],
+  "emptyActivityRecordIds": [],
+  "mismatchedGradeRecordIds": [],
+  "gradeCodeMismatchRecordIds": [],
+  "suspiciousHeadingRecordIds": [],
+  "activityCoverage": {
+    "present": 140,
+    "total": 140,
+    "percent": 100,
+    "requiredPercent": 0
+  },
+  "expectedStandardCoverage": {
+    "present": 133,
+    "total": 140,
+    "percent": 95,
+    "requiredPercent": 0
+  }
+}

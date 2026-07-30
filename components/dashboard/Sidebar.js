@@ -8,12 +8,9 @@ import { useAuth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useSchool } from '@/lib/context/SchoolContext'
-import {
-  canAccessEczFeatures,
-  canAccessHodFeatures,
-  canAccessSecondaryGrading,
-} from '@/lib/subjects/resolveSubjectCatalog'
+import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
+import { isNavItemApplicable } from '@/lib/school/navApplicability'
 import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
 import { hasSicAssignment } from '@/lib/sic/sicAccess'
 import {
@@ -147,7 +144,7 @@ function TimetableConflictNavBadge() {
 export function Sidebar({ className, mobileOpen, setMobileOpen }) {
   const [isCollapsed, setIsCollapsed] = useState(false)
   const { user, logout } = useAuth()
-  const { school } = useSchool()
+  const { school, isLoading: schoolLoading } = useSchool()
   const pathname = usePathname()
   const rawRoleKey = String(user?.role || '').toLowerCase()
   const roleKey =
@@ -155,6 +152,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
 
   const getNavigationItems = () => {
     const hasSeniorTeacherRole = Boolean(user?.isSeniorTeacher || user?.seniorTeacherAssignment?.id)
+    const schoolReady = Boolean(school?.level) && !schoolLoading
     const baseDashboardHref = hasSeniorTeacherRole
       ? '/dashboard/senior-teacher'
       : `/dashboard/${roleKey || 'student'}`
@@ -222,6 +220,8 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'ECZ Exam Tracking',
           href: '/dashboard/headteacher/exam-tracking',
           icon: BarChart3,
+          secondaryOnly: true,
+          requiresFeature: 'eczSBA',
         },
         { name: 'STEM Monitoring', href: '/dashboard/headteacher/stem-monitoring', icon: Target },
         { name: 'MOE Reports', href: '/dashboard/headteacher/moe-reports', icon: FileText },
@@ -237,10 +237,25 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         },
         { name: 'Transport', href: '/dashboard/headteacher/transport', icon: Bus },
         { name: 'Inter-house', href: '/dashboard/headteacher/houses', icon: Trophy },
-        { name: 'Hostel', href: '/dashboard/headteacher/hostel', icon: HomeIcon },
+        {
+          name: 'Hostel',
+          href: '/dashboard/headteacher/hostel',
+          icon: HomeIcon,
+          requiresFeature: 'hostel',
+        },
         { name: 'Assessments', href: '/dashboard/assessments', icon: ClipboardList },
-        { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
-        { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
+        {
+          name: 'Results',
+          href: '/dashboard/results',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
+        {
+          name: 'Payments',
+          href: '/dashboard/payments',
+          icon: CreditCard,
+          requiresFeature: 'feeManagement',
+        },
         { name: 'Billing', href: '/dashboard/billing', icon: CreditCard },
         {
           name: 'Parent links',
@@ -272,6 +287,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Old Syllabus',
           href: '/dashboard/teacher/old-syllabus',
           icon: BookOpen,
+          secondaryOnly: true,
         },
         { name: 'AI Assistant', href: '/dashboard/hod/chat', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
@@ -305,18 +321,29 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'ECZ SBA Hub',
           href: '/dashboard/teacher/assessments/ecz',
           icon: ClipboardList,
+          secondaryOnly: true,
+          requiresFeature: 'eczSBA',
         },
         {
           name: 'Exam scenarios',
           href: '/dashboard/teacher/assessments/ecz?tab=exam',
           icon: Target,
+          secondaryOnly: true,
+          requiresFeature: 'eczSBA',
         },
         {
           name: 'CBC Assessment',
           href: '/dashboard/teacher/assessments/cbc',
           icon: ClipboardList,
+          primaryOnly: true,
+          requiresFeature: 'cbc',
         },
-        { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
+        {
+          name: 'Results',
+          href: '/dashboard/results',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Extracurricular', href: '/dashboard/teacher/extracurricular', icon: Trophy },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
@@ -359,7 +386,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Teacher Monitoring', href: '/dashboard/senior-teacher/monitoring', icon: Eye },
         { name: 'Teaching Studio', href: '/dashboard/teacher/teaching-studio', icon: Zap },
         { name: 'Assessments', href: '/dashboard/teacher/assessments', icon: ClipboardList },
-        { name: 'Results', href: '/dashboard/results', icon: BarChart3 },
+        {
+          name: 'Results',
+          href: '/dashboard/results',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
@@ -384,6 +416,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Old Syllabus',
           href: '/dashboard/teacher/old-syllabus',
           icon: BookOpen,
+          secondaryOnly: true,
         },
         { name: 'AI Assistant', href: '/dashboard/teacher/chat', icon: Sparkles },
         { name: 'AI Quiz Maker', href: '/dashboard/teacher/quiz-maker', icon: Sparkles },
@@ -394,24 +427,40 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'ECZ SBA Hub',
           href: '/dashboard/teacher/assessments/ecz',
           icon: ClipboardList,
+          secondaryOnly: true,
+          requiresFeature: 'eczSBA',
         },
         {
           name: 'Exam scenarios',
           href: '/dashboard/teacher/assessments/ecz?tab=exam',
           icon: Target,
+          secondaryOnly: true,
+          requiresFeature: 'eczSBA',
         },
         {
           name: 'CBC Assessment',
           href: '/dashboard/teacher/assessments/cbc',
           icon: ClipboardList,
+          primaryOnly: true,
+          requiresFeature: 'cbc',
         },
-        { name: 'Results', href: '/dashboard/teacher/results', icon: BarChart3 },
+        {
+          name: 'Results',
+          href: '/dashboard/teacher/results',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Extracurricular', href: '/dashboard/teacher/extracurricular', icon: Trophy },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Lesson sessions', href: '/dashboard/attendance/sessions', icon: Clock },
-        { name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
+        {
+          name: 'Payments',
+          href: '/dashboard/payments',
+          icon: CreditCard,
+          requiresFeature: 'feeManagement',
+        },
         { name: 'Term reports', href: '/dashboard/teacher/term-reports', icon: FileText },
       ],
       student: [
@@ -423,9 +472,27 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Assessments', href: '/dashboard/student/assessments', icon: ClipboardList },
         { name: 'Flashcards', href: '/dashboard/student/flashcards', icon: BookOpen },
         { name: 'Results', href: '/dashboard/student/results', icon: BarChart3 },
-        { name: 'ECZ Practice', href: '/dashboard/student/ecz-practice', icon: Target },
-        { name: 'Mock Examination', href: '/dashboard/student/mock-exam', icon: FileCheck },
-        { name: 'Career guidance', href: '/dashboard/student/learning-path', icon: Briefcase },
+        {
+          name: 'ECZ Practice',
+          href: '/dashboard/student/ecz-practice',
+          icon: Target,
+          secondaryOnly: true,
+          requiresFeature: 'eczSBA',
+        },
+        {
+          name: 'Mock Examination',
+          href: '/dashboard/student/mock-exam',
+          icon: FileCheck,
+          secondaryOnly: true,
+          requiresFeature: 'mockExams',
+        },
+        {
+          name: 'Career guidance',
+          href: '/dashboard/student/learning-path',
+          icon: Briefcase,
+          secondaryOnly: true,
+          requiresFeature: 'careerGuidance',
+        },
         {
           name: 'Study assistant',
           href: '/dashboard/student/study-assistant',
@@ -436,10 +503,21 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           href: '/dashboard/student/help',
           icon: Compass,
         },
-        { name: 'Code Playground', href: '/dashboard/student/code-playground', icon: Code },
+        {
+          name: 'Code Playground',
+          href: '/dashboard/student/code-playground',
+          icon: Code,
+          secondaryOnly: true,
+          requiresFeature: 'codePlayground',
+        },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'My Activities', href: '/dashboard/student/extracurricular', icon: Trophy },
-        { name: 'Fee statement', href: '/dashboard/student/parent-view', icon: Users },
+        {
+          name: 'Fee statement',
+          href: '/dashboard/student/parent-view',
+          icon: Users,
+          requiresFeature: 'feeManagement',
+        },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
       parent: [
@@ -460,21 +538,14 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       ],
     }
 
-    const features = getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' })
-    const showHod = features.hod && canAccessHodFeatures({ schoolLevel: school?.level })
-    const showGrading =
-      features.secondaryGrading && canAccessSecondaryGrading({ schoolLevel: school?.level })
-    const showEcz =
-      features.eczSBA &&
-      (String(school?.level || '').toLowerCase() === 'secondary' ||
-        String(school?.level || '').toLowerCase() === 'combined' ||
-        canAccessEczFeatures({ schoolLevel: school?.level }))
-    const showCbc = features.cbc
-    const showFees = features.feeManagement
-    const showHostel = features.hostel
-    const showCareer = features.careerGuidance
-    const showCodePlayground = features.codePlayground
-    const showMockExams = features.mockExams
+    const featuresForRole = getSchoolFeatures(
+      schoolReady
+        ? school
+        : { level: 'combined', ownershipType: school?.ownershipType || 'PRIVATE' }
+    )
+    const showHod =
+      featuresForRole.hod && canAccessHodFeatures({ schoolLevel: school?.level || 'combined' })
+    const showCareer = featuresForRole.careerGuidance
     const guidancePortal = pathname?.startsWith('/dashboard/guidance')
     const sicPortal = pathname?.startsWith('/dashboard/sic')
     const hodPortal = pathname?.startsWith('/dashboard/hod')
@@ -500,13 +571,14 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     }
 
     let roleItems = roleSpecificItems[navRoleKey] || []
-    if (navRoleKey === 'headteacher' && features.proprietorDashboard) {
+    if (navRoleKey === 'headteacher' && featuresForRole.proprietorDashboard) {
       roleItems = [...roleItems]
       const billingIndex = roleItems.findIndex((item) => item.name === 'Billing')
       const proprietorItem = {
         name: 'Owner Dashboard',
         href: '/dashboard/proprietor',
         icon: BarChart3,
+        requiresFeature: 'proprietorDashboard',
       }
       if (billingIndex >= 0) {
         roleItems.splice(billingIndex + 1, 0, proprietorItem)
@@ -515,7 +587,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       }
     }
 
-    if (navRoleKey === 'headteacher' && features.feeManagement) {
+    if (navRoleKey === 'headteacher' && featuresForRole.feeManagement) {
       roleItems = [...roleItems]
       const billingIndex = roleItems.findIndex((item) => item.name === 'Billing')
       const feeItems = [
@@ -523,16 +595,19 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Fee Schedules',
           href: '/dashboard/headteacher/fees/schedules',
           icon: FileText,
+          requiresFeature: 'feeManagement',
         },
         {
           name: 'Invoices',
           href: '/dashboard/headteacher/fees/invoices',
           icon: ClipboardList,
+          requiresFeature: 'feeManagement',
         },
         {
           name: 'Sibling Groups',
           href: '/dashboard/headteacher/fees/siblings',
           icon: Users,
+          requiresFeature: 'feeManagement',
         },
       ]
       if (billingIndex >= 0) {
@@ -542,7 +617,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       }
     }
 
-    if (navRoleKey === 'headteacher' && features.isGovernment) {
+    if (navRoleKey === 'headteacher' && featuresForRole.isGovernment) {
       roleItems = [...roleItems]
       const moeIndex = roleItems.findIndex((item) => item.name === 'MOE Reports')
       const govItems = [
@@ -579,33 +654,15 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       }
     }
 
-    const filterPrimaryItems = (items) =>
+    const filterSchoolLevelItems = (items) =>
       items.filter((item) => {
-        if (!showGrading && item.name === 'Results') return false
         if (
-          !showEcz &&
-          (item.name === 'ECZ SBA Hub' ||
-            item.name === 'ECZ Exam Tracking' ||
-            item.name === 'Exam scenarios')
-        )
-          return false
-        if (!showCbc && item.name === 'CBC Assessment') return false
-        if (!showFees && item.name === 'Payments') return false
-        if (
-          !showFees &&
-          (item.name === 'Fee Schedules' ||
-            item.name === 'Invoices' ||
-            item.name === 'Sibling Groups' ||
-            item.name === 'Owner Dashboard' ||
-            item.name === 'Fee statement')
+          !isNavItemApplicable(item, schoolReady ? school : null, {
+            schoolReady,
+          })
         ) {
           return false
         }
-        if (!showHostel && item.name === 'Hostel') return false
-        if (!showCodePlayground && item.name === 'Code Playground') return false
-        if (!showEcz && item.name === 'ECZ Practice') return false
-        if (!showMockExams && item.name === 'Mock Examination') return false
-        if (!showCareer && item.name === 'Career guidance') return false
         // Keep Guidance teachers / reports visible for headteachers so assignments stay reachable
         // even when career feature flags are off for the school level.
         if (
@@ -621,7 +678,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         return true
       })
 
-    let items = filterPrimaryItems([...baseItems, ...roleItems])
+    let items = filterSchoolLevelItems([...baseItems, ...roleItems])
     if (navRoleKey === 'guidance') {
       items = items.map((item) =>
         item.name === 'Dashboard' ? { ...item, href: '/dashboard/guidance' } : item

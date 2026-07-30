@@ -196,12 +196,30 @@ export function loadJsonCurriculum(
   return null
 }
 
-export function listAvailableCurriculumSubjects(): string[] {
+export function listAvailableCurriculumSubjects(options?: {
+  educationLevel?: string | null
+}): string[] {
+  const level = String(options?.educationLevel || '')
+    .trim()
+    .toLowerCase()
+  const root = path.join(process.cwd(), 'data', 'curriculum')
+  const dirs =
+    level === 'primary'
+      ? [path.join(root, 'primary')]
+      : level === 'secondary'
+        ? [root, path.join(root, 'form1-4'), path.join(root, 'form1-6')].filter(
+            (d) => !d.endsWith(`${path.sep}primary`)
+          )
+        : curriculumDirs()
+
   const subjects = new Set<string>()
-  for (const dir of curriculumDirs()) {
+  for (const dir of dirs) {
     if (!fs.existsSync(dir)) continue
+    // When listing secondary, skip primary nested corpus
+    if (level === 'secondary' && dir.replace(/\\/g, '/').endsWith('/primary')) continue
     for (const entry of fs.readdirSync(dir)) {
       if (!entry.toLowerCase().endsWith('.json')) continue
+      if (entry.includes('validation')) continue
       if (entry.includes('cdc-2024')) {
         try {
           const raw = JSON.parse(fs.readFileSync(path.join(dir, entry), 'utf8')) as {

@@ -215,6 +215,33 @@ Timetable alignment and assessment auto-linking are planned for later phases.
 **Do not** run `ingest:syllabi` on the Teaching Module folder.  
 **Do not** write modules to `data/curriculum/form1-6/` — that path is unused; use `data/teaching-modules/`.
 
+### Dual pipelines (do not confuse)
+
+| Pipeline            | Command                                               | Output                   | Runtime use                                                                  |
+| ------------------- | ----------------------------------------------------- | ------------------------ | ---------------------------------------------------------------------------- |
+| Teaching modules    | `npm run ingest:teaching-modules`                     | `data/teaching-modules/` | Scheme/lesson enrichment + Official Resources UI + AI lesson planner context |
+| Static fallback RAG | `npm run ingest:extract` + `ingest:structure-modules` | `data/static-fallback/`  | AI RAG enrichment when CDC corpus chunks are thin                            |
+
+Primary Grade modules live under `Primary_Education_teaching/` and ingest with:
+
+```bash
+npm run ingest:teaching-modules -- "./Primary_Education_teaching" --all --recursive --overwrite
+```
+
+Secondary Form 2 STEM PDFs under `Teaching Module/form2-4-stem/` should also be ingested into `data/teaching-modules/` (not only static-fallback) so schemes get the same enrichment:
+
+```bash
+npm run ingest:teaching-modules -- "./Teaching Module" Mathematics --overwrite
+npm run ingest:teaching-modules -- "./Teaching Module/form2-4-stem" --all --overwrite
+```
+
+Official Resources in Teaching Studio:
+
+- Primary/combined schools → CDC syllabi + grade modules + ECE (`/api/curriculum/primary-resources`)
+- Secondary/combined schools → form-tagged MoE modules (`/api/curriculum/secondary-resources`)
+
+Grades 2–7 primary modules are not in-repo yet; add PDFs under `Primary_Education_teaching/` and re-ingest when CDC publishes them.
+
 ### Full ingest
 
 ```bash
