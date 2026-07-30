@@ -126,6 +126,49 @@
   color: var(--rp-on-deep);
 }
 
+/*
+ * Tailwind opacity modifiers on CSS-variable colors are not emitted by the
+ * current build, leaving bg-royalPurple-deep/NN transparent while the contrast
+ * rules below still switch its text to light. Define the used variants
+ * explicitly so deep cards, modal scrims, and the mobile sidebar backdrop
+ * retain their intended background.
+ */
+.bg-royalPurple-deep\/20 {
+  background-color: rgb(26 26 26 / 0.2);
+}
+
+.bg-royalPurple-deep\/30 {
+  background-color: rgb(26 26 26 / 0.3);
+}
+
+.bg-royalPurple-deep\/40 {
+  background-color: rgb(26 26 26 / 0.4);
+}
+
+.bg-royalPurple-deep\/50 {
+  background-color: rgb(26 26 26 / 0.5);
+}
+
+.bg-royalPurple-deep\/60 {
+  background-color: rgb(26 26 26 / 0.6);
+}
+
+.bg-royalPurple-deep\/80 {
+  background-color: rgb(26 26 26 / 0.8);
+}
+
+.bg-royalPurple-deep\/95 {
+  background-color: rgb(26 26 26 / 0.95);
+}
+
+.dark .dark\:bg-royalPurple-deep\/20 {
+  background-color: rgb(26 26 26 / 0.2);
+}
+
+.dark .dark\:bg-royalPurple-deep\/40 {
+  background-color: rgb(26 26 26 / 0.4);
+}
+
 [class*='bg-royalPurple-deep'] .text-royalPurple-text1,
 [class*='bg-royalPurple-deep'].text-royalPurple-text1 {
   color: var(--rp-on-deep);

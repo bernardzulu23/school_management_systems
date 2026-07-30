@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
@@ -788,7 +787,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         {getNavigationItems().map((item) => {
           const isActive = pathname === item.href
           return (
-            <Link
+            <a
               key={`${item.href}:${item.name}`}
               href={item.href}
               onClick={() => mobileOpen && setMobileOpen(false)}
@@ -814,7 +813,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
                   {item.name}
                 </div>
               )}
-            </Link>
+            </a>
           )
         })}
       </div>

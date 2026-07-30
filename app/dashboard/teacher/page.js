@@ -668,7 +668,7 @@ export default function TeacherDashboard() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
+              <div className="bg-royalPurple-card2 border border-royalPurple-border rounded-2xl p-6">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                   <div className="text-center">
                     <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-20 h-20 flex items-center justify-center mx-auto mb-4">
@@ -792,17 +792,17 @@ export default function TeacherDashboard() {
                       return (
                         <div
                           key={subject.id}
-                          className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer"
+                          className="p-6 bg-royalPurple-card border border-royalPurple-border rounded-xl shadow-sm hover:bg-royalPurple-card2 hover:border-royalPurple-border2 transition-all duration-300 hover:scale-105 cursor-pointer"
                         >
                           <div className="flex items-center justify-between mb-4">
-                            <div className="backdrop-blur-md bg-royalPurple-accent/60 border border-royalPurple-border2/50 rounded-2xl p-3">
-                              <BookOpen className="h-8 w-8 text-royalPurple-text1" />
+                            <div className="bg-royalPurple-accent border border-royalPurple-accent rounded-2xl p-3">
+                              <BookOpen className="h-8 w-8 text-royalPurple-accentTx" />
                             </div>
                             <div
                               className={`px-3 py-1 rounded-full text-xs font-medium ${
                                 (subject.student_count || 0) > 0
-                                  ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
-                                  : 'bg-warn/60 text-warn/20 border border-warn/50'
+                                  ? 'bg-royalPurple-accent text-royalPurple-accentTx border border-royalPurple-accent'
+                                  : 'bg-warn-bg text-warn-text border border-warn-text/30'
                               }`}
                             >
                               {subject.class_count || 0} Classes
@@ -995,7 +995,7 @@ export default function TeacherDashboard() {
                 </span>
                 <Link
                   href="/dashboard/teacher/teaching-studio"
-                  className="text-sm font-medium text-royalPurple-accentTx hover:underline"
+                  className="text-sm font-semibold text-royalPurple-accent hover:underline"
                 >
                   Open Teaching Studio
                 </Link>
@@ -1015,7 +1015,7 @@ export default function TeacherDashboard() {
                         </p>
                         <Link
                           href="/dashboard/teacher/teaching-studio?tab=scheme"
-                          className="inline-block mt-3 text-sm font-semibold text-royalPurple-accentTx hover:underline"
+                          className="inline-flex mt-3 items-center rounded-lg bg-royalPurple-accent px-3 py-2 text-sm font-semibold text-royalPurple-accentTx hover:opacity-90"
                         >
                           Create scheme of work →
                         </Link>
