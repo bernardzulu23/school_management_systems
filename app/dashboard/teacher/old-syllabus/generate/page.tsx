@@ -2,25 +2,35 @@
 
 import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useAuth } from '@/lib/auth'
+import { useAuth, useAuthHasHydrated } from '@/lib/auth'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { OldSyllabusHub } from '@/components/old-syllabus/OldSyllabusHub'
 import { SecondaryOnlyRouteGuard } from '@/components/auth/SecondaryOnlyRouteGuard'
+import { canAccessTeachingStudio } from '@/lib/teaching/teachingStudioAccess'
 
 function OldSyllabusGenerateInner() {
-  const { user, isAuthenticated, isLoading } = useAuth()
+  const user = useAuth((s) => s.user)
+  const isAuthenticated = useAuth((s) => s.isAuthenticated)
+  const hydrated = useAuthHasHydrated()
   const router = useRouter()
   const search = useSearchParams()
   const subject = String(search.get('subject') || '')
   const grade = Number(search.get('grade') || 10)
 
   useEffect(() => {
-    if (isLoading) return
-    if (!isAuthenticated || !user) router.replace('/login')
-  }, [isAuthenticated, isLoading, user, router])
+    if (!hydrated) return
+    if (!isAuthenticated || !user) return
+    if (!canAccessTeachingStudio(user)) {
+      router.replace('/dashboard')
+    }
+  }, [hydrated, isAuthenticated, user, router])
 
-  if (isLoading || !user) {
+  if (!hydrated || !user) {
     return <p className="text-sm text-muted-foreground">Loading…</p>
+  }
+
+  if (!canAccessTeachingStudio(user)) {
+    return <p className="text-sm text-muted-foreground">Redirecting…</p>
   }
 
   return (
