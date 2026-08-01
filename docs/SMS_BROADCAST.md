@@ -16,7 +16,7 @@ AFRICASTALKING_USERNAME=
 QSTASH_TOKEN=
 QSTASH_CURRENT_SIGNING_KEY=
 QSTASH_NEXT_SIGNING_KEY=
-QSTASH_CALLBACK_URL=https://your-production-domain.com
+QSTASH_CALLBACK_URL=https://www.bluepeacktechnologies.com/
 CRON_SECRET=                        # for /api/cron/sms-low-balance
 ```
 
