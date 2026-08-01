@@ -254,6 +254,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           icon: BarChart3,
           requiresFeature: 'secondaryGrading',
         },
+        { name: 'SMS', href: '/dashboard/sms', icon: MessageCircle },
         {
           name: 'Payments',
           href: '/dashboard/payments',
