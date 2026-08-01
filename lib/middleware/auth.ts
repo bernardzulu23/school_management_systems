@@ -25,7 +25,13 @@ const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 /** Audience claim — pins tokens to this API, preventing reuse in other contexts. */
 export const JWT_AUDIENCE = 'zsms-api'
 
-if (process.env.NODE_ENV === 'production' && !process.env.JWT_SECRET) {
+// Server-only check — JWT_SECRET is never exposed to the browser, so a client
+// import of this module would always look "unset" and spam a false warning.
+if (
+  typeof window === 'undefined' &&
+  process.env.NODE_ENV === 'production' &&
+  !process.env.JWT_SECRET
+) {
   console.warn('Warning: JWT_SECRET is not set in production environment.')
 }
 
