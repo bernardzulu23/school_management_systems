@@ -82,7 +82,7 @@ These routes do **not** update `ResultsStatus.smsSentAt`.
 
 1. Enter **Mobile number for welcome SMS** on step 1 (before email verification) or save it later via **Save phone** on plan/setup steps.
 2. Phone is stored on `SchoolRegistration.adminPhone` (`PATCH /api/onboarding/contact` or `POST /api/onboarding/start`).
-3. When you **Create Portal**, welcome SMS is sent from **ZSMS** via `sendOutboundSms` (gateway if online, else Africa's Talking).
+3. When you **Create Portal**, welcome SMS is sent from **ZSMS** via `sendOutboundSms` (Africa's Talking first; Android gateway only if AT fails).
 
 Requires `AFRICASTALKING_*` in `.env.local` for cloud delivery when the gateway is unavailable.
 

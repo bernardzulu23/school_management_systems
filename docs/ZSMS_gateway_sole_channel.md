@@ -1,13 +1,13 @@
-# Custom Android gateway + Africa's Talking SMS
+# Africa's Talking primary + Android gateway fallback
 
-School outbound SMS uses **gateway first, then Africa's Talking**.
+School outbound SMS uses **Africa's Talking first**, then the Android gateway.
 
 ## Routing (`lib/sms/sendOutbound.js`)
 
-1. **Custom Android SIM gateway** when `customGatewayEnabled` is on, an active `SMSGateway` exists, and `lastSeenAt` is within **5 minutes**.
-2. Otherwise **Africa's Talking** (`AFRICASTALKING_API_KEY` + `AFRICASTALKING_USERNAME`).
+1. **Africa's Talking** when `AFRICASTALKING_*` / `AFRICAS_TALKING_*` credentials are set.
+2. **Custom Android SIM gateway** only if AT fails or is unconfigured, and `customGatewayEnabled` is on with an active gateway seen within **5 minutes**.
 
-Offline or missing gateway does **not** leave stuck `PENDING` rows — the send falls through to Africa's Talking.
+Set `SMS_PREFER_CUSTOM_GATEWAY=true` only if you intentionally want gateway-first (cost mode).
 
 Bulk broadcast (`/api/sms/broadcast`) still uses Africa's Talking + QStash only.
 
