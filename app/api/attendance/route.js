@@ -4,7 +4,10 @@ import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import { scheduleParentAttendanceSmsBatch } from '@/lib/attendance/parentNotifications'
+import {
+  notifyParentsBatch,
+  scheduleParentAttendanceSmsBatch,
+} from '@/lib/attendance/parentNotifications'
 import { mergeAttendanceRegister } from '@/lib/attendance/unified-register'
 import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
 import { openAttendanceSession, recordAttendanceMark } from '@/lib/attendance/sessions'
@@ -171,16 +174,39 @@ export const POST = withErrorHandler(async function POST(request) {
       String(existingByStudent.get(String(w.studentId)) || '') !== String(w.status).toLowerCase()
   )
 
-  scheduleParentAttendanceSmsBatch({
-    marks: changedWrites.map((r) => ({
-      studentId: r.studentId,
-      status: r.status,
-      date: r.date,
-    })),
-    schoolId,
-    sessionId: null,
-    date: new Date(),
-  })
+  const smsMarks = changedWrites.map((r) => ({
+    studentId: r.studentId,
+    status: r.status,
+    date: r.date,
+  }))
+
+  // SMS only on status *change*. Remaking the same status skips send.
+  let smsSummary = { scheduled: false, sent: 0, failed: 0, skipped: 0, reason: null }
+  if (smsMarks.length === 0) {
+    smsSummary.reason = 'no_status_change'
+    console.log('[attendance] No parent SMS — status unchanged for all rows', {
+      schoolId,
+      count: finalWrites.length,
+    })
+  } else if (smsMarks.length <= 10) {
+    // Await small batches so Vercel does not freeze before Africa's Talking returns.
+    try {
+      const summary = await notifyParentsBatch(smsMarks, schoolId, null, new Date())
+      smsSummary = { scheduled: false, awaited: true, ...summary }
+      console.log('[attendance] Parent SMS awaited', { schoolId, ...summary })
+    } catch (err) {
+      smsSummary.reason = err?.message || 'sms_batch_failed'
+      console.error('[attendance] Parent SMS batch failed', err?.message || err)
+    }
+  } else {
+    scheduleParentAttendanceSmsBatch({
+      marks: smsMarks,
+      schoolId,
+      sessionId: null,
+      date: new Date(),
+    })
+    smsSummary = { scheduled: true, markCount: smsMarks.length }
+  }
 
   if (classId && !subjectId) {
     const assignment = await prisma.teachingAssignment.findFirst({
@@ -207,5 +233,9 @@ export const POST = withErrorHandler(async function POST(request) {
     }
   }
 
-  return NextResponse.json({ success: true, sms: { queued: true }, sessionSync })
+  return NextResponse.json({
+    success: true,
+    sms: { queued: Boolean(smsSummary.scheduled || smsSummary.awaited), ...smsSummary },
+    sessionSync,
+  })
 })

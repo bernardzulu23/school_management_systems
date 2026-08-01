@@ -16,7 +16,10 @@ import {
   closeAttendanceSession,
   openAttendanceSession,
 } from '@/lib/attendance/sessions'
-import { scheduleParentAttendanceSmsBatch } from '@/lib/attendance/parentNotifications'
+import {
+  notifyParentsBatch,
+  scheduleParentAttendanceSmsBatch,
+} from '@/lib/attendance/parentNotifications'
 import { syncWebAttendanceToSession } from '@/lib/compliance/attendanceToday'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 
