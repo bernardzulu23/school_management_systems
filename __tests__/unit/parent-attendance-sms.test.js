@@ -21,7 +21,7 @@ describe('parentNotifications', () => {
         parent_father_contact: '0962222222',
         parent_mother_contact: '',
       })
-    ).toEqual(['0971111111', '0962222222'])
+    ).toEqual(['+260971111111', '+260962222222'])
   })
 
   it('buildAttendanceSMS returns absent alert text', () => {

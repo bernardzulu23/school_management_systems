@@ -120,18 +120,112 @@ describe('sendOutboundSms (gateway sole channel)', () => {
 })
 
 describe('buildTermResultsCompleteSmsMessage', () => {
-  it('prefixes message with school name when login URL is present', async () => {
+  it('includes abbreviated school, grades, and short view URL', async () => {
     const { buildTermResultsCompleteSmsMessage } = await vi.importActual('@/lib/sms.js')
     const message = buildTermResultsCompleteSmsMessage({
       studentName: 'Jane Banda',
-      loginUrl: 'https://school.example.com/login',
       schoolName: 'Nyimba East Day Secondary School',
+      results: [
+        { subjectName: 'English', score: 50, grade: 'D' },
+        { subjectName: 'Math', score: 67, grade: 'C' },
+      ],
     })
 
-    expect(message.startsWith('Nyimba East Day Secondary School:')).toBe(true)
+    expect(message.startsWith('Nyimba Eas:')).toBe(true)
     expect(message).toContain('Jane Banda')
-    expect(message).toContain('https://school.example.com/login')
-    expect(message).not.toContain('- Nyimba East')
+    expect(message).toContain('English 50 (D)')
+    expect(message).toContain('Math 67 (C)')
+    expect(message).toContain('bluepeacktechnologies.com')
+    expect(message).not.toContain('https://school.example.com/login')
+  })
+
+  it('should handle single subject', async () => {
+    const { buildTermResultsCompleteSmsMessage, TERM_RESULTS_SMS_VIEW_URL } =
+      await vi.importActual('@/lib/sms.js')
+    const message = buildTermResultsCompleteSmsMessage({
+      studentName: 'John',
+      schoolName: 'Ndake Secondary School',
+      results: [{ subjectName: 'Math', score: 67, grade: 'C' }],
+    })
+    expect(message).toBe(`Ndake Seco: John — Math 67 (C). View at ${TERM_RESULTS_SMS_VIEW_URL}`)
+  })
+
+  it('should return null if no results', async () => {
+    const { buildTermResultsCompleteSmsMessage } = await vi.importActual('@/lib/sms.js')
+    expect(
+      buildTermResultsCompleteSmsMessage({
+        studentName: 'John',
+        schoolName: 'Ndake',
+        results: [],
+      })
+    ).toBeNull()
+  })
+
+  it('should abbreviate long school names to 10 chars', async () => {
+    const { abbreviateSchoolNameForSms, buildTermResultsCompleteSmsMessage } =
+      await vi.importActual('@/lib/sms.js')
+    expect(abbreviateSchoolNameForSms('')).toBe('ZSMS')
+    expect(abbreviateSchoolNameForSms('Ndake Secondary School')).toBe('Ndake Seco')
+    const message = buildTermResultsCompleteSmsMessage({
+      studentName: 'John',
+      schoolName: 'Very Long School Name Here',
+      results: [{ subjectName: 'Math', score: 67, grade: 'C' }],
+    })
+    expect(message.split(':')[0].length).toBeLessThanOrEqual(10)
+  })
+
+  it('should sort subjects alphabetically', async () => {
+    const { buildTermResultsCompleteSmsMessage } = await vi.importActual('@/lib/sms.js')
+    const message = buildTermResultsCompleteSmsMessage({
+      studentName: 'John Mulenga',
+      schoolName: 'Ndake Secondary School',
+      results: [
+        { subjectName: 'Math', score: 67, grade: 'C' },
+        { subjectName: 'English', score: 50, grade: 'D' },
+        { subjectName: 'Geography', score: 87, grade: 'A' },
+      ],
+    })
+    expect(message.indexOf('English')).toBeLessThan(message.indexOf('Geography'))
+    expect(message.indexOf('Geography')).toBeLessThan(message.indexOf('Math'))
+  })
+
+  it('should handle missing grade field', async () => {
+    const { formatResultGradeLine, buildTermResultsCompleteSmsMessage } =
+      await vi.importActual('@/lib/sms.js')
+    expect(formatResultGradeLine({ subjectName: 'Math', score: 67, grade: null })).toBe('Math 67')
+    const message = buildTermResultsCompleteSmsMessage({
+      studentName: 'John',
+      schoolName: 'Ndake',
+      results: [{ subjectName: 'Math', score: 67, grade: null }],
+    })
+    expect(message).toContain('Math 67')
+    expect(message).not.toContain('(null)')
+  })
+
+  it('should keep message under 320 characters for many subjects', async () => {
+    const {
+      buildTermResultsCompleteSmsMessage,
+      TERM_RESULTS_SMS_HARD_MAX,
+      abbreviateSubjectNameForSms,
+    } = await vi.importActual('@/lib/sms.js')
+    expect(abbreviateSubjectNameForSms('Mathematics')).toBe('MTH')
+    const results = [
+      { subjectName: 'Mathematics', score: 70, grade: 'B' },
+      { subjectName: 'English Language', score: 65, grade: 'C' },
+      { subjectName: 'Geography', score: 80, grade: 'A' },
+      { subjectName: 'History', score: 55, grade: 'D' },
+      { subjectName: 'Biology', score: 72, grade: 'B' },
+      { subjectName: 'Chemistry', score: 61, grade: 'C' },
+      { subjectName: 'Physics', score: 58, grade: 'D' },
+      { subjectName: 'Religious Education', score: 75, grade: 'B' },
+    ]
+    const message = buildTermResultsCompleteSmsMessage({
+      studentName: 'John Mulenga',
+      schoolName: 'Ndake Day Secondary School',
+      results,
+    })
+    expect(message.length).toBeLessThanOrEqual(TERM_RESULTS_SMS_HARD_MAX)
+    expect(message).toContain('bluepeacktechnologies.com')
   })
 })
 

@@ -7,11 +7,11 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import {
   buildTermResultsCompleteSmsMessage,
-  getSchoolPortalLoginUrls,
   getSchoolSmsFrom,
   normalizePhoneNumbers,
   sendOutboundSms,
 } from '@/lib/sms'
+import { RESULT_TYPES } from '@/lib/results/resultTypes'
 
 /** DEV ONLY — test parent results-complete SMS (does not update ResultsStatus). */
 export const POST = withErrorHandler(async function POST(request) {
@@ -30,11 +30,13 @@ export const POST = withErrorHandler(async function POST(request) {
   let to = normalizePhoneNumbers(body?.to)
   let studentName = String(body?.studentName || '').trim()
   let schoolName = String(body?.schoolName || '').trim()
-  let loginUrl = String(body?.loginUrl || '').trim()
-  let studentEmail = String(body?.studentEmail || '').trim()
   let school = null
+  let gradeRows = Array.isArray(body?.results) ? body.results : null
 
   const studentId = String(body?.studentId || '').trim()
+  const term = String(body?.term || 'Term 1').trim()
+  const year = Number(body?.year) || new Date().getFullYear()
+
   if (studentId && schoolId) {
     const student = await prisma.student.findFirst({
       where: { id: studentId, schoolId },
@@ -57,7 +59,30 @@ export const POST = withErrorHandler(async function POST(request) {
       ])
     }
     studentName = studentName || student.name || student.user?.name || 'your child'
-    studentEmail = studentEmail || String(student.user?.email || '').trim()
+
+    if (!gradeRows) {
+      const finalized = await prisma.result.findMany({
+        where: {
+          schoolId,
+          studentId,
+          term,
+          year,
+          resultType: RESULT_TYPES.END_OF_TERM,
+          workflowStatus: 'finalized',
+        },
+        select: {
+          score: true,
+          grade: true,
+          subject: { select: { name: true } },
+        },
+        take: 50000,
+      })
+      gradeRows = (finalized || []).map((r) => ({
+        subjectName: r.subject?.name || 'Subject',
+        score: r.score,
+        grade: r.grade,
+      }))
+    }
   }
 
   if (schoolId) {
@@ -66,9 +91,6 @@ export const POST = withErrorHandler(async function POST(request) {
       select: { name: true, subdomain: true, domain: true },
     })
     schoolName = schoolName || school?.name || 'School'
-    if (!loginUrl) {
-      loginUrl = getSchoolPortalLoginUrls(request, school).loginUrl
-    }
   }
 
   if (!to.length) {
@@ -78,15 +100,25 @@ export const POST = withErrorHandler(async function POST(request) {
     )
   }
 
+  if (!gradeRows || gradeRows.length === 0) {
+    gradeRows = [
+      { subjectName: 'Mathematics', score: 67, grade: 'C' },
+      { subjectName: 'English', score: 50, grade: 'D' },
+    ]
+  }
+
   schoolName = schoolName || 'School'
   const message = buildTermResultsCompleteSmsMessage({
     studentName: studentName || 'your child',
-    studentEmail,
-    loginUrl,
     schoolName,
+    results: gradeRows,
   })
-  const from = getSchoolSmsFrom(school)
 
+  if (!message) {
+    return NextResponse.json({ error: 'No finalized results for SMS' }, { status: 400 })
+  }
+
+  const from = getSchoolSmsFrom(school)
   const result = await sendOutboundSms({ to, message, from })
 
   return NextResponse.json({

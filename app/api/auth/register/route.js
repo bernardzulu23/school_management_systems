@@ -16,6 +16,7 @@ import {
   buildClassName,
 } from '@/lib/services/registrationHelpers'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
+import { normalizeParentContactFields } from '@/lib/sms/normalizePhone'
 
 export const POST = withErrorHandler(async (request) => {
   const auth = await authMiddleware(request)
@@ -236,6 +237,11 @@ export const POST = withErrorHandler(async (request) => {
 
         let student
         try {
+          const parentContacts = normalizeParentContactFields({
+            parent_father_contact: body.parent_father_contact,
+            parent_mother_contact: body.parent_mother_contact,
+            emergency_contact_phone: body.emergency_contact_phone,
+          })
           student = await tx.student.create({
             data: {
               userId: user.id,
@@ -249,14 +255,14 @@ export const POST = withErrorHandler(async (request) => {
 
               // Parents
               parent_father_name: body.parent_father_name,
-              parent_father_contact: body.parent_father_contact,
+              parent_father_contact: parentContacts.parent_father_contact,
               parent_father_email: body.parent_father_email,
               parent_mother_name: body.parent_mother_name,
-              parent_mother_contact: body.parent_mother_contact,
+              parent_mother_contact: parentContacts.parent_mother_contact,
 
               // Emergency
               emergency_contact_name: body.emergency_contact_name,
-              emergency_contact_phone: body.emergency_contact_phone,
+              emergency_contact_phone: parentContacts.emergency_contact_phone,
 
               // Medical (optional)
               blood_type: body.blood_type,

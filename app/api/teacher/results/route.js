@@ -593,7 +593,14 @@ export const POST = withErrorHandler(async function POST(request) {
         year: entry.year,
         request,
       })
-    } catch {}
+    } catch (err) {
+      console.error('[teacher/results] checkAndNotifyParent failed', {
+        studentId: entry.studentId,
+        term: entry.term,
+        year: entry.year,
+        error: err,
+      })
+    }
   }
 
   for (const m of masteryUpdates) {

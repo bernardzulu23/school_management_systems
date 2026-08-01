@@ -6,6 +6,14 @@ describe('Zambian phone normalization', () => {
     expect(normalizeZmPhoneNumber('0977123456')).toBe('+260977123456')
   })
 
+  it('converts 0977934996 to +260977934996', () => {
+    expect(normalizeZmPhoneNumber('0977934996')).toBe('+260977934996')
+  })
+
+  it('fixes mistaken +26 country code', () => {
+    expect(normalizeZmPhoneNumber('+26977934996')).toBe('+260977934996')
+  })
+
   it('keeps +260 prefix', () => {
     expect(normalizeZmPhoneNumber('+260961234567')).toBe('+260961234567')
   })

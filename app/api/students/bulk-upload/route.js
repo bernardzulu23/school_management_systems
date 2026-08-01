@@ -19,6 +19,7 @@ import {
   prepareStudentRow,
 } from '@/lib/uploads/studentUploadSchema'
 import { seedSubjectsForSchool } from '@/lib/subjects/seedSubjects'
+import { normalizeParentContactFields } from '@/lib/sms/normalizePhone'
 
 export const runtime = 'nodejs'
 
@@ -250,6 +251,9 @@ export const POST = withErrorHandler(async (request) => {
           select: { id: true, name: true },
         })
 
+        const contacts = normalizeParentContactFields({
+          parent_father_contact: row.father_contact || null,
+        })
         const student = await tx.student.create({
           data: {
             userId: user.id,
@@ -260,7 +264,7 @@ export const POST = withErrorHandler(async (request) => {
             exam_number: row.exam_number,
             selected_subjects: row.subjectNames,
             parent_father_name: row.father_full_name || null,
-            parent_father_contact: row.father_contact || null,
+            parent_father_contact: contacts.parent_father_contact,
           },
         })
 
