@@ -42,8 +42,15 @@ export const POST = withErrorHandler(async function POST(request) {
     data: {
       broadcastId: result.broadcastId,
       enqueued: result.enqueued,
+      sent: result.sent,
+      failed: result.failed,
+      mode: result.mode || 'qstash',
       balance: result.balance,
-      message: `Enqueued ${result.enqueued} messages for delivery.`,
+      message:
+        result.mode === 'qstash'
+          ? `Enqueued ${result.enqueued} messages for delivery.`
+          : `Sent ${result.sent ?? 0} of ${result.enqueued} messages` +
+            (result.failed ? ` (${result.failed} failed)` : ''),
     },
   })
 })
