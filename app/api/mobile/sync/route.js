@@ -156,16 +156,23 @@ export const POST = withSecureHandler(async function POST(request) {
           String(existingByStudent.get(String(w.studentId)) || '').toLowerCase() !==
           String(w.status)
       )
-      scheduleParentAttendanceSmsBatch({
-        marks: changedWrites.map((w) => ({
-          studentId: w.studentId,
-          status: w.status,
-          date: w.date,
-        })),
-        schoolId,
-        sessionId: null,
-        date: new Date(),
-      })
+      const smsMarks = changedWrites.map((w) => ({
+        studentId: w.studentId,
+        status: w.status,
+        date: w.date,
+      }))
+      if (smsMarks.length > 0 && smsMarks.length <= 10) {
+        await notifyParentsBatch(smsMarks, schoolId, null, new Date()).catch((err) =>
+          console.error('[mobile/sync] Parent SMS batch failed', err?.message || err)
+        )
+      } else if (smsMarks.length > 10) {
+        scheduleParentAttendanceSmsBatch({
+          marks: smsMarks,
+          schoolId,
+          sessionId: null,
+          date: new Date(),
+        })
+      }
 
       // Align with web/desktop: when classId (+ subject) present, mirror into lesson session.
       const classId = safeStringId(batch?.classId)
