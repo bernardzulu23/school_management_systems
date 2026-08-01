@@ -2,10 +2,12 @@
 
 ZSMS routes outbound SMS through **`sendOutboundSms`** in `lib/sms/sendOutbound.js`.
 
-**Send order:**
+**Send order (default):**
 
-1. **Custom Android SIM gateway** when `customGatewayEnabled` and an active gateway was seen within 5 minutes
-2. **Africa's Talking** otherwise (cloud primary / fallback)
+1. **Africa's Talking** (cloud primary)
+2. **Custom Android SIM gateway** if AT fails/unconfigured and `customGatewayEnabled` with an online gateway (seen within 5 minutes)
+
+Set `SMS_PREFER_CUSTOM_GATEWAY=true` to reverse that order (gateway first for cost saving).
 
 See [ZSMS_gateway_sole_channel.md](./ZSMS_gateway_sole_channel.md).
 

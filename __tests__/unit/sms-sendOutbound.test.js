@@ -31,7 +31,7 @@ vi.mock('@/lib/prisma/client', () => ({
   },
 }))
 
-describe("sendOutboundSms (gateway then Africa's Talking)", () => {
+describe("sendOutboundSms (Africa's Talking primary)", () => {
   beforeEach(() => {
     sendSMS.mockReset()
     queueForGatewayIfEnabled.mockReset()
@@ -39,10 +39,43 @@ describe("sendOutboundSms (gateway then Africa's Talking)", () => {
     smsLogCreate.mockResolvedValue({ id: 'log-1' })
     process.env.AFRICASTALKING_API_KEY = 'at-key'
     process.env.AFRICASTALKING_USERNAME = 'sandbox'
+    delete process.env.SMS_PREFER_CUSTOM_GATEWAY
     vi.resetModules()
   })
 
-  it('queues via custom gateway when enabled and does not call AT', async () => {
+  it("uses Africa's Talking first and does not queue gateway on success", async () => {
+    sendSMS.mockResolvedValue({
+      success: true,
+      results: [{ messageId: 'AT1', statusCode: 100 }],
+    })
+
+    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
+    const result = await sendOutboundSms({
+      to: '+260971234567',
+      message: 'Hello',
+      schoolId: 'school-1',
+    })
+
+    expect(result.ok).toBe(true)
+    expect(result.provider).toBe('africastalking')
+    expect(result.queuedForGateway).toBe(false)
+    expect(sendSMS).toHaveBeenCalled()
+    expect(queueForGatewayIfEnabled).not.toHaveBeenCalled()
+    expect(smsLogCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          status: 'SENT',
+          provider: 'africastalking',
+          channel: 'AFRICALA',
+          schoolId: 'school-1',
+          recipient: '+260971234567',
+        }),
+      })
+    )
+  })
+
+  it('falls back to custom gateway when AT fails', async () => {
+    sendSMS.mockResolvedValue({ success: false, reason: 'Carrier error', results: [] })
     queueForGatewayIfEnabled.mockResolvedValue({
       queued: true,
       messageIds: ['m1'],
@@ -59,60 +92,27 @@ describe("sendOutboundSms (gateway then Africa's Talking)", () => {
     expect(result.ok).toBe(true)
     expect(result.provider).toBe('custom_gateway')
     expect(result.queuedForGateway).toBe(true)
+    expect(queueForGatewayIfEnabled).toHaveBeenCalled()
+  })
+
+  it('uses gateway first when SMS_PREFER_CUSTOM_GATEWAY=true', async () => {
+    process.env.SMS_PREFER_CUSTOM_GATEWAY = 'true'
+    queueForGatewayIfEnabled.mockResolvedValue({
+      queued: true,
+      messageIds: ['m1'],
+      recipients: ['+260971234567'],
+    })
+
+    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
+    const result = await sendOutboundSms({
+      to: '+260971234567',
+      message: 'Hello',
+      schoolId: 'school-1',
+    })
+
+    expect(result.ok).toBe(true)
+    expect(result.provider).toBe('custom_gateway')
     expect(sendSMS).not.toHaveBeenCalled()
-  })
-
-  it("falls back to Africa's Talking when gateway cannot queue", async () => {
-    queueForGatewayIfEnabled.mockResolvedValue({
-      queued: false,
-      reason: 'no_active_gateway',
-    })
-    sendSMS.mockResolvedValue({
-      success: true,
-      results: [{ messageId: 'AT1' }],
-    })
-
-    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
-    const result = await sendOutboundSms({
-      to: '+260971234567',
-      message: 'Hello',
-      schoolId: 'school-1',
-    })
-
-    expect(result.ok).toBe(true)
-    expect(result.provider).toBe('africastalking')
-    expect(result.queuedForGateway).toBe(false)
-    expect(sendSMS).toHaveBeenCalled()
-    expect(smsLogCreate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          status: 'SENT',
-          provider: 'africastalking',
-          channel: 'AFRICALA',
-          schoolId: 'school-1',
-          recipient: '+260971234567',
-        }),
-      })
-    )
-  })
-
-  it("falls back to Africa's Talking when gateway is offline", async () => {
-    queueForGatewayIfEnabled.mockResolvedValue({
-      queued: false,
-      reason: 'gateway_offline',
-    })
-    sendSMS.mockResolvedValue({ success: true, results: [] })
-
-    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
-    const result = await sendOutboundSms({
-      to: '+260971234567',
-      message: 'Hello',
-      schoolId: 'school-1',
-    })
-
-    expect(result.ok).toBe(true)
-    expect(result.provider).toBe('africastalking')
-    expect(sendSMS).toHaveBeenCalled()
   })
 
   it("uses Africa's Talking when no schoolId (no gateway fork)", async () => {
@@ -131,7 +131,7 @@ describe("sendOutboundSms (gateway then Africa's Talking)", () => {
     expect(sendSMS).toHaveBeenCalled()
   })
 
-  it('returns SMS not configured when AT credentials missing', async () => {
+  it('returns SMS not configured when AT credentials missing and gateway unavailable', async () => {
     delete process.env.AFRICASTALKING_API_KEY
     delete process.env.AFRICASTALKING_USERNAME
     queueForGatewayIfEnabled.mockResolvedValue({
