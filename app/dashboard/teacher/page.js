@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '@/lib/auth'
+import { useAuth, useAuthHasHydrated } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import ResponsiveDashboardLayout from '@/components/dashboard/ResponsiveDashboardLayout'
@@ -89,6 +89,7 @@ export default function TeacherDashboard() {
   const router = useRouter()
   // Get current user data from auth context
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
+  const hydrated = useAuthHasHydrated()
   const { school } = useSchool()
   const { timeSlots: schoolTimeSlots } = useSchoolTimeSlots()
   const {
@@ -96,7 +97,7 @@ export default function TeacherDashboard() {
     timeSlots: publishedTimeSlots,
     term: publishedTerm,
     academicYear: publishedYear,
-  } = usePublishedTimetableView({ enabled: Boolean(isAuthenticated && currentUser) })
+  } = usePublishedTimetableView({ enabled: Boolean(hydrated && isAuthenticated && currentUser) })
   const timeSlots = publishedTimeSlots.length ? publishedTimeSlots : schoolTimeSlots
   const [timetableClasses, setTimetableClasses] = useState([])
   const [timetableClassrooms, setTimetableClassrooms] = useState([])
@@ -119,17 +120,12 @@ export default function TeacherDashboard() {
     assessments: { bg: 'bg-kpi-pass/10', text: 'text-kpi-pass' },
   }
 
-  // Redirect if not authenticated
+  // Wait for zustand persist rehydration before treating missing auth as logged out.
+  // Full-page sidebar navigations (window.location.assign) otherwise race ServerSessionGuard.
   useEffect(() => {
-    if (!isAuthenticated) {
-      window.location.href = '/login'
-      return
-    }
-  }, [isAuthenticated])
-
-  useEffect(() => {
+    if (!hydrated) return
     syncSession?.({ force: true })
-  }, [syncSession])
+  }, [hydrated, syncSession])
 
   useEffect(() => {
     const update = () => setTimetableMobile(window.innerWidth < 768)
@@ -346,14 +342,16 @@ export default function TeacherDashboard() {
       ? 'Mr'
       : ''
 
-  // Show loading if not authenticated
-  if (!isAuthenticated || !currentUser) {
+  // Show loading until auth has rehydrated (ServerSessionGuard owns /login redirect)
+  if (!hydrated || !isAuthenticated || !currentUser) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-ink via-g-800 to-g-700">
-        <div className="text-center space-y-4">
-          <LoadingSpinner size="xl" color="white" label="Loading dashboard" />
+      <ResponsiveDashboardLayout>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <LoadingSpinner size="xl" color="white" label="Loading dashboard" />
+          </div>
         </div>
-      </div>
+      </ResponsiveDashboardLayout>
     )
   }
 
@@ -437,12 +435,16 @@ export default function TeacherDashboard() {
                   String(currentUser?.role || '')
                     .trim()
                     .toLowerCase() === 'hod') && (
-                  <Link
+                  <a
                     href="/dashboard/hod"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      window.location.assign('/dashboard/hod')
+                    }}
                     className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalPurple-card/70 dark:bg-royalPurple-muted/70 border border-royalPurple-border dark:border-royalPurple-border/40 text-royalPurple-text2 hover:text-royalPurple-text1 hover:bg-royalPurple-card2 transition-colors"
                   >
                     HOD Dashboard
-                  </Link>
+                  </a>
                 )}
                 <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl px-3 py-2 sm:p-4 text-center">
                   <div className="text-xl sm:text-2xl font-bold text-royalPurple-text1">

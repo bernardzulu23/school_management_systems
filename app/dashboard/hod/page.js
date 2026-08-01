@@ -463,12 +463,16 @@ export default function HodDashboard() {
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-              <Link
+              <a
                 href="/dashboard/teacher"
+                onClick={(event) => {
+                  event.preventDefault()
+                  window.location.assign('/dashboard/teacher')
+                }}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-royalPurple-card/70 dark:bg-royalPurple-muted/70 border border-royalPurple-border dark:border-royalPurple-border/40 text-royalPurple-text2 hover:text-royalPurple-text1 hover:bg-royalPurple-card2 transition-colors"
               >
                 Teacher Dashboard
-              </Link>
+              </a>
               <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 text-center">
                 <div className="text-2xl font-bold text-royalPurple-text1">
                   {new Date().getDate()}

@@ -6,7 +6,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import ProfilePictureDisplay from '@/components/ui/ProfilePictureDisplay'
-import { useAuth } from '@/lib/auth'
+import { useAuth, useAuthHasHydrated } from '@/lib/auth'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { User, KeyRound, Upload, Eye, EyeOff } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -18,6 +18,7 @@ const MAX_BYTES = 10 * 1024 * 1024
 
 export default function ProfilePage() {
   const { user, isAuthenticated, updateUser } = useAuth()
+  const hydrated = useAuthHasHydrated()
   const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   const [me, setMe] = useState(null)
@@ -41,12 +42,7 @@ export default function ProfilePage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      window.location.href = '/login'
-    }
-  }, [isAuthenticated])
-
-  useEffect(() => {
+    if (!hydrated || !isAuthenticated) return
     let active = true
     const load = async () => {
       try {
@@ -60,7 +56,7 @@ export default function ProfilePage() {
     return () => {
       active = false
     }
-  }, [])
+  }, [hydrated, isAuthenticated])
 
   useEffect(() => {
     const u = me || user

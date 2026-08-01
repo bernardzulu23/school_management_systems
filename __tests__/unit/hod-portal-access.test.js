@@ -34,6 +34,21 @@ describe('HOD navigation rendering', () => {
     expect(source).not.toContain("import Link from 'next/link'")
   })
 
+  it('hard-navigates portal switch links in the header layout', () => {
+    const source = readFileSync(
+      join(process.cwd(), 'components/dashboard/SimpleDashboardLayout.js'),
+      'utf8'
+    )
+    expect(source).toContain("window.location.assign('/dashboard/teacher')")
+    expect(source).toContain("window.location.assign('/dashboard/hod')")
+  })
+
+  it('teacher dashboard waits for auth hydration instead of racing login', () => {
+    const source = readFileSync(join(process.cwd(), 'app/dashboard/teacher/page.js'), 'utf8')
+    expect(source).toContain('useAuthHasHydrated')
+    expect(source).not.toContain("window.location.href = '/login'")
+  })
+
   it('defines deep background opacity utilities used by HOD progress cards', () => {
     const css = readFileSync(join(process.cwd(), 'app/globals.css'), 'utf8')
     expect(css).toContain('.bg-royalPurple-deep\\/60')

@@ -183,36 +183,52 @@ export function DashboardLayout({ children, title }) {
                   <span className="hidden sm:inline">Feedback</span>
                 </button>
                 {canOpenTeacherDashboard && !onTeacherPortal ? (
-                  <Link
+                  <a
                     href="/dashboard/teacher"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      window.location.assign('/dashboard/teacher')
+                    }}
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
                     Teacher Dashboard
-                  </Link>
+                  </a>
                 ) : null}
                 {showHodLink && isHodUser && !onHodPortal ? (
-                  <Link
+                  <a
                     href="/dashboard/hod"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      window.location.assign('/dashboard/hod')
+                    }}
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
                     HOD Dashboard
-                  </Link>
+                  </a>
                 ) : null}
                 {showGuidanceLink && !onGuidancePortal ? (
-                  <Link
+                  <a
                     href="/dashboard/guidance"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      window.location.assign('/dashboard/guidance')
+                    }}
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
                     Guidance Dashboard
-                  </Link>
+                  </a>
                 ) : null}
                 {showSicLink && !onSicPortal ? (
-                  <Link
+                  <a
                     href="/dashboard/sic"
+                    onClick={(event) => {
+                      event.preventDefault()
+                      window.location.assign('/dashboard/sic')
+                    }}
                     className="inline-flex items-center h-10 px-3 rounded-lg text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1 transition-colors font-medium"
                   >
                     SIC Dashboard
-                  </Link>
+                  </a>
                 ) : null}
                 <Link
                   href="/dashboard/profile"
