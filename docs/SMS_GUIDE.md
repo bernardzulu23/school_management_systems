@@ -1,34 +1,30 @@
-# ZSMS SMS Guide (Custom gateway + legacy Mocean / Africa's Talking)
+# ZSMS SMS Guide (Android gateway + Africa's Talking)
 
 ZSMS routes outbound SMS through **`sendOutboundSms`** in `lib/sms/sendOutbound.js`.
 
-**Current default (sole channel):** custom Android SIM gateway when `customGatewayEnabled` and an active `SMSGateway` exist. Mocean / Africa’s Talking are **disabled** unless `ENABLE_LEGACY_SMS_FALLBACK` is flipped to `true` in that file (emergency / post-Africala only). See [ZSMS_gateway_sole_channel.md](./ZSMS_gateway_sole_channel.md).
+**Send order:**
 
-**Legacy chain (when the flag is true):**
+1. **Custom Android SIM gateway** when `customGatewayEnabled` and an active gateway was seen within 5 minutes
+2. **Africa's Talking** otherwise (cloud primary / fallback)
 
-1. **Custom gateway** (if enabled for the school)
-2. **Mocean** when `MOCEAN_API_TOKEN` is set
-3. **Africa's Talking** when Mocean is unset but AT credentials are set
+See [ZSMS_gateway_sole_channel.md](./ZSMS_gateway_sole_channel.md).
 
-Bulk broadcast (`/api/sms/broadcast`) still uses Africa's Talking + QStash only (separate path — revisit when re-enabling aggregators).
+Bulk broadcast (`/api/sms/broadcast`) still uses Africa's Talking + QStash only (separate path).
 
 ## Environment variables
 
 ```env
-# Primary (Mocean)
-MOCEAN_API_TOKEN=...
-MOCEAN_SENDER_ID=...              # optional — school-context SMS sender
+# Cloud SMS (Africa's Talking)
+AFRICASTALKING_API_KEY=...
+AFRICASTALKING_USERNAME=...
+# AFRICAS_TALKING_* aliases are also accepted
+AFRICASTALKING_SENDER_ID=...      # optional — bulk broadcast + school SMS sender
 
 # Onboarding welcome SMS sender (default ZSMS)
 ZSMS_ONBOARDING_SENDER_ID=ZSMS
-
-# Fallback (Africa's Talking)
-AFRICASTALKING_API_KEY=...
-AFRICASTALKING_USERNAME=...
-AFRICASTALKING_SENDER_ID=...      # optional — bulk broadcast + school fallback
 ```
 
-When neither Mocean nor AT credentials are set, `env.features.sms` is false and sends are skipped safely.
+When AT credentials are unset, `env.features.sms` is false and cloud sends are skipped safely (gateway can still queue when online).
 
 ## Send from code
 
@@ -39,6 +35,7 @@ await sendOutboundSms({
   to: ['+260971234567'],
   message: 'Your message here',
   from: getOnboardingSmsFrom(), // "ZSMS"
+  schoolId,
 })
 
 // Backward-compatible alias (routes through sendOutboundSms)
@@ -47,11 +44,11 @@ await sendSchoolSms({ to: ['+260971234567'], message: 'Hello', schoolId, from: '
 
 ## Sender IDs
 
-| Flow                    | Sender (`from`)                                  | Message branding                                               |
-| ----------------------- | ------------------------------------------------ | -------------------------------------------------------------- |
-| Onboarding welcome      | `ZSMS_ONBOARDING_SENDER_ID` (default `ZSMS`)     | Body mentions "Zambian School Management System" + school name |
-| Parent results complete | `MOCEAN_SENDER_ID` or `AFRICASTALKING_SENDER_ID` | Body **starts with school name**                               |
-| Attendance alerts       | Same as school-context                           | School name in body                                            |
+| Flow                    | Sender (`from`)                              | Message branding                 |
+| ----------------------- | -------------------------------------------- | -------------------------------- |
+| Onboarding welcome      | `ZSMS_ONBOARDING_SENDER_ID` (default `ZSMS`) | Body mentions ZSMS + school name |
+| Parent results complete | `AFRICASTALKING_SENDER_ID`                   | Body **starts with school name** |
+| Attendance alerts       | Same as school-context                       | School name in body              |
 
 ## Dev test routes (non-production only)
 
@@ -83,9 +80,9 @@ These routes do **not** update `ResultsStatus.smsSentAt`.
 
 1. Enter **Mobile number for welcome SMS** on step 1 (before email verification) or save it later via **Save phone** on plan/setup steps.
 2. Phone is stored on `SchoolRegistration.adminPhone` (`PATCH /api/onboarding/contact` or `POST /api/onboarding/start`).
-3. When you **Create Portal**, welcome SMS is sent from **ZSMS** via `sendOutboundSms` (Mocean primary, Africa's Talking fallback).
+3. When you **Create Portal**, welcome SMS is sent from **ZSMS** via `sendOutboundSms` (gateway if online, else Africa's Talking).
 
-Requires `MOCEAN_API_TOKEN` or `AFRICASTALKING_*` in `.env.local`.
+Requires `AFRICASTALKING_*` in `.env.local` for cloud delivery when the gateway is unavailable.
 
 ## Message builders (`lib/sms.js`)
 
@@ -98,13 +95,4 @@ Legacy templates in `lib/sms/africastalking.js` (`SMS_TEMPLATES`) remain for ref
 ## Zambia phone format
 
 Accepted output format is E.164 Zambia mobile:
-
-- `+260XXXXXXXXX` where network starts with `7` or `9`
-- Mocean receives numbers without `+` (e.g. `260971234567`)
-
-Normalization: `normalizePhoneNumbers()` / `normalizeZambianPhoneNumbers()`.
-
-## Africa's Talking sandbox
-
-1. Create an account at [africastalking.com](https://africastalking.com).
-2. Use sandbox credentials (`username=sandbox`) for development fallback testing.
+`+260` + `9` or `7` + 8 digits (e.g. `+260971234567`).

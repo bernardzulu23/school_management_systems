@@ -1,14 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-const sendMoceanSms = vi.fn()
 const sendSMS = vi.fn()
 const queueForGatewayIfEnabled = vi.fn()
 const smsLogCreate = vi.fn()
-
-vi.mock('@/lib/sms/mocean', () => ({
-  isMoceanConfigured: vi.fn(() => Boolean(process.env.MOCEAN_API_TOKEN)),
-  sendMoceanSms: (...args) => sendMoceanSms(...args),
-}))
 
 vi.mock('@/lib/sms/africastalking', () => ({
   sendSMS: (...args) => sendSMS(...args),
@@ -16,8 +10,12 @@ vi.mock('@/lib/sms/africastalking', () => ({
 
 vi.mock('@/lib/config/env', () => ({
   env: {
-    atApiKey: process.env.AFRICASTALKING_API_KEY || 'at-key',
-    atUsername: process.env.AFRICASTALKING_USERNAME || 'sandbox',
+    get atApiKey() {
+      return process.env.AFRICASTALKING_API_KEY || null
+    },
+    get atUsername() {
+      return process.env.AFRICASTALKING_USERNAME || null
+    },
   },
 }))
 
@@ -33,24 +31,18 @@ vi.mock('@/lib/prisma/client', () => ({
   },
 }))
 
-describe('sendOutboundSms (gateway sole channel)', () => {
+describe("sendOutboundSms (gateway then Africa's Talking)", () => {
   beforeEach(() => {
-    sendMoceanSms.mockReset()
     sendSMS.mockReset()
     queueForGatewayIfEnabled.mockReset()
     smsLogCreate.mockReset()
     smsLogCreate.mockResolvedValue({ id: 'log-1' })
-    delete process.env.MOCEAN_API_TOKEN
     process.env.AFRICASTALKING_API_KEY = 'at-key'
     process.env.AFRICASTALKING_USERNAME = 'sandbox'
     vi.resetModules()
   })
 
-  afterEach(() => {
-    delete process.env.MOCEAN_API_TOKEN
-  })
-
-  it('queues via custom gateway when enabled and does not call Mocean/AT', async () => {
+  it('queues via custom gateway when enabled and does not call AT', async () => {
     queueForGatewayIfEnabled.mockResolvedValue({
       queued: true,
       messageIds: ['m1'],
@@ -67,14 +59,84 @@ describe('sendOutboundSms (gateway sole channel)', () => {
     expect(result.ok).toBe(true)
     expect(result.provider).toBe('custom_gateway')
     expect(result.queuedForGateway).toBe(true)
-    expect(sendMoceanSms).not.toHaveBeenCalled()
     expect(sendSMS).not.toHaveBeenCalled()
   })
 
-  it('stops with FAILED_NO_FALLBACK when gateway enabled but cannot queue', async () => {
+  it("falls back to Africa's Talking when gateway cannot queue", async () => {
     queueForGatewayIfEnabled.mockResolvedValue({
       queued: false,
       reason: 'no_active_gateway',
+    })
+    sendSMS.mockResolvedValue({
+      success: true,
+      results: [{ messageId: 'AT1' }],
+    })
+
+    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
+    const result = await sendOutboundSms({
+      to: '+260971234567',
+      message: 'Hello',
+      schoolId: 'school-1',
+    })
+
+    expect(result.ok).toBe(true)
+    expect(result.provider).toBe('africastalking')
+    expect(result.queuedForGateway).toBe(false)
+    expect(sendSMS).toHaveBeenCalled()
+    expect(smsLogCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          status: 'SENT',
+          provider: 'africastalking',
+          channel: 'AFRICALA',
+          schoolId: 'school-1',
+          recipient: '+260971234567',
+        }),
+      })
+    )
+  })
+
+  it("falls back to Africa's Talking when gateway is offline", async () => {
+    queueForGatewayIfEnabled.mockResolvedValue({
+      queued: false,
+      reason: 'gateway_offline',
+    })
+    sendSMS.mockResolvedValue({ success: true, results: [] })
+
+    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
+    const result = await sendOutboundSms({
+      to: '+260971234567',
+      message: 'Hello',
+      schoolId: 'school-1',
+    })
+
+    expect(result.ok).toBe(true)
+    expect(result.provider).toBe('africastalking')
+    expect(sendSMS).toHaveBeenCalled()
+  })
+
+  it("uses Africa's Talking when no schoolId (no gateway fork)", async () => {
+    sendSMS.mockResolvedValue({ success: true, results: [] })
+
+    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
+    const result = await sendOutboundSms({
+      to: '+260971234567',
+      message: 'Hello',
+      from: 'ZSMS',
+    })
+
+    expect(queueForGatewayIfEnabled).not.toHaveBeenCalled()
+    expect(result.ok).toBe(true)
+    expect(result.provider).toBe('africastalking')
+    expect(sendSMS).toHaveBeenCalled()
+  })
+
+  it('returns SMS not configured when AT credentials missing', async () => {
+    delete process.env.AFRICASTALKING_API_KEY
+    delete process.env.AFRICASTALKING_USERNAME
+    queueForGatewayIfEnabled.mockResolvedValue({
+      queued: false,
+      reason: 'flag_off',
     })
 
     const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
@@ -85,36 +147,7 @@ describe('sendOutboundSms (gateway sole channel)', () => {
     })
 
     expect(result.ok).toBe(false)
-    expect(result.reason).toBe('gateway_failed_no_fallback_enabled')
-    expect(result.failureReason).toBe('gateway_unavailable_no_fallback')
-    expect(sendMoceanSms).not.toHaveBeenCalled()
-    expect(sendSMS).not.toHaveBeenCalled()
-    expect(smsLogCreate).toHaveBeenCalledWith(
-      expect.objectContaining({
-        data: expect.objectContaining({
-          status: 'FAILED_NO_FALLBACK',
-          failureReason: 'gateway_unavailable_no_fallback',
-          schoolId: 'school-1',
-          recipient: '+260971234567',
-        }),
-      })
-    )
-  })
-
-  it('does not call Mocean/AT when legacy fallback is disabled (default)', async () => {
-    process.env.MOCEAN_API_TOKEN = 'mocean-token'
-    sendMoceanSms.mockResolvedValue({ success: true, results: [], msgid: 'm1' })
-
-    const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
-    const result = await sendOutboundSms({
-      to: '+260971234567',
-      message: 'Hello',
-      from: 'ZSMS',
-    })
-
-    expect(result.ok).toBe(false)
-    expect(result.reason).toBe('gateway_failed_no_fallback_enabled')
-    expect(sendMoceanSms).not.toHaveBeenCalled()
+    expect(result.reason).toBe('SMS not configured')
     expect(sendSMS).not.toHaveBeenCalled()
   })
 })

@@ -13,7 +13,7 @@ loadEnv({ path: '.env' })
 import { PrismaClient } from '@prisma/client'
 import { normalizeZmPhoneNumber } from '@/lib/sms/normalizePhone'
 import { RESULT_TYPES } from '@/lib/results/resultTypes'
-import { buildTermResultsCompleteSmsMessage } from '@/lib/sms'
+import { buildTermResultsCompleteSmsMessage, sendSchoolSms } from '@/lib/sms'
 import { safeCompositeKey } from '@/lib/security/safeQueryValue'
 
 const prisma = new PrismaClient()
@@ -104,60 +104,6 @@ async function resolveSubjects(schoolId: string, classId: string) {
   return found
 }
 
-async function queueViaPlainPrisma(opts: { schoolId: string; phone: string; message: string }) {
-  const settings = await prisma.schoolSmsSettings.findUnique({
-    where: { schoolId: opts.schoolId },
-    select: { customGatewayEnabled: true },
-  })
-  console.log('SMS settings:', settings)
-
-  if (!settings?.customGatewayEnabled) {
-    return {
-      ok: false as const,
-      reason:
-        'customGatewayEnabled is false — enable the school SMS gateway, or turn on Africa’s Talking legacy fallback',
-    }
-  }
-
-  const gateway = await prisma.sMSGateway.findFirst({
-    where: { schoolId: opts.schoolId, isActive: true },
-    orderBy: { updatedAt: 'desc' },
-    select: {
-      id: true,
-      deviceName: true,
-      lastSeenAt: true,
-      lastHealthCheck: true,
-      isActive: true,
-    },
-  })
-  console.log('Active gateway:', gateway)
-
-  if (!gateway) {
-    return {
-      ok: false as const,
-      reason: 'No active SMSGateway row for this school — pair/register the Android gateway app',
-    }
-  }
-
-  const { randomUUID } = await import('crypto')
-  const row = await prisma.smsLog.create({
-    data: {
-      schoolId: opts.schoolId,
-      direction: 'out',
-      recipient: opts.phone,
-      body: opts.message,
-      status: 'PENDING',
-      provider: 'custom_gateway',
-      channel: 'CUSTOM_GATEWAY',
-      gatewayId: gateway.id,
-      idempotencyKey: `gw:${gateway.id}:${randomUUID()}`,
-    },
-    select: { id: true, recipient: true, status: true, body: true },
-  })
-
-  return { ok: true as const, row, gateway }
-}
-
 async function triggerNotify(opts: {
   schoolId: string
   studentId: string
@@ -219,23 +165,26 @@ async function triggerNotify(opts: {
     },
   })
 
-  // CLI uses plain PrismaClient — avoids Neon WebSocket ErrorEvent from @/lib/prisma basePrisma.
-  const queued = await queueViaPlainPrisma({
-    schoolId: opts.schoolId,
-    phone: opts.phone,
+  // Real production path: gateway (if online) → Africa's Talking
+  const sendResult = await sendSchoolSms({
+    to: opts.phone,
     message,
+    schoolId: opts.schoolId,
   })
 
-  if (!queued.ok) {
+  if (!sendResult.ok) {
     await prisma.resultsStatus.update({
       where: { schoolId_studentId_term_year: key as any },
       data: {
         smsSending: false,
-        smsLastError: queued.reason.slice(0, 500),
+        smsLastError: String(sendResult.reason || sendResult.failureReason || 'send_failed').slice(
+          0,
+          500
+        ),
         smsLastAttemptAt: new Date(),
       },
     })
-    console.error('SMS not queued:', queued.reason)
+    console.error('SMS send failed:', sendResult.reason || sendResult.failureReason, sendResult)
     return
   }
 
@@ -248,11 +197,13 @@ async function triggerNotify(opts: {
       smsLastAttemptAt: new Date(),
     },
   })
-  console.log('Queued for Android gateway:', queued.row)
-  console.log(
-    'Keep the school SMS gateway app online — it will pick up PENDING SmsLog and send to',
-    opts.phone
-  )
+  console.log('SMS sent via', sendResult.provider, {
+    queuedForGateway: sendResult.queuedForGateway,
+    recipients: sendResult.recipients,
+  })
+  if (sendResult.queuedForGateway) {
+    console.log('Keep the Android gateway app online — it will pick up PENDING SmsLog')
+  }
 }
 
 async function main() {

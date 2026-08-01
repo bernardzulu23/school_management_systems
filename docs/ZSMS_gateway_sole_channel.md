@@ -1,23 +1,15 @@
-# Custom gateway as sole SMS channel
+# Custom Android gateway + Africa's Talking SMS
 
-While Africa’s Talking (Africala) sender-ID approval is pending, the **custom Android SIM gateway** is the only channel that actually sends school SMS.
+School outbound SMS uses **gateway first, then Africa's Talking**.
 
-## Code flag
+## Routing (`lib/sms/sendOutbound.js`)
 
-In `lib/sms/sendOutbound.js`:
+1. **Custom Android SIM gateway** when `customGatewayEnabled` is on, an active `SMSGateway` exists, and `lastSeenAt` is within **5 minutes**.
+2. Otherwise **Africa's Talking** (`AFRICASTALKING_API_KEY` + `AFRICASTALKING_USERNAME`).
 
-```js
-const ENABLE_LEGACY_SMS_FALLBACK = false
-```
+Offline or missing gateway does **not** leave stuck `PENDING` rows — the send falls through to Africa's Talking.
 
-- **`false` (default):** after a gateway attempt (or when no gateway is available), do **not** call Mocean or Africa’s Talking. Failures are logged and written to `SmsLog` as `FAILED_NO_FALLBACK` / `failureReason = gateway_unavailable_no_fallback`.
-- **`true`:** emergency only — restores the old chain: gateway (if enabled) → Mocean → Africa’s Talking.
-
-Flip back to `false` as soon as the outage ends. Do **not** leave the flag true as the long-term architecture.
-
-## Intended end state (after Africala approval)
-
-Reassess: aggregators are ToS-safer and scale better; the gateway was meant as a bridge. Likely target: Africala primary, gateway as backup — not “flag forever.”
+Bulk broadcast (`/api/sms/broadcast`) still uses Africa's Talking + QStash only.
 
 ## Stale gateway alerts
 
@@ -27,4 +19,4 @@ Cron `GET /api/cron/sms-gateway-health` (`CRON_SECRET`) checks active `SMSGatewa
 
 ## Ops note
 
-Plan a second phone/SIM once stable — even a documented manual swap beats a single point of failure.
+Keep a second phone/SIM documented for swap — gateway remains useful for cost savings when online; Africa's Talking covers reliability when it is not.
