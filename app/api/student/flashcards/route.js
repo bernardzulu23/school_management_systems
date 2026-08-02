@@ -25,6 +25,7 @@ import { logger } from '@/lib/utils/logger'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { GenerateFlashcardsSchema } from '@/lib/schemas'
 import { resolveAssessmentMode } from '@/lib/ecz/assessment-engine'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 const FLASHCARD_SYSTEM =
   'You are a Zambian CBC study coach. Create concise self-quiz flashcards. Each card has a clear question, 3-4 plausible options, exactly one correct answer, and a one-line explanation. The answer field must be the full text of the correct option (not a letter like A or B). Use the subject language where natural (e.g. Cinyanja for Cinyanja).'
@@ -108,6 +109,10 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const planBlock = await requireFeature(schoolId, 'ai-tools')
+  if (planBlock) return planBlock
+
   const db = getTenantClient(schoolId)
 
   const student = await db.student.findFirst({

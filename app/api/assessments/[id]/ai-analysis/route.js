@@ -10,6 +10,7 @@ import { parseAssessmentInteractive } from '@/lib/assessments/assessmentInteract
 import { parseInteractiveQuizPayload } from '@/lib/assessments/interactiveQuiz'
 import { generateQuizClassAnalysis } from '@/lib/assessments/generateQuizClassAnalysis'
 import { safeRouteParam } from '@/lib/security/safeQueryValue'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 function parseSubmissionContent(raw) {
   if (!raw) return null
@@ -35,6 +36,9 @@ export const POST = withAILimits(
     if (!tenant.ok) return tenant.response
     const schoolId = tenant.schoolId
     if (!schoolId) throw new ApiError('School context required', 400)
+
+    const planBlock = await requireFeature(schoolId, 'ai-tools')
+    if (planBlock) return planBlock
 
     const assessment = await prisma.assessment.findFirst({
       where: { id, schoolId },

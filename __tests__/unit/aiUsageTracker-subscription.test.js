@@ -58,7 +58,7 @@ describe('checkAILimit subscription alignment', () => {
     expect(json.code).toBe('PLAN_EXPIRED')
   })
 
-  it('allows active trial plan and uses premium AI limits', async () => {
+  it('allows active trial plan with trial AI limits (10/day, not unlimited)', async () => {
     const future = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000)
     findUnique.mockResolvedValue({
       id: 'school-1',
@@ -69,10 +69,33 @@ describe('checkAILimit subscription alignment', () => {
       active: true,
     })
 
-    const { checkAILimit, getSchoolPlanForUsage, getEffectivePlanForAiLimits } =
+    const { checkAILimit, getSchoolPlanForUsage, getEffectivePlanForAiLimits, getAiQuota } =
       await import('@/lib/middleware/aiUsageTracker')
     const school = await getSchoolPlanForUsage('school-1')
-    expect(getEffectivePlanForAiLimits(school)).toBe('premium')
+    expect(school.plan).toBe('trial')
+    expect(getEffectivePlanForAiLimits({ plan: 'trial', trialEndsAt: future, active: true })).toBe(
+      'trial'
+    )
+    expect(getAiQuota('trial').limit).toBe(10)
     expect(await checkAILimit('school-1')).toBeNull()
+  })
+
+  it('blocks basic plan AI with PLAN_UPGRADE_REQUIRED', async () => {
+    const future = new Date(Date.now() + 60 * 24 * 60 * 60 * 1000)
+    findUnique.mockResolvedValue({
+      id: 'school-basic',
+      plan: 'basic',
+      planExpiresAt: future,
+      trialEndsAt: null,
+      createdAt: new Date('2026-01-01'),
+      active: true,
+    })
+
+    const { checkAILimit } = await import('@/lib/middleware/aiUsageTracker')
+    const block = await checkAILimit('school-basic')
+    expect(block).toBeTruthy()
+    expect(block.status).toBe(403)
+    const json = await block.json()
+    expect(json.code).toBe('PLAN_UPGRADE_REQUIRED')
   })
 })

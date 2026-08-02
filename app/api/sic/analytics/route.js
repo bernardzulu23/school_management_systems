@@ -5,10 +5,14 @@ import { getTenantClient } from '@/lib/prisma/tenantClient'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { authorizeSicOrHead } from '@/lib/sic/routeAuth'
 import { applyOverdueCpdInactivity, SIC_MINUTES_GRACE_DAYS } from '@/lib/sic/sicAccess'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 export const GET = withErrorHandler(async function GET(request) {
   const authz = await authorizeSicOrHead(request)
   if (!authz.ok) return authz.response
+
+  const planBlock = await requireFeature(authz.schoolId, 'comprehensive-analytics')
+  if (planBlock) return planBlock
 
   const db = getTenantClient(authz.schoolId)
   const marked = await applyOverdueCpdInactivity(db, authz.schoolId)

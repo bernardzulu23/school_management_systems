@@ -9,6 +9,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { requireSchoolType } from '@/lib/middleware/individual-gate'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { SendSMSSchema } from '@/lib/schemas'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -26,6 +27,9 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const typeCheck = await requireSchoolType(schoolId, ['SCHOOL'])
   if (!typeCheck.allowed) return typeCheck.response
+
+  const smsBlock = await requireFeature(schoolId, 'sms-alerts')
+  if (smsBlock) return smsBlock
 
   const { to, message, from = null } = await parseBodyOrThrow(request, SendSMSSchema)
 

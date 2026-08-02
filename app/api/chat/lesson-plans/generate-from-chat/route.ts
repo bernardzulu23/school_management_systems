@@ -5,6 +5,8 @@ import { createLessonPlanSubmissionFromChat } from '@/lib/ai/chat/lesson-plan-su
 import { roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { getTenantClient } from '@/lib/prisma/tenantClient'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { checkAILimit, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 120
@@ -38,6 +40,11 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       403
     )
   }
+
+  const planBlock = await requireFeature(auth.schoolId, 'ai-lesson-planner')
+  if (planBlock) return planBlock
+  const limitBlock = await checkAILimit(auth.schoolId, String(auth.user.id || ''))
+  if (limitBlock) return limitBlock
 
   const raw = await request.json().catch(() => ({}))
   const parsed = BodySchema.safeParse(raw)
@@ -84,6 +91,8 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     term: body.term,
     chatContext,
   })
+
+  await trackAIUsage(auth.schoolId, 'ai-lesson-planner').catch(() => null)
 
   return NextResponse.json({
     success: true,

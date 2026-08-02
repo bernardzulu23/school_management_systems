@@ -18,6 +18,8 @@ import { createChatSseStream, AI_SSE_HEADERS } from '@/lib/ai/chat/llm'
 import { handleHeadteacherQuery } from '@/lib/ai/chat/headteacher-handler'
 import { secureJson } from '@/lib/security/api'
 import { aiChain } from '@/lib/ai/provider-fallback'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { checkAILimit } from '@/lib/middleware/aiUsageTracker'
 
 export const dynamic = 'force-dynamic'
 
@@ -41,6 +43,11 @@ export const POST = withAILimits(
   withErrorHandler(async function POST(request: Request) {
     const auth = await requireChatAuth(request)
     if (!auth.ok) return auth.response
+
+    const planBlock = await requireFeature(auth.schoolId, 'ai-tools')
+    if (planBlock) return planBlock
+    const limitBlock = await checkAILimit(auth.schoolId, String(auth.user.id || ''))
+    if (limitBlock) return limitBlock
 
     const rl = await enforceChatRateLimit(request, auth.chatRole, String(auth.user.id))
     if (rl.limited) return rl.response

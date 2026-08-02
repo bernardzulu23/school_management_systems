@@ -3,15 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import {
-  Activity,
-  AlertTriangle,
-  CheckCircle2,
-  ChevronDown,
-  ChevronUp,
-  RefreshCw,
-  WifiOff,
-} from 'lucide-react'
+import { Activity, AlertTriangle, CheckCircle2, RefreshCw, WifiOff } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 function formatSeen(iso) {
@@ -50,8 +42,6 @@ export default function SMSGatewayStatus() {
   const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
   const [checking, setChecking] = useState(false)
-  const [showHelp, setShowHelp] = useState(false)
-
   const load = useCallback(async () => {
     setLoading(true)
     try {
@@ -243,32 +233,6 @@ export default function SMSGatewayStatus() {
                 </tbody>
               </table>
             </div>
-          </div>
-
-          <div className="border-t border-royalPurple-border pt-3">
-            <button
-              type="button"
-              className="flex items-center gap-2 text-sm font-medium text-royalPurple-text2 hover:text-royalPurple-text1"
-              onClick={() => setShowHelp((v) => !v)}
-            >
-              {showHelp ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-              Troubleshooting
-            </button>
-            {showHelp ? (
-              <ul className="mt-3 text-sm text-royalPurple-text3 space-y-1.5 list-disc pl-5">
-                <li>Keep the gateway phone powered on and connected to Wi‑Fi or mobile data.</li>
-                <li>
-                  Confirm the ZSMS Gateway app shows a persistent notification (foreground service
-                  running).
-                </li>
-                <li>Exempt the app from battery optimization so polling is not killed.</li>
-                <li>
-                  If the device never connects, ask a platform admin to re-pair at{' '}
-                  <span className="font-mono text-xs">/platform/sms-gateway</span>. Schools do not
-                  create their own pairing tokens.
-                </li>
-              </ul>
-            ) : null}
           </div>
         </>
       )}

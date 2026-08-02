@@ -9,6 +9,7 @@ import {
   getHodLearningAnalytics,
   getStudentLearningAnalytics,
 } from '@/lib/analytics/learning-analytics'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 /**
  * GET /api/dashboard/analytics/learning
@@ -24,6 +25,9 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!schoolId) {
     return NextResponse.json({ error: 'School context required' }, { status: 400 })
   }
+
+  const planBlock = await requireFeature(schoolId, 'comprehensive-analytics')
+  if (planBlock) return planBlock
 
   const { searchParams } = new URL(request.url)
   const academicYear = Number(searchParams.get('academicYear')) || new Date().getFullYear()

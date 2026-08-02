@@ -8,6 +8,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { validateQuery } from '@/lib/middleware/validate-request'
 import { NationalPercentileQuerySchema } from '@/lib/schemas'
 import { buildScoreDistribution, computePercentile } from '@/lib/mock-exam'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 const GRADED_STATUSES = ['graded', 'needs_review', 'submitted']
 
@@ -26,6 +27,9 @@ export const GET = withErrorHandler(async function GET(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const planBlock = await requireFeature(schoolId, 'predictive-analytics')
+  if (planBlock) return planBlock
 
   const { data: query, error: queryError } = validateQuery(
     new URL(request.url),

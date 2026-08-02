@@ -15,6 +15,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
 import { resolveAiChatHref, resolveAiChatLabel } from '@/lib/ai/chat/ui-entry'
+import { planIncludes } from '@/lib/zambiaSchoolFeatures'
+import { useSchool } from '@/lib/context/SchoolContext'
 
 const AI_FEATURES = [
   {
@@ -25,6 +27,7 @@ const AI_FEATURES = [
     bgColor: 'bg-orange-500/10',
     roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
     chatEntry: true,
+    planFeature: 'ai-tools',
   },
   {
     id: 'ai-reference-materials',
@@ -36,6 +39,7 @@ const AI_FEATURES = [
     color: 'text-indigo-500',
     bgColor: 'bg-indigo-500/10',
     roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+    planFeature: 'ai-tools',
   },
   {
     id: 'lesson-planner',
@@ -46,6 +50,7 @@ const AI_FEATURES = [
     color: 'text-blue-500',
     bgColor: 'bg-blue-500/10',
     roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+    planFeature: 'ai-lesson-planner',
   },
   {
     id: 'story-weaver',
@@ -56,6 +61,7 @@ const AI_FEATURES = [
     color: 'text-purple-500',
     bgColor: 'bg-purple-500/10',
     roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+    planFeature: 'ai-story-weaver',
   },
   {
     id: 'quiz-maker',
@@ -66,6 +72,7 @@ const AI_FEATURES = [
     color: 'text-emerald-500',
     bgColor: 'bg-emerald-500/10',
     roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+    planFeature: 'ai-quiz-maker',
   },
   {
     id: 'report-comments',
@@ -76,6 +83,7 @@ const AI_FEATURES = [
     color: 'text-amber-500',
     bgColor: 'bg-amber-500/10',
     roles: ['teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+    planFeature: 'ai-report-comments',
   },
   {
     id: 'ecz-practice',
@@ -86,25 +94,30 @@ const AI_FEATURES = [
     color: 'text-rose-500',
     bgColor: 'bg-rose-500/10',
     roles: ['student', 'teacher', 'hod', 'headteacher', 'administrator', 'admin'],
+    planFeature: 'ecz-practice',
   },
 ]
 
 export default function AIFeaturesShowcase() {
   const { user } = useAuth()
+  const { school } = useSchool()
   const userRole = String(user?.role || '').toLowerCase()
   const chatLabel = resolveAiChatLabel(userRole)
+  const plan = String(school?.plan || 'basic').toLowerCase()
 
-  const accessibleFeatures = AI_FEATURES.filter((f) => f.roles.includes(userRole)).map((f) => {
-    if (f.chatEntry) {
-      return {
-        ...f,
-        name: chatLabel.name,
-        description: chatLabel.description,
-        href: resolveAiChatHref(userRole),
+  const accessibleFeatures = AI_FEATURES.filter((f) => f.roles.includes(userRole))
+    .filter((f) => !f.planFeature || planIncludes(plan, f.planFeature, school))
+    .map((f) => {
+      if (f.chatEntry) {
+        return {
+          ...f,
+          name: chatLabel.name,
+          description: chatLabel.description,
+          href: resolveAiChatHref(userRole),
+        }
       }
-    }
-    return f
-  })
+      return f
+    })
 
   if (accessibleFeatures.length === 0) return null
 

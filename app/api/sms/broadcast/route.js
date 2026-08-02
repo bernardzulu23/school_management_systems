@@ -7,6 +7,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { BroadcastSMSSchema } from '@/lib/schemas'
 import { createBroadcast } from '@/lib/sms/broadcast'
+import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -20,6 +21,9 @@ export const POST = withErrorHandler(async function POST(request) {
   if (!tenant.ok) return tenant.response
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
+
+  const smsBlock = await requireFeature(schoolId, 'bulk-announcements')
+  if (smsBlock) return smsBlock
 
   const { phoneNumbers, message } = await parseBodyOrThrow(request, BroadcastSMSSchema)
 
