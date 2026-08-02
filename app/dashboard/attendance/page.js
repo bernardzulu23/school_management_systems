@@ -226,12 +226,18 @@ export default function AttendancePage() {
         const sent = Number(sms.sent) || 0
         const failed = Number(sms.failed) || 0
         const skipped = Number(sms.skipped) || 0
+        const failHint =
+          Array.isArray(sms.failures) && sms.failures.length
+            ? `: ${sms.failures[0]}`
+            : sms.reason
+              ? `: ${sms.reason}`
+              : ''
         if (sent > 0 && failed === 0) {
           toast.success(`Attendance saved — ${sent} parent SMS sent`)
         } else if (sent > 0 && failed > 0) {
-          toast.success(`Attendance saved — ${sent} SMS sent, ${failed} failed`)
+          toast.success(`Attendance saved — ${sent} SMS sent, ${failed} failed${failHint}`)
         } else if (failed > 0) {
-          toast.error(`Attendance saved but parent SMS failed (${failed})`)
+          toast.error(`Attendance saved but parent SMS failed (${failed})${failHint}`)
         } else if (skipped > 0 && sent === 0) {
           toast.success(
             `Attendance saved — ${skipped} SMS skipped (check SMS toggles / parent phones)`
