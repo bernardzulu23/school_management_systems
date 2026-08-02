@@ -394,11 +394,11 @@ export default function HomePageClient() {
           className="public-nav-brand"
           style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
         >
-          <div style={{ width: 40, height: 28, display: 'flex', alignItems: 'center' }}>
+          <div style={{ width: 40, height: 40, display: 'flex', alignItems: 'center' }}>
             <SchoolLogo
-              src={tenantSchool?.logo_url || '/Assets/logo.jpg'}
+              src={tenantSchool?.logo_url || '/Assets/logo.png'}
               alt={tenantSchool?.name || 'ZSMS'}
-              className="h-7 w-auto object-contain"
+              className="h-10 w-10 object-contain rounded-md"
               priority
             />
           </div>
@@ -927,11 +927,11 @@ export default function HomePageClient() {
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ width: 30, height: 22, display: 'flex', alignItems: 'center' }}>
+          <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center' }}>
             <SchoolLogo
-              src={tenantSchool?.logo_url || '/Assets/logo.jpg'}
+              src={tenantSchool?.logo_url || '/Assets/logo.png'}
               alt={tenantSchool?.name || 'ZSMS'}
-              className="h-5 w-auto object-contain"
+              className="h-9 w-9 object-contain rounded-md"
             />
           </div>
           <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>

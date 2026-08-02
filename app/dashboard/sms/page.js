@@ -5,7 +5,6 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { RefreshCw, Send } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
-import SMSGatewayStatus from '@/components/sms/SMSGatewayStatus'
 import { normalizeZmPhoneNumber } from '@/lib/sms/normalizePhone'
 import toast from 'react-hot-toast'
 
@@ -175,16 +174,10 @@ export default function SmsLogPage() {
       <div className="bg-royalPurple-card shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <h1 className="text-2xl font-bold text-royalPurple-text1">SMS</h1>
-          <p className="text-royalPurple-text2">
-            Bulk dispatch via QStash · Africa&apos;s Talking · credits:{' '}
-            <strong>{balance === null ? '…' : balance}</strong>
-          </p>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-        <SMSGatewayStatus />
-
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-royalPurple-text1 mb-2">Emergency broadcast</h2>
           <p className="text-sm text-royalPurple-text3 mb-4">

@@ -22,14 +22,15 @@ export function SchoolLogo({ src, alt, className, priority = false }) {
 
   // Use unoptimized if remote OR if it's a known internal asset that might fail in some environments
   // For the specific logo.jpg case, we can try to force unoptimized to bypass the 503 from _next/image
-  const shouldBeUnoptimized = isRemote || normalizedSrc.includes('logo.jpg')
+  const shouldBeUnoptimized =
+    isRemote || normalizedSrc.includes('logo.jpg') || normalizedSrc.includes('logo.png')
 
   return (
     <Image
       src={normalizedSrc}
       width={256}
-      height={64}
-      sizes="(max-width: 768px) 128px, 256px"
+      height={256}
+      sizes="(max-width: 768px) 64px, 128px"
       priority={Boolean(priority)}
       unoptimized={shouldBeUnoptimized}
       alt={alt || 'School logo'}
