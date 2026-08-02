@@ -24,28 +24,22 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   }
 
   const since = new Date(Date.now() - 24 * 60 * 60 * 1000)
-  const gateways = await basePrisma.sMSGateway.findMany({
-    include: {
-      school: { select: { id: true, name: true, subdomain: true } },
-      logs: {
-        where: { createdAt: { gte: since }, channel: 'CUSTOM_GATEWAY' },
-        select: { status: true },
+  const [gateways, enabledCount, totalSchools] = await Promise.all([
+    basePrisma.sMSGateway.findMany({
+      include: {
+        school: { select: { id: true, name: true, subdomain: true } },
+        logs: {
+          where: { createdAt: { gte: since }, channel: 'CUSTOM_GATEWAY' },
+          select: { status: true },
+        },
       },
-    },
-    orderBy: { updatedAt: 'desc' },
-  })
-
-  const schoolIds = [...new Set(gateways.map((g) => g.schoolId))]
-  const settingsRows =
-    schoolIds.length > 0
-      ? await basePrisma.schoolSmsSettings.findMany({
-          where: { schoolId: { in: schoolIds } },
-          select: { schoolId: true, customGatewayEnabled: true },
-        })
-      : []
-  const enabledBySchool = new Map(
-    settingsRows.map((s) => [s.schoolId, Boolean(s.customGatewayEnabled)])
-  )
+      orderBy: { updatedAt: 'desc' },
+    }),
+    basePrisma.schoolSmsSettings.count({
+      where: { customGatewayEnabled: true },
+    }),
+    basePrisma.school.count(),
+  ])
 
   const now = Date.now()
   const payload = gateways.map((g) => {
@@ -54,11 +48,13 @@ export const GET = withErrorHandler(async function GET(request: Request) {
     return {
       id: g.id,
       schoolId: g.schoolId,
-      schoolName: g.school.name,
-      subdomain: g.school.subdomain,
+      schoolName: g.isShared ? 'All schools (shared)' : g.school?.name || 'Unassigned',
+      subdomain: g.school?.subdomain || null,
       deviceName: g.deviceName,
       isActive: g.isActive,
-      customGatewayEnabled: enabledBySchool.get(g.schoolId) ?? false,
+      isShared: Boolean(g.isShared),
+      connectedSchoolCount: g.isShared ? enabledCount : g.schoolId ? 1 : 0,
+      customGatewayEnabled: g.isShared ? enabledCount > 0 : false,
       lastSeenAt: g.lastSeenAt,
       lastHealthCheck: g.lastHealthCheck,
       phoneStatus: offline ? 'offline' : 'online',
@@ -74,5 +70,9 @@ export const GET = withErrorHandler(async function GET(request: Request) {
     }
   })
 
-  return NextResponse.json({ gateways: payload })
+  return NextResponse.json({
+    gateways: payload,
+    enabledSchoolCount: enabledCount,
+    totalSchools,
+  })
 })

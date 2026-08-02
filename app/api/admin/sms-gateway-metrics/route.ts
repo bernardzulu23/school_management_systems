@@ -50,6 +50,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
         schoolId: true,
         deviceName: true,
         isActive: true,
+        isShared: true,
         lastSeenAt: true,
         totalSent: true,
         totalFailed: true,
@@ -128,7 +129,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
         type: 'offline',
         severity: 'error',
         gatewayId: g.id,
-        message: `${g.deviceName} (${g.school.name}) offline >30 min`,
+        message: `${g.deviceName} (${g.isShared ? 'shared' : g.school?.name || 'unassigned'}) offline >30 min`,
       })
     }
   }

@@ -1,12 +1,13 @@
 /**
  * POST /api/sms/gateway/health-check
- * School admin: poll-based health from lastSeenAt (no commercial sms-gate.app call).
+ * School admin: poll-based health from shared (or legacy) gateway lastSeenAt.
  */
 import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { basePrisma } from '@/lib/prisma/client'
+import { resolveActiveGatewayForSchool } from '@/lib/sms/resolveGateway'
 
 export const dynamic = 'force-dynamic'
 
@@ -25,17 +26,14 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const gateway = await basePrisma.sMSGateway.findFirst({
-    where: { schoolId, isActive: true },
-    orderBy: { updatedAt: 'desc' },
-  })
+  const gateway = await resolveActiveGatewayForSchool(schoolId)
 
   if (!gateway) {
     return NextResponse.json({
       success: true,
       healthy: false,
       status: 'not_configured',
-      reason: 'No active SMS gateway for this school',
+      reason: 'No active platform SMS gateway',
     })
   }
 
@@ -56,5 +54,6 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     lastSeenAt: gateway.lastSeenAt,
     lastHealthCheck: healthy ? new Date() : gateway.lastHealthCheck,
     deviceName: gateway.deviceName,
+    isShared: Boolean(gateway.isShared),
   })
 })

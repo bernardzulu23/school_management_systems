@@ -1,8 +1,8 @@
 /**
- * PATCH /api/sms/gateway/[id] — update deviceName / isActive / school enable flag
+ * PATCH /api/sms/gateway/[id] — update deviceName / isActive / enable-all-schools flag
  * DELETE /api/sms/gateway/[id] — revoke (hard-delete) a registered gateway device
  *
- * Platform-admin only. Tenant scoped: optional body (PATCH) or ?schoolId= (DELETE) must match the row.
+ * Platform-admin only.
  */
 import { NextResponse } from 'next/server'
 import { authMiddleware } from '@/lib/middleware/auth'
@@ -43,10 +43,23 @@ async function loadGatewayOrThrow(id: string, expectedSchoolId?: string | null) 
     include: { school: { select: { id: true, name: true } } },
   })
   if (!gateway) throw new ApiError('Gateway not found', 404)
-  if (expectedSchoolId && gateway.schoolId !== expectedSchoolId) {
+  // Legacy tenant check only when gateway is still school-bound.
+  if (expectedSchoolId && gateway.schoolId && gateway.schoolId !== expectedSchoolId) {
     throw new ApiError('Gateway does not belong to the specified school', 403)
   }
   return gateway
+}
+
+async function setAllSchoolsCustomGateway(enabled: boolean) {
+  const schools = await basePrisma.school.findMany({ select: { id: true } })
+  for (const s of schools) {
+    await basePrisma.schoolSmsSettings.upsert({
+      where: { schoolId: s.id },
+      create: { schoolId: s.id, customGatewayEnabled: enabled },
+      update: { customGatewayEnabled: enabled },
+    })
+  }
+  return schools.length
 }
 
 export const PATCH = withErrorHandler(async function PATCH(
@@ -62,7 +75,7 @@ export const PATCH = withErrorHandler(async function PATCH(
 
   const gateway = await loadGatewayOrThrow(id, expectedSchoolId || undefined)
 
-  const data: { deviceName?: string; isActive?: boolean } = {}
+  const data: { deviceName?: string; isActive?: boolean; isShared?: boolean } = {}
   if (body?.deviceName !== undefined) {
     const deviceName = String(body.deviceName || '').trim()
     if (!deviceName) throw new ApiError('deviceName cannot be empty', 400)
@@ -71,8 +84,18 @@ export const PATCH = withErrorHandler(async function PATCH(
   if (body?.isActive !== undefined) {
     data.isActive = Boolean(body.isActive)
   }
+  if (body?.isShared !== undefined) {
+    data.isShared = Boolean(body.isShared)
+  }
 
-  if (Object.keys(data).length === 0 && body?.enableForSchool === undefined) {
+  const enableForAll =
+    body?.enableForAllSchools !== undefined
+      ? Boolean(body.enableForAllSchools)
+      : body?.enableForSchool !== undefined
+        ? Boolean(body.enableForSchool)
+        : undefined
+
+  if (Object.keys(data).length === 0 && enableForAll === undefined) {
     throw new ApiError('No updatable fields provided', 400)
   }
 
@@ -84,15 +107,21 @@ export const PATCH = withErrorHandler(async function PATCH(
         })
       : gateway
 
+  let enabledSchoolCount: number | undefined
   let customGatewayEnabled: boolean | undefined
-  if (body?.enableForSchool !== undefined) {
-    const enableForSchool = Boolean(body.enableForSchool)
-    const settings = await basePrisma.schoolSmsSettings.upsert({
-      where: { schoolId: gateway.schoolId },
-      create: { schoolId: gateway.schoolId, customGatewayEnabled: enableForSchool },
-      update: { customGatewayEnabled: enableForSchool },
-    })
-    customGatewayEnabled = settings.customGatewayEnabled
+  if (enableForAll !== undefined) {
+    if (gateway.isShared || updated.isShared) {
+      enabledSchoolCount = await setAllSchoolsCustomGateway(enableForAll)
+      customGatewayEnabled = enableForAll
+    } else if (gateway.schoolId) {
+      const settings = await basePrisma.schoolSmsSettings.upsert({
+        where: { schoolId: gateway.schoolId },
+        create: { schoolId: gateway.schoolId, customGatewayEnabled: enableForAll },
+        update: { customGatewayEnabled: enableForAll },
+      })
+      customGatewayEnabled = settings.customGatewayEnabled
+      enabledSchoolCount = 1
+    }
   }
 
   return NextResponse.json({
@@ -100,12 +129,14 @@ export const PATCH = withErrorHandler(async function PATCH(
     gateway: {
       id: updated.id,
       schoolId: updated.schoolId,
-      schoolName: gateway.school.name,
+      schoolName: gateway.school?.name || null,
       deviceName: updated.deviceName,
       isActive: updated.isActive,
+      isShared: updated.isShared,
       updatedAt: updated.updatedAt,
     },
     ...(customGatewayEnabled !== undefined ? { customGatewayEnabled } : {}),
+    ...(enabledSchoolCount !== undefined ? { enabledSchoolCount } : {}),
   })
 })
 
@@ -118,7 +149,6 @@ export const DELETE = withErrorHandler(async function DELETE(
 
   const id = await resolveGatewayId(context)
   const url = new URL(request.url)
-  // Tenant scoping via query only — avoid request.json() on DELETE (can hang with empty body).
   const schoolIdHint = url.searchParams.get('schoolId')?.trim() || null
 
   const gateway = await loadGatewayOrThrow(id, schoolIdHint || undefined)
@@ -130,5 +160,6 @@ export const DELETE = withErrorHandler(async function DELETE(
     deleted: true,
     id: gateway.id,
     schoolId: gateway.schoolId,
+    isShared: gateway.isShared,
   })
 })

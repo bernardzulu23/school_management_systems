@@ -1,7 +1,6 @@
 'use client'
 
 import { useCallback, useEffect, useState } from 'react'
-import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import {
@@ -11,7 +10,6 @@ import {
   ChevronDown,
   ChevronUp,
   RefreshCw,
-  Settings2,
   WifiOff,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -108,10 +106,10 @@ export default function SMSGatewayStatus() {
         <div>
           <h2 className="text-lg font-semibold text-royalPurple-text1 flex items-center gap-2">
             <Activity className="w-5 h-5" />
-            SMS Gateway
+            Platform SMS Gateway
           </h2>
           <p className="text-sm text-royalPurple-text3 mt-1">
-            Custom Android SIM bridge status for this school.
+            Shared Android SIM bridge used by all schools. Pairing is managed by platform admins.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -127,12 +125,6 @@ export default function SMSGatewayStatus() {
           >
             {checking ? 'Checking…' : 'Health check'}
           </Button>
-          <Link href="/dashboard/sms/gateway-setup" className="inline-flex">
-            <Button type="button" className="btn-primary btn-sm">
-              <Settings2 className="w-4 h-4 mr-2" />
-              Configure gateway
-            </Button>
-          </Link>
         </div>
       </div>
 
@@ -156,6 +148,11 @@ export default function SMSGatewayStatus() {
                 Routing via Africala path (custom flag off)
               </span>
             )}
+            {info?.gateway?.isShared ? (
+              <span className="text-xs text-royalPurple-text2 bg-royalPurple-page px-2 py-1 rounded border border-royalPurple-border">
+                Shared platform gateway
+              </span>
+            ) : null}
           </div>
 
           <dl className="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
@@ -266,9 +263,9 @@ export default function SMSGatewayStatus() {
                 </li>
                 <li>Exempt the app from battery optimization so polling is not killed.</li>
                 <li>
-                  If the device never connects, ask platform admin to re-pair from{' '}
-                  <span className="font-mono text-xs">/platform/sms-gateway</span> and scan the new
-                  QR/token in the app.
+                  If the device never connects, ask a platform admin to re-pair at{' '}
+                  <span className="font-mono text-xs">/platform/sms-gateway</span>. Schools do not
+                  create their own pairing tokens.
                 </li>
               </ul>
             ) : null}

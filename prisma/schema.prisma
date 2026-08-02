@@ -3700,10 +3700,11 @@ model SchoolSmsSettings {
 }
 
 /// Physical Android phone fleet for custom SIM SMS (bridge while Africala sender-ID pending).
+/// Shared platform gateways have isShared=true and schoolId=null — one phone serves all opted-in schools.
 model SMSGateway {
   id                String    @id @default(uuid())
-  schoolId          String
-  school            School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolId          String?
+  school            School?   @relation(fields: [schoolId], references: [id], onDelete: SetNull)
 
   deviceName        String
   /// SHA-256 hex of the pairing token (lookup key). Raw token is never stored plaintext.
@@ -3711,6 +3712,8 @@ model SMSGateway {
   /// AES-256-GCM ciphertext of the raw pairing token (for admin re-display / rotation).
   apiTokenEncrypted String    @db.Text
 
+  /// When true, any school with customGatewayEnabled routes through this gateway.
+  isShared          Boolean   @default(false)
   isActive          Boolean   @default(true)
   lastSeenAt        DateTime?
   lastHealthCheck   DateTime?
@@ -3725,6 +3728,7 @@ model SMSGateway {
 
   @@index([schoolId])
   @@index([isActive])
+  @@index([isShared, isActive])
 }
 
 model SmsBroadcast {
@@ -3790,6 +3794,7 @@ model SmsLog {
 
   @@index([schoolId])
   @@index([createdAt])
+  @@index([schoolId, createdAt])
   @@index([broadcastId])
   @@index([gatewayId])
   @@index([channel, status, gatewayId])

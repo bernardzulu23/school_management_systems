@@ -32,6 +32,7 @@ const gatewayRow = {
   schoolId: 'school-1',
   deviceName: 'Front office',
   isActive: true,
+  isShared: false,
   updatedAt: new Date('2026-07-01T00:00:00Z'),
   school: { id: 'school-1', name: 'Demo School' },
 }

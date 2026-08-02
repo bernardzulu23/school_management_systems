@@ -36,13 +36,15 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       id: true,
       deviceName: true,
       schoolId: true,
+      isShared: true,
       school: { select: { name: true } },
     },
   })
   if (!gateway) throw new ApiError('Gateway not found', 404)
 
+  // Shared gateway: always show logs for this device. Legacy school-bound: school outbound mix unless filtered.
   const where =
-    channelOnly === 'CUSTOM_GATEWAY'
+    gateway.isShared || channelOnly === 'CUSTOM_GATEWAY' || !gateway.schoolId
       ? { gatewayId, channel: 'CUSTOM_GATEWAY' as const }
       : outboundSmsWhere({ schoolId: gateway.schoolId })
 
@@ -67,7 +69,8 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       id: gateway.id,
       deviceName: gateway.deviceName,
       schoolId: gateway.schoolId,
-      schoolName: gateway.school?.name || null,
+      isShared: Boolean(gateway.isShared),
+      schoolName: gateway.isShared ? 'All schools (shared)' : gateway.school?.name || null,
     },
     logs: logs.map((l) => ({
       ...l,

@@ -12,6 +12,10 @@ vi.mock('@/lib/prisma/client', () => ({
   },
 }))
 
+vi.mock('@/lib/sms/resolveGateway', () => ({
+  resolveActiveGatewayForSchool: (...args) => findFirst(...args),
+}))
+
 describe('queueForGatewayIfEnabled online window', () => {
   beforeEach(() => {
     findUnique.mockReset()

@@ -1,6 +1,6 @@
 /**
  * GET /api/sms/gateway/info
- * School-scoped gateway status for the custom Android SIM bridge.
+ * School-scoped view of the platform shared Android SIM bridge.
  * Does not collide with POST /api/sms/gateway/status (Android delivery reports).
  */
 import { NextResponse } from 'next/server'
@@ -9,6 +9,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { basePrisma } from '@/lib/prisma/client'
 import { outboundSmsWhere } from '@/lib/sms/outboundChannels'
+import { resolveActiveGatewayForSchool } from '@/lib/sms/resolveGateway'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,10 +34,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const gateway = await basePrisma.sMSGateway.findFirst({
-    where: { schoolId, isActive: true },
-    orderBy: { updatedAt: 'desc' },
-  })
+  const gateway = await resolveActiveGatewayForSchool(schoolId)
 
   const settings = await basePrisma.schoolSmsSettings.findUnique({
     where: { schoolId },
@@ -92,6 +90,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       idShort: `${gateway.id.slice(0, 8)}…`,
       deviceName: gateway.deviceName,
       isActive: gateway.isActive,
+      isShared: Boolean(gateway.isShared),
       lastSeenAt: gateway.lastSeenAt,
       lastHealthCheck: gateway.lastHealthCheck,
     },
