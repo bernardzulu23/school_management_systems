@@ -1,4 +1,6 @@
 export const dynamic = 'force-dynamic'
+/** Allow Africa's Talking round-trips after save (Vercel default can be too short). */
+export const maxDuration = 60
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { authMiddleware } from '@/lib/middleware/auth'
@@ -169,10 +171,14 @@ export const POST = withErrorHandler(async function POST(request) {
 
   await bulkUpsertAttendance(prisma, schoolId, finalWrites)
 
-  const changedWrites = finalWrites.filter(
-    (w) =>
-      String(existingByStudent.get(String(w.studentId)) || '') !== String(w.status).toLowerCase()
-  )
+  const changedWrites = finalWrites.filter((w) => {
+    const prev = String(existingByStudent.get(String(w.studentId)) || '').toLowerCase()
+    const next = String(w.status).toLowerCase()
+    if (prev === next) return false
+    // Skip bulk "empty → present" noise when the register is first opened/saved.
+    if (!prev && next === 'present') return false
+    return true
+  })
 
   const smsMarks = changedWrites.map((r) => ({
     studentId: r.studentId,
@@ -180,11 +186,11 @@ export const POST = withErrorHandler(async function POST(request) {
     date: r.date,
   }))
 
-  // SMS only on status *change*. Remaking the same status skips send.
+  // SMS only on real status changes (not initial default-present fill).
   let smsSummary = { scheduled: false, sent: 0, failed: 0, skipped: 0, reason: null }
   if (smsMarks.length === 0) {
     smsSummary.reason = 'no_status_change'
-    console.log('[attendance] No parent SMS — status unchanged for all rows', {
+    console.log('[attendance] No parent SMS — no actionable status changes', {
       schoolId,
       count: finalWrites.length,
     })

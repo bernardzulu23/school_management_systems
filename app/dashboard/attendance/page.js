@@ -216,6 +216,31 @@ export default function AttendancePage() {
       refreshPendingCount()
       if (result?.offline) {
         toast.success('Attendance saved on this device — will sync when online')
+        return
+      }
+
+      const sms = result?.sms || {}
+      if (sms.reason === 'no_status_change') {
+        toast.success('Attendance saved (no parent SMS — status unchanged)')
+      } else if (typeof sms.sent === 'number' || typeof sms.failed === 'number') {
+        const sent = Number(sms.sent) || 0
+        const failed = Number(sms.failed) || 0
+        const skipped = Number(sms.skipped) || 0
+        if (sent > 0 && failed === 0) {
+          toast.success(`Attendance saved — ${sent} parent SMS sent`)
+        } else if (sent > 0 && failed > 0) {
+          toast.success(`Attendance saved — ${sent} SMS sent, ${failed} failed`)
+        } else if (failed > 0) {
+          toast.error(`Attendance saved but parent SMS failed (${failed})`)
+        } else if (skipped > 0 && sent === 0) {
+          toast.success(
+            `Attendance saved — ${skipped} SMS skipped (check SMS toggles / parent phones)`
+          )
+        } else {
+          toast.success('Attendance saved successfully!')
+        }
+      } else if (sms.scheduled) {
+        toast.success('Attendance saved — parent SMS queued')
       } else {
         toast.success('Attendance saved successfully!')
       }
@@ -231,10 +256,30 @@ export default function AttendancePage() {
 
   const handleSaveAttendance = () => {
     if (!selectedClass) return
-    const records = students.map((s) => ({
-      studentId: s.id,
-      status: attendance[String(s.id)] || 'present',
-    }))
+    const savedMap = new Map(
+      (Array.isArray(savedRecords) ? savedRecords : []).map((r) => [
+        String(r.studentId),
+        String(r.status || '').toLowerCase(),
+      ])
+    )
+    const records = students
+      .map((s) => {
+        const id = String(s.id)
+        const status = String(attendance[id] || 'present').toLowerCase()
+        return { studentId: s.id, status }
+      })
+      .filter((r) => {
+        const prev = savedMap.get(String(r.studentId)) || ''
+        if (prev === r.status) return false
+        // Don't POST bulk default-present fill (no prior mark).
+        if (!prev && r.status === 'present') return false
+        return true
+      })
+
+    if (records.length === 0) {
+      toast('No attendance changes to save — mark a student late/absent/present first')
+      return
+    }
     attendanceMutation.mutate(records)
   }
 
