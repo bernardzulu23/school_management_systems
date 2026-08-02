@@ -43,7 +43,7 @@ export function CurriculumFeatures({ loginUrl = '/login' }) {
           Features built for the Zambian curriculum
         </h2>
         <p style={{ fontSize: 14, color: 'var(--text-secondary)', marginBottom: '2rem' }}>
-          Attendance, grades, reporting, coordination
+          Attendance, grades, parent SMS alerts, reporting, coordination
           {stats?.activeSchools != null && stats.activeSchools > 0 && (
             <span> · {stats.activeSchools} schools on the platform</span>
           )}

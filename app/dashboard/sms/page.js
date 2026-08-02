@@ -36,7 +36,7 @@ export default function SmsLogPage() {
   const fetchSmsLogs = useCallback(async () => {
     setLoading(true)
     try {
-      const res = await fetch('/api/sms/logs?limit=300', {
+      const res = await fetch('/api/sms/logs?limit=100', {
         cache: 'no-store',
         credentials: 'include',
       })
@@ -46,6 +46,7 @@ export default function SmsLogPage() {
     } catch (error) {
       console.error('Error fetching SMS logs:', error)
       setLogs([])
+      toast.error(error?.message || 'Could not load delivery log')
     } finally {
       setLoading(false)
     }
