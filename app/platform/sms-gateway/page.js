@@ -4,6 +4,17 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import toast from 'react-hot-toast'
 import { QRCodeSVG } from 'qrcode.react'
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts'
 import { PlatformShell } from '@/components/platform/PlatformShell'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 
@@ -16,12 +27,24 @@ function formatSeen(iso) {
   }
 }
 
+function KpiCard({ label, value, sub }) {
+  return (
+    <div className="border-2 border-ink bg-white p-4 shadow-[3px_3px_0_#111111]">
+      <p className="text-xs text-muted uppercase tracking-wide">{label}</p>
+      <p className="text-3xl font-bold text-ink mt-1">{value}</p>
+      {sub ? <p className="text-xs text-muted mt-1">{sub}</p> : null}
+    </div>
+  )
+}
+
 export default function PlatformSmsGatewayPage() {
   const router = useRouter()
   const [schools, setSchools] = useState([])
   const [gateways, setGateways] = useState([])
+  const [metrics, setMetrics] = useState(null)
   const [loadingSchools, setLoadingSchools] = useState(true)
   const [loadingGateways, setLoadingGateways] = useState(true)
+  const [loadingMetrics, setLoadingMetrics] = useState(true)
 
   const [schoolId, setSchoolId] = useState('')
   const [deviceName, setDeviceName] = useState('')
@@ -38,6 +61,11 @@ export default function PlatformSmsGatewayPage() {
   const [editEnableSchool, setEditEnableSchool] = useState(false)
   const [savingEdit, setSavingEdit] = useState(false)
   const [deletingId, setDeletingId] = useState(null)
+
+  const [logsGatewayId, setLogsGatewayId] = useState(null)
+  const [logsLoading, setLogsLoading] = useState(false)
+  const [logs, setLogs] = useState([])
+  const [logsMeta, setLogsMeta] = useState(null)
 
   const loadSchools = useCallback(async () => {
     setLoadingSchools(true)
@@ -82,12 +110,38 @@ export default function PlatformSmsGatewayPage() {
     }
   }, [router])
 
+  const loadMetrics = useCallback(async () => {
+    setLoadingMetrics(true)
+    try {
+      const res = await sessionFetch('/api/admin/sms-gateway-metrics', { cache: 'no-store' })
+      if (res.status === 401 || res.status === 403) {
+        router.replace('/login')
+        return
+      }
+      const data = await res.json()
+      if (!res.ok) {
+        toast.error(data.error || 'Failed to load metrics')
+        return
+      }
+      setMetrics(data)
+    } catch {
+      toast.error('Failed to load metrics')
+    } finally {
+      setLoadingMetrics(false)
+    }
+  }, [router])
+
+  const refreshAll = useCallback(() => {
+    loadGateways()
+    loadMetrics()
+  }, [loadGateways, loadMetrics])
+
   useEffect(() => {
     loadSchools()
     loadGateways()
-  }, [loadSchools, loadGateways])
+    loadMetrics()
+  }, [loadSchools, loadGateways, loadMetrics])
 
-  /** Status API returns the full fleet; filter to the selected school in the UI. */
   const schoolGateways = useMemo(() => {
     if (!schoolId) return []
     return gateways.filter((g) => g.schoolId === schoolId)
@@ -98,7 +152,17 @@ export default function PlatformSmsGatewayPage() {
     return Boolean(first?.customGatewayEnabled)
   }, [schoolGateways])
 
+  const fleetRows = useMemo(() => {
+    const monthMap = metrics?.monthSentByGateway || {}
+    return gateways.map((g) => ({
+      ...g,
+      idShort: `${String(g.id || '').slice(0, 8)}…`,
+      monthSent: monthMap[g.id] ?? 0,
+    }))
+  }, [gateways, metrics])
+
   function startEdit(g) {
+    setSchoolId(g.schoolId)
     setEditingId(g.id)
     setEditName(g.deviceName || '')
     setEditActive(Boolean(g.isActive))
@@ -157,7 +221,7 @@ export default function PlatformSmsGatewayPage() {
       setDeviceName('')
       setEnableForSchool(false)
       toast.success('Gateway registered — copy the token now')
-      loadGateways()
+      refreshAll()
     } catch {
       toast.error('Registration failed')
     } finally {
@@ -190,9 +254,13 @@ export default function PlatformSmsGatewayPage() {
         toast.error(data.error || 'Update failed')
         return
       }
-      toast.success('Gateway updated')
+      toast.success(
+        editEnableSchool
+          ? 'Gateway updated — custom routing on'
+          : 'Gateway updated — Africala fallback (custom flag off)'
+      )
       cancelEdit()
-      loadGateways()
+      refreshAll()
     } catch {
       toast.error('Update failed')
     } finally {
@@ -201,7 +269,8 @@ export default function PlatformSmsGatewayPage() {
   }
 
   async function revokeGateway(g) {
-    if (!schoolId) return
+    const sid = g.schoolId || schoolId
+    if (!sid) return
     const ok = window.confirm(
       `Revoke gateway “${g.deviceName}”? The pairing token will stop working. Re-register to issue a new token.`
     )
@@ -209,7 +278,7 @@ export default function PlatformSmsGatewayPage() {
 
     setDeletingId(g.id)
     try {
-      const qs = new URLSearchParams({ schoolId })
+      const qs = new URLSearchParams({ schoolId: sid })
       const res = await sessionFetch(`/api/sms/gateway/${g.id}?${qs}`, {
         method: 'DELETE',
       })
@@ -220,7 +289,7 @@ export default function PlatformSmsGatewayPage() {
       }
       if (editingId === g.id) cancelEdit()
       toast.success('Gateway revoked')
-      loadGateways()
+      refreshAll()
     } catch {
       toast.error('Revoke failed')
     } finally {
@@ -238,19 +307,241 @@ export default function PlatformSmsGatewayPage() {
     }
   }
 
+  async function openLogs(g) {
+    setLogsGatewayId(g.id)
+    setLogsMeta({ deviceName: g.deviceName, schoolName: g.schoolName })
+    setLogsLoading(true)
+    setLogs([])
+    try {
+      const qs = new URLSearchParams({ gatewayId: g.id, limit: '20' })
+      const res = await sessionFetch(`/api/admin/sms-gateway-logs?${qs}`, { cache: 'no-store' })
+      const data = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        toast.error(data.error || 'Failed to load logs')
+        return
+      }
+      setLogs(data.logs || [])
+    } catch {
+      toast.error('Failed to load logs')
+    } finally {
+      setLogsLoading(false)
+    }
+  }
+
+  const kpis = metrics?.kpis
+  const daily = metrics?.daily || []
+  const alerts = metrics?.alerts || []
+
+  function renderGatewayActions(g) {
+    return (
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => openLogs(g)}
+          className="border border-ink px-3 py-1 text-xs font-semibold hover:bg-paper"
+        >
+          View logs
+        </button>
+        <button
+          type="button"
+          onClick={() => startEdit(g)}
+          disabled={Boolean(deletingId)}
+          className="border border-ink px-3 py-1 text-xs font-semibold hover:bg-paper disabled:opacity-50"
+        >
+          Edit
+        </button>
+        <button
+          type="button"
+          onClick={() => revokeGateway(g)}
+          disabled={deletingId === g.id}
+          className="border border-red-700 text-red-800 px-3 py-1 text-xs font-semibold hover:bg-red-50 disabled:opacity-50"
+        >
+          {deletingId === g.id ? 'Revoking…' : 'Revoke'}
+        </button>
+      </div>
+    )
+  }
+
+  function renderEditForm() {
+    return (
+      <form onSubmit={saveEdit} className="space-y-3">
+        <label className="block space-y-1">
+          <span className="text-xs uppercase tracking-wide text-muted">Device name</span>
+          <input
+            type="text"
+            className="w-full border-2 border-ink bg-paper px-3 py-2 text-sm"
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            disabled={savingEdit}
+            required
+          />
+        </label>
+        <label className="flex items-start gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            className="mt-1"
+            checked={editActive}
+            onChange={(e) => setEditActive(e.target.checked)}
+            disabled={savingEdit}
+          />
+          <span>
+            <span className="font-medium text-ink">Device active</span>
+            <span className="block text-xs text-muted mt-0.5">
+              Inactive devices cannot poll the queue or report status.
+            </span>
+          </span>
+        </label>
+        <label className="flex items-start gap-2 text-sm cursor-pointer">
+          <input
+            type="checkbox"
+            className="mt-1"
+            checked={editEnableSchool}
+            onChange={(e) => setEditEnableSchool(e.target.checked)}
+            disabled={savingEdit}
+          />
+          <span>
+            <span className="font-medium text-ink">Enable custom gateway for this school</span>
+            <span className="block text-xs text-muted mt-0.5">
+              Uncheck to use Africala fallback (keeps the gateway registered; stops custom routing).
+            </span>
+          </span>
+        </label>
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="submit"
+            disabled={savingEdit}
+            className="border-2 border-ink bg-accent text-paper px-3 py-1.5 text-sm font-semibold disabled:opacity-50"
+          >
+            {savingEdit ? 'Saving…' : 'Save'}
+          </button>
+          <button
+            type="button"
+            onClick={cancelEdit}
+            disabled={savingEdit}
+            className="border-2 border-ink bg-white px-3 py-1.5 text-sm font-semibold disabled:opacity-50"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    )
+  }
+
   return (
     <PlatformShell title="SMS Gateway">
-      <div className="space-y-8 max-w-3xl">
+      <div className="space-y-8 max-w-6xl">
         <p className="text-sm text-muted">
-          Register, update, or revoke physical Android phones used as SIM SMS bridges. Copy the
-          pairing token into the ZSMS Gateway app when registering. Leave &quot;Enable for this
-          school&quot; unchecked until Day-4 staged rollout. To rotate a token, revoke the device
-          and register again.
+          Register, monitor, and revoke Android phones used as SIM SMS bridges. Pairing tokens are
+          one-time. Turning off &quot;Enable custom gateway&quot; restores the Africala path without
+          deleting the device.
         </p>
+
+        {/* Alerts */}
+        {alerts.length > 0 ? (
+          <div className="space-y-2">
+            {alerts.map((a, i) => (
+              <div
+                key={`${a.type}-${a.gatewayId || i}`}
+                className={`border-2 px-4 py-3 text-sm font-medium ${
+                  a.severity === 'error'
+                    ? 'border-red-700 bg-red-50 text-red-900'
+                    : 'border-amber-700 bg-amber-50 text-amber-950'
+                }`}
+              >
+                {a.message}
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        {/* KPIs */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <KpiCard
+            label="Online / active"
+            value={
+              loadingMetrics || !kpis ? '…' : `${kpis.onlineGateways} / ${kpis.activeGateways}`
+            }
+            sub={kpis ? `${kpis.totalGateways} registered` : undefined}
+          />
+          <KpiCard
+            label="Sent this month"
+            value={loadingMetrics || !kpis ? '…' : kpis.sentThisMonth}
+            sub="AT + gateway"
+          />
+          <KpiCard
+            label="Failure rate today"
+            value={loadingMetrics || !kpis ? '…' : `${kpis.failureRateToday}%`}
+            sub={
+              kpis
+                ? `${kpis.todayFailed} failed · ${kpis.todaySent} sent` +
+                  (typeof kpis.todayAt === 'number'
+                    ? ` · ${kpis.todayAt} AT / ${kpis.todayGateway || 0} SIM`
+                    : '')
+                : undefined
+            }
+          />
+          <KpiCard
+            label="Fleet health"
+            value={
+              loadingMetrics || !kpis
+                ? '…'
+                : alerts.length
+                  ? `${alerts.length} alert${alerts.length === 1 ? '' : 's'}`
+                  : 'OK'
+            }
+          />
+        </div>
+
+        {/* Charts */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="border-2 border-ink bg-white p-4 shadow-[3px_3px_0_#111111]">
+            <h3 className="text-sm font-semibold text-ink mb-3">7-day volume</h3>
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={daily}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 10 }}
+                    tickFormatter={(v) => String(v).slice(5)}
+                  />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 10 }} />
+                  <Tooltip />
+                  <Bar dataKey="sent" fill="#111111" name="Sent" />
+                  <Bar dataKey="failed" fill="#b91c1c" name="Failed" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+          <div className="border-2 border-ink bg-white p-4 shadow-[3px_3px_0_#111111]">
+            <h3 className="text-sm font-semibold text-ink mb-3">7-day failure rate (%)</h3>
+            <div className="h-48">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={daily}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#ddd" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 10 }}
+                    tickFormatter={(v) => String(v).slice(5)}
+                  />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="failureRate"
+                    stroke="#b45309"
+                    strokeWidth={2}
+                    name="Failure %"
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
 
         <form
           onSubmit={onSubmit}
-          className="border-2 border-ink bg-white p-6 shadow-[4px_4px_0_#111111] space-y-4"
+          className="border-2 border-ink bg-white p-6 shadow-[4px_4px_0_#111111] space-y-4 max-w-3xl"
         >
           <h2 className="font-semibold text-ink">Register device</h2>
 
@@ -301,7 +592,7 @@ export default function PlatformSmsGatewayPage() {
               <span className="font-medium text-ink">Enable for this school now</span>
               <span className="block text-xs text-muted mt-0.5">
                 Off by default. When on, outbound SMS for this school queues to the Android gateway
-                instead of Africala/Mocean.
+                instead of Africala.
               </span>
             </span>
           </label>
@@ -316,7 +607,7 @@ export default function PlatformSmsGatewayPage() {
         </form>
 
         {issuedToken ? (
-          <div className="border-2 border-amber-700 bg-amber-50 p-6 shadow-[4px_4px_0_#111111] space-y-3">
+          <div className="border-2 border-amber-700 bg-amber-50 p-6 shadow-[4px_4px_0_#111111] space-y-3 max-w-3xl">
             <p className="font-semibold text-amber-950">Device token — copy now</p>
             <p className="text-sm text-amber-900">
               This token will not be shown again — copy it now before leaving this page.
@@ -363,176 +654,214 @@ export default function PlatformSmsGatewayPage() {
           </div>
         ) : null}
 
+        {/* Fleet table / cards */}
         <section className="space-y-3">
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div>
-              <h2 className="font-semibold text-ink">Gateways for selected school</h2>
-              {schoolId && schoolGateways.length > 0 ? (
-                <p className="text-xs text-muted mt-0.5">
-                  School routing:{' '}
-                  {schoolCustomEnabled ? 'custom gateway enabled' : 'custom gateway off'}
-                </p>
-              ) : null}
-            </div>
+            <h2 className="font-semibold text-ink">All gateways</h2>
             <button
               type="button"
-              onClick={loadGateways}
+              onClick={refreshAll}
               className="text-xs border border-ink px-2 py-1 hover:bg-paper"
-              disabled={loadingGateways || !schoolId}
+              disabled={loadingGateways || loadingMetrics}
             >
               Refresh
             </button>
           </div>
 
-          {!schoolId ? (
-            <p className="text-muted text-sm">Select a school to view its registered gateways.</p>
-          ) : loadingGateways ? (
+          {loadingGateways ? (
             <p className="text-muted text-sm">Loading…</p>
-          ) : schoolGateways.length === 0 ? (
-            <p className="text-muted text-sm">No gateways registered for this school yet.</p>
+          ) : fleetRows.length === 0 ? (
+            <p className="text-muted text-sm">No gateways registered yet.</p>
           ) : (
-            <ul className="space-y-3">
-              {schoolGateways.map((g) => (
-                <li
-                  key={g.id}
-                  className="border-2 border-ink bg-white p-4 shadow-[2px_2px_0_#111111] text-sm"
-                >
-                  {editingId === g.id ? (
-                    <form onSubmit={saveEdit} className="space-y-3">
-                      <label className="block space-y-1">
-                        <span className="text-xs uppercase tracking-wide text-muted">
-                          Device name
-                        </span>
-                        <input
-                          type="text"
-                          className="w-full border-2 border-ink bg-paper px-3 py-2 text-sm"
-                          value={editName}
-                          onChange={(e) => setEditName(e.target.value)}
-                          disabled={savingEdit}
-                          required
-                        />
-                      </label>
-                      <label className="flex items-start gap-2 text-sm cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="mt-1"
-                          checked={editActive}
-                          onChange={(e) => setEditActive(e.target.checked)}
-                          disabled={savingEdit}
-                        />
-                        <span>
-                          <span className="font-medium text-ink">Device active</span>
-                          <span className="block text-xs text-muted mt-0.5">
-                            Inactive devices cannot poll the queue or report status.
+            <>
+              {/* Desktop table */}
+              <div className="hidden md:block overflow-x-auto border-2 border-ink bg-white shadow-[3px_3px_0_#111111]">
+                <table className="min-w-full text-sm">
+                  <thead className="bg-paper border-b-2 border-ink">
+                    <tr>
+                      <th className="px-3 py-2 text-left text-xs uppercase">School</th>
+                      <th className="px-3 py-2 text-left text-xs uppercase">Device</th>
+                      <th className="px-3 py-2 text-left text-xs uppercase">ID</th>
+                      <th className="px-3 py-2 text-left text-xs uppercase">Status</th>
+                      <th className="px-3 py-2 text-left text-xs uppercase">Month sent</th>
+                      <th className="px-3 py-2 text-left text-xs uppercase">Last seen</th>
+                      <th className="px-3 py-2 text-left text-xs uppercase">Routing</th>
+                      <th className="px-3 py-2 text-left text-xs uppercase">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {fleetRows.map((g) => (
+                      <tr key={g.id} className="border-t border-ink/20 align-top">
+                        <td className="px-3 py-3">
+                          <div className="font-medium">{g.schoolName}</div>
+                          <div className="text-xs text-muted">{g.subdomain || ''}</div>
+                        </td>
+                        <td className="px-3 py-3">{g.deviceName}</td>
+                        <td className="px-3 py-3 font-mono text-xs">{g.idShort}</td>
+                        <td className="px-3 py-3">
+                          <span
+                            className={`text-xs font-semibold uppercase px-2 py-0.5 border ${
+                              g.phoneStatus === 'online'
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                : 'bg-red-100 text-red-800 border-red-300'
+                            }`}
+                          >
+                            {g.phoneStatus}
+                            {!g.isActive ? ' · inactive' : ''}
                           </span>
-                        </span>
-                      </label>
-                      <label className="flex items-start gap-2 text-sm cursor-pointer">
-                        <input
-                          type="checkbox"
-                          className="mt-1"
-                          checked={editEnableSchool}
-                          onChange={(e) => setEditEnableSchool(e.target.checked)}
-                          disabled={savingEdit}
-                        />
-                        <span>
-                          <span className="font-medium text-ink">Enable for this school</span>
-                          <span className="block text-xs text-muted mt-0.5">
-                            School-level flag — applies to all gateways for this school.
+                        </td>
+                        <td className="px-3 py-3">{g.monthSent}</td>
+                        <td className="px-3 py-3 text-xs">{formatSeen(g.lastSeenAt)}</td>
+                        <td className="px-3 py-3 text-xs">
+                          {g.customGatewayEnabled ? 'Custom on' : 'Africala fallback'}
+                        </td>
+                        <td className="px-3 py-3">
+                          {editingId === g.id ? renderEditForm() : renderGatewayActions(g)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile cards */}
+              <ul className="md:hidden space-y-3">
+                {fleetRows.map((g) => (
+                  <li
+                    key={g.id}
+                    className="border-2 border-ink bg-white p-4 shadow-[2px_2px_0_#111111] text-sm space-y-3"
+                  >
+                    {editingId === g.id ? (
+                      renderEditForm()
+                    ) : (
+                      <>
+                        <div className="flex justify-between gap-2">
+                          <div>
+                            <p className="font-medium text-ink">{g.deviceName}</p>
+                            <p className="text-xs text-muted">
+                              {g.schoolName}
+                              {g.subdomain ? ` · ${g.subdomain}` : ''}
+                            </p>
+                          </div>
+                          <span
+                            className={`text-xs font-semibold uppercase px-2 py-0.5 border h-fit ${
+                              g.phoneStatus === 'online'
+                                ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                                : 'bg-red-100 text-red-800 border-red-300'
+                            }`}
+                          >
+                            {g.phoneStatus}
                           </span>
-                        </span>
-                      </label>
-                      <div className="flex flex-wrap gap-2">
-                        <button
-                          type="submit"
-                          disabled={savingEdit}
-                          className="border-2 border-ink bg-accent text-paper px-3 py-1.5 text-sm font-semibold disabled:opacity-50"
-                        >
-                          {savingEdit ? 'Saving…' : 'Save'}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={cancelEdit}
-                          disabled={savingEdit}
-                          className="border-2 border-ink bg-white px-3 py-1.5 text-sm font-semibold disabled:opacity-50"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </form>
-                  ) : (
-                    <>
-                      <div className="flex flex-wrap items-start justify-between gap-2">
-                        <div>
-                          <p className="font-medium text-ink">{g.deviceName}</p>
-                          <p className="text-xs text-muted mt-0.5">
-                            {g.schoolName}
-                            {g.subdomain ? ` · ${g.subdomain}` : ''}
-                          </p>
                         </div>
-                        <span
-                          className={`text-xs font-semibold uppercase px-2 py-0.5 border ${
-                            g.phoneStatus === 'online'
-                              ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                              : 'bg-red-100 text-red-800 border-red-300'
-                          }`}
-                        >
-                          {g.phoneStatus}
-                          {!g.isActive ? ' · inactive' : ''}
-                        </span>
-                      </div>
-                      <dl className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted">
-                        <div>
-                          <dt className="uppercase tracking-wide">Last seen</dt>
-                          <dd className="text-ink">{formatSeen(g.lastSeenAt)}</dd>
-                        </div>
-                        <div>
-                          <dt className="uppercase tracking-wide">Active</dt>
-                          <dd className="text-ink">{g.isActive ? 'Yes' : 'No'}</dd>
-                        </div>
-                        <div>
-                          <dt className="uppercase tracking-wide">Total sent</dt>
-                          <dd className="text-ink">{g.totalSent}</dd>
-                        </div>
-                        <div>
-                          <dt className="uppercase tracking-wide">Total failed</dt>
-                          <dd className="text-ink">{g.totalFailed}</dd>
-                        </div>
-                        {g.last24h ? (
-                          <div className="col-span-2">
-                            <dt className="uppercase tracking-wide">Last 24h</dt>
+                        <dl className="grid grid-cols-2 gap-2 text-xs text-muted">
+                          <div>
+                            <dt className="uppercase">ID</dt>
+                            <dd className="text-ink font-mono">{g.idShort}</dd>
+                          </div>
+                          <div>
+                            <dt className="uppercase">Month sent</dt>
+                            <dd className="text-ink">{g.monthSent}</dd>
+                          </div>
+                          <div>
+                            <dt className="uppercase">Last seen</dt>
+                            <dd className="text-ink">{formatSeen(g.lastSeenAt)}</dd>
+                          </div>
+                          <div>
+                            <dt className="uppercase">Routing</dt>
                             <dd className="text-ink">
-                              {g.last24h.sent} sent · {g.last24h.failed} failed ·{' '}
-                              {g.last24h.pending} pending · {g.last24h.dispatched} dispatched
+                              {g.customGatewayEnabled ? 'Custom on' : 'Africala fallback'}
                             </dd>
                           </div>
-                        ) : null}
-                      </dl>
-                      <div className="mt-3 flex flex-wrap gap-2">
-                        <button
-                          type="button"
-                          onClick={() => startEdit(g)}
-                          disabled={Boolean(deletingId)}
-                          className="border border-ink px-3 py-1 text-xs font-semibold hover:bg-paper disabled:opacity-50"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => revokeGateway(g)}
-                          disabled={deletingId === g.id}
-                          className="border border-red-700 text-red-800 px-3 py-1 text-xs font-semibold hover:bg-red-50 disabled:opacity-50"
-                        >
-                          {deletingId === g.id ? 'Revoking…' : 'Revoke'}
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
+                        </dl>
+                        {renderGatewayActions(g)}
+                      </>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
         </section>
+
+        {/* Selected-school detail (kept for register context) */}
+        {schoolId ? (
+          <section className="space-y-2 max-w-3xl">
+            <h2 className="font-semibold text-ink text-sm">
+              Selected school routing:{' '}
+              {schoolCustomEnabled ? 'custom gateway enabled' : 'custom gateway off (Africala)'}
+            </h2>
+            <p className="text-xs text-muted">
+              {schoolGateways.length} gateway(s) for this school.
+            </p>
+          </section>
+        ) : null}
+
+        {/* Logs modal */}
+        {logsGatewayId ? (
+          <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 p-4">
+            <div className="bg-white border-2 border-ink shadow-[6px_6px_0_#111111] w-full max-w-2xl max-h-[80vh] overflow-hidden flex flex-col">
+              <div className="flex items-center justify-between gap-3 px-4 py-3 border-b-2 border-ink">
+                <div>
+                  <h3 className="font-semibold text-ink">Delivery logs</h3>
+                  <p className="text-xs text-muted">
+                    {logsMeta?.deviceName}
+                    {logsMeta?.schoolName ? ` · ${logsMeta.schoolName}` : ''}
+                    {' · AT + gateway'}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="border border-ink px-2 py-1 text-xs font-semibold"
+                  onClick={() => {
+                    setLogsGatewayId(null)
+                    setLogs([])
+                  }}
+                >
+                  Close
+                </button>
+              </div>
+              <div className="overflow-y-auto p-4">
+                {logsLoading ? (
+                  <p className="text-sm text-muted">Loading…</p>
+                ) : logs.length === 0 ? (
+                  <p className="text-sm text-muted">No delivery logs for this school yet.</p>
+                ) : (
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="text-left text-xs uppercase text-muted border-b">
+                        <th className="py-1 pr-2">Status</th>
+                        <th className="py-1 pr-2">Recipient</th>
+                        <th className="py-1 pr-2">Channel</th>
+                        <th className="py-1">Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {logs.map((l) => (
+                        <tr key={l.id} className="border-b border-ink/10">
+                          <td className="py-2 pr-2 whitespace-nowrap">
+                            {l.status}
+                            {l.failureReason ? (
+                              <span className="block text-xs text-red-700 max-w-[12rem] truncate">
+                                {l.failureReason}
+                              </span>
+                            ) : null}
+                          </td>
+                          <td className="py-2 pr-2 whitespace-nowrap">{l.recipient || '—'}</td>
+                          <td className="py-2 pr-2 whitespace-nowrap text-xs">
+                            {l.channel || l.provider || '—'}
+                          </td>
+                          <td className="py-2 whitespace-nowrap text-xs">
+                            {formatSeen(l.createdAt)}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
     </PlatformShell>
   )

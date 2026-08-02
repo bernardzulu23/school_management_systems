@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { RefreshCw, Send } from 'lucide-react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
+import SMSGatewayStatus from '@/components/sms/SMSGatewayStatus'
 import { normalizeZmPhoneNumber } from '@/lib/sms/normalizePhone'
 import toast from 'react-hot-toast'
 
@@ -181,6 +182,8 @@ export default function SmsLogPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <SMSGatewayStatus />
+
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-royalPurple-text1 mb-2">Emergency broadcast</h2>
           <p className="text-sm text-royalPurple-text3 mb-4">
@@ -367,6 +370,9 @@ export default function SmsLogPage() {
                       To
                     </th>
                     <th className="px-4 py-2 text-left text-xs font-medium text-royalPurple-text3 uppercase">
+                      Channel
+                    </th>
+                    <th className="px-4 py-2 text-left text-xs font-medium text-royalPurple-text3 uppercase">
                       Message
                     </th>
                     <th className="px-4 py-2 text-left text-xs font-medium text-royalPurple-text3 uppercase">
@@ -393,6 +399,9 @@ export default function SmsLogPage() {
                       <td className="px-4 py-3 text-sm whitespace-nowrap">
                         {Array.isArray(log.to) ? log.to.join(', ') : log.to || log.recipient || '—'}
                       </td>
+                      <td className="px-4 py-3 text-sm whitespace-nowrap text-xs">
+                        {log.channel || log.provider || '—'}
+                      </td>
                       <td className="px-4 py-3 text-sm max-w-md truncate">
                         {log.text || log.message || '—'}
                       </td>
@@ -404,7 +413,7 @@ export default function SmsLogPage() {
                   {!logs.length && (
                     <tr>
                       <td
-                        colSpan={4}
+                        colSpan={5}
                         className="px-4 py-8 text-center text-sm text-royalPurple-text3"
                       >
                         No SMS logs yet.
