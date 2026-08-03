@@ -86,6 +86,12 @@ These routes do **not** update `ResultsStatus.smsSentAt`.
 
 Requires `AFRICASTALKING_*` in `.env.local` for cloud delivery when the gateway is unavailable.
 
+## Trial SMS credits
+
+When onboarding completes with **plan = trial**, ZSMS grants **50 SMS credits** once per school (`grantSmsCredits` in `lib/sms/balance.js`, fields `smsLifetimeGranted` / `smsLifetimeUsed` / `trialSmsGrantedAt`). Existing trial schools at balance 0 can be backfilled with `scripts/backfill-trial-sms-credits.js`.
+
+Operators see balance, used, and a **Subscribe** link to `/pricing` on `/dashboard/sms` when credits run out. Each send recipient reserves one credit.
+
 ## Message builders (`lib/sms.js`)
 
 - `buildWelcomeSmsMessage({ schoolName, loginUrl })`

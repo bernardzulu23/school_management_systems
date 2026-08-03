@@ -1,11 +1,13 @@
 ---
-description: Keep docs/USER_GUIDE.md in sync with user-facing feature changes
+description: Keep docs/USER_GUIDE.md in sync with every new user-facing feature
 alwaysApply: true
 ---
 
-# Update User Guide
+# Update User Guide (mandatory)
 
-When you make **user-facing changes** to ZSMS, update `docs/USER_GUIDE.md` in the **same session** before finishing. Bump the **Last updated** date (YYYY-MM-DD) at the top of that file.
+When you add or change a **user-facing feature** in ZSMS, update `docs/USER_GUIDE.md` in the **same session and same change set** — before you mark the task done, commit, or push. Do not defer guide updates to a follow-up.
+
+Bump **Last updated** (YYYY-MM-DD) at the top of `docs/USER_GUIDE.md`. If the file is empty or missing content, restore from git history first, then apply your edits.
 
 ## When to update (required)
 
@@ -13,12 +15,13 @@ When you make **user-facing changes** to ZSMS, update `docs/USER_GUIDE.md` in th
 | ----------- | --------------------- |
 | New/removed dashboard page or sidebar item | Role navigation tables for affected role(s); sync from `components/dashboard/Sidebar.js` |
 | New/removed platform admin page | Platform admin navigation table; sync from `components/platform/PlatformShell.js` |
-| New user workflow (onboarding, ECZ, timetable, attendance, billing, SMS, mobile, **results types**) | Cross-role workflows + affected role's "Key workflows" |
-| New/changed subscription plan or pricing | Subscription and billing, Feature availability by plan |
+| New user workflow (onboarding, ECZ, timetable, attendance, billing, SMS credits, mobile, results) | Cross-role workflows + affected role's "Key workflows" |
+| New/changed subscription plan, pricing, or trial allowances | Subscription and billing, Feature availability by plan |
 | New portal type or role | Executive summary, Getting started, new role section |
 | Login, password, or access flow change | Getting started |
 | Mobile app feature added/removed | Mobile app section; note web-only vs mobile scope |
 | Solo/individual portal change | Solo teacher portal section |
+| New toast, block, or CTA users will see | Matching workflow + Troubleshooting if it is a common failure |
 | Troubleshooting for new common issue | Troubleshooting table |
 
 ## When to skip
@@ -30,7 +33,7 @@ When you make **user-facing changes** to ZSMS, update `docs/USER_GUIDE.md` in th
 
 ## How to update
 
-1. Read the current `docs/USER_GUIDE.md`.
+1. Read the current `docs/USER_GUIDE.md` (confirm it is not empty).
 2. Verify routes against `Sidebar.js`, `PlatformShell.js`, and actual `app/dashboard/` pages.
 3. Edit only sections affected by your change; link to deeper docs (ECZ, SMS, offline) rather than duplicating them.
 4. Set **Last updated** to today's date.
