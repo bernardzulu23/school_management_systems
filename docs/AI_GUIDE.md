@@ -4,16 +4,30 @@ All AI features use **Groq** (free tier) via the **Vercel AI SDK** (`ai` + `@ai-
 
 ## Cost
 
-| Item             | Cost                                                                |
-| ---------------- | ------------------------------------------------------------------- |
-| `ai` npm package | Free (MIT)                                                          |
-| `@ai-sdk/groq`   | Free (MIT)                                                          |
-| Groq API         | Free up to ~14,400 requests/day on free tier                        |
-| Default model    | `GROQ_MODEL` → `llama-3.3-70b-versatile`                            |
-| Stream / fast    | `GROQ_FAST_MODEL` → `llama-3.3-70b-versatile` (`GROQ_STREAM_MODEL`) |
-| Structured JSON  | `GROQ_STRUCTURED_MODEL` → `llama-3.1-8b-instant`                    |
+| Item                | Cost                                                                |
+| ------------------- | ------------------------------------------------------------------- |
+| `ai` npm package    | Free (MIT)                                                          |
+| `@ai-sdk/groq`      | Free (MIT)                                                          |
+| Groq API            | Free up to ~14,400 requests/day on free tier                        |
+| Default model       | `GROQ_MODEL` → `llama-3.3-70b-versatile`                            |
+| Stream / fast       | `GROQ_FAST_MODEL` → `llama-3.3-70b-versatile` (`GROQ_STREAM_MODEL`) |
+| Structured JSON     | `GROQ_STRUCTURED_MODEL` → `llama-3.1-8b-instant`                    |
+| OpenRouter fallback | `OPENROUTER_MODEL` → `openai/gpt-4o-mini`                           |
 
-Set `GROQ_API_KEY` (and optionally `GEMINI_API_KEY`, `OPENROUTER_API_KEY`, `OPENAI_API_KEY`, `HUGGINGFACE_API_KEY`) in `.env` / Vercel. Default Gemini model is `gemini-2.0-flash` (override with `GEMINI_MODEL`).
+Set at least one of `GROQ_API_KEY`, `GEMINI_API_KEY`, or `OPENROUTER_API_KEY` in `.env` / Vercel (recommended: Groq + OpenRouter). Defaults: Gemini `gemini-2.0-flash` (`GEMINI_MODEL`), OpenRouter `openai/gpt-4o-mini` (`OPENROUTER_MODEL`).
+
+### OpenRouter (fallback)
+
+1. Create an API key at [openrouter.ai/keys](https://openrouter.ai/keys).
+2. Add the vars below to `.env.local` and Vercel **Production**.
+3. Chain position: used when Groq and Gemini are unavailable or error.
+
+```env
+OPENROUTER_API_KEY=sk-or-v1-...
+OPENROUTER_MODEL=openai/gpt-4o-mini
+OPENROUTER_SITE_URL=https://bluepeacktechnologies.com
+OPENROUTER_APP_NAME=Zambian School Management System
+```
 
 ## Architecture
 

@@ -91,9 +91,7 @@ export class AIProviderChain {
         name: 'OpenRouter',
         key: process.env.OPENROUTER_API_KEY,
         endpoint: 'https://openrouter.ai/api/v1',
-        model: String(
-          process.env.OPENROUTER_MODEL || 'meta-llama/llama-3.1-8b-instruct:free'
-        ).trim(),
+        model: String(process.env.OPENROUTER_MODEL || 'openai/gpt-4o-mini').trim(),
         isAvailable: Boolean(String(process.env.OPENROUTER_API_KEY || '').trim()),
       },
       {
@@ -455,7 +453,7 @@ export class AIProviderChain {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${provider.key}`,
-        'HTTP-Referer': process.env.OPENROUTER_SITE_URL || 'https://zambia-schools.example',
+        'HTTP-Referer': process.env.OPENROUTER_SITE_URL || 'https://bluepeacktechnologies.com',
         'X-Title': process.env.OPENROUTER_APP_NAME || 'Zambian School Management System',
       },
       body: JSON.stringify({ model: provider.model, ...payload }),
