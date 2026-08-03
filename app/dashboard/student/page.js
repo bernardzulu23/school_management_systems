@@ -18,6 +18,8 @@ import { usePublishedTimetableView } from '@/lib/timetable/usePublishedTimetable
 import { printTimetable } from '@/lib/timetable/printTimetable'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import { queueGameComplete, tryOnlineOrQueue } from '@/lib/offline/student-ops'
+import toast from 'react-hot-toast'
 import { calculateGrade, getGradeBadgeClasses, isTopAchievementGrade } from '@/lib/gradingSystem'
 import { inferClassGrade } from '@/lib/timetable/activeClasses'
 import {
@@ -54,7 +56,6 @@ import { LearningAnalyticsPanel } from '@/components/analytics/LearningAnalytics
 import { StudyAssistant } from '@/components/student/StudyAssistant'
 import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 import { SCHOOL_SUBJECTS, getSubjectsByIds } from '@/data/subjects'
-import toast from 'react-hot-toast'
 
 // Games data is now fetched dynamically via API
 
@@ -221,20 +222,32 @@ export default function StudentDashboard() {
   const handleGameComplete = async (results) => {
     try {
       if (currentGame?.id) {
-        const res = await api.completeStudentGame({
+        const payload = {
           gameId: currentGame.id,
           percentage: results?.percentage ?? 0,
           score: results?.score ?? 0,
-        })
-        const data = res?.data?.data
-        if (data?.leveledUp) {
-          toast.success(`Level up! You reached level ${data.profile.level}`)
-        } else if (data?.pointsEarned) {
-          toast.success(`+${data.pointsEarned} points earned!`)
         }
-        // Refresh gamification widgets with the new data.
-        queryClient.invalidateQueries({ queryKey: ['student-dashboard'] })
-        queryClient.invalidateQueries({ queryKey: ['student-game-dashboard'] })
+        const outcome = await tryOnlineOrQueue(
+          () => api.completeStudentGame(payload),
+          () =>
+            queueGameComplete({
+              gameId: currentGame.id,
+              percentage: results?.percentage ?? 0,
+            })
+        )
+        if (!outcome.ok) throw outcome.error || new Error('Could not save game result')
+        if (outcome.offline) {
+          toast.success('Game result saved offline — will sync when online')
+        } else {
+          const data = outcome.data?.data?.data
+          if (data?.leveledUp) {
+            toast.success(`Level up! You reached level ${data.profile.level}`)
+          } else if (data?.pointsEarned) {
+            toast.success(`+${data.pointsEarned} points earned!`)
+          }
+          queryClient.invalidateQueries({ queryKey: ['student-dashboard'] })
+          queryClient.invalidateQueries({ queryKey: ['student-game-dashboard'] })
+        }
       }
     } catch (e) {
       toast.error('Could not save your game result')

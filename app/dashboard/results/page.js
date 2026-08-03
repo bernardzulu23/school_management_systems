@@ -22,6 +22,9 @@ import { getGradeBadgeClasses } from '@/lib/gradingSystem'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
 import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 import { PrimarySchoolFeatureUnavailable } from '@/components/school/PrimarySchoolFeatureUnavailable'
+import { cacheAdminJson, getCachedAdminJson } from '@/lib/offline/admin-ops'
+import { isBrowserOnline, isNetworkFailure } from '@/lib/offline/network'
+import toast from 'react-hot-toast'
 
 export default function ResultsPage() {
   const [selectedClass, setSelectedClass] = useState('')
@@ -49,15 +52,39 @@ export default function ResultsPage() {
       selectedTeacher,
       selectedResultType,
     ],
-    queryFn: () =>
-      api
-        .getResultsOverview({
-          class: selectedClass || undefined,
-          subject: selectedSubject || undefined,
-          teacher: selectedTeacher || undefined,
-          resultType: selectedResultType || undefined,
-        })
-        .then((res) => res.data),
+    queryFn: async () => {
+      const cacheKey = `dashboard:results:${selectedClass || ''}:${selectedSubject || ''}:${selectedTeacher || ''}:${selectedResultType || ''}`
+      try {
+        if (isBrowserOnline()) {
+          try {
+            const res = await api.getResultsOverview({
+              class: selectedClass || undefined,
+              subject: selectedSubject || undefined,
+              teacher: selectedTeacher || undefined,
+              resultType: selectedResultType || undefined,
+            })
+            const data = res.data
+            await cacheAdminJson(cacheKey, data)
+            return data
+          } catch (e) {
+            if (!isNetworkFailure(e)) throw e
+          }
+        }
+        const cached = await getCachedAdminJson(cacheKey)
+        if (cached) {
+          toast('Showing cached results (offline)', { icon: '📡' })
+          return cached
+        }
+        throw new Error('No cached results available offline')
+      } catch (e) {
+        const cached = await getCachedAdminJson(cacheKey)
+        if (cached) {
+          toast('Showing cached results (offline)', { icon: '📡' })
+          return cached
+        }
+        throw e
+      }
+    },
     enabled: !isStudent,
   })
 

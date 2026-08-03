@@ -2,6 +2,11 @@ import toast from 'react-hot-toast'
 import type { Assignment } from './types'
 import { useTimetableStore } from './timetableStore'
 import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
+import {
+  queueTimetableDelete,
+  queueTimetablePatch,
+  tryOnlineOrQueue,
+} from '@/lib/offline/admin-ops'
 
 export interface TimetableMutationContext {
   term: string
@@ -34,16 +39,23 @@ export async function persistAssignmentMove(a: Assignment, ctx: TimetableMutatio
     ...(a.teacherId ? { teacherId: a.teacherId } : {}),
   })
 
-  try {
-    const res = await sessionFetch('/api/timetable/entries', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(patchBody(a, ctx)),
-    })
-    const json = await res.json().catch(() => ({}))
-    if (!res.ok) throw new Error(authErrorMessage(res.status, json))
-  } catch (e: unknown) {
+  const body = patchBody(a, ctx)
+  const result = await tryOnlineOrQueue(
+    async () => {
+      const res = await sessionFetch('/api/timetable/entries', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(authErrorMessage(res.status, json))
+      return json
+    },
+    () => queueTimetablePatch(body)
+  )
+
+  if (!result.ok) {
     if (before) {
       useTimetableStore.getState().moveAssignment(a.id, {
         dayOfWeek: before.dayOfWeek,
@@ -56,8 +68,11 @@ export async function persistAssignmentMove(a: Assignment, ctx: TimetableMutatio
     } else {
       await ctx.loadFromApi({ term: ctx.term, academicYear: ctx.academicYear, status: 'draft' })
     }
-    toast.error(e instanceof Error ? e.message : 'Failed to save timetable change')
-    throw e
+    toast.error(result.error.message || 'Failed to save timetable change')
+    throw result.error
+  }
+  if (result.offline) {
+    toast.success('Saved offline — will sync when online')
   }
 }
 
@@ -92,18 +107,28 @@ export async function persistAssignmentSwap(
     }
   )
 
-  try {
-    for (const a of [nextB, nextA]) {
-      const res = await sessionFetch('/api/timetable/entries', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify(patchBody(a, ctx)),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(authErrorMessage(res.status, json))
+  const bodyA = patchBody(nextA, ctx)
+  const bodyB = patchBody(nextB, ctx)
+  const result = await tryOnlineOrQueue(
+    async () => {
+      for (const body of [bodyB, bodyA]) {
+        const res = await sessionFetch('/api/timetable/entries', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(body),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(authErrorMessage(res.status, json))
+      }
+    },
+    async () => {
+      await queueTimetablePatch(bodyB)
+      await queueTimetablePatch(bodyA)
     }
-  } catch (e: unknown) {
+  )
+
+  if (!result.ok) {
     store.swapAssignments(
       nextA.id,
       {
@@ -124,8 +149,11 @@ export async function persistAssignmentSwap(
         ...(beforeB.teacherId ? { teacherId: beforeB.teacherId } : {}),
       }
     )
-    toast.error(e instanceof Error ? e.message : 'Failed to save swap')
-    throw e
+    toast.error(result.error.message || 'Failed to save swap')
+    throw result.error
+  }
+  if (result.offline) {
+    toast.success('Swap saved offline — will sync when online')
   }
 }
 
@@ -139,21 +167,28 @@ export async function persistAssignmentDelete(
 
   store.removeAssignment(assignmentId)
 
-  try {
-    const res = await sessionFetch('/api/timetable/entries', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({ id: assignmentId, term: ctx.term, academicYear: ctx.academicYear }),
-    })
-    const json = await res.json().catch(() => ({}))
-    if (!res.ok) throw new Error(authErrorMessage(res.status, json))
-    toast.success('Deleted')
-  } catch (e: unknown) {
+  const body = { id: assignmentId, term: ctx.term, academicYear: ctx.academicYear }
+  const result = await tryOnlineOrQueue(
+    async () => {
+      const res = await sessionFetch('/api/timetable/entries', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(authErrorMessage(res.status, json))
+      return json
+    },
+    () => queueTimetableDelete(body)
+  )
+
+  if (!result.ok) {
     store.addAssignment(before)
-    toast.error(e instanceof Error ? e.message : 'Failed to delete timetable entry')
-    throw e
+    toast.error(result.error.message || 'Failed to delete timetable entry')
+    throw result.error
   }
+  toast.success(result.offline ? 'Deleted offline — will sync when online' : 'Deleted')
 }
 
 export async function persistClearTimetable(ctx: TimetableMutationContext) {
@@ -161,23 +196,30 @@ export async function persistClearTimetable(ctx: TimetableMutationContext) {
   const previous = [...store.assignments]
   store.resetAssignments()
 
-  try {
-    const res = await sessionFetch('/api/timetable/entries', {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        clearAll: true,
-        term: ctx.term,
-        academicYear: ctx.academicYear,
-      }),
-    })
-    const json = await res.json().catch(() => ({}))
-    if (!res.ok) throw new Error(authErrorMessage(res.status, json))
-    toast.success('Timetable cleared')
-  } catch (e: unknown) {
-    store.replaceAssignments(previous, { source: 'update' })
-    toast.error(e instanceof Error ? e.message : 'Failed to clear timetable')
-    throw e
+  const body = {
+    clearAll: true,
+    term: ctx.term,
+    academicYear: ctx.academicYear,
   }
+  const result = await tryOnlineOrQueue(
+    async () => {
+      const res = await sessionFetch('/api/timetable/entries', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(body),
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(authErrorMessage(res.status, json))
+      return json
+    },
+    () => queueTimetableDelete(body)
+  )
+
+  if (!result.ok) {
+    store.replaceAssignments(previous, { source: 'update' })
+    toast.error(result.error.message || 'Failed to clear timetable')
+    throw result.error
+  }
+  toast.success(result.offline ? 'Cleared offline — will sync when online' : 'Timetable cleared')
 }

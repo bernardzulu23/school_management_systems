@@ -9,6 +9,8 @@ import { ArrowLeft, BarChart3, ClipboardList, UserCheck } from 'lucide-react'
 import Link from 'next/link'
 import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
+import { cacheAdminJson, getCachedAdminJson } from '@/lib/offline/admin-ops'
+import { isBrowserOnline, isNetworkFailure } from '@/lib/offline/network'
 
 function statusLabel(ok) {
   return ok ? 'Submitted' : 'Pending'
@@ -23,8 +25,25 @@ export default function MonitoringPage() {
     queryKey: ['hod-teacher-progress-monitoring', term, year],
     queryFn: async () => {
       const qs = new URLSearchParams({ term, year: String(year) })
-      const res = await api.get(`/dashboard/hod/teacher-progress?${qs}`)
-      return res.data
+      const cacheKey = `hod:teacher-progress:${term}:${year}`
+      try {
+        if (isBrowserOnline()) {
+          try {
+            const res = await api.get(`/dashboard/hod/teacher-progress?${qs}`)
+            await cacheAdminJson(cacheKey, res.data)
+            return res.data
+          } catch (e) {
+            if (!isNetworkFailure(e)) throw e
+          }
+        }
+        const cached = await getCachedAdminJson(cacheKey)
+        if (cached) return cached
+        throw new Error('No cached HOD progress available offline')
+      } catch (e) {
+        const cached = await getCachedAdminJson(cacheKey)
+        if (cached) return cached
+        throw e
+      }
     },
     staleTime: 60 * 1000,
   })
@@ -33,8 +52,25 @@ export default function MonitoringPage() {
     queryKey: ['hod-teacher-performance-monitoring', term, year],
     queryFn: async () => {
       const qs = new URLSearchParams({ term, year: String(year) })
-      const res = await api.get(`/dashboard/hod/teacher-performance?${qs}`)
-      return res.data
+      const cacheKey = `hod:teacher-performance:${term}:${year}`
+      try {
+        if (isBrowserOnline()) {
+          try {
+            const res = await api.get(`/dashboard/hod/teacher-performance?${qs}`)
+            await cacheAdminJson(cacheKey, res.data)
+            return res.data
+          } catch (e) {
+            if (!isNetworkFailure(e)) throw e
+          }
+        }
+        const cached = await getCachedAdminJson(cacheKey)
+        if (cached) return cached
+        throw new Error('No cached HOD performance available offline')
+      } catch (e) {
+        const cached = await getCachedAdminJson(cacheKey)
+        if (cached) return cached
+        throw e
+      }
     },
     staleTime: 60 * 1000,
   })

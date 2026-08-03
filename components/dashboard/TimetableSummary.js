@@ -8,6 +8,7 @@ import SkeletonLoader from '@/components/SkeletonLoader'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/lib/auth'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
+import { isBrowserOnline } from '@/lib/offline/network'
 import { useTimetableStore } from '@/lib/timetable/timetableStore'
 import { filterClassesForWallGrid, inferClassGrade } from '@/lib/timetable/activeClasses'
 import { AscClassWallGrid } from '@/components/timetable/AscClassWallGrid'
@@ -441,6 +442,12 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
 
     const publishToServer = async () => {
       if (!canPublish) return
+      if (!isBrowserOnline()) {
+        toast.error(
+          'Publishing needs internet (may send SMS). Edit/save the draft offline, then publish when online.'
+        )
+        return
+      }
       setPublishing(true)
       try {
         const snap = readTimetableConflictCountsSnapshot()

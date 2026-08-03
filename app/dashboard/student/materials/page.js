@@ -23,6 +23,14 @@ import Link from 'next/link'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import toast from 'react-hot-toast'
+import {
+  cacheStudentJson,
+  getCachedStudentJson,
+  queueMaterialBookmark,
+  queueMaterialDownload,
+  tryOnlineOrQueue,
+} from '@/lib/offline/student-ops'
+import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
 
 export default function StudyMaterialsPage() {
   const [activeTab, setActiveTab] = useState('all')
@@ -34,16 +42,39 @@ export default function StudyMaterialsPage() {
   const { data: studyMaterials = [], isLoading } = useQuery({
     queryKey: ['student-materials'],
     queryFn: async () => {
-      const res = await api.getStudentMaterials()
-      return res.data.data
+      try {
+        const res = await api.getStudentMaterials()
+        const data = res.data.data
+        await cacheStudentJson('student:materials', data)
+        return data
+      } catch (e) {
+        const cached = await getCachedStudentJson('student:materials')
+        if (Array.isArray(cached) && cached.length) {
+          toast('Using cached materials (offline)', { icon: '📡' })
+          return cached
+        }
+        throw e
+      }
     },
   })
 
   const bookmarkMutation = useMutation({
-    mutationFn: (id) => api.toggleMaterialBookmark(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['student-materials'])
-      toast.success('Bookmark updated')
+    mutationFn: async ({ id, nextBookmarked }) => {
+      const result = await tryOnlineOrQueue(
+        () => api.toggleMaterialBookmark(id, nextBookmarked),
+        () => queueMaterialBookmark({ materialId: id, bookmarked: nextBookmarked })
+      )
+      if (!result.ok) throw result.error || new Error('Failed to update bookmark')
+      return { ...result, id, nextBookmarked }
+    },
+    onSuccess: (result) => {
+      queryClient.setQueryData(['student-materials'], (prev) => {
+        if (!Array.isArray(prev)) return prev
+        return prev.map((m) =>
+          m.id === result.id ? { ...m, isBookmarked: result.nextBookmarked } : m
+        )
+      })
+      toast.success(result.offline ? 'Bookmark saved offline' : 'Bookmark updated')
     },
     onError: () => {
       toast.error('Failed to update bookmark')
@@ -51,7 +82,14 @@ export default function StudyMaterialsPage() {
   })
 
   const downloadMutation = useMutation({
-    mutationFn: (id) => api.trackMaterialDownload(id),
+    mutationFn: async (id) => {
+      const result = await tryOnlineOrQueue(
+        () => api.trackMaterialDownload(id),
+        () => queueMaterialDownload(id)
+      )
+      if (!result.ok) throw result.error || new Error('Failed to track download')
+      return result
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['student-materials'])
     },
@@ -64,12 +102,15 @@ export default function StudyMaterialsPage() {
       await openMaterialFile(material.fileUrl, { title: material.title })
       toast.success('Download started')
     } catch (e) {
-      toast.error(e?.message || 'Could not open file')
+      toast.error(e?.message || 'Could not open file (needs internet for the file itself)')
     }
   }
 
-  const handleBookmark = (id) => {
-    bookmarkMutation.mutate(id)
+  const handleBookmark = (material) => {
+    bookmarkMutation.mutate({
+      id: material.id,
+      nextBookmarked: !material.isBookmarked,
+    })
   }
 
   // Extract unique subjects from materials
@@ -170,7 +211,7 @@ export default function StudyMaterialsPage() {
     <DashboardLayout title="Study Materials">
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center space-x-4">
             <Link href="/dashboard/student">
               <Button variant="outline" size="sm">
@@ -188,14 +229,11 @@ export default function StudyMaterialsPage() {
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
+            <SyncStatusBadge channel="all" noun="change" />
             <Button variant="outline">
               <Download className="h-4 w-4 mr-2" />
               Download All
-            </Button>
-            <Button>
-              <Search className="h-4 w-4 mr-2" />
-              Advanced Search
             </Button>
           </div>
         </div>
@@ -356,7 +394,7 @@ export default function StudyMaterialsPage() {
                       <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => handleBookmark(material.id)}
+                        onClick={() => handleBookmark(material)}
                         disabled={bookmarkMutation.isPending}
                       >
                         <Bookmark

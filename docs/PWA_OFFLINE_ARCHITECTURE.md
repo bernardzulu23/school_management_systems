@@ -105,20 +105,27 @@ Format version `1`:
 - CBC competency ratings offline + read cache
 - Sync via central engine channel `mutations`
 
-### Phase 3 — Students
+### Phase 3 — Students ✅
 
-- Flashcards / materials / goals read-cache + submit queues
-- Games complete queue
+- Flashcard session complete offline (+ local score UI); AI deck generate stays online
+- Materials bookmark/download metadata queues; file open still needs network for the blob
+- Goals CRUD offline (local ids for creates)
+- Mock exam submit offline; AI start stays online
+- Games complete queued per play
 
-### Phase 4 — Admins / HT / HOD
+### Phase 4 — Admins / HT / HOD ✅
 
-- Timetable draft sync, announcements drafts, read-only reports cache
+- Timetable draft sync / patch / delete / conflict dismiss offline (`mutationQueue`, channel `timetable-draft`)
+- Device-local notice drafts (`announcementDrafts` Dexie) at `/dashboard/headteacher/notices` — not server-published; SMS/publish stay online
+- Read-cache: results overview, MOE / exam / STEM analytics pages, HOD monitoring, timetable views
+- Publish / generate / clone / allocations stay online-only
 
-### Phase 5 — Parents + mobile parity
+### Phase 5 — Parents + mobile parity ✅
 
-- Parent read-cache (children, fees view, results)
-- Expo seed import + shared sync contracts
-- School LAN hub (optional later)
+- Parent read-cache for children list + child portal payload (fees / attendance / results / reports)
+- PARENT seed packs include portal snapshots (`parent:children`, `parent:child:{id}`)
+- Shared sync contracts: `lib/offline/sync-contracts.js` ↔ `zsms-mobile/src/offline/syncContracts.ts`
+- Expo: import `.zsmsseed` on Profile; offline fallbacks for assignments, rosters, SBA tasks
 
 ### Out of scope for offline
 

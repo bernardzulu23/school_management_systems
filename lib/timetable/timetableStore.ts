@@ -19,6 +19,8 @@ import {
   dedupeAssignmentsByClassSlot,
 } from './assignmentInvariants'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
+import { cacheAdminJson, getCachedAdminJson } from '@/lib/offline/admin-ops'
+import { isBrowserOnline, isNetworkFailure } from '@/lib/offline/network'
 
 export type TimetableVersion = 'normal' | 'farming' | 'emergency'
 export type TimetableSeasonMode = 'normal' | 'planting' | 'harvest'
@@ -583,16 +585,11 @@ export const useTimetableStore = create<TimetableStoreState>()(
             status = 'published',
             scope = null,
           } = opts
-          try {
-            const qs = new URLSearchParams({
-              term,
-              academicYear,
-              ...(status ? { status } : {}),
-            })
-            if (scope === 'department') qs.set('scope', 'department')
-            const res = await sessionFetch(`/api/timetable/view?${qs}`, { cache: 'no-store' })
-            if (!res.ok) throw new Error('Failed to fetch timetable')
-            const data = await res.json()
+          const cacheKey = `timetable:view:${term}:${academicYear}:${status}${
+            scope === 'department' ? ':dept' : ''
+          }`
+
+          const applyPayload = (data: any) => {
             const assignments = normalizeAssignments(
               Array.isArray(data.assignments) ? data.assignments : []
             )
@@ -619,8 +616,31 @@ export const useTimetableStore = create<TimetableStoreState>()(
               pendingChanges: status === 'published' ? [] : get().pendingChanges,
             })
             return data
+          }
+
+          try {
+            const qs = new URLSearchParams({
+              term,
+              academicYear,
+              ...(status ? { status } : {}),
+            })
+            if (scope === 'department') qs.set('scope', 'department')
+            const res = await sessionFetch(`/api/timetable/view?${qs}`, { cache: 'no-store' })
+            if (!res.ok) throw new Error('Failed to fetch timetable')
+            const data = await res.json()
+            await cacheAdminJson(cacheKey, data)
+            return applyPayload(data)
           } catch (err) {
             console.error('[timetableStore loadFromApi]', err)
+            try {
+              const cached = await getCachedAdminJson(cacheKey)
+              if (cached) return applyPayload(cached)
+            } catch {
+              /* ignore cache read errors */
+            }
+            if (!isBrowserOnline() || isNetworkFailure(err)) {
+              return null
+            }
             return null
           }
         },

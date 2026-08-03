@@ -44,6 +44,12 @@ import {
   persistAssignmentSwap,
   persistClearTimetable,
 } from '@/lib/timetable/timetableMutations'
+import {
+  isBrowserOnline,
+  queueTimetablePatch,
+  queueTimetableSyncDraft,
+  tryOnlineOrQueue,
+} from '@/lib/offline/admin-ops'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { Check, X, Pencil, Trash2 } from 'lucide-react'
 import { AdminAllocationEditDialog } from '@/components/timetable/AdminAllocationEditDialog'
@@ -1109,21 +1115,34 @@ function HeadteacherTimetablePageContent() {
       return
     }
 
+    const body = {
+      term,
+      academicYear,
+      assignments: rows,
+      replaceExisting: true,
+    }
     try {
-      const res = await sessionFetch('/api/timetable/entries/sync-draft', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          term,
-          academicYear,
-          assignments: rows,
-          replaceExisting: true,
-        }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || 'Failed to save draft')
-      toast.success(`Saved ${json.saved ?? 0} periods to database`)
+      const result = await tryOnlineOrQueue(
+        async () => {
+          const res = await sessionFetch('/api/timetable/entries/sync-draft', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(body),
+          })
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok) throw new Error(json?.error || 'Failed to save draft')
+          return json
+        },
+        () => queueTimetableSyncDraft(body)
+      )
+      if (!result.ok) throw result.error
+      if (result.offline) {
+        toast.success('Draft saved offline — will sync when online')
+        detectConflicts()
+        return
+      }
+      toast.success(`Saved ${result.data?.saved ?? 0} periods to database`)
       await reloadFromServer({ term, academicYear, status: 'draft' })
       const slots = useTimetableStore.getState().timeSlots
       if (slots.length) setTimeSlots(slots as TimeSlot[])
@@ -1330,6 +1349,12 @@ function HeadteacherTimetablePageContent() {
             <Button
               onClick={async () => {
                 if (!canPublish) return
+                if (!isBrowserOnline()) {
+                  toast.error(
+                    'Publishing needs internet (and may send SMS). Save the draft offline first, then publish when online.'
+                  )
+                  return
+                }
                 setDbPublishing(true)
                 try {
                   if (!isPublished && assignments.length) {
@@ -2527,27 +2552,38 @@ function HeadteacherTimetablePageContent() {
                                 variant="outline"
                                 onClick={async () => {
                                   updateAssignment(lesson.id, { teacherId: c.teacher.id })
-                                  try {
-                                    const res = await sessionFetch('/api/timetable/entries', {
-                                      method: 'PATCH',
-                                      headers: { 'Content-Type': 'application/json' },
-                                      credentials: 'include',
-                                      body: JSON.stringify({
-                                        id: lesson.id,
-                                        teacherId: c.teacher.id,
-                                        term,
-                                        academicYear,
-                                      }),
-                                    })
-                                    const json = await res.json().catch(() => ({}))
-                                    if (!res.ok) {
-                                      throw new Error(json?.error || 'Failed to save cover')
-                                    }
-                                    toast.success('Cover teacher saved to draft')
-                                  } catch (err: any) {
-                                    toast.error(err?.message || 'Cover save failed')
-                                    await loadFromApi({ term, academicYear, status: 'draft' })
+                                  const patch = {
+                                    id: lesson.id,
+                                    teacherId: c.teacher.id,
+                                    term,
+                                    academicYear,
                                   }
+                                  const result = await tryOnlineOrQueue(
+                                    async () => {
+                                      const res = await sessionFetch('/api/timetable/entries', {
+                                        method: 'PATCH',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        credentials: 'include',
+                                        body: JSON.stringify(patch),
+                                      })
+                                      const json = await res.json().catch(() => ({}))
+                                      if (!res.ok) {
+                                        throw new Error(json?.error || 'Failed to save cover')
+                                      }
+                                      return json
+                                    },
+                                    () => queueTimetablePatch(patch)
+                                  )
+                                  if (!result.ok) {
+                                    toast.error(result.error.message || 'Cover save failed')
+                                    await loadFromApi({ term, academicYear, status: 'draft' })
+                                    return
+                                  }
+                                  toast.success(
+                                    result.offline
+                                      ? 'Cover saved offline — will sync when online'
+                                      : 'Cover teacher saved to draft'
+                                  )
                                 }}
                                 className="zsms-hover-raise"
                               >

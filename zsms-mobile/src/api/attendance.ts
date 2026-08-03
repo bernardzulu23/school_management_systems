@@ -1,10 +1,28 @@
 import { api } from './client'
 import type { AttendanceBatch, AttendanceRecord, AttendanceStatus, RosterStudent } from '@/types'
+import { getMobileRoster } from '@/offline/seedImport'
 
 export async function loadRoster(classId: string, subjectId?: string): Promise<RosterStudent[]> {
   const params = new URLSearchParams({ classId })
   if (subjectId) params.set('subjectId', subjectId)
-  return api<RosterStudent[]>(`/api/mobile/class-roster?${params}`)
+  try {
+    return await api<RosterStudent[]>(`/api/mobile/class-roster?${params}`)
+  } catch (e) {
+    const seeded = await getMobileRoster(classId)
+    if (seeded?.students && Array.isArray(seeded.students)) {
+      return seeded.students.map((s: { id?: string; name?: string; class?: string }) => ({
+        id: String(s.id || ''),
+        name: String(s.name || 'Student'),
+        class: s.class != null ? String(s.class) : null,
+        qrCode: null,
+        faceEmbedding: null,
+        twinGroupId: null,
+        requiresSecondaryAuth: false,
+        secondaryAuthMethod: null,
+      }))
+    }
+    throw e
+  }
 }
 
 export async function loadExistingAttendance(

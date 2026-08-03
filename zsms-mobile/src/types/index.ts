@@ -34,8 +34,10 @@ export interface TeachingAssignment {
 
 export interface SessionContext {
   user: { id: string; name: string; role: string }
-  school: { name: string | null; logoUrl: string | null }
+  school: { id?: string; name: string | null; logoUrl: string | null; subdomain?: string }
   assignments: TeachingAssignment[]
+  /** True when assignments came from an imported .zsmsseed pack */
+  fromSeed?: boolean
 }
 
 export interface RosterStudent {

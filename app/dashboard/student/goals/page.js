@@ -27,6 +27,17 @@ import Link from 'next/link'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { toast, Toaster } from 'react-hot-toast'
+import {
+  cacheStudentJson,
+  getCachedStudentJson,
+  isLocalGoalId,
+  newLocalGoalId,
+  queueGoalCreate,
+  queueGoalDelete,
+  queueGoalUpdate,
+  tryOnlineOrQueue,
+} from '@/lib/offline/student-ops'
+import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
 
 export default function StudentGoalsPage() {
   const [activeTab, setActiveTab] = useState('academic')
@@ -60,8 +71,15 @@ export default function StudentGoalsPage() {
     queryFn: async () => {
       try {
         const res = await api.getStudentGoals()
-        return res.data.data
+        const data = res.data.data
+        await cacheStudentJson('student:goals', data)
+        return data
       } catch (error) {
+        const cached = await getCachedStudentJson('student:goals')
+        if (cached) {
+          toast('Using cached goals (offline)', { icon: '📡' })
+          return cached
+        }
         toast.error('Failed to load goals')
         return null
       }
@@ -70,41 +88,111 @@ export default function StudentGoalsPage() {
 
   // Mutations
   const createMutation = useMutation({
-    mutationFn: (data) => api.createStudentGoal(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['student-goals'])
+    mutationFn: async (data) => {
+      const localId = newLocalGoalId()
+      const result = await tryOnlineOrQueue(
+        () => api.createStudentGoal(data),
+        () => queueGoalCreate(data, localId)
+      )
+      if (!result.ok) throw result.error || new Error('Failed to create goal')
+      return { ...result, localId, data }
+    },
+    onSuccess: (result) => {
+      if (result.offline) {
+        const typeKey = result.data.type === 'personal' ? 'personal' : 'academic'
+        queryClient.setQueryData(['student-goals'], (prev) => {
+          const base = prev || { academic: [], personal: [] }
+          const row = {
+            id: result.localId,
+            title: result.data.title,
+            category: typeKey,
+            description: result.data.description || '',
+            targetDate: result.data.targetDate || null,
+            status: result.data.status || 'in_progress',
+            progress: 0,
+            pendingSync: true,
+          }
+          return {
+            ...base,
+            [typeKey]: [row, ...(base[typeKey] || [])],
+          }
+        })
+        toast.success('Goal saved offline — will sync when online')
+      } else {
+        queryClient.invalidateQueries(['student-goals'])
+        toast.success('Goal created successfully')
+      }
       setIsAddModalOpen(false)
       resetForm()
-      toast.success('Goal created successfully')
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || 'Failed to create goal')
+      toast.error(error.response?.data?.message || error.message || 'Failed to create goal')
     },
   })
 
   const updateMutation = useMutation({
-    mutationFn: (data) => api.updateStudentGoal(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['student-goals'])
+    mutationFn: async (data) => {
+      const result = await tryOnlineOrQueue(
+        () => api.updateStudentGoal(data),
+        () => queueGoalUpdate(data)
+      )
+      if (!result.ok) throw result.error || new Error('Failed to update goal')
+      return { ...result, data }
+    },
+    onSuccess: (result) => {
+      if (result.offline) {
+        queryClient.setQueryData(['student-goals'], (prev) => {
+          const base = prev || { academic: [], personal: [] }
+          const mapRow = (g) => (g.id === result.data.id ? { ...g, ...result.data } : g)
+          return {
+            academic: (base.academic || []).map(mapRow),
+            personal: (base.personal || []).map(mapRow),
+          }
+        })
+        toast.success('Goal updated offline — will sync when online')
+      } else {
+        queryClient.invalidateQueries(['student-goals'])
+        toast.success('Goal updated successfully')
+      }
       setIsEditModalOpen(false)
       resetForm()
-      toast.success('Goal updated successfully')
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || 'Failed to update goal')
+      toast.error(error.response?.data?.message || error.message || 'Failed to update goal')
     },
   })
 
   const deleteMutation = useMutation({
-    mutationFn: (id) => api.deleteStudentGoal(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries(['student-goals'])
+    mutationFn: async (id) => {
+      const result = await tryOnlineOrQueue(
+        () => api.deleteStudentGoal(id),
+        () => queueGoalDelete(id)
+      )
+      if (!result.ok) throw result.error || new Error('Failed to delete goal')
+      return { ...result, id }
+    },
+    onSuccess: (result) => {
+      if (result.offline || isLocalGoalId(result.id)) {
+        queryClient.setQueryData(['student-goals'], (prev) => {
+          const base = prev || { academic: [], personal: [] }
+          const filterRow = (g) => g.id !== result.id
+          return {
+            academic: (base.academic || []).filter(filterRow),
+            personal: (base.personal || []).filter(filterRow),
+          }
+        })
+        toast.success(
+          result.offline ? 'Delete queued offline — will sync when online' : 'Goal deleted'
+        )
+      } else {
+        queryClient.invalidateQueries(['student-goals'])
+        toast.success('Goal deleted successfully')
+      }
       setIsDeleteModalOpen(false)
       setSelectedGoal(null)
-      toast.success('Goal deleted successfully')
     },
     onError: (error) => {
-      toast.error(error.response?.data?.message || 'Failed to delete goal')
+      toast.error(error.response?.data?.message || error.message || 'Failed to delete goal')
     },
   })
 

@@ -5,6 +5,7 @@ import { useAuthStore } from '@/store/authStore'
 import type { SessionContext, TeachingAssignment } from '@/types'
 import { ERROR_MESSAGES } from '@/lib/security/userFacingErrors'
 import { markAuthOkNow, wasRecentlyAuthenticated, msSinceAuthOk } from '@/lib/authGrace'
+import { getSeedTeachingAssignments } from '@/offline/seedImport'
 
 interface SessionState {
   context: SessionContext | null
@@ -12,6 +13,18 @@ interface SessionState {
   error: string | null
   load: () => Promise<void>
   getTodaySummary: () => { assignmentCount: number; message: string }
+}
+
+async function contextFromSeedFallback(): Promise<SessionContext | null> {
+  const userId = String(useAuthStore.getState().user?.id || '')
+  const assignments = (await getSeedTeachingAssignments(userId)) as TeachingAssignment[] | null
+  if (!Array.isArray(assignments) || !assignments.length) return null
+  return {
+    user: useAuthStore.getState().user as SessionContext['user'],
+    school: useAuthStore.getState().school as SessionContext['school'],
+    assignments,
+    fromSeed: true,
+  } as SessionContext
 }
 
 export const useSessionStore = create<SessionState>((set, get) => ({
@@ -49,6 +62,11 @@ export const useSessionStore = create<SessionState>((set, get) => ({
               })
               return
             }
+            const seeded = await contextFromSeedFallback()
+            if (seeded) {
+              set({ context: seeded, loading: false, error: null })
+              return
+            }
             set({
               loading: false,
               error:
@@ -66,6 +84,12 @@ export const useSessionStore = create<SessionState>((set, get) => ({
           loading: false,
           error: ERROR_MESSAGES.SESSION_EXPIRED,
         })
+        return
+      }
+
+      const seeded = await contextFromSeedFallback()
+      if (seeded) {
+        set({ context: seeded, loading: false, error: null })
         return
       }
 

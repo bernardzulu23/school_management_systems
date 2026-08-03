@@ -1,6 +1,8 @@
 import { api, ApiError } from './client'
 import type { RosterStudent, SbaScoreSubmit, SbaTask } from '@/types'
 import { loadRoster } from './attendance'
+import { getMobileCachedJson } from '@/offline/seedImport'
+import { CACHE_KEYS } from '@/offline/syncContracts'
 
 export interface SbaTasksFilters {
   formLevel?: number
@@ -18,19 +20,39 @@ export async function loadSbaTasks(filters: SbaTasksFilters = {}): Promise<SbaTa
   if (filters.formLevel != null) params.set('formLevel', String(filters.formLevel))
   if (filters.subjectId) params.set('subjectId', filters.subjectId)
   if (filters.component) params.set('component', filters.component)
-  const data = await api<{
-    tasks?: SbaTask[]
-    assessments?: SbaTask[]
-    data?: SbaTask[]
-  }>(`/api/assessments/sba-tasks?${params}`)
+  try {
+    const data = await api<{
+      tasks?: SbaTask[]
+      assessments?: SbaTask[]
+      data?: SbaTask[]
+    }>(`/api/assessments/sba-tasks?${params}`)
 
-  const fromData = asArray<SbaTask>(data.data)
-  if (fromData.length) return fromData
-  const fromTasks = asArray<SbaTask>(data.tasks)
-  if (fromTasks.length) return fromTasks
-  const fromAssessments = asArray<SbaTask>(data.assessments)
-  if (fromAssessments.length) return fromAssessments
-  return Array.isArray(data) ? (data as SbaTask[]) : []
+    const fromData = asArray<SbaTask>(data.data)
+    if (fromData.length) return fromData
+    const fromTasks = asArray<SbaTask>(data.tasks)
+    if (fromTasks.length) return fromTasks
+    const fromAssessments = asArray<SbaTask>(data.assessments)
+    if (fromAssessments.length) return fromAssessments
+    return Array.isArray(data) ? (data as SbaTask[]) : []
+  } catch (e) {
+    const seeded = await getMobileCachedJson<SbaTask[]>(CACHE_KEYS.sbaTasks)
+    if (Array.isArray(seeded) && seeded.length) {
+      return seeded.filter((t) => {
+        if (
+          filters.formLevel != null &&
+          Number((t as { formLevel?: number }).formLevel) !== filters.formLevel
+        )
+          return false
+        if (
+          filters.subjectId &&
+          String((t as { subjectId?: string }).subjectId) !== filters.subjectId
+        )
+          return false
+        return true
+      })
+    }
+    throw e
+  }
 }
 
 export type ScoreRow = {

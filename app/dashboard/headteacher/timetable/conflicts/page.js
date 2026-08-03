@@ -9,6 +9,7 @@ import {
   conflictAuditKey,
   canDismissAuditRow,
 } from '@/hooks/useTimetableDraftMeta'
+import { queueDraftMetaPatch, tryOnlineOrQueue } from '@/lib/offline/admin-ops'
 import {
   AlertTriangle,
   CheckCircle,
@@ -95,25 +96,42 @@ function TimetableConflictsContent() {
     setSuccessMsg(null)
     setError(null)
     try {
-      const res = await api.dismissTimetableDraftAudit({
+      const body = {
         term,
         academicYear,
         auditKey: key,
         mode: 'add',
-      })
-      const data = res?.data ?? res
-      if (!data?.success) throw new Error(data?.error || 'Dismiss failed')
-      setSuccessMsg('Warning dismissed — it will stay hidden until you restore dismissed items.')
+      }
+      const outcome = await tryOnlineOrQueue(
+        async () => {
+          const res = await api.dismissTimetableDraftAudit(body)
+          const data = res?.data ?? res
+          if (!data?.success && data?.success !== undefined) {
+            throw new Error(data?.error || 'Dismiss failed')
+          }
+          return data
+        },
+        () => queueDraftMetaPatch(body)
+      )
+      if (!outcome.ok) throw outcome.error
+      setSuccessMsg(
+        outcome.offline
+          ? 'Dismissal saved offline — will sync when online.'
+          : 'Warning dismissed — it will stay hidden until you restore dismissed items.'
+      )
       setExpanded(null)
-      notifyTimetableConflictsUpdated({
-        term,
-        academicYear,
-        conflictCount: Number(data.conflictCount ?? 0),
-        conflictErrors: Number(data.conflictErrors ?? 0),
-        conflictWarnings: Number(data.conflictWarnings ?? 0),
-        lastScannedAt: new Date().toISOString(),
-      })
-      await fetchConflicts()
+      if (!outcome.offline) {
+        const data = outcome.data
+        notifyTimetableConflictsUpdated({
+          term,
+          academicYear,
+          conflictCount: Number(data.conflictCount ?? 0),
+          conflictErrors: Number(data.conflictErrors ?? 0),
+          conflictWarnings: Number(data.conflictWarnings ?? 0),
+          lastScannedAt: new Date().toISOString(),
+        })
+        await fetchConflicts()
+      }
     } catch (e) {
       setError(e?.message || 'Dismiss failed')
     } finally {

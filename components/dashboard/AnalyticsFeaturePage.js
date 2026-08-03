@@ -6,9 +6,11 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { FeatureGate } from '@/components/FeatureGate'
-import { ArrowLeft, RefreshCw } from 'lucide-react'
+import { ArrowLeft, RefreshCw, WifiOff } from 'lucide-react'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 import LoadingSpinner from '@/components/LoadingSpinner'
+import { cacheAdminJson, getCachedAdminJson } from '@/lib/offline/admin-ops'
+import { isBrowserOnline, isNetworkFailure } from '@/lib/offline/network'
 
 export function AnalyticsFeaturePage({
   title,
@@ -21,15 +23,34 @@ export function AnalyticsFeaturePage({
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [fromCache, setFromCache] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
     setError('')
+    setFromCache(false)
+    const cacheKey = `admin-report:${apiPath}`
     try {
-      const res = await sessionFetch(apiPath)
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || json.message || 'Failed to load data')
-      setData(json.data ?? json)
+      if (isBrowserOnline()) {
+        try {
+          const res = await sessionFetch(apiPath)
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok) throw new Error(json.error || json.message || 'Failed to load data')
+          const payload = json.data ?? json
+          await cacheAdminJson(cacheKey, payload)
+          setData(payload)
+          return
+        } catch (e) {
+          if (!isNetworkFailure(e)) throw e
+        }
+      }
+      const cached = await getCachedAdminJson(cacheKey)
+      if (cached != null) {
+        setData(cached)
+        setFromCache(true)
+        return
+      }
+      throw new Error('No cached report available offline. Open this page once while online.')
     } catch (e) {
       setError(e?.message || 'Failed to load')
       setData(null)
@@ -58,6 +79,13 @@ export function AnalyticsFeaturePage({
           </Button>
           {headerAction}
         </div>
+
+        {fromCache ? (
+          <p className="text-sm text-amber-800 flex items-center gap-2">
+            <WifiOff className="h-4 w-4" />
+            Showing last cached snapshot — reconnect to refresh.
+          </p>
+        ) : null}
 
         <FeatureGate featureId={featureId}>
           {loading ? (

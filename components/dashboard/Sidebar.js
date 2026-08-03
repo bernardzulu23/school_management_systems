@@ -260,6 +260,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
         { name: 'Timetable', href: '/dashboard/headteacher/timetable', icon: Calendar },
         {
+          name: 'Notice drafts',
+          href: '/dashboard/headteacher/notices',
+          icon: Megaphone,
+        },
+        {
           name: 'Timetable Conflicts',
           href: '/dashboard/headteacher/timetable/conflicts',
           icon: AlertTriangle,

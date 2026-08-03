@@ -8,6 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { ArrowLeft, BookOpen, CheckCircle2, FileText, Loader2, Star, XCircle } from 'lucide-react'
 import { isFlashcardAnswerCorrect, resolveFlashcardAnswer } from '@/lib/flashcards/resolveAnswer'
+import { scoreFlashcardSession } from '@/lib/flashcards/scoreSession'
+import {
+  cacheStudentJson,
+  getCachedStudentJson,
+  queueFlashcardComplete,
+  tryOnlineOrQueue,
+} from '@/lib/offline/student-ops'
 import toast from 'react-hot-toast'
 
 function StarRating({ count = 0, max = 5 }) {
@@ -37,18 +44,32 @@ export default function StudentFlashcardStudyPage() {
   useEffect(() => {
     if (!deckId) return
     const load = async () => {
-      const res = await fetch('/api/student/flashcards', { credentials: 'include' })
-      const json = await res.json().catch(() => ({}))
-      const found = (json?.data?.decks || []).find((d) => String(d.id) === String(deckId))
-      setDeck(found || null)
+      const cacheKey = 'student:flashcards:all'
+      try {
+        const res = await fetch('/api/student/flashcards', { credentials: 'include' })
+        const json = await res.json().catch(() => ({}))
+        const decks = json?.data?.decks || []
+        await cacheStudentJson(cacheKey, decks)
+        const found = decks.find((d) => String(d.id) === String(deckId))
+        setDeck(found || null)
+        if (found) await cacheStudentJson(`student:flashcard-deck:${deckId}`, found)
+      } catch {
+        const cachedDeck = await getCachedStudentJson(`student:flashcard-deck:${deckId}`)
+        if (cachedDeck) {
+          setDeck(cachedDeck)
+          return
+        }
+        const decks = (await getCachedStudentJson(cacheKey)) || []
+        setDeck(decks.find((d) => String(d.id) === String(deckId)) || null)
+      }
     }
     load()
   }, [deckId])
 
   const score = useMemo(() => {
-    const cards = Array.isArray(deck?.cards) ? deck.cards : []
+    const list = Array.isArray(deck?.cards) ? deck.cards : []
     let correct = 0
-    for (const c of cards) {
+    for (const c of list) {
       const a = answers[c.id]
       if (a && isFlashcardAnswerCorrect(a, c.options, c.answer)) correct += 1
     }
@@ -85,15 +106,51 @@ export default function StudentFlashcardStudyPage() {
 
     setCompleting(true)
     try {
-      const res = await fetch(`/api/student/flashcards/${id}/complete`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ answers: finalAnswers }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.error || json?.message || 'Could not complete session')
-      setSessionResult(json.data)
+      const localScore = scoreFlashcardSession(deck?.cards || [], finalAnswers)
+      const result = await tryOnlineOrQueue(
+        async () => {
+          const res = await fetch(`/api/student/flashcards/${id}/complete`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ answers: finalAnswers }),
+          })
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok) throw new Error(json?.error || json?.message || 'Could not complete session')
+          return json.data
+        },
+        () => queueFlashcardComplete(id, { answers: finalAnswers })
+      )
+
+      if (!result.ok) {
+        throw result.error || new Error('Could not complete session')
+      }
+
+      if (result.offline) {
+        setSessionResult({
+          deckId: id,
+          subjectName: deck?.subjectName,
+          title: deck?.title,
+          score: {
+            correct: localScore.correctCount,
+            total: localScore.total,
+            percent: localScore.percent,
+            rating: localScore.rating,
+          },
+          results: localScore.results,
+          feedback: {
+            summary: `You scored ${localScore.correctCount}/${localScore.total}. Results are saved on this device and will sync when you are online.`,
+            topicsToImprove: localScore.missed.map((m) => m.question).slice(0, 5),
+            strengths: ['Completed the deck offline'],
+            readingList: [],
+          },
+          feedbackSource: 'offline',
+        })
+        setPhase('complete')
+        toast.success('Session saved offline — will sync when online')
+        return
+      }
+      setSessionResult(result.data)
       setPhase('complete')
     } catch (e) {
       alert(e.message || 'Failed to load your results. Please try again.')

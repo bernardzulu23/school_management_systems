@@ -14,6 +14,10 @@ Rural schools often have **2G, intermittent, or no connectivity**. ZSMS is built
 | CBC competency ratings                        | Materials file upload     |
 | Lesson plan draft / submit to HOD             | Bulk Excel school uploads |
 | Materials metadata (URL)                      | USSD                      |
+| Student flashcard complete                    | AI flashcard generate     |
+| Student goals CRUD                            | AI mock-exam start        |
+| Student materials bookmark / download track   | Live percentile lookup    |
+| Games complete / mock-exam submit             |                           |
 | Cached class lists & parent children (read)   |                           |
 | Seed import / queue flush when briefly online |                           |
 
@@ -27,37 +31,49 @@ Rural schools often have **2G, intermittent, or no connectivity**. ZSMS is built
 
 Seeds expire after **14 days**. They never include passwords or API keys.
 
-## What exists today (Phase 1–2)
+## What exists today (Phase 1–3)
 
-| Piece                               | Location                                                        |
-| ----------------------------------- | --------------------------------------------------------------- |
-| Sync engine                         | `lib/offline/sync/engine.js`                                    |
-| Dexie DB `zsms_offline`             | `lib/offline/db.js` (v3)                                        |
-| Attendance / SBA / gradebook queues | `attendance-store.js`, `results-store.js`                       |
-| CBC / lesson plans / materials      | `lib/offline/teacher-ops.js` → `mutationQueue`                  |
-| Seed export API                     | `POST /api/offline/seed`                                        |
-| Seed UI                             | `/dashboard/offline`                                            |
-| Service worker shells               | `public/sw.js`                                                  |
-| Global offline banner               | all authenticated routes                                        |
-| AI/payments/SMS gate                | `lib/auth/installApiFetch.js` when `navigator.onLine === false` |
+| Piece                               | Location                                                            |
+| ----------------------------------- | ------------------------------------------------------------------- |
+| Sync engine                         | `lib/offline/sync/engine.js`                                        |
+| Dexie DB `zsms_offline`             | `lib/offline/db.js` (v3)                                            |
+| Attendance / SBA / gradebook queues | `attendance-store.js`, `results-store.js`                           |
+| CBC / lesson plans / materials      | `lib/offline/teacher-ops.js` → `mutationQueue`                      |
+| Student flashcards / goals / games  | `lib/offline/student-ops.js` → `mutationQueue`                      |
+| HT timetable drafts / notice drafts | `lib/offline/admin-ops.js` → `mutationQueue` / `announcementDrafts` |
+| Parent portal read-cache            | `lib/offline/parent-ops.js` → `resultsCache`                        |
+| Shared sync contracts               | `lib/offline/sync-contracts.js` (+ Expo mirror)                     |
+| Seed export API                     | `POST /api/offline/seed`                                            |
+| Seed UI                             | `/dashboard/offline`                                                |
+| Service worker shells               | `public/sw.js`                                                      |
+| Global offline banner               | all authenticated routes                                            |
+| AI/payments/SMS gate                | `lib/auth/installApiFetch.js` when `navigator.onLine === false`     |
 
-### CBC ratings
+### Student (Phase 3)
 
-1. Open **CBC Continuous Assessment** online once (caches learners + competencies).
-2. Save ratings offline — queued and synced via `POST /api/cbc/ratings`.
-3. CSV export requires internet.
+1. **Flashcards:** open/cache decks online; finish a deck offline (score shows locally; sync mastery later). Generate new AI decks needs internet.
+2. **Materials:** bookmark and download-tracking queue offline; opening the file still needs network unless already cached by the browser.
+3. **Goals:** create/update/delete offline.
+4. **Mock exam:** submit offline if the attempt was started online; starting a new paper needs AI/internet.
+5. **Games:** complete events queue offline and sync XP later.
 
-### Lesson plans
+### Headteacher / admin (Phase 4)
 
-1. Generate AI plans **online** (AI needs internet).
-2. **Save draft** / **Submit to HOD** works offline (queued).
-3. Existing plan detail page save/submit also queues when offline.
+1. **Timetable drafts:** drag/swap/delete periods and **Save draft to DB** work offline (queue syncs when online). Publish, generate, clone, and SMS still need internet.
+2. **Notice drafts:** `/dashboard/headteacher/notices` — write local drafts on the device (IndexedDB). Copy into SMS when online; there is no server announcement model yet.
+3. **Reports:** Results, MOE reports, exam tracking, STEM monitoring, and HOD monitoring show the last cached snapshot when offline (open them once online first).
 
-### Materials
+### Parents (Phase 5)
 
-1. **File upload** requires internet.
-2. Create/update with a **File URL** (metadata only) works offline and syncs later.
-3. Materials list is cached after an online visit.
+1. Open the parent portal once online (or import a `.zsmsseed` downloaded while online).
+2. Children list, fees summary, attendance, results, and published reports use the last cached snapshot offline.
+3. Paying fees / Lipila stays online-only.
+
+### Expo teacher app (Phase 5)
+
+1. On web: **Offline & sync** → download `.zsmsseed` with a passphrase.
+2. On phone **Profile** → paste the JSON + passphrase → **Import seed**.
+3. Assignments, class rosters, and SBA task lists fall back to the seed when the API is unreachable. Attendance/scores still queue and flush when online.
 
 ## Teacher workflows
 
@@ -88,27 +104,29 @@ See sections below and the Result Entry / ECZ SBA notes in [USER_GUIDE.md](./USE
 
 ## Local schema (Dexie)
 
-| Store                              | Purpose                             |
-| ---------------------------------- | ----------------------------------- |
-| `attendanceQueue`                  | Attendance                          |
-| `classRosters`                     | Rosters                             |
-| `sbaScoreQueue` / `gradebookQueue` | Marks                               |
-| `mutationQueue`                    | CBC, lesson plans, materials, other |
-| `conflictQueue`                    | Manual resolve                      |
-| `resultsCache` / `seedMeta`        | Caches + seed audit                 |
-| `syncLog`                          | Debug                               |
+| Store                              | Purpose                                                     |
+| ---------------------------------- | ----------------------------------------------------------- |
+| `attendanceQueue`                  | Attendance                                                  |
+| `classRosters`                     | Rosters                                                     |
+| `sbaScoreQueue` / `gradebookQueue` | Marks                                                       |
+| `mutationQueue`                    | CBC, lesson plans, materials, student ops, timetable drafts |
+| `conflictQueue`                    | Manual resolve                                              |
+| `resultsCache` / `seedMeta`        | Caches + seed audit                                         |
+| `announcementDrafts`               | Local HT notice drafts (device-only)                        |
+| `syncLog`                          | Debug                                                       |
 
 ## Roadmap (later phases)
 
-- Phase 3: student flashcards/materials/goals queues
-- Phase 4: admin timetable drafts / announcements
-- Phase 5: parent read-cache + Expo seed parity
+- Optional School LAN hub for campus-local sync
+- Server-backed announcements sync from notice drafts
 
 ## For developers
+
+Cross-platform constants: `SYNC_CONTRACT_VERSION`, `CACHE_KEYS`, `MUTATION_CHANNELS`, `MOBILE_QUEUE_TYPES` in `lib/offline/sync-contracts.js` (Expo: `zsms-mobile/src/offline/syncContracts.ts`).
 
 ```javascript
 import { flushOfflineQueues, enqueueMutation } from '@/lib/offline'
 await flushOfflineQueues({ userId })
 ```
 
-Tests: `offline-attendance`, `offline-results`, `offline-seed-crypto`.
+Tests: `offline-attendance`, `offline-results`, `offline-seed-crypto`, `offline-student-ops`, `offline-admin-ops`, `lazy-prisma`.

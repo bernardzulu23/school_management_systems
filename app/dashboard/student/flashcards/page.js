@@ -15,6 +15,8 @@ import {
   useStudentCurriculumTopics,
   useStudentEnrolledSubjects,
 } from '@/hooks/useStudentCurriculumTopics'
+import { isBrowserOnline, AI_OFFLINE_MESSAGE } from '@/lib/offline/network'
+import { cacheStudentJson, getCachedStudentJson } from '@/lib/offline/student-ops'
 
 const MAX_CARDS = 10
 
@@ -46,14 +48,23 @@ export default function StudentFlashcardsPage() {
 
   const loadDecks = useCallback(async () => {
     setDecksLoading(true)
+    const cacheKey = `student:flashcards:${today}`
     try {
       const deckRes = await fetch(`/api/student/flashcards?date=${today}`, {
         credentials: 'include',
       })
       const deckJson = await deckRes.json().catch(() => ({}))
-      setTodayDecks(Array.isArray(deckJson?.data?.decks) ? deckJson.data.decks : [])
+      const decks = Array.isArray(deckJson?.data?.decks) ? deckJson.data.decks : []
+      setTodayDecks(decks)
+      await cacheStudentJson(cacheKey, decks)
     } catch {
-      toast.error('Failed to load flashcards')
+      const cached = await getCachedStudentJson(cacheKey)
+      if (Array.isArray(cached) && cached.length) {
+        setTodayDecks(cached)
+        toast('Using cached flashcard decks (offline)', { icon: '📡' })
+      } else {
+        toast.error('Failed to load flashcards')
+      }
     } finally {
       setDecksLoading(false)
     }
@@ -78,6 +89,10 @@ export default function StudentFlashcardsPage() {
     }
     if (topics.length > 0 && !topic) {
       toast.error('Select a curriculum topic')
+      return
+    }
+    if (!isBrowserOnline()) {
+      toast.error(AI_OFFLINE_MESSAGE)
       return
     }
     setGenerating(true)

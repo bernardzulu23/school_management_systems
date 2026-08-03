@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { api } from '@/lib/api'
+import { queueDraftMetaPatch, tryOnlineOrQueue } from '@/lib/offline/admin-ops'
 
 export const TIMETABLE_CONFLICTS_UPDATED = 'timetable-conflicts-updated'
 export const TIMETABLE_CONFLICT_COUNTS_KEY = 'zsms-timetable-conflict-counts'
@@ -280,14 +281,35 @@ export function useTimetableDraftMeta({
       const keys = Array.isArray(auditKeys) ? auditKeys : [auditKeys]
       setLoading(true)
       setError(null)
+      const body = { term, academicYear, auditKeys: keys, mode }
       try {
-        const res = await api.dismissTimetableDraftAudit({
-          term,
-          academicYear,
-          auditKeys: keys,
-          mode,
-        })
-        const data = res?.data ?? res
+        const outcome = await tryOnlineOrQueue(
+          async () => {
+            const res = await api.dismissTimetableDraftAudit(body)
+            return res?.data ?? res
+          },
+          () => queueDraftMetaPatch(body)
+        )
+        if (!outcome.ok) {
+          setError(outcome.error.message || 'Failed to dismiss audit issue')
+          return null
+        }
+        if (outcome.offline) {
+          const nextOffline: TimetableDraftMeta = {
+            term,
+            academicYear,
+            conflictCount: meta?.conflictCount ?? 0,
+            conflictErrors: meta?.conflictErrors ?? 0,
+            conflictWarnings: meta?.conflictWarnings ?? 0,
+            missingPeriodsCount: meta?.missingPeriodsCount ?? 0,
+            canPublish: meta?.canPublish ?? true,
+            lastScannedAt: meta?.lastScannedAt ?? null,
+            conflictSummary: meta?.conflictSummary,
+          }
+          notifyTimetableConflictsUpdated(nextOffline)
+          return nextOffline
+        }
+        const data = outcome.data
         const next: TimetableDraftMeta = {
           term,
           academicYear,
@@ -309,7 +331,7 @@ export function useTimetableDraftMeta({
         setLoading(false)
       }
     },
-    [term, academicYear, enabled, meta?.lastScannedAt]
+    [term, academicYear, enabled, meta]
   )
 
   useEffect(() => {

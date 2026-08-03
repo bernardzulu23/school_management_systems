@@ -550,6 +550,10 @@ See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md), [ECSEOL_ALIGNMENT.md](./ECSEOL_ALI
 3. Enter attendance / marks offline; use the amber banner and sync badge when connected.
 4. AI, payments, and SMS require internet (clear message when offline).
 5. Teachers can also save **CBC ratings**, **lesson plan drafts/submits**, and **materials metadata** (URL-based) offline — file uploads and AI lesson generation still need internet.
+6. Students can **finish flashcard decks**, manage **goals**, **bookmark materials**, **submit mock exams** (after starting online), and **complete games** offline — AI generate/start needs internet.
+7. Headteachers can **edit and save timetable drafts** offline (publish/generate needs internet), write **local notice drafts** on the device, and open **cached results / MOE / exam / STEM reports** after viewing them once online.
+8. Parents can open the **parent portal offline** after visiting online (or importing a seed) — children, fees view, attendance, and results use the device cache. Payments still need internet.
+9. Teachers on the **Expo app** import the same `.zsmsseed` from **Profile** to load assignments / rosters / SBA tasks offline (marks still sync when back online).
 
 See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [PWA_OFFLINE_ARCHITECTURE.md](./PWA_OFFLINE_ARCHITECTURE.md).
 

@@ -103,7 +103,7 @@ export const POST = withErrorHandler(async function POST(request) {
   })
   if (!student) throw new ApiError('Student profile not found', 404)
 
-  const { materialId, action } = await request.json().catch(() => ({}))
+  const { materialId, action, bookmarked } = await request.json().catch(() => ({}))
   const studyMaterialId = String(materialId || '').trim()
   const act = String(action || '').trim()
 
@@ -121,10 +121,12 @@ export const POST = withErrorHandler(async function POST(request) {
   })
 
   if (act === 'bookmark') {
+    const nextBookmarked =
+      typeof bookmarked === 'boolean' ? bookmarked : existing ? !existing.isBookmarked : true
     if (existing) {
       await db.studentMaterial.update({
         where: { id: existing.id },
-        data: { isBookmarked: !existing.isBookmarked, lastAccessed: new Date() },
+        data: { isBookmarked: nextBookmarked, lastAccessed: new Date() },
       })
     } else {
       await db.studentMaterial.create({
@@ -132,7 +134,7 @@ export const POST = withErrorHandler(async function POST(request) {
           schoolId,
           studentId: student.id,
           studyMaterialId,
-          isBookmarked: true,
+          isBookmarked: nextBookmarked,
           lastAccessed: new Date(),
         },
       })

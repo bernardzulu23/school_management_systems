@@ -20,6 +20,9 @@ import {
   useStudentCurriculumTopics,
   useStudentEnrolledSubjects,
 } from '@/hooks/useStudentCurriculumTopics'
+import { isBrowserOnline, AI_OFFLINE_MESSAGE } from '@/lib/offline/network'
+import { queueMockExamSubmit, tryOnlineOrQueue } from '@/lib/offline/student-ops'
+import toast from 'react-hot-toast'
 
 function formatDuration(ms) {
   const totalSec = Math.max(0, Math.floor(ms / 1000))
@@ -98,6 +101,10 @@ export default function StudentMockExamPage() {
       setError('Subject and topic are required')
       return
     }
+    if (!isBrowserOnline()) {
+      setError(AI_OFFLINE_MESSAGE)
+      return
+    }
     setLoading(true)
     setError(null)
     setResult(null)
@@ -141,8 +148,27 @@ export default function StudentMockExamPage() {
     setLoading(true)
     setError(null)
     try {
-      const res = await api.submitMockExam(attempt.id, { answers })
-      const data = res?.data
+      const result = await tryOnlineOrQueue(
+        async () => {
+          const res = await api.submitMockExam(attempt.id, { answers })
+          return res?.data
+        },
+        () => queueMockExamSubmit(attempt.id, { answers })
+      )
+      if (!result.ok) throw result.error || new Error('Submit failed')
+      if (result.offline) {
+        toast.success('Exam submitted offline — will sync when online')
+        setResult({
+          id: attempt.id,
+          status: 'submitted_offline',
+          scorePercent: null,
+          message: 'Your answers are saved on this device and will sync when you reconnect.',
+          paper,
+        })
+        setDeadline(null)
+        return
+      }
+      const data = result.data
       setResult(data)
       setAttempt(data)
       setPaper(data?.paper)

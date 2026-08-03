@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
+import { fetchParentChildrenWithCache } from '@/lib/offline/parent-ops'
 
 const ParentChildContext = createContext(null)
 
@@ -12,16 +13,16 @@ export function ParentChildProvider({ children }) {
   const [studentId, setStudentIdState] = useState('')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [fromCache, setFromCache] = useState(false)
 
   const load = useCallback(async () => {
     setLoading(true)
     setError('')
+    setFromCache(false)
     try {
-      const res = await sessionFetch('/api/parent/children')
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json.error || 'Failed to load children')
-      const kids = Array.isArray(json.children) ? json.children : []
+      const { children: kids, fromCache: cached } = await fetchParentChildrenWithCache(sessionFetch)
       setList(kids)
+      setFromCache(Boolean(cached))
       const stored = typeof window !== 'undefined' ? window.sessionStorage.getItem(STORAGE_KEY) : ''
       const preferred =
         kids.find((c) => c.student?.id === stored)?.student?.id || kids[0]?.student?.id || ''
@@ -62,9 +63,10 @@ export function ParentChildProvider({ children }) {
       activeChild,
       loading,
       error,
+      fromCache,
       reload: load,
     }),
-    [list, studentId, setStudentId, activeChild, loading, error, load]
+    [list, studentId, setStudentId, activeChild, loading, error, fromCache, load]
   )
 
   return <ParentChildContext.Provider value={value}>{children}</ParentChildContext.Provider>
@@ -77,7 +79,7 @@ export function useParentChild() {
 }
 
 export function ParentChildSwitcher({ className = '' }) {
-  const { children, studentId, setStudentId, loading } = useParentChild()
+  const { children, studentId, setStudentId, loading, fromCache } = useParentChild()
   if (loading) return null
   if (!children.length) {
     return (
@@ -90,6 +92,7 @@ export function ParentChildSwitcher({ className = '' }) {
     return (
       <p className={`text-sm font-medium ${className}`}>
         Viewing: {children[0].student?.name} ({children[0].student?.class})
+        {fromCache ? ' · cached' : ''}
       </p>
     )
   }
@@ -107,6 +110,7 @@ export function ParentChildSwitcher({ className = '' }) {
           </option>
         ))}
       </select>
+      {fromCache ? <span className="text-xs text-amber-800">cached</span> : null}
     </label>
   )
 }

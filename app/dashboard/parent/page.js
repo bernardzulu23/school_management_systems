@@ -9,13 +9,23 @@ import Link from 'next/link'
 import { BarChart3, CreditCard, FileText, UserCheck } from 'lucide-react'
 
 export default function ParentOverviewPage() {
-  const { studentId, loading: kidsLoading, error: kidsError } = useParentChild()
-  const { data, loading, error } = useParentPortalData(studentId)
+  const {
+    studentId,
+    loading: kidsLoading,
+    error: kidsError,
+    fromCache: kidsCached,
+  } = useParentChild()
+  const { data, loading, error, fromCache } = useParentPortalData(studentId)
 
   return (
     <DashboardLayout title="Parent portal">
       <div className="space-y-4">
         <ParentChildSwitcher />
+        {kidsCached || fromCache ? (
+          <p className="text-sm text-amber-800">
+            Showing cached parent portal data — reconnect to refresh fees, results, and attendance.
+          </p>
+        ) : null}
         {kidsLoading || loading ? (
           <LoadingSpinner />
         ) : kidsError || error ? (
