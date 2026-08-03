@@ -316,9 +316,10 @@ See [SMS_GUIDE.md](./SMS_GUIDE.md) and [SMS_BROADCAST.md](./SMS_BROADCAST.md).
 
 #### Enter results (teacher)
 
-1. Open **Result Entry** (`/dashboard/teacher/results`).
+1. Open **Result Entry** (`/dashboard/teacher/results`) online once so class lists cache (or install the PWA).
 2. Choose **Result type**: End of term, Midterm, or Class test.
-3. Select **Term** and **Class + Subject**, then enter scores and save.
+3. Select **Term** and **Class + Subject**, enter scores, and **Save** — works offline / on weak 2G (queues on the device).
+4. Use the sync badge / **Sync** after reconnecting. See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md).
 
 #### View school-wide results (headteacher / HOD)
 
@@ -533,14 +534,14 @@ HODs submit plans and minutes at **SIC CPD plans** (`/dashboard/hod/sic-cpd`).
 
 #### ECZ / School-Based Assessment (SBA)
 
-1. Open **ECZ SBA Hub** (`/dashboard/teacher/assessments/ecz`).
+1. Open **ECZ SBA Hub** (`/dashboard/teacher/assessments/ecz`) **while online at least once** (install PWA / load tasks and learners).
 2. Use tabs: **SBA & scores**, **Rubric builder**, **Tracking sheet**, **Accommodations**, **Evidence vault**.
-3. Create SBA tasks (Forms 1–3 only; Form 4 is blocked per ECZ rules).
-4. Record scores: task scores 0–20 each, term test 0–40, total ≤ 100.
-5. Review export at `/dashboard/teacher/ecz/submit` — validate and export CSV before annual submission.
+3. Create SBA tasks (Forms 1–3 only; Form 4 is blocked per ECZ rules) — task creation needs internet.
+4. Record scores (rubric form or tracking sheet): works offline / on 2G timeouts — scores queue on the device and sync when online (sync badge).
+5. Review export at `/dashboard/teacher/ecz/submit` — validate and export CSV before annual submission (needs internet).
 6. Submit to ECZ before **31 January** of the year after the academic year.
 
-See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md) and [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md).
+See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md), [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md), and [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md).
 
 #### Attendance (web + offline)
 
@@ -822,23 +823,23 @@ Trial schools receive **50 complimentary SMS credits** at onboarding. SMS broadc
 
 ## Troubleshooting
 
-| Problem                           | Solution                                                                                                                                                  |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Cannot log in                     | Check subdomain URL; use Forgot Password if weak password blocked                                                                                         |
-| Dashboard blank after login       | Trial may have expired — go to `/dashboard/billing`                                                                                                       |
-| Offline attendance not syncing    | Tap sync badge in header; ensure internet connection                                                                                                      |
-| Timetable not visible             | Headteacher must publish; check term/academic year. HODs see department teachers only — hard-refresh after publish                                        |
-| Timetable shows many conflicts    | Open **Timetable Conflicts**; fix double-booked teachers/classes/rooms; remove overloaded PE/allocation rows; regenerate                                  |
-| Cannot publish timetable          | Resolve **error** / hard conflicts first (Conflicts tab). Soft warnings (e.g. missing periods) do not block Publish — fix or **Dismiss** them for clarity |
-| Timetable generate fails          | Check HOD allocations for invalid multi-class rows or missing teachers; edit on **Department Allocations**                                                |
-| HOD allocation page blocked       | Sign out and back in; ensure you use the school subdomain URL                                                                                             |
-| SBA task blocked for Form 4       | ECZ rules prohibit SBA in Form 4 — use exam tracking instead                                                                                              |
-| SMS not sending                   | Check balance at `/dashboard/sms`. Trial schools start with 50 credits; if 0, use **Subscribe** (`/pricing`). Confirm numbers use Zambian `+260…` format. |
-| Insufficient SMS credits toast    | Recipient count exceeds remaining balance — reduce recipients, or subscribe / top up credits.                                                             |
-| AI tools unavailable              | Upgrade to a plan with AI features                                                                                                                        |
-| Chat reply shows markdown markers | Refresh and ask again - replies are plain text with dash (-) bullets only                                                                                 |
-| Chat error Unexpected end of JSON | Retry send; empty network responses are handled safely after the Aug 2026 fix                                                                             |
-| Solo teacher cannot add student   | Individual plan limited to 10 students; upgrade to Individual Premium                                                                                     |
+| Problem                                   | Solution                                                                                                                                                  |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Cannot log in                             | Check subdomain URL; use Forgot Password if weak password blocked                                                                                         |
+| Dashboard blank after login               | Trial may have expired — go to `/dashboard/billing`                                                                                                       |
+| Offline attendance or results not syncing | Tap sync badge; reconnect; open the same page online once so class lists refresh                                                                          | See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) |
+| Timetable not visible                     | Headteacher must publish; check term/academic year. HODs see department teachers only — hard-refresh after publish                                        |
+| Timetable shows many conflicts            | Open **Timetable Conflicts**; fix double-booked teachers/classes/rooms; remove overloaded PE/allocation rows; regenerate                                  |
+| Cannot publish timetable                  | Resolve **error** / hard conflicts first (Conflicts tab). Soft warnings (e.g. missing periods) do not block Publish — fix or **Dismiss** them for clarity |
+| Timetable generate fails                  | Check HOD allocations for invalid multi-class rows or missing teachers; edit on **Department Allocations**                                                |
+| HOD allocation page blocked               | Sign out and back in; ensure you use the school subdomain URL                                                                                             |
+| SBA task blocked for Form 4               | ECZ rules prohibit SBA in Form 4 — use exam tracking instead                                                                                              |
+| SMS not sending                           | Check balance at `/dashboard/sms`. Trial schools start with 50 credits; if 0, use **Subscribe** (`/pricing`). Confirm numbers use Zambian `+260…` format. |
+| Insufficient SMS credits toast            | Recipient count exceeds remaining balance — reduce recipients, or subscribe / top up credits.                                                             |
+| AI tools unavailable                      | Upgrade to a plan with AI features                                                                                                                        |
+| Chat reply shows markdown markers         | Refresh and ask again - replies are plain text with dash (-) bullets only                                                                                 |
+| Chat error Unexpected end of JSON         | Retry send; empty network responses are handled safely after the Aug 2026 fix                                                                             |
+| Solo teacher cannot add student           | Individual plan limited to 10 students; upgrade to Individual Premium                                                                                     |
 
 For technical issues, use **Give Feedback** (`/dashboard/feedback`) or contact your school administrator.
 

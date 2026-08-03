@@ -1,6 +1,16 @@
-const CACHE_VERSION = 'v3'
+const CACHE_VERSION = 'v4'
 const STATIC_CACHE = `zsms-static-assets-${CACHE_VERSION}`
+const PAGES_CACHE = `zsms-teacher-pages-${CACHE_VERSION}`
 const OFFLINE_URL = '/offline.html'
+
+/** Shell routes teachers reopen on 2G after a prior online visit. */
+const TEACHER_SHELL_PATHS = [
+  '/dashboard/teacher/results',
+  '/dashboard/teacher/assessments/ecz',
+  '/dashboard/attendance',
+  '/dashboard/teacher',
+]
+
 const PRECACHE_ASSETS = [
   OFFLINE_URL,
   '/manifest.json',
@@ -8,6 +18,12 @@ const PRECACHE_ASSETS = [
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
 ]
+
+function isTeacherShell(pathname) {
+  return TEACHER_SHELL_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(`${p}/`) || pathname.startsWith(`${p}?`)
+  )
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -26,7 +42,12 @@ self.addEventListener('activate', (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key.startsWith('zsms-static-assets-') && key !== STATIC_CACHE)
+            .filter(
+              (key) =>
+                (key.startsWith('zsms-static-assets-') || key.startsWith('zsms-teacher-pages-')) &&
+                key !== STATIC_CACHE &&
+                key !== PAGES_CACHE
+            )
             .map((key) => caches.delete(key))
         )
       )
@@ -45,10 +66,34 @@ self.addEventListener('fetch', (event) => {
 
   if (isNavigation) {
     event.respondWith(
-      fetch(request).catch(async () => {
-        const cache = await caches.open(STATIC_CACHE)
-        return (await cache.match(OFFLINE_URL)) || Response.error()
-      })
+      (async () => {
+        try {
+          const response = await fetch(request)
+          if (response && response.ok && isTeacherShell(requestUrl.pathname)) {
+            const cache = await caches.open(PAGES_CACHE)
+            cache.put(request, response.clone()).catch(() => undefined)
+          }
+          return response
+        } catch {
+          const pages = await caches.open(PAGES_CACHE)
+          const cachedPage = await pages.match(request)
+          if (cachedPage) return cachedPage
+          // Try pathname-only match (ignore search)
+          const keys = await pages.keys()
+          for (const key of keys) {
+            try {
+              if (new URL(key.url).pathname === requestUrl.pathname) {
+                const hit = await pages.match(key)
+                if (hit) return hit
+              }
+            } catch {
+              /* ignore */
+            }
+          }
+          const staticCache = await caches.open(STATIC_CACHE)
+          return (await staticCache.match(OFFLINE_URL)) || Response.error()
+        }
+      })()
     )
     return
   }

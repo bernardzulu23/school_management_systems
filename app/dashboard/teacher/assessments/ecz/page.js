@@ -43,6 +43,7 @@ import { ECZ_GUIDELINES_SUBJECT_COUNT } from '@/lib/ecz/ecz-subjects-data'
 import { StaffRouteGuard } from '@/components/auth/StaffRouteGuard'
 import { SecondaryOnlyRouteGuard } from '@/components/auth/SecondaryOnlyRouteGuard'
 import { FileText, Target, ShieldCheck } from 'lucide-react'
+import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
 
 const HUB_TAB_IDS = [
   'sba',
@@ -255,6 +256,9 @@ function EczAssessmentHubContent() {
               <ClipboardList className="h-7 w-7" />
               ECZ School-Based Assessment
             </h1>
+            <div className="ml-auto">
+              <SyncStatusBadge channel="results" noun="score" />
+            </div>
           </div>
 
           <ECZDeadlineTracker />

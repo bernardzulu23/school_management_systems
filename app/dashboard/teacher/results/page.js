@@ -25,6 +25,8 @@ import { Save, ArrowLeft, Loader2, CheckCircle, AlertCircle, Trash2 } from 'luci
 import Link from 'next/link'
 import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 import { PrimarySchoolFeatureUnavailable } from '@/components/school/PrimarySchoolFeatureUnavailable'
+import { resultsStore } from '@/lib/offline/results-store'
+import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
 
 export default function ResultEntryPage() {
   const { user } = useAuth()
@@ -59,7 +61,6 @@ export default function ResultEntryPage() {
     [assignments, selectedAssignmentId]
   )
 
-  const queueKey = user?.id ? `gradebook_queue_v1:${user.id}` : 'gradebook_queue_v1'
   const draftKey = user?.id ? `gradebook_drafts_v1:${user.id}` : 'gradebook_drafts_v1'
 
   const parseTermYear = (termRaw) => {
@@ -68,30 +69,6 @@ export default function ResultEntryPage() {
     if (match) return { term: match[1].trim(), year: Number(match[2]) }
     return { term: t || 'Term 1', year: new Date().getFullYear() }
   }
-
-  const getQueue = useCallback(() => {
-    try {
-      const raw = localStorage.getItem(queueKey)
-      const parsed = raw ? JSON.parse(raw) : []
-      const now = Date.now()
-      const keepMs = 8 * 24 * 60 * 60 * 1000
-      const filtered = Array.isArray(parsed)
-        ? parsed.filter((x) => x?.createdAt && now - new Date(x.createdAt).getTime() <= keepMs)
-        : []
-      if (filtered.length !== parsed.length)
-        localStorage.setItem(queueKey, JSON.stringify(filtered))
-      return filtered
-    } catch {
-      return []
-    }
-  }, [queueKey])
-
-  const setQueue = useCallback(
-    (items) => {
-      localStorage.setItem(queueKey, JSON.stringify(items))
-    },
-    [queueKey]
-  )
 
   const saveDraft = useCallback(
     (draft) => {
@@ -116,7 +93,10 @@ export default function ResultEntryPage() {
 
   useEffect(() => {
     setIsOnline(typeof navigator !== 'undefined' ? navigator.onLine : true)
-  }, [])
+    ;(async () => {
+      await resultsStore.migrateLegacyGradebookQueue(user?.id || '')
+    })()
+  }, [user?.id])
 
   useEffect(() => {
     const loadAssignments = async () => {
@@ -129,6 +109,7 @@ export default function ResultEntryPage() {
         const json = await res.json()
         const data = Array.isArray(json?.data) ? json.data : []
         setAssignments(data)
+        await resultsStore.cacheJson(`teaching-assignments:${user?.id || 'anon'}`, data)
         const draft = loadDraft()
         const preferred = draft?.selectedAssignmentId
         const draftTerm = String(draft?.selectedTerm || '').trim()
@@ -143,11 +124,19 @@ export default function ResultEntryPage() {
           setSelectedAssignmentId((prev) => prev || (data.length > 0 ? data[0].id : ''))
         }
       } catch (e) {
-        toast.error('Failed to load teaching assignments')
+        const cached = await resultsStore.getCachedJson(
+          `teaching-assignments:${user?.id || 'anon'}`
+        )
+        if (Array.isArray(cached) && cached.length) {
+          setAssignments(cached)
+          toast('Using cached teaching assignments (offline)', { icon: '📡' })
+        } else {
+          toast.error('Failed to load teaching assignments')
+        }
       }
     }
     loadAssignments()
-  }, [loadDraft, terms])
+  }, [loadDraft, terms, user?.id])
 
   useEffect(() => {
     saveDraft({ selectedAssignmentId, selectedTerm, selectedResultType })
@@ -156,9 +145,10 @@ export default function ResultEntryPage() {
   const fetchPupilsAndResults = useCallback(async () => {
     if (!selectedAssignment || !selectedTerm) return
     setLoading(true)
+    const pupilsCacheKey = `pupils:${selectedAssignment.classId}:${selectedAssignment.subjectId}`
+    const { term, year } = parseTermYear(selectedTerm)
+    const resultsCacheKey = `results:${selectedAssignment.classId}:${selectedAssignment.subjectId}:${term}:${year}:${selectedResultType}`
     try {
-      const { term, year } = parseTermYear(selectedTerm)
-
       const pupilsRes = await fetch(
         `/api/teacher/pupils?classId=${encodeURIComponent(selectedAssignment.classId)}&subjectId=${encodeURIComponent(selectedAssignment.subjectId)}`,
         { cache: 'no-store', credentials: 'include' }
@@ -167,6 +157,7 @@ export default function ResultEntryPage() {
       const pupilsJson = await pupilsRes.json()
       const pupilsData = Array.isArray(pupilsJson?.data) ? pupilsJson.data : []
       setPupils(pupilsData)
+      await resultsStore.cacheJson(pupilsCacheKey, pupilsData)
 
       const fetchResultsOnce = async () =>
         fetch(
@@ -194,6 +185,7 @@ export default function ResultEntryPage() {
 
       const resultsJson = await resultsRes.json()
       const results = Array.isArray(resultsJson?.data) ? resultsJson.data : []
+      await resultsStore.cacheJson(resultsCacheKey, results)
       const byStudent = new Map(results.map((r) => [r.studentId, r]))
 
       const initialScores = {}
@@ -212,11 +204,35 @@ export default function ResultEntryPage() {
       setBaseUpdatedAtByPupil(baseMap)
       setResultIdByPupil(idMap)
     } catch (e) {
-      toast.error('Failed to load gradebook data')
-      setPupils([])
-      setScores({})
-      setBaseUpdatedAtByPupil({})
-      setResultIdByPupil({})
+      const cachedPupils = await resultsStore.getCachedJson(pupilsCacheKey)
+      const cachedResults = await resultsStore.getCachedJson(resultsCacheKey)
+      if (Array.isArray(cachedPupils) && cachedPupils.length) {
+        setPupils(cachedPupils)
+        const byStudent = new Map(
+          (Array.isArray(cachedResults) ? cachedResults : []).map((r) => [r.studentId, r])
+        )
+        const initialScores = {}
+        const baseMap = {}
+        const idMap = {}
+        cachedPupils.forEach((p) => {
+          const existing = byStudent.get(p.id)
+          if (existing) {
+            initialScores[p.id] = existing.score
+            baseMap[p.id] = existing.updatedAt
+            idMap[p.id] = existing.id
+          }
+        })
+        setScores(initialScores)
+        setBaseUpdatedAtByPupil(baseMap)
+        setResultIdByPupil(idMap)
+        toast('Using cached class list (offline)', { icon: '📡' })
+      } else {
+        toast.error('Failed to load gradebook data')
+        setPupils([])
+        setScores({})
+        setBaseUpdatedAtByPupil({})
+        setResultIdByPupil({})
+      }
     } finally {
       setLoading(false)
     }
@@ -317,19 +333,8 @@ export default function ResultEntryPage() {
     return chunks
   }
 
-  const enqueueOffline = (payload) => {
-    const queue = getQueue()
-    queue.push({
-      id:
-        typeof crypto !== 'undefined' && crypto.randomUUID
-          ? crypto.randomUUID()
-          : String(Date.now()),
-      createdAt: new Date().toISOString(),
-      selectedAssignment,
-      selectedTerm,
-      payload,
-    })
-    setQueue(queue)
+  const enqueueOffline = async (payload) => {
+    await resultsStore.queueGradebook({ userId: user?.id || '', payload })
   }
 
   const broadcastResultsUpdated = () => {
@@ -404,23 +409,25 @@ export default function ResultEntryPage() {
 
   const syncQueue = useCallback(async () => {
     if (!isOnline) return
-    const queue = getQueue()
-    if (queue.length === 0) return
     setSyncing(true)
     try {
-      for (const item of queue) {
-        await syncOnce(item.payload)
+      const result = await resultsStore.syncGradebookPending({
+        userId: user?.id || '',
+        postPayload: syncOnce,
+      })
+      if (result.synced > 0) {
+        toast.success('Offline changes synced')
+        broadcastResultsUpdated()
+        await fetchPupilsAndResults()
+      } else if (result.failed > 0) {
+        toast.error('Sync failed')
       }
-      setQueue([])
-      toast.success('Offline changes synced')
-      broadcastResultsUpdated()
-      await fetchPupilsAndResults()
     } catch (e) {
       if (String(e?.message || '') !== 'conflicts') toast.error('Sync failed')
     } finally {
       setSyncing(false)
     }
-  }, [fetchPupilsAndResults, getQueue, isOnline, setQueue])
+  }, [fetchPupilsAndResults, isOnline, user?.id])
 
   useEffect(() => {
     const onlineHandler = () => setIsOnline(true)
@@ -455,7 +462,7 @@ export default function ResultEntryPage() {
     setSaving(true)
     try {
       if (!isOnline) {
-        enqueueOffline(payload)
+        await enqueueOffline(payload)
         toast.success('Saved offline. Will sync when online.')
         return
       }
@@ -465,9 +472,19 @@ export default function ResultEntryPage() {
       let totalSkipped = 0
 
       for (const batch of batches) {
-        const result = await syncOnce(batch)
-        totalApplied += Number(result?.applied || 0)
-        totalSkipped += Number(result?.skippedNotAssigned || 0)
+        try {
+          const result = await syncOnce(batch)
+          totalApplied += Number(result?.applied || 0)
+          totalSkipped += Number(result?.skippedNotAssigned || 0)
+        } catch (err) {
+          if (String(err?.message || '') === 'conflicts') throw err
+          if (resultsStore.isNetworkFailure(err)) {
+            await enqueueOffline(batch)
+            toast.success('Connection weak — saved offline. Will sync when online.')
+            return
+          }
+          throw err
+        }
       }
 
       if (totalApplied === 0) {
@@ -528,6 +545,7 @@ export default function ResultEntryPage() {
             </div>
           </div>
           <div className="flex items-center gap-2">
+            <SyncStatusBadge channel="results" userId={user?.id || ''} noun="result" />
             <Button variant="outline" onClick={syncQueue} disabled={syncing || !isOnline}>
               {syncing ? (
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />

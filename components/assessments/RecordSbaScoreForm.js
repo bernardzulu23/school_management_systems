@@ -13,6 +13,7 @@ import {
 import { computeRubricScore, SBA_TASK_MARKS, SBA_TERM_TEST_MARKS } from '@/lib/ecz/ecz-compliance'
 import { EczRubricTable } from '@/components/assessments/EczRubricTable'
 import { ECZ_TERM_WEIGHTS } from '@/lib/ecz/ecz-rubric-builder'
+import { resultsStore } from '@/lib/offline/results-store'
 import { toast } from 'react-hot-toast'
 
 const LEVEL_OPTIONS = [
@@ -73,11 +74,13 @@ export function RecordSbaScoreForm({ sbaTasks = [], onSuccess }) {
 
   const loadStudents = useCallback(async () => {
     setLoadingStudents(true)
+    const cacheKey = `sba-students:form${formLevel}`
     try {
       const res = await fetch('/api/students?limit=500', { credentials: 'include' })
       const json = await res.json()
       if (!res.ok) throw new Error(json.error || 'Failed to load students')
       const list = Array.isArray(json.data) ? json.data : []
+      await resultsStore.cacheJson(cacheKey, list)
       const pattern = formLevelPattern(formLevel)
       setStudents(
         list.filter((s) => {
@@ -86,8 +89,20 @@ export function RecordSbaScoreForm({ sbaTasks = [], onSuccess }) {
         })
       )
     } catch (e) {
-      toast.error(e.message || 'Could not load learners')
-      setStudents([])
+      const cached = await resultsStore.getCachedJson(cacheKey)
+      if (Array.isArray(cached) && cached.length) {
+        const pattern = formLevelPattern(formLevel)
+        setStudents(
+          cached.filter((s) => {
+            const cls = String(s.class || s.classRef?.name || '')
+            return pattern.test(cls)
+          })
+        )
+        toast('Using cached learner list (offline)', { icon: '📡' })
+      } else {
+        toast.error(e.message || 'Could not load learners')
+        setStudents([])
+      }
     } finally {
       setLoadingStudents(false)
     }
@@ -134,24 +149,40 @@ export function RecordSbaScoreForm({ sbaTasks = [], onSuccess }) {
     }
 
     setSubmitting(true)
+    const { excellentCount, goodCount, fairCount, needsImprovementCount } = rubricPreview
+    const body = {
+      assessmentId,
+      studentId,
+      formLevel: parseInt(formLevel, 10),
+      academicYear: parseInt(academicYear, 10),
+      taskNumber: parseInt(taskNumber, 10),
+      excellentCount,
+      goodCount,
+      fairCount,
+      needsImprovementCount,
+      rubricBreakdown: { criterionLevels, criteria: criteria.map((c) => c.id) },
+    }
+
+    const queueOffline = async (reason) => {
+      await resultsStore.queueSbaScore(body)
+      toast.success(
+        reason ||
+          `Saved offline (${rubricPreview.displayScore}/${rubricPreview.maxMarks}). Will sync when online.`
+      )
+      onSuccess?.({ offline: true, ...body })
+    }
+
     try {
-      const { excellentCount, goodCount, fairCount, needsImprovementCount } = rubricPreview
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        await queueOffline()
+        return
+      }
+
       const res = await fetch('/api/assessments/sba-scores', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          assessmentId,
-          studentId,
-          formLevel: parseInt(formLevel, 10),
-          academicYear: parseInt(academicYear, 10),
-          taskNumber: parseInt(taskNumber, 10),
-          excellentCount,
-          goodCount,
-          fairCount,
-          needsImprovementCount,
-          rubricBreakdown: { criterionLevels, criteria: criteria.map((c) => c.id) },
-        }),
+        body: JSON.stringify(body),
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json.error || 'Failed to save score')
@@ -160,7 +191,11 @@ export function RecordSbaScoreForm({ sbaTasks = [], onSuccess }) {
       )
       onSuccess?.(json.data)
     } catch (err) {
-      toast.error(err.message || 'Failed to record score')
+      if (resultsStore.isNetworkFailure(err)) {
+        await queueOffline()
+      } else {
+        toast.error(err.message || 'Failed to record score')
+      }
     } finally {
       setSubmitting(false)
     }

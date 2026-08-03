@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ECZ_TERM_WEIGHTS, ECZ_SBA_MARKS } from '@/lib/ecz/ecz-rubric-builder'
+import { resultsStore } from '@/lib/offline/results-store'
 import { toast } from 'react-hot-toast'
 
 function emptyRow(sn) {
@@ -90,25 +91,45 @@ export function EczSbaTrackingSheet({ subjects = [] }) {
 
     setSaving(true)
     try {
-      const tasksRes = await fetch(
-        `/api/assessments/sba-tasks?formLevel=${formLevel}&subjectId=${subjectId}&component=SBA_TASK`,
-        { credentials: 'include' }
-      )
-      const tasksJson = await tasksRes.json()
-      const tasks = Array.isArray(tasksJson.data) ? tasksJson.data : []
-      const sbaTasks = tasks.filter((t) => t.component === 'SBA_TASK').slice(0, 3)
+      const tasksCacheKey = `sba-tasks:${formLevel}:${subjectId}`
+      const studentsCacheKey = `sba-students:form${formLevel}`
+
+      let sbaTasks = []
+      try {
+        const tasksRes = await fetch(
+          `/api/assessments/sba-tasks?formLevel=${formLevel}&subjectId=${subjectId}&component=SBA_TASK`,
+          { credentials: 'include' }
+        )
+        const tasksJson = await tasksRes.json()
+        const tasks = Array.isArray(tasksJson.data) ? tasksJson.data : []
+        sbaTasks = tasks.filter((t) => t.component === 'SBA_TASK').slice(0, 3)
+        await resultsStore.cacheJson(tasksCacheKey, sbaTasks)
+      } catch {
+        const cached = await resultsStore.getCachedJson(tasksCacheKey)
+        sbaTasks = Array.isArray(cached) ? cached : []
+      }
 
       if (sbaTasks.length < 1) {
-        toast.error('Create at least one SBA task for this subject and form first.')
+        toast.error('Create at least one SBA task for this subject and form first (while online).')
         return
       }
 
-      const studentsRes = await fetch('/api/students?limit=500', { credentials: 'include' })
-      const studentsJson = await studentsRes.json()
-      const students = Array.isArray(studentsJson.data) ? studentsJson.data : []
+      let students = []
+      try {
+        const studentsRes = await fetch('/api/students?limit=500', { credentials: 'include' })
+        const studentsJson = await studentsRes.json()
+        students = Array.isArray(studentsJson.data) ? studentsJson.data : []
+        await resultsStore.cacheJson(studentsCacheKey, students)
+      } catch {
+        const cached = await resultsStore.getCachedJson(studentsCacheKey)
+        students = Array.isArray(cached) ? cached : []
+      }
+
       const pattern = new RegExp(`^form\\s*${formLevel}\\b`, 'i')
+      const offline = typeof navigator !== 'undefined' && !navigator.onLine
 
       let saved = 0
+      let queued = 0
       for (const row of rows) {
         if (!row.name.trim()) continue
         const student = students.find(
@@ -130,26 +151,52 @@ export function EczSbaTrackingSheet({ subjects = [] }) {
           if (val === '' || val == null) continue
           const assessment = sbaTasks[i]
           const level = Math.min(4, Math.max(1, Math.round(Number(val) / 5) || 2))
-          const res = await fetch('/api/assessments/sba-scores', {
-            method: 'POST',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              assessmentId: assessment.id,
-              studentId: student.id,
-              formLevel: parseInt(formLevel, 10),
-              academicYear: parseInt(academicYear, 10),
-              taskNumber: i + 1,
-              excellentCount: level === 4 ? 4 : 0,
-              goodCount: level === 3 ? 4 : 0,
-              fairCount: level === 2 ? 4 : 0,
-              needsImprovementCount: level === 1 ? 4 : 0,
-            }),
-          })
-          if (res.ok) saved++
+          const body = {
+            assessmentId: assessment.id,
+            studentId: student.id,
+            formLevel: parseInt(formLevel, 10),
+            academicYear: parseInt(academicYear, 10),
+            taskNumber: i + 1,
+            excellentCount: level === 4 ? 4 : 0,
+            goodCount: level === 3 ? 4 : 0,
+            fairCount: level === 2 ? 4 : 0,
+            needsImprovementCount: level === 1 ? 4 : 0,
+          }
+
+          if (offline) {
+            await resultsStore.queueSbaScore(body)
+            queued++
+            continue
+          }
+
+          try {
+            const res = await fetch('/api/assessments/sba-scores', {
+              method: 'POST',
+              credentials: 'include',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(body),
+            })
+            if (res.ok) {
+              saved++
+            } else if (res.status >= 500 || res.status === 429) {
+              await resultsStore.queueSbaScore(body)
+              queued++
+            }
+          } catch (err) {
+            if (resultsStore.isNetworkFailure(err)) {
+              await resultsStore.queueSbaScore(body)
+              queued++
+            }
+          }
         }
       }
-      toast.success(`Saved ${saved} score entries (matched learners by name)`)
+      if (queued > 0 && saved === 0) {
+        toast.success(`Saved ${queued} score(s) offline. Will sync when online.`)
+      } else if (queued > 0) {
+        toast.success(`Saved ${saved} online, queued ${queued} offline.`)
+      } else {
+        toast.success(`Saved ${saved} score entries (matched learners by name)`)
+      }
     } catch (e) {
       toast.error(e.message || 'Save failed')
     } finally {

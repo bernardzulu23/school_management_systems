@@ -1,14 +1,33 @@
 'use client'
 
 /**
- * Shows offline/online state and pending attendance sync count.
- * Add to teacher attendance page header.
+ * Shows offline/online state and pending sync count.
+ * labelNoun defaults to "mark" (attendance); use "result" on gradebook / SBA pages.
  */
 import { Loader2, Wifi, WifiOff, CloudUpload } from 'lucide-react'
 import { useOfflineSync } from '@/lib/offline/use-sync'
 
-export function SyncStatusBadge() {
-  const { isOnline, pendingCount, syncing, lastSync, syncNow } = useOfflineSync()
+/**
+ * @param {{
+ *   channel?: 'all' | 'attendance' | 'results',
+ *   userId?: string,
+ *   postGradebook?: (payload: object) => Promise<unknown>,
+ *   noun?: string,
+ * }} [props]
+ */
+export function SyncStatusBadge({
+  channel = 'attendance',
+  userId = '',
+  postGradebook,
+  noun = 'mark',
+} = {}) {
+  const { isOnline, pendingCount, syncing, lastSync, syncNow } = useOfflineSync({
+    channel,
+    userId,
+    postGradebook,
+  })
+
+  const plural = pendingCount !== 1 ? 's' : ''
 
   if (syncing) {
     return (
@@ -18,7 +37,8 @@ export function SyncStatusBadge() {
         aria-live="polite"
       >
         <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
-        Syncing {pendingCount} mark{pendingCount !== 1 ? 's' : ''}…
+        Syncing {pendingCount} {noun}
+        {plural}…
       </div>
     )
   }
@@ -30,7 +50,8 @@ export function SyncStatusBadge() {
         role="status"
       >
         <WifiOff className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        Offline — {pendingCount} mark{pendingCount !== 1 ? 's' : ''} pending
+        Offline — {pendingCount} {noun}
+        {plural} pending
       </div>
     )
   }
@@ -42,7 +63,7 @@ export function SyncStatusBadge() {
         role="status"
       >
         <WifiOff className="h-3.5 w-3.5 shrink-0" aria-hidden />
-        Offline — marks saved on this device
+        Offline — {noun}s saved on this device
       </div>
     )
   }
@@ -53,7 +74,7 @@ export function SyncStatusBadge() {
         type="button"
         onClick={() => syncNow()}
         className="flex items-center gap-1.5 text-xs text-amber-800 bg-amber-50 px-3 py-1.5 rounded-full border border-amber-200 hover:bg-amber-100 transition-colors"
-        aria-label={`Sync ${pendingCount} pending attendance marks`}
+        aria-label={`Sync ${pendingCount} pending ${noun}${plural}`}
       >
         <CloudUpload className="h-3.5 w-3.5 shrink-0" aria-hidden />
         {pendingCount} not synced — tap to sync
