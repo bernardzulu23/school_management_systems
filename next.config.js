@@ -19,10 +19,31 @@ const nextConfig = {
     cpus: 1,
     workerThreads: false,
     staticGenerationMaxConcurrency: 1,
-    // On Vercel (8GB), a webpack child + 6GB heap OOMs. Keep the worker local only.
+    staticGenerationMinPagesPerWorker: 50,
+    // On Vercel (8GB), a webpack child + large heap OOMs. Keep the worker local only.
     webpackBuildWorker: !process.env.VERCEL,
     // More aggressive GC / smaller peak during webpack (Next 15+).
     webpackMemoryOptimizations: true,
+  },
+
+  // Keep ingest PDFs / mobile / docs out of the serverless trace (and upload weight).
+  outputFileTracingExcludes: {
+    '*': [
+      './zsms-mobile/**/*',
+      './solver-service/**/*',
+      './EARLY_CHILDHOOD_EDUCATION_SYLLABI/**/*',
+      './Primary_Education_teaching/**/*',
+      './primary_school_syllabus/**/*',
+      './Teaching Module/**/*',
+      './Syllabus/**/*',
+      './Validation_folder/**/*',
+      './old_syllabus/**/*',
+      './past-papers/**/*',
+      './docs/**/*',
+      './__tests__/**/*',
+      './memory/**/*',
+      './ingest/**/*',
+    ],
   },
 
   // Skip typecheck during Vercel builds; run `npm run lint` and `tsc` locally.
@@ -94,6 +115,8 @@ const nextConfig = {
     // Cap webpack parallelism on constrained Vercel builders (2 CPUs / 8GB).
     if (!dev && process.env.VERCEL) {
       config.parallelism = 1
+      // Persistent cache can keep large serialized graphs in RAM + disk peak.
+      config.cache = false
     }
 
     if (!dev && !isServer) {
@@ -114,6 +137,18 @@ const nextConfig = {
         ]
       } catch {
         /* terser-webpack-plugin ships with Next/webpack */
+      }
+    }
+
+    // Server minify can also fan out worker threads on Vercel.
+    if (!dev && isServer && process.env.VERCEL && config.optimization) {
+      config.optimization.minimize = true
+      if (Array.isArray(config.optimization.minimizer)) {
+        for (const plugin of config.optimization.minimizer) {
+          if (plugin?.options && typeof plugin.options === 'object') {
+            plugin.options.parallel = false
+          }
+        }
       }
     }
 
