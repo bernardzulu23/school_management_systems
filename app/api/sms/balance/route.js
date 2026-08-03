@@ -6,7 +6,7 @@ import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { SmsBalanceSettingsSchema } from '@/lib/schemas'
-import { getOrCreateSmsSettings } from '@/lib/sms/balance'
+import { getOrCreateSmsSettings, TRIAL_SMS_CREDITS } from '@/lib/sms/balance'
 import prisma from '@/lib/prisma'
 
 export const GET = withErrorHandler(async function GET(request) {
@@ -42,6 +42,10 @@ export const GET = withErrorHandler(async function GET(request) {
     success: true,
     data: {
       smsBalance: settings.smsBalance,
+      smsLifetimeGranted: settings.smsLifetimeGranted ?? 0,
+      smsLifetimeUsed: settings.smsLifetimeUsed ?? 0,
+      trialSmsGrantedAt: settings.trialSmsGrantedAt ?? null,
+      trialSmsAllowance: settings.trialSmsGrantedAt ? TRIAL_SMS_CREDITS : null,
       lowBalanceThreshold: settings.lowBalanceThreshold,
       lowBalanceAlertEmail: settings.lowBalanceAlertEmail,
       parentSmsAbsent: settings.parentSmsAbsent ?? true,

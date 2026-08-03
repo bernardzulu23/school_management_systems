@@ -3686,6 +3686,12 @@ model SchoolSmsSettings {
   schoolId              String   @id
   school                School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   smsBalance            Int      @default(0)
+  /// Total credits ever granted (trial pack, manual top-ups, purchases).
+  smsLifetimeGranted      Int      @default(0)
+  /// Total credits reserved for outbound sends (refunds decrement).
+  smsLifetimeUsed         Int      @default(0)
+  /// Set once when the free-trial SMS pack is applied (idempotent guard).
+  trialSmsGrantedAt     DateTime?
   lowBalanceThreshold   Int      @default(50)
   lowBalanceAlertEmail  String?
   lowBalanceAlertSentAt DateTime?

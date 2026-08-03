@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { RefreshCw, Send } from 'lucide-react'
@@ -21,6 +22,9 @@ export default function SmsLogPage() {
   const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
   const [balance, setBalance] = useState(null)
+  const [lifetimeGranted, setLifetimeGranted] = useState(0)
+  const [lifetimeUsed, setLifetimeUsed] = useState(0)
+  const [trialSmsAllowance, setTrialSmsAllowance] = useState(null)
   const [threshold, setThreshold] = useState(50)
   const [alertEmail, setAlertEmail] = useState('')
   const [parentSmsAbsent, setParentSmsAbsent] = useState(true)
@@ -58,6 +62,9 @@ export default function SmsLogPage() {
       if (!res.ok) return
       const data = json?.data || {}
       setBalance(data.smsBalance ?? 0)
+      setLifetimeGranted(data.smsLifetimeGranted ?? 0)
+      setLifetimeUsed(data.smsLifetimeUsed ?? 0)
+      setTrialSmsAllowance(data.trialSmsAllowance ?? null)
       setThreshold(data.lowBalanceThreshold ?? 50)
       setAlertEmail(data.lowBalanceAlertEmail || '')
       setParentSmsAbsent(data.parentSmsAbsent !== false)
@@ -143,6 +150,10 @@ export default function SmsLogPage() {
       toast.error('Enter a message')
       return
     }
+    if (balance !== null && balance < phoneNumbers.length) {
+      toast.error(`Insufficient SMS credits. Required: ${phoneNumbers.length}, balance: ${balance}`)
+      return
+    }
 
     setSending(true)
     try {
@@ -168,6 +179,9 @@ export default function SmsLogPage() {
   }
 
   const previewCount = parsePhoneList(phoneText).length
+  const creditsExhausted = balance !== null && balance <= 0
+  const trialUsed =
+    trialSmsAllowance != null ? Math.min(lifetimeUsed, trialSmsAllowance) : lifetimeUsed
 
   return (
     <DashboardLayout title="SMS">
@@ -178,6 +192,55 @@ export default function SmsLogPage() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <Card className="p-6">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold text-royalPurple-text1 mb-1">Credits</h2>
+              <p className="text-sm text-royalPurple-text3">
+                Each recipient uses 1 credit. Remaining decreases as you send.
+              </p>
+            </div>
+            <Button type="button" className="btn-secondary btn-sm" onClick={fetchBalance}>
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Refresh balance
+            </Button>
+          </div>
+          <div className="mt-4 grid gap-4 sm:grid-cols-3">
+            <div className="rounded-lg border border-royalPurple-border bg-royalPurple-page p-4">
+              <p className="text-xs uppercase tracking-wide text-royalPurple-text3">Remaining</p>
+              <p className="text-3xl font-bold text-royalPurple-text1 mt-1">
+                {balance === null ? '—' : balance}
+              </p>
+            </div>
+            <div className="rounded-lg border border-royalPurple-border bg-royalPurple-page p-4">
+              <p className="text-xs uppercase tracking-wide text-royalPurple-text3">Texts used</p>
+              <p className="text-3xl font-bold text-royalPurple-text1 mt-1">{lifetimeUsed}</p>
+            </div>
+            <div className="rounded-lg border border-royalPurple-border bg-royalPurple-page p-4">
+              <p className="text-xs uppercase tracking-wide text-royalPurple-text3">Granted</p>
+              <p className="text-3xl font-bold text-royalPurple-text1 mt-1">{lifetimeGranted}</p>
+            </div>
+          </div>
+          {trialSmsAllowance != null ? (
+            <p className="text-sm text-royalPurple-text2 mt-3">
+              Trial pack: {trialUsed} of {trialSmsAllowance} used
+            </p>
+          ) : null}
+          {creditsExhausted ? (
+            <div className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-4">
+              <p className="text-sm font-medium text-amber-900">
+                SMS credits exhausted. Subscribe to continue sending messages to parents and staff.
+              </p>
+              <Link
+                href="/pricing"
+                className="inline-flex mt-3 text-sm font-semibold text-royalPurple-primary underline"
+              >
+                Subscribe to continue
+              </Link>
+            </div>
+          ) : null}
+        </Card>
+
         <Card className="p-6">
           <h2 className="text-lg font-semibold text-royalPurple-text1 mb-2">Emergency broadcast</h2>
           <p className="text-sm text-royalPurple-text3 mb-4">
@@ -194,12 +257,13 @@ export default function SmsLogPage() {
                 placeholder={'0977123456\n+260977123456\none per line or comma-separated'}
                 value={phoneText}
                 onChange={(e) => setPhoneText(e.target.value)}
+                disabled={creditsExhausted}
               />
               <Button
                 type="button"
                 className="btn-secondary btn-sm mt-2"
                 onClick={loadAllParentNumbers}
-                disabled={loadingParents}
+                disabled={loadingParents || creditsExhausted}
               >
                 {loadingParents ? 'Loading…' : 'Load all parent contacts'}
               </Button>
@@ -214,18 +278,24 @@ export default function SmsLogPage() {
                 value={broadcastMessage}
                 onChange={(e) => setBroadcastMessage(e.target.value)}
                 placeholder="School closed tomorrow due to…"
+                disabled={creditsExhausted}
               />
               <p className="text-xs text-royalPurple-text3 mt-1">
                 {broadcastMessage.length}/1000 · uses {previewCount} credit(s)
+                {balance !== null ? ` · balance ${balance}` : ''}
               </p>
               <Button
                 type="button"
                 className="btn-primary mt-3"
                 onClick={sendBroadcast}
-                disabled={sending || previewCount === 0}
+                disabled={sending || previewCount === 0 || creditsExhausted}
               >
                 <Send className="w-4 h-4 mr-2" />
-                {sending ? 'Enqueueing…' : `Send to ${previewCount} recipients`}
+                {sending
+                  ? 'Enqueueing…'
+                  : creditsExhausted
+                    ? 'No credits remaining'
+                    : `Send to ${previewCount} recipients`}
               </Button>
             </div>
           </div>

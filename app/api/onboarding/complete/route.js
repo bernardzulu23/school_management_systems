@@ -19,6 +19,7 @@ import { validateSchoolLocation } from '@/lib/platform/reportingStream'
 import { completeIndividualOnboarding, isIndividualRegistration } from '@/lib/onboarding/individual'
 import { seedSubjectsForSchool } from '@/lib/subjects/seedSubjects'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { grantSmsCredits, TRIAL_SMS_CREDITS } from '@/lib/sms/balance'
 
 const RESERVED = new Set([
   'www',
@@ -285,6 +286,10 @@ export const POST = withSecureHandler(async function POST(request) {
       })
 
       await seedSubjectsForSchool(tx, { id: school.id, level, enabledLocalLanguages: [] })
+
+      if (isTrial) {
+        await grantSmsCredits(school.id, TRIAL_SMS_CREDITS, { trial: true, tx })
+      }
 
       return school
     })
