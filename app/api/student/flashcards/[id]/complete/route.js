@@ -11,6 +11,7 @@ import { scoreFlashcardSession } from '@/lib/flashcards/scoreSession'
 import { generateFlashcardSessionFeedback } from '@/lib/flashcards/generateSessionFeedback'
 import { checkAILimit, trackAIUsage } from '@/lib/middleware/aiUsageTracker'
 import { onFlashcardDeckCompleted } from '@/lib/teaching/updateTopicMasteryHooks'
+import { safeRouteParam } from '@/lib/security/safeQueryValue'
 
 const CompleteSchema = z.object({
   answers: z.record(z.string(), z.string()).default({}),
@@ -28,8 +29,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
-  const { id } = await params
-  const deckId = String(id || '').trim()
+  const deckId = await safeRouteParam(params, 'id')
   if (!deckId) throw new ApiError('Deck id required', 400)
 
   const db = getTenantClient(schoolId)
@@ -55,18 +55,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
 
   const score = scoreFlashcardSession(cards, body.answers)
 
-  const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || ''))
-  if (limitBlock) return limitBlock
-
-  const feedback = await generateFlashcardSessionFeedback({
-    subjectName: deck.subjectName,
-    deckTitle: deck.title,
-    score,
-  })
-
-  await trackAIUsage(schoolId, 'student-flashcards-feedback').catch(() => {})
-
-  // Teaching Studio: Flashcard session → TopicMastery (best-effort)
+  // Mastery must succeed independently of AI enrichment.
   try {
     await onFlashcardDeckCompleted({
       schoolId,
@@ -78,6 +67,33 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
     })
   } catch (err) {
     console.warn('[teaching] flashcard mastery update skipped:', err?.message || err)
+  }
+
+  let fromAI = false
+  let feedback
+  try {
+    const limitBlock = await checkAILimit(schoolId, String(auth.user?.id || ''))
+    // Even if AI quota is exhausted, still return deterministic coaching text.
+    const generated = await generateFlashcardSessionFeedback({
+      subjectName: deck.subjectName,
+      deckTitle: deck.title,
+      score,
+      skipAI: Boolean(limitBlock),
+    })
+    feedback = generated.feedback
+    fromAI = Boolean(generated.fromAI)
+    if (fromAI) {
+      await trackAIUsage(schoolId, 'student-flashcards-feedback').catch(() => {})
+    }
+  } catch (err) {
+    console.warn('[flashcards] feedback enrichment skipped:', err?.message || err)
+    const generated = await generateFlashcardSessionFeedback({
+      subjectName: deck.subjectName,
+      deckTitle: deck.title,
+      score,
+      skipAI: true,
+    })
+    feedback = generated.feedback
   }
 
   return NextResponse.json({
@@ -94,6 +110,7 @@ export const POST = withErrorHandler(async function POST(request, { params }) {
       },
       results: score.results,
       feedback,
+      feedbackSource: fromAI ? 'ai' : 'fallback',
     },
   })
 })

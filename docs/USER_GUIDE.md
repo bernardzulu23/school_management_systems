@@ -622,25 +622,25 @@ Students view timetables, materials, assessments, results, and study tools.
 
 ### Navigation menu
 
-| Menu item          | Route                                                                           |
-| ------------------ | ------------------------------------------------------------------------------- |
-| Dashboard          | `/dashboard/student`                                                            |
-| Profile / Settings | `/dashboard/profile`, `/dashboard/settings`                                     |
-| Give Feedback      | `/dashboard/feedback`                                                           |
-| My Class           | `/dashboard/student/class`                                                      |
-| Subjects           | `/dashboard/student/subjects`                                                   |
-| Materials          | `/dashboard/student/materials`                                                  |
-| My Timetable       | `/dashboard/timetable/student`                                                  |
-| Assessments        | `/dashboard/student/assessments`                                                |
-| Flashcards         | `/dashboard/student/flashcards`                                                 |
-| Results            | `/dashboard/student/results`                                                    |
-| ECZ Practice       | `/dashboard/student/ecz-practice`                                               |
-| Career guidance    | `/dashboard/student/learning-path`                                              |
-| Study assistant    | `/dashboard/student/study-assistant` - plain-text answers (no markdown markers) |
-| Code Playground    | `/dashboard/student/code-playground`                                            |
-| Innovation Hub     | `/dashboard/innovation`                                                         |
-| My Activities      | `/dashboard/student/extracurricular`                                            |
-| Privacy            | `/dashboard/privacy`                                                            |
+| Menu item          | Route                                                                                                                                          |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dashboard          | `/dashboard/student`                                                                                                                           |
+| Profile / Settings | `/dashboard/profile`, `/dashboard/settings`                                                                                                    |
+| Give Feedback      | `/dashboard/feedback`                                                                                                                          |
+| My Class           | `/dashboard/student/class`                                                                                                                     |
+| Subjects           | `/dashboard/student/subjects`                                                                                                                  |
+| Materials          | `/dashboard/student/materials`                                                                                                                 |
+| My Timetable       | `/dashboard/timetable/student`                                                                                                                 |
+| Assessments        | `/dashboard/student/assessments`                                                                                                               |
+| Flashcards         | `/dashboard/student/flashcards` — finish a deck to score + coaching feedback (AI when available; always completes with a fallback if AI fails) |
+| Results            | `/dashboard/student/results`                                                                                                                   |
+| ECZ Practice       | `/dashboard/student/ecz-practice`                                                                                                              |
+| Career guidance    | `/dashboard/student/learning-path`                                                                                                             |
+| Study assistant    | `/dashboard/student/study-assistant` - plain-text answers (no markdown markers)                                                                |
+| Code Playground    | `/dashboard/student/code-playground`                                                                                                           |
+| Innovation Hub     | `/dashboard/innovation`                                                                                                                        |
+| My Activities      | `/dashboard/student/extracurricular`                                                                                                           |
+| Privacy            | `/dashboard/privacy`                                                                                                                           |
 
 ### Additional student pages
 
