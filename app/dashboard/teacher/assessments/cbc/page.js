@@ -15,6 +15,14 @@ import {
 } from '@/components/ui/select'
 import { ArrowLeft, Download, ClipboardList } from 'lucide-react'
 import { StaffRouteGuard } from '@/components/auth/StaffRouteGuard'
+import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
+import {
+  cacheTeacherJson,
+  getCachedTeacherJson,
+  queueCbcRating,
+  tryOnlineOrQueue,
+} from '@/lib/offline/teacher-ops'
+import { isBrowserOnline } from '@/lib/offline/network'
 import { toast } from 'react-hot-toast'
 
 const RATING_LEVELS = [
@@ -38,12 +46,14 @@ export default function CbcAssessmentPage() {
 
   const load = useCallback(async () => {
     setLoading(true)
+    const year = new Date().getFullYear()
+    const cacheKey = `cbc:bundle:${year}:${term}:${gradeLevel}`
     try {
       const [refRes, classRes, ratingsRes] = await Promise.all([
         fetch('/api/ecz/reference', { credentials: 'include' }),
         fetch('/api/classes', { credentials: 'include' }),
         fetch(
-          `/api/cbc/ratings?academicYear=${new Date().getFullYear()}&term=${term}&gradeLevel=${encodeURIComponent(gradeLevel)}`,
+          `/api/cbc/ratings?academicYear=${year}&term=${term}&gradeLevel=${encodeURIComponent(gradeLevel)}`,
           { credentials: 'include' }
         ),
       ])
@@ -65,9 +75,25 @@ export default function CbcAssessmentPage() {
       setStudents(learnerList)
       if (learnerList[0]?.id) setStudentId((p) => p || learnerList[0].id)
 
-      setRatings(Array.isArray(ratingsJson?.data) ? ratingsJson.data : [])
+      const ratingRows = Array.isArray(ratingsJson?.data) ? ratingsJson.data : []
+      setRatings(ratingRows)
+      await cacheTeacherJson(cacheKey, {
+        competencies: comps,
+        students: learnerList,
+        ratings: ratingRows,
+      })
     } catch {
-      toast.error('Failed to load CBC data')
+      const cached = await getCachedTeacherJson(cacheKey)
+      if (cached?.competencies?.length || cached?.students?.length) {
+        setCompetencies(cached.competencies || [])
+        setStudents(cached.students || [])
+        setRatings(cached.ratings || [])
+        if (cached.competencies?.[0]?.id) setCompetencyId((p) => p || cached.competencies[0].id)
+        if (cached.students?.[0]?.id) setStudentId((p) => p || cached.students[0].id)
+        toast('Using cached CBC data (offline)', { icon: '📡' })
+      } else {
+        toast.error('Failed to load CBC data')
+      }
     } finally {
       setLoading(false)
     }
@@ -82,31 +108,66 @@ export default function CbcAssessmentPage() {
       toast.error('Select learner and competency')
       return
     }
-    try {
-      const res = await fetch('/api/cbc/ratings', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          studentId,
-          competencyId,
-          gradeLevel,
-          term: Number(term),
-          level,
-          evidenceNote: evidenceNote || undefined,
-        }),
-      })
-      const json = await res.json()
-      if (!res.ok) throw new Error(json.error || 'Save failed')
-      toast.success('Rating saved')
-      setEvidenceNote('')
-      load()
-    } catch (e) {
-      toast.error(e.message || 'Could not save rating')
+    const body = {
+      studentId,
+      competencyId,
+      gradeLevel,
+      term: Number(term),
+      academicYear: new Date().getFullYear(),
+      level,
+      evidenceNote: evidenceNote || undefined,
     }
+
+    const result = await tryOnlineOrQueue(
+      async () => {
+        const res = await fetch('/api/cbc/ratings', {
+          method: 'POST',
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+        })
+        const json = await res.json().catch(() => ({}))
+        if (!res.ok) throw new Error(json.error || 'Save failed')
+        return json
+      },
+      () => queueCbcRating(body)
+    )
+
+    if (!result.ok) {
+      toast.error(result.error?.message || 'Could not save rating')
+      return
+    }
+    if (result.offline) {
+      toast.success('Rating saved offline — will sync when online')
+      setEvidenceNote('')
+      setRatings((prev) => [
+        {
+          id: `local-${Date.now()}`,
+          ...body,
+          student: students.find((s) => s.id === studentId),
+          pendingSync: true,
+        },
+        ...prev.filter(
+          (r) =>
+            !(
+              r.studentId === studentId &&
+              r.competencyId === competencyId &&
+              Number(r.term) === Number(term)
+            )
+        ),
+      ])
+      return
+    }
+    toast.success('Rating saved')
+    setEvidenceNote('')
+    load()
   }
 
   const exportCsv = async () => {
+    if (!isBrowserOnline()) {
+      toast.error('CSV export needs an internet connection')
+      return
+    }
     try {
       const res = await fetch(
         `/api/cbc/export?academicYear=${new Date().getFullYear()}&term=${term}&gradeLevel=${encodeURIComponent(gradeLevel)}`,
@@ -142,6 +203,9 @@ export default function CbcAssessmentPage() {
               <ClipboardList className="h-7 w-7" />
               CBC Continuous Assessment
             </h1>
+            <div className="ml-auto">
+              <SyncStatusBadge channel="all" noun="change" />
+            </div>
           </div>
 
           <div className="rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-sm text-emerald-900">

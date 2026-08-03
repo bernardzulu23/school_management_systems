@@ -18,6 +18,14 @@ import { Download, FileText, Printer } from 'lucide-react'
 import { sessionFetch, authErrorMessage } from '@/lib/auth/sessionFetch'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import { useSchoolSubjectSelectors } from '@/hooks/useSchoolSubjectSelectors'
+import {
+  isLocalLessonPlanId,
+  newLocalLessonPlanId,
+  queueLessonPlanCreate,
+  queueLessonPlanSubmit,
+  queueLessonPlanUpdate,
+  tryOnlineOrQueue,
+} from '@/lib/offline/teacher-ops'
 
 const GRADE_GROUPS = [
   {
@@ -686,57 +694,84 @@ export default function AILessonPlanner() {
     }
     setSaving(true)
     try {
-      if (savedPlanId) {
-        const res = await fetch(`/api/lesson-plans/${encodeURIComponent(savedPlanId)}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            content,
-            topic: form.topic,
-            subTopic: form.subTopic || form.topic,
-            grade: form.grade,
-            subject: activeSubject,
-            schemeId: schemeLink.schemeId || undefined,
-            weekNumber: schemeLink.weekNumber || undefined,
-            topicKey: schemeLink.topicKey || undefined,
-          }),
-        })
-        const json = await res.json().catch(() => ({}))
-        if (!res.ok || !json?.success) {
-          console.warn('[lesson-planner] draft update failed', res.status, json)
-          toast.error('Could not save draft. Please try again.')
+      const meta = {
+        content,
+        topic: form.topic,
+        subTopic: form.subTopic || form.topic,
+        grade: form.grade,
+        subject: activeSubject,
+        schemeId: schemeLink.schemeId || undefined,
+        weekNumber: schemeLink.weekNumber || undefined,
+        topicKey: schemeLink.topicKey || undefined,
+      }
+
+      if (savedPlanId && !isLocalLessonPlanId(savedPlanId)) {
+        const result = await tryOnlineOrQueue(
+          async () => {
+            const res = await fetch(`/api/lesson-plans/${encodeURIComponent(savedPlanId)}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify(meta),
+            })
+            const json = await res.json().catch(() => ({}))
+            if (!res.ok || !json?.success) throw new Error(json?.message || 'Could not save draft')
+            return json
+          },
+          () => queueLessonPlanUpdate(savedPlanId, meta)
+        )
+        if (!result.ok) {
+          toast.error(result.error?.message || 'Could not save draft. Please try again.')
           return
         }
-        toast.success('Draft updated')
+        toast.success(
+          result.offline ? 'Draft saved offline — will sync when online' : 'Draft updated'
+        )
         return
       }
-      const res = await fetch('/api/lesson-plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({
-          grade: form.grade,
-          subject: activeSubject,
-          topic: form.topic,
-          subTopic: form.subTopic || form.topic,
-          duration: Number(form.duration),
-          term: form.term,
-          templateType: form.templateType,
-          schemeId: schemeLink.schemeId || undefined,
-          weekNumber: schemeLink.weekNumber || undefined,
-          topicKey: schemeLink.topicKey || undefined,
-          content,
-          submit: false,
-        }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok || !json?.success) {
-        console.warn('[lesson-planner] draft create failed', res.status, json)
-        toast.error('Could not save draft. Please try again.')
+
+      const createBody = {
+        grade: form.grade,
+        subject: activeSubject,
+        topic: form.topic,
+        subTopic: form.subTopic || form.topic,
+        duration: Number(form.duration),
+        term: form.term,
+        templateType: form.templateType,
+        schemeId: schemeLink.schemeId || undefined,
+        weekNumber: schemeLink.weekNumber || undefined,
+        topicKey: schemeLink.topicKey || undefined,
+        content,
+        submit: false,
+      }
+      const localId =
+        savedPlanId && isLocalLessonPlanId(savedPlanId) ? savedPlanId : newLocalLessonPlanId()
+
+      const result = await tryOnlineOrQueue(
+        async () => {
+          const res = await fetch('/api/lesson-plans', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(createBody),
+          })
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok || !json?.success) throw new Error(json?.message || 'Could not save draft')
+          return json
+        },
+        () => queueLessonPlanCreate(createBody, localId)
+      )
+
+      if (!result.ok) {
+        toast.error(result.error?.message || 'Could not save draft. Please try again.')
         return
       }
-      setSavedPlanId(json.data.id)
+      if (result.offline) {
+        setSavedPlanId(localId)
+        toast.success('Draft saved offline — will sync when online')
+        return
+      }
+      setSavedPlanId(result.data.data.id)
       toast.success('Saved as draft')
     } finally {
       setSaving(false)
@@ -751,50 +786,90 @@ export default function AILessonPlanner() {
     }
     setSaving(true)
     try {
+      const createBody = {
+        grade: form.grade,
+        subject: activeSubject,
+        topic: form.topic,
+        subTopic: form.subTopic || form.topic,
+        duration: Number(form.duration),
+        term: form.term,
+        templateType: form.templateType,
+        schemeId: schemeLink.schemeId || undefined,
+        weekNumber: schemeLink.weekNumber || undefined,
+        topicKey: schemeLink.topicKey || undefined,
+        content,
+        submit: true,
+      }
+
       let planId = savedPlanId
-      if (!planId) {
-        const createRes = await fetch('/api/lesson-plans', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({
-            grade: form.grade,
-            subject: activeSubject,
-            topic: form.topic,
-            subTopic: form.subTopic || form.topic,
-            duration: Number(form.duration),
-            term: form.term,
-            templateType: form.templateType,
-            schemeId: schemeLink.schemeId || undefined,
-            weekNumber: schemeLink.weekNumber || undefined,
-            topicKey: schemeLink.topicKey || undefined,
-            content,
-            submit: false,
-          }),
-        })
-        const createJson = await createRes.json().catch(() => ({}))
-        if (!createRes.ok || !createJson?.success) {
-          console.warn('[lesson-planner] save before submit failed', createRes.status, createJson)
-          toast.error('Could not save the lesson plan. Please try again.')
+      if (!planId || isLocalLessonPlanId(planId)) {
+        const localId = planId || newLocalLessonPlanId()
+        const result = await tryOnlineOrQueue(
+          async () => {
+            const createRes = await fetch('/api/lesson-plans', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ ...createBody, submit: false }),
+            })
+            const createJson = await createRes.json().catch(() => ({}))
+            if (!createRes.ok || !createJson?.success) {
+              throw new Error(createJson?.message || 'Could not save the lesson plan')
+            }
+            const id = createJson.data.id
+            const res = await fetch(`/api/lesson-plans/${encodeURIComponent(id)}/submit`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ content }),
+            })
+            const json = await res.json().catch(() => ({}))
+            if (!res.ok || !json?.success) throw new Error(json?.message || 'Could not submit')
+            return { id, json }
+          },
+          () => queueLessonPlanCreate(createBody, localId)
+        )
+        if (!result.ok) {
+          toast.error(result.error?.message || 'Could not submit for approval. Please try again.')
           return
         }
-        planId = createJson.data.id
-        setSavedPlanId(planId)
-      }
-      const res = await fetch(`/api/lesson-plans/${encodeURIComponent(planId)}/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ content }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok || !json?.success) {
-        console.warn('[lesson-planner] submit failed', res.status, json)
-        toast.error('Could not submit for approval. Please try again.')
+        if (result.offline) {
+          setSavedPlanId(localId)
+          toast.success('Queued for HOD — will submit when online')
+          return
+        }
+        setSavedPlanId(result.data.id)
+        toast.success(result.data.json.message || 'Submitted for HOD approval')
+        router.push(`/dashboard/teacher/lesson-plans/${result.data.id}`)
         return
       }
-      toast.success(json.message || 'Submitted for HOD approval')
-      router.push(`/dashboard/teacher/lesson-plans/${planId}`)
+
+      const result = await tryOnlineOrQueue(
+        async () => {
+          const res = await fetch(`/api/lesson-plans/${encodeURIComponent(planId)}/submit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ content }),
+          })
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok || !json?.success) throw new Error(json?.message || 'Could not submit')
+          return json
+        },
+        () => queueLessonPlanSubmit(planId, { content })
+      )
+      if (!result.ok) {
+        toast.error(result.error?.message || 'Could not submit for approval. Please try again.')
+        return
+      }
+      toast.success(
+        result.offline
+          ? 'Queued for HOD — will submit when online'
+          : result.data.message || 'Submitted for HOD approval'
+      )
+      if (!result.offline && planId) {
+        router.push(`/dashboard/teacher/lesson-plans/${planId}`)
+      }
     } finally {
       setSaving(false)
     }

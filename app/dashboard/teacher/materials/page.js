@@ -23,6 +23,14 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'react-hot-toast'
 import { openMaterialFile } from '@/lib/materials/openMaterialFile'
+import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
+import {
+  cacheTeacherJson,
+  getCachedTeacherJson,
+  queueMaterialMeta,
+  tryOnlineOrQueue,
+} from '@/lib/offline/teacher-ops'
+import { isBrowserOnline } from '@/lib/offline/network'
 
 export default function StudyMaterialsPage() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -89,8 +97,15 @@ export default function StudyMaterialsPage() {
       if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to load materials')
       const data = Array.isArray(json?.data) ? json.data : []
       setMaterials(data)
+      await cacheTeacherJson('teacher:materials', data)
     } catch (e) {
-      setError(e.message || 'Failed to load materials')
+      const cached = await getCachedTeacherJson('teacher:materials')
+      if (Array.isArray(cached) && cached.length) {
+        setMaterials(cached)
+        toast('Using cached materials list (offline)', { icon: '📡' })
+      } else {
+        setError(e.message || 'Failed to load materials')
+      }
     } finally {
       setLoading(false)
     }
@@ -214,6 +229,11 @@ export default function StudyMaterialsPage() {
     setUploadProgress('')
     try {
       if (!editing && form.file) {
+        if (!isBrowserOnline()) {
+          throw new Error(
+            'File upload needs internet. Paste a File URL instead to save metadata offline, or reconnect.'
+          )
+        }
         setUploadProgress('Uploading file…')
         const csrf = await getCsrfToken()
         const body = new FormData()
@@ -265,20 +285,40 @@ export default function StudyMaterialsPage() {
         description: form.description || null,
       }
 
-      const res = await fetch(
-        editing
-          ? `/api/teacher/materials/${encodeURIComponent(editing.id)}`
-          : '/api/teacher/materials',
-        {
-          method: editing ? 'PUT' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-          credentials: 'include',
-        }
+      const result = await tryOnlineOrQueue(
+        async () => {
+          const res = await fetch(
+            editing
+              ? `/api/teacher/materials/${encodeURIComponent(editing.id)}`
+              : '/api/teacher/materials',
+            {
+              method: editing ? 'PUT' : 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload),
+              credentials: 'include',
+            }
+          )
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to save material')
+          return json
+        },
+        () => queueMaterialMeta({ editingId: editing?.id, payload })
       )
 
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to save material')
+      if (!result.ok) throw result.error || new Error('Failed to save material')
+
+      if (result.offline) {
+        toast.success('Material metadata saved offline — will sync when online')
+        setMaterials((prev) => {
+          if (editing) {
+            return prev.map((m) => (m.id === editing.id ? { ...m, ...payload } : m))
+          }
+          return [{ id: `local-${Date.now()}`, ...payload, pendingSync: true }, ...prev]
+        })
+        setShowForm(false)
+        resetForm()
+        return
+      }
 
       toast.success(editing ? 'Material updated successfully' : 'Material created successfully')
       setShowForm(false)
@@ -317,7 +357,7 @@ export default function StudyMaterialsPage() {
     <DashboardLayout title="Study Materials">
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center space-x-4">
             <Link href="/dashboard/teacher">
               <Button variant="outline" size="sm">
@@ -342,7 +382,8 @@ export default function StudyMaterialsPage() {
               </Link>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center gap-2">
+            <SyncStatusBadge channel="all" noun="change" />
             <Button onClick={openCreate} disabled={saving}>
               <Upload className="h-4 w-4 mr-2" />
               Add Material

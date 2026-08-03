@@ -11,8 +11,11 @@ Rural schools often have **2G, intermittent, or no connectivity**. ZSMS is built
 | Attendance                                    | AI chat / generation      |
 | Secondary Result Entry                        | Payments / Lipila         |
 | ECZ SBA score entry                           | SMS send                  |
-| Cached class lists & parent children (read)   | USSD                      |
-| Seed import / queue flush when briefly online | Bulk Excel school uploads |
+| CBC competency ratings                        | Materials file upload     |
+| Lesson plan draft / submit to HOD             | Bulk Excel school uploads |
+| Materials metadata (URL)                      | USSD                      |
+| Cached class lists & parent children (read)   |                           |
+| Seed import / queue flush when briefly online |                           |
 
 ## Cold start (zero prior visit)
 
@@ -24,18 +27,37 @@ Rural schools often have **2G, intermittent, or no connectivity**. ZSMS is built
 
 Seeds expire after **14 days**. They never include passwords or API keys.
 
-## What exists today (Phase 1)
+## What exists today (Phase 1–2)
 
 | Piece                               | Location                                                        |
 | ----------------------------------- | --------------------------------------------------------------- |
 | Sync engine                         | `lib/offline/sync/engine.js`                                    |
 | Dexie DB `zsms_offline`             | `lib/offline/db.js` (v3)                                        |
 | Attendance / SBA / gradebook queues | `attendance-store.js`, `results-store.js`                       |
+| CBC / lesson plans / materials      | `lib/offline/teacher-ops.js` → `mutationQueue`                  |
 | Seed export API                     | `POST /api/offline/seed`                                        |
 | Seed UI                             | `/dashboard/offline`                                            |
-| Service worker shells               | `public/sw.js` (v5)                                             |
+| Service worker shells               | `public/sw.js`                                                  |
 | Global offline banner               | all authenticated routes                                        |
 | AI/payments/SMS gate                | `lib/auth/installApiFetch.js` when `navigator.onLine === false` |
+
+### CBC ratings
+
+1. Open **CBC Continuous Assessment** online once (caches learners + competencies).
+2. Save ratings offline — queued and synced via `POST /api/cbc/ratings`.
+3. CSV export requires internet.
+
+### Lesson plans
+
+1. Generate AI plans **online** (AI needs internet).
+2. **Save draft** / **Submit to HOD** works offline (queued).
+3. Existing plan detail page save/submit also queues when offline.
+
+### Materials
+
+1. **File upload** requires internet.
+2. Create/update with a **File URL** (metadata only) works offline and syncs later.
+3. Materials list is cached after an online visit.
 
 ## Teacher workflows
 
@@ -66,19 +88,18 @@ See sections below and the Result Entry / ECZ SBA notes in [USER_GUIDE.md](./USE
 
 ## Local schema (Dexie)
 
-| Store                              | Purpose               |
-| ---------------------------------- | --------------------- |
-| `attendanceQueue`                  | Attendance            |
-| `classRosters`                     | Rosters               |
-| `sbaScoreQueue` / `gradebookQueue` | Marks                 |
-| `mutationQueue`                    | Future generic writes |
-| `conflictQueue`                    | Manual resolve        |
-| `resultsCache` / `seedMeta`        | Caches + seed audit   |
-| `syncLog`                          | Debug                 |
+| Store                              | Purpose                             |
+| ---------------------------------- | ----------------------------------- |
+| `attendanceQueue`                  | Attendance                          |
+| `classRosters`                     | Rosters                             |
+| `sbaScoreQueue` / `gradebookQueue` | Marks                               |
+| `mutationQueue`                    | CBC, lesson plans, materials, other |
+| `conflictQueue`                    | Manual resolve                      |
+| `resultsCache` / `seedMeta`        | Caches + seed audit                 |
+| `syncLog`                          | Debug                               |
 
 ## Roadmap (later phases)
 
-- Phase 2: lesson plans, materials, CBC ratings offline
 - Phase 3: student flashcards/materials/goals queues
 - Phase 4: admin timetable drafts / announcements
 - Phase 5: parent read-cache + Expo seed parity

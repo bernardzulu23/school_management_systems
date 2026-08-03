@@ -98,11 +98,12 @@ Format version `1`:
 - Manifest / SW role shells
 - Docs
 
-### Phase 2 — Teachers complete
+### Phase 2 — Teachers complete ✅
 
-- Lesson plans, materials, assessment create offline
-- Hardened conflict UI for SBA + gradebook
-- Scheme/timetable read-cache
+- Lesson plan draft/save/submit offline (`mutationQueue`)
+- Materials metadata create/update offline (file upload stays online)
+- CBC competency ratings offline + read cache
+- Sync via central engine channel `mutations`
 
 ### Phase 3 — Students
 

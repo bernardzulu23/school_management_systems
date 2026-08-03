@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v5'
+const CACHE_VERSION = 'v6'
 const STATIC_CACHE = `zsms-static-assets-${CACHE_VERSION}`
 const PAGES_CACHE = `zsms-app-shells-${CACHE_VERSION}`
 const OFFLINE_URL = '/offline.html'
@@ -11,7 +11,10 @@ const APP_SHELL_PATHS = [
   '/dashboard/teacher',
   '/dashboard/teacher/results',
   '/dashboard/teacher/assessments/ecz',
-  '/dashboard/teacher/assessments',
+  '/dashboard/teacher/assessments/cbc',
+  '/dashboard/teacher/materials',
+  '/dashboard/teacher/lesson-planner',
+  '/dashboard/teacher/lesson-plans',
   '/dashboard/student',
   '/dashboard/student/flashcards',
   '/dashboard/student/materials',

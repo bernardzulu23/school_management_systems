@@ -9,6 +9,11 @@ import { Button } from '@/components/ui/Button'
 import LessonPlanViewer from '@/components/lesson-plans/LessonPlanViewer'
 import toast from 'react-hot-toast'
 import { ArrowLeft, FileText, Send } from 'lucide-react'
+import {
+  queueLessonPlanSubmit,
+  queueLessonPlanUpdate,
+  tryOnlineOrQueue,
+} from '@/lib/offline/teacher-ops'
 
 function fmtDate(v) {
   try {
@@ -96,18 +101,30 @@ export default function TeacherLessonPlanDetailPage() {
     if (!plan) return
     setSaving(true)
     try {
-      const res = await fetch(`/api/lesson-plans/${encodeURIComponent(plan.id)}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ content }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok || !json?.success) {
-        toast.error(json?.message || 'Failed to save')
+      const result = await tryOnlineOrQueue(
+        async () => {
+          const res = await fetch(`/api/lesson-plans/${encodeURIComponent(plan.id)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ content }),
+          })
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok || !json?.success) throw new Error(json?.message || 'Failed to save')
+          return json
+        },
+        () => queueLessonPlanUpdate(plan.id, { content })
+      )
+      if (!result.ok) {
+        toast.error(result.error?.message || 'Failed to save')
         return
       }
-      setPlan((p) => ({ ...p, ...json.data }))
+      if (result.offline) {
+        toast.success('Saved offline — will sync when online')
+        setPlan((p) => ({ ...p, content }))
+        return
+      }
+      setPlan((p) => ({ ...p, ...result.data.data }))
       toast.success('Saved')
     } finally {
       setSaving(false)
@@ -118,27 +135,43 @@ export default function TeacherLessonPlanDetailPage() {
     if (!plan) return
     setSaving(true)
     try {
-      if (canEdit && content !== plan.content) {
-        await fetch(`/api/lesson-plans/${encodeURIComponent(plan.id)}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include',
-          body: JSON.stringify({ content }),
-        })
-      }
-      const res = await fetch(`/api/lesson-plans/${encodeURIComponent(plan.id)}/submit`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ content }),
-      })
-      const json = await res.json().catch(() => ({}))
-      if (!res.ok || !json?.success) {
-        toast.error(json?.message || 'Failed to submit')
+      const result = await tryOnlineOrQueue(
+        async () => {
+          if (canEdit && content !== plan.content) {
+            await fetch(`/api/lesson-plans/${encodeURIComponent(plan.id)}`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include',
+              body: JSON.stringify({ content }),
+            })
+          }
+          const res = await fetch(`/api/lesson-plans/${encodeURIComponent(plan.id)}/submit`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ content }),
+          })
+          const json = await res.json().catch(() => ({}))
+          if (!res.ok || !json?.success) throw new Error(json?.message || 'Failed to submit')
+          return json
+        },
+        async () => {
+          if (canEdit && content !== plan.content) {
+            await queueLessonPlanUpdate(plan.id, { content })
+          }
+          await queueLessonPlanSubmit(plan.id, { content })
+        }
+      )
+      if (!result.ok) {
+        toast.error(result.error?.message || 'Failed to submit')
         return
       }
-      setPlan(json.data)
-      toast.success(json.message || 'Submitted for HOD approval')
+      if (result.offline) {
+        toast.success('Queued for HOD — will submit when online')
+        return
+      }
+      setPlan(result.data.data)
+      toast.success(result.data.message || 'Submitted for HOD approval')
       router.refresh()
     } finally {
       setSaving(false)
