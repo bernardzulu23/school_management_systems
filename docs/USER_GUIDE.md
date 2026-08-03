@@ -622,25 +622,25 @@ Students view timetables, materials, assessments, results, and study tools.
 
 ### Navigation menu
 
-| Menu item          | Route                                                                   |
-| ------------------ | ----------------------------------------------------------------------- |
-| Dashboard          | `/dashboard/student`                                                    |
-| Profile / Settings | `/dashboard/profile`, `/dashboard/settings`                             |
-| Give Feedback      | `/dashboard/feedback`                                                   |
-| My Class           | `/dashboard/student/class`                                              |
-| Subjects           | `/dashboard/student/subjects`                                           |
-| Materials          | `/dashboard/student/materials`                                          |
-| My Timetable       | `/dashboard/timetable/student`                                          |
-| Assessments        | `/dashboard/student/assessments`                                        |
-| Flashcards         | `/dashboard/student/flashcards`                                         |
-| Results            | `/dashboard/student/results`                                            |
-| ECZ Practice       | `/dashboard/student/ecz-practice`                                       |
-| Career guidance    | `/dashboard/student/learning-path`                                      |
-| Study assistant    | /dashboard/student/study-assistant — plain-text answers (no ## or \*\*) |
-| Code Playground    | `/dashboard/student/code-playground`                                    |
-| Innovation Hub     | `/dashboard/innovation`                                                 |
-| My Activities      | `/dashboard/student/extracurricular`                                    |
-| Privacy            | `/dashboard/privacy`                                                    |
+| Menu item          | Route                                                                         |
+| ------------------ | ----------------------------------------------------------------------------- |
+| Dashboard          | `/dashboard/student`                                                          |
+| Profile / Settings | `/dashboard/profile`, `/dashboard/settings`                                   |
+| Give Feedback      | `/dashboard/feedback`                                                         |
+| My Class           | `/dashboard/student/class`                                                    |
+| Subjects           | `/dashboard/student/subjects`                                                 |
+| Materials          | `/dashboard/student/materials`                                                |
+| My Timetable       | `/dashboard/timetable/student`                                                |
+| Assessments        | `/dashboard/student/assessments`                                              |
+| Flashcards         | `/dashboard/student/flashcards`                                               |
+| Results            | `/dashboard/student/results`                                                  |
+| ECZ Practice       | `/dashboard/student/ecz-practice`                                             |
+| Career guidance    | `/dashboard/student/learning-path`                                            |
+| Study assistant    | /dashboard/student/study-assistant - plain-text answers (no markdown markers) |
+| Code Playground    | `/dashboard/student/code-playground`                                          |
+| Innovation Hub     | `/dashboard/innovation`                                                       |
+| My Activities      | `/dashboard/student/extracurricular`                                          |
+| Privacy            | `/dashboard/privacy`                                                          |
 
 ### Additional student pages
 
@@ -822,23 +822,23 @@ Trial schools receive **50 complimentary SMS credits** at onboarding. SMS broadc
 
 ## Troubleshooting
 
-| Problem                             | Solution                                                                                                                                                  |
-| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Cannot log in                       | Check subdomain URL; use Forgot Password if weak password blocked                                                                                         |
-| Dashboard blank after login         | Trial may have expired — go to `/dashboard/billing`                                                                                                       |
-| Offline attendance not syncing      | Tap sync badge in header; ensure internet connection                                                                                                      |
-| Timetable not visible               | Headteacher must publish; check term/academic year. HODs see department teachers only — hard-refresh after publish                                        |
-| Timetable shows many conflicts      | Open **Timetable Conflicts**; fix double-booked teachers/classes/rooms; remove overloaded PE/allocation rows; regenerate                                  |
-| Cannot publish timetable            | Resolve **error** / hard conflicts first (Conflicts tab). Soft warnings (e.g. missing periods) do not block Publish — fix or **Dismiss** them for clarity |
-| Timetable generate fails            | Check HOD allocations for invalid multi-class rows or missing teachers; edit on **Department Allocations**                                                |
-| HOD allocation page blocked         | Sign out and back in; ensure you use the school subdomain URL                                                                                             |
-| SBA task blocked for Form 4         | ECZ rules prohibit SBA in Form 4 — use exam tracking instead                                                                                              |
-| SMS not sending                     | Check balance at `/dashboard/sms`. Trial schools start with 50 credits; if 0, use **Subscribe** (`/pricing`). Confirm numbers use Zambian `+260…` format. |
-| Insufficient SMS credits toast      | Recipient count exceeds remaining balance — reduce recipients, or subscribe / top up credits.                                                             |
-| AI tools unavailable                | Upgrade to a plan with AI features                                                                                                                        |
-| Chat reply shows ## or \*\* markers | Refresh and ask again - replies are plain text with dash (-) bullets only                                                                                 |
-| Chat error Unexpected end of JSON   | Retry send; empty network responses are handled safely after the Aug 2026 fix                                                                             |
-| Solo teacher cannot add student     | Individual plan limited to 10 students; upgrade to Individual Premium                                                                                     |
+| Problem                           | Solution                                                                                                                                                  |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Cannot log in                     | Check subdomain URL; use Forgot Password if weak password blocked                                                                                         |
+| Dashboard blank after login       | Trial may have expired — go to `/dashboard/billing`                                                                                                       |
+| Offline attendance not syncing    | Tap sync badge in header; ensure internet connection                                                                                                      |
+| Timetable not visible             | Headteacher must publish; check term/academic year. HODs see department teachers only — hard-refresh after publish                                        |
+| Timetable shows many conflicts    | Open **Timetable Conflicts**; fix double-booked teachers/classes/rooms; remove overloaded PE/allocation rows; regenerate                                  |
+| Cannot publish timetable          | Resolve **error** / hard conflicts first (Conflicts tab). Soft warnings (e.g. missing periods) do not block Publish — fix or **Dismiss** them for clarity |
+| Timetable generate fails          | Check HOD allocations for invalid multi-class rows or missing teachers; edit on **Department Allocations**                                                |
+| HOD allocation page blocked       | Sign out and back in; ensure you use the school subdomain URL                                                                                             |
+| SBA task blocked for Form 4       | ECZ rules prohibit SBA in Form 4 — use exam tracking instead                                                                                              |
+| SMS not sending                   | Check balance at `/dashboard/sms`. Trial schools start with 50 credits; if 0, use **Subscribe** (`/pricing`). Confirm numbers use Zambian `+260…` format. |
+| Insufficient SMS credits toast    | Recipient count exceeds remaining balance — reduce recipients, or subscribe / top up credits.                                                             |
+| AI tools unavailable              | Upgrade to a plan with AI features                                                                                                                        |
+| Chat reply shows markdown markers | Refresh and ask again - replies are plain text with dash (-) bullets only                                                                                 |
+| Chat error Unexpected end of JSON | Retry send; empty network responses are handled safely after the Aug 2026 fix                                                                             |
+| Solo teacher cannot add student   | Individual plan limited to 10 students; upgrade to Individual Premium                                                                                     |
 
 For technical issues, use **Give Feedback** (`/dashboard/feedback`) or contact your school administrator.
 
