@@ -543,6 +543,15 @@ HODs submit plans and minutes at **SIC CPD plans** (`/dashboard/hod/sic-cpd`).
 
 See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md), [ECSEOL_ALIGNMENT.md](./ECSEOL_ALIGNMENT.md), and [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md).
 
+#### Offline & PWA (all roles)
+
+1. Install ZSMS on the device (**Add to Home Screen** / Install app) while on Wi‑Fi.
+2. Open **Offline & sync** (`/dashboard/offline`) → download an encrypted **`.zsmsseed`** for your account → transfer to rural devices → import with the same passphrase.
+3. Enter attendance / marks offline; use the amber banner and sync badge when connected.
+4. AI, payments, and SMS require internet (clear message when offline).
+
+See [OFFLINE_GUIDE.md](./OFFLINE_GUIDE.md) and [PWA_OFFLINE_ARCHITECTURE.md](./PWA_OFFLINE_ARCHITECTURE.md).
+
 #### Attendance (web + offline)
 
 1. Open **Attendance** (`/dashboard/attendance`).

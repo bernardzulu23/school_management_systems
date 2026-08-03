@@ -1,14 +1,29 @@
-const CACHE_VERSION = 'v4'
+const CACHE_VERSION = 'v5'
 const STATIC_CACHE = `zsms-static-assets-${CACHE_VERSION}`
-const PAGES_CACHE = `zsms-teacher-pages-${CACHE_VERSION}`
+const PAGES_CACHE = `zsms-app-shells-${CACHE_VERSION}`
 const OFFLINE_URL = '/offline.html'
 
-/** Shell routes teachers reopen on 2G after a prior online visit. */
-const TEACHER_SHELL_PATHS = [
-  '/dashboard/teacher/results',
-  '/dashboard/teacher/assessments/ecz',
+/** Role shells cached after an online visit (network-first, offline fallback). */
+const APP_SHELL_PATHS = [
+  '/dashboard',
+  '/dashboard/offline',
   '/dashboard/attendance',
   '/dashboard/teacher',
+  '/dashboard/teacher/results',
+  '/dashboard/teacher/assessments/ecz',
+  '/dashboard/teacher/assessments',
+  '/dashboard/student',
+  '/dashboard/student/flashcards',
+  '/dashboard/student/materials',
+  '/dashboard/student/results',
+  '/dashboard/parent',
+  '/dashboard/parent/results',
+  '/dashboard/parent/attendance',
+  '/dashboard/parent/fees',
+  '/dashboard/hod',
+  '/dashboard/results',
+  '/dashboard/classes',
+  '/login',
 ]
 
 const PRECACHE_ASSETS = [
@@ -19,8 +34,8 @@ const PRECACHE_ASSETS = [
   '/icons/icon-512x512.png',
 ]
 
-function isTeacherShell(pathname) {
-  return TEACHER_SHELL_PATHS.some(
+function isAppShell(pathname) {
+  return APP_SHELL_PATHS.some(
     (p) => pathname === p || pathname.startsWith(`${p}/`) || pathname.startsWith(`${p}?`)
   )
 }
@@ -44,7 +59,9 @@ self.addEventListener('activate', (event) => {
           keys
             .filter(
               (key) =>
-                (key.startsWith('zsms-static-assets-') || key.startsWith('zsms-teacher-pages-')) &&
+                (key.startsWith('zsms-static-assets-') ||
+                  key.startsWith('zsms-teacher-pages-') ||
+                  key.startsWith('zsms-app-shells-')) &&
                 key !== STATIC_CACHE &&
                 key !== PAGES_CACHE
             )
@@ -69,7 +86,7 @@ self.addEventListener('fetch', (event) => {
       (async () => {
         try {
           const response = await fetch(request)
-          if (response && response.ok && isTeacherShell(requestUrl.pathname)) {
+          if (response && response.ok && isAppShell(requestUrl.pathname)) {
             const cache = await caches.open(PAGES_CACHE)
             cache.put(request, response.clone()).catch(() => undefined)
           }
@@ -78,7 +95,6 @@ self.addEventListener('fetch', (event) => {
           const pages = await caches.open(PAGES_CACHE)
           const cachedPage = await pages.match(request)
           if (cachedPage) return cachedPage
-          // Try pathname-only match (ignore search)
           const keys = await pages.keys()
           for (const key of keys) {
             try {

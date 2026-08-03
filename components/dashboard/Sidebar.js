@@ -31,6 +31,7 @@ import {
   GamepadIcon,
   Rocket,
   Upload,
+  Download,
   Shield,
   MessageSquare,
   User as UserIcon,
@@ -175,6 +176,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         name: 'Settings',
         href: '/dashboard/settings',
         icon: Settings,
+      },
+      {
+        name: 'Offline & sync',
+        href: '/dashboard/offline',
+        icon: Download,
       },
       {
         name: 'Notifications',

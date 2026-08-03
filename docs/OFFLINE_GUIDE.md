@@ -1,115 +1,93 @@
-# Offline guide (attendance + teacher results)
+# Offline guide (system-wide PWA)
 
-Rural schools often have **2G, intermittent, or no connectivity** during the day. ZSMS is a Progressive Web App (PWA) that lets teachers keep working on the device and sync when the network returns.
+Rural schools often have **2G, intermittent, or no connectivity**. ZSMS is built **offline-first** for core school ops: install as a PWA, seed the device once, enter marks/attendance offline, and sync when signal returns.
 
-## What works offline today
+**Architecture:** [PWA_OFFLINE_ARCHITECTURE.md](./PWA_OFFLINE_ARCHITECTURE.md)
 
-| Workflow               | Page                                 | Local store                       | Sync API                           |
-| ---------------------- | ------------------------------------ | --------------------------------- | ---------------------------------- |
-| Class attendance       | `/dashboard/attendance`              | IndexedDB `attendanceQueue`       | `POST /api/attendance`             |
-| Secondary Result Entry | `/dashboard/teacher/results`         | IndexedDB `gradebookQueue`        | `POST /api/teacher/results`        |
-| ECZ SBA scores         | `/dashboard/teacher/assessments/ecz` | IndexedDB `sbaScoreQueue`         | `POST /api/assessments/sba-scores` |
-| Mobile SBA scores      | Expo Scores tab                      | AsyncStorage → `/api/mobile/sync` | See mobile docs                    |
+## Product rules
 
-**Install tip:** Open the school site on Chrome/Safari once while online, use **Add to Home Screen**, then reopen Result Entry / ECZ SBA / Attendance so the service worker can cache those shells.
+| Works offline (write + sync)                  | Needs internet            |
+| --------------------------------------------- | ------------------------- |
+| Attendance                                    | AI chat / generation      |
+| Secondary Result Entry                        | Payments / Lipila         |
+| ECZ SBA score entry                           | SMS send                  |
+| Cached class lists & parent children (read)   | USSD                      |
+| Seed import / queue flush when briefly online | Bulk Excel school uploads |
 
-## How it works
+## Cold start (zero prior visit)
 
-```mermaid
-sequenceDiagram
-  participant T as Teacher device
-  participant IDB as IndexedDB (Dexie)
-  participant API as School API
+1. At an office or hotspot, open **Offline & sync** (`/dashboard/offline`).
+2. Set a passphrase → **Download `.zsmsseed`** (role-scoped: only your classes/children).
+3. Copy the file (USB / ShareIt / WhatsApp) to the rural device.
+4. On that device: log in when possible **or** open a previously installed PWA → **Import seed** with the same passphrase.
+5. Enter attendance / marks offline → **Sync** when connected.
 
-  T->>IDB: Cache class/learner lists while online
-  Note over T: Offline or 2G failure
-  T->>IDB: Queue marks / scores / results
-  Note over T: Back online
-  T->>API: syncPending (auto + Sync badge)
-  API-->>T: success
-  T->>IDB: mark rows synced
-```
+Seeds expire after **14 days**. They never include passwords or API keys.
 
-1. Teacher opens the page **while online at least once** (loads class lists / tasks).
-2. Edits are written to **IndexedDB** when offline, on timeout, or on weak connections.
-3. When `navigator.onLine` is true, sync runs on reconnect and about every 30 seconds.
-4. The **Sync status badge** shows Online / Offline / pending count.
+## What exists today (Phase 1)
 
-## Local data (Dexie schema)
+| Piece                               | Location                                                        |
+| ----------------------------------- | --------------------------------------------------------------- |
+| Sync engine                         | `lib/offline/sync/engine.js`                                    |
+| Dexie DB `zsms_offline`             | `lib/offline/db.js` (v3)                                        |
+| Attendance / SBA / gradebook queues | `attendance-store.js`, `results-store.js`                       |
+| Seed export API                     | `POST /api/offline/seed`                                        |
+| Seed UI                             | `/dashboard/offline`                                            |
+| Service worker shells               | `public/sw.js` (v5)                                             |
+| Global offline banner               | all authenticated routes                                        |
+| AI/payments/SMS gate                | `lib/auth/installApiFetch.js` when `navigator.onLine === false` |
 
-Database name: `zsms_offline`
+## Teacher workflows
 
-| Store             | Purpose                                       |
-| ----------------- | --------------------------------------------- |
-| `attendanceQueue` | Unsynced attendance marks                     |
-| `classRosters`    | Cached student list per class                 |
-| `sbaScoreQueue`   | Unsynced ECZ SBA score POSTs                  |
-| `gradebookQueue`  | Unsynced secondary Result Entry batches       |
-| `resultsCache`    | Cached assignments, pupils, SBA learner lists |
-| `syncLog`         | Last sync attempts (debugging)                |
+See sections below and the Result Entry / ECZ SBA notes in [USER_GUIDE.md](./USER_GUIDE.md).
 
-Implementation:
+### Attendance
 
-- [`lib/offline/db.js`](../lib/offline/db.js)
-- [`lib/offline/attendance-store.js`](../lib/offline/attendance-store.js)
-- [`lib/offline/results-store.js`](../lib/offline/results-store.js)
-- [`lib/offline/use-sync.js`](../lib/offline/use-sync.js)
-- Service worker: [`public/sw.js`](../public/sw.js) (caches teacher page shells after online visits)
+1. Open **Attendance** (online once helps cache the roster; seed also loads rosters).
+2. Mark Present / Absent / Late — queued in IndexedDB.
+3. Sync badge / reconnect flushes to `POST /api/attendance`.
 
-## Attendance (summary)
+### Result Entry (secondary)
 
-1. Open **Dashboard → Attendance**.
-2. Status changes queue immediately; **Save Attendance** also queues.
-3. Manual sync: amber badge (“N not synced — tap to sync”).
+1. Open `/dashboard/teacher/results` (or import seed first).
+2. **Save** offline or on timeout → `gradebookQueue`.
+3. Resolve 409 conflicts in the UI when syncing.
 
-## Result Entry (secondary)
+### ECZ SBA
 
-1. Open **Result Entry** (`/dashboard/teacher/results`) online once to load teaching assignments and class lists.
-2. Enter scores and tap **Save** — works offline or on timeout (queued in IndexedDB).
-3. Legacy `localStorage` queues (`gradebook_queue_v1*`) migrate automatically into IndexedDB.
-4. Tap **Sync** or wait for reconnect; conflicts (409) still show the conflict UI.
+1. Seed or open hub online once for tasks/learners.
+2. Record score / tracking sheet queues to `sbaScoreQueue`.
 
-## ECZ SBA scores
+## PWA install
 
-1. Open **ECZ SBA Hub** online once so tasks and learner lists cache.
-2. Use **Record SBA score** or **Tracking sheet** — offline/network failures queue to IndexedDB.
-3. Sync badge flushes to `/api/assessments/sba-scores` when online.
+1. Chrome Android / desktop: browser menu → **Install app** / **Add to Home Screen**.
+2. iOS Safari: Share → **Add to Home Screen** (limited background sync; open the app to flush queues).
+3. Prefer low-data mode: open needed pages once on Wi‑Fi before travelling.
 
-Creating brand-new SBA tasks, seeding subjects, or exporting ECZ CSV still needs a live connection.
+## Local schema (Dexie)
 
-## PWA / 2G behaviour
+| Store                              | Purpose               |
+| ---------------------------------- | --------------------- |
+| `attendanceQueue`                  | Attendance            |
+| `classRosters`                     | Rosters               |
+| `sbaScoreQueue` / `gradebookQueue` | Marks                 |
+| `mutationQueue`                    | Future generic writes |
+| `conflictQueue`                    | Manual resolve        |
+| `resultsCache` / `seedMeta`        | Caches + seed audit   |
+| `syncLog`                          | Debug                 |
 
-- **Installable** via `manifest.json` + service worker.
-- Static assets: cache-first.
-- Teacher shells (results, SBA hub, attendance): network-first, **fallback to last cached page** when offline.
-- Writes never rely on the service worker — they use IndexedDB queues so marks are not lost if the HTML shell is stale.
-- **Zero internet:** teachers can keep entering on a previously opened/installed session; data stays on the device until sync.
+## Roadmap (later phases)
 
-## If sync fails
-
-- Retries increment `retryCount` and store `lastError`.
-- Permanent 4xx SBA rows are marked dropped so the queue does not loop forever.
-- Gradebook 409 conflicts pause flush until the teacher resolves them in the UI.
-- Data is **per device** until synced.
-
-## Browser support
-
-Requires **IndexedDB** (Chrome Android, Safari iOS 10+, Firefox, Edge).
+- Phase 2: lesson plans, materials, CBC ratings offline
+- Phase 3: student flashcards/materials/goals queues
+- Phase 4: admin timetable drafts / announcements
+- Phase 5: parent read-cache + Expo seed parity
 
 ## For developers
 
 ```javascript
-import { attendanceStore } from '@/lib/offline/attendance-store'
-import { resultsStore } from '@/lib/offline/results-store'
-import { useOfflineSync } from '@/lib/offline/use-sync'
-import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
-
-await resultsStore.queueSbaScore({ assessmentId, studentId, formLevel, taskNumber, score: 12 })
-await resultsStore.queueGradebook({ userId, payload })
-const { syncNow, pendingCount } = useOfflineSync({ channel: 'results' })
+import { flushOfflineQueues, enqueueMutation } from '@/lib/offline'
+await flushOfflineQueues({ userId })
 ```
 
-Tests:
-
-- [`__tests__/unit/offline-attendance.test.js`](../__tests__/unit/offline-attendance.test.js)
-- [`__tests__/unit/offline-results.test.js`](../__tests__/unit/offline-results.test.js)
+Tests: `offline-attendance`, `offline-results`, `offline-seed-crypto`.

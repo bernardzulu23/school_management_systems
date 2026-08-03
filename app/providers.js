@@ -141,6 +141,7 @@ export function Providers({ children }) {
                 <AppThemeProvider defaultTheme="light" enableSystem={false}>
                   <GlobalTopLoadingBar />
                   <GlobalBackButton />
+                  <OfflineBanner />
                   {children}
                 </AppThemeProvider>
               </AuthSessionSync>

@@ -20,6 +20,12 @@ if (typeof window === 'undefined') {
 
 export const metadata = {
   metadataBase,
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    title: 'ZSMS',
+    statusBarStyle: 'default',
+  },
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
