@@ -182,6 +182,7 @@ export default function SmsLogPage() {
           <h2 className="text-lg font-semibold text-royalPurple-text1 mb-2">Emergency broadcast</h2>
           <p className="text-sm text-royalPurple-text3 mb-4">
             Numbers are normalized to +260… before send. One bad number will not block the batch.
+            Your school name is added automatically at the start of each message.
           </p>
           <div className="grid gap-4 md:grid-cols-2">
             <div>

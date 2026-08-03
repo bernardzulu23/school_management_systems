@@ -8,6 +8,8 @@ import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { BroadcastSMSSchema } from '@/lib/schemas'
 import { createBroadcast } from '@/lib/sms/broadcast'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import { prefixSchoolNameToSms } from '@/lib/sms'
+import prisma from '@/lib/prisma'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -27,9 +29,15 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const { phoneNumbers, message } = await parseBodyOrThrow(request, BroadcastSMSSchema)
 
+  const school = await prisma.school.findUnique({
+    where: { id: schoolId },
+    select: { name: true },
+  })
+  const prefixedMessage = prefixSchoolNameToSms(school?.name, message)
+
   const result = await createBroadcast({
     schoolId,
-    message,
+    message: prefixedMessage,
     phoneNumbers,
     createdByUserId: auth.user.id || auth.user.userId,
   })

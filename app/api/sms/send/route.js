@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
-import { normalizePhoneNumbers } from '@/lib/sms'
+import { normalizePhoneNumbers, prefixSchoolNameToSms } from '@/lib/sms'
 import { createSmsLog } from '@/lib/sms/persistLog'
 import { reserveSmsCredits } from '@/lib/sms/balance'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
@@ -10,6 +10,7 @@ import { requireSchoolType } from '@/lib/middleware/individual-gate'
 import { parseBodyOrThrow } from '@/lib/middleware/validate-request'
 import { SendSMSSchema } from '@/lib/schemas'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
+import prisma from '@/lib/prisma'
 
 export const POST = withErrorHandler(async function POST(request) {
   const auth = await authMiddleware(request)
@@ -36,6 +37,12 @@ export const POST = withErrorHandler(async function POST(request) {
   const normalized = normalizePhoneNumbers(to)
   if (!normalized.length) throw new ApiError('No valid Zambian phone numbers', 400)
 
+  const school = await prisma.school.findUnique({
+    where: { id: schoolId },
+    select: { name: true },
+  })
+  const prefixedMessage = prefixSchoolNameToSms(school?.name, message)
+
   const reserve = await reserveSmsCredits(schoolId, normalized.length)
   if (!reserve.ok) {
     throw new ApiError(reserve.reason || 'Insufficient SMS credits', 402)
@@ -44,7 +51,7 @@ export const POST = withErrorHandler(async function POST(request) {
   const { sendOutboundSms } = await import('@/lib/sms/sendOutbound')
   const result = await sendOutboundSms({
     to: normalized,
-    message,
+    message: prefixedMessage,
     from,
     schoolId,
   })
@@ -62,7 +69,7 @@ export const POST = withErrorHandler(async function POST(request) {
         schoolId,
         direction: 'out',
         recipient: phone,
-        body: String(message || ''),
+        body: String(prefixedMessage || ''),
         status: 'SENT',
         provider: result.provider,
         channel: 'AFRICALA',

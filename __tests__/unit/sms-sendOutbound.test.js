@@ -153,7 +153,7 @@ describe("sendOutboundSms (Africa's Talking primary)", () => {
 })
 
 describe('buildTermResultsCompleteSmsMessage', () => {
-  it('includes abbreviated school, grades, and short view URL', async () => {
+  it('includes abbreviated school, scores only (no grade labels), and short view URL', async () => {
     const { buildTermResultsCompleteSmsMessage } = await vi.importActual('@/lib/sms.js')
     const message = buildTermResultsCompleteSmsMessage({
       studentName: 'Jane Banda',
@@ -166,8 +166,10 @@ describe('buildTermResultsCompleteSmsMessage', () => {
 
     expect(message.startsWith('Nyimba Eas:')).toBe(true)
     expect(message).toContain('Jane Banda')
-    expect(message).toContain('English 50 (D)')
-    expect(message).toContain('Math 67 (C)')
+    expect(message).toContain('English 50')
+    expect(message).toContain('Math 67')
+    expect(message).not.toContain('(D)')
+    expect(message).not.toContain('(C)')
     expect(message).toContain('bluepeacktechnologies.com')
     expect(message).not.toContain('https://school.example.com/login')
   })
@@ -180,7 +182,7 @@ describe('buildTermResultsCompleteSmsMessage', () => {
       schoolName: 'Ndake Secondary School',
       results: [{ subjectName: 'Math', score: 67, grade: 'C' }],
     })
-    expect(message).toBe(`Ndake Seco: John — Math 67 (C). View at ${TERM_RESULTS_SMS_VIEW_URL}`)
+    expect(message).toBe(`Ndake Seco: John — Math 67. View at ${TERM_RESULTS_SMS_VIEW_URL}`)
   })
 
   it('should return null if no results', async () => {
@@ -222,16 +224,18 @@ describe('buildTermResultsCompleteSmsMessage', () => {
     expect(message.indexOf('Geography')).toBeLessThan(message.indexOf('Math'))
   })
 
-  it('should handle missing grade field', async () => {
+  it('should ignore grade labels and send scores only', async () => {
     const { formatResultGradeLine, buildTermResultsCompleteSmsMessage } =
       await vi.importActual('@/lib/sms.js')
+    expect(formatResultGradeLine({ subjectName: 'Math', score: 67, grade: 'C' })).toBe('Math 67')
     expect(formatResultGradeLine({ subjectName: 'Math', score: 67, grade: null })).toBe('Math 67')
     const message = buildTermResultsCompleteSmsMessage({
       studentName: 'John',
       schoolName: 'Ndake',
-      results: [{ subjectName: 'Math', score: 67, grade: null }],
+      results: [{ subjectName: 'Math', score: 67, grade: 'ONE' }],
     })
     expect(message).toContain('Math 67')
+    expect(message).not.toContain('(ONE)')
     expect(message).not.toContain('(null)')
   })
 
@@ -267,5 +271,27 @@ describe('getOnboardingSmsFrom', () => {
     delete process.env.ZSMS_ONBOARDING_SENDER_ID
     const { getOnboardingSmsFrom } = await vi.importActual('@/lib/sms.js')
     expect(getOnboardingSmsFrom()).toBe('ZSMS')
+  })
+})
+
+describe('prefixSchoolNameToSms', () => {
+  it('prefixes school name when missing', async () => {
+    const { prefixSchoolNameToSms } = await vi.importActual('@/lib/sms.js')
+    expect(prefixSchoolNameToSms('Ndake Day Secondary', 'Meeting at 10am')).toBe(
+      'Ndake Day Secondary: Meeting at 10am'
+    )
+  })
+
+  it('does not double-prefix when message already starts with school name', async () => {
+    const { prefixSchoolNameToSms } = await vi.importActual('@/lib/sms.js')
+    const msg = 'Ndake Day Secondary: already tagged'
+    expect(prefixSchoolNameToSms('Ndake Day Secondary', msg)).toBe(msg)
+    expect(prefixSchoolNameToSms('ndake day secondary', msg)).toBe(msg)
+  })
+
+  it('returns trimmed empty input unchanged', async () => {
+    const { prefixSchoolNameToSms } = await vi.importActual('@/lib/sms.js')
+    expect(prefixSchoolNameToSms('Ndake', '   ')).toBe('')
+    expect(prefixSchoolNameToSms('', 'Hello parents')).toBe('Hello parents')
   })
 })
