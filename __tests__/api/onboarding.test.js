@@ -261,4 +261,21 @@ describe('POST /api/onboarding/lipila/callback', () => {
     expect(res.status).toBe(200)
     expect(mockPrisma.schoolRegistration.updateMany).not.toHaveBeenCalled()
   })
+
+  it('rejects operator-object identifier payloads with 400', async () => {
+    const res = await lipilaCallback(
+      buildRequest({
+        method: 'POST',
+        url: `http://localhost:3000/api/onboarding/lipila/callback?webhook_secret=${webhookSecret}`,
+        body: {
+          identifier: { $ne: null },
+          referenceId: 'LPLXC-TEST-003',
+          status: 'Successful',
+        },
+      })
+    )
+
+    expect(res.status).toBe(400)
+    expect(mockPrisma.schoolRegistration.updateMany).not.toHaveBeenCalled()
+  })
 })

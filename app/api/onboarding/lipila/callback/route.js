@@ -2,43 +2,11 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
+import { parseLipilaCallbackPayload } from '@/lib/payments/lipilaCallback'
 import { logger, captureError } from '@/lib/utils/logger'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
 import { unauthorizedWebhookResponse, verifySharedWebhookSecret } from '@/lib/security/webhookAuth'
-
-/** Matches UUID / CUID id shape used across ZSMS (see lib/schemas idString). */
-const REGISTRATION_ID_SHAPE = /^[A-Za-z0-9_-]+$/
-
-function sanitizeRegistrationId(value) {
-  const id = safeStringId(value)
-  if (!id || !REGISTRATION_ID_SHAPE.test(id)) return null
-  return id
-}
-
-function getIdentifier(payload) {
-  const p = payload || {}
-  const raw =
-    p.identifier ||
-    p.internalId ||
-    p.internal_id ||
-    p?.data?.identifier ||
-    p?.data?.internalId ||
-    p?.data?.internal_id ||
-    null
-  return sanitizeRegistrationId(raw)
-}
-
-function getReferenceId(payload) {
-  const p = payload || {}
-  const raw =
-    p.referenceId || p.reference_id || p?.data?.referenceId || p?.data?.reference_id || null
-  return safeStringId(raw, { maxLength: 256 })
-}
-
-function getStatus(payload) {
-  return String(payload?.status || payload?.data?.status || '').trim()
-}
 
 async function markRegistrationPaid({ identifier, referenceId }) {
   if (identifier) {
@@ -87,14 +55,18 @@ export const POST = withSecureHandler(async function POST(request) {
 
   try {
     const payload = await request.json().catch(() => ({}))
-    const identifier = getIdentifier(payload)
-    const referenceId = getReferenceId(payload)
+    const parsed = parseLipilaCallbackPayload(payload)
+    if (!parsed.ok) {
+      log.response(400, Date.now() - start)
+      return NextResponse.json({ success: false, error: parsed.error }, { status: 400 })
+    }
+
+    const { identifier, referenceId, status } = parsed
     if (!identifier && !referenceId) {
       log.response(200, Date.now() - start)
       return NextResponse.json({ success: true }, { status: 200 })
     }
 
-    const status = getStatus(payload)
     const ctx = logger({ route, registrationId: identifier || undefined })
     if (isPaidLipilaStatus(status)) {
       await markRegistrationPaid({ identifier, referenceId })

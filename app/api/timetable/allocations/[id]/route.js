@@ -6,6 +6,7 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeRouteParam } from '@/lib/security/safeQueryValue'
+import { idString } from '@/lib/schemas'
 
 export const DELETE = withErrorHandler(async function DELETE(req, { params }) {
   const auth = await authMiddleware(req)
@@ -28,8 +29,12 @@ export const DELETE = withErrorHandler(async function DELETE(req, { params }) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const id = await safeRouteParam(params, 'id')
-  if (!id) return NextResponse.json({ error: 'Invalid allocation id' }, { status: 400 })
+  const rawId = await safeRouteParam(params, 'id')
+  const parsedId = idString.safeParse(rawId)
+  if (!parsedId.success) {
+    return NextResponse.json({ error: 'Invalid allocation id' }, { status: 400 })
+  }
+  const id = parsedId.data
 
   const isHod = roleCheck(auth.user, ['HOD', 'hod']) || Boolean(hasHodProfile)
 
