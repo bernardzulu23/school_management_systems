@@ -26,7 +26,7 @@ export function createChatSseStream(options: {
     prompt: options.prompt,
     maxTokens: options.maxTokens ?? 2048,
     temperature: options.temperature ?? 0.4,
-    plainText: false,
+    plainText: true,
     meta: options.meta,
     onErrorMessage: 'The AI assistant could not generate a reply. Please try again.',
     onComplete: async (fullText) => {

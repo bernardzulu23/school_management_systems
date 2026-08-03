@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { Compass, ExternalLink, Send } from 'lucide-react'
+import { readResponseJson } from '@/lib/http/readResponseJson'
 
 /**
  * Student navigation help — FAQ matcher only.
@@ -45,7 +46,7 @@ export function StudentNavBot() {
         credentials: 'include',
         body: JSON.stringify({ message: text }),
       })
-      const json = await res.json().catch(() => ({}))
+      const json = await readResponseJson(res)
 
       if (res.status === 429) {
         toast.error(json.message || json.error || 'Daily limit reached. Try again later.')

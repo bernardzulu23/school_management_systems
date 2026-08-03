@@ -93,7 +93,18 @@ export const POST = withAILimits(async function POST(request) {
   }
   const cached = await getCachedAIResponse('study-assistant', cachePayload)
   if (cached) {
-    return NextResponse.json(cached)
+    const answer = sanitizePlainText(cached.answer || cached.data?.answer || '')
+    const refs = cached.refs || cached.data?.refs || []
+    return NextResponse.json({
+      ...cached,
+      answer,
+      refs,
+      data: {
+        ...(cached.data || {}),
+        answer,
+        refs,
+      },
+    })
   }
 
   const rag = await buildRagContextForQuery({

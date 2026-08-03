@@ -5,6 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { MessageCircle, Send } from 'lucide-react'
 import { RagReferencesPanel } from '@/components/ai/RagReferencesPanel'
+import { sanitizePlainText } from '@/lib/ai/plain-text'
+import { readResponseJson } from '@/lib/http/readResponseJson'
 import {
   useStudentCurriculumTopics,
   useStudentEnrolledSubjects,
@@ -47,9 +49,9 @@ export function StudyAssistant() {
         credentials: 'include',
         body: JSON.stringify({ question: prompt, subject }),
       })
-      const json = await res.json().catch(() => ({}))
+      const json = await readResponseJson(res)
       if (!res.ok) throw new Error(json.error || json.message || 'Request failed')
-      const nextAnswer = json.answer || json.data?.answer || ''
+      const nextAnswer = sanitizePlainText(json.answer || json.data?.answer || '')
       const nextRefs = json.refs || json.data?.refs || []
       setAnswer(nextAnswer)
       setRefs(Array.isArray(nextRefs) ? nextRefs : [])

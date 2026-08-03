@@ -38,6 +38,14 @@ describe('sanitizePlainText', () => {
     expect(sanitizePlainText(input)).toBe('Section\nBold text and italic')
   })
 
+  it('keeps dash bullets and converts markdown list markers', () => {
+    const input =
+      '### File Compression Methods\nThere are several ways:\n* **Lossless compression**: keeps data.\n* **Lossy compression**: discards data.\n- Archive compression: zip files.'
+    expect(sanitizePlainText(input)).toBe(
+      'File Compression Methods\nThere are several ways:\n- Lossless compression: keeps data.\n- Lossy compression: discards data.\n- Archive compression: zip files.'
+    )
+  })
+
   it('strips code fences', () => {
     const input = 'Before\n```json\n{"a":1}\n```\nAfter'
     expect(sanitizePlainText(input)).toBe('Before\n\nAfter')
@@ -66,8 +74,8 @@ describe('buildStoryPrompt', () => {
     })
     expect(prompt).not.toMatch(/^---$/m)
     expect(prompt).toContain('COMPREHENSION QUESTIONS')
-    expect(prompt).toContain('plain text only')
-    expect(prompt).toContain('NO markdown')
+    expect(prompt.toLowerCase()).toContain('plain text only')
+    expect(prompt.toLowerCase()).toContain('no markdown')
   })
 
   it('includes plain-text section headers for follow-up blocks', () => {

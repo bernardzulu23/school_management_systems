@@ -1,9 +1,11 @@
-'use client'
+﻿'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Loader2, Send, FileText, Download, SendHorizontal, Headphones } from 'lucide-react'
 import { EMPTY_CHAT_REPLY_MESSAGE, readChatSseStream } from '@/lib/ai/chat/sse-client'
+import { sanitizePlainText } from '@/lib/ai/plain-text'
+import { readResponseJson } from '@/lib/http/readResponseJson'
 import { CurriculumTopicSelect } from '@/components/curriculum/CurriculumTopicSelect'
 import { useSchool } from '@/lib/context/SchoolContext'
 import {
@@ -89,7 +91,7 @@ export default function ChatPanel({
 
   const connectHandoffWs = useCallback(async (sid) => {
     if (!sid) return
-    // Keep one socket per session — reconnecting on PENDING→ACTIVE drops broadcasts.
+    // Keep one socket per session â€” reconnecting on PENDINGâ†’ACTIVE drops broadcasts.
     if (
       wsSessionRef.current === sid &&
       wsRef.current &&
@@ -105,7 +107,7 @@ export default function ChatPanel({
         credentials: 'include',
         body: JSON.stringify({ sessionId: sid }),
       })
-      const data = await res.json().catch(() => ({}))
+      const data = await readResponseJson(res)
       if (!res.ok || !data.url) {
         wsLiveRef.current = false
         setWsLabel(data.code === 'CHAT_DO_NOT_CONFIGURED' ? '' : 'Live relay unavailable')
@@ -211,7 +213,7 @@ export default function ChatPanel({
         const res = await fetch(`/api/chat/sessions/${encodeURIComponent(sessionId)}`, {
           credentials: 'include',
         })
-        const data = await res.json().catch(() => ({}))
+        const data = await readResponseJson(res)
         if (!res.ok || cancelled) return
         if (data.session?.status && data.session.status !== sessionStatus) {
           setSessionStatus(data.session.status)
@@ -243,7 +245,7 @@ export default function ChatPanel({
         const res = await fetch(`/api/chat/sessions/${encodeURIComponent(initialSessionId)}`, {
           credentials: 'include',
         })
-        const data = await res.json().catch(() => ({}))
+        const data = await readResponseJson(res)
         if (!res.ok) throw new Error(data.error || 'Could not reopen chat session')
         if (cancelled) return
         setSessionId(data.session?.id || initialSessionId)
@@ -277,11 +279,10 @@ export default function ChatPanel({
       credentials: 'include',
       body: JSON.stringify({ title: 'New Conversation' }),
     })
+    const data = await readResponseJson(res)
     if (!res.ok) {
-      const data = await res.json().catch(() => ({}))
       throw new Error(data.error || 'Failed to create session')
     }
-    const data = await res.json()
     const id = data.session?.id
     setSessionId(id)
     setSessionStatus(data.session?.status || 'AI_MANAGED')
@@ -300,7 +301,7 @@ export default function ChatPanel({
         credentials: 'include',
         body: JSON.stringify({ sessionId: sid }),
       })
-      const data = await res.json().catch(() => ({}))
+      const data = await readResponseJson(res)
       if (!res.ok) throw new Error(data.error || 'Could not request human help')
       setSessionStatus(data.status || 'PENDING_HUMAN')
       if (typeof data.telegramSent === 'boolean') setTelegramSent(data.telegramSent)
@@ -311,12 +312,12 @@ export default function ChatPanel({
       const claimerHint =
         typeof data.claimerHint === 'string' && data.claimerHint.trim()
           ? data.claimerHint.trim()
-          : 'An administrator has been notified. Platform admins claim sessions at Platform → Chat support. You will not receive a personal invite on your school dashboard — keep this window open.'
+          : 'An administrator has been notified. Platform admins claim sessions at Platform â†’ Chat support. You will not receive a personal invite on your school dashboard â€” keep this window open.'
       const telegramNote =
         data.telegramSent === false
           ? typeof data.telegramSkippedHint === 'string' && data.telegramSkippedHint.trim()
             ? data.telegramSkippedHint.trim()
-            : 'Telegram alert was not sent on this server. A platform admin must open Platform → Chat support to claim this session.'
+            : 'Telegram alert was not sent on this server. A platform admin must open Platform â†’ Chat support to claim this session.'
           : null
       const assistantContent = [reply, claimerHint, telegramNote].filter(Boolean).join('\n\n')
       setMessages((m) => [
@@ -354,7 +355,7 @@ export default function ChatPanel({
           credentials: 'include',
           body: JSON.stringify({ message: text, sessionId: sid }),
         })
-        const data = await res.json().catch(() => ({}))
+        const data = await readResponseJson(res)
         if (!res.ok) throw new Error(data.error || data.message || 'Send failed')
         return
       }
@@ -373,17 +374,17 @@ export default function ChatPanel({
           credentials: 'include',
           body: JSON.stringify({ question: text, sessionId: sid }),
         })
-        const data = await res.json().catch(() => ({}))
+        const data = await readResponseJson(res)
         if (!res.ok) {
           if (data.code === 'CHAT_ROLE_MISMATCH') {
             setSessionId(null)
-            throw new Error(data.message || 'Role mismatch — start a new session')
+            throw new Error(data.message || 'Role mismatch â€” start a new session')
           }
           throw new Error(data.error || data.message || 'Request failed')
         }
         if (data.sessionId) setSessionId(data.sessionId)
         const reply = data.refused ? data.message : data.summary
-        const content = String(reply || '').trim()
+        const content = sanitizePlainText(String(reply || '').trim())
         if (!content) throw new Error('No answer returned. Please try a different question.')
         setMessages((m) => [...m, { id: `a-${Date.now()}`, role: 'assistant', content }])
         return
@@ -398,10 +399,10 @@ export default function ChatPanel({
 
       const ct = res.headers.get('content-type') || ''
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
+        const data = await readResponseJson(res)
         if (data.code === 'CHAT_ROLE_MISMATCH') {
           setSessionId(null)
-          throw new Error(data.message || 'Role mismatch — start a new session')
+          throw new Error(data.message || 'Role mismatch â€” start a new session')
         }
         if (data.code === 'HANDOFF_ACTIVE' && data.status) {
           setSessionStatus(data.status)
@@ -410,10 +411,10 @@ export default function ChatPanel({
       }
 
       if (ct.includes('application/json')) {
-        const data = await res.json()
+        const data = await readResponseJson(res)
         if (data.sessionId) setSessionId(data.sessionId)
         const reply = data.refused ? data.message : data.summary || data.message
-        const content = String(reply || '').trim()
+        const content = sanitizePlainText(String(reply || '').trim())
         if (!content) throw new Error(EMPTY_CHAT_REPLY_MESSAGE)
         setMessages((m) => [...m, { id: `a-${Date.now()}`, role: 'assistant', content }])
         return
@@ -436,7 +437,7 @@ export default function ChatPanel({
             if (typeof meta.telegramSent === 'boolean') setTelegramSent(meta.telegramSent)
           },
         })
-        const finalText = String(streamedText || acc || '').trim()
+        const finalText = sanitizePlainText(String(streamedText || acc || '').trim())
         if (streamError) {
           throw new Error(streamError)
         }
@@ -453,14 +454,15 @@ export default function ChatPanel({
           const hydrateRes = await fetch(`/api/chat/sessions/${encodeURIComponent(sid)}`, {
             credentials: 'include',
           })
-          const hydrate = await hydrateRes.json().catch(() => ({}))
+          const hydrate = await readResponseJson(hydrateRes)
           const loaded = Array.isArray(hydrate.messages) ? hydrate.messages : []
           const lastAssistant = [...loaded].reverse().find((m) => m.role === 'assistant')
           if (lastAssistant?.content) {
+            const cleaned = sanitizePlainText(String(lastAssistant.content || ''))
             setMessages((m) =>
               m.map((msg) =>
                 msg.id === assistantId
-                  ? { ...msg, id: lastAssistant.id || msg.id, content: lastAssistant.content }
+                  ? { ...msg, id: lastAssistant.id || msg.id, content: cleaned }
                   : msg
               )
             )
@@ -514,7 +516,7 @@ export default function ChatPanel({
           chatContext: input.trim() || undefined,
         }),
       })
-      const data = await res.json().catch(() => ({}))
+      const data = await readResponseJson(res)
       if (!res.ok) {
         throw new Error(data.error || data.message || 'Lesson plan generation failed')
       }
@@ -524,9 +526,9 @@ export default function ChatPanel({
         {
           id: `lp-${sub.id}`,
           role: 'assistant',
-          content: `Lesson plan ready: ${sub.subject} • ${sub.grade} • ${sub.topic}${
+          content: `Lesson plan ready: ${sub.subject} â€¢ ${sub.grade} â€¢ ${sub.topic}${
             sub.diagramFailed
-              ? '\n(Diagram could not be rendered — document generated without it.)'
+              ? '\n(Diagram could not be rendered â€” document generated without it.)'
               : ''
           }`,
           submissionId: sub.id,
@@ -549,11 +551,11 @@ export default function ChatPanel({
       })
       const ct = res.headers.get('content-type') || ''
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}))
+        const data = await readResponseJson(res)
         throw new Error(data.error || data.message || 'Download failed')
       }
       if (ct.includes('application/json')) {
-        const data = await res.json()
+        const data = await readResponseJson(res)
         if (data.url) {
           window.open(data.url, '_blank', 'noopener,noreferrer')
           return
@@ -581,7 +583,7 @@ export default function ChatPanel({
         method: 'POST',
         credentials: 'include',
       })
-      const data = await res.json().catch(() => ({}))
+      const data = await readResponseJson(res)
       if (!res.ok) {
         throw new Error(data.error || data.message || 'Submit failed')
       }
@@ -603,18 +605,18 @@ export default function ChatPanel({
 
   const placeholder =
     mode === 'headteacher'
-      ? 'Ask about enrollment, attendance, exam performance, or teacher coverage…'
+      ? 'Ask about enrollment, attendance, exam performance, or teacher coverageâ€¦'
       : sessionStatus === 'HUMAN_ACTIVE'
-        ? 'Message the administrator…'
+        ? 'Message the administratorâ€¦'
         : sessionStatus === 'PENDING_HUMAN'
-          ? 'Waiting for an administrator…'
-          : 'Ask about your classes, curriculum, or lesson planning…'
+          ? 'Waiting for an administratorâ€¦'
+          : 'Ask about your classes, curriculum, or lesson planningâ€¦'
 
   const handoffBanner =
     sessionStatus === 'PENDING_HUMAN'
       ? telegramSent === false
-        ? 'Waiting for a platform administrator. Telegram was not configured — an admin must claim this at Platform → Chat support. Keep this window open.'
-        : 'Waiting for a platform administrator to join (Platform → Chat support). You will not get a personal invite — keep this window open.'
+        ? 'Waiting for a platform administrator. Telegram was not configured â€” an admin must claim this at Platform â†’ Chat support. Keep this window open.'
+        : 'Waiting for a platform administrator to join (Platform â†’ Chat support). You will not get a personal invite â€” keep this window open.'
       : sessionStatus === 'HUMAN_ACTIVE'
         ? assignedAdminName
           ? `${assignedAdminName} is in this conversation.`
@@ -632,9 +634,9 @@ export default function ChatPanel({
           </h2>
           <p className="text-xs text-muted mt-0.5">
             {mode === 'headteacher'
-              ? 'Retrieval-only — answers from verified dashboard figures.'
+              ? 'Retrieval-only â€” answers from verified dashboard figures.'
               : 'Teachers and HODs can chat here; students use ZSMS Help.'}
-            {wsLabel ? ` · ${wsLabel}` : ''}
+            {wsLabel ? ` Â· ${wsLabel}` : ''}
           </p>
         </div>
         {mode === 'generative' && sessionStatus === 'AI_MANAGED' && (
@@ -670,14 +672,14 @@ export default function ChatPanel({
           </div>
           <p className="mt-0.5 whitespace-pre-wrap">{pinnedHodComment}</p>
           <p className="text-[10px] text-amber-800/80 mt-1">
-            Suggested prompt is pre-filled below — review and send when ready (not auto-sent).
+            Suggested prompt is pre-filled below â€” review and send when ready (not auto-sent).
           </p>
         </div>
       )}
 
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
         {!sessionHydrated && (
-          <p className="text-sm text-muted text-center py-8">Reopening chat session…</p>
+          <p className="text-sm text-muted text-center py-8">Reopening chat sessionâ€¦</p>
         )}
         {sessionHydrated && messages.length === 0 && (
           <p className="text-sm text-muted text-center py-8">{placeholder}</p>
@@ -703,7 +705,7 @@ export default function ChatPanel({
             {m.role === 'system' && (
               <div className="text-[10px] uppercase tracking-wide opacity-80 mb-0.5">System</div>
             )}
-            {m.content || (busy ? '…' : '')}
+            {m.content || (busy ? 'â€¦' : '')}
             {m.submissionId && m.role === 'assistant' && (
               <div className="mt-2 flex flex-wrap gap-2">
                 <Button
@@ -754,7 +756,7 @@ export default function ChatPanel({
               aria-label="Form or grade"
             >
               <option value="">
-                {schoolLoading ? 'Loading forms / grades…' : 'Select form / grade…'}
+                {schoolLoading ? 'Loading forms / gradesâ€¦' : 'Select form / gradeâ€¦'}
               </option>
               {lessonPlanGrades.map((grade) => (
                 <option key={grade} value={grade}>
@@ -775,10 +777,10 @@ export default function ChatPanel({
             >
               <option value="">
                 {!lpGrade
-                  ? 'Select form / grade first…'
+                  ? 'Select form / grade firstâ€¦'
                   : schoolLoading
-                    ? 'Loading subjects…'
-                    : 'Select subject…'}
+                    ? 'Loading subjectsâ€¦'
+                    : 'Select subjectâ€¦'}
               </option>
               {lessonPlanSubjects.map((subject) => (
                 <option key={subject} value={subject}>
