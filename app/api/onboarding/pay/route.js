@@ -16,6 +16,7 @@ import {
 
 import { PLAN_PRICING, normalizePlanSlug } from '@/lib/billing/plan-pricing'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { appendWebhookSecretToUrl } from '@/lib/security/webhookAuth'
 
 function normalizeZambiaMsisdn(value) {
   const digits = String(value || '').replace(/\D/g, '')
@@ -93,7 +94,7 @@ export const POST = withSecureHandler(async function POST(request) {
   const origin = host
     ? `${proto}://${host}`
     : request.headers.get('origin') || new URL(request.url).origin
-  const callbackUrl = `${origin}/api/onboarding/lipila/callback`
+  const callbackUrl = appendWebhookSecretToUrl(`${origin}/api/onboarding/lipila/callback`)
 
   const lipilaPayload = {
     callbackUrl,

@@ -5,6 +5,7 @@ import { activateFeePayment } from '@/lib/payments/feePayments'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
 import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
+import { unauthorizedWebhookResponse, verifySharedWebhookSecret } from '@/lib/security/webhookAuth'
 
 function getIdentifier(payload) {
   const p = payload || {}
@@ -30,7 +31,16 @@ function getStatus(payload) {
   return String(payload?.status || payload?.data?.status || '').trim()
 }
 
+function assertLipilaWebhook(request) {
+  return verifySharedWebhookSecret(request, 'LIPILA_WEBHOOK_SECRET', {
+    aliasHeaders: ['x-lipila-webhook-secret'],
+  })
+}
+
 export const POST = withSecureHandler(async function POST(request) {
+  const auth = assertLipilaWebhook(request)
+  if (!auth.ok) return unauthorizedWebhookResponse(auth)
+
   const payload = await request.json().catch(() => ({}))
   const identifier = getIdentifier(payload)
   const referenceId = getReferenceId(payload)
@@ -54,49 +64,21 @@ export const POST = withSecureHandler(async function POST(request) {
   })
 })
 
+/**
+ * Browser return URL only — never activate payments from query-string status.
+ */
 export const GET = withSecureHandler(async function GET(request) {
   const { searchParams } = new URL(request.url)
   const referenceId = safeQueryString(searchParams.get('referenceId'), { defaultValue: '' })
-  const identifier = safeQueryString(searchParams.get('identifier'), { defaultValue: '' })
-  const status = safeQueryString(searchParams.get('status'), { defaultValue: '' })
   const origin = new URL(request.url).origin
 
-  if (referenceId || identifier) {
-    if (isPaidLipilaStatus(status) || isFailedLipilaStatus(status)) {
-      const feeResult = await activateFeePayment({
-        identifier: identifier || null,
-        referenceId,
-        status,
-      })
-      if (feeResult.handled) {
-        const params = new URLSearchParams({
-          payment: isPaidLipilaStatus(status) ? 'success' : 'failed',
-        })
-        if (referenceId) params.set('referenceId', referenceId)
-        return NextResponse.redirect(`${origin}/dashboard/payments?${params.toString()}`)
-      }
+  const params = new URLSearchParams({ paymentReturn: '1' })
+  if (referenceId) params.set('referenceId', referenceId)
 
-      const result = await activatePlanPayment({
-        identifier: identifier || null,
-        referenceId,
-        status,
-      })
-      if (result.type === 'school_plan_payment') {
-        const params = new URLSearchParams({
-          paymentReturn: '1',
-          payment: isPaidLipilaStatus(status) ? 'success' : 'failed',
-        })
-        if (referenceId) params.set('referenceId', referenceId)
-        return NextResponse.redirect(`${origin}/dashboard/billing?${params.toString()}`)
-      }
-    }
-
-    const params = new URLSearchParams({
-      payment: isPaidLipilaStatus(status) ? 'success' : 'failed',
-    })
-    if (referenceId) params.set('reference', referenceId)
-    return NextResponse.redirect(`${origin}/onboarding?${params.toString()}`)
+  // Prefer billing return; fee returns still land on payments if client used that redirectUrl.
+  const hint = safeQueryString(searchParams.get('returnTo'), { defaultValue: '' })
+  if (hint === 'payments') {
+    return NextResponse.redirect(`${origin}/dashboard/payments?${params.toString()}`)
   }
-
-  return NextResponse.json({ success: true, message: 'Payment callback endpoint active' })
+  return NextResponse.redirect(`${origin}/dashboard/billing?${params.toString()}`)
 })

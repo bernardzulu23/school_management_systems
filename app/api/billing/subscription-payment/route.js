@@ -13,6 +13,7 @@ import {
   LIPILA_PROVIDER_PAYMENT_TYPES,
   lipilaCreateMobileMoneyCollection,
 } from '@/lib/payments/lipila'
+import { appendWebhookSecretToUrl } from '@/lib/security/webhookAuth'
 
 function normalizeZambiaMsisdn(value) {
   const digits = String(value || '').replace(/\D/g, '')
@@ -110,7 +111,7 @@ export const POST = withErrorHandler(async function POST(request) {
     ? `${proto}://${host}`
     : request.headers.get('origin') || new URL(request.url).origin
 
-  const callbackUrl = `${origin}/api/payments/lipila/callback`
+  const callbackUrl = appendWebhookSecretToUrl(`${origin}/api/payments/lipila/callback`)
   const redirectUrl = `${origin}/dashboard/billing?paymentReturn=1`
 
   let paymentRecord

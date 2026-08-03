@@ -3,8 +3,9 @@ import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
 import { logger, captureError } from '@/lib/utils/logger'
-import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
+import { safeStringId } from '@/lib/security/safeQueryValue'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
+import { unauthorizedWebhookResponse, verifySharedWebhookSecret } from '@/lib/security/webhookAuth'
 
 /** Matches UUID / CUID id shape used across ZSMS (see lib/schemas idString). */
 const REGISTRATION_ID_SHAPE = /^[A-Za-z0-9_-]+$/
@@ -66,11 +67,23 @@ async function markRegistrationFailed({ identifier, referenceId }) {
   }
 }
 
+function assertLipilaWebhook(request) {
+  return verifySharedWebhookSecret(request, 'LIPILA_WEBHOOK_SECRET', {
+    aliasHeaders: ['x-lipila-webhook-secret'],
+  })
+}
+
 export const POST = withSecureHandler(async function POST(request) {
   const route = '/api/onboarding/lipila/callback'
   const start = Date.now()
   const log = logger({ route })
   log.request(request)
+
+  const auth = assertLipilaWebhook(request)
+  if (!auth.ok) {
+    log.response(auth.status, Date.now() - start)
+    return unauthorizedWebhookResponse(auth)
+  }
 
   try {
     const payload = await request.json().catch(() => ({}))
@@ -100,6 +113,10 @@ export const POST = withSecureHandler(async function POST(request) {
   }
 })
 
+/**
+ * Browser return URL only — never trust query status to mutate payment state.
+ * Activation happens via authenticated POST webhook or client status poll.
+ */
 export const GET = withSecureHandler(async function GET(request) {
   const route = '/api/onboarding/lipila/callback'
   const start = Date.now()
@@ -109,22 +126,6 @@ export const GET = withSecureHandler(async function GET(request) {
   try {
     const { searchParams } = new URL(request.url)
     const referenceId = safeStringId(searchParams.get('referenceId'), { maxLength: 256 })
-    const identifier = sanitizeRegistrationId(searchParams.get('identifier'))
-    const status = safeQueryString(searchParams.get('status'), { defaultValue: '' })
-
-    if (referenceId || identifier) {
-      if (isPaidLipilaStatus(status)) {
-        await markRegistrationPaid({
-          identifier: identifier || null,
-          referenceId: referenceId || null,
-        })
-      } else if (isFailedLipilaStatus(status)) {
-        await markRegistrationFailed({
-          identifier: identifier || null,
-          referenceId: referenceId || null,
-        })
-      }
-    }
 
     log.response(302, Date.now() - start)
     const origin = new URL(request.url).origin

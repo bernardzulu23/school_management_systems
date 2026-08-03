@@ -48,6 +48,30 @@ describe('Onboarding payment gate', () => {
         user: { create: vi.fn().mockResolvedValue({ id: 'user-new-1' }) },
         schoolRegistration: { update: vi.fn().mockResolvedValue({}) },
         subject: { createMany: vi.fn().mockResolvedValue({ count: 0 }) },
+        schoolSmsSettings: {
+          findUnique: vi.fn().mockResolvedValue(null),
+          upsert: vi.fn().mockResolvedValue({
+            schoolId: 'school-new-1',
+            smsBalance: 50,
+            smsLifetimeGranted: 50,
+            smsLifetimeUsed: 0,
+            trialSmsGrantedAt: new Date(),
+          }),
+          create: vi.fn().mockResolvedValue({
+            schoolId: 'school-new-1',
+            smsBalance: 50,
+            smsLifetimeGranted: 50,
+            smsLifetimeUsed: 0,
+            trialSmsGrantedAt: new Date(),
+          }),
+          update: vi.fn().mockResolvedValue({
+            schoolId: 'school-new-1',
+            smsBalance: 50,
+            smsLifetimeGranted: 50,
+            smsLifetimeUsed: 0,
+            trialSmsGrantedAt: new Date(),
+          }),
+        },
       }
       return fn(tx)
     })
@@ -155,16 +179,35 @@ describe('Onboarding payment gate', () => {
 })
 
 describe('POST /api/onboarding/lipila/callback', () => {
+  const webhookSecret = 'test-lipila-webhook-secret'
+
   beforeEach(() => {
     vi.clearAllMocks()
+    process.env.LIPILA_WEBHOOK_SECRET = webhookSecret
     mockPrisma.schoolRegistration.updateMany.mockResolvedValue({ count: 1 })
+  })
+
+  it('rejects callbacks without webhook secret', async () => {
+    const res = await lipilaCallback(
+      buildRequest({
+        method: 'POST',
+        url: 'http://localhost:3000/api/onboarding/lipila/callback',
+        body: {
+          identifier: registrationId,
+          referenceId: 'LPLXC-TEST-000',
+          status: 'Successful',
+        },
+      })
+    )
+    expect(res.status).toBe(401)
+    expect(mockPrisma.schoolRegistration.updateMany).not.toHaveBeenCalled()
   })
 
   it('marks registration paid on successful Lipila payload', async () => {
     const res = await lipilaCallback(
       buildRequest({
         method: 'POST',
-        url: 'http://localhost:3000/api/onboarding/lipila/callback',
+        url: `http://localhost:3000/api/onboarding/lipila/callback?webhook_secret=${webhookSecret}`,
         body: {
           identifier: registrationId,
           referenceId: 'LPLXC-TEST-001',
@@ -185,7 +228,7 @@ describe('POST /api/onboarding/lipila/callback', () => {
     const res = await lipilaCallback(
       buildRequest({
         method: 'POST',
-        url: 'http://localhost:3000/api/onboarding/lipila/callback',
+        url: `http://localhost:3000/api/onboarding/lipila/callback?webhook_secret=${webhookSecret}`,
         body: {
           identifier: registrationId,
           referenceId: 'LPLXC-TEST-002',
@@ -210,7 +253,7 @@ describe('POST /api/onboarding/lipila/callback', () => {
     const res = await lipilaCallback(
       buildRequest({
         method: 'POST',
-        url: 'http://localhost:3000/api/onboarding/lipila/callback',
+        url: `http://localhost:3000/api/onboarding/lipila/callback?webhook_secret=${webhookSecret}`,
         body: { status: 'Successful' },
       })
     )

@@ -16,6 +16,7 @@ import {
 import { activateFeePayment, serializeFeePayment } from '@/lib/payments/feePayments'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
 import { safeStringId } from '@/lib/security/safeQueryValue'
+import { appendWebhookSecretToUrl } from '@/lib/security/webhookAuth'
 
 const PAYMENT_OPTION_BY_PROVIDER = {
   airtel: { label: 'Airtel Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.airtel },
@@ -130,7 +131,9 @@ export const POST = withSecureHandler(async function POST(request) {
   const referenceId = safeStringId(body?.referenceId, { maxLength: 256 }) || crypto.randomUUID()
 
   const origin = request.headers.get('origin') || new URL(request.url).origin
-  const callbackUrl = String(body?.callbackUrl || `${origin}/api/payments/lipila/callback`).trim()
+  const callbackUrl = appendWebhookSecretToUrl(
+    String(body?.callbackUrl || `${origin}/api/payments/lipila/callback`).trim()
+  )
   const backUrl = String(body?.backUrl || `${origin}/dashboard/payments`).trim()
   const redirectUrl = String(body?.redirectUrl || `${origin}/dashboard/payments`).trim()
 

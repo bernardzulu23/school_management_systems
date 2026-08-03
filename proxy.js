@@ -76,6 +76,7 @@ const PUBLIC_PATHS = [
   // Marketplace browsing is public (browse before signup). The mutating
   // sub-routes (submit/review/rate/download/mine) enforce auth internally.
   '/api/marketplace',
+  // Onboarding APIs stay public (pre-auth signup) but are CSRF-checked below.
   '/api/onboarding',
   '/api/schools/check-subdomain',
   '/api/schools/register',
@@ -103,7 +104,7 @@ const CSRF_EXEMPT_PATHS = [
   // Native clients (desktop/mobile) use Bearer tokens — no browser CSRF cookie.
   '/api/mobile/auth/login',
   '/api/mobile/auth/refresh',
-  '/api/onboarding',
+  // Lipila + SMS provider webhooks authenticate via shared secret (not browser CSRF).
   '/api/payments/lipila/callback',
   '/api/onboarding/lipila/callback',
   '/api/sms/inbound',
