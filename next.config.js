@@ -104,6 +104,8 @@ const nextConfig = {
 
   // Fix ES Module and webpack issues (production build uses --webpack on Vercel)
   webpack: (config, { dev, isServer }) => {
+    const path = require('path')
+
     config.externals = [
       ...(config.externals || []),
       'jsdom',
@@ -117,6 +119,27 @@ const nextConfig = {
       config.parallelism = 1
       // Persistent cache can keep large serialized graphs in RAM + disk peak.
       config.cache = false
+    }
+
+    // Client pages import logger → requestContext; Node `node:` builtins must not enter the browser graph.
+    if (!isServer) {
+      const requestContextServer = path.resolve(__dirname, 'lib/observability/requestContext.js')
+      const requestContextBrowser = path.resolve(
+        __dirname,
+        'lib/observability/requestContext.browser.js'
+      )
+      config.resolve.alias = {
+        ...(config.resolve.alias || {}),
+        [requestContextServer]: requestContextBrowser,
+        '@/lib/observability/requestContext': requestContextBrowser,
+        '@/lib/observability/requestContext.js': requestContextBrowser,
+      }
+      config.resolve.fallback = {
+        ...(config.resolve.fallback || {}),
+        async_hooks: false,
+        'node:async_hooks': false,
+        'node:crypto': false,
+      }
     }
 
     if (!dev && !isServer) {
