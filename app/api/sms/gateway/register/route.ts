@@ -1,6 +1,6 @@
 /**
  * POST /api/sms/gateway/register
- * Platform-admin only: create a shared gateway device and return the raw pairing token once.
+ * Platform-admin only: create shared or dedicated gateway; return raw pairing token once.
  */
 import { randomBytes } from 'crypto'
 import { NextResponse } from 'next/server'
@@ -36,10 +36,22 @@ export const POST = withErrorHandler(async function POST(request: Request) {
   const body = await request.json().catch(() => ({}))
   const deviceName = String(body?.deviceName || '').trim() || 'Primary SMS Gateway'
   const enableForAllSchools = Boolean(body?.enableForAllSchools ?? body?.enableForSchool)
-  // Optional legacy: still allow binding a display schoolId, but gateway is always shared.
-  const legacySchoolId = String(body?.schoolId || '').trim() || null
+  const bindSchoolId = String(body?.schoolId || '').trim() || null
+  // Dedicated = one school only (cannot be polled/hijacked for another school's queue).
+  const dedicated = Boolean(body?.dedicated) || (Boolean(bindSchoolId) && body?.isShared === false)
 
-  // Raw token shown once to pair the Android app — never stored plaintext.
+  if (dedicated && !bindSchoolId) {
+    throw new ApiError('schoolId is required for dedicated gateways', 400)
+  }
+
+  if (bindSchoolId) {
+    const school = await basePrisma.school.findUnique({
+      where: { id: bindSchoolId },
+      select: { id: true, name: true },
+    })
+    if (!school) throw new ApiError('School not found', 404)
+  }
+
   const rawToken = randomBytes(32).toString('hex')
   const deviceTokenHash = hashDeviceToken(rawToken)
   let apiTokenEncrypted: string
@@ -55,54 +67,65 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     )
   }
 
-  // New shared gateway becomes the sole active shared device — deactivate prior shared ones.
-  await basePrisma.sMSGateway.updateMany({
-    where: { isShared: true, isActive: true },
-    data: { isActive: false },
-  })
+  const isShared = !dedicated
+
+  if (isShared) {
+    // New shared gateway becomes the sole active shared device — deactivate prior shared ones.
+    await basePrisma.sMSGateway.updateMany({
+      where: { isShared: true, isActive: true },
+      data: { isActive: false },
+    })
+  }
 
   const gateway = await basePrisma.sMSGateway.create({
     data: {
-      schoolId: null,
+      schoolId: dedicated ? bindSchoolId : null,
       deviceName,
       deviceToken: deviceTokenHash,
       apiTokenEncrypted,
-      isShared: true,
+      isShared,
       isActive: true,
     },
   })
 
   let enabledSchoolCount = 0
-  if (enableForAllSchools) {
+  if (dedicated && bindSchoolId) {
+    await setCustomGatewayEnabledForSchools([bindSchoolId], true)
+    enabledSchoolCount = 1
+  } else if (enableForAllSchools) {
     const schools = await basePrisma.school.findMany({ select: { id: true } })
     const ids = schools.map((s) => s.id)
     await setCustomGatewayEnabledForSchools(ids, true)
     enabledSchoolCount = ids.length
-  } else if (legacySchoolId) {
-    const school = await basePrisma.school.findUnique({
-      where: { id: legacySchoolId },
-      select: { id: true },
-    })
-    if (!school) throw new ApiError('School not found', 404)
-    await setCustomGatewayEnabledForSchools([legacySchoolId], true)
+  } else if (bindSchoolId) {
+    await setCustomGatewayEnabledForSchools([bindSchoolId], true)
     enabledSchoolCount = 1
   }
+
+  const schoolName =
+    dedicated && bindSchoolId
+      ? (
+          await basePrisma.school.findUnique({
+            where: { id: bindSchoolId },
+            select: { name: true },
+          })
+        )?.name || null
+      : null
 
   return NextResponse.json({
     success: true,
     gateway: {
       id: gateway.id,
-      schoolId: null,
-      schoolName: null,
+      schoolId: gateway.schoolId,
+      schoolName,
       deviceName: gateway.deviceName,
-      isShared: true,
+      isShared: gateway.isShared,
       isActive: gateway.isActive,
       createdAt: gateway.createdAt,
     },
     enabledSchoolCount,
-    customGatewayEnabled: enableForAllSchools || Boolean(legacySchoolId),
-    // Pairing secret — display as QR / manual entry. Not retrievable as plaintext later
-    // without decrypting apiTokenEncrypted (admin-only helper can be added if needed).
+    customGatewayEnabled: dedicated || enableForAllSchools || Boolean(bindSchoolId),
+    // Pairing secret — display once. School admins cannot register or re-bind tokens.
     deviceToken: rawToken,
   })
 })

@@ -98,9 +98,14 @@ See sections below and the Result Entry / ECZ SBA notes in [USER_GUIDE.md](./USE
 
 ## PWA install
 
-1. Chrome Android / desktop: browser menu → **Install app** / **Add to Home Screen**.
-2. iOS Safari: Share → **Add to Home Screen** (limited background sync; open the app to flush queues).
-3. Prefer low-data mode: open needed pages once on Wi‑Fi before travelling.
+ZSMS is an installable Progressive Web App on the **web** (custom `manifest.json` + `/sw.js`). Each school **subdomain is a separate install** (separate caches and home-screen icon).
+
+1. **Chrome / Edge (Android or desktop):** while signed in on the school subdomain, use the in-app **Install ZSMS** banner, or the browser menu → **Install app** / **Add to Home Screen**.
+2. **iOS Safari:** open the school site in Safari → Share → **Add to Home Screen** (iOS does not use the Chrome install prompt; background sync is limited — open the app to flush queues).
+3. Prefer low-data mode: open needed dashboard pages once on Wi‑Fi before travelling.
+4. Offline seed download/import remains at **`/dashboard/offline`**.
+
+Dev builds unregister the service worker so local `next dev` is not interfered with.
 
 ## Local schema (Dexie)
 

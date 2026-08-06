@@ -9,7 +9,10 @@ $link = Join-Path $mobile 'node_modules'
 # Refresh mobile sources without node_modules
 $src = 'F:\Mobile Apps\ZSMS\school_management_systems\zsms-mobile'
 if (Test-Path $link) { cmd /c "rmdir `"$link`"" }
-robocopy $src $mobile /E /XD node_modules .expo tools tools.localbuild android\.gradle android\build android\app\build .git /XF *.zip *.apk *.aab .env /NFL /NDL /NJH /NJS /nc /ns /np | Out-Null
+# /MIR mirrors so deleted assets (e.g. old ic_launcher.webp) do not remain beside new .png icons
+robocopy $src $mobile /MIR /XD node_modules .expo tools tools.localbuild android\.gradle android\build android\app\build .git /XF *.zip *.apk *.aab .env /NFL /NDL /NJH /NJS /nc /ns /np | Out-Null
+# Extra safety: never ship duplicate launcher formats
+Get-ChildItem -Recurse (Join-Path $mobile 'android\app\src\main\res') -Filter 'ic_launcher*.webp' -ErrorAction SilentlyContinue | Remove-Item -Force
 
 Set-Content -Path (Join-Path $mobile '.env.local') -Value @"
 EXPO_PUBLIC_API_BASE_URL=https://www.bluepeacktechnologies.com

@@ -57,7 +57,6 @@ export default function SmartDashboardIntegration({
   // PWA and Offline Management
   const [pwaManager] = useState(() => new PWAManager())
   const [isOnline, setIsOnline] = useState(true)
-  const [isInstallable, setIsInstallable] = useState(false)
   const [notifications, setNotifications] = useState([])
 
   // Search and Filtering
@@ -120,10 +119,6 @@ export default function SmartDashboardIntegration({
       })
     }
 
-    pwaManager.installer.onInstallable = () => {
-      setIsInstallable(true)
-    }
-
     // Request notification permission
     pwaManager.requestNotificationPermission()
   }, [pwaManager, showNotification])
@@ -153,16 +148,6 @@ export default function SmartDashboardIntegration({
     const results = searchEngine.search(searchQuery, activeFilters)
     setSearchResults(results)
   }, [searchQuery, activeFilters, searchEngine])
-
-  const handleInstallApp = async () => {
-    const installed = await pwaManager.showInstallPrompt()
-    if (installed) {
-      showNotification('App Installed', {
-        body: 'School Management System is now installed!',
-        icon: '🎉',
-      })
-    }
-  }
 
   const handleGenerateReport = async (templateType, data) => {
     setReportGenerating(true)
@@ -446,20 +431,6 @@ export default function SmartDashboardIntegration({
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {isInstallable && (
-        <div className="mt-3 p-3 bg-royalPurple-accent rounded-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="font-medium text-sm">Install App</div>
-              <div className="text-xs text-royalPurple-text2">Get the full experience</div>
-            </div>
-            <Button onClick={handleInstallApp} className="btn-primary btn-sm">
-              Install
-            </Button>
-          </div>
         </div>
       )}
     </Card>

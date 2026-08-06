@@ -1,44 +1,38 @@
 export const dynamic = 'force-dynamic'
 
-import { NextResponse } from 'next/server'
+import { withApiHandler, apiOk, ApiError } from '@/lib/middleware/withApiHandler'
 import prisma from '@/lib/prisma'
-import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
-import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 
-export const POST = withErrorHandler(async function POST(request, { params }) {
-  const routeParams = await params
-  const notificationId = String(routeParams?.notificationId || '').trim()
-  if (!notificationId) throw new ApiError('notificationId is required', 400)
+/**
+ * POST /api/admin/notifications/[notificationId]/read — Phase 3 example (admin domain).
+ */
+export const POST = withApiHandler(
+  async ({ user, schoolId, params }) => {
+    const notificationId = String(params?.notificationId || '').trim()
+    if (!notificationId) {
+      throw new ApiError('notificationId is required', 400, { code: 'VALIDATION_FAILED' })
+    }
 
-  const auth = await authMiddleware(request)
-  if (!auth.isAuthenticated) return auth.response
+    const notification = await prisma.allocationNotification.findFirst({
+      where: { id: notificationId, schoolId, adminUserId: user.id },
+      select: { id: true },
+    })
+    if (!notification) throw new ApiError('Not found', 404, { code: 'NOT_FOUND' })
 
-  if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
-    throw new ApiError('Forbidden', 403)
+    const updateResult = await prisma.allocationNotification.updateMany({
+      where: { id: notification.id, schoolId },
+      data: { read: true, readAt: new Date() },
+    })
+    if (updateResult.count === 0) throw new ApiError('Not found', 404, { code: 'NOT_FOUND' })
+
+    const updated = await prisma.allocationNotification.findFirst({
+      where: { id: notification.id, schoolId },
+      select: { read: true, readAt: true },
+    })
+
+    return apiOk({ read: updated.read, readAt: updated.readAt })
+  },
+  {
+    roles: ['ADMIN', 'headteacher'],
   }
-
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-  if (!schoolId) throw new ApiError('School context required', 400)
-
-  const notification = await prisma.allocationNotification.findFirst({
-    where: { id: notificationId, schoolId, adminUserId: auth.user.id },
-    select: { id: true },
-  })
-  if (!notification) throw new ApiError('Not found', 404)
-
-  const updateResult = await prisma.allocationNotification.updateMany({
-    where: { id: notification.id, schoolId },
-    data: { read: true, readAt: new Date() },
-  })
-  if (updateResult.count === 0) throw new ApiError('Not found', 404)
-
-  const updated = await prisma.allocationNotification.findFirst({
-    where: { id: notification.id, schoolId },
-    select: { read: true, readAt: true },
-  })
-
-  return NextResponse.json({ read: updated.read, readAt: updated.readAt })
-})
+)

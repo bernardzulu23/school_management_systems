@@ -103,9 +103,16 @@ export const PUT = withErrorHandler(async function PUT(request) {
     return NextResponse.json({ error: 'No changes provided' }, { status: 400 })
   }
 
-  const updated = await prisma.user.update({
-    where: { id: user.id },
+  const updated = await prisma.user.updateMany({
+    where: { id: user.id, schoolId },
     data,
+  })
+  if (!updated.count) {
+    return NextResponse.json({ error: 'Update failed' }, { status: 404 })
+  }
+
+  const refreshed = await prisma.user.findFirst({
+    where: { id: user.id, schoolId },
     select: {
       id: true,
       name: true,
@@ -121,5 +128,5 @@ export const PUT = withErrorHandler(async function PUT(request) {
     },
   })
 
-  return NextResponse.json({ success: true, user: updated })
+  return NextResponse.json({ success: true, user: refreshed })
 })

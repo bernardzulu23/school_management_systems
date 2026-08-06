@@ -13,6 +13,7 @@ import { TimetableNotificationBell } from '@/components/timetable/TimetableNotif
 import { NotificationBadge } from '@/components/notifications/NotificationBadge'
 import { NotificationToast } from '@/components/notifications/NotificationToast'
 import { WebPushAutoEnable } from '@/components/notifications/WebPushAutoEnable'
+import { InstallAppPrompt } from '@/components/pwa/InstallAppPrompt'
 import toast from 'react-hot-toast'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarningBanner'
@@ -262,6 +263,7 @@ export function DashboardLayout({ children, title }) {
             </div>
           </div>
         </header>
+        <InstallAppPrompt />
         {/* Main content */}
         <main className="max-w-7xl w-full mx-auto py-6 sm:px-6 lg:px-8">
           <NotificationToast />

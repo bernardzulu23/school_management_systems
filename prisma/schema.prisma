@@ -76,6 +76,7 @@ model School {
   students             Student[]
   parentProfiles       ParentProfile[]
   parentStudentLinks   ParentStudentLink[]
+  smsContactOptOuts    SmsContactOptOut[]
   consentRecords       ConsentRecord[]
   teachers             Teacher[]
   hods                 HeadOfDepartment[]
@@ -384,6 +385,8 @@ model SchoolFeePayment {
   narration     String?
   paymentType   String?
   studentId     String?
+  /// Optional bind to StudentInvoice — amount must match invoice balance at initiate.
+  invoiceId     String?
   lipilaStatus  String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -391,6 +394,33 @@ model SchoolFeePayment {
   @@index([schoolId])
   @@index([status])
   @@index([createdAt])
+  @@index([invoiceId])
+}
+
+/**
+ * Append-only payment reconciliation (Phase 6).
+ * Never UPDATE/DELETE rows — only INSERT. Current status stays on payment tables as denormalized cache.
+ */
+model PaymentLedgerEntry {
+  id           String   @id @default(cuid())
+  schoolId     String?
+  provider     String   @default("lipila")
+  paymentKind  String
+  paymentId    String
+  referenceId  String?
+  /// Unique idempotency key: provider:kind:paymentId:action:refOrStatus
+  eventKey     String
+  action       String
+  amount       Float?
+  currency     String?
+  lipilaStatus String?
+  metadata     Json?
+  createdAt    DateTime @default(now())
+
+  @@unique([provider, eventKey])
+  @@index([paymentId, createdAt])
+  @@index([schoolId, createdAt])
+  @@index([action, createdAt])
 }
 
 /** Government school capitation / infrastructure grants (Phase 2). */
@@ -698,10 +728,50 @@ model ParentProfile {
   school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   phone            String?
   preferredContact String? // email | phone
+  /// Phase 5 M2 — keep account; stop outbound school SMS.
+  smsOptOutAll         Boolean  @default(false)
+  smsOptOutAttendance  Boolean  @default(false)
+  smsOptOutFees        Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   @@index([schoolId])
+}
+
+/// Phone-level SMS opt-out (guardian numbers on Student without a Parent User).
+model SmsContactOptOut {
+  id               String   @id @default(cuid())
+  schoolId         String
+  school           School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  phoneNormalized  String
+  optOutAll        Boolean  @default(false)
+  optOutAttendance Boolean  @default(false)
+  optOutFees       Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([schoolId, phoneNormalized])
+  @@index([schoolId])
+}
+
+/// Staff / platform reads of sensitive pupil or cross-tenant data (Phase 5 M3).
+model PiiAccessLog {
+  id             String   @id @default(cuid())
+  schoolId       String?
+  actorUserId    String
+  actorRole      String?
+  action         String
+  resourceType   String
+  resourceId     String?
+  fieldsAccessed String[] @default([])
+  ip             String?
+  userAgent      String?
+  metadata       Json?
+  createdAt      DateTime @default(now())
+
+  @@index([schoolId, createdAt])
+  @@index([actorUserId, createdAt])
+  @@index([resourceType, resourceId])
 }
 
 /// Durable link between a parent User and a Student (invite → active).

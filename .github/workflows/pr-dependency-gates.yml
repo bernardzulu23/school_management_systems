@@ -1,0 +1,52 @@
+# Phase 9 — PR dependency & tenancy gates
+#
+# Runs on every pull request:
+#   1. npm audit (production deps, fail on high/critical)
+#   2. Phase 1 tenant-scoping static check
+#   3. Zod schema validation unit tests
+#
+# Broader security suite (full Vitest + TruffleHog) remains in security.yml.
+name: PR Dependency Gates
+
+on:
+  pull_request:
+  push:
+    branches: [main, develop]
+
+concurrency:
+  group: pr-dependency-gates-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  gates:
+    name: Audit · tenant scope · Zod schemas
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '24'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+        env:
+          HUSKY: '0'
+
+      - name: npm audit (production, fail on high+)
+        run: npm run audit:security
+
+      - name: Tenant-scoping static check (Phase 1)
+        run: npm run check:tenant
+
+      - name: Zod schema validation tests
+        run: npm run test:zod
+        env:
+          JWT_SECRET: test-jwt-secret-minimum-32-characters-long
+          JWT_REFRESH_SECRET: test-refresh-secret-minimum-32-characters
+          NODE_ENV: test

@@ -29,6 +29,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   const channelOnly = String(searchParams.get('channel') || '')
     .trim()
     .toUpperCase()
+  const filterSchoolId = String(searchParams.get('schoolId') || '').trim() || null
 
   const gateway = await basePrisma.sMSGateway.findUnique({
     where: { id: gatewayId },
@@ -42,11 +43,22 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   })
   if (!gateway) throw new ApiError('Gateway not found', 404)
 
-  // Shared gateway: always show logs for this device. Legacy school-bound: school outbound mix unless filtered.
-  const where =
-    gateway.isShared || channelOnly === 'CUSTOM_GATEWAY' || !gateway.schoolId
-      ? { gatewayId, channel: 'CUSTOM_GATEWAY' as const }
-      : outboundSmsWhere({ schoolId: gateway.schoolId })
+  // Dedicated gateway: always school-bound. Shared: optional schoolId isolates one tenant.
+  let where
+  if (gateway.isShared) {
+    where = {
+      gatewayId,
+      channel: 'CUSTOM_GATEWAY' as const,
+      ...(filterSchoolId ? { schoolId: filterSchoolId } : {}),
+    }
+  } else if (gateway.schoolId) {
+    where =
+      channelOnly === 'CUSTOM_GATEWAY'
+        ? { gatewayId, channel: 'CUSTOM_GATEWAY' as const, schoolId: gateway.schoolId }
+        : outboundSmsWhere({ schoolId: gateway.schoolId })
+  } else {
+    where = { gatewayId, channel: 'CUSTOM_GATEWAY' as const }
+  }
 
   const logs = await basePrisma.smsLog.findMany({
     where,
@@ -61,6 +73,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       channel: true,
       provider: true,
       gatewayId: true,
+      schoolId: true,
     },
   })
 
@@ -71,6 +84,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
       schoolId: gateway.schoolId,
       isShared: Boolean(gateway.isShared),
       schoolName: gateway.isShared ? 'All schools (shared)' : gateway.school?.name || null,
+      filterSchoolId,
     },
     logs: logs.map((l) => ({
       ...l,

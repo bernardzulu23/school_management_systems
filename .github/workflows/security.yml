@@ -1,15 +1,17 @@
-# ZSMS Security Audit — runs on PRs to main, pushes to main/develop, and weekly.
+# ZSMS Security Audit — runs on PRs, pushes to main/develop, and weekly.
 #
 # 1. Fails the build if HIGH/CRITICAL vulnerabilities exist in production deps.
-# 2. Runs the Vitest suite (includes __tests__/security/*).
-# 3. Scans the diff for committed secrets.
+# 2. Tenant-scoping static check + API handler smoke.
+# 3. Runs the Vitest suite (includes __tests__/security/*).
+# 4. Scans the diff for committed secrets.
+#
+# Fast PR gates (audit + tenant + Zod only) also live in pr-dependency-gates.yml.
 name: Security Audit
 
 on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main]
   schedule:
     - cron: '0 6 * * 1' # Mondays 08:00 Africa/Lusaka (UTC+2)
 
@@ -32,6 +34,12 @@ jobs:
 
       - name: Security audit (production deps, fail on high)
         run: npm run audit:security
+
+      - name: Tenant scoping static check
+        run: npm run check:tenant
+
+      - name: API handler migration smoke (examples present)
+        run: npm run check:api-handlers -- --fail-under 5
 
       - name: Run tests
         run: npm test

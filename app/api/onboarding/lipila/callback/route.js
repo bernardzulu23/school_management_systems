@@ -2,42 +2,104 @@ export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
 import prisma from '@/lib/prisma'
 import { isFailedLipilaStatus, isPaidLipilaStatus } from '@/lib/payments/lipila'
-import { parseLipilaCallbackPayload } from '@/lib/payments/lipilaCallback'
+import {
+  parseLipilaCallbackPayload,
+  verifyLipilaWebhookRequest,
+} from '@/lib/payments/lipilaCallback'
+import {
+  LEDGER_ACTIONS,
+  appendPaymentLedger,
+  isTerminalPaidStatus,
+} from '@/lib/payments/paymentLedger'
 import { logger, captureError } from '@/lib/utils/logger'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
-import { unauthorizedWebhookResponse, verifySharedWebhookSecret } from '@/lib/security/webhookAuth'
+import { unauthorizedWebhookResponse } from '@/lib/security/webhookAuth'
+import { recordPaymentWebhookFailureAlert } from '@/lib/observability/alerts'
 
-async function markRegistrationPaid({ identifier, referenceId }) {
-  if (identifier) {
-    await prisma.schoolRegistration.updateMany({
-      where: { id: identifier },
-      data: { paymentStatus: 'paid', ...(referenceId ? { paymentReference: referenceId } : {}) },
+async function markRegistrationPaid({ identifier, referenceId, eventId, status }) {
+  const where = identifier
+    ? { id: identifier }
+    : referenceId
+      ? { paymentReference: referenceId }
+      : null
+  if (!where) return
+
+  const reg = await prisma.schoolRegistration.findFirst({
+    where,
+    select: { id: true, paymentStatus: true, paymentReference: true },
+  })
+  if (!reg) return
+
+  if (isTerminalPaidStatus(reg.paymentStatus)) {
+    await appendPaymentLedger({
+      paymentKind: 'registration',
+      paymentId: reg.id,
+      referenceId: referenceId || reg.paymentReference,
+      action: LEDGER_ACTIONS.DUPLICATE,
+      lipilaStatus: status,
+      eventKey: `lipila:registration:${reg.id}:DUPLICATE:${eventId || referenceId || status}`,
     })
     return
   }
-  if (referenceId) {
-    await prisma.schoolRegistration.updateMany({
-      where: { paymentReference: referenceId },
-      data: { paymentStatus: 'paid' },
-    })
-  }
+
+  await appendPaymentLedger({
+    paymentKind: 'registration',
+    paymentId: reg.id,
+    referenceId: referenceId || reg.paymentReference,
+    action: LEDGER_ACTIONS.PAID,
+    lipilaStatus: status,
+    eventKey: `lipila:registration:${reg.id}:PAID:${eventId || referenceId || status}`,
+  })
+
+  await prisma.schoolRegistration.updateMany({
+    where: { id: reg.id, paymentStatus: { not: 'paid' } },
+    data: {
+      paymentStatus: 'paid',
+      ...(referenceId ? { paymentReference: referenceId } : {}),
+    },
+  })
 }
 
-async function markRegistrationFailed({ identifier, referenceId }) {
-  const data = { paymentStatus: 'failed' }
-  if (identifier) {
-    await prisma.schoolRegistration.updateMany({ where: { id: identifier }, data })
+async function markRegistrationFailed({ identifier, referenceId, eventId, status }) {
+  const where = identifier
+    ? { id: identifier }
+    : referenceId
+      ? { paymentReference: referenceId }
+      : null
+  if (!where) return
+
+  const reg = await prisma.schoolRegistration.findFirst({
+    where,
+    select: { id: true, paymentStatus: true, paymentReference: true },
+  })
+  if (!reg) return
+
+  if (isTerminalPaidStatus(reg.paymentStatus)) {
+    await appendPaymentLedger({
+      paymentKind: 'registration',
+      paymentId: reg.id,
+      referenceId: referenceId || reg.paymentReference,
+      action: LEDGER_ACTIONS.REJECTED_STATUS,
+      lipilaStatus: status,
+      eventKey: `lipila:registration:${reg.id}:REJECTED_STATUS:${eventId || referenceId || status}`,
+      metadata: { note: 'refuse_paid_to_failed' },
+    })
     return
   }
-  if (referenceId) {
-    await prisma.schoolRegistration.updateMany({ where: { paymentReference: referenceId }, data })
-  }
-}
 
-function assertLipilaWebhook(request) {
-  return verifySharedWebhookSecret(request, 'LIPILA_WEBHOOK_SECRET', {
-    aliasHeaders: ['x-lipila-webhook-secret'],
+  await appendPaymentLedger({
+    paymentKind: 'registration',
+    paymentId: reg.id,
+    referenceId: referenceId || reg.paymentReference,
+    action: LEDGER_ACTIONS.FAILED,
+    lipilaStatus: status,
+    eventKey: `lipila:registration:${reg.id}:FAILED:${eventId || referenceId || status}`,
+  })
+
+  await prisma.schoolRegistration.updateMany({
+    where: { id: reg.id, paymentStatus: { not: 'paid' } },
+    data: { paymentStatus: 'failed' },
   })
 }
 
@@ -47,21 +109,38 @@ export const POST = withSecureHandler(async function POST(request) {
   const log = logger({ route })
   log.request(request)
 
-  const auth = assertLipilaWebhook(request)
+  const rawBody = await request.text().catch(() => '')
+  const auth = verifyLipilaWebhookRequest(request, rawBody)
   if (!auth.ok) {
+    recordPaymentWebhookFailureAlert({
+      kind: 'lipila_onboarding',
+      reason: auth.error || 'unauthorized',
+    })
     log.response(auth.status, Date.now() - start)
     return unauthorizedWebhookResponse(auth)
   }
 
   try {
-    const payload = await request.json().catch(() => ({}))
+    let payload = {}
+    try {
+      payload = rawBody ? JSON.parse(rawBody) : {}
+    } catch {
+      recordPaymentWebhookFailureAlert({ kind: 'lipila_onboarding', reason: 'invalid_json' })
+      log.response(400, Date.now() - start)
+      return NextResponse.json({ success: false, error: 'Invalid JSON' }, { status: 400 })
+    }
+
     const parsed = parseLipilaCallbackPayload(payload)
     if (!parsed.ok) {
+      recordPaymentWebhookFailureAlert({
+        kind: 'lipila_onboarding',
+        reason: parsed.error || 'parse_failed',
+      })
       log.response(400, Date.now() - start)
       return NextResponse.json({ success: false, error: parsed.error }, { status: 400 })
     }
 
-    const { identifier, referenceId, status } = parsed
+    const { identifier, referenceId, status, eventId } = parsed
     if (!identifier && !referenceId) {
       log.response(200, Date.now() - start)
       return NextResponse.json({ success: true }, { status: 200 })
@@ -69,16 +148,17 @@ export const POST = withSecureHandler(async function POST(request) {
 
     const ctx = logger({ route, registrationId: identifier || undefined })
     if (isPaidLipilaStatus(status)) {
-      await markRegistrationPaid({ identifier, referenceId })
+      await markRegistrationPaid({ identifier, referenceId, eventId, status })
       ctx.info('Payment marked paid', { referenceId, status })
     } else if (isFailedLipilaStatus(status)) {
-      await markRegistrationFailed({ identifier, referenceId })
+      await markRegistrationFailed({ identifier, referenceId, eventId, status })
       ctx.warn('Payment marked failed', { referenceId, status })
     }
 
     log.response(200, Date.now() - start)
     return NextResponse.json({ success: true }, { status: 200 })
   } catch (error) {
+    recordPaymentWebhookFailureAlert({ kind: 'lipila_onboarding', reason: 'handler_exception' })
     captureError(error, { route })
     log.response(500, Date.now() - start)
     return NextResponse.json({ success: false }, { status: 500 })
@@ -87,7 +167,6 @@ export const POST = withSecureHandler(async function POST(request) {
 
 /**
  * Browser return URL only — never trust query status to mutate payment state.
- * Activation happens via authenticated POST webhook or client status poll.
  */
 export const GET = withSecureHandler(async function GET(request) {
   const route = '/api/onboarding/lipila/callback'

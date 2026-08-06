@@ -9,6 +9,7 @@ import { requirePlatformAdmin } from '@/lib/middleware/platformAuth'
 import { basePrisma } from '@/lib/prisma/client'
 import { secureJson } from '@/lib/security/api'
 import { outboundSmsWhere } from '@/lib/sms/outboundChannels'
+import { logPiiAccess, clientMetaFromRequest } from '@/lib/privacy/piiAccessLog'
 
 export const dynamic = 'force-dynamic'
 
@@ -37,6 +38,17 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   if (!gate.ok) {
     return secureJson({ error: gate.error }, { status: gate.status }, request)
   }
+
+  await logPiiAccess({
+    schoolId: null,
+    actorUserId: auth.user.id,
+    actorRole: auth.user.role || 'platform_admin',
+    action: 'READ',
+    resourceType: 'PlatformSmsGatewayMetrics',
+    resourceId: 'fleet',
+    fieldsAccessed: ['sms_aggregates', 'gateway_fleet'],
+    ...clientMetaFromRequest(request),
+  })
 
   const now = Date.now()
   const todayStart = startOfDay()

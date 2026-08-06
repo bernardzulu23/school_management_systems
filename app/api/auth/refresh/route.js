@@ -82,16 +82,20 @@ export const POST = withSecureApi(async function POST(request) {
       return response
     }
 
-    // 3. Rotation check: Look up token in database
+    // 3. Rotation check: Look up token by unique token only (never trust JWT schoolId for the key).
     let tokenRecord = null
     let canUseDbTokenRotation = true
     try {
       tokenRecord = await prisma.refreshToken.findUnique({
-        where: {
-          token: refreshToken,
-          ...(decoded.schoolId ? { schoolId: decoded.schoolId } : {}),
+        where: { token: refreshToken },
+        select: {
+          id: true,
+          token: true,
+          revoked: true,
+          userId: true,
+          schoolId: true,
+          updatedAt: true,
         },
-        select: { id: true, token: true, revoked: true, userId: true, updatedAt: true },
       })
     } catch (e) {
       canUseDbTokenRotation = false
@@ -106,11 +110,11 @@ export const POST = withSecureApi(async function POST(request) {
       const recentlyRotated = revokedAt > 0 && Date.now() - revokedAt < REFRESH_ROTATION_GRACE_MS
 
       if (!recentlyRotated) {
-        // POTENTIAL ATTACK: reuse of a rotated refresh token — revoke all sessions.
+        // POTENTIAL ATTACK: reuse of a rotated refresh token — revoke all sessions for this user+school.
         await prisma.refreshToken.updateMany({
           where: {
-            userId: decoded.id,
-            ...(decoded.schoolId ? { schoolId: decoded.schoolId } : {}),
+            userId: tokenRecord.userId || decoded.id,
+            ...(tokenRecord.schoolId ? { schoolId: tokenRecord.schoolId } : {}),
           },
           data: { revoked: true },
         })
@@ -134,8 +138,9 @@ export const POST = withSecureApi(async function POST(request) {
       )
     }
 
+    // Load user by id; tenant comes from DB (and must match token row when present).
     const user = await prisma.user.findFirst({
-      where: decoded.schoolId ? { id: decoded.id, schoolId: decoded.schoolId } : { id: decoded.id },
+      where: { id: decoded.id },
       select: {
         id: true,
         email: true,
@@ -147,7 +152,20 @@ export const POST = withSecureApi(async function POST(request) {
       },
     })
 
-    if (!user) {
+    if (!user?.schoolId) {
+      return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
+    }
+
+    if (tokenRecord?.schoolId && tokenRecord.schoolId !== user.schoolId) {
+      return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
+    }
+
+    if (tokenRecord?.userId && tokenRecord.userId !== user.id) {
+      return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
+    }
+
+    // Stale JWT claim vs DB school — reject (do not use claim as query key).
+    if (decoded.schoolId && String(decoded.schoolId) !== String(user.schoolId)) {
       return NextResponse.json({ error: 'Invalid token', stopRetry: true }, { status: 401 })
     }
 

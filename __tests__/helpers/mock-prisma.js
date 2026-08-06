@@ -129,6 +129,11 @@ export function createMockPrisma() {
       upsert: vi.fn(),
       update: vi.fn(),
     },
+    paymentLedgerEntry: {
+      create: vi.fn().mockResolvedValue({ id: 'led-1' }),
+      findUnique: vi.fn().mockResolvedValue(null),
+      findFirst: vi.fn().mockResolvedValue(null),
+    },
     $queryRaw: vi.fn().mockResolvedValue([]),
     $transaction: vi.fn(async (fn) => fn(mock)),
   }

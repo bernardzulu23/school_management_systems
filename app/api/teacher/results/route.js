@@ -1,6 +1,5 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { calculateGrade } from '@/lib/gradingSystem'
@@ -11,6 +10,7 @@ import { assertSecondaryGradingForContext } from '@/lib/school/gradingAccess'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import { onTestResultRecorded } from '@/lib/teaching/updateTopicMasteryHooks'
 import { safeStringId, safeQueryString } from '@/lib/security/safeQueryValue'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
 
 async function gunzipAsync(data) {
   const ds = new DecompressionStream('gzip')
@@ -54,6 +54,8 @@ export const GET = withErrorHandler(async function GET(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  const db = getTenantClient(schoolId)
+
   const featureBlock = await requireFeature(schoolId, 'basic-results')
   if (featureBlock) return featureBlock
 
@@ -68,7 +70,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   await assertSecondaryGradingForContext(schoolId, {
     classId: classId || '',
-    prismaClient: prisma,
+    prismaClient: db,
   })
 
   const parsedTermYear = parseTermYear(termRaw)
@@ -85,7 +87,7 @@ export const GET = withErrorHandler(async function GET(request) {
   }
 
   if (isTeacher && resolvedClassId && resolvedSubjectId) {
-    const teacherProfile = await prisma.teacher.findFirst({
+    const teacherProfile = await db.teacher.findFirst({
       where: { userId: auth.user.id, schoolId },
       select: {
         id: true,
@@ -115,7 +117,7 @@ export const GET = withErrorHandler(async function GET(request) {
         .filter(Boolean)
     )
 
-    const classRecord = await prisma.class.findFirst({
+    const classRecord = await db.class.findFirst({
       where: { schoolId, id: resolvedClassId },
       select: { id: true, teacherId: true },
     })
@@ -123,7 +125,7 @@ export const GET = withErrorHandler(async function GET(request) {
       allowedClassIds.has(resolvedClassId) ||
       String(classRecord?.teacherId || '') === String(teacherProfile.id)
 
-    const subjectRecord = await prisma.subject.findFirst({
+    const subjectRecord = await db.subject.findFirst({
       where: { schoolId, id: resolvedSubjectId },
       select: { id: true, name: true },
     })
@@ -145,7 +147,7 @@ export const GET = withErrorHandler(async function GET(request) {
   let rosterStudentIds =
     resolvedClassId && resolvedSubjectId
       ? (
-          await prisma.pupilSubjectEnrollment.findMany({
+          await db.pupilSubjectEnrollment.findMany({
             where: { schoolId, classId: resolvedClassId, subjectId: resolvedSubjectId },
             select: { pupilId: true },
             take: 50000,
@@ -156,7 +158,7 @@ export const GET = withErrorHandler(async function GET(request) {
       : null
 
   if (resolvedClassId && resolvedSubjectId && Array.isArray(rosterStudentIds)) {
-    const classRecord = await prisma.class.findFirst({
+    const classRecord = await db.class.findFirst({
       where: { schoolId, id: resolvedClassId },
       select: { id: true, name: true, year_group: true, section: true },
     })
@@ -198,7 +200,7 @@ export const GET = withErrorHandler(async function GET(request) {
     // Always merge class membership with subject enrollments.
     // This prevents "partial enrollment" data from hiding already-entered student results in the gradebook.
     if (classOr.length > 0) {
-      const studentsInClass = await prisma.student.findMany({
+      const studentsInClass = await db.student.findMany({
         where: { schoolId, OR: classOr },
         select: { id: true },
         take: 50000,
@@ -210,7 +212,7 @@ export const GET = withErrorHandler(async function GET(request) {
     }
   }
 
-  const results = await prisma.result.findMany({
+  const results = await db.result.findMany({
     where: {
       schoolId,
       ...(studentId ? { studentId } : {}),
@@ -263,6 +265,8 @@ export const POST = withErrorHandler(async function POST(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  const db = getTenantClient(schoolId)
+
   const featureBlock = await requireFeature(schoolId, 'basic-results')
   if (featureBlock) return featureBlock
 
@@ -286,7 +290,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const teacherProfile = isAdmin
     ? null
-    : await prisma.teacher.findFirst({
+    : await db.teacher.findFirst({
         where: { userId: auth.user.id, schoolId },
         select: {
           id: true,
@@ -325,7 +329,7 @@ export const POST = withErrorHandler(async function POST(request) {
     )
     const subjectsInPayload =
       subjectIdsInPayload.length > 0
-        ? await prisma.subject.findMany({
+        ? await db.subject.findMany({
             where: { schoolId, id: { in: subjectIdsInPayload } },
             select: { id: true, name: true },
             take: 50000,
@@ -343,19 +347,16 @@ export const POST = withErrorHandler(async function POST(request) {
 
   const classIds = Array.from(new Set(results.map((r) => safeStringId(r.classId)).filter(Boolean)))
   const classMap = new Map(
-    (await prisma.class.findMany({ where: { schoolId, id: { in: classIds } } })).map((c) => [
-      c.id,
-      c,
-    ])
+    (await db.class.findMany({ where: { schoolId, id: { in: classIds } } })).map((c) => [c.id, c])
   )
 
-  await assertSecondaryGradingForContext(schoolId, { prismaClient: prisma })
+  await assertSecondaryGradingForContext(schoolId, { prismaClient: db })
   for (const cid of classIds) {
     const c = classMap.get(cid)
     if (!c) continue
     await assertSecondaryGradingForContext(schoolId, {
       gradeLevel: c.year_group || c.name,
-      prismaClient: prisma,
+      prismaClient: db,
     })
   }
 
@@ -371,7 +372,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
     const enrollments =
       studentIds.length > 0 && classIds.length > 0 && subjectIds.length > 0
-        ? await prisma.pupilSubjectEnrollment.findMany({
+        ? await db.pupilSubjectEnrollment.findMany({
             where: {
               schoolId,
               classId: { in: classIds },
@@ -416,7 +417,7 @@ export const POST = withErrorHandler(async function POST(request) {
 
     const students =
       studentIds.length > 0
-        ? await prisma.student.findMany({
+        ? await db.student.findMany({
             where: { schoolId, id: { in: studentIds } },
             select: { id: true, classId: true, class: true },
             take: 50000,
@@ -433,7 +434,7 @@ export const POST = withErrorHandler(async function POST(request) {
     }
   }
 
-  await prisma.$transaction(async (tx) => {
+  await db.$transaction(async (tx) => {
     for (const r of results) {
       const studentId = safeStringId(r.studentId || r.pupilId)
       const subjectId = safeStringId(r.subjectId)
@@ -677,12 +678,14 @@ async function assertMayDeleteResult({
     .trim()
     .toLowerCase()
 
-  const student = await prisma.student.findFirst({
+  const db = getTenantClient(schoolId)
+
+  const student = await db.student.findFirst({
     where: { schoolId, id: result.studentId },
     select: { id: true, classId: true, class: true },
   })
 
-  const enrollmentRows = await prisma.pupilSubjectEnrollment.findMany({
+  const enrollmentRows = await db.pupilSubjectEnrollment.findMany({
     where: { schoolId, pupilId: result.studentId, subjectId: result.subjectId },
     select: { classId: true },
     take: 50000,
@@ -700,7 +703,7 @@ async function assertMayDeleteResult({
       .toLowerCase()
       .replace(/\s+/g, '')
 
-  const classes = await prisma.class.findMany({
+  const classes = await db.class.findMany({
     where: { schoolId },
     select: { id: true, name: true, year_group: true, section: true },
     take: 5000,
@@ -732,7 +735,7 @@ async function assertMayDeleteResult({
 
   if (isStaffEntry) {
     for (const classId of classIds) {
-      const enrollment = await prisma.pupilSubjectEnrollment.findFirst({
+      const enrollment = await db.pupilSubjectEnrollment.findFirst({
         where: {
           schoolId,
           pupilId: result.studentId,
@@ -751,7 +754,7 @@ async function assertMayDeleteResult({
   const ctx = buildTeacherAssignmentSets(teacherProfile)
 
   for (const classId of classIds) {
-    const classRecord = await prisma.class.findFirst({
+    const classRecord = await db.class.findFirst({
       where: { schoolId, id: classId },
       select: { id: true, teacherId: true },
     })
@@ -791,22 +794,24 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  const db = getTenantClient(schoolId)
+
   const { searchParams } = new URL(request.url)
   const id = safeStringId(searchParams.get('id'))
   if (!id) throw new ApiError('Result id is required', 400)
 
   if (isAdmin) {
-    const result = await prisma.result.findFirst({
+    const result = await db.result.findFirst({
       where: { id, schoolId },
       select: { id: true },
     })
     if (!result) throw new ApiError('Result not found', 404)
 
-    await prisma.result.deleteMany({ where: { id: result.id, schoolId } })
+    await db.result.deleteMany({ where: { id: result.id, schoolId } })
     return NextResponse.json({ success: true })
   }
 
-  const teacherProfile = await prisma.teacher.findFirst({
+  const teacherProfile = await db.teacher.findFirst({
     where: { userId: auth.user.id, schoolId },
     select: {
       id: true,
@@ -820,13 +825,13 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   const isStaffEntry = isHod && !teacherProfile
   if (!isStaffEntry && !teacherProfile) throw new ApiError('Teacher profile not found', 404)
 
-  const result = await prisma.result.findFirst({
+  const result = await db.result.findFirst({
     where: { id, schoolId },
     select: { id: true, studentId: true, subjectId: true },
   })
   if (!result) throw new ApiError('Result not found', 404)
 
-  const subjectRecord = await prisma.subject.findFirst({
+  const subjectRecord = await db.subject.findFirst({
     where: { schoolId, id: result.subjectId },
     select: { name: true },
   })
@@ -839,7 +844,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
     isStaffEntry,
   })
 
-  await prisma.result.deleteMany({ where: { id: result.id, schoolId } })
+  await db.result.deleteMany({ where: { id: result.id, schoolId } })
 
   return NextResponse.json({ success: true })
 })

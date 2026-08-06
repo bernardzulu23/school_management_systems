@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 import prisma from '@/lib/prisma'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
+import { getTenantContext } from '@/lib/tenant/context'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import {
@@ -37,8 +38,9 @@ export const POST = withAILimits(async function POST(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
-  const schoolId = String(user.schoolId || '').trim()
-  if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
+  const tenant = await getTenantContext(request, user)
+  if (!tenant.ok) return tenant.response
+  const schoolId = tenant.schoolId
 
   const eczCheck = await requireSecondarySchoolAccess(schoolId)
   if (!eczCheck.ok) return eczCheck.response

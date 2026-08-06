@@ -1,0 +1,39 @@
+# Auto-merge Dependabot PRs that are semver-patch only.
+# Minor/major and security-grouped updates still require human review.
+name: Dependabot patch auto-merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  automerge-patch:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dependabot metadata
+        id: meta
+        uses: dependabot/fetch-metadata@08effed4ba2a6b6c350c73a743a6745f5e92bef5 # v2.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Enable auto-merge (squash) for patch updates only
+        if: steps.meta.outputs.update-type == 'version-update:semver-patch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          echo "Patch update detected — enabling auto-merge"
+          echo "dependency-names=${{ steps.meta.outputs.dependency-names }}"
+          echo "package-ecosystem=${{ steps.meta.outputs.package-ecosystem }}"
+          gh pr merge --auto --squash "$PR_URL"
+
+      - name: Skip non-patch Dependabot PRs
+        if: steps.meta.outputs.update-type != 'version-update:semver-patch'
+        run: |
+          echo "Skipping auto-merge for update-type=${{ steps.meta.outputs.update-type }}"
+          echo "Human review required for minor/major updates."

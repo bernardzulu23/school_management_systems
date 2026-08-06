@@ -65,8 +65,10 @@ export function AIFeatures({ registerUrl }: { registerUrl: string }) {
           </p>
           {stats && stats.activeSchools > 0 && (
             <p className="text-sm text-gray-500 mt-4">
-              Used across {stats.activeSchools.toLocaleString()} active schools ·{' '}
-              {stats.totalResults.toLocaleString()} results tracked platform-wide
+              Used across {stats.activeSchools.toLocaleString()} active schools
+              {stats.totalResults > 0
+                ? ` · ${stats.totalResults.toLocaleString()} results tracked platform-wide`
+                : ''}
             </p>
           )}
         </div>

@@ -21,6 +21,7 @@ if (typeof window === 'undefined') {
 export const metadata = {
   metadataBase,
   manifest: '/manifest.json',
+  themeColor: '#333331',
   appleWebApp: {
     capable: true,
     title: 'ZSMS',
@@ -28,6 +29,7 @@ export const metadata = {
   },
   icons: {
     icon: [
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
       { url: '/Assets/logo.png', type: 'image/png' },

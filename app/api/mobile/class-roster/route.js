@@ -6,6 +6,12 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 import { assertTeacherMayAccessAttendanceClass } from '@/lib/attendance/routeAuth'
+import {
+  PUPIL_ROSTER_SELECT,
+  PUPIL_ROSTER_FACE_SELECT,
+  toRosterPupilDto,
+} from '@/lib/privacy/pupilDto'
+import { logPiiAccess, clientMetaFromRequest } from '@/lib/privacy/piiAccessLog'
 
 const STAFF_ROLES = ['TEACHER', 'teacher', 'ADMIN', 'headteacher', 'HOD', 'hod']
 const ROSTER_LIMIT = 200
@@ -36,6 +42,7 @@ export const GET = withErrorHandler(async function GET(request) {
 
   await assertTeacherMayAccessAttendanceClass({ schoolId, user: auth.user, classId })
 
+  const pupilSelect = includeFaceData ? PUPIL_ROSTER_FACE_SELECT : PUPIL_ROSTER_SELECT
   let students = []
 
   if (subjectId) {
@@ -46,7 +53,7 @@ export const GET = withErrorHandler(async function GET(request) {
         subjectId,
       },
       include: {
-        pupil: true,
+        pupil: { select: pupilSelect },
       },
       take: ROSTER_LIMIT,
     })
@@ -81,23 +88,34 @@ export const GET = withErrorHandler(async function GET(request) {
           schoolId,
           OR: [{ classId: classRecord.id }, { class: { in: classCandidates } }],
         },
+        select: pupilSelect,
         take: ROSTER_LIMIT,
       })
     }
   }
 
-  const responseData = students.map((s) => ({
-    id: s.id,
-    name: s.name,
-    class: s.class,
-    qrCode: s.exam_number || null,
-    faceEmbedding: includeFaceData ? s.faceEmbedding : null,
-    twinGroupId: s.twinGroupId || null,
-    requiresSecondaryAuth: Boolean(s.requiresSecondaryAuth),
-    secondaryAuthMethod: s.secondaryAuthMethod || null,
-  }))
+  const responseData = students.map((s) => {
+    const row = toRosterPupilDto(s)
+    row.qrCode = s.exam_number || null
+    if (includeFaceData) {
+      row.faceEmbedding = s.faceEmbedding || null
+    }
+    return row
+  })
 
   if (includeFaceData) {
+    await logPiiAccess({
+      schoolId,
+      actorUserId: auth.user.id,
+      actorRole: auth.user.role,
+      action: 'READ',
+      resourceType: 'StudentFaceRoster',
+      resourceId: classId,
+      fieldsAccessed: ['faceEmbedding'],
+      metadata: { count: responseData.length },
+      ...clientMetaFromRequest(request),
+    })
+
     const { filterRosterEmbeddingsByConsent, getSchoolFacialPolicy } =
       await import('@/lib/consent/facialAttendance')
     const policy = await getSchoolFacialPolicy(schoolId)

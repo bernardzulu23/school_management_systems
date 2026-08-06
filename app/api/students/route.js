@@ -13,6 +13,7 @@ import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { studentSchema, validateRequest, sanitizeOutput } from '@/lib/middleware/inputValidation'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
+import { getTenantContext } from '@/lib/tenant/context'
 import { safeQueryString, safeStringId } from '@/lib/security/safeQueryValue'
 
 const normalizeYearGroup = (yearGroupRaw) => {
@@ -105,19 +106,20 @@ export const GET = withErrorHandler(async (request) => {
   // Authorization: Only Admin, HOD, and Teacher can view all students or specific classes
   // Students can only view their own record (handled in a separate specific route or filtered here)
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher'])) {
-    // If student, filter to only show themselves
+    // If student, filter to only show themselves (tenant from verified session only)
     if (roleCheck(auth.user, ['STUDENT', 'student'])) {
-      const student = await findStudentByUserId(auth.user.id)
+      const ctx = await getTenantContext(request, auth.user)
+      if (!ctx.ok) return ctx.response
+      const student = await findStudentByUserId(ctx.schoolId, ctx.userId)
       return NextResponse.json({ success: true, data: student ? [sanitizeOutput(student)] : [] })
     }
     throw new ApiError('Forbidden: Insufficient permissions', 403)
   }
 
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-  if (!schoolId) throw new ApiError('School context required', 400)
-  const db = getTenantClient(schoolId)
+  const ctx = await getTenantContext(request, auth.user)
+  if (!ctx.ok) return ctx.response
+  const schoolId = ctx.schoolId
+  const db = ctx.db
 
   if (q) {
     const { students, total } = await searchStudents(schoolId, q, { page, limit })

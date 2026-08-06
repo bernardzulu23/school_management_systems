@@ -7,6 +7,7 @@ import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { basePrisma } from '@/lib/prisma/client'
 import { requireActiveGateway } from '@/lib/sms/gatewayAuth'
 import { tryReserveGatewayDispatch } from '@/lib/sms/gatewayRateLimit'
+import { smsLogTenantWhere } from '@/lib/sms/gatewayTenant'
 import { secureJson } from '@/lib/security/api'
 
 export const dynamic = 'force-dynamic'
@@ -25,14 +26,15 @@ export const GET = withErrorHandler(async function GET(request: Request) {
     data: {
       lastSeenAt: new Date(),
       lastHealthCheck: new Date(),
-      // Clear so a future outage can alert again (one alert per episode).
       lastStaleAlertSentAt: null,
     },
   })
 
+  const tenantWhere = smsLogTenantWhere(gateway)
+
   const pending = await basePrisma.smsLog.findMany({
     where: {
-      gatewayId: gateway.id,
+      ...tenantWhere,
       channel: 'CUSTOM_GATEWAY',
       status: 'PENDING',
     },
@@ -40,6 +42,7 @@ export const GET = withErrorHandler(async function GET(request: Request) {
     take: BATCH_LIMIT,
     select: {
       id: true,
+      schoolId: true,
       recipient: true,
       body: true,
       createdAt: true,
@@ -52,7 +55,6 @@ export const GET = withErrorHandler(async function GET(request: Request) {
 
   const { allowed } = await tryReserveGatewayDispatch(gateway.id, pending.length)
   if (allowed <= 0) {
-    // Rate limited — leave rows PENDING for the next poll.
     return NextResponse.json({ messages: [], rateLimited: true })
   }
 
@@ -60,13 +62,20 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   const ids = batch.map((m) => m.id)
 
   await basePrisma.smsLog.updateMany({
-    where: { id: { in: ids }, status: 'PENDING' },
+    where: {
+      id: { in: ids },
+      status: 'PENDING',
+      ...tenantWhere,
+    },
     data: { status: 'DISPATCHED' },
   })
 
-  // Re-read only rows we successfully flipped (guards double-poll races).
   const dispatched = await basePrisma.smsLog.findMany({
-    where: { id: { in: ids }, status: 'DISPATCHED' },
+    where: {
+      id: { in: ids },
+      status: 'DISPATCHED',
+      ...tenantWhere,
+    },
     select: { id: true, recipient: true, body: true, createdAt: true },
   })
 

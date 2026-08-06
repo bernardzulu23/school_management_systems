@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
+import { getTenantContext } from '@/lib/tenant/context'
 import { syncTimeSlotsFromConfig } from '@/lib/timetable/syncTimeSlots'
 import {
   buildTimeSlotsFromConfig,
@@ -54,8 +55,11 @@ function configResponse(config, dbSlots) {
 
 export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
-  const schoolId = await resolveSchoolId(req, user)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const ctx = await getTenantContext(req, user)
+  if (!ctx.ok) return ctx.response
+  const schoolId = ctx.schoolId
 
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
   if (!typeCheck.allowed) return typeCheck.response

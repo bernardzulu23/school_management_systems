@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v9'
+const CACHE_VERSION = 'v10'
 const STATIC_CACHE = `zsms-static-assets-${CACHE_VERSION}`
 const PAGES_CACHE = `zsms-app-shells-${CACHE_VERSION}`
 const OFFLINE_URL = '/offline.html'
@@ -44,6 +44,7 @@ const PRECACHE_ASSETS = [
   '/favicon.ico',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
+  '/icons/icon-512x512-maskable.png',
 ]
 
 function isAppShell(pathname) {

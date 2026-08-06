@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { z } from 'zod'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { getTenantClient } from '@/lib/prisma/tenantClient'
+import { getTenantContext } from '@/lib/tenant/context'
 import { enforceNavBotRateLimit } from '@/lib/navbot/enforce-rate-limit'
 import { matchIntent } from '@/lib/navbot/match-intent'
 
@@ -22,12 +22,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Forbidden', code: 'NAVBOT_STUDENT_ONLY' }, { status: 403 })
   }
 
-  const schoolId = String(auth.user.schoolId || '')
-  const db = getTenantClient(schoolId)
+  const tenant = await getTenantContext(request, auth.user)
+  if (!tenant.ok) return tenant.response
+  const { schoolId, db } = tenant
+
   const student = await db.student.findFirst({
     where: {
       userId: String(auth.user.id),
-      schoolId,
     },
     select: { id: true },
   })
@@ -79,6 +80,6 @@ export async function POST(request: Request) {
     intentId: null,
     answer: NAVBOT_FALLBACK_MESSAGE,
     route: null,
-    score: result.bestCandidate?.score ?? 0,
+    score: 0,
   })
 }

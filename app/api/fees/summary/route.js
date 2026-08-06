@@ -1,13 +1,21 @@
 export const dynamic = 'force-dynamic'
-import { NextResponse } from 'next/server'
-import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import { authorizeFeeRoute } from '@/lib/fees/routeAuth'
+
+import { withApiHandler, apiOk } from '@/lib/middleware/withApiHandler'
+import { assertFeeManagementAllowed } from '@/lib/school/feeManagementAccess'
 import { getFeeSummary } from '@/lib/fees/summary'
 
-export const GET = withErrorHandler(async function GET(request) {
-  const access = await authorizeFeeRoute(request)
-  if (!access.ok) return access.response
-
-  const summary = await getFeeSummary(access.schoolId)
-  return NextResponse.json({ success: true, ...summary })
-})
+/**
+ * GET /api/fees/summary — Phase 3 example (fees domain).
+ * Stack: auth → tenant → ADMIN/headteacher → fee-management → ownership after-hook.
+ */
+export const GET = withApiHandler(
+  async ({ schoolId }) => {
+    const summary = await getFeeSummary(schoolId)
+    return apiOk(summary)
+  },
+  {
+    roles: ['ADMIN', 'headteacher'],
+    feature: 'fee-management',
+    after: async ({ schoolId }) => assertFeeManagementAllowed(schoolId),
+  }
+)

@@ -545,7 +545,7 @@ See [ECZ_COMPLIANCE.md](./ECZ_COMPLIANCE.md), [ECSEOL_ALIGNMENT.md](./ECSEOL_ALI
 
 #### Offline & PWA (all roles)
 
-1. Install ZSMS on the device (**Add to Home Screen** / Install app) while on Wi‑Fi.
+1. Install ZSMS on the device while on Wi‑Fi: use the dashboard **Install ZSMS** banner (Chrome/Edge), or iOS Safari **Share → Add to Home Screen**. Install is **per school subdomain**.
 2. Open **Offline & sync** (`/dashboard/offline`) → download an encrypted **`.zsmsseed`** for your account → transfer to rural devices → import with the same passphrase.
 3. Enter attendance / marks offline; use the amber banner and sync badge when connected.
 4. AI, payments, and SMS require internet (clear message when offline).

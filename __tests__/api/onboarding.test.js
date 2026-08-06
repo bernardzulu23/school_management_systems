@@ -184,7 +184,13 @@ describe('POST /api/onboarding/lipila/callback', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     process.env.LIPILA_WEBHOOK_SECRET = webhookSecret
+    mockPrisma.schoolRegistration.findFirst.mockResolvedValue({
+      id: registrationId,
+      paymentStatus: 'pending',
+      paymentReference: null,
+    })
     mockPrisma.schoolRegistration.updateMany.mockResolvedValue({ count: 1 })
+    mockPrisma.paymentLedgerEntry.create.mockResolvedValue({ id: 'led-1' })
   })
 
   it('rejects callbacks without webhook secret', async () => {

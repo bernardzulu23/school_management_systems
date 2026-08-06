@@ -1,10 +1,12 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { safeRouteParam, safeQueryString } from '@/lib/security/safeQueryValue'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
+import { withSchoolContext } from '@/lib/db/school-context'
+import { PUPIL_ROSTER_SELECT, toRosterPupilDto } from '@/lib/privacy/pupilDto'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = await authMiddleware(request)
@@ -27,60 +29,58 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
 
   const { searchParams } = new URL(request.url)
   const subject = safeQueryString(searchParams.get('subject'))
+  const db = getTenantClient(schoolId)
 
-  if (subject) {
-    const [classRecord, subjectRecord] = await Promise.all([
-      prisma.class.findUnique({
-        where: { schoolId_name: { schoolId, name: className } },
-      }),
-      prisma.subject.findUnique({
-        where: { schoolId_name: { schoolId, name: subject } },
-      }),
-    ])
+  return withSchoolContext(schoolId, async () => {
+    if (subject) {
+      const [classRecord, subjectRecord] = await Promise.all([
+        db.class.findUnique({
+          where: { schoolId_name: { schoolId, name: className } },
+        }),
+        db.subject.findUnique({
+          where: { schoolId_name: { schoolId, name: subject } },
+        }),
+      ])
 
-    if (classRecord && subjectRecord) {
-      const enrollments = await prisma.pupilSubjectEnrollment.findMany({
-        where: {
-          schoolId,
-          classId: classRecord.id,
-          subjectId: subjectRecord.id,
-        },
-        include: {
-          pupil: true,
-        },
-        orderBy: {
-          pupil: { name: 'asc' },
-        },
-        take: 500,
-      })
+      if (classRecord && subjectRecord) {
+        const enrollments = await db.pupilSubjectEnrollment.findMany({
+          where: {
+            schoolId,
+            classId: classRecord.id,
+            subjectId: subjectRecord.id,
+          },
+          include: {
+            pupil: { select: PUPIL_ROSTER_SELECT },
+          },
+          orderBy: {
+            pupil: { name: 'asc' },
+          },
+          take: 500,
+        })
 
-      return NextResponse.json({
-        success: true,
-        data: enrollments.map((e) => ({
-          ...e.pupil,
-          currentScore: null,
-        })),
-      })
+        return NextResponse.json({
+          success: true,
+          data: enrollments.map((e) => toRosterPupilDto(e.pupil, { currentScore: null })),
+        })
+      }
     }
-  }
 
-  const students = await prisma.student.findMany({
-    where: {
-      schoolId,
-      class: className,
-      ...(subject ? { selected_subjects: { has: subject } } : {}),
-    },
-    orderBy: {
-      name: 'asc',
-    },
-    take: 500,
-  })
+    const students = await db.student.findMany({
+      where: {
+        schoolId,
+        class: className,
+        ...(subject ? { selected_subjects: { has: subject } } : {}),
+      },
+      select: PUPIL_ROSTER_SELECT,
+      orderBy: {
+        name: 'asc',
+      },
+      take: 500,
+    })
 
-  return NextResponse.json({
-    success: true,
-    data: students.map((s) => ({
-      ...s,
-      currentScore: null,
-    })),
+    return NextResponse.json({
+      success: true,
+      data: students.map((s) => toRosterPupilDto(s, { currentScore: null })),
+    })
   })
 })

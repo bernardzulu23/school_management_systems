@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { FlatList, Text, TextInput, View } from 'react-native'
+import { FlatList, Image, Text, TextInput, View } from 'react-native'
 import { router } from 'expo-router'
 import { searchSchools, validateSubdomain } from '@/api/schools'
 import { BrutalButton } from '@/components/BrutalButton'
@@ -60,6 +60,18 @@ export default function SchoolSelectScreen() {
 
   return (
     <View style={globalStyles.container}>
+      <Image
+        source={require('../../assets/logo.png')}
+        accessibilityLabel="ZSMS"
+        style={{
+          width: 112,
+          height: 112,
+          alignSelf: 'center',
+          marginBottom: 16,
+          borderRadius: 16,
+        }}
+        resizeMode="contain"
+      />
       <Text style={globalStyles.title}>Your school</Text>
       <Text style={globalStyles.subtitle}>
         Enter the short subdomain only (e.g. ndakedaysecondaryschool), not the full https:// URL.

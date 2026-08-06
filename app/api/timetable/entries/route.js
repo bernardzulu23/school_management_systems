@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { resolveSchoolId } from '@/lib/utils/resolveSchoolId'
 import { getAuthUser } from '@/lib/middleware/auth'
+import { getTenantContext } from '@/lib/tenant/context'
 import { guardSchoolOnlyTimetable } from '@/lib/timetable/guardSchoolOnly'
 import { validatePatchedDraftEntries } from '@/lib/timetable/draftHardConflictCheck'
 import { rescanAndPersistDraftMeta } from '@/lib/timetable/conflictAudit'
@@ -34,8 +35,11 @@ function normalizeDayOfWeek(day) {
 
 export const GET = withErrorHandler(async function GET(req) {
   const user = await getAuthUser(req)
-  const schoolId = await resolveSchoolId(req, user)
-  if (!schoolId) return NextResponse.json({ error: 'No school' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+
+  const ctx = await getTenantContext(req, user)
+  if (!ctx.ok) return ctx.response
+  const schoolId = ctx.schoolId
 
   const typeCheck = await guardSchoolOnlyTimetable(schoolId)
   if (!typeCheck.allowed) return typeCheck.response
@@ -47,8 +51,8 @@ export const GET = withErrorHandler(async function GET(req) {
   })
   const status = safeQueryString(searchParams.get('status'))
 
-  const entries = await prisma.timetableAllocationEntry.findMany({
-    where: { schoolId, term, academicYear, ...(status ? { status } : {}) },
+  const entries = await ctx.db.timetableAllocationEntry.findMany({
+    where: { term, academicYear, ...(status ? { status } : {}) },
     include: {
       allocation: {
         include: {

@@ -1,80 +1,29 @@
-# MUST live next to eas.json (zsms-mobile). EAS still archives the git root.
-# Patterns are matched from the repository root.
-
 .git/
 **/.git/
-
-# Root junk / large binaries
-*.zip
-*.apk
-*.aab
-*.log
-.tsbuildinfo
-Syllabus.zip
-Teaching Module.zip
-
-# Monorepo (everything that is not zsms-mobile)
 node_modules/
 .next/
 .open-next/
-.venv/
-.vs/
-.vscode/
-.wrangler/
-.swc/
-.husky/
-.github/
-.cursor/
-.claude/
-.qodo/
-.sixth/
 .vercel/
-__mocks__/
-__tests__/
-ai-text-demo/
-app/
-chat-realtime/
-components/
-config/
-data/
-docs/
-exports/
-hooks/
-ingest/
-lib/
-memory/
+EARLY_CHILDHOOD_EDUCATION_SYLLABI/
+Primary_Education_teaching/
+primary_school_syllabus/
+Syllabus/
 old-syllabus-pdfs/
 old_syllabus/
 past-papers/
+Teaching Module/
+Teaching Module.zip
+Syllabus.zip
+app/
+components/
+lib/
 prisma/
 public/
-sanity/
 scripts/
-services/
-solver-service/
-styles/
-Syllabus/
-Teaching Module/
-test/
-tests/
-Validation_folder/
-
-# Secrets / env at monorepo root
-.env
-.env.*
-!.env.example
-
-# Mobile local-only
+docs/
+__tests__/
 zsms-mobile/node_modules/
 zsms-mobile/.expo/
-zsms-mobile/.env
-zsms-mobile/.env.local
-zsms-mobile/tools/
-zsms-mobile/tools.localbuild/
 zsms-mobile/android/.gradle/
 zsms-mobile/android/build/
 zsms-mobile/android/app/build/
-zsms-mobile/android/.cxx/
-zsms-mobile/android/app/.cxx/
-zsms-mobile/.vscode/
-zsms-mobile/coverage/

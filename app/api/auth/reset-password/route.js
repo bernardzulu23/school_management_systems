@@ -13,10 +13,18 @@ import {
 } from '@/lib/sms'
 import { passwordPolicyError } from '@/lib/security/passwordPolicy'
 import { withSecureApi } from '@/lib/middleware/secureApi'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { revokeAllUserRefreshTokens } from '@/lib/auth/sessionRevocation'
 
 export const POST = withSecureApi(async function POST(request) {
   try {
+    const limited = rateLimiter(request, {
+      limit: process.env.NODE_ENV === 'production' ? 10 : 50,
+      windowMs: 60 * 60 * 1000,
+      keyPrefix: 'reset_password_',
+    })
+    if (limited.isLimited) return limited.response
+
     const body = await request.json().catch(() => ({}))
     const token = String(body?.token || '')
     const email = body?.email ? String(body.email).toLowerCase() : null

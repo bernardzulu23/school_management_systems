@@ -1,11 +1,10 @@
-# Dependabot configuration for ZSMS.
+# Dependabot — ZSMS (Phase 9)
 #
-# Opens PRs when dependencies have updates/security advisories. Security
-# updates are never auto-merged — a developer reviews each PR (see Phase 4
-# critical note #5). Non-security minor/patch updates are grouped to cut noise.
+# Opens update PRs on a weekly schedule. Patch-only PRs may auto-merge via
+# `.github/workflows/dependabot-auto-merge.yml` after required checks pass.
+# Minor/major still need human review (minors are grouped to reduce noise).
 version: 2
 updates:
-  # Next.js web app (root)
   - package-ecosystem: 'npm'
     directory: '/'
     schedule:
@@ -13,33 +12,32 @@ updates:
       day: 'monday'
       time: '08:00'
       timezone: 'Africa/Lusaka'
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 12
     labels:
       - 'dependencies'
-      - 'security'
+    # Patches stay ungrouped so Dependabot metadata reports semver-patch
+    # (required for safe auto-merge). Minors are grouped for review batches.
     groups:
-      non-security-updates:
+      npm-minor-updates:
         update-types:
           - 'minor'
-          - 'patch'
 
-  # Expo mobile app
   - package-ecosystem: 'npm'
     directory: '/zsms-mobile'
     schedule:
       interval: 'weekly'
       day: 'monday'
+      time: '08:00'
+      timezone: 'Africa/Lusaka'
     open-pull-requests-limit: 5
     labels:
       - 'dependencies'
       - 'mobile'
     groups:
-      non-security-updates:
+      mobile-minor-updates:
         update-types:
           - 'minor'
-          - 'patch'
 
-  # Python OR-Tools timetable solver
   - package-ecosystem: 'pip'
     directory: '/services/timetable-solver'
     schedule:
@@ -58,7 +56,6 @@ updates:
       - 'dependencies'
       - 'solver-service'
 
-  # GitHub Actions workflow pinning
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:

@@ -7,14 +7,14 @@ import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { validateQuery } from '@/lib/middleware/validate-request'
 import { NationalPercentileQuerySchema } from '@/lib/schemas'
-import { buildScoreDistribution, computePercentile } from '@/lib/mock-exam'
+import { buildScoreDistributionFromBuckets, computePercentileFromBuckets } from '@/lib/mock-exam'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 
 const GRADED_STATUSES = ['graded', 'needs_review', 'submitted']
 
 /**
  * Anonymous national percentile for a student's mock exam score.
- * Aggregates across all schools — no individual identities returned.
+ * Aggregates bucket counts only — never loads per-attempt percentages across tenants.
  */
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -63,29 +63,28 @@ export const GET = withErrorHandler(async function GET(request) {
     studentPercentage = attempt.percentage
   }
 
-  // Cross-tenant aggregate — raw SQL so RLS tenant policy does not hide peers.
-  const rows = await prisma.$queryRaw`
-    SELECT "percentage", "scoreBucket"
+  // Cross-tenant aggregate of bucket counts only (no individual scores / schoolIds).
+  const bucketRows = await prisma.$queryRaw`
+    SELECT (FLOOR("percentage" / 10) * 10)::int AS bucket, COUNT(*)::int AS count
     FROM "MockExamAttempt"
     WHERE "subject" = ${query.subject}
       AND "examLevel" = ${query.examLevel}
       AND "status" IN ('graded', 'needs_review', 'submitted')
       AND "percentage" IS NOT NULL
-    LIMIT 10000
+    GROUP BY 1
   `
-
-  const peerPercentages = (rows || [])
-    .map((r) => Number(r.percentage))
-    .filter((n) => Number.isFinite(n))
 
   let percentileResult = {
     percentile: null,
-    sampleSize: peerPercentages.length,
+    sampleSize: 0,
     rankMessage: 'Submit a graded mock exam to see your national percentile.',
   }
 
   if (studentPercentage != null) {
-    percentileResult = computePercentile(studentPercentage, peerPercentages)
+    percentileResult = computePercentileFromBuckets(studentPercentage, bucketRows)
+  } else {
+    const sampleSize = (bucketRows || []).reduce((s, r) => s + Number(r.count || 0), 0)
+    percentileResult.sampleSize = sampleSize
   }
 
   return NextResponse.json({
@@ -97,7 +96,7 @@ export const GET = withErrorHandler(async function GET(request) {
       percentile: percentileResult.percentile,
       sampleSize: percentileResult.sampleSize,
       message: percentileResult.rankMessage,
-      distribution: buildScoreDistribution(peerPercentages),
+      distribution: buildScoreDistributionFromBuckets(bucketRows),
     },
   })
 })

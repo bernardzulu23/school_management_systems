@@ -17,6 +17,7 @@ import { activateFeePayment, serializeFeePayment } from '@/lib/payments/feePayme
 import { withSecureHandler } from '@/lib/middleware/secureApi'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 import { appendWebhookSecretToUrl } from '@/lib/security/webhookAuth'
+import { LEDGER_ACTIONS, appendPaymentLedger } from '@/lib/payments/paymentLedger'
 
 const PAYMENT_OPTION_BY_PROVIDER = {
   airtel: { label: 'Airtel Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.airtel },
@@ -25,6 +26,9 @@ const PAYMENT_OPTION_BY_PROVIDER = {
   mtn_zambia: { label: 'MTN Zambia', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.mtn },
   zamtel: { label: 'Zamtel', paymentType: LIPILA_PROVIDER_PAYMENT_TYPES.zamtel },
 }
+
+/** Soft cap for ad-hoc fee collections (ZMW). Invoice-bound amounts use invoice balance. */
+const MAX_ADHOC_FEE_AMOUNT = 500_000
 
 const HISTORY_ROLES = ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher']
 
@@ -102,9 +106,44 @@ export const POST = withSecureHandler(async function POST(request) {
 
   const body = await request.json().catch(() => ({}))
 
-  const amount = Number(body?.amount)
-  if (!Number.isFinite(amount) || amount <= 0) {
-    return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
+  const invoiceId = safeStringId(body?.invoiceId)
+  let amount = Number(body?.amount)
+  let currency = 'ZMW'
+  /** @type {{ id: string, balance: number, studentId: string } | null} */
+  let invoice = null
+
+  if (invoiceId) {
+    invoice = await prisma.studentInvoice.findFirst({
+      where: { id: invoiceId, schoolId },
+      select: { id: true, balance: true, studentId: true, status: true },
+    })
+    if (!invoice) {
+      return NextResponse.json({ error: 'Invoice not found' }, { status: 404 })
+    }
+    if (Number(invoice.balance) <= 0) {
+      return NextResponse.json({ error: 'Invoice has no outstanding balance' }, { status: 400 })
+    }
+    amount = Number(invoice.balance)
+    if (body?.studentId && safeStringId(body.studentId) !== invoice.studentId) {
+      return NextResponse.json({ error: 'studentId does not match invoice' }, { status: 400 })
+    }
+  } else {
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return NextResponse.json({ error: 'Invalid amount' }, { status: 400 })
+    }
+    if (amount > MAX_ADHOC_FEE_AMOUNT) {
+      return NextResponse.json(
+        { error: `Amount exceeds maximum of ${MAX_ADHOC_FEE_AMOUNT} ZMW` },
+        { status: 400 }
+      )
+    }
+  }
+
+  const requestedCurrency = String(body?.currency || 'ZMW')
+    .trim()
+    .toUpperCase()
+  if (requestedCurrency && requestedCurrency !== 'ZMW') {
+    return NextResponse.json({ error: 'Only ZMW is supported' }, { status: 400 })
   }
 
   const accountNumber = normalizeZambiaMsisdn(body?.accountNumber)
@@ -113,12 +152,9 @@ export const POST = withSecureHandler(async function POST(request) {
   }
 
   const narration = String(body?.narration || 'ZSMS payment').trim()
-  const currency = String(body?.currency || 'ZMW')
-    .trim()
-    .toUpperCase()
   const email = String(body?.email || auth.user?.email || '').trim()
   const paymentType = String(body?.paymentType || '').trim() || null
-  const studentId = safeStringId(body?.studentId)
+  const studentId = invoice?.studentId || safeStringId(body?.studentId)
 
   const providerRaw = String(body?.provider || body?.paymentOption || '')
     .trim()
@@ -130,12 +166,11 @@ export const POST = withSecureHandler(async function POST(request) {
   const paymentId = crypto.randomUUID()
   const referenceId = safeStringId(body?.referenceId, { maxLength: 256 }) || crypto.randomUUID()
 
-  const origin = request.headers.get('origin') || new URL(request.url).origin
-  const callbackUrl = appendWebhookSecretToUrl(
-    String(body?.callbackUrl || `${origin}/api/payments/lipila/callback`).trim()
-  )
-  const backUrl = String(body?.backUrl || `${origin}/dashboard/payments`).trim()
-  const redirectUrl = String(body?.redirectUrl || `${origin}/dashboard/payments`).trim()
+  // Never trust client callbackUrl — only server-owned Lipila callback + webhook secret.
+  const origin = new URL(request.url).origin
+  const callbackUrl = appendWebhookSecretToUrl(`${origin}/api/payments/lipila/callback`)
+  const backUrl = `${origin}/dashboard/payments`
+  const redirectUrl = `${origin}/dashboard/payments`
 
   let paymentRecord
   try {
@@ -153,7 +188,19 @@ export const POST = withSecureHandler(async function POST(request) {
         narration,
         paymentType,
         studentId,
+        invoiceId: invoiceId || null,
       },
+    })
+    await appendPaymentLedger({
+      schoolId,
+      paymentKind: 'school_fee',
+      paymentId: paymentRecord.id,
+      referenceId,
+      action: LEDGER_ACTIONS.INITIATED,
+      amount,
+      currency,
+      eventKey: `lipila:school_fee:${paymentRecord.id}:INITIATED:${referenceId}`,
+      metadata: { invoiceId: invoiceId || null },
     })
   } catch (dbError) {
     const code = String(dbError?.code || '')
@@ -319,6 +366,7 @@ export const POST = withSecureHandler(async function POST(request) {
         identifier: paymentId,
         referenceId: gatewayReferenceId,
         status: lipilaStatus,
+        schoolId,
       })
       paymentRecord = await prisma.schoolFeePayment.findFirst({
         where: { id: paymentId, schoolId },

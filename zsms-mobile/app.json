@@ -7,17 +7,23 @@
     "scheme": "zsms",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "icon": "./assets/icon.png",
     "splash": {
-      "backgroundColor": "#F5F2ED"
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0f172a"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.bluepeack.zsms.teacher"
+      "bundleIdentifier": "com.bluepeack.zsms.teacher",
+      "icon": "./assets/icon.png"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#111111"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0f172a"
       },
+      "icon": "./assets/icon.png",
       "package": "com.bluepeack.zsms.teacher"
     },
     "plugins": [
@@ -39,7 +45,8 @@
       [
         "expo-notifications",
         {
-          "color": "#FF3B00"
+          "color": "#FF3B00",
+          "icon": "./assets/icon.png"
         }
       ]
     ],

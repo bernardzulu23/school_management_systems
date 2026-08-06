@@ -18,6 +18,8 @@ import { assertTeacherTeachesClassSubject } from '@/lib/assignments/routeScope'
 import { assertTeacherMayAccessAttendanceClass } from '@/lib/attendance/routeAuth'
 import { safeStringId } from '@/lib/security/safeQueryValue'
 import { roleCheck } from '@/lib/middleware/auth'
+import { getTenantClient } from '@/lib/prisma/tenantClient'
+import { withSchoolContext } from '@/lib/db/school-context'
 
 export const GET = withErrorHandler(async function GET(request) {
   const auth = await authMiddleware(request)
@@ -89,6 +91,8 @@ export const POST = withErrorHandler(async function POST(request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  const db = getTenantClient(schoolId)
+
   const rawBody = await request.json().catch(() => ({}))
 
   // Handle both { date, records: [] } and directly [ { studentId, date, status, remarks }, ... ]
@@ -157,7 +161,7 @@ export const POST = withErrorHandler(async function POST(request) {
     return NextResponse.json({ error: 'No valid records' }, { status: 400 })
   }
 
-  const existingRows = await prisma.attendance.findMany({
+  const existingRows = await db.attendance.findMany({
     where: {
       schoolId,
       date: finalWrites[0].date,
@@ -169,7 +173,9 @@ export const POST = withErrorHandler(async function POST(request) {
     existingRows.map((r) => [String(r.studentId), String(r.status || '').toLowerCase()])
   )
 
-  await bulkUpsertAttendance(prisma, schoolId, finalWrites)
+  await withSchoolContext(schoolId, async () => {
+    await bulkUpsertAttendance(db, schoolId, finalWrites)
+  })
 
   const changedWrites = finalWrites.filter((w) => {
     const prev = String(existingByStudent.get(String(w.studentId)) || '').toLowerCase()

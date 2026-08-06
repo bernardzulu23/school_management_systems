@@ -37,8 +37,8 @@ export const POST = withSecureHandler(async function POST(request) {
   let canUseDbTokenRotation = true
   try {
     tokenRecord = await prisma.refreshToken.findFirst({
-      where: { token: refreshToken, schoolId: decoded.schoolId },
-      select: { id: true, revoked: true, userId: true },
+      where: { token: refreshToken },
+      select: { id: true, revoked: true, userId: true, schoolId: true },
     })
   } catch {
     canUseDbTokenRotation = false
@@ -48,27 +48,8 @@ export const POST = withSecureHandler(async function POST(request) {
     return NextResponse.json({ error: 'Session expired or revoked' }, { status: 401 })
   }
 
-  // Production: refresh tokens must exist in DB so revocation is enforceable.
-  // Heal orphaned JWTs from older logins where create() failed silently.
-  if (canUseDbTokenRotation && !tokenRecord && process.env.NODE_ENV === 'production') {
-    try {
-      const expMs = decoded.exp ? Number(decoded.exp) * 1000 : Date.now() + 7 * 24 * 60 * 60 * 1000
-      await prisma.refreshToken.create({
-        data: {
-          token: refreshToken,
-          userId: decoded.id,
-          schoolId: decoded.schoolId,
-          expiresAt: new Date(expMs),
-        },
-      })
-      tokenRecord = { id: 'healed', revoked: false, userId: decoded.id }
-    } catch {
-      return NextResponse.json({ error: 'Session expired or revoked' }, { status: 401 })
-    }
-  }
-
   const user = await prisma.user.findFirst({
-    where: { id: decoded.id, schoolId: decoded.schoolId },
+    where: { id: decoded.id },
     select: {
       id: true,
       email: true,
@@ -81,8 +62,37 @@ export const POST = withSecureHandler(async function POST(request) {
     },
   })
 
-  if (!user) {
+  if (!user?.schoolId) {
     return NextResponse.json({ error: 'User not found' }, { status: 401 })
+  }
+
+  if (tokenRecord?.schoolId && tokenRecord.schoolId !== user.schoolId) {
+    return NextResponse.json({ error: 'Invalid refresh token' }, { status: 401 })
+  }
+  if (tokenRecord?.userId && tokenRecord.userId !== user.id) {
+    return NextResponse.json({ error: 'Invalid refresh token' }, { status: 401 })
+  }
+  if (decoded.schoolId && String(decoded.schoolId) !== String(user.schoolId)) {
+    return NextResponse.json({ error: 'Invalid refresh token' }, { status: 401 })
+  }
+
+  // Production: refresh tokens must exist in DB so revocation is enforceable.
+  // Heal orphaned JWTs from older logins where create() failed silently — use DB schoolId.
+  if (canUseDbTokenRotation && !tokenRecord && process.env.NODE_ENV === 'production') {
+    try {
+      const expMs = decoded.exp ? Number(decoded.exp) * 1000 : Date.now() + 7 * 24 * 60 * 60 * 1000
+      await prisma.refreshToken.create({
+        data: {
+          token: refreshToken,
+          userId: user.id,
+          schoolId: user.schoolId,
+          expiresAt: new Date(expMs),
+        },
+      })
+      tokenRecord = { id: 'healed', revoked: false, userId: user.id, schoolId: user.schoolId }
+    } catch {
+      return NextResponse.json({ error: 'Session expired or revoked' }, { status: 401 })
+    }
   }
 
   const role = String(user.role || '').toLowerCase()

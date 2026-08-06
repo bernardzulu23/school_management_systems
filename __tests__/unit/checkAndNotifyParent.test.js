@@ -56,8 +56,20 @@ function createPrismaMock(overrides = {}) {
   ]
   const classSubjects = overrides.classSubjects ?? [{ id: 'sub1' }, { id: 'sub2' }]
   const results = overrides.results ?? [
-    { subjectId: 'sub1', workflowStatus: 'finalized' },
-    { subjectId: 'sub2', workflowStatus: 'finalized' },
+    {
+      subjectId: 'sub1',
+      workflowStatus: 'finalized',
+      score: 67,
+      grade: 'C',
+      subject: { name: 'Mathematics' },
+    },
+    {
+      subjectId: 'sub2',
+      workflowStatus: 'finalized',
+      score: 50,
+      grade: 'D',
+      subject: { name: 'English' },
+    },
   ]
 
   const updates = []
@@ -237,7 +249,7 @@ describe('resolveEnrolledSubjectIds', () => {
     expect(tx.class.findFirst).not.toHaveBeenCalled()
   })
 
-  it('falls back to class subjects when enrollments and selected_subjects empty', async () => {
+  it('does not fall back to class subjects (race-safe)', async () => {
     const tx = {
       pupilSubjectEnrollment: { findMany: vi.fn(async () => []) },
       subject: { findMany: vi.fn() },
@@ -252,7 +264,8 @@ describe('resolveEnrolledSubjectIds', () => {
       student: { selected_subjects: [] },
       tx,
     })
-    expect(ids).toEqual(['c1', 'c2'])
+    expect(ids).toEqual([])
+    expect(tx.class.findFirst).not.toHaveBeenCalled()
   })
 })
 
@@ -266,8 +279,20 @@ describe('checkAndNotifyParent', () => {
   it('does not send when results are incomplete', async () => {
     const prismaClient = createPrismaMock({
       results: [
-        { subjectId: 'sub1', workflowStatus: 'finalized' },
-        { subjectId: 'sub2', workflowStatus: 'draft' },
+        {
+          subjectId: 'sub1',
+          workflowStatus: 'finalized',
+          score: 67,
+          grade: 'C',
+          subject: { name: 'Mathematics' },
+        },
+        {
+          subjectId: 'sub2',
+          workflowStatus: 'draft',
+          score: null,
+          grade: null,
+          subject: { name: 'English' },
+        },
       ],
     })
     await checkAndNotifyParent({
@@ -295,7 +320,7 @@ describe('checkAndNotifyParent', () => {
       prismaClient,
     })
     expect(sendSchoolSms).toHaveBeenCalledTimes(1)
-    expect(sendSchoolSms.mock.calls[0][0].to).toContain('0971111111')
+    expect(sendSchoolSms.mock.calls[0][0].to).toContain('+260971111111')
     expect(prismaClient._status.smsSentAt).toBeTruthy()
     expect(prismaClient._status.smsSending).toBe(false)
     expect(prismaClient._status.smsLastError).toBeNull()
@@ -345,7 +370,7 @@ describe('checkAndNotifyParent', () => {
     expect(prismaClient._status.smsSentAt).toBeTruthy()
   })
 
-  it('uses class subject fallback when enrollments are empty', async () => {
+  it('does not send via class-subject cascade when enrollments are empty', async () => {
     const prismaClient = createPrismaMock({
       enrollments: [],
       student: { selected_subjects: [] },
@@ -360,12 +385,54 @@ describe('checkAndNotifyParent', () => {
       request: null,
       prismaClient,
     })
-    expect(prismaClient._tx.class.findFirst).toHaveBeenCalled()
-    expect(sendSchoolSms).toHaveBeenCalledTimes(1)
+    expect(prismaClient._tx.class.findFirst).not.toHaveBeenCalled()
+    expect(sendSchoolSms).not.toHaveBeenCalled()
+    expect(prismaClient._status.smsLastError).toBe('No enrolled subjects resolved')
   })
 
   it('does not send when grade rows are empty after lock', async () => {
-    const prismaClient = createPrismaMock({ gradeResults: [] })
+    const prismaClient = createPrismaMock({
+      results: [
+        {
+          subjectId: 'sub1',
+          workflowStatus: 'finalized',
+          score: 67,
+          grade: 'C',
+          subject: { name: 'Mathematics' },
+        },
+        {
+          subjectId: 'sub2',
+          workflowStatus: 'finalized',
+          score: 50,
+          grade: 'D',
+          subject: { name: 'English' },
+        },
+      ],
+    })
+    // First findMany (completeness) returns finalized; second under lock returns []
+    let resultCalls = 0
+    prismaClient._tx.result.findMany = vi.fn(async () => {
+      resultCalls += 1
+      if (resultCalls === 1) {
+        return [
+          {
+            subjectId: 'sub1',
+            workflowStatus: 'finalized',
+            score: 67,
+            grade: 'C',
+            subject: { name: 'Mathematics' },
+          },
+          {
+            subjectId: 'sub2',
+            workflowStatus: 'finalized',
+            score: 50,
+            grade: 'D',
+            subject: { name: 'English' },
+          },
+        ]
+      }
+      return []
+    })
     await checkAndNotifyParent({
       schoolId: 'sch1',
       studentId: 'stu1',
@@ -376,8 +443,47 @@ describe('checkAndNotifyParent', () => {
       prismaClient,
     })
     expect(sendSchoolSms).not.toHaveBeenCalled()
-    expect(prismaClient._status.smsLastError).toBe('No finalized results for SMS')
+    expect(prismaClient._status.smsLastError).toBe('Results incomplete after lock')
     expect(prismaClient._status.smsSending).toBe(false)
     expect(prismaClient._status.smsSentAt).toBeFalsy()
+  })
+
+  it('only one concurrent result-entry wins the SMS lock (no duplicate / mismatched send)', async () => {
+    const prismaClient = createPrismaMock()
+    // Shared lock state: second caller sees smsSending already true
+    let lockAcquisitions = 0
+    prismaClient._tx.resultsStatus.updateMany = vi.fn(async ({ data }) => {
+      lockAcquisitions += 1
+      if (lockAcquisitions === 1) {
+        Object.assign(prismaClient._status, data)
+        return { count: 1 }
+      }
+      return { count: 0 }
+    })
+
+    await Promise.all([
+      checkAndNotifyParent({
+        schoolId: 'sch1',
+        studentId: 'stu1',
+        classId: 'cls1',
+        term: 'Term 1',
+        year: 2026,
+        request: null,
+        prismaClient,
+      }),
+      checkAndNotifyParent({
+        schoolId: 'sch1',
+        studentId: 'stu1',
+        classId: 'cls1',
+        term: 'Term 1',
+        year: 2026,
+        request: null,
+        prismaClient,
+      }),
+    ])
+
+    expect(sendSchoolSms).toHaveBeenCalledTimes(1)
+    const msgArgs = buildTermResultsCompleteSmsMessage.mock.calls[0]?.[0]
+    expect(msgArgs?.results?.map((r) => r.subjectName).sort()).toEqual(['English', 'Mathematics'])
   })
 })

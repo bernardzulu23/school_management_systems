@@ -18,7 +18,7 @@ The product delivers:
 - Role-based web dashboards (headteacher, HOD, teacher, student, admin)
 - **ECZ-aligned** School-Based Assessment (SBA) and submission workflows
 - Timetabling, attendance (including QR and offline), lesson plans, results, and a deterministic student navigation bot
-- **Mobile money billing** (Lipila), email onboarding (Resend), and SMS (Mocean primary, Africa's Talking fallback)
+- **Mobile money billing** (Lipila), email onboarding (Resend), and SMS (Africa's Talking primary, optional Android SIM gateway)
 - AI-assisted teaching tools (Groq / Vercel AI SDK)
 - An optional **Expo mobile app** (`zsms-mobile/`) for teacher attendance and sync
 - A **platform super-admin** console for operator-level school and billing oversight
@@ -66,8 +66,8 @@ flowchart TB
   subgraph external [External services]
     Lipila[Lipila - mobile money]
     Resend[Resend - email]
-    AT[Africa's Talking - SMS fallback]
-    Mocean[Mocean - SMS primary]
+    AT[Africa's Talking - SMS primary]
+    AndroidGW[Android SIM gateway - optional]
     Groq[Groq - AI]
     Sentry[Sentry - errors]
     Sanity[Sanity - marketing CMS]
@@ -97,8 +97,8 @@ flowchart TB
   API --> Billing
   API --> SMS
   Billing --> Lipila
-  SMS --> Mocean
   SMS --> AT
+  SMS --> AndroidGW
   AI --> Groq
   Pages --> Sanity
   API --> Solver
@@ -135,7 +135,7 @@ See [DEVELOPER_GUIDE.md](./DEVELOPER_GUIDE.md) for the canonical route template.
 | Tenancy          | `schoolId` + subdomain                                                                      | `lib/tenant/resolveSchoolId.js`                      |
 | Email            | Resend                                                                                      | `config/email.js`                                    |
 | Payments         | Lipila (MTN / Airtel / Zamtel)                                                              | `lib/billing/`, `/api/payments/lipila/callback`      |
-| SMS              | Mocean (primary) + Africa's Talking (fallback) + QStash bulk                                | `lib/sms/`, `/api/sms/*`                             |
+| SMS              | Africa's Talking (primary) + Android SIM gateway (fallback) + QStash bulk                   | `lib/sms/`, `/api/sms/*`                             |
 | AI               | Groq (+ multi-provider fallback: Gemini, OpenRouter, OpenAI, HuggingFace) via Vercel AI SDK | `lib/ai/`, `lib/config/env.js`                       |
 | Observability    | Sentry (`@sentry/nextjs`)                                                                   | `sentry.*.config.ts`, `/monitoring` tunnel           |
 | Marketing CMS    | Sanity (optional)                                                                           | `lib/sanity/`, `sanity/queries/`                     |

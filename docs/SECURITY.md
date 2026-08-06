@@ -92,17 +92,18 @@ verified against the route source.
 These routes legitimately do not scope to a tenant; each is protected by another
 mechanism:
 
-| Route(s)                                                                                                             | Why exempt                               | Protection                                                                                    |
-| -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `/api/auth/login`, `/api/auth/refresh`, `/api/auth/logout`, `/api/auth/forgot-password`, `/api/auth/reset-password*` | Pre-session auth flows                   | Rate limiting, credential checks, short-lived tokens                                          |
-| `/api/mobile/auth/login`, `/api/platform/auth/login`                                                                 | Pre-session auth                         | As above                                                                                      |
-| `/api/schools/register`, `/api/onboarding/*`                                                                         | Tenant created/derived during onboarding | CSRF (same-origin) + signed onboarding tokens; Lipila callbacks use `LIPILA_WEBHOOK_SECRET`   |
-| `/api/public/schools`, `/api/school/current`                                                                         | Public lookup of tenant by subdomain     | Returns only non-sensitive public fields                                                      |
-| `/api/payments/lipila/callback`, `/api/onboarding/lipila/callback`                                                   | Provider payment webhooks                | `LIPILA_WEBHOOK_SECRET` (Bearer / header / `?webhook_secret=`); GET redirects only, no mutate |
-| `/api/sms/inbound`, `/api/sms/delivery`                                                                              | Provider SMS webhooks                    | `SMS_WEBHOOK_SECRET` (Bearer / header / `?webhook_secret=`)                                   |
-| `/api/health`, `/api/ping`, `/api/csrf-token`                                                                        | Infra/liveness/CSRF                      | No tenant data returned                                                                       |
-| `/api/cron/*`                                                                                                        | Scheduled jobs                           | Cron secret; operate across tenants by design                                                 |
-| `/api/ussd`                                                                                                          | USSD gateway                             | Gateway-authenticated; tenant resolved from session/MSISDN                                    |
+| Route(s)                                                                                                             | Why exempt                               | Protection                                                                                                                   |
+| -------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `/api/auth/login`, `/api/auth/refresh`, `/api/auth/logout`, `/api/auth/forgot-password`, `/api/auth/reset-password*` | Pre-session auth flows                   | Rate limiting, credential checks, short-lived tokens                                                                         |
+| `/api/mobile/auth/login`, `/api/platform/auth/login`                                                                 | Pre-session auth                         | As above                                                                                                                     |
+| `/api/schools/register`, `/api/onboarding/*`                                                                         | Tenant created/derived during onboarding | CSRF (same-origin) + signed onboarding tokens; Lipila callbacks use `LIPILA_WEBHOOK_SECRET`                                  |
+| `/api/public/schools`, `/api/school/current`                                                                         | Public lookup of tenant by subdomain     | Returns only non-sensitive public fields                                                                                     |
+| `/api/payments/lipila/callback`, `/api/onboarding/lipila/callback`                                                   | Provider payment webhooks                | `LIPILA_WEBHOOK_SECRET` (+ optional HMAC); amount/currency cross-check; append-only `PaymentLedgerEntry`; GET redirects only |
+
+| `/api/sms/inbound`, `/api/sms/delivery` | Provider SMS webhooks | `SMS_WEBHOOK_SECRET` (Bearer / header / `?webhook_secret=`) |
+| `/api/health`, `/api/ping`, `/api/csrf-token` | Infra/liveness/CSRF | No tenant data returned |
+| `/api/cron/*` | Scheduled jobs | Cron secret; operate across tenants by design |
+| `/api/ussd` | USSD gateway | Gateway-authenticated; tenant resolved from session/MSISDN |
 
 ## Tests (must pass before every production deploy)
 

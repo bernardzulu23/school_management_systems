@@ -5,6 +5,7 @@ import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { logPiiAccess, clientMetaFromRequest } from '@/lib/privacy/piiAccessLog'
 
 function safeString(v) {
   return v === null || v === undefined ? '' : String(v)
@@ -154,6 +155,18 @@ export const GET = withErrorHandler(async function GET(request) {
     `${template ? 'template' : 'results'}_${safeString(classRecord.name)}_${safeString(
       subjectRecord.name
     )}.xlsx`.replace(/\s+/g, '_')
+
+  await logPiiAccess({
+    schoolId,
+    actorUserId: auth.user.id,
+    actorRole: auth.user.role,
+    action: 'EXPORT',
+    resourceType: 'StudentResults',
+    resourceId: classId,
+    fieldsAccessed: ['name', 'exam_number', 'score', 'grade'],
+    metadata: { subjectId, template: Boolean(template) },
+    ...clientMetaFromRequest(request),
+  })
 
   return new NextResponse(buffer, {
     status: 200,

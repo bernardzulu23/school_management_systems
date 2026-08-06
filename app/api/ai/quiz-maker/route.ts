@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import crypto from 'crypto'
 import { z } from 'zod'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
+import { getTenantContext } from '@/lib/tenant/context'
 import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { requireFeature } from '@/lib/middleware/planGate-zambia'
 import {
@@ -77,10 +78,9 @@ export const POST = withAILimits(async function POST(request: Request) {
       return NextResponse.json({ error: 'Access denied' }, { status: 403 })
     }
 
-    const schoolId = String(user.schoolId || '').trim()
-    if (!schoolId) {
-      return NextResponse.json({ error: 'School context required' }, { status: 400 })
-    }
+    const tenant = await getTenantContext(request as any, user)
+    if (!tenant.ok) return tenant.response as any
+    const schoolId = tenant.schoolId
 
     const school = await getSchoolPlanForUsage(schoolId)
     if (!school) return NextResponse.json({ error: 'School not found' }, { status: 404 })

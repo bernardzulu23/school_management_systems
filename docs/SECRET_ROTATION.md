@@ -59,18 +59,23 @@ all refresh tokens (users silently get new ones on next login).
 2. Set `GROQ_API_KEY` in Vercel env, redeploy.
 3. Revoke the old key in the Groq console. No user-facing downtime (server-side only).
 
-## 4. Provider keys — `LIPILA_API_KEY`, `AFRICASTALKING_API_KEY`, `RESEND_API_KEY`, `BLOB_READ_WRITE_TOKEN`, `CRON_SECRET`
+## 4. Provider keys — `LIPILA_API_KEY`, `LIPILA_WEBHOOK_SECRET`, `AFRICASTALKING_API_KEY`, `RESEND_API_KEY`, `BLOB_READ_WRITE_TOKEN`, `CRON_SECRET`
 
 All are server-side only; rotation is a simple swap:
 
-1. Provision a new key in the provider dashboard.
-2. Update the env var in Vercel, redeploy.
-3. Revoke the old key.
+1. Provision a new key / secret in the provider dashboard (or generate a new webhook secret).
+2. Update the env var(s) in Vercel, redeploy.
+3. Revoke the old key (or stop accepting the old webhook secret).
 
 Notes:
 
 - `AFRICASTALKING_API_KEY` also requires the matching `AFRICASTALKING_USERNAME`.
 - `LIPILA_API_KEY` — verify the matching `LIPILA_BASE_URL` (sandbox vs production).
+  Rotate every **180 days** (or sooner on leak / staff offboarding). Never expose via `NEXT_PUBLIC_*`.
+- `LIPILA_WEBHOOK_SECRET` — rotate every **180 days**. After rotate, update callback URLs that
+  embed `?webhook_secret=` (Lipila collections use server-built callback URLs with the secret
+  appended). Optional: set `LIPILA_WEBHOOK_HMAC_SECRET` + `LIPILA_REQUIRE_HMAC=true` when a
+  signing proxy is available.
 - `BLOB_READ_WRITE_TOKEN` is managed automatically when using the Vercel Blob
   integration; rotate by regenerating the store token in Storage → Blob.
 - `CRON_SECRET` protects `/api/cron/*`; update the Vercel Cron config to match.
@@ -88,8 +93,9 @@ To invalidate **every** session immediately (independent of token lifetime):
 
 ## Rotation schedule (recommended)
 
-| Secret                              | Cadence        | Trigger                       |
-| ----------------------------------- | -------------- | ----------------------------- |
-| `JWT_SECRET` / `JWT_REFRESH_SECRET` | every 90 days  | + on any suspected leak       |
-| Provider API keys                   | every 180 days | + on staff offboarding / leak |
-| `CRON_SECRET`                       | every 180 days | + on leak                     |
+| Secret                                                 | Cadence        | Trigger                            |
+| ------------------------------------------------------ | -------------- | ---------------------------------- |
+| `JWT_SECRET` / `JWT_REFRESH_SECRET`                    | every 90 days  | + on any suspected leak            |
+| Provider API keys (`LIPILA_API_KEY`, AT, Resend, Blob) | every 180 days | + on staff offboarding / leak      |
+| `LIPILA_WEBHOOK_SECRET` / `LIPILA_WEBHOOK_HMAC_SECRET` | every 180 days | + on leak or callback URL exposure |
+| `CRON_SECRET`                                          | every 180 days | + on leak                          |

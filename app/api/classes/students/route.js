@@ -115,6 +115,19 @@ export const GET = withErrorHandler(async function GET(request) {
   }))
 
   if (includeFaceData) {
+    const { logPiiAccess, clientMetaFromRequest } = await import('@/lib/privacy/piiAccessLog')
+    await logPiiAccess({
+      schoolId,
+      actorUserId: auth.user.id,
+      actorRole: auth.user.role,
+      action: 'READ',
+      resourceType: 'StudentFaceRoster',
+      resourceId: classId,
+      fieldsAccessed: ['faceEmbedding'],
+      metadata: { count: payload.length },
+      ...clientMetaFromRequest(request),
+    })
+
     const { filterRosterEmbeddingsByConsent, getSchoolFacialPolicy } =
       await import('@/lib/consent/facialAttendance')
     const policy = await getSchoolFacialPolicy(schoolId)

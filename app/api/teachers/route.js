@@ -100,8 +100,8 @@ export const PUT = withErrorHandler(async function PUT(request) {
 
     // 2. Update User
     if (name || email || contact_number) {
-      await tx.user.update({
-        where: { id: teacher.userId },
+      await tx.user.updateMany({
+        where: { id: teacher.userId, schoolId },
         data: {
           name,
           email,
@@ -111,13 +111,17 @@ export const PUT = withErrorHandler(async function PUT(request) {
     }
 
     // 3. Update Teacher Profile
-    const updatedTeacher = await tx.teacher.update({
-      where: { id },
+    await tx.teacher.updateMany({
+      where: { id, schoolId },
       data: {
         ...teacherData,
         subjects: assigned_subjects, // Map back if needed, assuming array
         assigned_classes: assigned_classes,
       },
+    })
+
+    const updatedTeacher = await tx.teacher.findFirst({
+      where: { id, schoolId },
       include: {
         user: {
           select: {

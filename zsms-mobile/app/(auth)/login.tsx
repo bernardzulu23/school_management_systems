@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Text, TextInput, View } from 'react-native'
+import { Image, Text, TextInput, View } from 'react-native'
 import { router, useLocalSearchParams } from 'expo-router'
 import { BrutalButton } from '@/components/BrutalButton'
 import { useAuthStore } from '@/store/authStore'
@@ -45,6 +45,18 @@ export default function LoginScreen() {
 
   return (
     <View style={globalStyles.container}>
+      <Image
+        source={require('../../assets/logo.png')}
+        accessibilityLabel="ZSMS"
+        style={{
+          width: 112,
+          height: 112,
+          alignSelf: 'center',
+          marginBottom: 16,
+          borderRadius: 16,
+        }}
+        resizeMode="contain"
+      />
       <Text style={globalStyles.title}>Staff login</Text>
       <Text style={globalStyles.subtitle}>School: {subdomain || '—'}</Text>
       <Text style={globalStyles.label}>Email</Text>

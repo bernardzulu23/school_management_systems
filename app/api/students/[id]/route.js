@@ -1,11 +1,12 @@
 export const dynamic = 'force-dynamic'
 import { NextResponse } from 'next/server'
-import prisma from '@/lib/prisma'
 import { authMiddleware, roleCheck } from '@/lib/middleware/auth'
-import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
-import { deleteStudentCascade, deleteUserCascade } from '@/lib/db/deleteCascade'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
 import { safeRouteParam, safeStringId } from '@/lib/security/safeQueryValue'
+import { withTenantRequest } from '@/lib/tenant/context'
+import { deleteStudentCascade, deleteUserCascade } from '@/lib/db/deleteCascade'
+import { toSafePupilDto, PII_FIELD_GROUPS } from '@/lib/privacy/pupilDto'
+import { logPiiAccess, clientMetaFromRequest } from '@/lib/privacy/piiAccessLog'
 
 export const GET = withErrorHandler(async function GET(request, { params }) {
   const auth = await authMiddleware(request)
@@ -29,60 +30,87 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('Student id is required', 400)
 
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-  if (!schoolId) throw new ApiError('School context required', 400)
-
-  const student = await prisma.student.findFirst({
-    where: { id, schoolId },
-    include: {
-      user: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          profile_picture_url: true,
-          contact_number: true,
+  const result = await withTenantRequest(request, auth.user, async ({ schoolId, db }) => {
+    const student = await db.student.findFirst({
+      where: { id, schoolId },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            profile_picture_url: true,
+            contact_number: true,
+          },
         },
+        results: true,
+        attendance: { orderBy: { date: 'desc' }, take: 30 },
+        subjectEnrollments: { include: { subject: true, class: true } },
+        gamificationProfile: true,
       },
-      results: true,
-      attendance: { orderBy: { date: 'desc' }, take: 30 },
-      subjectEnrollments: { include: { subject: true, class: true } },
-      gamificationProfile: true,
-    },
+    })
+
+    if (!student) throw new ApiError('Not found', 404)
+
+    const isSelf = roleCheck(auth.user, ['STUDENT', 'student']) && student.userId === auth.user.id
+    if (roleCheck(auth.user, ['STUDENT', 'student']) && !isSelf) {
+      throw new ApiError('Forbidden', 403)
+    }
+
+    const canViewMedical = isSelf || roleCheck(auth.user, ['ADMIN', 'headteacher'])
+    const shaped = {
+      ...student,
+      email: student.user?.email ?? null,
+      profilePicture: student.user?.profile_picture_url ?? null,
+      contactNumber: student.user?.contact_number ?? null,
+    }
+
+    const data = toSafePupilDto(shaped, {
+      includeFace: false,
+      includeMedical: canViewMedical,
+      includeGuardianContacts: true,
+      includeAddresses: canViewMedical,
+    })
+
+    if (!isSelf) {
+      const fields = []
+      if (canViewMedical) {
+        fields.push(...PII_FIELD_GROUPS.medical.filter((k) => shaped[k] != null))
+        for (const k of ['guardian_address', 'emergency_contact_address']) {
+          if (shaped[k] != null) fields.push(k)
+        }
+      }
+      fields.push(...PII_FIELD_GROUPS.guardian.filter((k) => shaped[k] != null && data[k] != null))
+      if (fields.length) {
+        await logPiiAccess({
+          schoolId,
+          actorUserId: auth.user.id,
+          actorRole: auth.user.role,
+          action: 'READ',
+          resourceType: 'Student',
+          resourceId: student.id,
+          fieldsAccessed: [...new Set(fields)],
+          ...clientMetaFromRequest(request),
+        })
+      }
+    }
+
+    return {
+      success: true,
+      data: {
+        ...data,
+        updatedAt: student.updatedAt,
+      },
+    }
   })
 
-  if (!student) throw new ApiError('Not found', 404)
-
-  if (roleCheck(auth.user, ['STUDENT', 'student']) && student.userId !== auth.user.id) {
-    throw new ApiError('Forbidden', 403)
-  }
-
-  const shaped = {
-    ...student,
-    email: student.user?.email ?? null,
-    profilePicture: student.user?.profile_picture_url ?? null,
-    contactNumber: student.user?.contact_number ?? null,
-  }
-
-  return NextResponse.json({
-    success: true,
-    data: {
-      ...shaped,
-      updatedAt: student.updatedAt,
-    },
-  })
+  if (result instanceof Response) return result
+  return NextResponse.json(result)
 })
 
 export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
-
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-  if (!schoolId) throw new ApiError('School context required', 400)
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher', 'HOD', 'hod', 'TEACHER', 'teacher'])) {
     throw new ApiError('Forbidden', 403)
@@ -95,61 +123,70 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
   const baseUpdatedAt = body.baseUpdatedAt ? new Date(body.baseUpdatedAt) : null
   const resolution = body.resolution ? String(body.resolution) : null
 
-  const existing = await prisma.student.findFirst({
-    where: { id, schoolId },
-  })
-  if (!existing) throw new ApiError('Not found', 404)
-
-  if (baseUpdatedAt && existing.updatedAt.getTime() !== baseUpdatedAt.getTime() && !resolution) {
-    return NextResponse.json(
-      {
-        success: false,
-        conflict: true,
-        server: { ...existing, updatedAt: existing.updatedAt },
-      },
-      { status: 409 }
-    )
-  }
-
-  if (resolution === 'keep_server') {
-    return NextResponse.json({
-      success: true,
-      data: { ...existing, updatedAt: existing.updatedAt },
+  const result = await withTenantRequest(request, auth.user, async ({ schoolId, db, tx }) => {
+    const existing = await db.student.findFirst({
+      where: { id, schoolId },
     })
-  }
+    if (!existing) throw new ApiError('Not found', 404)
 
-  const allowed = [
-    'name',
-    'class',
-    'exam_number',
-    'selected_subjects',
-    'emergency_contact_name',
-    'emergency_contact_phone',
-    'emergency_contact_relationship',
-    'emergency_contact_address',
-    'blood_type',
-    'medical_aid_scheme',
-    'medical_aid_number',
-    'family_doctor_name',
-    'family_doctor_contact',
-    'medical_conditions',
-    'allergies',
-    'enrollmentStatus',
-  ]
+    if (baseUpdatedAt && existing.updatedAt.getTime() !== baseUpdatedAt.getTime() && !resolution) {
+      return {
+        status: 409,
+        body: {
+          success: false,
+          conflict: true,
+          server: toSafePupilDto(existing, {
+            includeMedical: false,
+            includeGuardianContacts: true,
+          }),
+        },
+      }
+    }
 
-  const data = {}
-  for (const key of allowed) {
-    if (body[key] !== undefined) data[key] = body[key]
-  }
+    if (resolution === 'keep_server') {
+      return {
+        status: 200,
+        body: {
+          success: true,
+          data: toSafePupilDto(
+            { ...existing, updatedAt: existing.updatedAt },
+            { includeMedical: false, includeGuardianContacts: true }
+          ),
+        },
+      }
+    }
 
-  if (data.enrollmentStatus != null) {
-    const st = String(data.enrollmentStatus).trim().toUpperCase()
-    const ok = ['ACTIVE', 'WITHDRAWN', 'GRADUATED', 'TRANSFERRED'].includes(st)
-    if (!ok) throw new ApiError('Invalid enrollmentStatus', 400)
-    data.enrollmentStatus = st
-  }
+    const allowed = [
+      'name',
+      'class',
+      'exam_number',
+      'selected_subjects',
+      'emergency_contact_name',
+      'emergency_contact_phone',
+      'emergency_contact_relationship',
+      'emergency_contact_address',
+      'blood_type',
+      'medical_aid_scheme',
+      'medical_aid_number',
+      'family_doctor_name',
+      'family_doctor_contact',
+      'medical_conditions',
+      'allergies',
+      'enrollmentStatus',
+    ]
 
-  const updated = await prisma.$transaction(async (tx) => {
+    const data = {}
+    for (const key of allowed) {
+      if (body[key] !== undefined) data[key] = body[key]
+    }
+
+    if (data.enrollmentStatus != null) {
+      const st = String(data.enrollmentStatus).trim().toUpperCase()
+      const ok = ['ACTIVE', 'WITHDRAWN', 'GRADUATED', 'TRANSFERRED'].includes(st)
+      if (!ok) throw new ApiError('Invalid enrollmentStatus', 400)
+      data.enrollmentStatus = st
+    }
+
     const yearGroup = body.year_group ? String(body.year_group).trim() : null
     const section = body.section ? String(body.section).trim() : null
     const classNameFromParts = yearGroup && section ? `${yearGroup}${section}` : null
@@ -189,10 +226,17 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       })
     }
 
-    const studentUpdated = await tx.student.update({
-      where: { id: existing.id },
+    await tx.student.updateMany({
+      where: { id: existing.id, schoolId },
       data,
     })
+
+    const studentUpdated = await tx.student.findFirst({
+      where: { id: existing.id, schoolId },
+    })
+    if (!studentUpdated) {
+      throw new Error('Student update failed')
+    }
 
     if (existing.userId) {
       const userUpdates = {}
@@ -202,8 +246,8 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
         userUpdates.contact_number = String(body.user.contact_number)
 
       if (Object.keys(userUpdates).length > 0) {
-        await tx.user.update({
-          where: { id: existing.userId },
+        await tx.user.updateMany({
+          where: { id: existing.userId, schoolId },
           data: userUpdates,
         })
       }
@@ -240,20 +284,28 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       })
     }
 
-    return studentUpdated
+    return {
+      status: 200,
+      body: {
+        success: true,
+        data: toSafePupilDto(
+          { ...studentUpdated, updatedAt: studentUpdated.updatedAt },
+          {
+            includeMedical: roleCheck(auth.user, ['ADMIN', 'headteacher']),
+            includeGuardianContacts: true,
+          }
+        ),
+      },
+    }
   })
 
-  return NextResponse.json({ success: true, data: { ...updated, updatedAt: updated.updatedAt } })
+  if (result instanceof Response) return result
+  return NextResponse.json(result.body, { status: result.status || 200 })
 })
 
 export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
   const auth = await authMiddleware(request)
   if (!auth.isAuthenticated) return auth.response
-
-  const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
-  if (!tenant.ok) return tenant.response
-  const schoolId = tenant.schoolId
-  if (!schoolId) throw new ApiError('School context required', 400)
 
   if (!roleCheck(auth.user, ['ADMIN', 'headteacher'])) {
     throw new ApiError('Forbidden', 403)
@@ -262,27 +314,41 @@ export const DELETE = withErrorHandler(async function DELETE(request, { params }
   const id = await safeRouteParam(params, 'id')
   if (!id) throw new ApiError('Student id is required', 400)
 
-  const existing = await prisma.student.findFirst({
-    where: { id, schoolId },
-    select: { id: true, userId: true, name: true, class: true },
-  })
-  if (!existing) throw new ApiError('Not found', 404)
+  const result = await withTenantRequest(request, auth.user, async ({ schoolId, tx }) => {
+    const existing = await tx.student.findFirst({
+      where: { id, schoolId },
+      select: { id: true, userId: true, name: true, class: true },
+    })
+    if (!existing) throw new ApiError('Not found', 404)
 
-  const studentLabel = `Student record: ${existing.name}${existing.class ? ` (${existing.class})` : ''}`
+    const studentLabel = `Student record: ${existing.name}${existing.class ? ` (${existing.class})` : ''}`
 
-  await prisma.$transaction(async (tx) => {
     if (existing.userId) {
       await deleteUserCascade({ tx, schoolId, userId: existing.userId, actor: auth.user })
-      return
+    } else {
+      await deleteStudentCascade({
+        tx,
+        schoolId,
+        studentId: existing.id,
+        actor: auth.user,
+        studentLabel,
+      })
     }
-    await deleteStudentCascade({
-      tx,
+
+    await logPiiAccess({
       schoolId,
-      studentId: existing.id,
-      actor: auth.user,
-      studentLabel,
+      actorUserId: auth.user.id,
+      actorRole: auth.user.role,
+      action: 'DELETE',
+      resourceType: 'Student',
+      resourceId: existing.id,
+      fieldsAccessed: ['student_record'],
+      ...clientMetaFromRequest(request),
     })
+
+    return { success: true }
   })
 
-  return NextResponse.json({ success: true })
+  if (result instanceof Response) return result
+  return NextResponse.json(result)
 })

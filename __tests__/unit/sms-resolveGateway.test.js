@@ -14,45 +14,50 @@ describe('resolveActiveGatewayForSchool', () => {
     vi.resetModules()
   })
 
-  it('prefers active shared gateway for any school', async () => {
+  it('prefers dedicated school gateway over shared', async () => {
     findFirst.mockResolvedValueOnce({
-      id: 'shared-1',
-      isShared: true,
+      id: 'dedicated-1',
+      isShared: false,
       isActive: true,
-      schoolId: null,
+      schoolId: 'school-a',
     })
 
     const { resolveActiveGatewayForSchool } = await import('@/lib/sms/resolveGateway')
     const gw = await resolveActiveGatewayForSchool('school-a')
 
-    expect(gw.id).toBe('shared-1')
+    expect(gw.id).toBe('dedicated-1')
     expect(findFirst).toHaveBeenCalledWith({
-      where: { isShared: true, isActive: true },
+      where: { schoolId: 'school-a', isActive: true, isShared: false },
       orderBy: { updatedAt: 'desc' },
     })
   })
 
-  it('falls back to per-school gateway when no shared row', async () => {
+  it('falls back to shared gateway when no dedicated row', async () => {
     findFirst.mockResolvedValueOnce(null).mockResolvedValueOnce({
-      id: 'legacy-1',
-      isShared: false,
-      schoolId: 'school-b',
+      id: 'shared-1',
+      isShared: true,
+      schoolId: null,
       isActive: true,
     })
 
     const { resolveActiveGatewayForSchool } = await import('@/lib/sms/resolveGateway')
     const gw = await resolveActiveGatewayForSchool('school-b')
 
-    expect(gw.id).toBe('legacy-1')
+    expect(gw.id).toBe('shared-1')
+    expect(findFirst).toHaveBeenNthCalledWith(1, {
+      where: { schoolId: 'school-b', isActive: true, isShared: false },
+      orderBy: { updatedAt: 'desc' },
+    })
     expect(findFirst).toHaveBeenNthCalledWith(2, {
-      where: { schoolId: 'school-b', isActive: true },
+      where: { isShared: true, isActive: true },
       orderBy: { updatedAt: 'desc' },
     })
   })
 
-  it('same shared gateway resolves for two schools', async () => {
+  it('same shared gateway resolves for two schools without dedicated', async () => {
     const shared = { id: 'shared-1', isShared: true, isActive: true, schoolId: null }
-    findFirst.mockResolvedValue(shared)
+    findFirst.mockResolvedValueOnce(null).mockResolvedValueOnce(shared)
+    findFirst.mockResolvedValueOnce(null).mockResolvedValueOnce(shared)
 
     const { resolveActiveGatewayForSchool } = await import('@/lib/sms/resolveGateway')
     const a = await resolveActiveGatewayForSchool('school-1')

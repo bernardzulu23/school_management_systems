@@ -133,6 +133,14 @@ function finalizeProxyResponse(response, request, securityOpts) {
   if (shouldApplyWcdNoStore(path)) {
     applyWcdNoStoreHeaders(response)
   }
+  try {
+    const rid = request?.headers?.get?.('x-request-id')
+    if (rid && response instanceof Response && !response.headers.get('x-request-id')) {
+      response.headers.set('x-request-id', rid)
+    }
+  } catch {
+    // ignore
+  }
   return response
 }
 
@@ -184,6 +192,12 @@ export async function handleSecurityProxy(request) {
     // headers from the forwarded request BEFORE any routing or auth decision.
     // This is the authoritative copy forwarded downstream via NextResponse.next.
     const requestHeaders = stripInternalRequestHeaders(new Headers(request.headers))
+    if (pathname.startsWith('/api')) {
+      const existing = String(requestHeaders.get('x-request-id') || '').trim()
+      if (!existing || !/^[a-zA-Z0-9_-]{8,128}$/.test(existing)) {
+        requestHeaders.set('x-request-id', crypto.randomUUID())
+      }
+    }
     requestHeaders.set('x-nonce', nonce)
     requestHeaders.set('x-current-path', pathname)
 

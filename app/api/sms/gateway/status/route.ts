@@ -4,13 +4,22 @@
  */
 import { NextResponse } from 'next/server'
 import { withErrorHandler, ApiError } from '@/lib/middleware/errorHandler'
+import { rateLimiter } from '@/lib/middleware/rateLimiter'
 import { basePrisma } from '@/lib/prisma/client'
 import { requireActiveGateway } from '@/lib/sms/gatewayAuth'
+import { gatewayMayAccessLog, smsLogTenantWhere } from '@/lib/sms/gatewayTenant'
 import { secureJson } from '@/lib/security/api'
 
 export const dynamic = 'force-dynamic'
 
 export const POST = withErrorHandler(async function POST(request: Request) {
+  const limited = rateLimiter(request, {
+    limit: process.env.NODE_ENV === 'production' ? 120 : 600,
+    windowMs: 60 * 1000,
+    keyPrefix: 'sms_gateway_status_',
+  })
+  if (limited.isLimited) return limited.response
+
   const auth = await requireActiveGateway(request)
   if (!auth.ok) {
     return secureJson({ error: auth.error }, { status: auth.status }, request)
@@ -30,22 +39,29 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     throw new ApiError("status must be 'SENT' or 'FAILED'", 400)
   }
 
+  const tenantWhere = smsLogTenantWhere(gateway)
+
   const log = await basePrisma.smsLog.findFirst({
     where: {
       id: messageId,
-      gatewayId: gateway.id,
       channel: 'CUSTOM_GATEWAY',
+      ...tenantWhere,
     },
+    select: { id: true, status: true, schoolId: true, gatewayId: true },
   })
-  if (!log) throw new ApiError('Message not found for this gateway', 404)
+  if (!log || !gatewayMayAccessLog(gateway, log)) {
+    throw new ApiError('Message not found for this gateway', 404)
+  }
 
-  // Idempotent: already terminal.
   if (log.status === 'SENT' || log.status === 'FAILED') {
     return NextResponse.json({ success: true, status: log.status, alreadyFinal: true })
   }
 
-  await basePrisma.smsLog.update({
-    where: { id: log.id },
+  await basePrisma.smsLog.updateMany({
+    where: {
+      id: log.id,
+      ...tenantWhere,
+    },
     data: {
       status,
       failureReason: status === 'FAILED' ? failureReason : null,

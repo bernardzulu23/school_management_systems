@@ -2,19 +2,25 @@
  * Seed / update platform super admin (developer console).
  * Run: npm run seed:platform-admin
  *
- * Override via env: PLATFORM_ADMIN_EMAIL, PLATFORM_ADMIN_PASSWORD, PLATFORM_ADMIN_NAME
+ * Requires: PLATFORM_ADMIN_PASSWORD (no hardcoded default).
+ * Optional: PLATFORM_ADMIN_EMAIL, PLATFORM_ADMIN_NAME
  */
 const { PrismaClient } = require('@prisma/client')
 const { Pool } = require('pg')
 const { PrismaPg } = require('@prisma/adapter-pg')
 const { hash } = require('bcryptjs')
 
-const ADMIN = {
-  email: (process.env.PLATFORM_ADMIN_EMAIL || 'super-admin@bluepeacktechnologies.com')
-    .trim()
-    .toLowerCase(),
-  password: process.env.PLATFORM_ADMIN_PASSWORD || 'P@fjK43WjhL',
-  name: process.env.PLATFORM_ADMIN_NAME || 'Platform Super Admin',
+const email = (process.env.PLATFORM_ADMIN_EMAIL || 'super-admin@bluepeacktechnologies.com')
+  .trim()
+  .toLowerCase()
+const password = String(process.env.PLATFORM_ADMIN_PASSWORD || '').trim()
+const name = process.env.PLATFORM_ADMIN_NAME || 'Platform Super Admin'
+
+if (!password || password.length < 12) {
+  console.error(
+    '❌ PLATFORM_ADMIN_PASSWORD is required (min 12 chars). Set it in the environment — never commit it.'
+  )
+  process.exit(1)
 }
 
 const connectionString = process.env.DATABASE_URL
@@ -30,19 +36,19 @@ const prisma = new PrismaClient({ adapter })
 async function main() {
   console.log('🌱 Seeding platform super admin...')
 
-  const hashedPassword = await hash(ADMIN.password, 12)
+  const hashedPassword = await hash(password, 12)
 
   const admin = await prisma.platformAdmin.upsert({
-    where: { email: ADMIN.email },
+    where: { email },
     update: {
       password: hashedPassword,
-      name: ADMIN.name,
+      name,
       active: true,
     },
     create: {
-      email: ADMIN.email,
+      email,
       password: hashedPassword,
-      name: ADMIN.name,
+      name,
       active: true,
     },
   })
@@ -58,6 +64,7 @@ async function main() {
   console.log(`   Name:     ${admin.name}`)
   console.log(`   Login:    ${String(base).replace(/\/$/, '')}${loginPath}`)
   console.log(`   Local:    http://localhost:3000${loginPath}\n`)
+  console.log('   Password: (from PLATFORM_ADMIN_PASSWORD — not printed)\n')
 }
 
 main()

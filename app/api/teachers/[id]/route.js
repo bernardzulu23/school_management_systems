@@ -196,10 +196,22 @@ export const PUT = withErrorHandler(async function PUT(request, { params }) {
       }
     }
 
-    await tx.teacher.update({
-      where: { id: existing.id },
-      data: teacherUpdates,
-    })
+    const scalarUpdates = Object.fromEntries(
+      Object.entries(teacherUpdates).filter(([key]) => key !== 'classes')
+    )
+    if (Object.keys(scalarUpdates).length > 0) {
+      await tx.teacher.updateMany({
+        where: { id: existing.id, schoolId },
+        data: scalarUpdates,
+      })
+    }
+
+    if (teacherUpdates.classes) {
+      await tx.teacher.update({
+        where: { id: existing.id },
+        data: { classes: teacherUpdates.classes },
+      })
+    }
 
     return tx.teacher.findFirst({
       where: { id: existing.id, schoolId },

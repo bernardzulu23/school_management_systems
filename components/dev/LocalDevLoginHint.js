@@ -20,8 +20,8 @@ export default function LocalDevLoginHint() {
     >
       <p className="font-semibold mb-2">Local test accounts (npm run seed:local)</p>
       <p className="mb-2 text-amber-900">
-        Password: <code className="font-mono">ZsmsLocal@Test2026</code> or your{' '}
-        <code className="font-mono">LOCAL_DEV_PASSWORD</code> in .env
+        Password: value of <code className="font-mono">LOCAL_DEV_PASSWORD</code> in your local{' '}
+        <code className="font-mono">.env</code> (never commit it).
       </p>
       <ul className="space-y-1 font-mono">
         {ACCOUNTS.map(([role, email]) => (
