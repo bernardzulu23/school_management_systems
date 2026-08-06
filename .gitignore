@@ -192,6 +192,9 @@ past-papers/*
 # Large local curriculum PDF trees (keep on disk, do not track)
 Syllabus/
 Teaching Module/
+EARLY_CHILDHOOD_EDUCATION_SYLLABI/
+Primary_Education_teaching/
+primary_school_syllabus/
 
 # TypeScript incremental build cache
 tsconfig.tsbuildinfo

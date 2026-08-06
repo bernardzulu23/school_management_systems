@@ -33,9 +33,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { toast } from 'react-hot-toast'
 import { Loader2, X } from 'lucide-react'
+import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 
 export default function TeacherAssessmentsPage() {
   const router = useRouter()
+  const { canAccessEcz } = useSchoolCapabilities()
   const [activeTab, setActiveTab] = useState('upcoming')
   const [searchTerm, setSearchTerm] = useState('')
   const [filterType, setFilterType] = useState('all')
@@ -460,28 +462,30 @@ export default function TeacherAssessmentsPage() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <Link
-                    href={
-                      selectedScheme
-                        ? `/dashboard/teacher/quiz-maker?schemeId=${encodeURIComponent(selectedScheme.id)}&subject=${encodeURIComponent(selectedScheme.subject)}&grade=${encodeURIComponent(selectedScheme.gradeOrForm)}&mode=secondary`
-                        : '#'
-                    }
-                    className={`inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium ${
-                      selectedScheme
-                        ? 'hover:bg-royalPurple-muted'
-                        : 'pointer-events-none opacity-50'
-                    }`}
-                  >
-                    Generate ECZ / secondary questions
-                  </Link>
-                  <Link
-                    href="/dashboard/teacher/assessments/ecz"
-                    className="inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium hover:bg-royalPurple-muted"
-                  >
-                    Open ECZ / SBA hub
-                  </Link>
-                </div>
+                {canAccessEcz ? (
+                  <div className="flex flex-wrap gap-2">
+                    <Link
+                      href={
+                        selectedScheme
+                          ? `/dashboard/teacher/quiz-maker?schemeId=${encodeURIComponent(selectedScheme.id)}&subject=${encodeURIComponent(selectedScheme.subject)}&grade=${encodeURIComponent(selectedScheme.gradeOrForm)}&mode=secondary`
+                          : '#'
+                      }
+                      className={`inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium ${
+                        selectedScheme
+                          ? 'hover:bg-royalPurple-muted'
+                          : 'pointer-events-none opacity-50'
+                      }`}
+                    >
+                      Generate ECZ / secondary questions
+                    </Link>
+                    <Link
+                      href="/dashboard/teacher/assessments/ecz"
+                      className="inline-flex items-center rounded-md border px-3 py-2 text-sm font-medium hover:bg-royalPurple-muted"
+                    >
+                      Open ECZ / SBA hub
+                    </Link>
+                  </div>
+                ) : null}
                 <div className="space-y-2">
                   <Label>Title</Label>
                   <Input
@@ -756,14 +760,16 @@ export default function TeacherAssessmentsPage() {
                   <Plus className="h-4 w-4 mr-2" />
                   Create New Assessment
                 </Button>
-                <Button
-                  variant="outline"
-                  className="w-full justify-start bg-royalPurple-pill/30 border-royalPurple-primary/30"
-                  onClick={() => router.push('/dashboard/teacher/assessments/ecz')}
-                >
-                  <ClipboardList className="h-4 w-4 mr-2" />
-                  ECZ SBA Hub (Zambia)
-                </Button>
+                {canAccessEcz ? (
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start bg-royalPurple-pill/30 border-royalPurple-primary/30"
+                    onClick={() => router.push('/dashboard/teacher/assessments/ecz')}
+                  >
+                    <ClipboardList className="h-4 w-4 mr-2" />
+                    ECZ SBA Hub (Zambia)
+                  </Button>
+                ) : null}
                 <Button
                   variant="outline"
                   className="w-full justify-start"

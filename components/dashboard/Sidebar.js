@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
-import { getSchoolFeatures } from '@/lib/school/schoolTypeHelpers'
+import { getSchoolFeatures, hasPrimaryClasses } from '@/lib/school/schoolTypeHelpers'
 import { isNavItemApplicable } from '@/lib/school/navApplicability'
 import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
 import { hasSicAssignment } from '@/lib/sic/sicAccess'
@@ -151,8 +151,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     rawRoleKey === 'admin' || rawRoleKey === 'administrator' ? 'headteacher' : rawRoleKey
 
   const getNavigationItems = () => {
-    const hasSeniorTeacherRole = Boolean(user?.isSeniorTeacher || user?.seniorTeacherAssignment?.id)
     const schoolReady = Boolean(school?.level) && !schoolLoading
+    // Senior Teacher is a primary (and combined) role — never show on secondary-only schools.
+    const seniorTeacherFeaturesAllowed = schoolReady && hasPrimaryClasses(school)
+    const hasSeniorTeacherRole =
+      seniorTeacherFeaturesAllowed &&
+      Boolean(user?.isSeniorTeacher || user?.seniorTeacherAssignment?.id)
     const teacherPortal = pathname?.startsWith('/dashboard/teacher')
     const isHodUser = Boolean(user?.isHod || user?.hodProfile || roleKey === 'hod')
     // When an HOD is viewing the teacher portal, home should stay on teacher.
@@ -203,11 +207,15 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Guidance teachers',
           href: '/dashboard/headteacher/guidance-teachers',
           icon: Briefcase,
+          secondaryOnly: true,
+          requiresFeature: 'careerGuidance',
         },
         {
           name: 'Guidance reports',
           href: '/dashboard/headteacher/guidance-reports',
           icon: FileText,
+          secondaryOnly: true,
+          requiresFeature: 'careerGuidance',
         },
         {
           name: 'SIC (In-service)',
@@ -218,6 +226,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           name: 'Senior Teachers',
           href: '/dashboard/headteacher/senior-teachers',
           icon: UserCheck,
+          primaryOnly: true,
         },
         { name: 'Teacher Performance', href: '/admin/teacher-performance', icon: Target },
         {
@@ -312,13 +321,31 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Reports', href: '/dashboard/reports', icon: FileText },
       ],
       hod: [
-        { name: 'Class Allocation', href: '/dashboard/hod/allocation', icon: BookOpen },
-        { name: 'Department Timetable', href: '/dashboard/hod/timetable', icon: Calendar },
+        {
+          name: 'Class Allocation',
+          href: '/dashboard/hod/allocation',
+          icon: BookOpen,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Department Timetable',
+          href: '/dashboard/hod/timetable',
+          icon: Calendar,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
         { name: 'Activity log', href: '/dashboard/headteacher/activity', icon: ClipboardList },
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'My Classes', href: '/dashboard/classes', icon: GraduationCap },
         { name: 'Subjects', href: '/admin/subjects', icon: BookOpen },
-        { name: 'Games', href: '/dashboard/hod/games', icon: GamepadIcon },
+        {
+          name: 'Games',
+          href: '/dashboard/hod/games',
+          icon: GamepadIcon,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
         {
           name: 'Teaching Studio',
           href: '/dashboard/teacher/teaching-studio',
@@ -335,6 +362,8 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           href: '/dashboard/hod/chat',
           icon: Sparkles,
           requiresPlanFeature: 'ai-tools',
+          secondaryOnly: true,
+          requiresFeature: 'hod',
         },
         {
           name: 'AI Quiz Maker',
@@ -360,23 +389,97 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           icon: Sparkles,
           requiresPlanFeature: 'ai-story-weaver',
         },
-        { name: 'Teacher Performance', href: '/dashboard/hod/teacher-performance', icon: Target },
+        {
+          name: 'Teacher Performance',
+          href: '/dashboard/hod/teacher-performance',
+          icon: Target,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
         {
           name: 'Teaching Coverage',
           href: '/dashboard/hod/teacher-performance',
           icon: BarChart3,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
         },
-        { name: 'Exam Analysis', href: '/dashboard/hod/exam-analysis', icon: BarChart3 },
-        { name: 'Monitoring', href: '/dashboard/hod/monitoring', icon: Eye },
-        { name: 'CPD File', href: '/dashboard/hod/cpd', icon: ClipboardList },
-        { name: 'Lesson Plans', href: '/dashboard/hod/lesson-plans', icon: FileText },
-        { name: 'Chat Lesson Plans', href: '/dashboard/hod/chat-lesson-plans', icon: FileText },
-        { name: 'Quizzes', href: '/dashboard/hod/quizzes', icon: ClipboardList },
-        { name: 'Budget', href: '/dashboard/hod/budget', icon: DollarSign },
-        { name: 'Stock Book', href: '/dashboard/hod/stock-book', icon: Package },
-        { name: 'Meetings', href: '/dashboard/hod/meetings', icon: Calendar },
-        { name: 'Correspondence', href: '/dashboard/hod/correspondence', icon: FileText },
-        { name: 'Daily Routine', href: '/dashboard/hod/daily-routine', icon: Clock },
+        {
+          name: 'Exam Analysis',
+          href: '/dashboard/hod/exam-analysis',
+          icon: BarChart3,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Monitoring',
+          href: '/dashboard/hod/monitoring',
+          icon: Eye,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'CPD File',
+          href: '/dashboard/hod/cpd',
+          icon: ClipboardList,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Lesson Plans',
+          href: '/dashboard/hod/lesson-plans',
+          icon: FileText,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Chat Lesson Plans',
+          href: '/dashboard/hod/chat-lesson-plans',
+          icon: FileText,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Quizzes',
+          href: '/dashboard/hod/quizzes',
+          icon: ClipboardList,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Budget',
+          href: '/dashboard/hod/budget',
+          icon: DollarSign,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Stock Book',
+          href: '/dashboard/hod/stock-book',
+          icon: Package,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Meetings',
+          href: '/dashboard/hod/meetings',
+          icon: Calendar,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Correspondence',
+          href: '/dashboard/hod/correspondence',
+          icon: FileText,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'Daily Routine',
+          href: '/dashboard/hod/daily-routine',
+          icon: Clock,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
         { name: 'Assessments', href: '/dashboard/teacher/assessments', icon: ClipboardList },
         {
           name: 'ECZ SBA Hub',
@@ -411,17 +514,47 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'Attendance', href: '/dashboard/attendance', icon: UserCheck },
         { name: 'Lesson sessions', href: '/dashboard/attendance/sessions', icon: Clock },
         { name: 'Attendance Returns', href: '/dashboard/attendance/returns', icon: UserCheck },
-        { name: 'Term reports', href: '/dashboard/hod/term-reports', icon: FileText },
-        { name: 'SIC CPD plans', href: '/dashboard/hod/sic-cpd', icon: ClipboardList },
+        {
+          name: 'Term reports',
+          href: '/dashboard/hod/term-reports',
+          icon: FileText,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
+        {
+          name: 'SIC CPD plans',
+          href: '/dashboard/hod/sic-cpd',
+          icon: ClipboardList,
+          secondaryOnly: true,
+          requiresFeature: 'hod',
+        },
       ],
       guidance: [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
         { name: 'Pupil register', href: '/dashboard/guidance/pupils', icon: Users },
         { name: 'Case log', href: '/dashboard/guidance/cases', icon: ClipboardList },
         { name: 'Documents', href: '/dashboard/guidance/documents', icon: FileText },
-        { name: 'Career board', href: '/dashboard/guidance/resources', icon: Megaphone },
-        { name: 'Career clusters', href: '/dashboard/guidance/career-clusters', icon: Layers },
-        { name: 'Careers', href: '/dashboard/guidance/careers', icon: Briefcase },
+        {
+          name: 'Career board',
+          href: '/dashboard/guidance/resources',
+          icon: Megaphone,
+          secondaryOnly: true,
+          requiresFeature: 'careerGuidance',
+        },
+        {
+          name: 'Career clusters',
+          href: '/dashboard/guidance/career-clusters',
+          icon: Layers,
+          secondaryOnly: true,
+          requiresFeature: 'careerGuidance',
+        },
+        {
+          name: 'Careers',
+          href: '/dashboard/guidance/careers',
+          icon: Briefcase,
+          secondaryOnly: true,
+          requiresFeature: 'careerGuidance',
+        },
         { name: 'Girls re-entry', href: '/dashboard/guidance/reentry', icon: Heart },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
@@ -435,16 +568,42 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       ],
       'senior-teacher': [
         { name: 'Give Feedback', href: '/dashboard/feedback', icon: MessageSquare },
-        { name: 'Primary Classes', href: '/dashboard/classes', icon: GraduationCap },
+        {
+          name: 'Primary Classes',
+          href: '/dashboard/classes',
+          icon: GraduationCap,
+          primaryOnly: true,
+        },
         {
           name: 'Primary Allocation',
           href: '/dashboard/senior-teacher/allocation',
           icon: BookOpen,
+          primaryOnly: true,
         },
-        { name: 'Primary Timetable', href: '/dashboard/senior-teacher/timetable', icon: Calendar },
-        { name: 'Lesson Plans', href: '/dashboard/senior-teacher/lesson-plans', icon: FileText },
-        { name: 'Quizzes', href: '/dashboard/senior-teacher/quizzes', icon: ClipboardList },
-        { name: 'Teacher Monitoring', href: '/dashboard/senior-teacher/monitoring', icon: Eye },
+        {
+          name: 'Primary Timetable',
+          href: '/dashboard/senior-teacher/timetable',
+          icon: Calendar,
+          primaryOnly: true,
+        },
+        {
+          name: 'Lesson Plans',
+          href: '/dashboard/senior-teacher/lesson-plans',
+          icon: FileText,
+          primaryOnly: true,
+        },
+        {
+          name: 'Quizzes',
+          href: '/dashboard/senior-teacher/quizzes',
+          icon: ClipboardList,
+          primaryOnly: true,
+        },
+        {
+          name: 'Teacher Monitoring',
+          href: '/dashboard/senior-teacher/monitoring',
+          icon: Eye,
+          primaryOnly: true,
+        },
         { name: 'Teaching Studio', href: '/dashboard/teacher/teaching-studio', icon: Zap },
         { name: 'Assessments', href: '/dashboard/teacher/assessments', icon: ClipboardList },
         {
@@ -531,6 +690,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           icon: BarChart3,
           requiresFeature: 'secondaryGrading',
         },
+        {
+          name: 'Exam Analysis',
+          href: '/dashboard/teacher/exam-analysis',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
         { name: 'Innovation Hub', href: '/dashboard/innovation', icon: Rocket },
         { name: 'Extracurricular', href: '/dashboard/teacher/extracurricular', icon: Trophy },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
@@ -552,7 +717,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         { name: 'My Timetable', href: '/dashboard/timetable/student', icon: Calendar },
         { name: 'Assessments', href: '/dashboard/student/assessments', icon: ClipboardList },
         { name: 'Flashcards', href: '/dashboard/student/flashcards', icon: BookOpen },
-        { name: 'Results', href: '/dashboard/student/results', icon: BarChart3 },
+        {
+          name: 'Results',
+          href: '/dashboard/student/results',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
         {
           name: 'ECZ Practice',
           href: '/dashboard/student/ecz-practice',
@@ -604,28 +774,43 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
       parent: [
         { name: 'My children', href: '/dashboard/parent', icon: Users },
         { name: 'Attendance', href: '/dashboard/parent/attendance', icon: UserCheck },
-        { name: 'Results', href: '/dashboard/parent/results', icon: BarChart3 },
+        {
+          name: 'Results',
+          href: '/dashboard/parent/results',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
         { name: 'Progress reports', href: '/dashboard/parent/reports', icon: FileText },
-        { name: 'Fees', href: '/dashboard/parent/fees', icon: CreditCard },
+        {
+          name: 'Fees',
+          href: '/dashboard/parent/fees',
+          icon: CreditCard,
+          requiresFeature: 'feeManagement',
+        },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
       guardian: [
         { name: 'My children', href: '/dashboard/parent', icon: Users },
         { name: 'Attendance', href: '/dashboard/parent/attendance', icon: UserCheck },
-        { name: 'Results', href: '/dashboard/parent/results', icon: BarChart3 },
+        {
+          name: 'Results',
+          href: '/dashboard/parent/results',
+          icon: BarChart3,
+          requiresFeature: 'secondaryGrading',
+        },
         { name: 'Progress reports', href: '/dashboard/parent/reports', icon: FileText },
-        { name: 'Fees', href: '/dashboard/parent/fees', icon: CreditCard },
+        {
+          name: 'Fees',
+          href: '/dashboard/parent/fees',
+          icon: CreditCard,
+          requiresFeature: 'feeManagement',
+        },
         { name: 'Privacy', href: '/dashboard/privacy', icon: Shield },
       ],
     }
 
-    const featuresForRole = getSchoolFeatures(
-      schoolReady
-        ? school
-        : { level: 'combined', ownershipType: school?.ownershipType || 'PRIVATE' }
-    )
-    const showHod =
-      featuresForRole.hod && canAccessHodFeatures({ schoolLevel: school?.level || 'combined' })
+    const featuresForRole = getSchoolFeatures(schoolReady ? school : null)
+    const showHod = featuresForRole.hod && canAccessHodFeatures({ schoolLevel: school?.level })
     const showCareer = featuresForRole.careerGuidance
     const guidancePortal = pathname?.startsWith('/dashboard/guidance')
     const sicPortal = pathname?.startsWith('/dashboard/sic')
@@ -652,7 +837,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
     if (sicPortal && hasSicRole) {
       navRoleKey = 'sic'
     }
-    if (seniorTeacherPortal && hasSeniorTeacherRole) {
+    if (seniorTeacherPortal && hasSeniorTeacherRole && seniorTeacherFeaturesAllowed) {
       navRoleKey = 'senior-teacher'
     }
 

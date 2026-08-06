@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { Button } from '@/components/ui/Button'
-import { Upload, FileText, Trash2, Loader2 } from 'lucide-react'
+import { Upload, FileText, Trash2, Loader2, Download, Pencil } from 'lucide-react'
 
 const LABEL_OPTIONS = [
   { value: 'schedule', label: 'Schedule' },
@@ -12,9 +12,13 @@ const LABEL_OPTIONS = [
   { value: 'attachment', label: 'Attachment' },
   { value: 'receipt', label: 'Receipt' },
   { value: 'report', label: 'Report' },
+  { value: 'analysis', label: 'Analysis' },
+  { value: 'monitoring', label: 'Monitoring' },
+  { value: 'inventory', label: 'Inventory' },
 ]
 
 /**
+ * Full file CRUD for HOD attachments: list, upload, download, relabel, delete.
  * @param {{ entityType: string, entityId: string, defaultLabel?: string, compact?: boolean }} props
  */
 export function HodFileUpload({
@@ -28,6 +32,8 @@ export function HodFileUpload({
   const [loading, setLoading] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState(null)
+  const [editingId, setEditingId] = useState(null)
+  const [editLabel, setEditLabel] = useState('attachment')
 
   const loadFiles = useCallback(async () => {
     if (!entityId) return
@@ -97,6 +103,23 @@ export function HodFileUpload({
     }
   }
 
+  const onSaveLabel = async (id) => {
+    try {
+      const res = await fetch(`/api/hod/files/${id}`, {
+        method: 'PATCH',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ label: editLabel }),
+      })
+      const json = await res.json()
+      if (!res.ok) throw new Error(json.error || 'Update failed')
+      setEditingId(null)
+      await loadFiles()
+    } catch (err) {
+      setError(err.message)
+    }
+  }
+
   if (!entityId) {
     return (
       <p className="text-xs text-royalPurple-text3">
@@ -144,20 +167,57 @@ export function HodFileUpload({
               key={f.id}
               className="flex items-center justify-between gap-2 text-sm bg-royalPurple-page/50 rounded px-2 py-1"
             >
-              <a
-                href={f.fileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1 text-royalPurple-accentTx hover:underline truncate"
-              >
+              <div className="flex min-w-0 flex-1 items-center gap-1">
                 <FileText className="h-3 w-3 shrink-0" />
-                <span className="truncate">
-                  {f.fileName} <span className="text-royalPurple-text3">({f.label})</span>
-                </span>
-              </a>
-              <Button type="button" size="sm" variant="ghost" onClick={() => onDelete(f.id)}>
-                <Trash2 className="h-3 w-3" />
-              </Button>
+                {editingId === f.id ? (
+                  <select
+                    className="text-xs px-1 py-0.5 border rounded"
+                    value={editLabel}
+                    onChange={(e) => setEditLabel(e.target.value)}
+                  >
+                    {LABEL_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <span className="truncate">
+                    {f.fileName} <span className="text-royalPurple-text3">({f.label})</span>
+                  </span>
+                )}
+              </div>
+              <div className="flex shrink-0 items-center gap-0.5">
+                {editingId === f.id ? (
+                  <Button type="button" size="sm" variant="ghost" onClick={() => onSaveLabel(f.id)}>
+                    Save
+                  </Button>
+                ) : (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    title="Change label"
+                    onClick={() => {
+                      setEditingId(f.id)
+                      setEditLabel(f.label || 'attachment')
+                    }}
+                  >
+                    <Pencil className="h-3 w-3" />
+                  </Button>
+                )}
+                <a
+                  href={f.fileUrl}
+                  download={f.fileName}
+                  className="inline-flex h-8 w-8 items-center justify-center rounded hover:bg-royalPurple-card2"
+                  title="Download"
+                >
+                  <Download className="h-3 w-3" />
+                </a>
+                <Button type="button" size="sm" variant="ghost" onClick={() => onDelete(f.id)}>
+                  <Trash2 className="h-3 w-3" />
+                </Button>
+              </div>
             </li>
           ))}
         </ul>

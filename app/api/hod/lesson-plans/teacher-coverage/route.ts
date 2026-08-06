@@ -37,6 +37,9 @@ export const GET = withErrorHandler(async function GET(request: Request) {
   const schoolId = tenant.schoolId
   if (!schoolId) throw new ApiError('School context required', 400)
 
+  const { assertHodSchoolAccess } = await import('@/lib/school/hodAccess')
+  await assertHodSchoolAccess(schoolId)
+
   const hodUserId = String(auth.user.id)
   const { searchParams } = new URL(request.url)
   const teacherId = searchParams.get('teacherId')?.trim() || null

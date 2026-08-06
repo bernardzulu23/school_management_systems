@@ -62,3 +62,34 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
 
   return NextResponse.json({ success: true, data: updated })
 })
+
+export const DELETE = withErrorHandler(async function DELETE(request, { params }) {
+  const scope = await resolveHodScope(request)
+  if (!scope.ok) return scope.response
+
+  const { db, departmentId } = scope
+  const id = await safeRouteParam(params, 'id')
+  if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
+
+  const existing = await db.hodMeeting.findFirst({
+    where: { id, ...hodDepartmentWhere(departmentId) },
+  })
+  if (!existing) {
+    return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  }
+
+  const files = await db.hodFile.findMany({
+    where: { entityType: 'meeting', entityId: id },
+    select: { id: true, filePath: true },
+  })
+  const { deleteHodFileFromDisk } = await import('@/lib/hod/hodFiles')
+  for (const f of files) {
+    await deleteHodFileFromDisk(f.filePath)
+  }
+  if (files.length) {
+    await db.hodFile.deleteMany({ where: { entityType: 'meeting', entityId: id } })
+  }
+  await db.hodMeeting.delete({ where: { id } })
+
+  return NextResponse.json({ success: true })
+})

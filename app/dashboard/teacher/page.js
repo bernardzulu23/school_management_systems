@@ -61,6 +61,7 @@ import AdvancedTeachingTools from '@/components/teaching/AdvancedTeachingTools'
 import { DepartmentActivityReminders } from '@/components/dashboard/teacher/DepartmentActivityReminders'
 import { isEnabled } from '@/lib/featureFlags'
 import { useSchool } from '@/lib/context/SchoolContext'
+import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 import { percentTextClass } from '@/lib/utils/percentColor'
 // Temporarily commented out to isolate error
 // import {
@@ -91,6 +92,7 @@ export default function TeacherDashboard() {
   const { user: currentUser, isAuthenticated, logout, syncSession } = useAuth()
   const hydrated = useAuthHasHydrated()
   const { school } = useSchool()
+  const { canAccessSecondaryGrading } = useSchoolCapabilities()
   const { timeSlots: schoolTimeSlots } = useSchoolTimeSlots()
   const {
     assignments: publishedAssignments,
@@ -555,21 +557,23 @@ export default function TeacherDashboard() {
                     </p>
                   </div>
                 ) : null}
-                <Link href="/dashboard/teacher/results" className="block">
-                  <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 hover:border-royalPurple-border2 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
-                    <div
-                      className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 group-hover:scale-110 transition-transform ${ACTION_THEMES['enter-results'].bg}`}
-                    >
-                      <Edit className={`h-6 w-6 ${ACTION_THEMES['enter-results'].text}`} />
+                {canAccessSecondaryGrading ? (
+                  <Link href="/dashboard/teacher/results" className="block">
+                    <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 hover:border-royalPurple-border2 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
+                      <div
+                        className={`flex h-12 w-12 items-center justify-center rounded-xl mb-4 group-hover:scale-110 transition-transform ${ACTION_THEMES['enter-results'].bg}`}
+                      >
+                        <Edit className={`h-6 w-6 ${ACTION_THEMES['enter-results'].text}`} />
+                      </div>
+                      <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1 mb-2">
+                        Enter Results
+                      </h3>
+                      <p className="text-royalPurple-text3 dark:text-royalPurple-text3 text-sm">
+                        Input student grades for subjects and assessments.
+                      </p>
                     </div>
-                    <h3 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1 mb-2">
-                      Enter Results
-                    </h3>
-                    <p className="text-royalPurple-text3 dark:text-royalPurple-text3 text-sm">
-                      Input student grades for subjects and assessments.
-                    </p>
-                  </div>
-                </Link>
+                  </Link>
+                ) : null}
 
                 <Link href="/dashboard/teacher/classes" className="block">
                   <div className="p-6 bg-royalPurple-card/60 dark:bg-royalPurple-card/60 border border-royalPurple-border2 dark:border-royalPurple-border2/40 hover:border-royalPurple-border2 hover:bg-royalPurple-page dark:hover:bg-royalPurple-muted/80 rounded-2xl transition-all duration-300 group cursor-pointer h-full shadow-sm hover:shadow-md">
@@ -924,11 +928,13 @@ export default function TeacherDashboard() {
                   <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-successTx" />
                   Recent Results
                 </CardTitle>
-                <Link href="/dashboard/teacher/results">
-                  <Button className="bg-gradient-to-r from-kpi-pass to-ink hover:from-g-700 hover:to-g-800 text-royalPurple-text1">
-                    View All
-                  </Button>
-                </Link>
+                {canAccessSecondaryGrading ? (
+                  <Link href="/dashboard/teacher/results">
+                    <Button className="bg-gradient-to-r from-kpi-pass to-ink hover:from-g-700 hover:to-g-800 text-royalPurple-text1">
+                      View All
+                    </Button>
+                  </Link>
+                ) : null}
               </CardHeader>
               <CardContent>
                 <div className="backdrop-blur-sm bg-royalPurple-card/60 border border-royalPurple-border/40 rounded-2xl p-6">
@@ -1581,12 +1587,14 @@ export default function TeacherDashboard() {
                       </p>
                     </div>
                   </div>
-                  <Button
-                    asChild
-                    className="w-full mt-6 bg-gradient-to-r from-ink to-accent hover:from-g-800 hover:to-accent text-royalPurple-text1"
-                  >
-                    <Link href="/dashboard/teacher/results">Continue Marking</Link>
-                  </Button>
+                  {canAccessSecondaryGrading ? (
+                    <Button
+                      asChild
+                      className="w-full mt-6 bg-gradient-to-r from-ink to-accent hover:from-g-800 hover:to-accent text-royalPurple-text1"
+                    >
+                      <Link href="/dashboard/teacher/results">Continue Marking</Link>
+                    </Button>
+                  ) : null}
                 </div>
               </CardContent>
             </Card>
@@ -1705,19 +1713,21 @@ export default function TeacherDashboard() {
                       </p>
                     </div>
                   </Link>
-                  <Link href="/dashboard/teacher/results">
-                    <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
-                      <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
-                        <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
+                  {canAccessSecondaryGrading ? (
+                    <Link href="/dashboard/teacher/results">
+                      <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
+                        <div className="backdrop-blur-md bg-royalPurple-pill/60 border border-royalPurple-border2/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                          <BarChart3 className="h-8 w-8 text-royalPurple-text1" />
+                        </div>
+                        <h3 className="text-royalPurple-text1 font-semibold text-center">
+                          Record Results
+                        </h3>
+                        <p className="text-royalPurple-text2 text-sm text-center mt-2">
+                          Enter assessment results
+                        </p>
                       </div>
-                      <h3 className="text-royalPurple-text1 font-semibold text-center">
-                        Record Results
-                      </h3>
-                      <p className="text-royalPurple-text2 text-sm text-center mt-2">
-                        Enter assessment results
-                      </p>
-                    </div>
-                  </Link>
+                    </Link>
+                  ) : null}
                   <Link href="/dashboard/teacher/schemes">
                     <div className="group p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl hover:bg-royalPurple-muted/80 transition-all duration-300 hover:scale-105 cursor-pointer">
                       <div className="backdrop-blur-md bg-accent/60 border border-accent/80/50 rounded-2xl p-4 w-16 h-16 flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">

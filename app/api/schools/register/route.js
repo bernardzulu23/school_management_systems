@@ -130,6 +130,12 @@ export const POST = withSecureApi(async function POST(request) {
       body.level || body.schoolLevel || body.schoolLevelSelection || ''
     ).trim()
     const level = (levelRaw || 'combined').toLowerCase()
+    const ownershipRaw = String(body.ownershipType || body.ownership || body.schoolOwnership || '')
+      .trim()
+      .toUpperCase()
+      .replace(/[^A-Z_]/g, '')
+    const allowedOwnership = new Set(['PRIVATE', 'GOVERNMENT', 'COMMUNITY', 'GRANT_AIDED'])
+    const ownershipType = allowedOwnership.has(ownershipRaw) ? ownershipRaw : 'PRIVATE'
 
     const subdomain = normalizeSubdomain(body.subdomain)
 
@@ -225,6 +231,7 @@ export const POST = withSecureApi(async function POST(request) {
           district,
           reportingStreamKey,
           level,
+          ownershipType,
           plan: 'trial',
           trialEndsAt: trialEndsAtFromStart(),
           active: false,

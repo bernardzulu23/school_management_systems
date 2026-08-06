@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { isNavItemApplicable, SECONDARY_ONLY_ROUTE_PREFIXES } from '@/lib/school/navApplicability'
+import {
+  isNavItemApplicable,
+  isPrimaryOnlyPath,
+  isSecondaryOnlyPath,
+  PRIMARY_ONLY_ROUTE_PREFIXES,
+  SECONDARY_ONLY_ROUTE_PREFIXES,
+} from '@/lib/school/navApplicability'
 import { hasPrimaryClasses, hasSecondaryClasses } from '@/lib/school/schoolTypeHelpers'
 import {
   resolveSubjectCatalog,
@@ -84,6 +90,55 @@ describe('primary UI isolation — navigation', () => {
     expect(
       SECONDARY_ONLY_ROUTE_PREFIXES.some((p) => p.includes('old-syllabus') || p.includes('ecz'))
     ).toBe(true)
+  })
+  it('hides Senior Teachers nav for secondary schools', () => {
+    expect(
+      isNavItemApplicable(
+        {
+          name: 'Senior Teachers',
+          href: '/dashboard/headteacher/senior-teachers',
+          primaryOnly: true,
+        },
+        secondarySchool
+      )
+    ).toBe(false)
+    expect(
+      isNavItemApplicable(
+        {
+          name: 'Senior Teachers',
+          href: '/dashboard/headteacher/senior-teachers',
+          primaryOnly: true,
+        },
+        primarySchool
+      )
+    ).toBe(true)
+  })
+
+  it('denies secondary path hrefs for primary even without flags', () => {
+    expect(
+      isNavItemApplicable({ name: 'HOD Exam', href: '/dashboard/hod/exam-analysis' }, primarySchool)
+    ).toBe(false)
+    expect(
+      isNavItemApplicable(
+        { name: 'Code Playground', href: '/dashboard/student/code-playground' },
+        primarySchool
+      )
+    ).toBe(false)
+    expect(
+      isNavItemApplicable(
+        { name: 'CBC', href: '/dashboard/teacher/assessments/cbc' },
+        secondarySchool
+      )
+    ).toBe(false)
+  })
+
+  it('exposes expanded secondary and primary path prefix lists', () => {
+    expect(isSecondaryOnlyPath('/dashboard/hod/meetings')).toBe(true)
+    expect(isSecondaryOnlyPath('/dashboard/results')).toBe(true)
+    expect(isPrimaryOnlyPath('/dashboard/senior-teacher/allocation')).toBe(true)
+    expect(isPrimaryOnlyPath('/dashboard/headteacher/senior-teachers')).toBe(true)
+    expect(SECONDARY_ONLY_ROUTE_PREFIXES).toContain('/dashboard/hod')
+    expect(PRIMARY_ONLY_ROUTE_PREFIXES).toContain('/dashboard/teacher/assessments/cbc')
   })
 })
 

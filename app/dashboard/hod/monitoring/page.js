@@ -11,6 +11,7 @@ import { api } from '@/lib/api'
 import { percentTextClass } from '@/lib/utils/percentColor'
 import { cacheAdminJson, getCachedAdminJson } from '@/lib/offline/admin-ops'
 import { isBrowserOnline, isNetworkFailure } from '@/lib/offline/network'
+import { HodDocumentCabinet } from '@/components/hod/HodDocumentCabinet'
 
 function statusLabel(ok) {
   return ok ? 'Submitted' : 'Pending'
@@ -123,6 +124,13 @@ export default function MonitoringPage() {
             </Link>
           </div>
         </div>
+
+        <HodDocumentCabinet
+          entityType="monitoring"
+          title="Monitoring documents"
+          description="Upload, download, relabel, or delete oversight and tracking files for this department."
+          defaultLabel="monitoring"
+        />
 
         {summary ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

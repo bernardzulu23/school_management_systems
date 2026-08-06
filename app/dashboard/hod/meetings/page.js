@@ -15,6 +15,7 @@ import {
   Search,
   Download,
   CheckCircle,
+  Trash2,
 } from 'lucide-react'
 import Link from 'next/link'
 import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
@@ -45,6 +46,25 @@ export default function MeetingFilesPage() {
       await reload()
     } catch (e) {
       toast.error(e.message || 'Update failed')
+    } finally {
+      setUpdatingId(null)
+    }
+  }
+
+  const deleteMeeting = async (id) => {
+    if (!confirm('Delete this meeting and its attached files?')) return
+    setUpdatingId(id)
+    try {
+      const res = await fetch(`/api/hod/meetings/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Failed to delete meeting')
+      toast.success('Meeting deleted')
+      await reload()
+    } catch (e) {
+      toast.error(e.message || 'Delete failed')
     } finally {
       setUpdatingId(null)
     }
@@ -337,6 +357,15 @@ export default function MeetingFilesPage() {
                           </Button>
                         </Link>
                       )}
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        disabled={updatingId === meeting.id}
+                        onClick={() => deleteMeeting(meeting.id)}
+                        title="Delete meeting"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
                   </div>
 

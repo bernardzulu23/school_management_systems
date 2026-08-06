@@ -32,7 +32,8 @@ import {
   Line,
 } from 'recharts'
 import { percentTextClass } from '@/lib/utils/percentColor'
-import { RESULT_TYPES, RESULT_TYPE_LABELS } from '@/lib/results/resultTypes'
+import { listTrackedResultTypes } from '@/lib/results/resultTypes'
+import { HodDocumentCabinet } from '@/components/hod/HodDocumentCabinet'
 
 function currentTermLabel() {
   const month = new Date().getMonth()
@@ -136,15 +137,11 @@ export default function ExamAnalysisPage() {
               onChange={(e) => setSelectedResultType(e.target.value)}
             >
               <option value="all">All exams & tests</option>
-              <option value={RESULT_TYPES.END_OF_TERM}>
-                {RESULT_TYPE_LABELS[RESULT_TYPES.END_OF_TERM]}
-              </option>
-              <option value={RESULT_TYPES.MIDTERM}>
-                {RESULT_TYPE_LABELS[RESULT_TYPES.MIDTERM]}
-              </option>
-              <option value={RESULT_TYPES.CLASS_TEST}>
-                {RESULT_TYPE_LABELS[RESULT_TYPES.CLASS_TEST]}
-              </option>
+              {listTrackedResultTypes().map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
             <select
               className="w-full px-4 py-2 border border-royalPurple-border rounded-md focus:ring-2 focus:ring-g-500 focus:border-transparent bg-royalPurple-card text-royalPurple-text1"
@@ -166,6 +163,13 @@ export default function ExamAnalysisPage() {
             </Button>
           </div>
         </div>
+
+        <HodDocumentCabinet
+          entityType="exam_analysis"
+          title="Exam analysis documents"
+          description="Upload, download, relabel, or delete analysis reports and supporting files."
+          defaultLabel="analysis"
+        />
 
         {isLoading ? (
           <div className="flex justify-center py-12">

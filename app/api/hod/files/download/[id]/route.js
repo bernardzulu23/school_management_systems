@@ -23,6 +23,10 @@ export const GET = withErrorHandler(async function GET(request, { params }) {
   const schoolId = tenant.schoolId
   if (!schoolId) return NextResponse.json({ error: 'School context required' }, { status: 400 })
 
+  const { requireHodSchoolAccess } = await import('@/lib/school/hodAccess')
+  const levelCheck = await requireHodSchoolAccess(schoolId)
+  if (!levelCheck.ok) return levelCheck.response
+
   const id = await safeRouteParam(params, 'id')
   if (!id) return NextResponse.json({ error: 'Invalid id' }, { status: 400 })
   const row = await prisma.hodFile.findFirst({ where: { id, schoolId } })

@@ -18,6 +18,7 @@ import toast from 'react-hot-toast'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import { SubscriptionWarningBanner } from '@/components/billing/SubscriptionWarningBanner'
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
+import { SchoolLevelPathGate } from '@/components/auth/SchoolLevelPathGate'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ErrorBoundary } from '@/components/dashboard/ErrorBoundary'
 import { getAppVersionLabel } from '@/lib/app-version'
@@ -33,8 +34,7 @@ export function DashboardLayout({ children, title }) {
   const pathname = usePathname()
   const showHodLink = canAccessHodFeatures({ schoolLevel: school?.level })
   const showGuidanceLink =
-    getSchoolFeatures(school || { level: 'combined', ownershipType: 'PRIVATE' }).careerGuidance &&
-    hasGuidanceAssignment(user)
+    getSchoolFeatures(school || {}).careerGuidance && hasGuidanceAssignment(user)
   const showSicLink = hasSicAssignment(user)
   const roleLower = String(user?.role || '')
     .trim()
@@ -272,7 +272,11 @@ export function DashboardLayout({ children, title }) {
             <div className="px-4 py-6 sm:px-0 space-y-4">
               <SubscriptionBanner />
               <SubscriptionWarningBanner />
-              {showChildren ? <ErrorBoundary>{children}</ErrorBoundary> : null}
+              {showChildren ? (
+                <SchoolLevelPathGate>
+                  <ErrorBoundary>{children}</ErrorBoundary>
+                </SchoolLevelPathGate>
+              ) : null}
             </div>
           </ServerSessionGuard>
         </main>

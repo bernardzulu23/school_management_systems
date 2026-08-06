@@ -1,17 +1,39 @@
 'use client'
 
+import { useState } from 'react'
 import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
-import { ArrowLeft, FileText, CalendarDays } from 'lucide-react'
+import { ArrowLeft, FileText, CalendarDays, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useHodApi } from '@/lib/hod/useHodApi'
 import { EmptyModuleState } from '@/components/dashboard/EmptyModuleState'
 import { HodFileUpload } from '@/components/hod/HodFileUpload'
+import toast from 'react-hot-toast'
 
 export default function DepartmentMinutesPage() {
-  const { data, loading, error } = useHodApi('/api/hod/meetings?scope=department&minutes=1')
+  const [updatingId, setUpdatingId] = useState(null)
+  const { data, loading, error, reload } = useHodApi('/api/hod/meetings?scope=department&minutes=1')
   const meetings = data?.meetings ?? []
+
+  const deleteMeeting = async (id) => {
+    if (!confirm('Delete this meeting and its attached minutes files?')) return
+    setUpdatingId(id)
+    try {
+      const res = await fetch(`/api/hod/meetings/${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok) throw new Error(json.error || 'Failed to delete')
+      toast.success('Meeting deleted')
+      await reload()
+    } catch (e) {
+      toast.error(e.message || 'Delete failed')
+    } finally {
+      setUpdatingId(null)
+    }
+  }
 
   return (
     <DashboardLayout title="Department Minutes">
@@ -38,11 +60,20 @@ export default function DepartmentMinutesPage() {
 
         {meetings.map((meeting) => (
           <Card key={meeting.id} variant="glass">
-            <CardHeader>
+            <CardHeader className="flex flex-row items-start justify-between gap-3 space-y-0">
               <CardTitle className="flex items-center gap-2 text-royalPurple-text1">
                 <FileText className="h-5 w-5" />
                 {meeting.title}
               </CardTitle>
+              <Button
+                size="sm"
+                variant="outline"
+                disabled={updatingId === meeting.id}
+                onClick={() => deleteMeeting(meeting.id)}
+                title="Delete meeting"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
             </CardHeader>
             <CardContent className="space-y-3">
               <p className="text-sm text-royalPurple-text2">

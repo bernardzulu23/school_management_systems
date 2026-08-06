@@ -4,6 +4,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { POST as assignHodPost } from '@/app/api/hods/assign/route.js'
 import { POST as teacherResultsPost } from '@/app/api/teacher/results/route.js'
+import { GET as teacherExamAnalysisGet } from '@/app/api/dashboard/teacher/exam-analysis/route.js'
+import { GET as hodMeetingsGet } from '@/app/api/hod/meetings/route.js'
 import { mockPrisma } from '../setup.js'
 import { buildRequest, parseJson } from '../helpers/request.js'
 
@@ -88,5 +90,37 @@ describe('primary school API gating', () => {
     const json = await parseJson(res)
     expect(json.code).toBe('SCHOOL_LEVEL_RESTRICTED')
     expect(json.featureId).toBe('basic-results')
+  })
+
+  it('GET /api/dashboard/teacher/exam-analysis returns 403 for primary schools', async () => {
+    authMiddleware.mockResolvedValue({
+      isAuthenticated: true,
+      user: { id: 'teacher-1', role: 'teacher', schoolId: 'school-primary' },
+    })
+
+    const res = await teacherExamAnalysisGet(
+      buildRequest({
+        method: 'GET',
+        url: 'http://localhost:3000/api/dashboard/teacher/exam-analysis',
+      })
+    )
+
+    expect(res.status).toBe(403)
+  })
+
+  it('GET /api/hod/meetings returns 403 for primary schools', async () => {
+    authMiddleware.mockResolvedValue({
+      isAuthenticated: true,
+      user: { id: 'admin-1', role: 'headteacher', schoolId: 'school-primary' },
+    })
+
+    const res = await hodMeetingsGet(
+      buildRequest({
+        method: 'GET',
+        url: 'http://localhost:3000/api/hod/meetings',
+      })
+    )
+
+    expect(res.status).toBe(403)
   })
 })

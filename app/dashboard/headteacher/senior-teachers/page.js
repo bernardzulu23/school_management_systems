@@ -5,6 +5,7 @@ import { DashboardLayout } from '@/components/dashboard/SimpleDashboardLayout'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/Button'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
+import { PrimaryOnlyRouteGuard } from '@/components/auth/PrimaryOnlyRouteGuard'
 import toast from 'react-hot-toast'
 
 export default function HeadteacherSeniorTeachersPage() {
@@ -93,69 +94,75 @@ export default function HeadteacherSeniorTeachersPage() {
   const availableTeachers = teachers.filter((teacher) => Boolean(teacher.teacherId))
 
   return (
-    <DashboardLayout title="Senior Teachers">
-      <div className="space-y-6">
-        <Card className="bg-royalPurple-card border border-royalPurple-border2">
-          <CardHeader>
-            <CardTitle className="text-royalPurple-text1">Assign Senior Teachers</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-royalPurple-text2">
-              Senior Teachers oversee all primary classes, lesson plans, exercises, and class
-              allocations.
-            </p>
-            <div className="flex flex-col md:flex-row gap-3">
-              <select
-                className="flex-1 rounded-lg border border-royalPurple-border bg-royalPurple-card2 p-3 text-royalPurple-text1"
-                value={teacherId}
-                onChange={(e) => setTeacherId(e.target.value)}
-                disabled={loading || saving}
-              >
-                {availableTeachers.map((teacher) => (
-                  <option key={teacher.id} value={teacher.teacherId}>
-                    {teacher.name} ({teacher.email})
-                  </option>
-                ))}
-              </select>
-              <Button onClick={assign} disabled={!teacherId || loading || saving}>
-                {saving ? 'Saving...' : 'Assign Senior Teacher'}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-royalPurple-card border border-royalPurple-border2">
-          <CardHeader>
-            <CardTitle className="text-royalPurple-text1">Active assignments</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {loading ? (
-              <p className="text-sm text-royalPurple-text2">Loading assignments...</p>
-            ) : assignments.length === 0 ? (
-              <p className="text-sm text-royalPurple-text2">No Senior Teachers assigned yet.</p>
-            ) : (
-              assignments.map((assignment) => (
-                <div
-                  key={assignment.id}
-                  className="rounded-xl border border-royalPurple-border bg-royalPurple-card2 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+    <PrimaryOnlyRouteGuard redirectTo="/dashboard/headteacher">
+      <DashboardLayout title="Senior Teachers">
+        <div className="space-y-6">
+          <Card className="bg-royalPurple-card border border-royalPurple-border2">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1">Assign Senior Teachers</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-royalPurple-text2">
+                Senior Teachers oversee all primary classes, lesson plans, exercises, and class
+                allocations.
+              </p>
+              <div className="flex flex-col md:flex-row gap-3">
+                <select
+                  className="flex-1 rounded-lg border border-royalPurple-border bg-royalPurple-card2 p-3 text-royalPurple-text1"
+                  value={teacherId}
+                  onChange={(e) => setTeacherId(e.target.value)}
+                  disabled={loading || saving}
                 >
-                  <div>
-                    <p className="font-semibold text-royalPurple-text1">
-                      {assignment.user?.name || assignment.user?.email || 'Teacher'}
-                    </p>
-                    <p className="text-sm text-royalPurple-text2">
-                      Assigned by {assignment.assignedBy?.name || 'Headteacher'}
-                    </p>
+                  {availableTeachers.map((teacher) => (
+                    <option key={teacher.id} value={teacher.teacherId}>
+                      {teacher.name} ({teacher.email})
+                    </option>
+                  ))}
+                </select>
+                <Button onClick={assign} disabled={!teacherId || loading || saving}>
+                  {saving ? 'Saving...' : 'Assign Senior Teacher'}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-royalPurple-card border border-royalPurple-border2">
+            <CardHeader>
+              <CardTitle className="text-royalPurple-text1">Active assignments</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {loading ? (
+                <p className="text-sm text-royalPurple-text2">Loading assignments...</p>
+              ) : assignments.length === 0 ? (
+                <p className="text-sm text-royalPurple-text2">No Senior Teachers assigned yet.</p>
+              ) : (
+                assignments.map((assignment) => (
+                  <div
+                    key={assignment.id}
+                    className="rounded-xl border border-royalPurple-border bg-royalPurple-card2 p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
+                  >
+                    <div>
+                      <p className="font-semibold text-royalPurple-text1">
+                        {assignment.user?.name || assignment.user?.email || 'Teacher'}
+                      </p>
+                      <p className="text-sm text-royalPurple-text2">
+                        Assigned by {assignment.assignedBy?.name || 'Headteacher'}
+                      </p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      onClick={() => revoke(assignment.id)}
+                      disabled={saving}
+                    >
+                      Revoke
+                    </Button>
                   </div>
-                  <Button variant="outline" onClick={() => revoke(assignment.id)} disabled={saving}>
-                    Revoke
-                  </Button>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-      </div>
-    </DashboardLayout>
+                ))
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </DashboardLayout>
+    </PrimaryOnlyRouteGuard>
   )
 }

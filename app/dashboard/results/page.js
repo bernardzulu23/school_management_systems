@@ -20,6 +20,7 @@ import {
 } from 'lucide-react'
 import { getGradeBadgeClasses } from '@/lib/gradingSystem'
 import { TeacherCompliancePanel } from '@/components/compliance/TeacherCompliancePanel'
+import { StudentResultCardPanel } from '@/components/results/StudentResultCardPanel'
 import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 import { PrimarySchoolFeatureUnavailable } from '@/components/school/PrimarySchoolFeatureUnavailable'
 import { cacheAdminJson, getCachedAdminJson } from '@/lib/offline/admin-ops'
@@ -31,6 +32,8 @@ export default function ResultsPage() {
   const [selectedSubject, setSelectedSubject] = useState('')
   const [selectedTeacher, setSelectedTeacher] = useState('')
   const [selectedResultType, setSelectedResultType] = useState('')
+  const [cardStudentId, setCardStudentId] = useState('')
+  const [cardStudentName, setCardStudentName] = useState('')
   const { user } = useAuth()
   const { canAccessSecondaryGrading, isLoading: schoolLoading } = useSchoolCapabilities()
 
@@ -39,6 +42,7 @@ export default function ResultsPage() {
   const isHod = role === 'hod'
   const isStudent = role === 'student'
   const showTeacherFilter = isHeadteacher || isHod
+  const canCreateResultCards = isHeadteacher || isHod || role === 'superadmin'
 
   const {
     data: resultsData,
@@ -153,6 +157,18 @@ export default function ResultsPage() {
     <DashboardLayout title={isStudent ? 'My Results' : 'Results & Grading'}>
       <main className="space-y-6">
         {!isStudent && <TeacherCompliancePanel domain="results" />}
+        {canCreateResultCards && (
+          <section aria-labelledby="result-cards-title">
+            <h2 id="result-cards-title" className="sr-only">
+              Student result cards
+            </h2>
+            <StudentResultCardPanel
+              initialStudentId={cardStudentId}
+              initialStudentName={cardStudentName}
+              key={`${cardStudentId || 'none'}-${cardStudentName || ''}`}
+            />
+          </section>
+        )}
         <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <div>
             <h1 className="text-2xl font-bold text-royalPurple-text1">
@@ -426,6 +442,11 @@ export default function ResultsPage() {
                           <th className="text-left py-3 px-4 text-sm text-royalPurple-text2">
                             Date
                           </th>
+                          {canCreateResultCards && (
+                            <th className="text-left py-3 px-4 text-sm text-royalPurple-text2">
+                              Card
+                            </th>
+                          )}
                         </tr>
                       </thead>
                       <tbody>
@@ -464,6 +485,23 @@ export default function ResultsPage() {
                             <td className="py-3 px-4 text-sm text-royalPurple-text3">
                               {result.date}
                             </td>
+                            {canCreateResultCards && (
+                              <td className="py-3 px-4">
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  disabled={!result.studentId}
+                                  onClick={() => {
+                                    setCardStudentId(result.studentId)
+                                    setCardStudentName(result.student_name || '')
+                                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                                  }}
+                                  title="Create result card for this student"
+                                >
+                                  Card
+                                </Button>
+                              </td>
+                            )}
                           </tr>
                         ))}
                       </tbody>

@@ -63,6 +63,41 @@ describe('schoolTypeHelpers', () => {
     expect(canUseFeatureByLevel('primary', 'continuous-assessment-tool')).toBe(true)
   })
 
+  it('canUseFeatureByLevel denies full secondary catalog for primary and primary catalog for secondary', () => {
+    expect(canUseFeatureByLevel('primary', 'hod-dashboard')).toBe(false)
+    expect(canUseFeatureByLevel('primary', 'basic-results')).toBe(false)
+    expect(canUseFeatureByLevel('primary', 'code-playground')).toBe(false)
+    expect(canUseFeatureByLevel('primary', 'career-guidance')).toBe(false)
+    expect(canUseFeatureByLevel('secondary', 'phonics-trainer')).toBe(false)
+    expect(canUseFeatureByLevel('secondary', 'cbc-competency-tracker')).toBe(false)
+    expect(canUseFeatureByLevel('secondary', 'parent-report-cards-primary')).toBe(false)
+    expect(canUseFeatureByLevel('combined', 'hod-dashboard')).toBe(true)
+    expect(canUseFeatureByLevel('combined', 'phonics-trainer')).toBe(true)
+  })
+
+  it('multi-level AI features remain available on primary and secondary', () => {
+    expect(canUseFeatureByLevel('primary', 'ai-tools')).toBe(true)
+    expect(canUseFeatureByLevel('secondary', 'ai-study-assistant')).toBe(true)
+    expect(canUseFeatureByLevel('primary', 'ai-term-reports')).toBe(true)
+  })
+
+  it('unknown school level denies gated features in getSchoolFeatures', () => {
+    const f = getSchoolFeatures({})
+    expect(f.levelKnown).toBe(false)
+    expect(f.cbc).toBe(false)
+    expect(f.eczSBA).toBe(false)
+    expect(f.hod).toBe(false)
+    expect(f.secondaryGrading).toBe(false)
+    expect(f.hasPrimary).toBe(false)
+    expect(f.hasSecondary).toBe(false)
+  })
+
+  it('canUseFeatureByLevel with empty level denies level-gated ids', () => {
+    expect(canUseFeatureByLevel('', 'ecz-practice')).toBe(false)
+    expect(canUseFeatureByLevel('', 'phonics-trainer')).toBe(false)
+    expect(canUseFeatureByLevel('', 'ai-tools')).toBe(true)
+  })
+
   it('canUseFeatureByOwnership blocks fees for government', () => {
     expect(canUseFeatureByOwnership('GOVERNMENT', 'fee-management')).toBe(false)
     expect(canUseFeatureByOwnership('PRIVATE', 'fee-management')).toBe(true)

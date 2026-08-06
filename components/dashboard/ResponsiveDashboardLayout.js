@@ -9,6 +9,7 @@ import { useSchool } from '@/lib/context/SchoolContext'
 import { TimetableNotificationBell } from '@/components/timetable/TimetableNotificationBell'
 import SubscriptionBanner from '@/components/billing/SubscriptionBanner'
 import ServerSessionGuard from '@/components/auth/ServerSessionGuard'
+import { SchoolLevelPathGate } from '@/components/auth/SchoolLevelPathGate'
 import { getSubscriptionState } from '@/lib/billing/subscription'
 
 export default function ResponsiveDashboardLayout({ children }) {
@@ -95,7 +96,7 @@ export default function ResponsiveDashboardLayout({ children }) {
           <ServerSessionGuard>
             <div className="max-w-7xl mx-auto space-y-4">
               <SubscriptionBanner />
-              {showChildren ? children : null}
+              <SchoolLevelPathGate>{showChildren ? children : null}</SchoolLevelPathGate>
             </div>
           </ServerSessionGuard>
         </main>
