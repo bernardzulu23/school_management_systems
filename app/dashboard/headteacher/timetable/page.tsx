@@ -45,11 +45,11 @@ import {
   persistClearTimetable,
 } from '@/lib/timetable/timetableMutations'
 import {
-  isBrowserOnline,
   queueTimetablePatch,
   queueTimetableSyncDraft,
   tryOnlineOrQueue,
 } from '@/lib/offline/admin-ops'
+import { isBrowserOnline } from '@/lib/offline/network'
 import type { Assignment, Class, Teacher, TimeSlot } from '@/lib/timetable/types'
 import { Check, X, Pencil, Trash2 } from 'lucide-react'
 import { AdminAllocationEditDialog } from '@/components/timetable/AdminAllocationEditDialog'
