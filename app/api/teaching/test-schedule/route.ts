@@ -4,12 +4,18 @@ import { prisma } from '@/lib/prisma'
 import { getAuthUser, roleCheck } from '@/lib/middleware/auth'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { withErrorHandler } from '@/lib/middleware/errorHandler'
-import { endOfTermWeeksFromSchedule, midTermWeeksFromSchedule } from '@/lib/teaching/testWeeks'
+import {
+  endOfTermWeeksFromSchedule,
+  midTermWeeksFromSchedule,
+  week2AssessmentWeeksFromSchedule,
+} from '@/lib/teaching/testWeeks'
 
 export const dynamic = 'force-dynamic'
 
 const BodySchema = z.object({
   schemeId: z.string().min(1),
+  week2AssessmentWeek: z.number().int().min(1).max(20).nullable().optional(),
+  week2AssessmentWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
   midTermWeek: z.number().int().min(1).max(20).nullable().optional(),
   midTermWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
   endOfTermWeek: z.number().int().min(1).max(20).nullable().optional(),
@@ -66,6 +72,12 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
   }
 
+  const week2End =
+    body.week2AssessmentWeekEnd != null
+      ? body.week2AssessmentWeekEnd
+      : body.week2AssessmentWeek != null
+        ? body.week2AssessmentWeek
+        : null
   const midEnd =
     body.midTermWeekEnd != null
       ? body.midTermWeekEnd
@@ -85,6 +97,8 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       schoolId,
       schemeId: body.schemeId,
       teacherId: scheme.teacherId,
+      week2AssessmentWeek: body.week2AssessmentWeek ?? null,
+      week2AssessmentWeekEnd: week2End,
       midTermWeek: body.midTermWeek ?? null,
       midTermWeekEnd: midEnd,
       endOfTermWeek: body.endOfTermWeek ?? null,
@@ -94,6 +108,8 @@ export const POST = withErrorHandler(async function POST(request: Request) {
       notes: body.notes ?? null,
     },
     update: {
+      week2AssessmentWeek: body.week2AssessmentWeek ?? undefined,
+      week2AssessmentWeekEnd: body.week2AssessmentWeekEnd !== undefined ? week2End : undefined,
       midTermWeek: body.midTermWeek ?? undefined,
       midTermWeekEnd: body.midTermWeekEnd !== undefined ? midEnd : undefined,
       endOfTermWeek: body.endOfTermWeek ?? undefined,
@@ -114,9 +130,17 @@ export const POST = withErrorHandler(async function POST(request: Request) {
     },
   })
 
+  const week2Weeks = week2AssessmentWeeksFromSchedule(schedule)
   const midWeeks = midTermWeeksFromSchedule(schedule)
   const eotWeeks = endOfTermWeeksFromSchedule(schedule)
   const schedules = [
+    ...week2Weeks.map((w) => ({
+      id: `${schedule.id}-w2-${w}`,
+      testType: 'WEEK_2' as const,
+      scheduledWeek: w,
+      scheduledWeeks: week2Weeks,
+      schemeId: schedule.schemeId,
+    })),
     ...midWeeks.map((w) => ({
       id: `${schedule.id}-mid-${w}`,
       testType: 'MID_TERM' as const,

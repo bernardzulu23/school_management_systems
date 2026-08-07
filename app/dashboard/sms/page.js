@@ -35,6 +35,7 @@ export default function SmsLogPage() {
   const [phoneText, setPhoneText] = useState('')
   const [sending, setSending] = useState(false)
   const [loadingParents, setLoadingParents] = useState(false)
+  const [loadingTeachers, setLoadingTeachers] = useState(false)
 
   const fetchSmsLogs = useCallback(async () => {
     setLoading(true)
@@ -136,6 +137,23 @@ export default function SmsLogPage() {
       toast.error(e?.message || 'Could not load recipients')
     } finally {
       setLoadingParents(false)
+    }
+  }
+
+  const loadAllTeacherNumbers = async () => {
+    setLoadingTeachers(true)
+    try {
+      const res = await fetch('/api/sms/recipients?source=teachers', { credentials: 'include' })
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok)
+        throw new Error(json?.error || json?.message || 'Failed to load teacher contacts')
+      const phones = json?.data?.phoneNumbers || []
+      setPhoneText(phones.join('\n'))
+      toast.success(`Loaded ${phones.length} teacher numbers`)
+    } catch (e) {
+      toast.error(e?.message || 'Could not load teacher contacts')
+    } finally {
+      setLoadingTeachers(false)
     }
   }
 
@@ -259,14 +277,24 @@ export default function SmsLogPage() {
                 onChange={(e) => setPhoneText(e.target.value)}
                 disabled={creditsExhausted}
               />
-              <Button
-                type="button"
-                className="btn-secondary btn-sm mt-2"
-                onClick={loadAllParentNumbers}
-                disabled={loadingParents || creditsExhausted}
-              >
-                {loadingParents ? 'Loading…' : 'Load all parent contacts'}
-              </Button>
+              <div className="flex flex-wrap gap-2 mt-2">
+                <Button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  onClick={loadAllParentNumbers}
+                  disabled={loadingParents || loadingTeachers || creditsExhausted}
+                >
+                  {loadingParents ? 'Loading…' : 'Load all parent contacts'}
+                </Button>
+                <Button
+                  type="button"
+                  className="btn-secondary btn-sm"
+                  onClick={loadAllTeacherNumbers}
+                  disabled={loadingParents || loadingTeachers || creditsExhausted}
+                >
+                  {loadingTeachers ? 'Loading…' : 'Load all teacher contacts'}
+                </Button>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-royalPurple-text2 mb-1">

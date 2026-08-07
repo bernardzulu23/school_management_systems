@@ -666,6 +666,9 @@ function teacherMayManageClassSubject(
  * DELETE must use the same assignment rules as POST. Teachers often have Class/Subject
  * links without TeachingAssignment rows; the previous implementation only checked TeachingAssignment
  * and returned 403 after successful saves via profile assignment.
+ *
+ * Teachers may also delete results they themselves entered (enteredByUserId), even when
+ * assignment resolution cannot reconstruct the original class/subject pairing.
  */
 async function assertMayDeleteResult({
   schoolId,
@@ -673,7 +676,16 @@ async function assertMayDeleteResult({
   teacherProfile,
   subjectName,
   isStaffEntry,
+  actorUserId,
 }) {
+  if (
+    actorUserId &&
+    result?.enteredByUserId &&
+    String(result.enteredByUserId) === String(actorUserId)
+  ) {
+    return
+  }
+
   const subjectNameLower = String(subjectName || '')
     .trim()
     .toLowerCase()
@@ -748,7 +760,10 @@ async function assertMayDeleteResult({
         String(student?.classId || '') === classId || inferredClassId === classId
       if (enrollment || inStudentClass) return
     }
-    throw new ApiError('Forbidden', 403)
+    throw new ApiError(
+      'You can only delete results you entered, or results for classes and subjects you are assigned to teach',
+      403
+    )
   }
 
   const ctx = buildTeacherAssignmentSets(teacherProfile)
@@ -774,7 +789,10 @@ async function assertMayDeleteResult({
     }
   }
 
-  throw new ApiError('Forbidden', 403)
+  throw new ApiError(
+    'You can only delete results you entered, or results for classes and subjects you are assigned to teach',
+    403
+  )
 }
 
 export const DELETE = withErrorHandler(async function DELETE(request) {
@@ -786,7 +804,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
   const isAdmin = roleCheck(auth.user, ['ADMIN', 'headteacher'])
 
   if (!isTeacher && !isHod && !isAdmin) {
-    throw new ApiError('Forbidden', 403)
+    throw new ApiError('You are not authorized to delete results', 403)
   }
 
   const tenant = await resolveAuthenticatedSchoolId(request, auth.user)
@@ -827,7 +845,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
 
   const result = await db.result.findFirst({
     where: { id, schoolId },
-    select: { id: true, studentId: true, subjectId: true },
+    select: { id: true, studentId: true, subjectId: true, enteredByUserId: true },
   })
   if (!result) throw new ApiError('Result not found', 404)
 
@@ -842,6 +860,7 @@ export const DELETE = withErrorHandler(async function DELETE(request) {
     teacherProfile,
     subjectName: subjectRecord?.name,
     isStaffEntry,
+    actorUserId: auth.user.id,
   })
 
   await db.result.deleteMany({ where: { id: result.id, schoolId } })

@@ -77,6 +77,17 @@ export const PATCH = withErrorHandler(async function PATCH(request, { params }) 
   if (body.description != null) data.description = String(body.description).trim()
   if (body.type != null && ACTIVITY_TYPES.includes(String(body.type))) data.type = String(body.type)
   if (body.location != null) data.location = body.location ? String(body.location).trim() : null
+  if (body.scheduleDays != null) {
+    data.scheduleDays = Array.isArray(body.scheduleDays)
+      ? body.scheduleDays
+          .map((d) =>
+            String(d || '')
+              .toLowerCase()
+              .slice(0, 3)
+          )
+          .filter((d) => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(d))
+      : []
+  }
   if (body.date != null) {
     const dateRaw = body.date ? new Date(body.date) : null
     data.date = dateRaw && !Number.isNaN(dateRaw.getTime()) ? dateRaw : null

@@ -43,6 +43,8 @@ export const SchemeInputSchema = z.object({
   midTermWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
   endOfTermWeek: z.number().int().min(1).max(20).nullable().optional(),
   endOfTermWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
+  week2AssessmentWeek: z.number().int().min(1).max(20).nullable().optional(),
+  week2AssessmentWeekEnd: z.number().int().min(1).max(20).nullable().optional(),
   format: z.enum(['word', 'csv', 'json']).optional().default('word'),
   save: z.boolean().optional().default(true),
   submit: z.boolean().optional().default(false),
@@ -79,6 +81,8 @@ export async function handleSchemePost(request: Request): Promise<NextResponse> 
     term,
     year,
     weekCount,
+    week2AssessmentWeek: input.week2AssessmentWeek,
+    week2AssessmentWeekEnd: input.week2AssessmentWeekEnd,
     midTermWeek: input.midTermWeek,
     midTermWeekEnd: input.midTermWeekEnd,
     endOfTermWeek: input.endOfTermWeek,
@@ -108,8 +112,10 @@ export async function handleSchemePost(request: Request): Promise<NextResponse> 
 
     if (
       schemeId &&
-      (input.midTermWeek != null ||
+      (input.week2AssessmentWeek != null ||
+        input.midTermWeek != null ||
         input.endOfTermWeek != null ||
+        input.week2AssessmentWeekEnd != null ||
         input.midTermWeekEnd != null ||
         input.endOfTermWeekEnd != null)
     ) {
@@ -119,12 +125,17 @@ export async function handleSchemePost(request: Request): Promise<NextResponse> 
           schoolId,
           schemeId,
           teacherId: String(user.id),
+          week2AssessmentWeek: input.week2AssessmentWeek ?? null,
+          week2AssessmentWeekEnd: input.week2AssessmentWeekEnd ?? input.week2AssessmentWeek ?? null,
           midTermWeek: input.midTermWeek ?? null,
           midTermWeekEnd: input.midTermWeekEnd ?? input.midTermWeek ?? null,
           endOfTermWeek: input.endOfTermWeek ?? null,
           endOfTermWeekEnd: input.endOfTermWeekEnd ?? input.endOfTermWeek ?? null,
         },
         update: {
+          week2AssessmentWeek: input.week2AssessmentWeek ?? undefined,
+          week2AssessmentWeekEnd:
+            input.week2AssessmentWeekEnd ?? input.week2AssessmentWeek ?? undefined,
           midTermWeek: input.midTermWeek ?? undefined,
           midTermWeekEnd: input.midTermWeekEnd ?? input.midTermWeek ?? undefined,
           endOfTermWeek: input.endOfTermWeek ?? undefined,

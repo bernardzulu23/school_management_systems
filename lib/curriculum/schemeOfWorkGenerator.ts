@@ -24,7 +24,7 @@ export type SchemeWeekRow = {
   notes: string
   teacherNotes: string
   homeworkTask: string
-  /** teaching | mid_term_test | end_of_term_test */
+  /** teaching | week2_test | mid_term_test | end_of_term_test */
   weekType?: WeekKind
   unitNumber?: number
   unitTitle?: string
@@ -38,7 +38,11 @@ type WeekCtx = { subject?: string; gradeOrForm?: string }
 function makeTestWeekRow(week: number, kind: WeekKind): SchemeWeekRow {
   const topic = testWeekTopicLabel(kind) || `Week ${week} — assessment`
   const assessmentMethods =
-    kind === 'mid_term_test' ? ['Mid-term formal test / exam'] : ['End-of-term formal examinations']
+    kind === 'week2_test'
+      ? ['Week 2 formative / written assessment']
+      : kind === 'mid_term_test'
+        ? ['Week 7 / mid-term formal test']
+        : ['End-of-term formal examinations']
   return {
     week,
     topic,
@@ -186,6 +190,8 @@ export async function generateSchemeOfWork(input: {
   term: string | number
   year: number
   weekCount?: number
+  week2AssessmentWeek?: number | null
+  week2AssessmentWeekEnd?: number | null
   midTermWeek?: number | null
   midTermWeekEnd?: number | null
   endOfTermWeek?: number | null
@@ -214,6 +220,8 @@ export async function generateSchemeOfWork(input: {
   })
 
   const testSchedule: TestScheduleLike = {
+    week2AssessmentWeek: input.week2AssessmentWeek,
+    week2AssessmentWeekEnd: input.week2AssessmentWeekEnd,
     midTermWeek: input.midTermWeek,
     midTermWeekEnd: input.midTermWeekEnd,
     endOfTermWeek: input.endOfTermWeek,

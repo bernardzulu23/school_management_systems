@@ -108,6 +108,8 @@ export function CurriculumStudio({
   const [term, setTerm] = useState('Term 1')
   const [year, setYear] = useState(new Date().getFullYear())
   const [weeksPerTerm, setWeeksPerTerm] = useState('12')
+  const [week2AssessmentWeek, setWeek2AssessmentWeek] = useState('2')
+  const [week2AssessmentWeekEnd, setWeek2AssessmentWeekEnd] = useState('2')
   const [midTermWeek, setMidTermWeek] = useState('7')
   const [midTermWeekEnd, setMidTermWeekEnd] = useState('7')
   const [endOfTermWeek, setEndOfTermWeek] = useState('12')
@@ -153,6 +155,8 @@ export function CurriculumStudio({
 
   const weeksPerTermNum = Math.min(MAX_WEEKS, Math.max(MIN_WEEKS, Number(weeksPerTerm) || 12))
   const weekChoices = Array.from({ length: weeksPerTermNum }, (_, i) => i + 1)
+  const week2Start = Number(week2AssessmentWeek) || 2
+  const week2End = Number(week2AssessmentWeekEnd) || week2Start
   const midStart = Number(midTermWeek) || 7
   const midEnd = Number(midTermWeekEnd) || midStart
   const eotStart = Number(endOfTermWeek) || Math.max(1, weeksPerTermNum - 1)
@@ -281,6 +285,8 @@ export function CurriculumStudio({
       credentials: 'include',
       body: JSON.stringify({
         schemeId,
+        week2AssessmentWeek: week2Start,
+        week2AssessmentWeekEnd: week2End,
         midTermWeek: midStart,
         midTermWeekEnd: midEnd,
         endOfTermWeek: eotStart,
@@ -328,6 +334,8 @@ export function CurriculumStudio({
           term,
           academicYear: Number(year),
           weeksPerTerm: weeksPerTermNum,
+          week2AssessmentWeek: week2Start,
+          week2AssessmentWeekEnd: week2End,
           midTermWeek: midStart,
           midTermWeekEnd: midEnd,
           endOfTermWeek: eotStart,
@@ -663,16 +671,51 @@ export function CurriculumStudio({
                   <div>
                     <h4 className="font-medium text-sky-900">Test Schedule Setup</h4>
                     <p className="mt-1 text-sm text-sky-700">
-                      Mid-term and end-of-term weeks are assessment-only (no teaching topics). Use a
-                      range when tests span multiple weeks (e.g. end-of-term 12–13).
+                      Primary schools typically assess in week 2, week 7, and end of term.
+                      Assessment weeks have no teaching topics. Use a range when tests span multiple
+                      weeks.
                     </p>
                   </div>
                 </div>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="space-y-2">
-                  <Label>Mid-Term Test Weeks</Label>
+                  <Label>Week 2 assessment</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Select value={week2AssessmentWeek} onValueChange={setWeek2AssessmentWeek}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="From" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {weekChoices.map((w) => (
+                          <SelectItem key={`w2-s-${w}`} value={w.toString()}>
+                            Week {w}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select
+                      value={week2AssessmentWeekEnd}
+                      onValueChange={setWeek2AssessmentWeekEnd}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="To" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {weekChoices.map((w) => (
+                          <SelectItem key={`w2-e-${w}`} value={w.toString()}>
+                            Week {w}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <p className="text-xs text-muted-foreground">Recommended: Week 2</p>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Week 7 / Mid-Term Test Weeks</Label>
                   <div className="grid grid-cols-2 gap-2">
                     <Select value={midTermWeek} onValueChange={setMidTermWeek}>
                       <SelectTrigger>

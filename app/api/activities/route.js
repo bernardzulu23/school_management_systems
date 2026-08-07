@@ -70,11 +70,20 @@ export const POST = withErrorHandler(async function POST(request) {
   const title = String(body.title || '').trim()
   if (!title) throw new ApiError('Activity name is required', 400)
 
-  const type = ACTIVITY_TYPES.includes(String(body.type)) ? String(body.type) : 'club'
+  const type = ACTIVITY_TYPES.includes(String(body.type)) ? String(body.type) : 'clubs'
   const description = String(body.description || '').trim()
   const location = body.location ? String(body.location).trim() : null
   const dateRaw = body.date ? new Date(body.date) : null
   const date = dateRaw && !Number.isNaN(dateRaw.getTime()) ? dateRaw : null
+  const scheduleDays = Array.isArray(body.scheduleDays)
+    ? body.scheduleDays
+        .map((d) =>
+          String(d || '')
+            .toLowerCase()
+            .slice(0, 3)
+        )
+        .filter((d) => ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].includes(d))
+    : []
 
   const db = getTenantClient(schoolId)
   const activity = await db.activity.create({
@@ -86,6 +95,7 @@ export const POST = withErrorHandler(async function POST(request) {
       type,
       location,
       date,
+      scheduleDays,
       isActive: true,
     },
     include: activityInclude,

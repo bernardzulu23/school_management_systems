@@ -52,6 +52,18 @@ export function createMockPrisma() {
     },
     class: {
       findMany: vi.fn(),
+      findFirst: vi.fn(),
+    },
+    result: {
+      findFirst: vi.fn(),
+      findMany: vi.fn(),
+      deleteMany: vi.fn(),
+      create: vi.fn(),
+      update: vi.fn(),
+    },
+    pupilSubjectEnrollment: {
+      findMany: vi.fn(),
+      findFirst: vi.fn(),
     },
     eczAssessment: {
       findFirst: vi.fn(),

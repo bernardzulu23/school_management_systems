@@ -114,6 +114,48 @@ describe('primary UI isolation — navigation', () => {
     ).toBe(true)
   })
 
+  it('hides primary Inter-house activities and extracurricular for secondary schools', () => {
+    expect(
+      isNavItemApplicable(
+        {
+          name: 'House activities',
+          href: '/dashboard/headteacher/houses/activities',
+          primaryOnly: true,
+        },
+        secondarySchool
+      )
+    ).toBe(false)
+    expect(
+      isNavItemApplicable(
+        {
+          name: 'Extracurricular',
+          href: '/dashboard/teacher/extracurricular',
+          primaryOnly: true,
+        },
+        secondarySchool
+      )
+    ).toBe(false)
+    expect(
+      isNavItemApplicable(
+        {
+          name: 'House activities',
+          href: '/dashboard/headteacher/houses/activities',
+          primaryOnly: true,
+        },
+        primarySchool
+      )
+    ).toBe(true)
+  })
+
+  it('fail-closes primary-only paths for secondary even without primaryOnly flag', () => {
+    expect(
+      isNavItemApplicable(
+        { name: 'Senior Teachers', href: '/dashboard/headteacher/senior-teachers' },
+        secondarySchool
+      )
+    ).toBe(false)
+  })
+
   it('denies secondary path hrefs for primary even without flags', () => {
     expect(
       isNavItemApplicable({ name: 'HOD Exam', href: '/dashboard/hod/exam-analysis' }, primarySchool)

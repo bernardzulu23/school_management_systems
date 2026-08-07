@@ -2341,7 +2341,9 @@ model Activity {
   description String   @default("")
   date        DateTime?
   location    String?
-  type        String   // 'sport', 'club', 'event'
+  type        String   // 'sport'|'club'|'event'|'sports'|'preventive_maintenance'|'clubs'|'production_unit'
+  /** Weekly schedule days: mon,tue,wed,thu,fri,sat,sun */
+  scheduleDays String[] @default([])
   isActive    Boolean  @default(true)
   
   participants ActivityParticipant[] 
@@ -4128,7 +4130,7 @@ model TopicMastery {
   @@index([needsReteaching])
 }
 
-/// Mid-term / end-of-term weeks for a scheme
+/// Mid-term / end-of-term / week-2 assessment weeks for a scheme
 model SchemeTestSchedule {
   id            String       @id @default(uuid())
   schoolId      String
@@ -4137,6 +4139,9 @@ model SchemeTestSchedule {
   scheme        SchemeOfWork @relation(fields: [schemeId], references: [id], onDelete: Cascade)
   teacherId     String
   teacher       User         @relation("SchemeTestScheduleTeacher", fields: [teacherId], references: [id], onDelete: Cascade)
+  /** Primary early assessment (typically week 2). */
+  week2AssessmentWeek    Int?
+  week2AssessmentWeekEnd Int?
   midTermWeek   Int?
   midTermWeekEnd Int?
   endOfTermWeek Int?

@@ -27,6 +27,7 @@ import { useSchoolCapabilities } from '@/lib/school/useSchoolCapabilities'
 import { PrimarySchoolFeatureUnavailable } from '@/components/school/PrimarySchoolFeatureUnavailable'
 import { resultsStore } from '@/lib/offline/results-store'
 import { SyncStatusBadge } from '@/components/attendance/SyncStatusBadge'
+import { sessionFetch } from '@/lib/auth/sessionFetch'
 
 export default function ResultEntryPage() {
   const { user } = useAuth()
@@ -275,9 +276,8 @@ export default function ResultEntryPage() {
     if (!ok) return
 
     try {
-      const res = await fetch(`/api/teacher/results?id=${encodeURIComponent(resultId)}`, {
+      const res = await sessionFetch(`/api/teacher/results?id=${encodeURIComponent(resultId)}`, {
         method: 'DELETE',
-        credentials: 'include',
       })
       const json = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(json?.message || json?.error || 'Failed to delete result')
