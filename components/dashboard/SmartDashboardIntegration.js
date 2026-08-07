@@ -119,8 +119,9 @@ export default function SmartDashboardIntegration({
       })
     }
 
-    // Request notification permission
-    pwaManager.requestNotificationPermission()
+    // Do NOT call requestNotificationPermission() on mount — browsers and
+    // Malwarebytes Browser Guard (heuristic 10008) treat that as spam.
+    // Permission must come from an explicit user gesture.
   }, [pwaManager, showNotification])
 
   // Process gamification data — students use live games API; others skip engine mocks.

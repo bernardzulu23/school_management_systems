@@ -37,20 +37,10 @@ export function NotificationToast() {
   useEffect(() => {
     let cancelled = false
 
-    async function ensureOsPermission() {
-      if (typeof window === 'undefined' || !('Notification' in window)) return false
-      if (Notification.permission === 'granted') return true
-      if (Notification.permission === 'denied') return false
-      try {
-        const p = await Notification.requestPermission()
-        return p === 'granted'
-      } catch {
-        return false
-      }
-    }
-
     function showOsNotification(row) {
       if (typeof window === 'undefined' || !('Notification' in window)) return
+      // Never call Notification.requestPermission() here — only use OS toasts
+      // if the user already granted permission via an explicit enable action.
       if (Notification.permission !== 'granted') return
       try {
         const n = new Notification(row.title || 'ZSMS', {
@@ -85,7 +75,6 @@ export function NotificationToast() {
           rows.forEach((r) => seen.add(r.id))
           writeSeen(seen)
           primed.current = true
-          await ensureOsPermission()
           return
         }
 
