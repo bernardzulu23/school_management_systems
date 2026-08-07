@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v10'
+const CACHE_VERSION = 'v11'
 const STATIC_CACHE = `zsms-static-assets-${CACHE_VERSION}`
 const PAGES_CACHE = `zsms-app-shells-${CACHE_VERSION}`
 const OFFLINE_URL = '/offline.html'
@@ -42,6 +42,8 @@ const PRECACHE_ASSETS = [
   OFFLINE_URL,
   '/manifest.json',
   '/favicon.ico',
+  '/favicon.svg',
+  '/icons/zsms-mark.svg',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/icon-512x512-maskable.png',

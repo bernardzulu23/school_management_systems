@@ -64,6 +64,7 @@
     "test:zod": "vitest run __tests__/security/input-validation.test.js __tests__/unit/ai/quiz-schema-coerce.test.js __tests__/unit/chat/phase3-lesson-plan.test.js __tests__/unit/student-bulk-upload.test.js __tests__/unit/teacher-bulk-upload.test.js",
     "check:deps": "npm outdated || exit 0",
     "format": "prettier --write .",
+    "icons:generate": "node scripts/generate-app-icons.mjs",
     "prepare": "node scripts/prepare.js",
     "seed": "node prisma/seed.js",
     "seed:ecz": "node prisma/seeds/ecz-seed.js",

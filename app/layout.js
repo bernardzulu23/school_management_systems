@@ -21,7 +21,7 @@ if (typeof window === 'undefined') {
 export const metadata = {
   metadataBase,
   manifest: '/manifest.json',
-  themeColor: '#333331',
+  themeColor: '#1A1A1A',
   appleWebApp: {
     capable: true,
     title: 'ZSMS',
@@ -29,10 +29,10 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
       { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
       { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/Assets/logo.png', type: 'image/png' },
+      { url: '/icons/zsms-mark.svg', type: 'image/svg+xml' },
     ],
     shortcut: '/favicon-32.png',
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
