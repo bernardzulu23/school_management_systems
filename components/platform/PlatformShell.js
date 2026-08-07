@@ -5,13 +5,15 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useState } from 'react'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { useAuth } from '@/lib/auth'
+import { BrandMark } from '@/components/brand/BrandMark'
 import {
   Building2,
   CreditCard,
   LayoutDashboard,
   LogOut,
   MapPin,
-  Shield,
+  ShieldAlert,
+  ClipboardList,
   User,
   Activity,
   Users,
@@ -29,6 +31,13 @@ const NAV = [
   { href: '/platform/streams', label: 'Reporting streams', icon: MapPin },
   { href: '/platform/billing', label: 'Billing', icon: CreditCard },
   { href: '/platform/health', label: 'Health', icon: Activity },
+  { href: '/platform/audit-logs', label: 'Audit Logs', icon: ClipboardList },
+  {
+    href: '/platform/security',
+    label: 'Security',
+    icon: ShieldAlert,
+    badgeKey: 'unresolvedSecurity',
+  },
   { href: '/platform/profile', label: 'Profile', icon: User },
 ]
 
@@ -37,6 +46,7 @@ export function PlatformShell({ title, children }) {
   const router = useRouter()
   const [user, setUser] = useState(null)
   const [pendingHandoffs, setPendingHandoffs] = useState(0)
+  const [unresolvedSecurity, setUnresolvedSecurity] = useState(0)
 
   const loadMe = useCallback(async () => {
     const res = await sessionFetch('/api/platform/auth/me', { cache: 'no-store' })
@@ -66,15 +76,30 @@ export function PlatformShell({ title, children }) {
     }
   }, [])
 
+  const loadSecurityBadge = useCallback(async () => {
+    try {
+      const res = await sessionFetch('/api/platform/security/overview', { cache: 'no-store' })
+      if (!res.ok) return
+      const data = await res.json().catch(() => ({}))
+      setUnresolvedSecurity(Number(data.unresolvedCriticalHigh) || 0)
+    } catch {
+      // non-blocking
+    }
+  }, [])
+
   useEffect(() => {
     loadMe()
   }, [loadMe])
 
   useEffect(() => {
     loadPendingHandoffs()
-    const id = setInterval(loadPendingHandoffs, 30_000)
+    loadSecurityBadge()
+    const id = setInterval(() => {
+      loadPendingHandoffs()
+      loadSecurityBadge()
+    }, 30_000)
     return () => clearInterval(id)
-  }, [loadPendingHandoffs, pathname])
+  }, [loadPendingHandoffs, loadSecurityBadge, pathname])
 
   async function logout() {
     await useAuth.getState().logout?.()
@@ -85,7 +110,7 @@ export function PlatformShell({ title, children }) {
       <aside className="w-56 shrink-0 border-r-2 border-ink bg-ink text-paper flex flex-col">
         <div className="p-4 border-b border-paper/20">
           <div className="flex items-center gap-2">
-            <Shield className="text-accent shrink-0" size={20} />
+            <BrandMark size={20} className="h-5 w-5 rounded shrink-0" />
             <span className="font-semibold text-sm">Platform Admin</span>
           </div>
           {user?.email ? (
@@ -97,7 +122,13 @@ export function PlatformShell({ title, children }) {
         <nav className="flex-1 p-2 space-y-1">
           {NAV.map(({ href, label, icon: Icon, badgeKey }) => {
             const active = pathname === href || pathname?.startsWith(`${href}/`)
-            const badge = badgeKey === 'pendingHandoffs' ? pendingHandoffs : 0
+            const badge =
+              badgeKey === 'pendingHandoffs'
+                ? pendingHandoffs
+                : badgeKey === 'unresolvedSecurity'
+                  ? unresolvedSecurity
+                  : 0
+            const isSecurityBadge = badgeKey === 'unresolvedSecurity'
             return (
               <Link
                 key={href}
@@ -111,9 +142,19 @@ export function PlatformShell({ title, children }) {
                 {badge > 0 ? (
                   <span
                     className={`min-w-[1.25rem] h-5 px-1.5 rounded text-[10px] font-bold flex items-center justify-center ${
-                      active ? 'bg-paper text-accent' : 'bg-amber-400 text-ink'
+                      isSecurityBadge
+                        ? active
+                          ? 'bg-red-500 text-white'
+                          : 'bg-red-500 text-white'
+                        : active
+                          ? 'bg-paper text-accent'
+                          : 'bg-amber-400 text-ink'
                     }`}
-                    title={`${badge} pending handoff${badge === 1 ? '' : 's'}`}
+                    title={
+                      isSecurityBadge
+                        ? `${badge} unresolved critical/high alert${badge === 1 ? '' : 's'}`
+                        : `${badge} pending handoff${badge === 1 ? '' : 's'}`
+                    }
                   >
                     {badge > 99 ? '99+' : badge}
                   </span>

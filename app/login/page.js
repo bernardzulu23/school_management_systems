@@ -5,13 +5,14 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { FEATURE_LOGIN_REDIRECTS } from '@/lib/marketing/featureCatalog'
 import Link from 'next/link'
 import { useAuth } from '@/lib/auth'
-import { GraduationCap, Loader2, ArrowLeft } from 'lucide-react'
+import { Loader2, ArrowLeft } from 'lucide-react'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import FormField from '@/components/forms/FormField'
 import { Button } from '@/components/ui/Button'
 import { setTopLoading, startTopLoading, stopTopLoading } from '@/lib/uiProgress'
 import { SchoolLogo } from '@/components/SchoolLogo'
+import { BrandMark } from '@/components/brand/BrandMark'
 import LocalDevLoginHint from '@/components/dev/LocalDevLoginHint'
 
 const REMEMBER_EMAIL_KEY = 'zsms_remember_email'
@@ -213,8 +214,8 @@ function LoginPageContent() {
             </>
           ) : (
             <>
-              <div className="bg-paper border-2 border-ink/20 rounded-lg p-3 w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                <GraduationCap className="h-6 w-6 text-ink/70" />
+              <div className="bg-paper border-2 border-ink/20 rounded-lg p-2 w-14 h-14 flex items-center justify-center mx-auto mb-4">
+                <BrandMark size={40} className="h-10 w-10 rounded-md" priority />
               </div>
               <h1 className="text-2xl font-bold text-ink mb-2">Welcome Back</h1>
             </>

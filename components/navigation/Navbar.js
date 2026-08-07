@@ -3,10 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, GraduationCap, Home, Users, BookOpen, Settings, LogOut } from 'lucide-react'
+import { Menu, X, Home, Users, BookOpen, Settings, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/lib/auth'
+import { BrandMark } from '@/components/brand/BrandMark'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -26,9 +27,7 @@ const Navbar = () => {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center gap-2">
-              <div className="bg-royalPurple-accent p-1.5 rounded-lg">
-                <GraduationCap className="h-6 w-6 text-royalPurple-text1" />
-              </div>
+              <BrandMark size={32} className="h-8 w-8 rounded-lg" />
               <span className="text-xl font-bold text-royalPurple-text1 hidden sm:block">ZSMS</span>
             </Link>
           </div>

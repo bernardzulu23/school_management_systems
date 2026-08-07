@@ -396,7 +396,7 @@ export default function HomePageClient() {
         >
           <div style={{ width: 40, height: 40, display: 'flex', alignItems: 'center' }}>
             <SchoolLogo
-              src={tenantSchool?.logo_url || '/Assets/logo.png'}
+              src={tenantSchool?.logo_url || '/icons/zsms-mark.svg'}
               alt={tenantSchool?.name || 'ZSMS'}
               className="h-10 w-10 object-contain rounded-md"
               priority
@@ -929,7 +929,7 @@ export default function HomePageClient() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center' }}>
             <SchoolLogo
-              src={tenantSchool?.logo_url || '/Assets/logo.png'}
+              src={tenantSchool?.logo_url || '/icons/zsms-mark.svg'}
               alt={tenantSchool?.name || 'ZSMS'}
               className="h-9 w-9 object-contain rounded-md"
             />

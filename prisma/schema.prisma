@@ -122,6 +122,7 @@ model School {
   aiUsageLogs          AIUsageLog[]
   schedulingRecipes    SchedulingRecipe[]
   auditLogs            AuditLog[]
+  securityAlerts       SecurityAlert[]
   changeLogEntries     ChangeLogEntry[]
   refreshTokens        RefreshToken[]
 
@@ -210,6 +211,10 @@ model School {
   studentInvoices        StudentInvoice[]
   siblingGroups          SiblingGroup[]
   invoiceFeePayments     FeePayment[]
+  sbaSubjectPolicies     SBASubjectPolicy[]
+  sbaComponentPolicies   SBAComponentPolicy[]
+  sbaRecords             SBARecord[]
+  sbaRecordEdits         SBARecordEdit[]
 
   @@index([subdomain])
   @@index([active])
@@ -312,6 +317,7 @@ model User {
   
   refreshTokens           RefreshToken[]
   auditLogs               AuditLog[]
+  securityAlerts          SecurityAlert[]
   attendanceSessionsLed   AttendanceSession[]
 
   enrollmentInvitesUsed   EnrollmentInvite[] @relation("EnrollmentInviteUsedBy")
@@ -328,6 +334,10 @@ model User {
   chatMessages            ChatMessage[]
   lessonPlanSubmissionsCreated LessonPlanSubmission[] @relation("LessonPlanSubmissionsTeacher")
   lessonPlanSubmissionsToReview LessonPlanSubmission[] @relation("LessonPlanSubmissionsHod")
+
+  sbaRecordsEntered       SBARecord[] @relation("SBARecordEnteredBy")
+  sbaRecordsLocked        SBARecord[] @relation("SBARecordLockedBy")
+  sbaRecordEdits          SBARecordEdit[] @relation("SBARecordEditBy")
 
   @@unique([schoolId, email]) // Email must be unique per school
   @@index([schoolId])
@@ -560,12 +570,13 @@ model PlatformAdmin {
 
 model AuditLog {
   id         String   @id @default(uuid())
-  userId     String
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  schoolId   String
-  school     School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  /// Null for platform superadmin sessions (no school tenant).
+  schoolId   String?
+  school     School?  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
 
-  action     String   // e.g., 'UPDATE_GRADE', 'DELETE_STUDENT', 'LOGIN'
+  action     String   // e.g., 'UPDATE_GRADE', 'DELETE_STUDENT', 'LOGIN', 'LOGIN_FAILED'
   entity     String   // e.g., 'Student', 'Result', 'Teacher'
   entityId   String   // The ID of the modified record
   oldValue   Json?    // Previous state of the record
@@ -573,12 +584,58 @@ model AuditLog {
 
   ipAddress  String?
   userAgent  String?
+  country    String?
+  city       String?
+  region     String?
+  isp        String?
+  isVpn      Boolean  @default(false)
+  isTor      Boolean  @default(false)
+  isProxy    Boolean  @default(false)
+  threatScore Int?
 
   createdAt  DateTime @default(now())
 
   @@index([schoolId])
   @@index([userId])
   @@index([entity, entityId])
+  @@index([action, createdAt])
+  @@index([ipAddress, createdAt])
+  @@index([schoolId, action, createdAt])
+}
+
+/// Platform-wide security threat alerts (superadmin Security dashboard).
+model SecurityAlert {
+  id         String    @id @default(uuid())
+  schoolId   String?
+  school     School?   @relation(fields: [schoolId], references: [id], onDelete: SetNull)
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  email      String?
+  ipAddress  String?
+  country    String?
+  pattern    String // BRUTE_FORCE | VPN_LOGIN | HIGH_THREAT
+  severity   String // critical | high | medium | low
+  details    Json?
+  resolved   Boolean   @default(false)
+  resolvedAt DateTime?
+  resolvedBy String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([resolved, severity, createdAt])
+  @@index([schoolId, createdAt])
+  @@index([ipAddress, createdAt])
+}
+
+/// Globally blocked IPs (platform superadmin).
+model BlockedIp {
+  id        String   @id @default(uuid())
+  ip        String   @unique
+  reason    String?
+  blockedBy String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
 }
 
 /// Append-only system-wide activity trail (Prompt 10).
@@ -706,6 +763,7 @@ model Student {
   girlsReEntryRecords GirlsReEntryRecord[]
   consentRecords      ConsentRecord[]
   parentLinks         ParentStudentLink[]
+  sbaRecords          SBARecord[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1403,6 +1461,7 @@ model Class {
   attendanceSessions AttendanceSession[]
   eczAssessments    EczAssessment[]
   topicMasteries    TopicMastery[]
+  sbaRecords        SBARecord[]
   
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -1444,6 +1503,8 @@ model Subject {
   eczSubmissions    EczSubmission[]
   questionBanks     QuestionBank[]
   attendanceSessions AttendanceSession[]
+  sbaSubjectPolicies SBASubjectPolicy[]
+  sbaRecords         SBARecord[]
   
   createdAt   DateTime @default(now()) 
   updatedAt   DateTime @updatedAt
@@ -4464,13 +4525,12 @@ enum SyllabusVersion {
   CBC
 }
 
-/// National cohort rollout: which syllabus is active for SS1/SS2/SS3 in a given academic year.
-/// Seeded programmatically from year >= 2026 + n (SS1→2027, SS2→2028, SS3→2029).
+/// Seeded programmatically: CBC from 2024+n (SS1→2025, SS2→2026, SS3→2027).
 model CurriculumRollout {
   id              String          @id @default(cuid())
   canonicalLevel  String // "SS1" | "SS2" | "SS3"
   academicYear    Int
-  displayLabel    String // "Grade 10" pre-2029, "Form 1" from 2029
+  displayLabel    String // Form labels from 2025+
   syllabusVersion SyllabusVersion
   effectiveFrom   DateTime
   effectiveTo     DateTime?
@@ -4527,4 +4587,122 @@ model PastPaper {
 
   @@index([subject, syllabusVersion, paperNumber])
   @@index([validationStatus])
+}
+
+// ─── School-Based Assessment (secondary mark entry from academic year 2026) ───
+
+enum SBAComponentType {
+  COURSEWORK
+  PRACTICAL
+  PROJECT
+  ORAL
+  PORTFOLIO
+  TERM_TEST
+  OTHER
+}
+
+enum SBARecordStatus {
+  DRAFT
+  SUBMITTED
+  LOCKED
+}
+
+enum SchoolPhase {
+  PRIMARY
+  SECONDARY
+}
+
+/// Per-school subject policy for secondary SBA (one row per syllabus track).
+model SBASubjectPolicy {
+  id              String          @id @default(cuid())
+  schoolId        String
+  school          School          @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  subjectId       String
+  subject         Subject         @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  syllabusVersion SyllabusVersion
+  /// e.g. "Form 2" — SBA_START_LEVEL_SOURCE: TBD (unconfirmed ECZ vs school policy)
+  startsAtLevel   String          @default("Form 2")
+  sourceDocument  String?
+  isActive        Boolean         @default(true)
+  components      SBAComponentPolicy[]
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@unique([schoolId, subjectId, syllabusVersion])
+  @@index([schoolId])
+  @@index([schoolId, isActive])
+  @@index([subjectId])
+}
+
+model SBAComponentPolicy {
+  id              String           @id @default(cuid())
+  schoolId        String
+  school          School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  policyId        String
+  policy          SBASubjectPolicy @relation(fields: [policyId], references: [id], onDelete: Cascade)
+  componentType   SBAComponentType
+  /// Null until source document confirms max marks (do not invent CBC totals).
+  maxRawMark      Int?
+  weight          Float            @default(0)
+  sortOrder       Int              @default(0)
+  label           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@unique([policyId, componentType])
+  @@index([policyId])
+  @@index([schoolId])
+}
+
+/// School mark-entry record — separate from EczAssessment / SBA_TASK (no dual-write in v1).
+model SBARecord {
+  id            String           @id @default(cuid())
+  schoolId      String
+  school        School           @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolPhase   SchoolPhase      @default(SECONDARY)
+  pupilId       String
+  pupil         Student          @relation(fields: [pupilId], references: [id], onDelete: Cascade)
+  classId       String
+  class         Class            @relation(fields: [classId], references: [id], onDelete: Cascade)
+  subjectId     String
+  subject       Subject          @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  componentType SBAComponentType
+  term          String
+  academicYear  Int
+  rawMark       Float?
+  /// Snapshot of policy max at entry time
+  maxRawMark    Int?
+  status        SBARecordStatus  @default(DRAFT)
+  enteredById   String?
+  enteredBy     User?            @relation("SBARecordEnteredBy", fields: [enteredById], references: [id], onDelete: SetNull)
+  lockedAt      DateTime?
+  lockedById    String?
+  lockedBy      User?            @relation("SBARecordLockedBy", fields: [lockedById], references: [id], onDelete: SetNull)
+  edits         SBARecordEdit[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  @@unique([schoolId, pupilId, subjectId, classId, componentType, term, academicYear], map: "SBARecord_school_pupil_subject_class_comp_term_year_key")
+  @@index([schoolId])
+  @@index([schoolId, classId, subjectId, academicYear, term])
+  @@index([pupilId])
+  @@index([status])
+}
+
+model SBARecordEdit {
+  id          String    @id @default(cuid())
+  schoolId    String
+  school      School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  recordId    String
+  record      SBARecord @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  editedById  String
+  editedBy    User      @relation("SBARecordEditBy", fields: [editedById], references: [id], onDelete: Cascade)
+  previousMark Float?
+  newMark     Float?
+  reason      String
+  createdAt   DateTime  @default(now())
+
+  @@index([recordId])
+  @@index([editedById])
+  @@index([schoolId])
 }

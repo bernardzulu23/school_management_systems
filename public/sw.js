@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'v11'
+const CACHE_VERSION = 'v12'
 const STATIC_CACHE = `zsms-static-assets-${CACHE_VERSION}`
 const PAGES_CACHE = `zsms-app-shells-${CACHE_VERSION}`
 const OFFLINE_URL = '/offline.html'
@@ -43,10 +43,13 @@ const PRECACHE_ASSETS = [
   '/manifest.json',
   '/favicon.ico',
   '/favicon.svg',
+  '/favicon-32.png',
+  '/apple-touch-icon.png',
   '/icons/zsms-mark.svg',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
   '/icons/icon-512x512-maskable.png',
+  '/icons/badge-72x72.png',
 ]
 
 function isAppShell(pathname) {
@@ -159,7 +162,7 @@ self.addEventListener('push', (event) => {
     self.registration.showNotification(payload.title || 'ZSMS', {
       body: payload.body || '',
       icon: '/icons/icon-192x192.png',
-      badge: '/icons/icon-192x192.png',
+      badge: '/icons/badge-72x72.png',
       data: { url: payload.url || '/dashboard' },
     })
   )

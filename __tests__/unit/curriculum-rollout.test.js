@@ -5,26 +5,27 @@ import {
 } from '@/lib/curriculum/curriculumRollout'
 
 describe('curriculumRollout', () => {
-  it('flips SS1→2027, SS2→2028, SS3→2029 to CBC', () => {
-    expect(resolveSyllabusVersionForYear(1, 2026)).toBe('OLD_SYLLABUS')
-    expect(resolveSyllabusVersionForYear(1, 2027)).toBe('CBC')
-    expect(resolveSyllabusVersionForYear(2, 2027)).toBe('OLD_SYLLABUS')
-    expect(resolveSyllabusVersionForYear(2, 2028)).toBe('CBC')
-    expect(resolveSyllabusVersionForYear(3, 2028)).toBe('OLD_SYLLABUS')
-    expect(resolveSyllabusVersionForYear(3, 2029)).toBe('CBC')
+  it('flips SS1→2025, SS2→2026, SS3→2027 to CBC (MoE Form 1 2025 cohort)', () => {
+    expect(resolveSyllabusVersionForYear(1, 2024)).toBe('OLD_SYLLABUS')
+    expect(resolveSyllabusVersionForYear(1, 2025)).toBe('CBC')
+    expect(resolveSyllabusVersionForYear(2, 2025)).toBe('OLD_SYLLABUS')
+    expect(resolveSyllabusVersionForYear(2, 2026)).toBe('CBC')
+    expect(resolveSyllabusVersionForYear(3, 2026)).toBe('OLD_SYLLABUS')
+    expect(resolveSyllabusVersionForYear(3, 2027)).toBe('CBC')
   })
 
-  it('seeds Phase 1 gate rows correctly', () => {
+  it('seeds Phase 1 gate rows correctly for SBA entry year 2026', () => {
     const rows = buildCurriculumRolloutRows()
     const lookup = (level, year) =>
       rows.find((r) => r.canonicalLevel === level && r.academicYear === year)
 
-    expect(lookup('SS1', 2027)?.syllabusVersion).toBe('CBC')
-    expect(lookup('SS2', 2027)?.syllabusVersion).toBe('OLD_SYLLABUS')
-    expect(lookup('SS3', 2028)?.syllabusVersion).toBe('OLD_SYLLABUS')
-    expect(lookup('SS3', 2029)?.syllabusVersion).toBe('CBC')
+    expect(lookup('SS1', 2025)?.syllabusVersion).toBe('CBC')
+    expect(lookup('SS2', 2026)?.syllabusVersion).toBe('CBC')
+    expect(lookup('SS2', 2025)?.syllabusVersion).toBe('OLD_SYLLABUS')
+    expect(lookup('SS3', 2026)?.syllabusVersion).toBe('OLD_SYLLABUS')
+    expect(lookup('SS3', 2027)?.syllabusVersion).toBe('CBC')
 
-    expect(lookup('SS1', 2027)?.displayLabel).toBe('Grade 10')
-    expect(lookup('SS1', 2029)?.displayLabel).toBe('Form 1')
+    expect(lookup('SS1', 2025)?.displayLabel).toBe('Form 1')
+    expect(lookup('SS2', 2026)?.displayLabel).toBe('Form 2')
   })
 })

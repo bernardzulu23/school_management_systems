@@ -37,6 +37,7 @@ import {
   handleLoginFailure,
 } from '@/lib/security/loginBruteForce'
 import { evaluatePassword, weakPasswordLoginPayload } from '@/lib/security/passwordPolicy'
+import { maybeCreateBruteForceAlert } from '@/lib/security/securityAlerts'
 
 const JWT_SECRET = process.env.JWT_SECRET || 'dev-only-fallback-replace-in-prod'
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dev-only-refresh-fallback'
@@ -55,6 +56,37 @@ function isPilotEmail(email) {
       .toLowerCase()
   )
 }
+
+async function logSchoolLoginFailure({
+  request,
+  email,
+  schoolId,
+  ip,
+  userId = null,
+  reason = 'invalid_credentials',
+}) {
+  const lock = handleLoginFailure({ request, email, schoolId, ip })
+  if (schoolId && schoolId !== 'platform' && schoolId !== 'global') {
+    await logAuditAction({
+      userId,
+      schoolId,
+      action: 'LOGIN_FAILED',
+      entity: 'User',
+      entityId: userId || 'unknown',
+      newValue: { email, reason },
+      request,
+    })
+    await maybeCreateBruteForceAlert({
+      schoolId,
+      email,
+      ip,
+      attempts: lock.attempts || 0,
+      userId,
+    })
+  }
+  return lock
+}
+
 if (
   process.env.NODE_ENV === 'production' &&
   (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET) &&
@@ -112,6 +144,19 @@ export const POST = withSecureApi(async function POST(request) {
     if (rateLimitResult.isLimited) return rateLimitResult.response
 
     const clientIp = getRequestIp(request)
+
+    try {
+      const blocked = await prisma.blockedIp.findUnique({
+        where: { ip: clientIp },
+        select: { id: true },
+      })
+      if (blocked) {
+        return NextResponse.json({ error: 'Access denied', code: 'IP_BLOCKED' }, { status: 403 })
+      }
+    } catch {
+      // BlockedIp table may not exist until migration — do not block login
+    }
+
     const globalLock = checkLoginBruteForce({
       request,
       email: normalizedEmail,
@@ -239,11 +284,12 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     if (!user) {
-      const lock = handleLoginFailure({
+      const lock = await logSchoolLoginFailure({
         request,
         email: normalizedEmail,
         schoolId,
         ip: clientIp,
+        reason: 'user_not_found',
       })
       if (lock.blocked) return lock.response
       recordLoginFailure({ email: normalizedEmail, schoolId: 'global', ip: clientIp })
@@ -309,11 +355,13 @@ export const POST = withSecureApi(async function POST(request) {
     const storedHash = String(user.password || '')
     if (!storedHash.startsWith('$2')) {
       console.error('[Login] User has no valid password hash:', user.id)
-      const lock = handleLoginFailure({
+      const lock = await logSchoolLoginFailure({
         request,
         email: normalizedEmail,
         schoolId,
         ip: clientIp,
+        userId: user.id,
+        reason: 'invalid_password_hash',
       })
       if (lock.blocked) return lock.response
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
@@ -328,11 +376,13 @@ export const POST = withSecureApi(async function POST(request) {
     }
 
     if (!isValid) {
-      const lock = handleLoginFailure({
+      const lock = await logSchoolLoginFailure({
         request,
         email: normalizedEmail,
         schoolId,
         ip: clientIp,
+        userId: user.id,
+        reason: 'invalid_credentials',
       })
       if (lock.blocked) return lock.response
       recordLoginFailure({ email: normalizedEmail, schoolId: 'global', ip: clientIp })

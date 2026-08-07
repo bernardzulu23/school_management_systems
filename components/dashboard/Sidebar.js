@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useAuth } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
+import { BrandMark } from '@/components/brand/BrandMark'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import {
@@ -245,6 +246,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           icon: BarChart3,
           secondaryOnly: true,
           requiresFeature: 'eczSBA',
+        },
+        {
+          name: 'SBA Policy',
+          href: '/dashboard/headteacher/sba-policy',
+          icon: ClipboardList,
+          secondaryOnly: true,
         },
         {
           name: 'STEM Monitoring',
@@ -512,6 +519,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           requiresFeature: 'eczSBA',
         },
         {
+          name: 'School SBA',
+          href: '/dashboard/teacher/sba',
+          icon: ClipboardList,
+          secondaryOnly: true,
+        },
+        {
           name: 'Exam scenarios',
           href: '/dashboard/teacher/assessments/ecz?tab=exam',
           icon: Target,
@@ -697,6 +710,12 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
           icon: ClipboardList,
           secondaryOnly: true,
           requiresFeature: 'eczSBA',
+        },
+        {
+          name: 'School SBA',
+          href: '/dashboard/teacher/sba',
+          icon: ClipboardList,
+          secondaryOnly: true,
         },
         {
           name: 'Exam scenarios',
@@ -1064,9 +1083,11 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
                     className="h-8 w-8 rounded-lg object-contain bg-royalPurple-card2 border border-royalPurple-border shrink-0"
                   />
                 ) : (
-                  <div className="h-8 w-8 rounded-lg bg-royalPurple-card2 border border-royalPurple-border flex items-center justify-center shrink-0">
-                    <GraduationCap className="h-5 w-5 text-royalPurple-text2" />
-                  </div>
+                  <BrandMark
+                    size={32}
+                    className="h-8 w-8 rounded-lg bg-royalPurple-card2 border border-royalPurple-border"
+                    alt={school.name || 'ZSMS'}
+                  />
                 )}
                 <span
                   className="font-bold text-lg tracking-tight truncate text-royalPurple-text1"
@@ -1077,9 +1098,10 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
               </>
             ) : (
               <>
-                <div className="h-8 w-8 rounded-lg bg-royalPurple-card2 border border-royalPurple-border flex items-center justify-center shrink-0">
-                  <GraduationCap className="h-5 w-5 text-royalPurple-text2" />
-                </div>
+                <BrandMark
+                  size={32}
+                  className="h-8 w-8 rounded-lg bg-royalPurple-card2 border border-royalPurple-border"
+                />
                 <span className="font-bold text-lg tracking-tight text-royalPurple-text1">
                   ZSMS
                 </span>
