@@ -8,8 +8,12 @@ import { cn } from '@/lib/utils'
 import { AppVersionLabel } from '@/components/dashboard/AppVersionLabel'
 import { useSchool } from '@/lib/context/SchoolContext'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
-import { getSchoolFeatures, hasPrimaryClasses } from '@/lib/school/schoolTypeHelpers'
-import { isNavItemApplicable } from '@/lib/school/navApplicability'
+import {
+  getSchoolFeatures,
+  hasPrimaryClasses,
+  isSecondaryOnly,
+} from '@/lib/school/schoolTypeHelpers'
+import { isNavItemApplicable, isPrimaryOnlyPath } from '@/lib/school/navApplicability'
 import { hasGuidanceAssignment } from '@/lib/guidance/guidanceAccess'
 import { hasSicAssignment } from '@/lib/sic/sicAccess'
 import {
@@ -968,6 +972,18 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
 
     const filterSchoolLevelItems = (items) =>
       items.filter((item) => {
+        const href = String(item.href || '').split('?')[0]
+        // Hard rule: secondary-only campuses never see Senior Teachers / primary-only nav.
+        if (
+          schoolReady &&
+          (isSecondaryOnly(school) || !hasPrimaryClasses(school)) &&
+          (item.primaryOnly ||
+            item.requiresPrimary ||
+            item.name === 'Senior Teachers' ||
+            isPrimaryOnlyPath(href))
+        ) {
+          return false
+        }
         if (
           !isNavItemApplicable(item, schoolReady ? school : null, {
             schoolReady,

@@ -43,7 +43,7 @@ export default function BasicInfoStep({ formData, errors, onInputChange, role })
             onChange={onInputChange}
             required
             icon={Calendar}
-            placeholder="DD/MM/YYYY"
+            placeholder="DD/MM/YYYY, MM/DD/YYYY, or YYYY/MM/DD"
             error={errors.date_of_birth}
             aria-describedby="date_of_birth-error"
           />

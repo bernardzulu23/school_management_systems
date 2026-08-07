@@ -6,6 +6,7 @@ import { resolvePlatformAdminRecord } from '@/lib/platform/platformAdminAuth'
 import prisma from '@/lib/prisma'
 import { getTenantContext } from '@/lib/tenant/context'
 import { hydrateLegacySchoolAccess } from '@/lib/billing/subscription'
+import { resolveSchoolSectionFlags } from '@/lib/school/resolveSchoolSectionFlags'
 
 /**
  * GET /api/auth/me — Phase 3 example (auth domain).
@@ -87,6 +88,16 @@ export const GET = withApiHandler(
 
     const hydratedSchool = school ? await hydrateLegacySchoolAccess(prisma, schoolId, school) : null
 
+    let sectionFlags = null
+    if (hydratedSchool) {
+      const classes = await prisma.class.findMany({
+        where: { schoolId, isActive: true },
+        select: { year_group: true, name: true },
+        take: 800,
+      })
+      sectionFlags = resolveSchoolSectionFlags(hydratedSchool, classes)
+    }
+
     const resolvedDepartment =
       dbUser.hodProfile?.departmentRef?.name ||
       dbUser.hodProfile?.department ||
@@ -105,6 +116,8 @@ export const GET = withApiHandler(
             emailVerified: hydratedSchool.emailVerified,
             schoolType: hydratedSchool.schoolType,
             level: hydratedSchool.level,
+            hasPrimary: sectionFlags?.hasPrimary ?? false,
+            hasSecondary: sectionFlags?.hasSecondary ?? false,
           }
         : null,
       user: {

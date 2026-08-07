@@ -372,7 +372,7 @@ export default function ProfilePage() {
                     className="input"
                     value={editForm.date_of_birth}
                     disabled={loading}
-                    placeholder="DD/MM/YYYY"
+                    placeholder="DD/MM/YYYY, MM/DD/YYYY, or YYYY/MM/DD"
                     onChange={(e) => setEditForm((p) => ({ ...p, date_of_birth: e.target.value }))}
                   />
                 </div>

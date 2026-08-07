@@ -29,6 +29,7 @@ import toast from 'react-hot-toast'
 import LoadingSpinner from '@/components/LoadingSpinner'
 import { SCHOOL_SUBJECTS } from '@/data/subjects'
 import { useSchool } from '@/lib/context/SchoolContext'
+import { hasPrimaryClasses } from '@/lib/school/schoolTypeHelpers'
 import { canAccessHodFeatures } from '@/lib/subjects/resolveSubjectCatalog'
 import { GRADE_LEVELS, SECTIONS } from '@/lib/constants'
 import SubjectSelection from '@/components/registration/SubjectSelection'
@@ -109,9 +110,7 @@ export default function UserManagement() {
   const router = useRouter()
   const { school } = useSchool()
   const showHodFeatures = canAccessHodFeatures({ schoolLevel: school?.level })
-  const showSeniorTeacherAssign = ['primary', 'combined'].includes(
-    String(school?.level || '').toLowerCase()
-  )
+  const showSeniorTeacherAssign = hasPrimaryClasses(school)
   const isIndividualSchool = String(school?.schoolType || 'SCHOOL').toUpperCase() === 'INDIVIDUAL'
   /** Always show for school tenants — assignment pages enforce their own access rules. */
   const showGuidanceAssign = !isIndividualSchool

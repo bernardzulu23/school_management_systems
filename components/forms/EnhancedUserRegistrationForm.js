@@ -291,22 +291,15 @@ export default function EnhancedUserRegistrationForm({ role = 'student', onSubmi
         } else {
           const dob = parseDateInput(formData.date_of_birth)
           if (!dob) {
-            newErrors.date_of_birth = 'Use DD/MM/YYYY'
+            newErrors.date_of_birth = 'Use DD/MM/YYYY, MM/DD/YYYY, or YYYY/MM/DD'
           } else {
             const today = new Date()
             const todayUtc = new Date(
               Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate())
             )
-            let age = todayUtc.getUTCFullYear() - dob.getUTCFullYear()
-            const m = todayUtc.getUTCMonth() - dob.getUTCMonth()
-            if (m < 0 || (m === 0 && todayUtc.getUTCDate() < dob.getUTCDate())) {
-              age--
-            }
 
             if (dob.getTime() > todayUtc.getTime()) {
               newErrors.date_of_birth = 'Date cannot be in the future'
-            } else if (age < 12) {
-              newErrors.date_of_birth = 'Must be at least 12 years old'
             }
           }
         }

@@ -55,7 +55,7 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
   const validateRequired = (value) => (value ? true : 'This field is required')
   const validateDob = (value) => {
     if (!value) return 'This field is required'
-    return parseDateInput(value) ? true : 'Use DD/MM/YYYY'
+    return parseDateInput(value) ? true : 'Use DD/MM/YYYY, MM/DD/YYYY, or YYYY/MM/DD'
   }
   const validateEmail = (value) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -232,7 +232,7 @@ export function HodRegistrationForm({ onSubmit, onCancel, isLoading = false, ini
               type="text"
               value={formData.date_of_birth}
               onChange={onInputChange}
-              placeholder="DD/MM/YYYY"
+              placeholder="DD/MM/YYYY, MM/DD/YYYY, or YYYY/MM/DD"
               validate={validateDob}
               icon={Calendar}
               aria-describedby="date_of_birth-error"

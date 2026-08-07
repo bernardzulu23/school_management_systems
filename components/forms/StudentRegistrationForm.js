@@ -70,7 +70,7 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
   const validateDob = (value) => {
     if (!value) return 'This field is required'
     const d = parseDateInput(value)
-    if (!d) return 'Use DD/MM/YYYY'
+    if (!d) return 'Use DD/MM/YYYY, MM/DD/YYYY, or YYYY/MM/DD'
     return true
   }
 
@@ -224,7 +224,7 @@ export default function StudentRegistrationForm({ onSubmit, onCancel }) {
               name="dateOfBirth"
               type="text"
               required
-              placeholder="DD/MM/YYYY"
+              placeholder="DD/MM/YYYY, MM/DD/YYYY, or YYYY/MM/DD"
               value={formData.dateOfBirth}
               onChange={onInputChange}
               error={errors.dateOfBirth}

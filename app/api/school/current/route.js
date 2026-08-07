@@ -5,6 +5,7 @@ import { resolvePublicSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { getSubscriptionState } from '@/lib/billing/subscription'
 import { withSecureHandler } from '@/lib/middleware/secureApi'
 import { safeQueryString } from '@/lib/security/safeQueryValue'
+import { resolveSchoolSectionFlags } from '@/lib/school/resolveSchoolSectionFlags'
 
 export const GET = withSecureHandler(async function GET(request) {
   const { searchParams } = new URL(request.url)
@@ -40,12 +41,23 @@ export const GET = withSecureHandler(async function GET(request) {
     },
   })
 
+  if (!school) {
+    return NextResponse.json({ school: null })
+  }
+
+  const classes = await prisma.class.findMany({
+    where: { schoolId, isActive: true },
+    select: { year_group: true, name: true },
+    take: 800,
+  })
+  const sectionFlags = resolveSchoolSectionFlags(school, classes)
+
   return NextResponse.json({
-    school: school
-      ? {
-          ...school,
-          subscription: getSubscriptionState(school),
-        }
-      : null,
+    school: {
+      ...school,
+      hasPrimary: sectionFlags.hasPrimary,
+      hasSecondary: sectionFlags.hasSecondary,
+      subscription: getSubscriptionState(school),
+    },
   })
 })

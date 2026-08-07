@@ -114,6 +114,26 @@ describe('primary UI isolation — navigation', () => {
     ).toBe(true)
   })
 
+  it('hides Senior Teachers for combined schools with only secondary classes', () => {
+    const secondaryCampus = {
+      level: 'combined',
+      hasPrimary: false,
+      hasSecondary: true,
+    }
+    expect(
+      isNavItemApplicable(
+        {
+          name: 'Senior Teachers',
+          href: '/dashboard/headteacher/senior-teachers',
+          primaryOnly: true,
+        },
+        secondaryCampus
+      )
+    ).toBe(false)
+    expect(hasPrimaryClasses(secondaryCampus)).toBe(false)
+    expect(hasSecondaryClasses(secondaryCampus)).toBe(true)
+  })
+
   it('hides primary Inter-house activities and extracurricular for secondary schools', () => {
     expect(
       isNavItemApplicable(
