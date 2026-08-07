@@ -11,6 +11,7 @@ import { isPilotEmail } from '@/lib/services/registrationHelpers'
 import { buildClassName } from '@/lib/services/registrationHelpers'
 import { normalizeYearGroup } from '@/lib/services/registrationHelpers'
 import { parseStudentExcel } from '@/lib/uploads/parseStudentExcel'
+import { normalizeCellValue } from '@/lib/excel/workbook'
 import {
   studentRowSchema,
   normalizeUploadYearGroup,
@@ -194,8 +195,8 @@ export const POST = withErrorHandler(async (request) => {
     if (rowErrors.length > 0) {
       errorRows.push({
         excelRow: row._excelRow,
-        full_name: row.full_name,
-        email: row.email,
+        full_name: normalizeCellValue(row.full_name),
+        email: normalizeCellValue(row.email),
         errors: rowErrors,
       })
     }
@@ -287,8 +288,8 @@ export const POST = withErrorHandler(async (request) => {
         if (target.includes('exam_number')) {
           errorRows.push({
             excelRow: row._excelRow,
-            full_name: row.full_name,
-            email: row.email,
+            full_name: normalizeCellValue(row.full_name),
+            email: normalizeCellValue(row.email),
             errors: [{ field: 'exam_number', error: 'Exam number already exists in this school' }],
           })
           continue
@@ -296,8 +297,8 @@ export const POST = withErrorHandler(async (request) => {
         if (target.includes('email')) {
           errorRows.push({
             excelRow: row._excelRow,
-            full_name: row.full_name,
-            email: row.email,
+            full_name: normalizeCellValue(row.full_name),
+            email: normalizeCellValue(row.email),
             errors: [{ field: 'email', error: 'Email already exists in this school' }],
           })
           continue
@@ -305,8 +306,8 @@ export const POST = withErrorHandler(async (request) => {
       }
       errorRows.push({
         excelRow: row._excelRow,
-        full_name: row.full_name,
-        email: row.email,
+        full_name: normalizeCellValue(row.full_name),
+        email: normalizeCellValue(row.email),
         errors: [{ field: 'database', error: dbErr?.message || 'Database error' }],
       })
     }

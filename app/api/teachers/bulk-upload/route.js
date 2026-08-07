@@ -9,6 +9,7 @@ import { withErrorHandler } from '@/lib/middleware/errorHandler'
 import { resolveAuthenticatedSchoolId } from '@/lib/tenant/resolveSchoolId'
 import { parseTeacherExcel } from '@/lib/uploads/parseTeacherExcel'
 import { teacherRowSchema, prepareTeacherRow } from '@/lib/uploads/teacherUploadSchema'
+import { normalizeCellValue } from '@/lib/excel/workbook'
 import { parseYearGroupSectionFromClassName } from '@/lib/services/registrationHelpers'
 import { seedSubjectsForSchool } from '@/lib/subjects/seedSubjects'
 
@@ -112,8 +113,8 @@ export const POST = withErrorHandler(async (request) => {
     } else if (rowErrors.length > 0) {
       errorRows.push({
         excelRow: row._excelRow,
-        full_name: row.full_name,
-        email: row.email,
+        full_name: normalizeCellValue(row.full_name),
+        email: normalizeCellValue(row.email),
         errors: rowErrors,
       })
     }
@@ -238,8 +239,8 @@ export const POST = withErrorHandler(async (request) => {
         if (target.includes('email')) {
           errorRows.push({
             excelRow: row._excelRow,
-            full_name: row.full_name,
-            email: row.email,
+            full_name: normalizeCellValue(row.full_name),
+            email: normalizeCellValue(row.email),
             errors: [{ field: 'email', error: 'Email already exists in this school' }],
           })
           continue
@@ -247,8 +248,8 @@ export const POST = withErrorHandler(async (request) => {
       }
       errorRows.push({
         excelRow: row._excelRow,
-        full_name: row.full_name,
-        email: row.email,
+        full_name: normalizeCellValue(row.full_name),
+        email: normalizeCellValue(row.email),
         errors: [{ field: 'database', error: dbErr?.message || 'Database error' }],
       })
     }
