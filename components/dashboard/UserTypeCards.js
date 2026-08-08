@@ -38,7 +38,7 @@ export default function UserTypeCards({
                 <Icon className="h-8 w-8 text-royalPurple-text1 mx-auto" aria-hidden="true" />
               </div>
               <h3 className="font-bold text-royalPurple-text1 text-lg mb-2">{type.name}</h3>
-              <p className="text-3xl font-bold text-royalPurple-accentTx">
+              <p className="text-3xl font-bold text-royalPurple-text1">
                 {countsLoading ? '...' : type.count}
               </p>
             </CardContent>
