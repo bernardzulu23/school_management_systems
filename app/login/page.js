@@ -14,6 +14,8 @@ import { setTopLoading, startTopLoading, stopTopLoading } from '@/lib/uiProgress
 import { SchoolLogo } from '@/components/SchoolLogo'
 import { BrandMark } from '@/components/brand/BrandMark'
 import LocalDevLoginHint from '@/components/dev/LocalDevLoginHint'
+import { getSchoolSubdomainFromHost, normalizeSchoolSubdomain } from '@/lib/utils/schoolSubdomain'
+import { getAppName } from '@/lib/app-version'
 
 const REMEMBER_EMAIL_KEY = 'zsms_remember_email'
 
@@ -41,18 +43,14 @@ function LoginPageContent() {
 
   function resolveSubdomainFromHost() {
     if (typeof window === 'undefined') return ''
-    const hostname = window.location.hostname
-    const parts = hostname.split('.')
-    if (parts.length >= 3) {
-      return parts[0] === 'www' && parts.length >= 4 ? parts[1] : parts[0]
-    }
-    return ''
+    return getSchoolSubdomainFromHost(window.location.hostname) || ''
   }
 
   // Subdomain: hostname (school.ndake.com) or ?subdomain= on apex / Vercel preview
   useEffect(() => {
     const fromHost = resolveSubdomainFromHost()
-    const sub = fromHost || subdomainFromQuery
+    const fromQuery = normalizeSchoolSubdomain(subdomainFromQuery) || ''
+    const sub = fromHost || fromQuery
     if (sub) setDetectedSubdomain(sub)
   }, [subdomainFromQuery])
 
@@ -114,7 +112,11 @@ function LoginPageContent() {
         })
       }, 220)
 
-      const subdomain = resolveSubdomainFromHost() || subdomainFromQuery || detectedSubdomain || ''
+      const subdomain =
+        resolveSubdomainFromHost() ||
+        normalizeSchoolSubdomain(subdomainFromQuery) ||
+        normalizeSchoolSubdomain(detectedSubdomain) ||
+        ''
 
       const result = await login({
         email,
@@ -217,7 +219,8 @@ function LoginPageContent() {
               <div className="bg-paper border-2 border-ink/20 rounded-lg p-2 w-14 h-14 flex items-center justify-center mx-auto mb-4">
                 <BrandMark size={40} className="h-10 w-10 rounded-md" priority />
               </div>
-              <h1 className="text-2xl font-bold text-ink mb-2">Welcome Back</h1>
+              <h1 className="text-2xl font-bold text-ink mb-2 text-center">{getAppName()}</h1>
+              <p className="text-center text-muted text-xs">Blue Peak Technologies</p>
             </>
           )}
           <p className="mt-3 text-center text-muted text-sm">

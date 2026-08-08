@@ -30,7 +30,7 @@ describe('LoginPage', () => {
 
   test('renders login form correctly', () => {
     render(<LoginPage />)
-    expect(screen.getByText(/Welcome Back/i)).toBeInTheDocument()
+    expect(screen.getByText(/Zambian School Management System/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Email address/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/Password/i, { selector: 'input' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Sign In/i })).toBeInTheDocument()

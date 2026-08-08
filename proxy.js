@@ -34,6 +34,7 @@ import {
   shouldApplyWcdNoStore,
   shouldRejectStaticExtensionOnDynamicPath,
 } from './lib/security/webCacheDeception'
+import { getSchoolSubdomainFromHost } from './lib/utils/schoolSubdomain'
 
 // CLOUDFLARE MANUAL STEP REQUIRED:
 // Dashboard > Caching > Cache Rules > Create Rule:
@@ -294,11 +295,11 @@ export async function handleSecurityProxy(request) {
     }
 
     const hostname = request.headers.get('host') || ''
-    const subdomain = getSubdomain(hostname)
+    const subdomain = getSchoolSubdomainFromHost(hostname)
 
     // Re-set the tenant subdomain ONLY from the verified hostname (the
-    // client-supplied value was already stripped above).
-    if (subdomain && subdomain !== 'www') {
+    // client-supplied value was already stripped above). Apex/www are never tenants.
+    if (subdomain) {
       requestHeaders.set('x-school-subdomain', subdomain)
     }
 
@@ -506,19 +507,6 @@ async function decodeAccessToken(request) {
       /* try next signing key */
     }
   }
-  return null
-}
-
-function getSubdomain(hostname) {
-  if (
-    !hostname ||
-    hostname === 'localhost:3000' ||
-    hostname === 'localhost' ||
-    hostname.endsWith('.vercel.app')
-  )
-    return null
-  const parts = hostname.split('.')
-  if (parts.length > 2) return parts[0]
   return null
 }
 

@@ -8,6 +8,7 @@ import FormField from '@/components/forms/FormField'
 import { useSchool } from '@/lib/context/SchoolContext'
 import toast from 'react-hot-toast'
 import { SchoolLogo } from '@/components/SchoolLogo'
+import { getSchoolSubdomainFromHost, normalizeSchoolSubdomain } from '@/lib/utils/schoolSubdomain'
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState('')
@@ -16,16 +17,11 @@ export default function ForgotPasswordPage() {
   const [detectedSubdomain, setDetectedSubdomain] = useState('')
   const { school } = useSchool()
 
-  // Detect subdomain
+  // Detect subdomain (apex/www are platform — no school slug)
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const hostname = window.location.hostname
-      const parts = hostname.split('.')
-      if (parts.length >= 3) {
-        const sub = parts[0] === 'www' && parts.length >= 4 ? parts[1] : parts[0]
-        setDetectedSubdomain(sub)
-      }
-    }
+    if (typeof window === 'undefined') return
+    const sub = getSchoolSubdomainFromHost(window.location.hostname) || ''
+    if (sub) setDetectedSubdomain(sub)
   }, [])
 
   const handleSubmit = async (e) => {
@@ -33,12 +29,13 @@ export default function ForgotPasswordPage() {
     setIsLoading(true)
 
     try {
+      const subdomain = normalizeSchoolSubdomain(detectedSubdomain) || undefined
       const res = await fetch('/api/auth/forgot-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email,
-          subdomain: detectedSubdomain,
+          ...(subdomain ? { subdomain } : {}),
         }),
       })
 

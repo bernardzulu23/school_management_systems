@@ -21,6 +21,7 @@ import { CurriculumFeatures } from '@/components/sections/CurriculumFeatures'
 import { TimeSavings } from '@/components/sections/TimeSavings'
 import { Pricing } from '@/components/sections/Pricing'
 import { TRIAL_MONTHS } from '@/lib/billing/subscription'
+import { getSchoolSubdomainFromHost } from '@/lib/utils/schoolSubdomain'
 
 export default function HomePageClient() {
   const { isAuthenticated, user } = useAuth()
@@ -97,27 +98,9 @@ export default function HomePageClient() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    const hostname = String(window.location.hostname || '')
-      .split(':')[0]
-      .toLowerCase()
-
-    if (!hostname || hostname === 'localhost' || /^[0-9.]+$/.test(hostname)) {
-      setIsMarketingSite(true)
-      return
-    }
-
-    const parts = hostname.split('.').filter(Boolean)
-    if (parts.length < 3) {
-      setIsMarketingSite(true)
-      return
-    }
-
-    if (parts[0] === 'www') {
-      setIsMarketingSite(parts.length < 4)
-      return
-    }
-
-    setIsMarketingSite(false)
+    // Platform apex / www.<base> → marketing; school.<base> → tenant portal
+    const tenantSlug = getSchoolSubdomainFromHost(window.location.hostname)
+    setIsMarketingSite(!tenantSlug)
   }, [])
 
   const tenantSchool = isMarketingSite ? null : school
