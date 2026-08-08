@@ -363,10 +363,10 @@ export default function TeacherRegistrationForm({ onSubmit, onCancel }) {
                             type="checkbox"
                             checked={formData.subjects.includes(subject.id)}
                             onChange={(e) => onSubjectChange(subject.id, e.target.checked)}
-                            className="rounded border-royalPurple-border text-royalPurple-accentTx focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
+                            className="rounded border-royalPurple-border text-royalPurple-accent focus:ring-blue-500 focus-visible:ring-2 focus-visible:ring-blue-500 transition-all duration-200"
                             aria-label={`Select ${subject.name}`}
                           />
-                          <span className="text-royalPurple-text2 group-hover:text-royalPurple-accentTx transition-colors">
+                          <span className="text-royalPurple-text2 group-hover:text-royalPurple-accent transition-colors">
                             {subject.name}
                           </span>
                         </label>

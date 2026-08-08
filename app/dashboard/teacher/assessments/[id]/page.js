@@ -15,7 +15,7 @@ import { ArrowLeft, Download, Send, Save } from 'lucide-react'
 function statusPill(status) {
   const s = String(status || 'DRAFT').toUpperCase()
   if (s === 'PUBLISHED') return 'bg-royalPurple-success/20 text-royalPurple-successTx'
-  if (s === 'SUBMITTED') return 'bg-royalPurple-accent/20 text-royalPurple-accentTx'
+  if (s === 'SUBMITTED') return 'bg-royalPurple-accent/20 text-royalPurple-accent'
   if (s === 'APPROVED') return 'bg-royalPurple-success/20 text-royalPurple-successTx'
   if (s === 'REJECTED' || s === 'REVISION_REQUESTED')
     return 'bg-royalPurple-danger/20 text-royalPurple-dangerTx'
@@ -142,7 +142,7 @@ export default function TeacherAssessmentInteractivePage() {
               (answers hidden; auto-graded).
             </div>
             {meta?.status === 'SUBMITTED' ? (
-              <div className="text-royalPurple-accentTx">Awaiting HOD approval</div>
+              <div className="text-royalPurple-accent">Awaiting HOD approval</div>
             ) : null}
             {meta?.rejectionReason ? (
               <div className="text-royalPurple-dangerTx">HOD feedback: {meta.rejectionReason}</div>

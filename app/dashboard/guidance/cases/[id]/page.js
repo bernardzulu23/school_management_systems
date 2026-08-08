@@ -137,7 +137,7 @@ export default function GuidanceCaseDetailPage() {
         <p className="text-royalPurple-text2">Case not found or access denied.</p>
         <Link
           href="/dashboard/guidance/cases"
-          className="text-royalPurple-accentTx hover:underline text-sm"
+          className="text-royalPurple-accent hover:underline text-sm"
         >
           Back to case log
         </Link>
@@ -151,7 +151,7 @@ export default function GuidanceCaseDetailPage() {
         <div>
           <Link
             href="/dashboard/guidance/cases"
-            className="text-sm text-royalPurple-accentTx hover:underline"
+            className="text-sm text-royalPurple-accent hover:underline"
           >
             ← Case log
           </Link>

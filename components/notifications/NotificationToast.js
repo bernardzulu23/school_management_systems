@@ -97,7 +97,7 @@ export function NotificationToast() {
                 <p className="text-xs text-royalPurple-text3">{formatNotificationType(row.type)}</p>
                 <p className="font-medium text-royalPurple-text1 text-sm mt-0.5">{row.title}</p>
                 <p className="text-sm text-royalPurple-text2 line-clamp-2 mt-1">{row.message}</p>
-                <p className="text-xs text-royalPurple-accentTx mt-2">View details</p>
+                <p className="text-xs text-royalPurple-accent mt-2">View details</p>
               </button>
             ),
             { duration: 5000, id: `notif-${row.id}` }

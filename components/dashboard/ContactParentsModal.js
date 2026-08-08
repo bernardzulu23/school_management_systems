@@ -234,7 +234,7 @@ export default function ContactParentsModal({ students, onClose }) {
                             <div className="grid grid-cols-1 gap-1 text-sm">
                               <div className="flex items-center">
                                 <Phone className="h-3 w-3 text-royalPurple-text3 mr-2" />
-                                <span className="font-medium text-royalPurple-accentTx">
+                                <span className="font-medium text-royalPurple-accent">
                                   {contact.primary_contact.phone}
                                 </span>
                               </div>
@@ -336,10 +336,10 @@ export default function ContactParentsModal({ students, onClose }) {
                 {/* Selected Students Summary */}
                 {selectedStudents.length > 0 && (
                   <div className="p-3 bg-royalPurple-accentBg border border-royalPurple-border2 rounded-lg">
-                    <h4 className="font-medium text-royalPurple-accentTx mb-2">
+                    <h4 className="font-medium text-royalPurple-accent mb-2">
                       Ready to Contact ({selectedStudents.length} students):
                     </h4>
-                    <div className="text-sm text-royalPurple-accentTx">
+                    <div className="text-sm text-royalPurple-accent">
                       {students
                         .filter((s) => selectedStudents.includes(s.id))
                         .map((s) => s.name)

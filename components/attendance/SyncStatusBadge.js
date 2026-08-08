@@ -32,7 +32,7 @@ export function SyncStatusBadge({
   if (syncing) {
     return (
       <div
-        className="flex items-center gap-1.5 text-xs text-royalPurple-accentTx bg-royalPurple-accent/15 px-3 py-1.5 rounded-full border border-royalPurple-border/40"
+        className="flex items-center gap-1.5 text-xs text-royalPurple-accent bg-royalPurple-accent/15 px-3 py-1.5 rounded-full border border-royalPurple-border/40"
         role="status"
         aria-live="polite"
       >

@@ -131,7 +131,7 @@ export default function SubjectsPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-royalPurple-accentTx">
+                  <div className="text-2xl font-bold text-royalPurple-accent">
                     {dashboardData.stats?.total_subjects || dashboardData.my_subjects.length}
                   </div>
                   <div className="text-sm text-royalPurple-text2">Total Subjects</div>

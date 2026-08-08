@@ -260,7 +260,7 @@ export default function HodSDGView({ hodId, departmentData = {} }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-royalPurple-accentTx">
+            <div className="text-2xl font-bold text-royalPurple-accent">
               {staffSDGTraining.length}
             </div>
             <p className="text-xs text-royalPurple-text3">Teachers with SDG training</p>

@@ -208,7 +208,7 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-royalPurple-accentTx">
+            <div className="text-2xl font-bold text-royalPurple-accent">
               ZMW {povertyData.averageHouseholdIncome.toLocaleString()}
             </div>
             <p className="text-xs text-royalPurple-text3">Monthly household income</p>
@@ -285,7 +285,7 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
                 </div>
                 <p className="text-sm text-royalPurple-text2 mb-2">{scholarship.criteria}</p>
                 <div className="flex justify-between text-sm">
-                  <span className="text-royalPurple-accentTx">
+                  <span className="text-royalPurple-accent">
                     {scholarship.recipients} recipients
                   </span>
                   <span
@@ -321,7 +321,7 @@ export default function SDG1PovertyModule({ schoolId, studentData = [] }) {
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-semibold text-royalPurple-text1">{program.name}</h3>
                   <div className="text-right">
-                    <div className="text-sm font-semibold text-royalPurple-accentTx">
+                    <div className="text-sm font-semibold text-royalPurple-accent">
                       {program.beneficiaries} students
                     </div>
                     <div className="text-xs text-royalPurple-text3">

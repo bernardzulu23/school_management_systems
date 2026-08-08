@@ -23,7 +23,7 @@ function pill(status) {
     return 'bg-royalPurple-success/20 text-royalPurple-successTx'
   if (s === 'REJECTED' || s === 'REVISION_REQUESTED')
     return 'bg-royalPurple-danger/20 text-royalPurple-dangerTx'
-  if (s === 'SUBMITTED') return 'bg-royalPurple-accent/20 text-royalPurple-accentTx'
+  if (s === 'SUBMITTED') return 'bg-royalPurple-accent/20 text-royalPurple-accent'
   return 'bg-royalPurple-card2 text-royalPurple-text2'
 }
 
@@ -73,7 +73,7 @@ export default function SeniorTeacherQuizzesPage() {
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center justify-between flex-wrap gap-2">
               <span className="flex items-center">
-                <ClipboardList className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                <ClipboardList className="h-5 w-5 mr-2 text-royalPurple-accent" />
                 Quizzes pending review: {pendingCount}
               </span>
               <Button

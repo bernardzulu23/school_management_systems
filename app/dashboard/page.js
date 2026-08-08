@@ -319,7 +319,7 @@ export default function DashboardPage() {
               >
                 <Card className="p-6 h-full hover:shadow-lg transition-shadow border-2 border-transparent group-hover:border-royalPurple-border2">
                   <div className="flex items-center justify-between mb-4">
-                    <Users className="h-8 w-8 text-royalPurple-accentTx" aria-hidden="true" />
+                    <Users className="h-8 w-8 text-royalPurple-accent" aria-hidden="true" />
                     <div className="text-right">
                       <p className="text-2xl font-bold text-royalPurple-text1">
                         {stats.totalUsers || '0'}
@@ -589,7 +589,7 @@ export default function DashboardPage() {
               id="schedule-title"
               className="text-xl font-bold text-royalPurple-text1 flex items-center"
             >
-              <Clock className="w-6 h-6 text-royalPurple-accentTx mr-2" />
+              <Clock className="w-6 h-6 text-royalPurple-accent mr-2" />
               Your Schedule Today
             </h2>
           </div>

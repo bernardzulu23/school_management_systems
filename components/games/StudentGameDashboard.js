@@ -92,7 +92,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
               </div>
               <div>
                 <h2 className="text-3xl font-bold">Level {studentProgress?.level}</h2>
-                <p className="text-royalPurple-accentTx text-lg">
+                <p className="text-royalPurple-accent text-lg">
                   {studentProgress?.totalPoints} Total Points
                 </p>
                 <div className="flex items-center space-x-4 mt-2">
@@ -119,7 +119,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
                     style={{ width: `${studentProgress?.progressPercentage || 0}%` }}
                   ></div>
                 </div>
-                <p className="text-xs text-royalPurple-accentTx mt-2">
+                <p className="text-xs text-royalPurple-accent mt-2">
                   {(studentProgress?.nextLevelXP || 0) - (studentProgress?.experiencePoints || 0)}{' '}
                   XP to next level
                 </p>
@@ -140,7 +140,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
                   {studentProgress?.gamesPlayed}
                 </p>
               </div>
-              <GamepadIcon className="h-8 w-8 text-royalPurple-accentTx" />
+              <GamepadIcon className="h-8 w-8 text-royalPurple-accent" />
             </div>
           </CardContent>
         </Card>
@@ -234,7 +234,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
 
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div className="flex items-center space-x-2">
-                        <Clock className="h-4 w-4 text-royalPurple-accentTx" />
+                        <Clock className="h-4 w-4 text-royalPurple-accent" />
                         <span>{game.timeLimit} min</span>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -297,7 +297,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
                       >
                         {achievement.rarity}
                       </span>
-                      <span className="text-sm font-semibold text-royalPurple-accentTx">
+                      <span className="text-sm font-semibold text-royalPurple-accent">
                         +{achievement.pointsReward} pts
                       </span>
                     </div>
@@ -394,7 +394,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
                       </div>
                       <div className="text-right">
                         <p className="font-bold text-lg">{session.percentage}%</p>
-                        <p className="text-sm text-royalPurple-accentTx">
+                        <p className="text-sm text-royalPurple-accent">
                           +{session.pointsEarned} pts
                         </p>
                       </div>
@@ -423,7 +423,7 @@ export default function StudentGameDashboard({ currentUser, onPlayGame }) {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="text-center p-4 bg-royalPurple-accent rounded-lg">
-                      <p className="text-2xl font-bold text-royalPurple-accentTx">
+                      <p className="text-2xl font-bold text-royalPurple-accent">
                         {studentProgress?.longestStreak}
                       </p>
                       <p className="text-sm text-royalPurple-text2">Longest Streak</p>

@@ -56,7 +56,7 @@ export function QuizClassAnalysisPanel({ assessmentId, publishedAssignmentId }) 
     <Card>
       <CardHeader className="flex flex-row items-center justify-between gap-3 flex-wrap">
         <CardTitle className="text-base flex items-center gap-2">
-          <Brain className="h-5 w-5 text-royalPurple-accentTx" />
+          <Brain className="h-5 w-5 text-royalPurple-accent" />
           AI progress analysis
         </CardTitle>
         <Button variant="outline" size="sm" onClick={generate} disabled={loading}>

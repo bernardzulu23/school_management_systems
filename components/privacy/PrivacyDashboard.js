@@ -194,7 +194,7 @@ export default function PrivacyDashboard() {
       {/* Header */}
       <div className="text-center">
         <div className="flex items-center justify-center mb-4">
-          <Shield className="h-12 w-12 text-royalPurple-accentTx" />
+          <Shield className="h-12 w-12 text-royalPurple-accent" />
         </div>
         <h1 className="text-3xl font-bold text-royalPurple-text1 mb-2">Privacy Dashboard</h1>
         <p className="text-royalPurple-text2">Manage your privacy settings and data rights</p>
@@ -216,8 +216,8 @@ export default function PrivacyDashboard() {
               <div className="text-sm text-royalPurple-text2">GDPR & COPPA</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-accent rounded-lg">
-              <Lock className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
-              <div className="text-2xl font-bold text-royalPurple-accentTx">Encrypted</div>
+              <Lock className="h-8 w-8 text-royalPurple-accent mx-auto mb-2" />
+              <div className="text-2xl font-bold text-royalPurple-accent">Encrypted</div>
               <div className="text-sm text-royalPurple-text2">Data Protection</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-pill rounded-lg">
@@ -290,7 +290,7 @@ export default function PrivacyDashboard() {
                 <div key={index} className="p-4 border border-royalPurple-border rounded-lg">
                   <div className="flex items-center mb-3">
                     <IconComponent
-                      className={`h-6 w-6 mr-3 ${right.dangerous ? 'text-royalPurple-dangerTx' : 'text-royalPurple-accentTx'}`}
+                      className={`h-6 w-6 mr-3 ${right.dangerous ? 'text-royalPurple-dangerTx' : 'text-royalPurple-accent'}`}
                     />
                     <h4 className="font-medium text-royalPurple-text1">{right.title}</h4>
                   </div>
@@ -330,7 +330,7 @@ export default function PrivacyDashboard() {
                 Email:{' '}
                 <a
                   href={`mailto:${PRIVACY_CONTACT_EMAIL}`}
-                  className="text-royalPurple-accentTx hover:underline"
+                  className="text-royalPurple-accent hover:underline"
                 >
                   {PRIVACY_CONTACT_EMAIL}
                 </a>
@@ -339,7 +339,7 @@ export default function PrivacyDashboard() {
                 Phone:{' '}
                 <a
                   href={`tel:${PRIVACY_CONTACT_PHONE.replace(/\s/g, '')}`}
-                  className="text-royalPurple-accentTx hover:underline"
+                  className="text-royalPurple-accent hover:underline"
                 >
                   {PRIVACY_CONTACT_PHONE}
                 </a>

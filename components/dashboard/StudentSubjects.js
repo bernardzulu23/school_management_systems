@@ -59,8 +59,8 @@ export default function StudentSubjects({ studentData }) {
 
   const getGradeColor = (grade) => {
     if (grade >= 85) return 'text-royalPurple-successTx'
-    if (grade >= 75) return 'text-royalPurple-accentTx'
-    if (grade >= 65) return 'text-royalPurple-accentTx'
+    if (grade >= 75) return 'text-royalPurple-accent'
+    if (grade >= 65) return 'text-royalPurple-accent'
     return 'text-royalPurple-dangerTx'
   }
 
@@ -71,7 +71,7 @@ export default function StudentSubjects({ studentData }) {
       case 'declining':
         return <TrendingUp className="h-4 w-4 text-royalPurple-dangerTx transform rotate-180" />
       default:
-        return <Target className="h-4 w-4 text-royalPurple-accentTx" />
+        return <Target className="h-4 w-4 text-royalPurple-accent" />
     }
   }
 
@@ -80,7 +80,7 @@ export default function StudentSubjects({ studentData }) {
       {/* Student Overview */}
       <Card className="bg-royalPurple-card border border-royalPurple-border2">
         <CardHeader>
-          <CardTitle className="flex items-center text-royalPurple-accentTx">
+          <CardTitle className="flex items-center text-royalPurple-accent">
             <User className="h-6 w-6 mr-2" />
             Academic Overview - {studentInfo.name}
           </CardTitle>
@@ -88,28 +88,26 @@ export default function StudentSubjects({ studentData }) {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-2xl font-bold text-royalPurple-accentTx">
+              <div className="text-2xl font-bold text-royalPurple-accent">
                 {studentInfo.yearGroup}
               </div>
-              <div className="text-sm text-royalPurple-accentTx">Year Group</div>
+              <div className="text-sm text-royalPurple-accent">Year Group</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-royalPurple-accentTx">
-                {studentInfo.class}
-              </div>
-              <div className="text-sm text-royalPurple-accentTx">Class</div>
+              <div className="text-2xl font-bold text-royalPurple-accent">{studentInfo.class}</div>
+              <div className="text-sm text-royalPurple-accent">Class</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-royalPurple-accentTx">
+              <div className="text-2xl font-bold text-royalPurple-accent">
                 {studentInfo.totalSubjects}
               </div>
-              <div className="text-sm text-royalPurple-accentTx">Subjects</div>
+              <div className="text-sm text-royalPurple-accent">Subjects</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-royalPurple-accentTx">
+              <div className="text-2xl font-bold text-royalPurple-accent">
                 #{studentInfo.ranking}
               </div>
-              <div className="text-sm text-royalPurple-accentTx">Class Rank</div>
+              <div className="text-sm text-royalPurple-accent">Class Rank</div>
             </div>
           </div>
           <div className="mt-4 p-3 bg-royalPurple-card rounded-lg">
@@ -117,7 +115,7 @@ export default function StudentSubjects({ studentData }) {
               <span className="text-sm font-medium text-royalPurple-text2">
                 Overall Performance
               </span>
-              <span className="text-lg font-bold text-royalPurple-accentTx">
+              <span className="text-lg font-bold text-royalPurple-accent">
                 {studentInfo.overallGrade}%
               </span>
             </div>
@@ -151,12 +149,12 @@ export default function StudentSubjects({ studentData }) {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-royalPurple-accentTx text-sm font-medium">Good</p>
-                <p className="text-2xl font-bold text-royalPurple-accentTx">
+                <p className="text-royalPurple-accent text-sm font-medium">Good</p>
+                <p className="text-2xl font-bold text-royalPurple-accent">
                   {enrolledSubjects.filter((s) => s.status === 'good').length}
                 </p>
               </div>
-              <Star className="h-8 w-8 text-royalPurple-accentTx" />
+              <Star className="h-8 w-8 text-royalPurple-accent" />
             </div>
           </CardContent>
         </Card>
@@ -307,7 +305,7 @@ export default function StudentSubjects({ studentData }) {
               >
                 <div className="flex items-center space-x-3">
                   <div className="w-10 h-10 rounded-lg bg-royalPurple-accent flex items-center justify-center">
-                    <BookOpen className="h-5 w-5 text-royalPurple-accentTx" />
+                    <BookOpen className="h-5 w-5 text-royalPurple-accent" />
                   </div>
                   <div>
                     <h4 className="font-medium text-royalPurple-text1">{assessment.title}</h4>

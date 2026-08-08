@@ -655,7 +655,7 @@ function HeadteacherDashboardContent() {
                       </p>
                       {isActive ? (
                         <div
-                          className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-royalPurple-accentBg text-royalPurple-accentTx text-xs font-semibold border border-royalPurple-accent"
+                          className="inline-flex items-center justify-center px-3 py-1.5 rounded-full bg-royalPurple-accentBg text-royalPurple-accent text-xs font-semibold border border-royalPurple-accent"
                           aria-label={`Current ${tab.name}`}
                         >
                           Active

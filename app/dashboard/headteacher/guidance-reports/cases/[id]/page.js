@@ -35,7 +35,7 @@ export default function HeadteacherSafeguardingCasePage() {
       <div className="space-y-4 max-w-2xl">
         <Link
           href="/dashboard/headteacher/guidance-reports"
-          className="text-sm text-royalPurple-accentTx hover:underline"
+          className="text-sm text-royalPurple-accent hover:underline"
         >
           ← Guidance reports
         </Link>

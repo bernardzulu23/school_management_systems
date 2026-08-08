@@ -11,7 +11,7 @@ function CareerSection({ title, children }) {
   if (!children) return null
   return (
     <div className="border-t border-royalPurple-border pt-4 first:border-t-0 first:pt-0">
-      <h4 className="text-sm font-semibold text-royalPurple-accentTx mb-2">{title}</h4>
+      <h4 className="text-sm font-semibold text-royalPurple-accent mb-2">{title}</h4>
       <div className="text-sm text-royalPurple-text2 whitespace-pre-wrap">{children}</div>
     </div>
   )
@@ -174,7 +174,7 @@ export function CareerExplorer({ embedded = false }) {
                   className="rounded-lg border border-royalPurple-border p-4 space-y-2"
                 >
                   <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs font-medium rounded-full bg-royalPurple-card2 px-2 py-0.5 text-royalPurple-accentTx">
+                    <span className="text-xs font-medium rounded-full bg-royalPurple-card2 px-2 py-0.5 text-royalPurple-accent">
                       {resourceTypeLabel(item.type)}
                     </span>
                     {item.deadline ? (
@@ -243,7 +243,7 @@ export function CareerExplorer({ embedded = false }) {
                         className="text-left p-4 rounded-lg border border-royalPurple-border hover:border-royalPurple-border2 hover:bg-royalPurple-card2/50 transition-colors"
                       >
                         <div className="flex items-start gap-2">
-                          <Briefcase className="h-5 w-5 text-royalPurple-accentTx shrink-0 mt-0.5" />
+                          <Briefcase className="h-5 w-5 text-royalPurple-accent shrink-0 mt-0.5" />
                           <div>
                             <div className="font-semibold text-royalPurple-text1">
                               {career.title}
@@ -253,7 +253,7 @@ export function CareerExplorer({ embedded = false }) {
                                 {career.summary}
                               </p>
                             )}
-                            <span className="text-xs text-royalPurple-accentTx mt-2 inline-block">
+                            <span className="text-xs text-royalPurple-accent mt-2 inline-block">
                               View subjects &amp; universities →
                             </span>
                           </div>

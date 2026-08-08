@@ -19,7 +19,7 @@ export default function StudyToolsPage() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="flex items-center text-royalPurple-text1">
-                <Calculator className="mr-2 text-royalPurple-accentTx" />
+                <Calculator className="mr-2 text-royalPurple-accent" />
                 Scientific Calculator
               </CardTitle>
             </CardHeader>

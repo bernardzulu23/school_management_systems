@@ -182,7 +182,7 @@ export default function SubjectsPage() {
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-bold text-royalPurple-text1 flex items-center gap-2">
-              <BookOpen className="w-8 h-8 text-royalPurple-accentTx" aria-hidden="true" />
+              <BookOpen className="w-8 h-8 text-royalPurple-accent" aria-hidden="true" />
               School Subjects Management
             </h1>
             <p className="text-royalPurple-text2 mt-2">
@@ -270,7 +270,7 @@ export default function SubjectsPage() {
         aria-label="Subject statistics"
       >
         <Card className="p-4 text-center">
-          <div className="text-2xl font-bold text-royalPurple-accentTx" role="status">
+          <div className="text-2xl font-bold text-royalPurple-accent" role="status">
             {subjects.length}
           </div>
           <div className="text-sm text-royalPurple-text2">Total Subjects</div>
@@ -494,7 +494,7 @@ export default function SubjectsPage() {
         >
           <Card className="w-full max-w-md p-6" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl font-semibold text-royalPurple-text1 mb-4 flex items-center gap-2">
-              <Plus className="w-5 h-5 text-royalPurple-accentTx" aria-hidden="true" />
+              <Plus className="w-5 h-5 text-royalPurple-accent" aria-hidden="true" />
               Add Subject
             </h2>
             <form onSubmit={handleAddSubject} className="space-y-4">

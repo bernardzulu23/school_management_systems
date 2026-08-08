@@ -251,13 +251,13 @@ export default function CreateSupportPlansModal({ students, onClose }) {
                         <div className="text-sm text-royalPurple-text2">Overall Average</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-royalPurple-accentTx">
+                        <div className="text-lg font-bold text-royalPurple-accent">
                           {selectedStudentData.subjects.filter((s) => s.score < 40).length}
                         </div>
                         <div className="text-sm text-royalPurple-text2">Failing Subjects</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-royalPurple-accentTx">
+                        <div className="text-lg font-bold text-royalPurple-accent">
                           {selectedStudentData.attendance_rate}%
                         </div>
                         <div className="text-sm text-royalPurple-text2">Attendance</div>
@@ -332,7 +332,7 @@ export default function CreateSupportPlansModal({ students, onClose }) {
                               <p className="text-sm text-royalPurple-text2">
                                 {template.description}
                               </p>
-                              <p className="text-xs text-royalPurple-accentTx">
+                              <p className="text-xs text-royalPurple-accent">
                                 {template.frequency}
                               </p>
                             </div>
@@ -375,7 +375,7 @@ export default function CreateSupportPlansModal({ students, onClose }) {
                                 <p className="text-sm text-royalPurple-text2">
                                   {intervention.frequency}
                                 </p>
-                                <p className="text-xs text-royalPurple-accentTx">
+                                <p className="text-xs text-royalPurple-accent">
                                   Start: {intervention.startDate}
                                 </p>
                               </div>

@@ -8,7 +8,7 @@ export default function ParentGuardianStep({ formData, errors, onInputChange }) 
       <div className="space-y-8">
         {/* Father's Information */}
         <div className="bg-royalPurple-accent p-6 rounded-xl border border-royalPurple-border2">
-          <h4 className="text-lg font-semibold text-royalPurple-accentTx mb-4 flex items-center">
+          <h4 className="text-lg font-semibold text-royalPurple-accent mb-4 flex items-center">
             <User className="h-5 w-5 mr-2" />
             Father's Information
           </h4>

@@ -126,7 +126,7 @@ export default function TeacherPerformanceDashboard({
       case 'Good':
         return 'text-royalPurple-accentTx bg-royalPurple-accent'
       case 'Satisfactory':
-        return 'text-royalPurple-accentTx bg-royalPurple-accentBg'
+        return 'text-royalPurple-accent bg-royalPurple-accentBg'
       case 'Needs Improvement':
         return 'text-royalPurple-dangerTx bg-royalPurple-danger'
       case 'Unsatisfactory':
@@ -194,7 +194,7 @@ export default function TeacherPerformanceDashboard({
               </p>
             </div>
             <div className="p-3 bg-royalPurple-accent rounded-full">
-              <Eye className="w-6 h-6 text-royalPurple-accentTx" />
+              <Eye className="w-6 h-6 text-royalPurple-accent" />
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">
@@ -248,7 +248,7 @@ export default function TeacherPerformanceDashboard({
               </p>
             </div>
             <div className="p-3 bg-royalPurple-accentBg rounded-full">
-              <Award className="w-6 h-6 text-royalPurple-accentTx" />
+              <Award className="w-6 h-6 text-royalPurple-accent" />
             </div>
           </div>
           <div className="mt-4 flex items-center gap-2">
@@ -271,7 +271,7 @@ export default function TeacherPerformanceDashboard({
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === tab.id
-                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  ? 'border-royalPurple-border2 text-royalPurple-accent'
                   : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >

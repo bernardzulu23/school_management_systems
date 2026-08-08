@@ -129,7 +129,7 @@ export default function TeacherGoalsPage() {
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'in_progress':
-        return <Clock className="h-4 w-4 text-royalPurple-accentTx" />
+        return <Clock className="h-4 w-4 text-royalPurple-accent" />
       case 'pending':
         return <Target className="h-4 w-4 text-warn/100" />
       case 'overdue':
@@ -226,7 +226,7 @@ export default function TeacherGoalsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Target className="h-8 w-8 text-royalPurple-accentTx" />
+                <Target className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Goals</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -508,13 +508,13 @@ export default function TeacherGoalsPage() {
                   <p className="text-xs text-royalPurple-successTx mt-1">3 days ago</p>
                 </div>
                 <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
-                  <h4 className="font-medium text-royalPurple-accentTx mb-1">
+                  <h4 className="font-medium text-royalPurple-accent mb-1">
                     Course Module Completed
                   </h4>
-                  <p className="text-sm text-royalPurple-accentTx">
+                  <p className="text-sm text-royalPurple-accent">
                     Advanced Mathematics Pedagogy - Module 2
                   </p>
-                  <p className="text-xs text-royalPurple-accentTx mt-1">1 week ago</p>
+                  <p className="text-xs text-royalPurple-accent mt-1">1 week ago</p>
                 </div>
                 <div className="p-3 bg-royalPurple-pill border border-royalPurple-border2 rounded-lg">
                   <h4 className="font-medium text-royalPurple-pillTx mb-1">Student Achievement</h4>

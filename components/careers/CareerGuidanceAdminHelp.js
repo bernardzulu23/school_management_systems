@@ -88,7 +88,7 @@ export function CareerGuidanceAdminHelp({ page = 'careers' }) {
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between gap-2">
           <CardTitle className="text-base flex items-center gap-2 text-royalPurple-text1">
-            <HelpCircle className="h-5 w-5 text-royalPurple-accentTx" />
+            <HelpCircle className="h-5 w-5 text-royalPurple-accent" />
             How to set up career guidance (training guide)
           </CardTitle>
           <Button
@@ -125,7 +125,7 @@ export function CareerGuidanceAdminHelp({ page = 'careers' }) {
                 key={step.title}
                 className="flex gap-3 text-sm border-l-2 border-royalPurple-accent pl-3"
               >
-                <span className="font-bold text-royalPurple-accentTx shrink-0">{i + 1}.</span>
+                <span className="font-bold text-royalPurple-accent shrink-0">{i + 1}.</span>
                 <div>
                   <span className="font-semibold text-royalPurple-text1">{step.title}</span>
                   <p className="text-royalPurple-text2 mt-0.5">{step.body}</p>
@@ -140,7 +140,7 @@ export function CareerGuidanceAdminHelp({ page = 'careers' }) {
               <dl className="space-y-2 text-sm">
                 {EXAMPLE.fields.map((row) => (
                   <div key={row.label}>
-                    <dt className="font-medium text-royalPurple-accentTx">{row.label}</dt>
+                    <dt className="font-medium text-royalPurple-accent">{row.label}</dt>
                     <dd className="text-royalPurple-text2 mt-0.5">{row.value}</dd>
                   </div>
                 ))}

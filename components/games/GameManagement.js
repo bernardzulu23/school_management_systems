@@ -196,7 +196,7 @@ export default function GameManagement({ userRole, subjects }) {
                 <p className="text-sm font-medium text-royalPurple-text2">Total Games</p>
                 <p className="text-3xl font-bold text-royalPurple-text1">{games.length}</p>
               </div>
-              <GamepadIcon className="h-8 w-8 text-royalPurple-accentTx" />
+              <GamepadIcon className="h-8 w-8 text-royalPurple-accent" />
             </div>
           </CardContent>
         </Card>
@@ -374,7 +374,7 @@ export default function GameManagement({ userRole, subjects }) {
 
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center space-x-2">
-                    <Target className="h-4 w-4 text-royalPurple-accentTx" />
+                    <Target className="h-4 w-4 text-royalPurple-accent" />
                     <span>{game.targetClass}</span>
                   </div>
                   <div className="flex items-center space-x-2">

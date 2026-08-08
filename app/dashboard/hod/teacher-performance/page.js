@@ -122,7 +122,7 @@ export default function HodTeacherPerformancePage() {
                 </p>
               </div>
               <div className="p-3 rounded-full bg-royalPurple-accent">
-                <Users className="h-5 w-5 text-royalPurple-accentTx" />
+                <Users className="h-5 w-5 text-royalPurple-accent" />
               </div>
             </CardContent>
           </Card>

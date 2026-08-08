@@ -32,8 +32,8 @@ function getGradeColor(grade) {
   if (grade == null || !Number.isFinite(Number(grade))) return 'text-royalPurple-text2'
   if (grade >= 85) return 'text-royalPurple-pillTx'
   if (grade >= 80) return 'text-royalPurple-successTx'
-  if (grade >= 70) return 'text-royalPurple-accentTx'
-  if (grade >= 60) return 'text-royalPurple-accentTx'
+  if (grade >= 70) return 'text-royalPurple-accent'
+  if (grade >= 60) return 'text-royalPurple-accent'
   return 'text-royalPurple-dangerTx'
 }
 

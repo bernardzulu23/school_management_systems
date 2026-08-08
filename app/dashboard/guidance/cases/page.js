@@ -185,7 +185,7 @@ export default function GuidanceCasesPage() {
                     </div>
                     <Link
                       href={`/dashboard/guidance/cases/${c.id}`}
-                      className="text-sm text-royalPurple-accentTx hover:underline self-center"
+                      className="text-sm text-royalPurple-accent hover:underline self-center"
                     >
                       View
                     </Link>

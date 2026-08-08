@@ -125,7 +125,7 @@ export function NotificationCenter({ compact = false }) {
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
-              <Bell className="h-7 w-7 text-royalPurple-accentTx" />
+              <Bell className="h-7 w-7 text-royalPurple-accent" />
               Notifications
             </h1>
             <p className="text-sm text-royalPurple-text2 mt-1">
@@ -252,7 +252,7 @@ export function NotificationCenter({ compact = false }) {
         <div className="text-center pt-1">
           <Link
             href="/dashboard/notifications"
-            className="text-sm text-royalPurple-accentTx hover:underline"
+            className="text-sm text-royalPurple-accent hover:underline"
           >
             Open notification center
           </Link>

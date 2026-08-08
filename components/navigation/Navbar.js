@@ -43,7 +43,7 @@ const Navbar = () => {
                   'px-3 py-2 rounded-md text-sm font-medium transition-colors',
                   pathname === item.href
                     ? 'text-royalPurple-accentTx bg-royalPurple-accent'
-                    : 'text-royalPurple-text2 hover:text-royalPurple-accentTx hover:bg-royalPurple-page'
+                    : 'text-royalPurple-text2 hover:text-royalPurple-accent hover:bg-royalPurple-page'
                 )}
               >
                 {item.name}
@@ -83,7 +83,7 @@ const Navbar = () => {
                 'flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium transition-colors',
                 pathname === item.href
                   ? 'text-royalPurple-accentTx bg-royalPurple-accent'
-                  : 'text-royalPurple-text2 hover:text-royalPurple-accentTx hover:bg-royalPurple-page'
+                  : 'text-royalPurple-text2 hover:text-royalPurple-accent hover:bg-royalPurple-page'
               )}
             >
               <NavIcon icon={item.icon} size={20} className="h-5 w-5" />

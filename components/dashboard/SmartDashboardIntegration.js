@@ -244,7 +244,7 @@ export default function SmartDashboardIntegration({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <div className="text-center p-3 bg-royalPurple-card rounded-lg">
-            <div className="text-2xl font-bold text-royalPurple-accentTx">
+            <div className="text-2xl font-bold text-royalPurple-accent">
               {gamificationData.totalPoints || 0}
             </div>
             <div className="text-sm text-royalPurple-text2">Total Points</div>
@@ -270,7 +270,7 @@ export default function SmartDashboardIntegration({
                 <div className="text-sm text-royalPurple-text2">{achievement.level} Level</div>
               </div>
               <div className="text-right">
-                <div className="font-bold text-royalPurple-accentTx">+{achievement.points}</div>
+                <div className="font-bold text-royalPurple-accent">+{achievement.points}</div>
               </div>
             </div>
           ))}
@@ -321,7 +321,7 @@ export default function SmartDashboardIntegration({
               {filter.field}: {filter.value}
               <button
                 onClick={() => handleFilterRemove(index)}
-                className="ml-2 text-royalPurple-accentTx hover:text-royalPurple-accentTx"
+                className="ml-2 text-royalPurple-accent hover:text-royalPurple-accent"
               >
                 ×
               </button>
@@ -340,7 +340,7 @@ export default function SmartDashboardIntegration({
             <p className="text-sm text-royalPurple-text2">Total Students</p>
             <p className="text-2xl font-bold">{studentData.length}</p>
           </div>
-          <Users className="w-8 h-8 text-royalPurple-accentTx" />
+          <Users className="w-8 h-8 text-royalPurple-accent" />
         </div>
       </Card>
 

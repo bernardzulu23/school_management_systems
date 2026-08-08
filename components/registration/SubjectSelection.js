@@ -155,7 +155,7 @@ export default function SubjectSelection({
                 : 'Choose the subjects you want to work with'}
         </p>
         {selectedSubjects.length > 0 && (
-          <p className="text-sm text-royalPurple-accentTx mt-2">
+          <p className="text-sm text-royalPurple-accent mt-2">
             Selected: {selectedSubjects.length} subject{selectedSubjects.length !== 1 ? 's' : ''}
           </p>
         )}

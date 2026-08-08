@@ -54,7 +54,7 @@ export default function SicDashboardPage() {
               <Link key={item.title} href={item.href}>
                 <Card className="hover:border-royalPurple-accentTx transition-colors h-full">
                   <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-                    <Icon className="h-5 w-5 text-royalPurple-accentTx" />
+                    <Icon className="h-5 w-5 text-royalPurple-accent" />
                     <CardTitle className="text-lg">{item.title}</CardTitle>
                   </CardHeader>
                   <CardContent>

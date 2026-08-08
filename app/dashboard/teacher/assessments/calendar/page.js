@@ -226,7 +226,7 @@ export default function TeacherAssessmentCalendarPage() {
                               {a.kind?.startsWith('scheme_') ? (
                                 <Link
                                   href={`/dashboard/teacher/assessments?create=1&schemeId=${encodeURIComponent(a.schemeId || '')}`}
-                                  className="text-xs font-semibold text-royalPurple-accentTx hover:underline"
+                                  className="text-xs font-semibold text-royalPurple-accent hover:underline"
                                 >
                                   Create from this scheme slot →
                                 </Link>

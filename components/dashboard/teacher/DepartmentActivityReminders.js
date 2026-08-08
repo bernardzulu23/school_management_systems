@@ -129,7 +129,7 @@ export function DepartmentActivityReminders() {
     <section className="space-y-3" aria-label="Department reminders">
       <div className="flex items-center justify-between gap-2 flex-wrap">
         <h2 className="text-xl font-bold text-royalPurple-text1 flex items-center gap-2">
-          <AlertTriangle className="h-5 w-5 text-royalPurple-accentTx" />
+          <AlertTriangle className="h-5 w-5 text-royalPurple-accent" />
           Department reminders
           {payload.departmentName && (
             <span className="text-sm font-normal text-royalPurple-text2">

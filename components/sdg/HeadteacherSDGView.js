@@ -131,7 +131,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-royalPurple-accentTx flex items-center justify-center space-x-2">
+        <h1 className="text-3xl font-bold text-royalPurple-accent flex items-center justify-center space-x-2">
           <School className="h-8 w-8" />
           <span>School SDG Leadership Dashboard</span>
         </h1>
@@ -141,8 +141,8 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
         </p>
         <div className="flex items-center justify-center space-x-4">
           <div className="flex items-center space-x-2">
-            <Globe className="h-6 w-6 text-royalPurple-accentTx" />
-            <span className="text-2xl font-bold text-royalPurple-accentTx">
+            <Globe className="h-6 w-6 text-royalPurple-accent" />
+            <span className="text-2xl font-bold text-royalPurple-accent">
               {getSchoolOverallProgress()}%
             </span>
             <span className="text-royalPurple-text2">Overall SDG Progress</span>
@@ -160,7 +160,7 @@ export default function HeadteacherSDGView({ schoolId, schoolData = {} }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-royalPurple-accentTx">
+            <div className="text-2xl font-bold text-royalPurple-accent">
               {schoolImpactMetrics.totalStudentsImpacted}
             </div>
             <p className="text-xs text-royalPurple-text3">Across all SDG programs</p>

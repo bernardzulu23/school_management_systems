@@ -124,7 +124,7 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
       case 'Good':
         return 'text-royalPurple-accentTx bg-royalPurple-accent'
       case 'Satisfactory':
-        return 'text-royalPurple-accentTx bg-royalPurple-accentBg'
+        return 'text-royalPurple-accent bg-royalPurple-accentBg'
       case 'Needs Improvement':
         return 'text-royalPurple-dangerTx bg-royalPurple-danger'
       case 'Unsatisfactory':
@@ -246,10 +246,10 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div className="text-center p-3 bg-royalPurple-accent rounded-lg">
-                    <div className="text-2xl font-bold text-royalPurple-accentTx">
+                    <div className="text-2xl font-bold text-royalPurple-accent">
                       {data.observation_score}%
                     </div>
-                    <div className="text-sm text-royalPurple-accentTx">Observation Score</div>
+                    <div className="text-sm text-royalPurple-accent">Observation Score</div>
                   </div>
                   <div className="text-center p-3 bg-royalPurple-success rounded-lg">
                     <div className="text-2xl font-bold text-royalPurple-successTx">
@@ -349,10 +349,10 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     <div className="text-center p-2 bg-royalPurple-accent rounded">
-                      <div className="text-lg font-bold text-royalPurple-accentTx">
+                      <div className="text-lg font-bold text-royalPurple-accent">
                         {term.observation_score.toFixed(1)}%
                       </div>
-                      <div className="text-xs text-royalPurple-accentTx">Observation</div>
+                      <div className="text-xs text-royalPurple-accent">Observation</div>
                     </div>
                     <div className="text-center p-2 bg-royalPurple-success rounded">
                       <div className="text-lg font-bold text-royalPurple-successTx">
@@ -500,12 +500,10 @@ export default function TeacherPerformanceAnalysis({ teacherId, teacherData, per
 
                         {obs.recommendations && (
                           <div className="p-3 bg-royalPurple-accent rounded-lg">
-                            <p className="font-medium text-royalPurple-accentTx mb-1">
+                            <p className="font-medium text-royalPurple-accent mb-1">
                               Recommendations:
                             </p>
-                            <p className="text-sm text-royalPurple-accentTx">
-                              {obs.recommendations}
-                            </p>
+                            <p className="text-sm text-royalPurple-accent">{obs.recommendations}</p>
                           </div>
                         )}
 

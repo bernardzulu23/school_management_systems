@@ -205,7 +205,7 @@ export default function SDG3HealthModule({ schoolId, studentData = [] }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-royalPurple-accentTx">
+            <div className="text-2xl font-bold text-royalPurple-accent">
               {healthData.healthCheckupCompletion}%
             </div>
             <p className="text-xs text-royalPurple-text3">Annual screening completion</p>
@@ -345,7 +345,7 @@ export default function SDG3HealthModule({ schoolId, studentData = [] }) {
               <div key={index} className="p-4 border rounded-lg">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="font-semibold text-royalPurple-text1">{vaccine.vaccine}</h3>
-                  <span className="text-sm font-medium text-royalPurple-accentTx">
+                  <span className="text-sm font-medium text-royalPurple-accent">
                     {vaccine.percentage}%
                   </span>
                 </div>

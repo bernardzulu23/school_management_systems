@@ -27,8 +27,8 @@ export default function PasswordRequirements({ password, className = '' }) {
     <div
       className={`p-4 bg-royalPurple-accent rounded-lg border border-royalPurple-border2 ${className}`}
     >
-      <h4 className="font-medium text-royalPurple-accentTx mb-2">Password requirements</h4>
-      <ul className="text-sm text-royalPurple-accentTx space-y-1">
+      <h4 className="font-medium text-royalPurple-accent mb-2">Password requirements</h4>
+      <ul className="text-sm text-royalPurple-accent space-y-1">
         {PASSWORD_REQUIREMENTS.map((rule) => {
           const met = requirements[rule.key]
           return (

@@ -185,7 +185,7 @@ export default function TeacherObservationForm({
 
   const getScoreColor = (score) => {
     if (score >= 90) return 'text-royalPurple-successTx'
-    if (score >= 80) return 'text-royalPurple-accentTx'
+    if (score >= 80) return 'text-royalPurple-accent'
     if (score >= 70) return 'text-yellow-600'
     if (score >= 60) return 'text-orange-600'
     return 'text-royalPurple-dangerTx'
@@ -596,7 +596,7 @@ export default function TeacherObservationForm({
                 name="follow_up_required"
                 checked={formData.follow_up_required}
                 onChange={handleChange}
-                className="h-4 w-4 text-royalPurple-accentTx focus:ring-blue-500 border-royalPurple-border rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                className="h-4 w-4 text-royalPurple-accent focus:ring-blue-500 border-royalPurple-border rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
               />
               <label
                 htmlFor="follow_up_required"

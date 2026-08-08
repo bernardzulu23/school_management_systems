@@ -62,7 +62,7 @@ export default function BudgetPage() {
       case 'pending':
         return <Clock className="h-4 w-4 text-warn/100" />
       case 'completed':
-        return <CheckCircle className="h-4 w-4 text-royalPurple-accentTx" />
+        return <CheckCircle className="h-4 w-4 text-royalPurple-accent" />
       default:
         return <AlertCircle className="h-4 w-4 text-royalPurple-text3" />
     }
@@ -170,7 +170,7 @@ export default function BudgetPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Wallet className="h-8 w-8 text-royalPurple-accentTx" />
+                <Wallet className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Allocated</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">

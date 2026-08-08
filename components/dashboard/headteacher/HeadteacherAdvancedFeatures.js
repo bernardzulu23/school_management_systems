@@ -20,7 +20,7 @@ export function HeadteacherAdvancedFeatures() {
         <Card variant="glass">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center">
-              <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+              <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accent" />
               Institutional Analytics
             </CardTitle>
           </CardHeader>

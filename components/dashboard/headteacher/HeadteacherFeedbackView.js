@@ -141,13 +141,13 @@ export function HeadteacherFeedbackView() {
                       {new Date(fb.createdAt).toLocaleDateString()}
                     </span>
                     {fb.category && (
-                      <span className="px-2 py-0.5 rounded bg-royalPurple-accent dark:bg-royalPurple-accent/30 text-royalPurple-accentTx dark:text-royalPurple-accentTx">
+                      <span className="px-2 py-0.5 rounded bg-royalPurple-accent dark:bg-royalPurple-accent/30 text-royalPurple-accent dark:text-royalPurple-accent">
                         {CATEGORY_LABELS[fb.category] || fb.category}
                       </span>
                     )}
                     {fb.rating && (
                       <span className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-amber-400 text-royalPurple-accentTx" />
+                        <Star className="h-4 w-4 fill-amber-400 text-royalPurple-accent" />
                         {fb.rating}/5
                       </span>
                     )}

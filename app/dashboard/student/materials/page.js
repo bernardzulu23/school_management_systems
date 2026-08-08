@@ -121,7 +121,7 @@ export default function StudyMaterialsPage() {
       case 'pdf':
         return <FileText className="h-5 w-5 text-royalPurple-dangerTx" />
       case 'video':
-        return <Video className="h-5 w-5 text-royalPurple-accentTx" />
+        return <Video className="h-5 w-5 text-royalPurple-accent" />
       case 'powerpoint':
         return <FileText className="h-5 w-5 text-accent/100" />
       case 'zip':
@@ -243,7 +243,7 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <BookOpen className="h-8 w-8 text-royalPurple-accentTx" />
+                <BookOpen className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Materials</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">

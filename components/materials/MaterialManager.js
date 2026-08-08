@@ -102,7 +102,7 @@ export default function MaterialManager() {
     toast('Delete materials from AI Reference Materials.', { icon: 'ℹ️' })
   }
 
-  const getFileIcon = () => <FileText className="h-5 w-5 text-royalPurple-accentTx" />
+  const getFileIcon = () => <FileText className="h-5 w-5 text-royalPurple-accent" />
 
   return (
     <div className="space-y-6">

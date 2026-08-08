@@ -1096,7 +1096,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
               className={cn(
                 'flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors duration-200 group relative',
                 isActive
-                  ? 'bg-royalPurple-accentBg text-royalPurple-accentTx border-l-2 border-royalPurple-accent'
+                  ? 'bg-royalPurple-accentBg text-royalPurple-accent border-l-2 border-royalPurple-accent'
                   : 'text-royalPurple-text2 hover:bg-royalPurple-card2 hover:text-royalPurple-text1'
               )}
             >
@@ -1105,7 +1105,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
                 size={20}
                 className={cn(
                   'h-5 w-5 shrink-0',
-                  isActive ? 'text-royalPurple-accentTx' : 'text-royalPurple-text2'
+                  isActive ? 'text-royalPurple-accent' : 'text-royalPurple-text2'
                 )}
               />
               {(!isCollapsed || mobileOpen) && <span className="font-medium">{item.name}</span>}
@@ -1132,7 +1132,7 @@ export function Sidebar({ className, mobileOpen, setMobileOpen }) {
         )}
         <button
           onClick={logout}
-          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-royalPurple-border2 text-royalPurple-text2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx transition-colors"
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-royalPurple-border2 text-royalPurple-text2 hover:border-royalPurple-accent hover:text-royalPurple-accent transition-colors"
           aria-label="Logout"
         >
           <NavIcon name="logout" size={20} className="h-5 w-5 shrink-0" />

@@ -67,7 +67,7 @@ export default function SubjectsPage() {
                     {subject.name}
                   </CardTitle>
                   <div className="p-2 bg-royalPurple-accent rounded-lg">
-                    <BookOpen className="h-5 w-5 text-royalPurple-accentTx" />
+                    <BookOpen className="h-5 w-5 text-royalPurple-accent" />
                   </div>
                 </CardHeader>
                 <CardContent>

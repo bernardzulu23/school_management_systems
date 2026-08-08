@@ -80,8 +80,8 @@ export default function SDGDashboard({ schoolData = {} }) {
           Tracking our school's contribution to the 2030 Agenda for Sustainable Development
         </p>
         <div className="flex items-center justify-center space-x-2">
-          <Globe className="h-6 w-6 text-royalPurple-accentTx" />
-          <span className="text-2xl font-bold text-royalPurple-accentTx">
+          <Globe className="h-6 w-6 text-royalPurple-accent" />
+          <span className="text-2xl font-bold text-royalPurple-accent">
             {getOverallProgress()}%
           </span>
           <span className="text-royalPurple-text2">Overall Progress</span>
@@ -216,7 +216,7 @@ export default function SDGDashboard({ schoolData = {} }) {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <button className="p-4 bg-royalPurple-accent rounded-lg hover:bg-royalPurple-accent transition-colors text-left">
-              <div className="text-royalPurple-accentTx font-semibold">📊 Update Metrics</div>
+              <div className="text-royalPurple-accent font-semibold">📊 Update Metrics</div>
               <div className="text-sm text-royalPurple-text2">Update SDG progress data</div>
             </button>
             <button className="p-4 bg-royalPurple-success rounded-lg hover:bg-royalPurple-success transition-colors text-left">

@@ -39,7 +39,7 @@ export default function StudyGroupsPage() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="flex items-center text-royalPurple-text1">
-                <Users className="mr-2 text-royalPurple-accentTx" />
+                <Users className="mr-2 text-royalPurple-accent" />
                 Science Explorers
               </CardTitle>
             </CardHeader>

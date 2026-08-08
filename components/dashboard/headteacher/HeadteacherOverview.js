@@ -143,7 +143,7 @@ export const HeadteacherOverview = memo(function HeadteacherOverview() {
           </p>
           <Link
             href="/dashboard/assessments"
-            className="text-sm font-semibold text-royalPurple-accentTx hover:underline shrink-0"
+            className="text-sm font-semibold text-royalPurple-accent hover:underline shrink-0"
           >
             View compliance
           </Link>

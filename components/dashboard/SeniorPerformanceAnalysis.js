@@ -147,7 +147,7 @@ export default function SeniorPerformanceAnalysis({ results = [] }) {
               analysis.overallPassRate >= 75
                 ? 'text-royalPurple-successTx'
                 : analysis.overallPassRate >= 50
-                  ? 'text-royalPurple-accentTx'
+                  ? 'text-royalPurple-accent'
                   : 'text-orange-400'
             }`}
           >
@@ -160,7 +160,7 @@ export default function SeniorPerformanceAnalysis({ results = [] }) {
         <Card variant="glass">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center">
-              <TrendingUp className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+              <TrendingUp className="h-5 w-5 mr-2 text-royalPurple-accent" />
               Overall Grade Distribution
             </CardTitle>
           </CardHeader>
@@ -216,7 +216,7 @@ export default function SeniorPerformanceAnalysis({ results = [] }) {
                         subject.passRate >= 75
                           ? 'text-royalPurple-successTx'
                           : subject.passRate >= 50
-                            ? 'text-royalPurple-accentTx'
+                            ? 'text-royalPurple-accent'
                             : 'text-royalPurple-dangerTx'
                       }`}
                     >
@@ -273,7 +273,7 @@ export default function SeniorPerformanceAnalysis({ results = [] }) {
                           teacher.passRate >= 75
                             ? 'bg-royalPurple-success/20 text-royalPurple-successTx'
                             : teacher.passRate >= 50
-                              ? 'bg-royalPurple-accent/20 text-royalPurple-accentTx'
+                              ? 'bg-royalPurple-accent/20 text-royalPurple-accent'
                               : 'bg-royalPurple-danger/20 text-royalPurple-dangerTx'
                         }`}
                       >

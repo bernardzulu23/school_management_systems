@@ -110,7 +110,7 @@ export default function SeniorTeacherLessonPlanDetailPage() {
         <Card variant="glass">
           <CardHeader>
             <CardTitle className="text-royalPurple-text1 flex items-center">
-              <FileText className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+              <FileText className="h-5 w-5 mr-2 text-royalPurple-accent" />
               {plan ? `${plan.subject} • ${plan.grade}` : 'Lesson Plan'}
             </CardTitle>
           </CardHeader>

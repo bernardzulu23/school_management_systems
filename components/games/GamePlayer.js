@@ -134,9 +134,9 @@ export default function GamePlayer({ game, onComplete, onExit }) {
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center p-6 bg-royalPurple-accent rounded-xl">
-                <Clock className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+                <Clock className="h-8 w-8 text-royalPurple-accent mx-auto mb-2" />
                 <h3 className="font-semibold text-royalPurple-text1">Time Limit</h3>
-                <p className="text-2xl font-bold text-royalPurple-accentTx">{game.timeLimit} min</p>
+                <p className="text-2xl font-bold text-royalPurple-accent">{game.timeLimit} min</p>
               </div>
               <div className="text-center p-6 bg-royalPurple-success rounded-xl">
                 <Target className="h-8 w-8 text-royalPurple-successTx mx-auto mb-2" />
@@ -208,9 +208,9 @@ export default function GamePlayer({ game, onComplete, onExit }) {
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="text-center p-6 bg-royalPurple-accent rounded-xl">
-                <Trophy className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+                <Trophy className="h-8 w-8 text-royalPurple-accent mx-auto mb-2" />
                 <h3 className="font-semibold text-royalPurple-text1">Score</h3>
-                <p className="text-2xl font-bold text-royalPurple-accentTx">
+                <p className="text-2xl font-bold text-royalPurple-accent">
                   {totalScore}/{maxScore}
                 </p>
               </div>
@@ -317,7 +317,7 @@ export default function GamePlayer({ game, onComplete, onExit }) {
         <CardContent className="p-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="text-2xl font-bold text-royalPurple-accentTx">
+              <div className="text-2xl font-bold text-royalPurple-accent">
                 {currentQuestion + 1}/{game.content.questions.length}
               </div>
               <div className="flex-1">

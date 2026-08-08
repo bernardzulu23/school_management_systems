@@ -60,7 +60,7 @@ export function InstallAppPrompt() {
       <div className="flex items-start gap-2 min-w-0 text-sm">
         {showAndroid ? (
           <>
-            <Download className="h-4 w-4 mt-0.5 shrink-0 text-royalPurple-accentTx" aria-hidden />
+            <Download className="h-4 w-4 mt-0.5 shrink-0 text-royalPurple-accent" aria-hidden />
             <div className="min-w-0">
               <p className="font-medium text-royalPurple-text1">Install ZSMS</p>
               <p className="text-xs text-royalPurple-text2">
@@ -70,7 +70,7 @@ export function InstallAppPrompt() {
           </>
         ) : (
           <>
-            <Share2 className="h-4 w-4 mt-0.5 shrink-0 text-royalPurple-accentTx" aria-hidden />
+            <Share2 className="h-4 w-4 mt-0.5 shrink-0 text-royalPurple-accent" aria-hidden />
             <div className="min-w-0">
               <p className="font-medium text-royalPurple-text1">Add to Home Screen</p>
               <p className="text-xs text-royalPurple-text2">

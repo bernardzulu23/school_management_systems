@@ -71,7 +71,7 @@ export default function GuidancePupilsPage() {
                         <td className="py-2">
                           <Link
                             href={`/dashboard/guidance/cases?pupilId=${p.id}`}
-                            className="text-royalPurple-accentTx hover:underline"
+                            className="text-royalPurple-accent hover:underline"
                           >
                             Open case
                           </Link>

@@ -377,7 +377,7 @@ function RegistrationContent() {
                   .careerGuidance ? (
                   <Card className="p-6">
                     <div className="flex items-center gap-3 mb-3">
-                      <Briefcase className="h-6 w-6 text-royalPurple-accentTx" />
+                      <Briefcase className="h-6 w-6 text-royalPurple-accent" />
                       <h3 className="text-lg font-semibold text-royalPurple-text1">
                         Guidance teachers
                       </h3>
@@ -406,7 +406,7 @@ function RegistrationContent() {
 
                 <Card className="p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <GraduationCap className="h-6 w-6 text-royalPurple-accentTx" />
+                    <GraduationCap className="h-6 w-6 text-royalPurple-accent" />
                     <h3 className="text-lg font-semibold text-royalPurple-text1">
                       School In-service Coordinator (SIC)
                     </h3>
@@ -424,7 +424,7 @@ function RegistrationContent() {
 
                 <Card className="p-6">
                   <div className="flex items-center gap-3 mb-3">
-                    <Bell className="h-6 w-6 text-royalPurple-accentTx" />
+                    <Bell className="h-6 w-6 text-royalPurple-accent" />
                     <h3 className="text-lg font-semibold text-royalPurple-text1">Notifications</h3>
                   </div>
                   <p className="text-sm text-royalPurple-text2 mb-4">
@@ -523,7 +523,7 @@ export default function RegistrationPage() {
     <Suspense
       fallback={
         <div className="min-h-screen bg-royalPurple-page flex items-center justify-center">
-          <Loader2 className="h-8 w-8 text-royalPurple-accentTx animate-spin" />
+          <Loader2 className="h-8 w-8 text-royalPurple-accent animate-spin" />
         </div>
       }
     >

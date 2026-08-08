@@ -45,7 +45,7 @@ export default function AccountSetupStep({
           />
           <button
             type="button"
-            className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text2 focus:outline-none focus:text-royalPurple-accentTx"
+            className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text2 focus:outline-none focus:text-royalPurple-accent"
             onClick={() => setShowPassword(!showPassword)}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
@@ -68,7 +68,7 @@ export default function AccountSetupStep({
           />
           <button
             type="button"
-            className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text2 focus:outline-none focus:text-royalPurple-accentTx"
+            className="absolute right-3 top-[38px] text-royalPurple-text3 hover:text-royalPurple-text2 focus:outline-none focus:text-royalPurple-accent"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
             aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
           >

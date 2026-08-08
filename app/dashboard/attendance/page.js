@@ -293,7 +293,7 @@ export default function AttendancePage() {
     return (
       <DashboardLayout title="Take Attendance">
         <div className="flex justify-center py-12">
-          <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
+          <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accent" />
         </div>
       </DashboardLayout>
     )
@@ -454,7 +454,7 @@ export default function AttendancePage() {
             <Card className="focus-within:ring-2 focus-within:ring-g-500 transition-shadow">
               <CardContent className="p-4">
                 <div className="flex items-center">
-                  <Users className="h-6 w-6 text-royalPurple-accentTx" aria-hidden="true" />
+                  <Users className="h-6 w-6 text-royalPurple-accent" aria-hidden="true" />
                   <div className="ml-3">
                     <p className="text-sm text-royalPurple-text2">Total Students</p>
                     <p className="text-lg font-semibold">{students.length}</p>

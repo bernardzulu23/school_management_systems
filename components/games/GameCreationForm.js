@@ -431,7 +431,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
       <Card className="dashboard-card">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
-            <GamepadIcon className="h-6 w-6 text-royalPurple-accentTx" />
+            <GamepadIcon className="h-6 w-6 text-royalPurple-accent" />
             <span>{initialData ? 'Edit Game' : 'Create New Game'}</span>
           </CardTitle>
         </CardHeader>
@@ -466,7 +466,7 @@ export default function GameCreationForm({ subjects, onSave, onCancel, initialDa
                 <p className="text-royalPurple-text2 mt-2">{gameData.description}</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
                   <div className="text-center">
-                    <Clock className="h-5 w-5 mx-auto text-royalPurple-accentTx" />
+                    <Clock className="h-5 w-5 mx-auto text-royalPurple-accent" />
                     <p className="text-sm font-medium mt-1">{gameData.timeLimit} min</p>
                   </div>
                   <div className="text-center">

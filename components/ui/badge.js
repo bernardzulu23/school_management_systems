@@ -6,7 +6,7 @@ const badgeVariants = {
   destructive: 'border-transparent bg-royalPurple-danger text-royalPurple-dangerTx',
   outline: 'border-royalPurple-border text-royalPurple-text1',
   success: 'border-transparent bg-royalPurple-success text-royalPurple-successTx',
-  warning: 'border-transparent bg-royalPurple-accentBg text-royalPurple-accentTx',
+  warning: 'border-transparent bg-royalPurple-accentBg text-royalPurple-accent',
 }
 
 export function Badge({ className = '', variant = 'default', children, ...props }) {

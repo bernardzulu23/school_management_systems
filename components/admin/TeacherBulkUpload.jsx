@@ -85,7 +85,7 @@ export default function TeacherBulkUpload() {
   return (
     <Card className="max-w-2xl mx-auto p-6">
       <div className="flex items-start gap-3 mb-6">
-        <FileSpreadsheet className="w-8 h-8 text-royalPurple-accentTx shrink-0" aria-hidden />
+        <FileSpreadsheet className="w-8 h-8 text-royalPurple-accent shrink-0" aria-hidden />
         <div>
           <h2 className="text-xl font-semibold text-royalPurple-text1">Bulk Teacher Upload</h2>
           <p className="text-sm text-royalPurple-text2 mt-1">

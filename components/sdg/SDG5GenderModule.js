@@ -250,7 +250,7 @@ export default function SDG5GenderModule({ schoolId, studentData = [], teacherDa
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-royalPurple-accentTx">
+            <div className="text-2xl font-bold text-royalPurple-accent">
               {genderData.femaleLeadership}%
             </div>
             <p className="text-xs text-royalPurple-text3">In leadership positions</p>

@@ -21,7 +21,7 @@ export default function Student3DShapesPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Box className="h-5 w-5 text-royalPurple-accentTx" />
+              <Box className="h-5 w-5 text-royalPurple-accent" />
               Feature Coming Soon
             </CardTitle>
           </CardHeader>

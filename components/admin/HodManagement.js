@@ -220,7 +220,7 @@ export default function HodManagement() {
         <Card role="region" aria-labelledby="stat-total-hods">
           <CardContent className="p-6">
             <div className="flex items-center">
-              <UserCheck className="h-8 w-8 text-royalPurple-accentTx" aria-hidden="true" />
+              <UserCheck className="h-8 w-8 text-royalPurple-accent" aria-hidden="true" />
               <div className="ml-4">
                 <p id="stat-total-hods" className="text-sm font-medium text-royalPurple-text2">
                   Total HODs

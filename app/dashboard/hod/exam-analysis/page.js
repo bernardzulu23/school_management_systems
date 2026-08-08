@@ -113,7 +113,7 @@ export default function ExamAnalysisPage() {
             </Link>
             <div>
               <h1 className="flex items-center text-2xl font-bold text-royalPurple-text1 sm:text-3xl">
-                <BarChart3 className="mr-3 h-7 w-7 text-royalPurple-accentTx sm:h-8 sm:w-8" />
+                <BarChart3 className="mr-3 h-7 w-7 text-royalPurple-accent sm:h-8 sm:w-8" />
                 Exam Analysis
               </h1>
               <p className="text-royalPurple-text2 mt-1">
@@ -173,7 +173,7 @@ export default function ExamAnalysisPage() {
 
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
+            <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accent" />
           </div>
         ) : isError ? (
           <Card className="p-8 text-center">
@@ -190,14 +190,14 @@ export default function ExamAnalysisPage() {
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-royalPurple-accentTx/80 text-sm font-medium">
+                      <p className="text-royalPurple-accent/80 text-sm font-medium">
                         Total Students
                       </p>
-                      <p className="text-3xl font-bold text-royalPurple-accentTx">
+                      <p className="text-3xl font-bold text-royalPurple-accent">
                         {departmentStats.totalStudents || 0}
                       </p>
                     </div>
-                    <Users className="h-12 w-12 text-royalPurple-accentTx/60" />
+                    <Users className="h-12 w-12 text-royalPurple-accent/60" />
                   </div>
                 </CardContent>
               </Card>
@@ -594,7 +594,7 @@ export default function ExamAnalysisPage() {
                           ? 'text-royalPurple-dangerTx'
                           : a.level === 'success'
                             ? 'text-royalPurple-successTx'
-                            : 'text-royalPurple-accentTx'
+                            : 'text-royalPurple-accent'
 
                       return (
                         <div key={idx} className={`p-4 border rounded-lg ${bg}`}>

@@ -127,7 +127,7 @@ export default function SecurityDashboard() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <Shield className="w-8 h-8 text-royalPurple-accentTx" />
+            <Shield className="w-8 h-8 text-royalPurple-accent" />
             <h1 className="text-3xl font-bold text-royalPurple-text1">
               Security Dashboard - AES-256 & TLS 1.3
             </h1>
@@ -143,7 +143,7 @@ export default function SecurityDashboard() {
           <div className="bg-royalPurple-card rounded-lg shadow-md p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <Lock className="w-6 h-6 text-royalPurple-accentTx" />
+                <Lock className="w-6 h-6 text-royalPurple-accent" />
                 <h3 className="font-semibold text-royalPurple-text1">AES-256 Encryption</h3>
               </div>
               {getStatusIcon(securityStatus.encryption)}
@@ -273,7 +273,7 @@ export default function SecurityDashboard() {
 
                 <div className="flex justify-between items-center">
                   <span className="text-royalPurple-text2">TLS Version:</span>
-                  <span className="font-medium text-royalPurple-accentTx">
+                  <span className="font-medium text-royalPurple-accent">
                     {tlsTestResults.tlsVersion}
                   </span>
                 </div>
@@ -324,7 +324,7 @@ export default function SecurityDashboard() {
 
             <div className="text-center">
               <div className="w-16 h-16 bg-royalPurple-accent rounded-full flex items-center justify-center mx-auto mb-3">
-                <Shield className="w-8 h-8 text-royalPurple-accentTx" />
+                <Shield className="w-8 h-8 text-royalPurple-accent" />
               </div>
               <h4 className="font-semibold text-royalPurple-text1 mb-2">FERPA Ready</h4>
               <p className="text-sm text-royalPurple-text2">

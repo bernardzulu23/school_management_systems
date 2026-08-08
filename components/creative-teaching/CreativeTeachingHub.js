@@ -256,7 +256,7 @@ export default function CreativeTeachingHub() {
       <p className="text-sm text-royalPurple-text3 text-center">
         Beta features are actively developed. Report issues to{' '}
         <a
-          className="underline text-royalPurple-accentTx"
+          className="underline text-royalPurple-accent"
           href="mailto:support@bluepeacktechnologies.com"
         >
           support@bluepeacktechnologies.com
@@ -285,7 +285,7 @@ export default function CreativeTeachingHub() {
             </Card>
             <Card className="bg-royalPurple-muted/60 border-royalPurple-border/40">
               <CardContent className="p-4 text-center">
-                <Atom className="h-8 w-8 mx-auto mb-2 text-royalPurple-accentTx" />
+                <Atom className="h-8 w-8 mx-auto mb-2 text-royalPurple-accent" />
                 <div className="text-2xl font-bold text-royalPurple-text1">
                   {stemFeatures.length}
                 </div>
@@ -371,7 +371,7 @@ export default function CreativeTeachingHub() {
 
           <div>
             <h3 className="text-xl font-bold text-royalPurple-text1 mb-4 flex items-center">
-              <Atom className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+              <Atom className="h-5 w-5 mr-2 text-royalPurple-accent" />
               STEM Learning Features
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -383,7 +383,7 @@ export default function CreativeTeachingHub() {
                   <FeatureBetaBadge featureId={feature.id} />
                   <CardContent className="p-4">
                     <div className="flex items-start space-x-3">
-                      <feature.icon className="h-8 w-8 text-royalPurple-accentTx mt-1" />
+                      <feature.icon className="h-8 w-8 text-royalPurple-accent mt-1" />
                       <div className="flex-1">
                         <h4 className="text-royalPurple-text1 font-medium mb-1">{feature.name}</h4>
                         <p className="text-royalPurple-text3 text-sm mb-3">{feature.description}</p>

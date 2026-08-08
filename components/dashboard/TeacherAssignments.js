@@ -43,8 +43,8 @@ export default function TeacherAssignments({ teacherData }) {
 
   const getGradeColor = (grade) => {
     if (grade >= 80) return 'text-royalPurple-successTx'
-    if (grade >= 70) return 'text-royalPurple-accentTx'
-    if (grade >= 60) return 'text-royalPurple-accentTx'
+    if (grade >= 70) return 'text-royalPurple-accent'
+    if (grade >= 60) return 'text-royalPurple-accent'
     return 'text-royalPurple-dangerTx'
   }
 
@@ -56,12 +56,12 @@ export default function TeacherAssignments({ teacherData }) {
           <CardContent className="p-4">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-royalPurple-accentTx text-sm font-medium">Total Subjects</p>
-                <p className="text-2xl font-bold text-royalPurple-accentTx">
+                <p className="text-royalPurple-accent text-sm font-medium">Total Subjects</p>
+                <p className="text-2xl font-bold text-royalPurple-accent">
                   {assignedSubjects.length}
                 </p>
               </div>
-              <BookOpen className="h-8 w-8 text-royalPurple-accentTx" />
+              <BookOpen className="h-8 w-8 text-royalPurple-accent" />
             </div>
           </CardContent>
         </Card>
@@ -207,7 +207,7 @@ export default function TeacherAssignments({ teacherData }) {
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-lg font-semibold text-royalPurple-text1">{classItem.name}</h3>
                   {classItem.classTeacher && (
-                    <span className="px-2 py-1 text-xs rounded-full font-medium bg-royalPurple-accentBg text-royalPurple-accentTx">
+                    <span className="px-2 py-1 text-xs rounded-full font-medium bg-royalPurple-accentBg text-royalPurple-accent">
                       Class Teacher
                     </span>
                   )}

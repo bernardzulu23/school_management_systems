@@ -89,7 +89,7 @@ export default function SicAssignmentAdminPage() {
       <div className="space-y-6 max-w-4xl">
         <div>
           <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
-            <GraduationCap className="h-7 w-7 text-royalPurple-accentTx" />
+            <GraduationCap className="h-7 w-7 text-royalPurple-accent" />
             School In-service Coordinator (SIC)
           </h1>
           <p className="text-royalPurple-text2 mt-1">

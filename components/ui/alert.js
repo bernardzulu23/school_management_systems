@@ -5,7 +5,7 @@ export function Alert({ children, variant = 'default', className = '' }) {
   const variantClasses = {
     default: 'bg-royalPurple-card border-royalPurple-border text-royalPurple-text1',
     destructive: 'bg-royalPurple-danger border-royalPurple-border text-royalPurple-dangerTx',
-    warning: 'bg-royalPurple-accentBg border-royalPurple-accent text-royalPurple-accentTx',
+    warning: 'bg-royalPurple-accentBg border-royalPurple-accent text-royalPurple-accent',
     success: 'bg-royalPurple-success border-royalPurple-border text-royalPurple-successTx',
     info: 'bg-royalPurple-card2 border-royalPurple-border2 text-royalPurple-text1',
   }

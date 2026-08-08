@@ -204,7 +204,7 @@ export default function StudentFlashcardStudyPage() {
                   {finalScore.correct}/{finalScore.total}
                 </div>
                 <div>
-                  <p className="text-lg font-semibold text-royalPurple-accentTx">
+                  <p className="text-lg font-semibold text-royalPurple-accent">
                     {finalScore.rating.label}
                   </p>
                   <StarRating count={finalScore.rating.stars} />
@@ -251,9 +251,9 @@ export default function StudentFlashcardStudyPage() {
                       >
                         <div className="flex items-start gap-2">
                           {item.type === 'book' ? (
-                            <BookOpen className="h-4 w-4 mt-0.5 text-royalPurple-accentTx shrink-0" />
+                            <BookOpen className="h-4 w-4 mt-0.5 text-royalPurple-accent shrink-0" />
                           ) : (
-                            <FileText className="h-4 w-4 mt-0.5 text-royalPurple-accentTx shrink-0" />
+                            <FileText className="h-4 w-4 mt-0.5 text-royalPurple-accent shrink-0" />
                           )}
                           <div>
                             <p className="font-medium text-royalPurple-text1">{item.title}</p>

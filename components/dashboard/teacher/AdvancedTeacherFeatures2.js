@@ -315,7 +315,7 @@ export const ParentConferences = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">
-              <div className="text-2xl font-bold text-royalPurple-accentTx">8</div>
+              <div className="text-2xl font-bold text-royalPurple-accent">8</div>
               <div className="text-sm text-royalPurple-text2">This Week</div>
             </div>
             <div className="text-center p-4 bg-royalPurple-card/60 rounded-lg">

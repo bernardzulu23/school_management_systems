@@ -21,7 +21,7 @@ const DashboardHeader = ({ systemStatus }) => {
               className={`px-3 py-1 rounded-full text-sm ${
                 systemStatus?.integration_status === 'operational'
                   ? 'bg-royalPurple-success text-royalPurple-successTx'
-                  : 'bg-royalPurple-accentBg text-royalPurple-accentTx'
+                  : 'bg-royalPurple-accentBg text-royalPurple-accent'
               }`}
               aria-live="polite"
             >

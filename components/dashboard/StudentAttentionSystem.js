@@ -67,7 +67,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
       case 'high':
         return 'bg-royalPurple-danger text-royalPurple-dangerTx border-royalPurple-border'
       case 'medium':
-        return 'bg-royalPurple-accentBg text-royalPurple-accentTx border-royalPurple-border2'
+        return 'bg-royalPurple-accentBg text-royalPurple-accent border-royalPurple-border2'
       default:
         return 'bg-royalPurple-card2 text-royalPurple-text1 border-royalPurple-border'
     }
@@ -78,7 +78,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
       green: 'bg-royalPurple-success text-royalPurple-successTx',
       blue: 'bg-royalPurple-accent text-royalPurple-accentTx',
       purple: 'bg-royalPurple-pill text-royalPurple-pillTx',
-      yellow: 'bg-royalPurple-accentBg text-royalPurple-accentTx',
+      yellow: 'bg-royalPurple-accentBg text-royalPurple-accent',
       red: 'bg-royalPurple-danger text-royalPurple-dangerTx',
       gray: 'bg-royalPurple-card2 text-royalPurple-text1',
     }
@@ -167,7 +167,7 @@ export default function StudentAttentionSystem({ studentsData, performanceSummar
                 {Number(performanceSummary?.average_school_performance) || 0}%
               </span>
             </div>
-            <div className="text-royalPurple-accentTx font-medium">School Average</div>
+            <div className="text-royalPurple-accent font-medium">School Average</div>
           </div>
         </div>
       </div>

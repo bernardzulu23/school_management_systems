@@ -259,7 +259,7 @@ export default function SDG2HungerModule({ schoolId, studentData = [] }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-royalPurple-accentTx">
+            <div className="text-2xl font-bold text-royalPurple-accent">
               {nutritionData.foodSecurityIndex}%
             </div>
             <p className="text-xs text-royalPurple-text3">School food security level</p>

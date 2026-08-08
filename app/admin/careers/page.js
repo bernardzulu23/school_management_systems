@@ -190,7 +190,7 @@ export default function CareersAdminPage() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
-              <Briefcase className="h-7 w-7 text-royalPurple-accentTx" />
+              <Briefcase className="h-7 w-7 text-royalPurple-accent" />
               Careers
             </h1>
             <p className="text-royalPurple-text2 mt-1 max-w-2xl">
@@ -218,7 +218,7 @@ export default function CareersAdminPage() {
           <Card>
             <CardContent className="p-6 text-royalPurple-text2">
               Create at least one{' '}
-              <Link href="/admin/career-clusters" className="text-royalPurple-accentTx underline">
+              <Link href="/admin/career-clusters" className="text-royalPurple-accent underline">
                 career cluster
               </Link>{' '}
               before adding careers.

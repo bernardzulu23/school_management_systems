@@ -433,7 +433,7 @@ export default function StudentDashboard() {
                 <Card variant="glass">
                   <CardHeader>
                     <CardTitle className="text-royalPurple-text1 flex items-center">
-                      <User className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                      <User className="h-6 w-6 mr-3 text-royalPurple-accent" />
                       Student Information
                     </CardTitle>
                   </CardHeader>
@@ -442,7 +442,7 @@ export default function StudentDashboard() {
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                           <div className="flex items-center mb-2">
-                            <User className="h-4 w-4 text-royalPurple-accentTx mr-2" />
+                            <User className="h-4 w-4 text-royalPurple-accent mr-2" />
                             <span className="text-royalPurple-text2 text-sm font-medium">
                               Full Name
                             </span>
@@ -603,7 +603,7 @@ export default function StudentDashboard() {
                 <Card variant="glass">
                   <CardHeader>
                     <CardTitle className="text-royalPurple-text1 flex items-center">
-                      <BookOpen className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                      <BookOpen className="h-6 w-6 mr-3 text-royalPurple-accent" />
                       My Class Information
                     </CardTitle>
                   </CardHeader>
@@ -615,7 +615,7 @@ export default function StudentDashboard() {
                             <h3 className="font-bold text-xl text-royalPurple-text1">
                               {dashboardData.my_class.name}
                             </h3>
-                            <p className="text-royalPurple-accentTx">
+                            <p className="text-royalPurple-accent">
                               Academic Year: {dashboardData.my_class.academic_year}
                             </p>
                           </div>
@@ -684,7 +684,7 @@ export default function StudentDashboard() {
                                 </div>
                               </div>
                               <div className="text-right">
-                                <span className="px-3 py-1 text-xs rounded-full bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 capitalize font-medium">
+                                <span className="px-3 py-1 text-xs rounded-full bg-royalPurple-accent/60 text-royalPurple-accent border border-royalPurple-border2/50 capitalize font-medium">
                                   {assessment.type}
                                 </span>
                                 <p className="text-royalPurple-text3 text-xs mt-1">
@@ -694,7 +694,7 @@ export default function StudentDashboard() {
                             </div>
                             {assessment.duration_minutes && (
                               <div className="flex items-center mt-3 text-sm text-royalPurple-text2">
-                                <Clock className="h-4 w-4 mr-2 text-royalPurple-accentTx" />
+                                <Clock className="h-4 w-4 mr-2 text-royalPurple-accent" />
                                 {assessment.duration_minutes} minutes
                               </div>
                             )}
@@ -769,10 +769,7 @@ export default function StudentDashboard() {
                           <div className="text-center py-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                             <Target className="h-8 w-8 text-royalPurple-text3 mx-auto mb-2" />
                             <p className="text-royalPurple-text2 text-sm">No active goals</p>
-                            <Button
-                              variant="link"
-                              className="text-royalPurple-accentTx text-xs mt-1"
-                            >
+                            <Button variant="link" className="text-royalPurple-accent text-xs mt-1">
                               Create your first goal
                             </Button>
                           </div>
@@ -840,7 +837,7 @@ export default function StudentDashboard() {
                                     performance.avgScore >= 90
                                       ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
                                       : performance.avgScore >= 80
-                                        ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
+                                        ? 'bg-royalPurple-accent/60 text-royalPurple-accent border border-royalPurple-border2/50'
                                         : performance.avgScore >= 70
                                           ? 'bg-warn/60 text-warn/20 border border-warn/50'
                                           : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'
@@ -924,7 +921,7 @@ export default function StudentDashboard() {
                 <Card variant="glass">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle className="text-royalPurple-text1 flex items-center">
-                      <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                      <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accent" />
                       Recent Results
                     </CardTitle>
                     <Link href="/dashboard/student/results">
@@ -1290,7 +1287,7 @@ export default function StudentDashboard() {
                       </div>
                       <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                         <div className="flex items-center mb-2">
-                          <Phone className="h-4 w-4 text-royalPurple-accentTx mr-2" />
+                          <Phone className="h-4 w-4 text-royalPurple-accent mr-2" />
                           <span className="text-royalPurple-text2 text-sm font-medium">
                             Phone Number
                           </span>
@@ -1369,10 +1366,8 @@ export default function StudentDashboard() {
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="bg-royalPurple-accent p-4 rounded-lg border border-royalPurple-border2">
-                    <h4 className="font-semibold text-royalPurple-accentTx mb-2">
-                      Digital Library
-                    </h4>
-                    <p className="text-royalPurple-accentTx text-sm">
+                    <h4 className="font-semibold text-royalPurple-accent mb-2">Digital Library</h4>
+                    <p className="text-royalPurple-accent text-sm">
                       Access thousands of books offline
                     </p>
                     <Link
@@ -1653,7 +1648,7 @@ export default function StudentDashboard() {
                                     performance.avgScore >= 90
                                       ? 'bg-royalPurple-success/60 text-royalPurple-successTx border border-royalPurple-border/50'
                                       : performance.avgScore >= 80
-                                        ? 'bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50'
+                                        ? 'bg-royalPurple-accent/60 text-royalPurple-accent border border-royalPurple-border2/50'
                                         : performance.avgScore >= 70
                                           ? 'bg-warn/60 text-warn/20 border border-warn/50'
                                           : 'bg-royalPurple-danger/60 text-royalPurple-dangerTx border border-royalPurple-border/50'

@@ -178,7 +178,7 @@ export default function SmartAnalyticsDashboard({
       case 'high':
         return 'text-royalPurple-dangerTx bg-royalPurple-danger border-royalPurple-border'
       case 'medium':
-        return 'text-royalPurple-accentTx bg-royalPurple-accentBg border-royalPurple-border2'
+        return 'text-royalPurple-accent bg-royalPurple-accentBg border-royalPurple-border2'
       case 'low':
         return 'text-royalPurple-successTx bg-royalPurple-success border-royalPurple-border'
       default:
@@ -424,7 +424,7 @@ export default function SmartAnalyticsDashboard({
       {activeWidgets.includes('attendance-analysis') && (
         <Card className="p-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center">
-            <Calendar className="w-5 h-5 text-royalPurple-accentTx mr-2" />
+            <Calendar className="w-5 h-5 text-royalPurple-accent mr-2" />
             Attendance Risk Analysis
           </h3>
 

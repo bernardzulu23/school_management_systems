@@ -132,7 +132,7 @@ export default function StudentPerformanceReport({ student, onClose }) {
                       ? 'text-royalPurple-dangerTx'
                       : student.risk_level === 'high'
                         ? 'text-royalPurple-dangerTx'
-                        : 'text-royalPurple-accentTx'
+                        : 'text-royalPurple-accent'
                   }`}
                 >
                   {student.risk_level.toUpperCase()}
@@ -280,8 +280,8 @@ export default function StudentPerformanceReport({ student, onClose }) {
                       className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg"
                     >
                       <div className="flex items-start">
-                        <Target className="h-4 w-4 text-royalPurple-accentTx mr-2 mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-royalPurple-accentTx">{recommendation}</span>
+                        <Target className="h-4 w-4 text-royalPurple-accent mr-2 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-royalPurple-accent">{recommendation}</span>
                       </div>
                     </div>
                   ))}
@@ -349,10 +349,10 @@ export default function StudentPerformanceReport({ student, onClose }) {
                   </div>
 
                   <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg text-center">
-                    <div className="text-sm font-medium text-royalPurple-accentTx">
+                    <div className="text-sm font-medium text-royalPurple-accent">
                       Medium-term (1 month)
                     </div>
-                    <div className="text-xs text-royalPurple-accentTx mt-1">
+                    <div className="text-xs text-royalPurple-accent mt-1">
                       Reassess performance, adjust plan
                     </div>
                   </div>

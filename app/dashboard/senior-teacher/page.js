@@ -101,7 +101,7 @@ export default function SeniorTeacherDashboardPage() {
                     <p className="text-3xl font-bold text-royalPurple-text1">{card.value}</p>
                   </div>
                   <div className="p-3 rounded-xl bg-royalPurple-card2 border border-royalPurple-border">
-                    <Icon className="h-6 w-6 text-royalPurple-accentTx" />
+                    <Icon className="h-6 w-6 text-royalPurple-accent" />
                   </div>
                 </CardContent>
               </Card>
@@ -121,7 +121,7 @@ export default function SeniorTeacherDashboardPage() {
                   <div className="h-full rounded-2xl border border-royalPurple-border bg-royalPurple-card2 p-5 hover:border-royalPurple-border2 transition-colors">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="p-2 rounded-lg bg-royalPurple-card border border-royalPurple-border">
-                        <Icon className="h-5 w-5 text-royalPurple-accentTx" />
+                        <Icon className="h-5 w-5 text-royalPurple-accent" />
                       </div>
                       <h3 className="font-semibold text-royalPurple-text1">{item.title}</h3>
                     </div>

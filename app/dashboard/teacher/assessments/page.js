@@ -218,7 +218,7 @@ export default function TeacherAssessmentsPage() {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'scheduled':
-        return <Calendar className="h-4 w-4 text-royalPurple-accentTx" />
+        return <Calendar className="h-4 w-4 text-royalPurple-accent" />
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'draft':
@@ -363,7 +363,7 @@ export default function TeacherAssessmentsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <ClipboardList className="h-8 w-8 text-royalPurple-accentTx" />
+                <ClipboardList className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Assessments</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -712,8 +712,8 @@ export default function TeacherAssessmentsPage() {
                       <h4 className="font-medium text-royalPurple-text1 mb-2">Results Summary:</h4>
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div className="text-center p-3 bg-royalPurple-accent rounded-lg">
-                          <p className="text-sm text-royalPurple-accentTx">Average Score</p>
-                          <p className="text-lg font-bold text-royalPurple-accentTx">
+                          <p className="text-sm text-royalPurple-accent">Average Score</p>
+                          <p className="text-lg font-bold text-royalPurple-accent">
                             {assessment.averageScore}/{assessment.totalMarks}
                           </p>
                         </div>
@@ -842,21 +842,21 @@ export default function TeacherAssessmentsPage() {
                       item.type === 'completed'
                         ? 'text-royalPurple-successTx'
                         : item.type === 'scheduled'
-                          ? 'text-royalPurple-accentTx'
+                          ? 'text-royalPurple-accent'
                           : 'text-g-800'
 
                     const descColor =
                       item.type === 'completed'
                         ? 'text-royalPurple-successTx'
                         : item.type === 'scheduled'
-                          ? 'text-royalPurple-accentTx'
+                          ? 'text-royalPurple-accent'
                           : 'text-g-700'
 
                     const timeColor =
                       item.type === 'completed'
                         ? 'text-royalPurple-successTx'
                         : item.type === 'scheduled'
-                          ? 'text-royalPurple-accentTx'
+                          ? 'text-royalPurple-accent'
                           : 'text-warn'
 
                     const timeLabel = item.time ? new Date(item.time).toLocaleString() : ''
@@ -890,12 +890,12 @@ export default function TeacherAssessmentsPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center p-4 bg-royalPurple-accent rounded-lg">
-                <ClipboardList className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
-                <h4 className="font-medium text-royalPurple-accentTx">Total Assessments</h4>
-                <p className="text-2xl font-bold text-royalPurple-accentTx">
+                <ClipboardList className="h-8 w-8 text-royalPurple-accent mx-auto mb-2" />
+                <h4 className="font-medium text-royalPurple-accent">Total Assessments</h4>
+                <p className="text-2xl font-bold text-royalPurple-accent">
                   {analyticsLoading ? '…' : assessmentStats.totalAssessments}
                 </p>
-                <p className="text-sm text-royalPurple-accentTx">
+                <p className="text-sm text-royalPurple-accent">
                   {assessmentStats.upcomingAssessments} upcoming ·{' '}
                   {assessmentStats.completedAssessments} completed
                 </p>

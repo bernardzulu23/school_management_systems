@@ -67,7 +67,7 @@ function AdminAssessmentsOverview() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center">
-              <Users className="h-8 w-8 text-royalPurple-accentTx" />
+              <Users className="h-8 w-8 text-royalPurple-accent" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-royalPurple-text2">Teachers</p>
                 <p className="text-2xl font-bold text-royalPurple-text1">
@@ -312,7 +312,7 @@ function TeacherAssessmentsView() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center">
-              <ClipboardList className="h-8 w-8 text-royalPurple-accentTx" />
+              <ClipboardList className="h-8 w-8 text-royalPurple-accent" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-royalPurple-text2">Total Assessments</p>
                 <p className="text-2xl font-bold text-royalPurple-text1">

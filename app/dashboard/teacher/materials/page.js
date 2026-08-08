@@ -396,7 +396,7 @@ export default function StudyMaterialsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <BookOpen className="h-8 w-8 text-royalPurple-accentTx" />
+                <BookOpen className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Materials</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -456,7 +456,7 @@ export default function StudyMaterialsPage() {
           <CardContent>
             {loading ? (
               <div className="flex justify-center py-12">
-                <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
+                <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accent" />
               </div>
             ) : error ? (
               <div className="text-center py-12">
@@ -532,7 +532,7 @@ export default function StudyMaterialsPage() {
                     <div className="flex items-center justify-between">
                       <button
                         type="button"
-                        className="text-sm text-royalPurple-accentTx underline"
+                        className="text-sm text-royalPurple-accent underline"
                         onClick={async () => {
                           try {
                             await openMaterialFile(material.fileUrl, { title: material.title })

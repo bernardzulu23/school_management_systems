@@ -58,7 +58,7 @@ export default function DailyRoutinePage() {
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'in-progress':
-        return <Play className="h-4 w-4 text-royalPurple-accentTx" />
+        return <Play className="h-4 w-4 text-royalPurple-accent" />
       case 'pending':
         return <Clock className="h-4 w-4 text-warn/100" />
       case 'overdue':
@@ -187,7 +187,7 @@ export default function DailyRoutinePage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Clock className="h-8 w-8 text-royalPurple-accentTx" />
+                <Clock className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Tasks</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -213,7 +213,7 @@ export default function DailyRoutinePage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Play className="h-8 w-8 text-royalPurple-accentTx" />
+                <Play className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">In Progress</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -278,7 +278,7 @@ export default function DailyRoutinePage() {
               onClick={() => setActiveTab('today')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'today'
-                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  ? 'border-royalPurple-border2 text-royalPurple-accent'
                   : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >
@@ -288,7 +288,7 @@ export default function DailyRoutinePage() {
               onClick={() => setActiveTab('weekly')}
               className={`py-2 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'weekly'
-                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  ? 'border-royalPurple-border2 text-royalPurple-accent'
                   : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >
@@ -329,7 +329,7 @@ export default function DailyRoutinePage() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center mb-2 flex-wrap gap-2">
-                          <span className="text-sm font-medium text-royalPurple-accentTx">
+                          <span className="text-sm font-medium text-royalPurple-accent">
                             {task.time}
                           </span>
                           <h3 className="text-lg font-semibold text-royalPurple-text1">
@@ -416,7 +416,7 @@ export default function DailyRoutinePage() {
                   {routineData.weekly.map((day, index) => (
                     <div key={index} className="border border-royalPurple-border rounded-lg p-4">
                       <h3 className="font-semibold text-royalPurple-text1 mb-2">{day.day}</h3>
-                      <p className="text-sm text-royalPurple-accentTx mb-3 font-medium">
+                      <p className="text-sm text-royalPurple-accent mb-3 font-medium">
                         {day.focus}
                       </p>
                       <div className="space-y-2">

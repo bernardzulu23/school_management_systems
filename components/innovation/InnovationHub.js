@@ -28,7 +28,7 @@ const ICONS = {
 function StatusPill({ status }) {
   const styles = {
     active: 'bg-royalPurple-success/15 text-royalPurple-successTx border-royalPurple-success/30',
-    beta: 'bg-royalPurple-accent/15 text-royalPurple-accentTx border-royalPurple-accent/30',
+    beta: 'bg-royalPurple-accent/15 text-royalPurple-accent border-royalPurple-accent/30',
   }
   const labels = { active: 'Live', beta: 'Beta' }
   return (
@@ -64,7 +64,7 @@ export default function InnovationHub() {
           <CardHeader>
             <CardTitle className="flex items-center gap-3">
               <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-royalPurple-accent/10">
-                <Icon className="h-5 w-5 text-royalPurple-accentTx" />
+                <Icon className="h-5 w-5 text-royalPurple-accent" />
               </span>
               {active.title}
             </CardTitle>
@@ -79,12 +79,12 @@ export default function InnovationHub() {
                     className="group flex items-start justify-between gap-3 rounded-xl border border-royalPurple-border bg-white p-4 hover:border-royalPurple-border2 hover:shadow-sm transition-all"
                   >
                     <div>
-                      <p className="font-semibold text-royalPurple-text1 group-hover:text-royalPurple-accentTx">
+                      <p className="font-semibold text-royalPurple-text1 group-hover:text-royalPurple-accent">
                         {tool.name}
                       </p>
                       <p className="text-sm text-royalPurple-text3 mt-1">{tool.description}</p>
                     </div>
-                    <ExternalLink className="h-4 w-4 shrink-0 text-royalPurple-text3 group-hover:text-royalPurple-accentTx mt-1" />
+                    <ExternalLink className="h-4 w-4 shrink-0 text-royalPurple-text3 group-hover:text-royalPurple-accent mt-1" />
                   </Link>
                 </li>
               ))}
@@ -99,7 +99,7 @@ export default function InnovationHub() {
     <div className="space-y-8">
       <div>
         <div className="flex items-center gap-3 mb-2">
-          <Rocket className="h-8 w-8 text-royalPurple-accentTx" aria-hidden="true" />
+          <Rocket className="h-8 w-8 text-royalPurple-accent" aria-hidden="true" />
           <Sparkles className="h-5 w-5 text-accent" aria-hidden="true" />
         </div>
         <h1 className="text-3xl font-bold text-royalPurple-text1">Innovation Hub</h1>
@@ -140,7 +140,7 @@ export default function InnovationHub() {
               <CardHeader>
                 <div className="flex items-start justify-between gap-2">
                   <CardTitle className="flex items-center gap-2 text-base">
-                    <Icon className="h-5 w-5 text-royalPurple-accentTx shrink-0" />
+                    <Icon className="h-5 w-5 text-royalPurple-accent shrink-0" />
                     {section.title}
                   </CardTitle>
                   <StatusPill status={section.status} />
@@ -152,7 +152,7 @@ export default function InnovationHub() {
                   <span className="text-xs text-royalPurple-text3">
                     {section.tools.length} linked tools
                   </span>
-                  <span className="inline-flex items-center text-sm font-medium text-royalPurple-accentTx">
+                  <span className="inline-flex items-center text-sm font-medium text-royalPurple-accent">
                     Open
                     <ArrowRight className="h-4 w-4 ml-1" />
                   </span>

@@ -342,7 +342,7 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
                         <div className="text-xs font-bold text-royalPurple-text3">BREAK</div>
                       ) : a ? (
                         <div className="space-y-2">
-                          <div className="text-sm font-semibold text-royalPurple-accentTx">
+                          <div className="text-sm font-semibold text-royalPurple-accent">
                             {String(a.teacher?.user?.name || '').trim() ||
                               String(a.teacherId).slice(0, 6)}
                           </div>
@@ -418,7 +418,7 @@ export default function TeacherPeriodAssignmentUI(props: TeacherPeriodAssignment
                             <div className="text-xs font-bold text-royalPurple-text3">BREAK</div>
                           ) : a ? (
                             <div className="flex flex-col items-center gap-1">
-                              <div className="text-sm font-semibold text-royalPurple-accentTx">
+                              <div className="text-sm font-semibold text-royalPurple-accent">
                                 {String(a.teacher?.user?.name || '').split(' ')[0] ||
                                   String(a.teacherId).slice(0, 6)}
                               </div>

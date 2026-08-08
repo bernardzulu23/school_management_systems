@@ -53,7 +53,7 @@ const rarityConfig = {
     name: 'Rare',
     color: 'blue',
     bgColor: 'bg-royalPurple-accent',
-    textColor: 'text-royalPurple-accentTx',
+    textColor: 'text-royalPurple-accent',
     borderColor: 'border-royalPurple-border2',
     glowColor: 'shadow-blue-200',
   },
@@ -273,7 +273,7 @@ export default function AchievementSystem({
 
         <Card className="stats-card">
           <CardContent className="p-6 text-center">
-            <Star className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+            <Star className="h-8 w-8 text-royalPurple-accent mx-auto mb-2" />
             <p className="text-3xl font-bold text-royalPurple-text1">{totalPoints}</p>
             <p className="text-sm text-royalPurple-text2">Points from Achievements</p>
           </CardContent>
@@ -322,7 +322,7 @@ export default function AchievementSystem({
                   type="checkbox"
                   checked={showEarnedOnly}
                   onChange={(e) => setShowEarnedOnly(e.target.checked)}
-                  className="rounded border-royalPurple-border text-royalPurple-accentTx focus:ring-blue-500"
+                  className="rounded border-royalPurple-border text-royalPurple-accent focus:ring-blue-500"
                 />
                 <span className="text-sm font-medium text-royalPurple-text2">Earned Only</span>
               </label>

@@ -27,8 +27,8 @@ export default function RegisterPage() {
         </div>
 
         <div className="bg-royalPurple-accent rounded-lg p-4 mb-6">
-          <h3 className="font-semibold text-royalPurple-accentTx mb-2">For New Users:</h3>
-          <p className="text-sm text-royalPurple-accentTx">
+          <h3 className="font-semibold text-royalPurple-accent mb-2">For New Users:</h3>
+          <p className="text-sm text-royalPurple-accent">
             Please contact your school administrator to create your account. Once registered, you
             can login with your provided credentials.
           </p>

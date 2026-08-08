@@ -199,7 +199,7 @@ export default function TeacherPerformancePage() {
         <div className="flex justify-between items-start">
           <div>
             <h1 className="text-3xl font-bold text-royalPurple-text1 flex items-center gap-2">
-              <BarChart3 className="w-8 h-8 text-royalPurple-accentTx" aria-hidden="true" />
+              <BarChart3 className="w-8 h-8 text-royalPurple-accent" aria-hidden="true" />
               Teacher Performance Evaluation System
             </h1>
             <p className="text-royalPurple-text2 mt-2">
@@ -256,7 +256,7 @@ export default function TeacherPerformancePage() {
                 onClick={() => setActiveView(tab.id)}
                 className={`flex items-center gap-2 py-2 px-1 border-b-2 font-medium text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-g-500 ${
                   activeView === tab.id
-                    ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                    ? 'border-royalPurple-border2 text-royalPurple-accent'
                     : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
                 }`}
               >
@@ -335,10 +335,10 @@ export default function TeacherPerformancePage() {
                           className="w-12 h-12 bg-royalPurple-accent rounded-full flex items-center justify-center"
                           aria-hidden="true"
                         >
-                          <Users className="w-6 h-6 text-royalPurple-accentTx" />
+                          <Users className="w-6 h-6 text-royalPurple-accent" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-royalPurple-text1 group-hover:text-royalPurple-accentTx transition-colors">
+                          <h3 className="font-semibold text-royalPurple-text1 group-hover:text-royalPurple-accent transition-colors">
                             {teacher.name}
                           </h3>
                           <p className="text-sm text-royalPurple-text2">{teacher.department}</p>

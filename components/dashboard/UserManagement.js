@@ -550,7 +550,7 @@ export default function UserManagement() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                     onClick={() => router.push('/dashboard/students/bulk-upload')}
                     aria-label="Import multiple students via CSV"
                   >
@@ -589,7 +589,7 @@ export default function UserManagement() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                     onClick={() => router.push('/dashboard/teachers/bulk-upload')}
                     aria-label="Import multiple teachers via Excel"
                   >
@@ -629,7 +629,7 @@ export default function UserManagement() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                       onClick={() => setShowHodAssign(true)}
                       aria-label="Manage HOD assignments"
                     >
@@ -670,7 +670,7 @@ export default function UserManagement() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                       onClick={() => router.push('/dashboard/headteacher/guidance-reports')}
                       aria-label="Open guidance reports"
                     >
@@ -714,7 +714,7 @@ export default function UserManagement() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                       onClick={() => router.push('/dashboard/headteacher/sic')}
                       aria-label="Manage SIC assignment"
                     >
@@ -755,7 +755,7 @@ export default function UserManagement() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                       onClick={() => router.push('/dashboard/headteacher/senior-teachers')}
                       aria-label="Manage Senior Teacher assignments"
                     >
@@ -796,7 +796,7 @@ export default function UserManagement() {
                     </Button>
                     <Button
                       variant="outline"
-                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                      className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                       onClick={() => router.push('/dashboard/settings?tab=notifications')}
                       aria-label="Open notification preferences"
                     >
@@ -836,7 +836,7 @@ export default function UserManagement() {
                   </Button>
                   <Button
                     variant="outline"
-                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accentTx"
+                    className="border border-royalPurple-border2 text-royalPurple-text2 rounded-lg w-full py-2 hover:border-royalPurple-accent hover:text-royalPurple-accent"
                     onClick={() => toast('Assign permissions functionality - Coming soon')}
                     aria-label="Assign permissions to headteachers"
                   >
@@ -984,7 +984,7 @@ export default function UserManagement() {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="border-royalPurple-border2 text-royalPurple-accentTx hover:bg-royalPurple-accent/20"
+                                    className="border-royalPurple-border2 text-royalPurple-accent hover:bg-royalPurple-accent/20"
                                     onClick={() => handleViewUser(user.id)}
                                     aria-label={`View details for ${user.name}`}
                                   >
@@ -1250,7 +1250,7 @@ function HodAssignmentModal({ onClose, onUpdated }) {
                           </div>
                           <div className="flex-shrink-0">
                             {hod ? (
-                              <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accentBg text-royalPurple-accentTx border border-royalPurple-border2">
+                              <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accentBg text-royalPurple-accent border border-royalPurple-border2">
                                 HOD: {hod.department || 'Assigned'}
                               </span>
                             ) : (
@@ -1519,7 +1519,7 @@ function UserDetailsModal({ user, allUsers, onClose, loading }) {
               <h4 className="text-xl font-bold text-royalPurple-text1 dark:text-royalPurple-text1">
                 {data.name || data.user?.name}
               </h4>
-              <span className="px-3 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/30 dark:text-royalPurple-accentTx border border-royalPurple-border2 dark:border-royalPurple-border2/30 capitalize font-medium">
+              <span className="px-3 py-1 text-xs rounded-full bg-royalPurple-accent text-royalPurple-accent dark:bg-royalPurple-accent/30 dark:text-royalPurple-accent border border-royalPurple-border2 dark:border-royalPurple-border2/30 capitalize font-medium">
                 {role || 'user'}
               </span>
             </div>
@@ -1545,7 +1545,7 @@ function UserDetailsModal({ user, allUsers, onClose, loading }) {
           {role === 'teacher' && (
             <>
               <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4">
-                <h4 className="text-lg font-semibold text-royalPurple-accentTx dark:text-royalPurple-accentTx mb-3">
+                <h4 className="text-lg font-semibold text-royalPurple-accent dark:text-royalPurple-accent mb-3">
                   Professional Info
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
@@ -1558,7 +1558,7 @@ function UserDetailsModal({ user, allUsers, onClose, loading }) {
                         {data.departments.map((d) => (
                           <span
                             key={d.departmentId || d.id}
-                            className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
+                            className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accent dark:bg-royalPurple-accent/20 dark:text-royalPurple-accent rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                           >
                             {d.department?.name || d.name || d.department_name || d.departmentId}
                           </span>
@@ -1608,7 +1608,7 @@ function UserDetailsModal({ user, allUsers, onClose, loading }) {
                     derivedTeacherClasses.map((cls) => (
                       <span
                         key={cls.id || cls.name}
-                        className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
+                        className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accent dark:bg-royalPurple-accent/20 dark:text-royalPurple-accent rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                       >
                         {cls.name || String(cls)}
                       </span>
@@ -1645,7 +1645,7 @@ function UserDetailsModal({ user, allUsers, onClose, loading }) {
           {role === 'hod' && (
             <>
               <div className="border-t border-royalPurple-border dark:border-royalPurple-border pt-4">
-                <h4 className="text-lg font-semibold text-royalPurple-accentTx dark:text-royalPurple-accentTx mb-3">
+                <h4 className="text-lg font-semibold text-royalPurple-accent dark:text-royalPurple-accent mb-3">
                   Department Info
                 </h4>
                 <div className="grid grid-cols-2 gap-4">
@@ -1677,7 +1677,7 @@ function UserDetailsModal({ user, allUsers, onClose, loading }) {
                     resolvedHodClasses.map((cls, idx) => (
                       <span
                         key={`${cls}-${idx}`}
-                        className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accentTx dark:bg-royalPurple-accent/20 dark:text-royalPurple-accentTx rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
+                        className="px-2 py-1 bg-royalPurple-accent text-royalPurple-accent dark:bg-royalPurple-accent/20 dark:text-royalPurple-accent rounded text-xs border border-royalPurple-border2 dark:border-royalPurple-border2/20"
                       >
                         {String(cls)}
                       </span>

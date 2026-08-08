@@ -122,7 +122,7 @@ export default function HeadteacherGuidanceReportsPage() {
                         <div className="flex gap-2 self-center">
                           <Link
                             href={`/dashboard/headteacher/guidance-reports/cases/${e.caseId}`}
-                            className="text-royalPurple-accentTx hover:underline text-sm"
+                            className="text-royalPurple-accent hover:underline text-sm"
                           >
                             View case
                           </Link>

@@ -148,7 +148,7 @@ export function InnovationProjectsPanel() {
       <CardHeader className="flex flex-row items-center justify-between gap-4">
         <div>
           <CardTitle className="flex items-center gap-2">
-            <Lightbulb className="h-5 w-5 text-royalPurple-accentTx" />
+            <Lightbulb className="h-5 w-5 text-royalPurple-accent" />
             Innovation lab projects
           </CardTitle>
           <p className="text-sm text-royalPurple-text3 mt-1">

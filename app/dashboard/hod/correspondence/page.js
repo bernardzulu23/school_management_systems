@@ -77,7 +77,7 @@ export default function CorrespondencePage() {
       case 'responded':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'sent':
-        return <MailOpen className="h-4 w-4 text-royalPurple-accentTx" />
+        return <MailOpen className="h-4 w-4 text-royalPurple-accent" />
       case 'draft':
         return <Edit className="h-4 w-4 text-royalPurple-text3" />
       default:
@@ -166,7 +166,7 @@ export default function CorrespondencePage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <FileText className="h-8 w-8 text-royalPurple-accentTx" />
+                <FileText className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Items</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">{stats.total}</p>
@@ -304,7 +304,7 @@ export default function CorrespondencePage() {
                         </td>
                         <td className="py-3 px-4 text-center">
                           {item.attachments > 0 && (
-                            <span className="text-royalPurple-accentTx">{item.attachments}</span>
+                            <span className="text-royalPurple-accent">{item.attachments}</span>
                           )}
                         </td>
                         <td className="py-3 px-4">

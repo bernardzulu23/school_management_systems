@@ -270,7 +270,7 @@ export default function GenerateReportsModal({ students, onClose }) {
                           </div>
                           <div className="flex items-center">
                             <Users
-                              className="h-3 w-3 text-royalPurple-accentTx mr-1"
+                              className="h-3 w-3 text-royalPurple-accent mr-1"
                               aria-hidden="true"
                             />
                             <span>{student.attendance_rate}% attendance</span>

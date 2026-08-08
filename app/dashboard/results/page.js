@@ -342,7 +342,7 @@ export default function ResultsPage() {
               <Card>
                 <CardContent className="p-3 sm:p-6">
                   <div className="flex flex-col sm:flex-row items-center text-center sm:text-left">
-                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-royalPurple-accentTx mb-2 sm:mb-0" />
+                    <Users className="h-6 w-6 sm:h-8 sm:w-8 text-royalPurple-accent mb-2 sm:mb-0" />
                     <div className="sm:ml-4">
                       <p className="text-[10px] sm:text-sm font-medium text-royalPurple-text2 uppercase">
                         Entries

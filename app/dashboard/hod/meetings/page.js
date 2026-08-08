@@ -73,7 +73,7 @@ export default function MeetingFilesPage() {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'scheduled':
-        return <Calendar className="h-4 w-4 text-royalPurple-accentTx" />
+        return <Calendar className="h-4 w-4 text-royalPurple-accent" />
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'cancelled':
@@ -201,7 +201,7 @@ export default function MeetingFilesPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Group className="h-8 w-8 text-royalPurple-accentTx" />
+                <Group className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Meetings</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -389,7 +389,7 @@ export default function MeetingFilesPage() {
                         <span className="text-sm text-royalPurple-successTx">
                           Minutes: {meeting.minutes}
                         </span>
-                        <span className="text-sm text-royalPurple-accentTx">
+                        <span className="text-sm text-royalPurple-accent">
                           Action Items: {meeting.actionItems}
                         </span>
                       </div>

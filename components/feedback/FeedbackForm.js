@@ -107,7 +107,7 @@ export default function FeedbackForm() {
                   aria-label={`Rate ${n} out of 5`}
                 >
                   <Star
-                    className={`h-6 w-6 ${rating && n <= rating ? 'fill-amber-400 text-royalPurple-accentTx' : 'text-royalPurple-text3 dark:text-royalPurple-text3'}`}
+                    className={`h-6 w-6 ${rating && n <= rating ? 'fill-amber-400 text-royalPurple-accent' : 'text-royalPurple-text3 dark:text-royalPurple-text3'}`}
                   />
                 </button>
               ))}

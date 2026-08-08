@@ -75,7 +75,7 @@ export default function StudentAssessmentsPage() {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'scheduled':
-        return <Calendar className="h-4 w-4 text-royalPurple-accentTx" />
+        return <Calendar className="h-4 w-4 text-royalPurple-accent" />
       case 'completed':
         return <CheckCircle className="h-4 w-4 text-royalPurple-successTx" />
       case 'overdue':
@@ -116,13 +116,13 @@ export default function StudentAssessmentsPage() {
   const getGradeColor = (grade) => {
     if (grade && grade.startsWith('A')) return 'bg-royalPurple-success text-royalPurple-successTx'
     if (grade && grade.startsWith('B')) return 'bg-royalPurple-accent text-royalPurple-accentTx'
-    if (grade && grade.startsWith('C')) return 'bg-royalPurple-accentBg text-royalPurple-accentTx'
+    if (grade && grade.startsWith('C')) return 'bg-royalPurple-accentBg text-royalPurple-accent'
     return 'bg-royalPurple-danger text-royalPurple-dangerTx'
   }
 
   const getDaysLeftColor = (days) => {
     if (days <= 2) return 'text-royalPurple-dangerTx'
-    if (days <= 5) return 'text-royalPurple-accentTx'
+    if (days <= 5) return 'text-royalPurple-accent'
     return 'text-royalPurple-successTx'
   }
 
@@ -177,7 +177,7 @@ export default function StudentAssessmentsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <ClipboardList className="h-8 w-8 text-royalPurple-accentTx" />
+                <ClipboardList className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Assessments</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -216,7 +216,7 @@ export default function StudentAssessmentsPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <TrendingUp className="h-8 w-8 text-royalPurple-accentTx" />
+                <TrendingUp className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Average Grade</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -454,8 +454,8 @@ export default function StudentAssessmentsPage() {
                     <div className="border-t pt-3">
                       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-3">
                         <div className="text-center p-3 bg-royalPurple-accent rounded-lg">
-                          <p className="text-sm text-royalPurple-accentTx">My Score</p>
-                          <p className="text-lg font-bold text-royalPurple-accentTx">
+                          <p className="text-sm text-royalPurple-accent">My Score</p>
+                          <p className="text-lg font-bold text-royalPurple-accent">
                             {assessment.myScore}/{assessment.totalMarks}
                           </p>
                         </div>

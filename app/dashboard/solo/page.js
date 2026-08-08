@@ -126,7 +126,7 @@ export default function SoloDashboardPage() {
               ].map((item) => (
                 <Card key={item.label} className="white-card">
                   <CardContent className="pt-6">
-                    <item.icon className="h-5 w-5 text-royalPurple-accentTx mb-2" />
+                    <item.icon className="h-5 w-5 text-royalPurple-accent mb-2" />
                     <p className="text-2xl font-bold text-royalPurple-text1">{item.value}</p>
                     <p className="text-xs text-royalPurple-text3">{item.label}</p>
                   </CardContent>

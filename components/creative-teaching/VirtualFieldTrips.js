@@ -306,7 +306,7 @@ export default function VirtualFieldTrips() {
                             {currentStopData.activities.map((activity, index) => (
                               <Button
                                 key={index}
-                                className="bg-royalPurple-accent/20 text-royalPurple-accentTx border border-royalPurple-border2/40 hover:bg-royalPurple-accent/40"
+                                className="bg-royalPurple-accent/20 text-royalPurple-accent border border-royalPurple-border2/40 hover:bg-royalPurple-accent/40"
                               >
                                 {activity}
                               </Button>

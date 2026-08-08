@@ -100,7 +100,7 @@ export default function GuidanceTeachersAdminPage() {
       <div className="space-y-6 max-w-4xl">
         <div>
           <h1 className="text-2xl font-bold text-royalPurple-text1 flex items-center gap-2">
-            <Briefcase className="h-7 w-7 text-royalPurple-accentTx" />
+            <Briefcase className="h-7 w-7 text-royalPurple-accent" />
             Guidance teachers
           </h1>
           <p className="text-royalPurple-text2 mt-1">

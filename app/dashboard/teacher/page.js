@@ -305,7 +305,7 @@ export default function TeacherDashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-royalPurple-page">
         <div className="text-center">
-          <LoadingSpinner className="h-12 w-12 text-royalPurple-accentTx mb-4" />
+          <LoadingSpinner className="h-12 w-12 text-royalPurple-accent mb-4" />
           <p className="text-royalPurple-text2">Loading dashboard...</p>
         </div>
       </div>
@@ -492,7 +492,7 @@ export default function TeacherDashboard() {
                   </div>
                   <div className="p-4 bg-royalPurple-page/60 dark:bg-royalPurple-muted/60 border border-royalPurple-border dark:border-royalPurple-border/40 rounded-xl transition-colors duration-300">
                     <div className="flex items-center mb-2">
-                      <BookOpen className="h-4 w-4 text-royalPurple-accentTx dark:text-royalPurple-accentTx mr-2" />
+                      <BookOpen className="h-4 w-4 text-royalPurple-accent dark:text-royalPurple-accent mr-2" />
                       <span className="text-royalPurple-text2 dark:text-royalPurple-text2 text-sm font-medium">
                         Teaching Subjects
                       </span>
@@ -541,7 +541,7 @@ export default function TeacherDashboard() {
                 {isEnabled('MOBILE_APP_DOWNLOAD') ? (
                   <div className="p-6 bg-royalPurple-accent/10 border border-royalPurple-border rounded-2xl h-full">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl mb-4 bg-royalPurple-accent/20">
-                      <Rocket className="h-6 w-6 text-royalPurple-accentTx" />
+                      <Rocket className="h-6 w-6 text-royalPurple-accent" />
                     </div>
                     <h3 className="text-xl font-bold text-royalPurple-text1 mb-2">
                       Take attendance on the go
@@ -785,7 +785,7 @@ export default function TeacherDashboard() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <BookOpen className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                <BookOpen className="h-6 w-6 mr-3 text-royalPurple-accent" />
                 My Teaching Subjects
               </CardTitle>
             </CardHeader>
@@ -802,7 +802,7 @@ export default function TeacherDashboard() {
                         >
                           <div className="flex items-center justify-between mb-4">
                             <div className="bg-royalPurple-accent border border-royalPurple-accent rounded-2xl p-3">
-                              <BookOpen className="h-8 w-8 text-royalPurple-accentTx" />
+                              <BookOpen className="h-8 w-8 text-royalPurple-accent" />
                             </div>
                             <div
                               className={`px-3 py-1 rounded-full text-xs font-medium ${
@@ -858,7 +858,7 @@ export default function TeacherDashboard() {
             <Card variant="glass">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <Users className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                  <Users className="h-6 w-6 mr-3 text-royalPurple-accent" />
                   My Classes
                 </CardTitle>
                 <Link href="/dashboard/teacher/classes">
@@ -1205,7 +1205,7 @@ export default function TeacherDashboard() {
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <ClipboardList className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                <ClipboardList className="h-6 w-6 mr-3 text-royalPurple-accent" />
                 Recent Assessments
               </CardTitle>
               <Link href="/dashboard/teacher/assessments?create=1">
@@ -1242,7 +1242,7 @@ export default function TeacherDashboard() {
                             {assessment.title}
                           </td>
                           <td className="py-2">
-                            <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accent/20 text-royalPurple-accentTx capitalize border border-royalPurple-border2/30">
+                            <span className="px-2 py-1 text-xs rounded-full bg-royalPurple-accent/20 text-royalPurple-accent capitalize border border-royalPurple-border2/30">
                               {assessment.type}
                             </span>
                           </td>
@@ -1295,7 +1295,7 @@ export default function TeacherDashboard() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <User className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                <User className="h-6 w-6 mr-3 text-royalPurple-accent" />
                 Teacher Information
               </CardTitle>
             </CardHeader>
@@ -1304,7 +1304,7 @@ export default function TeacherDashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   <div className="p-4 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                     <div className="flex items-center mb-2">
-                      <User className="h-4 w-4 text-royalPurple-accentTx mr-2" />
+                      <User className="h-4 w-4 text-royalPurple-accent mr-2" />
                       <span className="text-royalPurple-text2 text-sm font-medium">Name</span>
                     </div>
                     <p className="text-royalPurple-text1 font-semibold">{currentUser?.name}</p>
@@ -1374,7 +1374,7 @@ export default function TeacherDashboard() {
                   <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
-                        <Users className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                        <Users className="h-5 w-5 mr-2 text-royalPurple-accent" />
                         My Classes
                       </h3>
                       <span className="text-royalPurple-text2 text-sm">
@@ -1569,7 +1569,7 @@ export default function TeacherDashboard() {
             <Card variant="glass">
               <CardHeader>
                 <CardTitle className="text-royalPurple-text1 flex items-center">
-                  <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                  <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accent" />
                   Marking Progress
                 </CardTitle>
               </CardHeader>
@@ -1632,7 +1632,7 @@ export default function TeacherDashboard() {
                     {/* Subject Performance */}
                     <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                       <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                        <Award className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                        <Award className="h-5 w-5 mr-2 text-royalPurple-accent" />
                         Subject Performance
                       </h3>
                       <div className="space-y-4">
@@ -1649,7 +1649,7 @@ export default function TeacherDashboard() {
                                 <span className="text-royalPurple-text1 font-semibold text-sm">
                                   {subject}
                                 </span>
-                                <span className="text-royalPurple-accentTx font-bold">
+                                <span className="text-royalPurple-accent font-bold">
                                   {performance}%
                                 </span>
                               </div>

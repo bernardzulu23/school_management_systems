@@ -215,7 +215,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
         <h3 className="text-lg font-semibold text-royalPurple-text1 mb-4">🧠 Learning Style</h3>
         {dashboardData.learningProfile ? (
           <div>
-            <div className="text-lg font-medium text-royalPurple-accentTx mb-2">
+            <div className="text-lg font-medium text-royalPurple-accent mb-2">
               {dashboardData.learningProfile.primaryStyle.replace('_', ' ').toUpperCase()}
             </div>
             <div className="text-sm text-royalPurple-text2 mb-3">
@@ -347,7 +347,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
       <div className="bg-royalPurple-accentBg border-l-4 border-royalPurple-accent p-4 mb-6">
         <div className="flex">
           <div className="flex-shrink-0">
-            <span className="text-royalPurple-accentTx text-xl">🔔</span>
+            <span className="text-royalPurple-accent text-xl">🔔</span>
           </div>
           <div className="ml-3 flex-1">
             <h3 className="text-sm font-medium text-royalPurple-text1">Notifications</h3>
@@ -367,7 +367,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
           <div className="ml-3 flex-shrink-0">
             <button
               onClick={() => setNotifications([])}
-              className="text-royalPurple-accentTx hover:text-royalPurple-accentTx"
+              className="text-royalPurple-accent hover:text-royalPurple-accent"
             >
               ✕
             </button>
@@ -396,7 +396,7 @@ const EnhancedStudentDashboard = ({ studentId, studentData }) => {
               onClick={() => setActiveTab(tab.id)}
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === tab.id
-                  ? 'border-royalPurple-border2 text-royalPurple-accentTx'
+                  ? 'border-royalPurple-border2 text-royalPurple-accent'
                   : 'border-transparent text-royalPurple-text3 hover:text-royalPurple-text2 hover:border-royalPurple-border'
               }`}
             >

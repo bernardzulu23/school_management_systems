@@ -116,7 +116,7 @@ export function HeadteacherStrategicPlanning() {
     return (s) => {
       const v = String(s || '').toLowerCase()
       if (v === 'completed') return 'bg-royalPurple-success text-royalPurple-successTx'
-      if (v === 'in_progress') return 'bg-royalPurple-accentBg text-royalPurple-accentTx'
+      if (v === 'in_progress') return 'bg-royalPurple-accentBg text-royalPurple-accent'
       return 'bg-royalPurple-card2 text-royalPurple-text2'
     }
   }, [])
@@ -208,7 +208,7 @@ export function HeadteacherStrategicPlanning() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-royalPurple-text2">Total Goals</span>
-                <span className="font-bold text-royalPurple-accentTx">{summary.total}</span>
+                <span className="font-bold text-royalPurple-accent">{summary.total}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-royalPurple-text2">Completed</span>
@@ -216,7 +216,7 @@ export function HeadteacherStrategicPlanning() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-royalPurple-text2">In Progress</span>
-                <span className="text-royalPurple-accentTx font-bold">{summary.in_progress}</span>
+                <span className="text-royalPurple-accent font-bold">{summary.in_progress}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm text-royalPurple-text2">Not Started</span>
@@ -389,7 +389,7 @@ export function HeadteacherStrategicPlanning() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardContent className="p-6 text-center">
-            <Target className="h-8 w-8 text-royalPurple-accentTx mx-auto mb-2" />
+            <Target className="h-8 w-8 text-royalPurple-accent mx-auto mb-2" />
             <h4 className="font-medium text-royalPurple-text1">Goal Completion Rate</h4>
             <p className={`text-2xl font-bold ${percentTextClass(summary.completion_rate)}`}>
               {Number(summary.completion_rate) || 0}%

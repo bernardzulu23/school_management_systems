@@ -504,7 +504,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
         <CardHeader className="px-4 pt-4 pb-3" style={{ marginBottom: 0 }}>
           <CardTitle className="flex flex-wrap items-center justify-between gap-3">
             <span className="flex items-center">
-              <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" aria-hidden="true" />
+              <Calendar className="h-5 w-5 mr-2 text-royalPurple-accent" aria-hidden="true" />
               Master Timetable
             </span>
             <div className="flex items-center gap-2 shrink-0">
@@ -641,7 +641,7 @@ export function TimetableSummary({ userRole, userId, className = '' }) {
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between">
           <span className="flex items-center">
-            <Calendar className="h-5 w-5 mr-2 text-royalPurple-accentTx" aria-hidden="true" />
+            <Calendar className="h-5 w-5 mr-2 text-royalPurple-accent" aria-hidden="true" />
             {resolvedRole === 'teacher'
               ? 'My Teaching Timetable'
               : resolvedRole === 'hod'

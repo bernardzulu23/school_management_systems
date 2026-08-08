@@ -243,7 +243,7 @@ export default function SDGPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-royalPurple-accentTx mb-2">17</div>
+                <div className="text-3xl font-bold text-royalPurple-accent mb-2">17</div>
                 <div className="text-sm text-royalPurple-text2">SDGs Tracked</div>
               </div>
               <div className="text-center">

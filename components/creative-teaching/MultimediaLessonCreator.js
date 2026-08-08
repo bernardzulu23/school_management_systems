@@ -586,7 +586,7 @@ export default function MultimediaLessonCreator() {
                             <div className="flex items-center">
                               {media.type === 'image' && (
                                 <>
-                                  <ImageIcon className="h-4 w-4 mr-2 text-royalPurple-accentTx" />
+                                  <ImageIcon className="h-4 w-4 mr-2 text-royalPurple-accent" />
                                   <div className="relative h-8 w-8 mr-2 overflow-hidden rounded">
                                     <Image
                                       src={media.url}

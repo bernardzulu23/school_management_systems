@@ -394,24 +394,24 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                                 {/* Parent Contact Info */}
                                 <div className="mt-3 p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
                                   <div className="flex items-center mb-2">
-                                    <User className="h-4 w-4 text-royalPurple-accentTx mr-2" />
-                                    <span className="font-semibold text-royalPurple-accentTx">
+                                    <User className="h-4 w-4 text-royalPurple-accent mr-2" />
+                                    <span className="font-semibold text-royalPurple-accent">
                                       {contact.name}
                                     </span>
-                                    <span className="text-xs text-royalPurple-accentTx ml-2">
+                                    <span className="text-xs text-royalPurple-accent ml-2">
                                       (Parent/Guardian)
                                     </span>
                                   </div>
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                                     <div className="flex items-center">
-                                      <Phone className="h-3 w-3 text-royalPurple-accentTx mr-2" />
-                                      <span className="font-medium text-royalPurple-accentTx">
+                                      <Phone className="h-3 w-3 text-royalPurple-accent mr-2" />
+                                      <span className="font-medium text-royalPurple-accent">
                                         {contact.phone}
                                       </span>
                                     </div>
                                     <div className="flex items-center">
-                                      <Mail className="h-3 w-3 text-royalPurple-accentTx mr-2" />
-                                      <span className="text-royalPurple-accentTx">
+                                      <Mail className="h-3 w-3 text-royalPurple-accent mr-2" />
+                                      <span className="text-royalPurple-accent">
                                         {contact.email}
                                       </span>
                                     </div>
@@ -547,8 +547,8 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                                   <span className="font-bold text-lg text-royalPurple-text1">
                                     {meeting.date}
                                   </span>
-                                  <Clock className="h-5 w-5 text-royalPurple-accentTx" />
-                                  <span className="font-semibold text-royalPurple-accentTx">
+                                  <Clock className="h-5 w-5 text-royalPurple-accent" />
+                                  <span className="font-semibold text-royalPurple-accent">
                                     {meeting.time}
                                   </span>
                                   <span className="px-2 py-1 text-xs font-medium bg-royalPurple-accent text-royalPurple-accentTx rounded-full">
@@ -624,8 +624,8 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                             {/* Parent Contacts */}
                             <div className="p-3 bg-royalPurple-accent border border-royalPurple-border2 rounded-lg">
                               <div className="flex items-center mb-2">
-                                <Phone className="h-4 w-4 text-royalPurple-accentTx mr-2" />
-                                <span className="font-semibold text-royalPurple-accentTx">
+                                <Phone className="h-4 w-4 text-royalPurple-accent mr-2" />
+                                <span className="font-semibold text-royalPurple-accent">
                                   Parent Contacts:
                                 </span>
                               </div>
@@ -638,18 +638,18 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                                       className="flex items-center justify-between p-2 bg-royalPurple-card border border-royalPurple-border2 rounded"
                                     >
                                       <div>
-                                        <div className="font-medium text-royalPurple-accentTx">
+                                        <div className="font-medium text-royalPurple-accent">
                                           {contact.name}
                                         </div>
-                                        <div className="text-sm text-royalPurple-accentTx">
+                                        <div className="text-sm text-royalPurple-accent">
                                           Parent of {student.name}
                                         </div>
                                       </div>
                                       <div className="text-right">
-                                        <div className="font-semibold text-royalPurple-accentTx">
+                                        <div className="font-semibold text-royalPurple-accent">
                                           {contact.phone}
                                         </div>
-                                        <div className="text-sm text-royalPurple-accentTx">
+                                        <div className="text-sm text-royalPurple-accent">
                                           {contact.email}
                                         </div>
                                       </div>
@@ -692,7 +692,7 @@ ${selectedStudentData.map((s) => `   - ${s.name}: ${s.overall_average}% average`
                       </div>
                       <div>
                         <div className="font-medium">Next Meeting:</div>
-                        <div className="text-royalPurple-accentTx">
+                        <div className="text-royalPurple-accent">
                           {meetings.length > 0 ? meetings[0].date : 'None'}
                         </div>
                       </div>

@@ -177,14 +177,14 @@ export default function UserManagement() {
       <aside aria-label="Security notice">
         <Card className="bg-royalPurple-accentBg border-royalPurple-accent p-4" role="note">
           <div className="flex items-start">
-            <div className="text-royalPurple-accentTx mr-3" aria-hidden="true">
+            <div className="text-royalPurple-accent mr-3" aria-hidden="true">
               🔒
             </div>
             <div>
-              <h3 className="font-semibold text-royalPurple-accentTx mb-1">
+              <h3 className="font-semibold text-royalPurple-accent mb-1">
                 Administrator Access Only
               </h3>
-              <p className="text-sm text-royalPurple-accentTx">
+              <p className="text-sm text-royalPurple-accent">
                 Only headteachers and deputy headteachers can register new users. All registered
                 users will receive login credentials to access their respective dashboards.
               </p>

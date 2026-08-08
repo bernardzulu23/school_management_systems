@@ -833,7 +833,7 @@ export default function HodDashboard() {
                   <div className="bg-gradient-to-br from-ink/20 to-g-700/20 border border-royalPurple-border2/30 rounded-xl p-4">
                     <div className="flex items-center mb-3">
                       <div className="w-10 h-10 bg-royalPurple-accent/30 rounded-lg flex items-center justify-center mr-3">
-                        <Users className="h-5 w-5 text-royalPurple-accentTx" />
+                        <Users className="h-5 w-5 text-royalPurple-accent" />
                       </div>
                       <h4 className="font-semibold text-royalPurple-text1">Teacher Development</h4>
                     </div>
@@ -911,7 +911,7 @@ export default function HodDashboard() {
           <Card variant="glass">
             <CardHeader>
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                <BarChart3 className="h-6 w-6 mr-3 text-royalPurple-accent" />
                 Department Overview
               </CardTitle>
             </CardHeader>
@@ -923,7 +923,7 @@ export default function HodDashboard() {
                       <Users className="h-10 w-10 text-royalPurple-text1" />
                     </div>
                     <h3 className="font-bold text-royalPurple-text1 text-lg">Teachers</h3>
-                    <p className="text-3xl font-bold text-royalPurple-accentTx mt-2">
+                    <p className="text-3xl font-bold text-royalPurple-accent mt-2">
                       {dashboardStats.totalTeachers}
                     </p>
                     <p className="text-royalPurple-text2 text-sm mt-1">Department staff</p>
@@ -980,7 +980,7 @@ export default function HodDashboard() {
                   <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                     <div className="flex items-center justify-between mb-4">
                       <h3 className="text-royalPurple-text1 font-bold text-lg flex items-center">
-                        <Users className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                        <Users className="h-5 w-5 mr-2 text-royalPurple-accent" />
                         Department Teachers
                       </h3>
                       <span className="text-royalPurple-text2 text-sm">
@@ -1261,7 +1261,7 @@ export default function HodDashboard() {
           <Card variant="glass">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-royalPurple-text1 flex items-center">
-                <Group className="h-6 w-6 mr-3 text-royalPurple-accentTx" />
+                <Group className="h-6 w-6 mr-3 text-royalPurple-accent" />
                 Department Classes
               </CardTitle>
               <Link href="/dashboard/classes">
@@ -1466,7 +1466,7 @@ export default function HodDashboard() {
                       >
                         {assessment.status}
                       </div>
-                      <div className="px-2 py-1 bg-royalPurple-accent/60 text-royalPurple-accentTx border border-royalPurple-border2/50 rounded text-xs">
+                      <div className="px-2 py-1 bg-royalPurple-accent/60 text-royalPurple-accent border border-royalPurple-border2/50 rounded text-xs">
                         {assessment.type}
                       </div>
                     </div>
@@ -1520,9 +1520,9 @@ export default function HodDashboard() {
                   variant="outline"
                   className="w-full h-20 flex flex-col bg-gradient-to-r from-accent/5 to-kpi-pass/10 hover:from-accent/10 hover:to-kpi-pass/20 border-royalPurple-border2"
                 >
-                  <Globe className="h-6 w-6 mb-2 text-royalPurple-accentTx" />
-                  <span className="text-royalPurple-accentTx font-semibold">🇺🇳 UN SDGs</span>
-                  <span className="text-xs text-royalPurple-accentTx">Global Impact</span>
+                  <Globe className="h-6 w-6 mb-2 text-royalPurple-accent" />
+                  <span className="text-royalPurple-accent font-semibold">🇺🇳 UN SDGs</span>
+                  <span className="text-xs text-royalPurple-accent">Global Impact</span>
                 </Button>
               </Link>
             </div>
@@ -1619,7 +1619,7 @@ export default function HodDashboard() {
                   {/* Performance by Subject */}
                   <div className="p-6 bg-royalPurple-muted/60 border border-royalPurple-border/40 rounded-xl">
                     <h3 className="text-royalPurple-text1 font-bold text-lg mb-4 flex items-center">
-                      <BarChart3 className="h-5 w-5 mr-2 text-royalPurple-accentTx" />
+                      <BarChart3 className="h-5 w-5 mr-2 text-royalPurple-accent" />
                       Performance by Subject
                     </h3>
                     <div className="space-y-4">

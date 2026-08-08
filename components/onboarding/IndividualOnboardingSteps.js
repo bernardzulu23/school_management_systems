@@ -33,7 +33,7 @@ export function IndividualVerifyStep({
           type="button"
           disabled={resending || resendCooldown > 0}
           onClick={resendVerification}
-          className="underline text-royalPurple-accentTx disabled:opacity-50"
+          className="underline text-royalPurple-accent disabled:opacity-50"
         >
           {resendCooldown > 0 ? `Resend in ${resendCooldown}s` : 'Resend email'}
         </button>

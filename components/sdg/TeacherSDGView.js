@@ -160,7 +160,7 @@ export default function TeacherSDGView({ teacherId, classData = [], studentData 
     <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-royalPurple-accentTx flex items-center justify-center space-x-2">
+        <h1 className="text-3xl font-bold text-royalPurple-accent flex items-center justify-center space-x-2">
           <Globe className="h-8 w-8" />
           <span>Classroom SDG Impact</span>
         </h1>
@@ -168,7 +168,7 @@ export default function TeacherSDGView({ teacherId, classData = [], studentData 
           Track how your teaching contributes to the UN Sustainable Development Goals
         </p>
         <div className="flex items-center justify-center space-x-2">
-          <span className="text-2xl font-bold text-royalPurple-accentTx">
+          <span className="text-2xl font-bold text-royalPurple-accent">
             {getClassroomOverallProgress()}%
           </span>
           <span className="text-royalPurple-text2">Classroom SDG Progress</span>
@@ -185,7 +185,7 @@ export default function TeacherSDGView({ teacherId, classData = [], studentData 
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-royalPurple-accentTx">{studentData.length}</div>
+            <div className="text-2xl font-bold text-royalPurple-accent">{studentData.length}</div>
             <p className="text-xs text-royalPurple-text3">In your classes</p>
           </CardContent>
         </Card>

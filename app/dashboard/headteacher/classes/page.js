@@ -132,7 +132,7 @@ export default function ClassesManagementPage() {
     return (
       <DashboardLayout title="Classes Management">
         <div className="flex items-center justify-center h-96">
-          <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accentTx" />
+          <Loader2 className="h-8 w-8 animate-spin text-royalPurple-accent" />
         </div>
       </DashboardLayout>
     )
@@ -177,7 +177,7 @@ export default function ClassesManagementPage() {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <School className="h-8 w-8 text-royalPurple-accentTx" />
+                <School className="h-8 w-8 text-royalPurple-accent" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-royalPurple-text2">Total Classes</p>
                   <p className="text-2xl font-bold text-royalPurple-text1">
@@ -461,7 +461,7 @@ export default function ClassesManagementPage() {
                         className="flex items-center justify-between p-3 bg-royalPurple-page rounded-lg"
                       >
                         <div className="flex items-center">
-                          <BookOpen className="h-5 w-5 text-royalPurple-accentTx mr-2" />
+                          <BookOpen className="h-5 w-5 text-royalPurple-accent mr-2" />
                           <span className="font-medium">{year}</span>
                           <span className="text-sm text-royalPurple-text3 ml-2">
                             ({yearClasses.length} classes)

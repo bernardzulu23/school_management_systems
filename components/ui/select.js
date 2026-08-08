@@ -307,7 +307,7 @@ export const SelectItem = ({ children, value, className = '', disabled = false, 
       }}
       className={cn(
         'relative flex w-full cursor-pointer select-none items-center rounded-lg py-2 pl-8 pr-2 text-sm outline-none text-ink/80 hover:bg-royalPurple-card2 hover:text-ink data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-        isSelected && 'bg-royalPurple-accentBg font-semibold text-royalPurple-accentTx',
+        isSelected && 'bg-royalPurple-accentBg font-semibold text-royalPurple-accent',
         isHighlighted && !isSelected && 'bg-royalPurple-card2',
         className
       )}
