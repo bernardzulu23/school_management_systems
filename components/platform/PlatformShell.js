@@ -6,39 +6,31 @@ import { useCallback, useEffect, useState } from 'react'
 import { sessionFetch } from '@/lib/auth/sessionFetch'
 import { useAuth } from '@/lib/auth'
 import { BrandMark } from '@/components/brand/BrandMark'
-import {
-  Building2,
-  CreditCard,
-  LayoutDashboard,
-  LogOut,
-  MapPin,
-  ShieldAlert,
-  ClipboardList,
-  User,
-  Activity,
-  Users,
-  Headset,
-  Smartphone,
-} from 'lucide-react'
+import { NavIcon } from '@/components/brand/NavIcon'
 
 const NAV = [
-  { href: '/platform/overview', label: 'Overview', icon: LayoutDashboard },
-  { href: '/platform/usage', label: 'School usage', icon: Users },
-  { href: '/platform/dashboard', label: 'Schools', icon: Building2 },
-  { href: '/platform/sms-gateway', label: 'SMS Gateway', icon: Smartphone },
-  { href: '/platform/support', label: 'Chat support', icon: Headset, badgeKey: 'pendingHandoffs' },
-  { href: '/platform/provinces', label: 'Provinces', icon: MapPin },
-  { href: '/platform/streams', label: 'Reporting streams', icon: MapPin },
-  { href: '/platform/billing', label: 'Billing', icon: CreditCard },
-  { href: '/platform/health', label: 'Health', icon: Activity },
-  { href: '/platform/audit-logs', label: 'Audit Logs', icon: ClipboardList },
+  { href: '/platform/overview', label: 'Overview', icon: 'overview' },
+  { href: '/platform/usage', label: 'School usage', icon: 'users' },
+  { href: '/platform/dashboard', label: 'Schools', icon: 'schools' },
+  { href: '/platform/sms-gateway', label: 'SMS Gateway', icon: 'sms' },
+  {
+    href: '/platform/support',
+    label: 'Chat support',
+    icon: 'support',
+    badgeKey: 'pendingHandoffs',
+  },
+  { href: '/platform/provinces', label: 'Provinces', icon: 'map' },
+  { href: '/platform/streams', label: 'Reporting streams', icon: 'streams' },
+  { href: '/platform/billing', label: 'Billing', icon: 'billing' },
+  { href: '/platform/health', label: 'Health', icon: 'health' },
+  { href: '/platform/audit-logs', label: 'Audit Logs', icon: 'audit' },
   {
     href: '/platform/security',
     label: 'Security',
-    icon: ShieldAlert,
+    icon: 'security',
     badgeKey: 'unresolvedSecurity',
   },
-  { href: '/platform/profile', label: 'Profile', icon: User },
+  { href: '/platform/profile', label: 'Profile', icon: 'profile' },
 ]
 
 export function PlatformShell({ title, children }) {
@@ -120,7 +112,7 @@ export function PlatformShell({ title, children }) {
           ) : null}
         </div>
         <nav className="flex-1 p-2 space-y-1">
-          {NAV.map(({ href, label, icon: Icon, badgeKey }) => {
+          {NAV.map(({ href, label, icon, badgeKey }) => {
             const active = pathname === href || pathname?.startsWith(`${href}/`)
             const badge =
               badgeKey === 'pendingHandoffs'
@@ -137,7 +129,7 @@ export function PlatformShell({ title, children }) {
                   active ? 'bg-accent text-paper' : 'text-paper/80 hover:bg-paper/10'
                 }`}
               >
-                <Icon size={16} />
+                <NavIcon name={icon} size={16} />
                 <span className="flex-1">{label}</span>
                 {badge > 0 ? (
                   <span
@@ -168,7 +160,7 @@ export function PlatformShell({ title, children }) {
           onClick={logout}
           className="m-2 flex items-center gap-2 px-3 py-2 text-sm text-paper/70 hover:bg-paper/10 rounded"
         >
-          <LogOut size={16} />
+          <NavIcon name="logout" size={16} />
           Sign out
         </button>
       </aside>

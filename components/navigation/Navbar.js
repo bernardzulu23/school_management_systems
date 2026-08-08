@@ -3,11 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Home, Users, BookOpen, Settings, LogOut } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/lib/auth'
 import { BrandMark } from '@/components/brand/BrandMark'
+import { NavIcon } from '@/components/brand/NavIcon'
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -15,10 +16,10 @@ const Navbar = () => {
   const { user, logout } = useAuth()
 
   const navItems = [
-    { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'Students', href: '/dashboard/students', icon: Users },
-    { name: 'Subjects', href: '/dashboard/subjects', icon: BookOpen },
-    { name: 'Settings', href: '/dashboard/settings', icon: Settings },
+    { name: 'Dashboard', href: '/dashboard', icon: 'overview' },
+    { name: 'Students', href: '/dashboard/students', icon: 'users' },
+    { name: 'Subjects', href: '/dashboard/subjects', icon: 'subjects' },
+    { name: 'Settings', href: '/dashboard/settings', icon: 'settings' },
   ]
 
   return (
@@ -50,7 +51,7 @@ const Navbar = () => {
             ))}
             {user && (
               <Button variant="ghost" size="sm" onClick={logout} className="text-royalPurple-text2">
-                <LogOut className="h-4 w-4 mr-2" />
+                <NavIcon name="logout" size={16} className="h-4 w-4 mr-2" />
                 Logout
               </Button>
             )}
@@ -85,7 +86,7 @@ const Navbar = () => {
                   : 'text-royalPurple-text2 hover:text-royalPurple-accentTx hover:bg-royalPurple-page'
               )}
             >
-              <item.icon className="h-5 w-5" />
+              <NavIcon icon={item.icon} size={20} className="h-5 w-5" />
               {item.name}
             </Link>
           ))}
@@ -97,7 +98,7 @@ const Navbar = () => {
               }}
               className="w-full flex items-center gap-3 px-3 py-2 rounded-md text-base font-medium text-royalPurple-dangerTx hover:bg-royalPurple-danger transition-colors"
             >
-              <LogOut className="h-5 w-5" />
+              <NavIcon name="logout" size={20} className="h-5 w-5" />
               Logout
             </button>
           )}
